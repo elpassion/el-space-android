@@ -12,7 +12,7 @@ class ReportListControllerTest {
 
     val api = mock<ReportList.Api>()
     val view = mock<ReportList.View>()
-    val controller = ActivitiesController(api, view)
+    val controller = ReportListController(api, view)
 
     @Test
     fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
@@ -36,11 +36,11 @@ class ReportListControllerTest {
         stubApiToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
-        verify(view, times(1)).showActivities(days)
+        verify(view, times(1)).showDays(days)
     }
 
     private fun stubApiToReturn(list: List<Report>) {
-        whenever(api.getActivities()).thenReturn(list)
+        whenever(api.getReports()).thenReturn(list)
     }
 
     private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
@@ -57,22 +57,22 @@ object CurrentTimeProvider : Provider<Long>({ throw NotImplementedError() })
 interface ReportList {
 
     interface Api {
-        fun getActivities(): List<Report>
+        fun getReports(): List<Report>
     }
 
     interface View {
-        fun showActivities(reports: List<Day>)
+        fun showDays(reports: List<Day>)
     }
 
 }
 
 class Report()
 
-class ActivitiesController(val api: ReportList.Api, val view: ReportList.View) {
+class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
         val days = ArrayList<Day>()
         (1..daysForCurrentMonth()).forEach { days.add(Day(it)) }
-        view.showActivities(days)
+        view.showDays(days)
     }
 
     private fun daysForCurrentMonth() = Calendar.getInstance().run {

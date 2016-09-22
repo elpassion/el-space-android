@@ -33,14 +33,13 @@ class ReportListControllerTest {
 
     @Test
     fun shouldMapReturnedReportsToCorrectDays() {
-        stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubApiToReturn(listOf(Report(2016, 6, 1)))
-        val days = ArrayList((1..30).map { Day(it, emptyList()) })
         val report = Report(2016, 6, 1)
-        days[0] = Day(1, listOf(report))
+        stubCurrentTime(year = 2016, month = 6, day = 1)
+        stubApiToReturn(listOf(report))
+
         controller.onCreate()
 
-        verify(view, times(1)).showDays(days)
+        verify(view, times(1)).showDays(daysWithReportInFirstDay(report))
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
@@ -60,6 +59,8 @@ class ReportListControllerTest {
             Calendar.getInstance().apply { set(year, month - 1, day) }.timeInMillis
         }
     }
+
+    private fun daysWithReportInFirstDay(report: Report) = listOf(Day(1, listOf(report))) + (2..30).map { Day(it, emptyList()) }
 
 }
 

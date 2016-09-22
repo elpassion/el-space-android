@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 import pl.elpassion.common.Provider
+import rx.Observable
 import java.util.*
 
 class ReportListControllerTest {
@@ -42,6 +43,15 @@ class ReportListControllerTest {
         verify(view, times(1)).showDays(daysWithReportInFirstDay(report))
     }
 
+    @Test
+    fun shouldShowErrorWhenApiCallFails() {
+        whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
+
+        controller.onCreate()
+
+        verify(view, times(1)).showError()
+    }
+
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
         val days = (1..daysInMonth).map { Day(it, emptyList()) }
         stubApiToReturn(apiReturnValue)
@@ -51,7 +61,7 @@ class ReportListControllerTest {
     }
 
     private fun stubApiToReturn(list: List<Report>) {
-        whenever(api.getReports()).thenReturn(list)
+        whenever(api.getReports()).thenReturn(Observable.just(list))
     }
 
     private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
@@ -71,11 +81,13 @@ object CurrentTimeProvider : Provider<Long>({ throw NotImplementedError() })
 interface ReportList {
 
     interface Api {
-        fun getReports(): List<Report>
+        fun getReports(): Observable<List<Report>>
     }
 
     interface View {
         fun showDays(reports: List<Day>)
+
+        fun showError()
     }
 
 }
@@ -84,10 +96,14 @@ data class Report(val year: Int, val month: Int, val day: Int)
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
-        val reports = api.getReports()
-        val days = ArrayList<Day>()
-        (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
-        view.showDays(days)
+        api.getReports().subscribe({ reports ->
+            val days = ArrayList<Day>()
+            (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
+            view.showDays(days)
+        },{
+            view.showError()
+        })
+
     }
 
     private fun getReportsForDay(day: Int): (Report) -> Boolean {

@@ -1,12 +1,10 @@
 package pl.elpassion.report
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.common.Provider
 import rx.Observable
+import rx.Subscription
 import java.util.*
 
 class ReportListControllerTest {
@@ -80,6 +78,17 @@ class ReportListControllerTest {
         verify(view, times(1)).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderOnDestroyWhenCallFinished() {
+        stubApiToReturn(emptyList())
+
+        controller.onCreate()
+        reset(view)
+        controller.onDestroy()
+
+        verify(view, never()).hideLoader()
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }
@@ -135,8 +144,11 @@ interface ReportList {
 data class Report(val year: Int, val month: Int, val day: Int)
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
+
+    var subscription : Subscription? = null
+
     fun onCreate() {
-        api.getReports()
+       subscription = api.getReports()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
@@ -162,6 +174,6 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     }
 
     fun onDestroy() {
-        view.hideLoader()
+        subscription?.unsubscribe()
     }
 }

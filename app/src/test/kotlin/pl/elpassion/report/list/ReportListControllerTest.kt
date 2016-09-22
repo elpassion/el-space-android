@@ -96,14 +96,6 @@ class ReportListControllerTest {
         whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
     }
 
-    private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        val days = (1..daysInMonth).map { Day(it, emptyList()) }
-        stubApiToReturn(apiReturnValue)
-        stubCurrentTime(month = month)
-        controller.onCreate()
-        verify(view, times(1)).showDays(days)
-    }
-
     private fun stubApiToReturn(list: List<Report>) {
         whenever(api.getReports()).thenReturn(Observable.just(list))
     }
@@ -112,6 +104,14 @@ class ReportListControllerTest {
         CurrentTimeProvider.override = {
             Calendar.getInstance().apply { set(year, month - 1, day) }.timeInMillis
         }
+    }
+
+    private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
+        val days = (1..daysInMonth).map { Day(it, emptyList()) }
+        stubApiToReturn(apiReturnValue)
+        stubCurrentTime(month = month)
+        controller.onCreate()
+        verify(view, times(1)).showDays(days)
     }
 
     private fun daysWithReportInFirstDay(report: Report) = listOf(Day(1, listOf(report))) + (2..30).map { Day(it, emptyList()) }

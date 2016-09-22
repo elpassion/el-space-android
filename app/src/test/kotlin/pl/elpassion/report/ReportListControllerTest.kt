@@ -4,22 +4,34 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.joda.time.DateTime
 import org.junit.Test
+import pl.elpassion.common.Provider
+import java.util.*
 
 class ReportListControllerTest {
 
     @Test
-    fun shouldDisplayReportsReturnedFromApiOnCreate() {
+    fun shouldDisplay31DaysWithoutReportsIfApiReturnsEmptyListOnCreate() {
+        CurrentTimeProvider.override = { dateInMillis(month = 10) }
+        val days = ArrayList<Day>()
+        (1..31).forEach { days.add(Day(it)) }
         val api = mock<ReportList.Api>()
-        val reports = listOf(Report())
-        whenever(api.getActivities()).thenReturn(reports)
+        whenever(api.getActivities()).thenReturn(emptyList())
         val view = mock<ReportList.View>()
         val controller = ActivitiesController(api, view)
         controller.onCreate()
-        verify(view, times(1)).showActivities(reports)
+
+        verify(view, times(1)).showActivities(days)
     }
 
+    private fun dateInMillis(year: Int = 2016, month: Int = 6, day: Int = 1): Long = DateTime(year, month, day, 0, 0).millis
+
 }
+
+data class Day(val dayNumber: Int)
+
+object CurrentTimeProvider : Provider<Long>({ throw NotImplementedError() })
 
 interface ReportList {
 
@@ -28,7 +40,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showActivities(reports: List<Report>)
+        fun showActivities(reports: ArrayList<Day>)
     }
 
 }
@@ -37,6 +49,8 @@ class Report()
 
 class ActivitiesController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
-        view.showActivities(api.getActivities())
+        val days = ArrayList<Day>()
+        (1..31).forEach { days.add(Day(it)) }
+        view.showActivities(days)
     }
 }

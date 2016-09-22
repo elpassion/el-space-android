@@ -30,6 +30,7 @@ repositories {
 }
 
 dependencies {
+    compile 'net.danlew:android.joda:2.9.4.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {

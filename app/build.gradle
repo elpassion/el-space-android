@@ -1,3 +1,8 @@
+buildscript {
+    ext.dexMakerVersion = '1.4'
+    ext.espressoVersion = '2.2.2'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
@@ -35,9 +40,26 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.0'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+
     testCompile 'junit:junit:4.12'
     testCompile "com.nhaarman:mockito-kotlin:0.6.1"
+
+    androidTestCompile "com.crittercism.dexmaker:dexmaker:$dexMakerVersion"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
+    androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$dexMakerVersion"
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile("com.elpassion.android.commons:espresso:0.0.9") {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+
+    androidTestCompile("com.nhaarman:mockito-kotlin:0.6.0") {
+        exclude group: 'org.mockito'
+    }
 }

@@ -1,5 +1,6 @@
 package pl.elpassion.project.choose
 
+import pl.elpassion.common.Provider
 import pl.elpassion.project.dto.Project
 
 interface ProjectChoose {
@@ -12,4 +13,8 @@ interface ProjectChoose {
     interface Repository {
         fun getPossibleProjects(): List<Project>
     }
+
+    object RepositoryProvider : Provider<Repository>({
+        throw NotImplementedError()
+    })
 }

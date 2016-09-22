@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
+import pl.elpassion.project.dto.Project
+import pl.elpassion.project.dto.newProject
 
 class ProjectChooseControllerTest {
     val view = mock<ProjectChoose.View>()
@@ -18,7 +20,7 @@ class ProjectChooseControllerTest {
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
-        val projects = listOf(Project())
+        val projects = listOf(newProject())
         stubApiToReturn(projects)
         ProjectChooseController(view, api).onCreate()
         verify(view).showPossibleProjects(projects)
@@ -26,7 +28,7 @@ class ProjectChooseControllerTest {
 
     @Test
     fun shouldSelectClickedProject() {
-        val project = Project()
+        val project = newProject()
         ProjectChooseController(view, api).onProjectClicked(project)
         verify(view).selectProject(project)
     }
@@ -46,10 +48,6 @@ interface ProjectChoose {
     interface Api {
         fun getPossibleProjects(): List<Project>
     }
-}
-
-class Project {
-
 }
 
 class ProjectChooseController(val view: ProjectChoose.View, val api: ProjectChoose.Api) {

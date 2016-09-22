@@ -111,14 +111,15 @@ data class Report(val year: Int, val month: Int, val day: Int)
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
-        view.showLoader()
-        api.getReports().subscribe({ reports ->
-            val days = ArrayList<Day>()
-            (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
-            view.showDays(days)
-        }, {
-            view.showError()
-        })
+        api.getReports()
+                .doOnSubscribe { view.showLoader() }
+                .subscribe({ reports ->
+                    val days = ArrayList<Day>()
+                    (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
+                    view.showDays(days)
+                }, {
+                    view.showError()
+                })
 
     }
 

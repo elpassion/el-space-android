@@ -71,6 +71,15 @@ class ReportListControllerTest {
         verify(view, times(1)).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenApiCallFinishes() {
+        stubApiToReturn(emptyList())
+
+        controller.onCreate()
+
+        verify(view, times(1)).hideLoader()
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }
@@ -129,6 +138,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
         api.getReports()
                 .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
                     val days = ArrayList<Day>()
                     (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }

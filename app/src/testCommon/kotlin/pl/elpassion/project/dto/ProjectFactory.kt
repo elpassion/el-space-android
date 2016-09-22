@@ -1,3 +1,3 @@
 package pl.elpassion.project.dto
 
-fun newProject() = Project("id", "name")
+fun newProject(id: String = "id", name: String = "name") = Project(id, name)

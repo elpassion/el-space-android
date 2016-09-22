@@ -23,8 +23,6 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     }
 
-    private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
-
     fun onDestroy() {
         subscription?.unsubscribe()
     }
@@ -48,6 +46,8 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
         view.showDays(days)
     }
+
+    private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
 
     private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
         report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day

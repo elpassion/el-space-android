@@ -17,6 +17,7 @@
         </activity>
         <activity android:name=".project.choose.ProjectChooseActivity" />
         <activity android:name=".report.add.AddReportActivity" />
+        <activity android:name=".report.list.ReportListActivity" />
     </application>
 
 </manifest>

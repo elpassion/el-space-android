@@ -89,7 +89,7 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldReturnCorrectDaysWhenUserChangeMonth() {
+    fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
         val report = Report(2016, 6, 1)
         val days = daysWithReportInFirstDay(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
@@ -98,6 +98,20 @@ class ReportListControllerTest {
         controller.onCreate()
         reset(view)
         controller.onNextMonth()
+
+        verify(view, times(1)).showDays(days)
+    }
+
+    @Test
+    fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
+        val report = Report(2016, 6, 1)
+        val days = daysWithReportInFirstDay(report)
+        stubCurrentTime(year = 2016, month = 7, day = 1)
+        stubApiToReturn(listOf(report))
+
+        controller.onCreate()
+        reset(view)
+        controller.onPreviousMonth()
 
         verify(view, times(1)).showDays(days)
     }

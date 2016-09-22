@@ -88,6 +88,20 @@ class ReportListControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldReturnCorrectDaysWhenUserChangeMonth() {
+        val report = Report(2016, 6, 1)
+        val days = daysWithReportInFirstDay(report)
+        stubCurrentTime(year = 2016, month = 5, day = 1)
+        stubApiToReturn(listOf(report))
+
+        controller.onCreate()
+        reset(view)
+        controller.onNextMonth()
+
+        verify(view, times(1)).showDays(days)
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }

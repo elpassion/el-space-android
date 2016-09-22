@@ -7,14 +7,17 @@ import java.util.*
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     var subscription: Subscription? = null
+    val reportList: MutableList<Report> = ArrayList()
+    val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
 
     fun onCreate() {
         subscription = api.getReports()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
+                    reportList.addAll(reports)
                     val days = ArrayList<Day>()
-                    (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
+                    (1..daysForCurrentMonth()).forEach { days.add(Day(it, reportList.filter(getReportsForDay(it)))) }
                     view.showDays(days)
                 }, {
                     view.showError()
@@ -24,17 +27,20 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     private fun getReportsForDay(day: Int): (Report) -> Boolean {
         return { report ->
-            val date = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
             report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
         }
     }
 
-    private fun daysForCurrentMonth() = Calendar.getInstance().run {
-        time = Date(CurrentTimeProvider.get())
-        getActualMaximum(Calendar.DAY_OF_MONTH)
-    }
+    private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
 
     fun onDestroy() {
         subscription?.unsubscribe()
+    }
+
+    fun onNextMonth() {
+        date.add(Calendar.MONTH, 1)
+        val days = ArrayList<Day>()
+        (1..daysForCurrentMonth()).forEach { days.add(Day(it, reportList.filter(getReportsForDay(it)))) }
+        view.showDays(days)
     }
 }

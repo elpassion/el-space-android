@@ -58,4 +58,8 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
         val iteratorDay = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
         iteratorDay.isNotAfter(currentDate)
     }
+
+    fun onDay(dayNumber: Int) {
+        view.openAddReportScreen(String.format("%d-%02d-%02d",date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1,  dayNumber))
+    }
 }

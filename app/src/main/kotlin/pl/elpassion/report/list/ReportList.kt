@@ -16,6 +16,8 @@ interface ReportList {
         fun showLoader()
 
         fun hideLoader()
+
+        fun openAddReportScreen(date: String)
     }
 
 }

@@ -126,6 +126,17 @@ class ReportListControllerTest {
         verify(view, times(1)).showDays(days)
     }
 
+    @Test
+    fun shouldOpenAddReportScreenOnDay() {
+        stubApiToReturn(emptyList())
+        stubCurrentTime(year = 1999, month = 1)
+
+        controller.onCreate()
+        controller.onDay(2)
+
+        verify(view, times(1)).openAddReportScreen("1999-01-02")
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }

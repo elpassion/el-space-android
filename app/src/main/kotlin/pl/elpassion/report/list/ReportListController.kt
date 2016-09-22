@@ -1,9 +1,6 @@
 package pl.elpassion.report.list
 
-import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.changeToNextMonth
-import pl.elpassion.common.changeToPreviousMonth
-import pl.elpassion.common.isNotAfter
+import pl.elpassion.common.*
 import rx.Subscription
 import java.util.*
 
@@ -57,8 +54,8 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     }
 
     private val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
-        val currentDate = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
-        val iteratorDay = Calendar.getInstance().apply { set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), dayNumber) }
+        val currentDate = getCurrentTimeCalendar()
+        val iteratorDay = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
         iteratorDay.isNotAfter(currentDate)
     }
 }

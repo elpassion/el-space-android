@@ -12,7 +12,7 @@ import java.util.*
 class ReportListControllerTest {
 
     @Test
-    fun shouldDisplay31DaysWithoutReportsIfApiReturnsEmptyListOnCreate() {
+    fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
         CurrentTimeProvider.override = { dateInMillis(month = 10) }
         val days = ArrayList<Day>()
         (1..31).forEach { days.add(Day(it)) }

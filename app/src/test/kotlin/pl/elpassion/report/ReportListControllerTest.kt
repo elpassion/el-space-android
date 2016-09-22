@@ -1,4 +1,4 @@
-package pl.elpassion.activities
+package pl.elpassion.report
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
@@ -6,14 +6,14 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 
-class ActivitiesControllerTest {
+class ReportListControllerTest {
 
     @Test
-    fun shouldDisplayActivitiesReturnedFromApiOnCreate() {
-        val api = mock<Activities.Api>()
-        val reports = listOf(Activity())
+    fun shouldDisplayReportsReturnedFromApiOnCreate() {
+        val api = mock<ReportList.Api>()
+        val reports = listOf(Report())
         whenever(api.getActivities()).thenReturn(reports)
-        val view = mock<Activities.View>()
+        val view = mock<ReportList.View>()
         val controller = ActivitiesController(api, view)
         controller.onCreate()
         verify(view, times(1)).showActivities(reports)
@@ -21,21 +21,21 @@ class ActivitiesControllerTest {
 
 }
 
-interface Activities {
+interface ReportList {
 
     interface Api {
-        fun getActivities(): List<Activity>
+        fun getActivities(): List<Report>
     }
 
     interface View {
-        fun showActivities(reports: List<Activity>)
+        fun showActivities(reports: List<Report>)
     }
 
 }
 
-class Activity()
+class Report()
 
-class ActivitiesController(val api: Activities.Api, val view: Activities.View) {
+class ActivitiesController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
         view.showActivities(api.getActivities())
     }

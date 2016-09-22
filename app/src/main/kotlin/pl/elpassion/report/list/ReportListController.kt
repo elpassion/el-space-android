@@ -1,6 +1,8 @@
 package pl.elpassion.report.list
 
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.changeToNextMonth
+import pl.elpassion.common.changeToPreviousMonth
 import rx.Subscription
 import java.util.*
 
@@ -34,12 +36,12 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     }
 
     fun onNextMonth() {
-        date.add(Calendar.MONTH, 1)
+        date.changeToNextMonth()
         showDays()
     }
 
     fun onPreviousMonth() {
-        date.add(Calendar.MONTH, -1)
+        date.changeToPreviousMonth()
         showDays()
     }
 

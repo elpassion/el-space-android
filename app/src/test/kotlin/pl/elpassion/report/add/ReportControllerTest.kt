@@ -7,23 +7,26 @@ import org.junit.Test
 
 class ReportControllerTest {
 
+    val view = mock<Report.View>()
+    val api = mock<Report.Api>()
+
     @Test
     fun shouldShowPossibleProjects() {
-        val view = mock<Report.View>()
-        val api = mock<Report.Api>()
-        whenever(api.getPossibleProjects()).thenReturn(emptyList())
+        stubApiToReturn(emptyList())
         ReportController(view, api).onCreate()
         verify(view).showPossibleProjects(emptyList())
     }
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
-        val view = mock<Report.View>()
-        val api = mock<Report.Api>()
         val projects = listOf(Project())
-        whenever(api.getPossibleProjects()).thenReturn(projects)
+        stubApiToReturn(projects)
         ReportController(view, api).onCreate()
         verify(view).showPossibleProjects(projects)
+    }
+
+    private fun stubApiToReturn(list: List<Project>) {
+        whenever(api.getPossibleProjects()).thenReturn(list)
     }
 }
 

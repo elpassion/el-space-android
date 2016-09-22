@@ -17,7 +17,7 @@ class ReportListControllerTest {
     @Test
     fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
         verifyIfShowCorrectListForGivenParams(
-                apiReturnValue = emptyList<Report>(),
+                apiReturnValue = emptyList(),
                 month = 10,
                 daysInMonth = 31)
     }
@@ -32,11 +32,9 @@ class ReportListControllerTest {
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        CurrentTimeProvider.override = { dateInMillis(month = month) }
-        val days = ArrayList<Day>().apply {
-            (1..daysInMonth).forEach { add(Day(it)) }
-        }
+        val days = (1..daysInMonth).map { Day(it) }
         stubApiToReturn(apiReturnValue)
+        stubCurrentTime(month = month)
         controller.onCreate()
         verify(view, times(1)).showActivities(days)
     }
@@ -45,11 +43,11 @@ class ReportListControllerTest {
         whenever(api.getActivities()).thenReturn(list)
     }
 
-    private fun dateInMillis(year: Int = 2016, month: Int = 6, day: Int = 1) = Calendar.getInstance().run {
-        set(year, month - 1, day)
-        timeInMillis
+    private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
+        CurrentTimeProvider.override = {
+            Calendar.getInstance().apply { set(year, month - 1, day) }.timeInMillis
+        }
     }
-
 }
 
 data class Day(val dayNumber: Int)
@@ -63,7 +61,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showActivities(reports: ArrayList<Day>)
+        fun showActivities(reports: List<Day>)
     }
 
 }

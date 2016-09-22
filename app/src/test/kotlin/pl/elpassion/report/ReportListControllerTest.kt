@@ -61,6 +61,16 @@ class ReportListControllerTest {
         verify(view, times(1)).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenCallIsNotFinishedOnDestroy() {
+        stubApiToReturnNever()
+
+        controller.onCreate()
+        controller.onDestroy()
+
+        verify(view, times(1)).hideLoader()
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }
@@ -107,6 +117,8 @@ interface ReportList {
         fun showError()
 
         fun showLoader()
+
+        fun hideLoader()
     }
 
 }
@@ -137,5 +149,9 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     private fun daysForCurrentMonth() = Calendar.getInstance().run {
         time = Date(CurrentTimeProvider.get())
         getActualMaximum(Calendar.DAY_OF_MONTH)
+    }
+
+    fun onDestroy() {
+        view.hideLoader()
     }
 }

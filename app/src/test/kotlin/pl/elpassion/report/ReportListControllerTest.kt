@@ -54,11 +54,15 @@ class ReportListControllerTest {
 
     @Test
     fun shouldShowLoaderWhenApiCallBegins() {
-        whenever(api.getReports()).thenReturn(Observable.never())
+        stubApiToReturnNever()
 
         controller.onCreate()
 
         verify(view, times(1)).showLoader()
+    }
+
+    private fun stubApiToReturnNever() {
+        whenever(api.getReports()).thenReturn(Observable.never())
     }
 
     private fun stubApiToReturnError() {

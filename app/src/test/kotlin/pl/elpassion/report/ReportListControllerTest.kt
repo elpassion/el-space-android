@@ -31,8 +31,20 @@ class ReportListControllerTest {
         )
     }
 
+    @Test
+    fun shouldMapReturnedReportsToCorrectDays() {
+        stubCurrentTime(year = 2016, month = 6, day = 1)
+        stubApiToReturn(listOf(Report(2016, 6, 1)))
+        val days = ArrayList((1..30).map { Day(it, emptyList()) })
+        val report = Report(2016, 6, 1)
+        days[0] = Day(1, listOf(report))
+        controller.onCreate()
+
+        verify(view, times(1)).showDays(days)
+    }
+
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        val days = (1..daysInMonth).map { Day(it) }
+        val days = (1..daysInMonth).map { Day(it, emptyList()) }
         stubApiToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
@@ -48,9 +60,10 @@ class ReportListControllerTest {
             Calendar.getInstance().apply { set(year, month - 1, day) }.timeInMillis
         }
     }
+
 }
 
-data class Day(val dayNumber: Int)
+data class Day(val dayNumber: Int, val reports: List<Report>)
 
 object CurrentTimeProvider : Provider<Long>({ throw NotImplementedError() })
 
@@ -66,13 +79,21 @@ interface ReportList {
 
 }
 
-class Report()
+data class Report(val year: Int, val month: Int, val day: Int)
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
+        val reports = api.getReports()
         val days = ArrayList<Day>()
-        (1..daysForCurrentMonth()).forEach { days.add(Day(it)) }
+        (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
         view.showDays(days)
+    }
+
+    private fun getReportsForDay(day: Int): (Report) -> Boolean {
+        return { report ->
+            val date = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
+            report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
+        }
     }
 
     private fun daysForCurrentMonth() = Calendar.getInstance().run {

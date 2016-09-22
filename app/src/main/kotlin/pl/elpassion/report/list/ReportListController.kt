@@ -9,9 +9,9 @@ import java.util.*
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
-    var subscription: Subscription? = null
-    val reportList: MutableList<Report> = ArrayList()
-    val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
+    private var subscription: Subscription? = null
+    private val reportList: MutableList<Report> = ArrayList()
+    private val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
 
     fun onCreate() {
         subscription = api.getReports()
@@ -56,7 +56,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
         view.showDays(days)
     }
 
-    val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
+    private val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
         val currentDate = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
         val iteratorDay = Calendar.getInstance().apply { set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), dayNumber) }
         iteratorDay.isNotAfter(currentDate)

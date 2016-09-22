@@ -8,33 +8,35 @@ import pl.elpassion.project.dto.Project
 import pl.elpassion.project.dto.newProject
 
 class ProjectChooseControllerTest {
+
     val view = mock<ProjectChoose.View>()
-    val api = mock<ProjectChoose.Api>()
+    val repository = mock<ProjectChoose.Repository>()
+    val controller = ProjectChooseController(view, repository)
 
     @Test
     fun shouldShowPossibleProjects() {
-        stubApiToReturn(emptyList())
-        ProjectChooseController(view, api).onCreate()
+        stubRepositoryToReturn(emptyList())
+        controller.onCreate()
         verify(view).showPossibleProjects(emptyList())
     }
 
     @Test
-    fun shouldShowPossibleProjectFormApi() {
+    fun shouldShowPossibleProjectFormRepository() {
         val projects = listOf(newProject())
-        stubApiToReturn(projects)
-        ProjectChooseController(view, api).onCreate()
+        stubRepositoryToReturn(projects)
+        controller.onCreate()
         verify(view).showPossibleProjects(projects)
     }
 
     @Test
     fun shouldSelectClickedProject() {
         val project = newProject()
-        ProjectChooseController(view, api).onProjectClicked(project)
+        controller.onProjectClicked(project)
         verify(view).selectProject(project)
     }
 
-    private fun stubApiToReturn(list: List<Project>) {
-        whenever(api.getPossibleProjects()).thenReturn(list)
+    private fun stubRepositoryToReturn(list: List<Project>) {
+        whenever(repository.getPossibleProjects()).thenReturn(list)
     }
 }
 
@@ -45,14 +47,14 @@ interface ProjectChoose {
         fun selectProject(project: Project)
     }
 
-    interface Api {
+    interface Repository {
         fun getPossibleProjects(): List<Project>
     }
 }
 
-class ProjectChooseController(val view: ProjectChoose.View, val api: ProjectChoose.Api) {
+class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectChoose.Repository) {
     fun onCreate() {
-        view.showPossibleProjects(api.getPossibleProjects())
+        view.showPossibleProjects(repository.getPossibleProjects())
     }
 
     fun onProjectClicked(project: Project) {

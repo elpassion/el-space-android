@@ -37,7 +37,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showDays(daysWithReportInFirstDay(report))
+        verify(view, times(1)).showDays(daysWithReportInFirstDayFromCurrentMonth(report))
     }
 
     @Test
@@ -91,7 +91,7 @@ class ReportListControllerTest {
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
         val report = Report(2016, 6, 1)
-        val days = daysWithReportInFirstDay(report)
+        val days = daysWithReportInFirstDayFromNextMonth(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
         stubApiToReturn(listOf(report))
 
@@ -105,7 +105,7 @@ class ReportListControllerTest {
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
         val report = Report(2016, 6, 1)
-        val days = daysWithReportInFirstDay(report)
+        val days = daysWithReportInFirstDayFromPreviousMonth(report)
         stubCurrentTime(year = 2016, month = 7, day = 1)
         stubApiToReturn(listOf(report))
 
@@ -113,6 +113,16 @@ class ReportListControllerTest {
         reset(view)
         controller.onPreviousMonth()
 
+        verify(view, times(1)).showDays(days)
+    }
+
+    @Test
+    fun shouldMarkUnreportedPassedDays() {
+        stubCurrentTime(month = 6, day = 1)
+        stubApiToReturn(emptyList())
+
+        controller.onCreate()
+        val days = listOf(Day(1, emptyList(), true)) + (2..30).map { Day(it, emptyList(), false) }
         verify(view, times(1)).showDays(days)
     }
 
@@ -135,13 +145,15 @@ class ReportListControllerTest {
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        val days = (1..daysInMonth).map { Day(it, emptyList()) }
+        val days = listOf(Day(1, emptyList(), true)) + (2..daysInMonth).map { Day(it, emptyList(), false) }
         stubApiToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
         verify(view, times(1)).showDays(days)
     }
 
-    private fun daysWithReportInFirstDay(report: Report) = listOf(Day(1, listOf(report))) + (2..30).map { Day(it, emptyList()) }
+    private fun daysWithReportInFirstDayFromCurrentMonth(report: Report) = listOf(Day(1, listOf(report), true)) + (2..30).map { Day(it, emptyList(), false) }
+    private fun daysWithReportInFirstDayFromNextMonth(report: Report) = listOf(Day(1, listOf(report), false)) + (2..30).map { Day(it, emptyList(), false) }
+    private fun daysWithReportInFirstDayFromPreviousMonth(report: Report) = listOf(Day(1, listOf(report), true)) + (2..30).map { Day(it, emptyList(), true) }
 
 }

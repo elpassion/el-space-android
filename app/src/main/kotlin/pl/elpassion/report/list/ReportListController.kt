@@ -3,6 +3,7 @@ package pl.elpassion.report.list
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.changeToNextMonth
 import pl.elpassion.common.changeToPreviousMonth
+import pl.elpassion.common.isNotAfter
 import rx.Subscription
 import java.util.*
 
@@ -46,8 +47,18 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     }
 
     private fun showDays() {
-        val days = ArrayList<Day>()
-        (1..daysForCurrentMonth()).forEach { days.add(Day(it, reportList.filter(getReportsForDay(it)))) }
+        val days = ArrayList<Day>().apply {
+            (1..daysForCurrentMonth()).forEach {
+                add(Day(it, reportList.filter(getReportsForDay(it)), isNotAfterNow(it)))
+            }
+        }
+
         view.showDays(days)
+    }
+
+    val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
+        val currentDate = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
+        val iteratorDay = Calendar.getInstance().apply { set(date.get(Calendar.YEAR), date.get(Calendar.MONTH), dayNumber) }
+        iteratorDay.isNotAfter(currentDate)
     }
 }

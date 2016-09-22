@@ -16,9 +16,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
                     reportList.addAll(reports)
-                    val days = ArrayList<Day>()
-                    (1..daysForCurrentMonth()).forEach { days.add(Day(it, reportList.filter(getReportsForDay(it)))) }
-                    view.showDays(days)
+                    showDays()
                 }, {
                     view.showError()
                 })
@@ -39,6 +37,10 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     fun onNextMonth() {
         date.add(Calendar.MONTH, 1)
+        showDays()
+    }
+
+    private fun showDays() {
         val days = ArrayList<Day>()
         (1..daysForCurrentMonth()).forEach { days.add(Day(it, reportList.filter(getReportsForDay(it)))) }
         view.showDays(days)

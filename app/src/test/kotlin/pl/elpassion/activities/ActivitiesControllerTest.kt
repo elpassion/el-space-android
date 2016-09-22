@@ -8,11 +8,12 @@ import org.junit.Test
 class ActivitiesControllerTest {
 
     @Test
-    fun shouldCallApiForActivitiesOnCreate() {
+    fun shouldDisplayActivitiesReturnedFromApiOnCreate() {
         val api = mock<Activities.Api>()
-        val controller = ActivitiesController(api)
+        val view = mock<Activities.View>()
+        val controller = ActivitiesController(api, view)
         controller.onCreate()
-        verify(api, times(1)).getActivities()
+        verify(view, times(1)).showActivities()
     }
 
 }
@@ -23,11 +24,15 @@ interface Activities {
         fun getActivities()
     }
 
-}
-
-class ActivitiesController(val api: Activities.Api) {
-    fun onCreate() {
-        api.getActivities()
+    interface View {
+        fun showActivities()
     }
 
+}
+
+class ActivitiesController(val api: Activities.Api, val view: Activities.View) {
+    fun onCreate() {
+        api.getActivities()
+        view.showActivities()
+    }
 }

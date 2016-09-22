@@ -23,7 +23,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     }
 
-    private fun getReportsForDay(day: Int): (Report) -> Boolean = { report ->
+    private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
         report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
     }
 
@@ -46,7 +46,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     private fun showDays() {
         val days = ArrayList<Day>().apply {
             (1..daysForCurrentMonth()).forEach {
-                add(Day(it, reportList.filter(getReportsForDay(it)), isNotAfterNow(it)))
+                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it)))
             }
         }
 

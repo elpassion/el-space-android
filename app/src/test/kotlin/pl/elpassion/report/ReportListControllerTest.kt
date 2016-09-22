@@ -52,6 +52,15 @@ class ReportListControllerTest {
         verify(view, times(1)).showError()
     }
 
+    @Test
+    fun shouldShowLoaderWhenApiCallBegins() {
+        whenever(api.getReports()).thenReturn(Observable.never())
+
+        controller.onCreate()
+
+        verify(view, times(1)).showLoader()
+    }
+
     private fun stubApiToReturnError() {
         whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
     }
@@ -92,6 +101,8 @@ interface ReportList {
         fun showDays(reports: List<Day>)
 
         fun showError()
+
+        fun showLoader()
     }
 
 }
@@ -100,11 +111,12 @@ data class Report(val year: Int, val month: Int, val day: Int)
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onCreate() {
+        view.showLoader()
         api.getReports().subscribe({ reports ->
             val days = ArrayList<Day>()
             (1..daysForCurrentMonth()).forEach { days.add(Day(it, reports.filter(getReportsForDay(it)))) }
             view.showDays(days)
-        },{
+        }, {
             view.showError()
         })
 

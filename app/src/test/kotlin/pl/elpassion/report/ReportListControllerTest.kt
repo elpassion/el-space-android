@@ -45,11 +45,15 @@ class ReportListControllerTest {
 
     @Test
     fun shouldShowErrorWhenApiCallFails() {
-        whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
+        stubApiToReturnError()
 
         controller.onCreate()
 
         verify(view, times(1)).showError()
+    }
+
+    private fun stubApiToReturnError() {
+        whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {

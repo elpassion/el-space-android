@@ -40,24 +40,3 @@ class ProjectChooseControllerTest {
     }
 }
 
-interface ProjectChoose {
-    interface View {
-        fun showPossibleProjects(projects: List<Project>)
-
-        fun selectProject(project: Project)
-    }
-
-    interface Repository {
-        fun getPossibleProjects(): List<Project>
-    }
-}
-
-class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectChoose.Repository) {
-    fun onCreate() {
-        view.showPossibleProjects(repository.getPossibleProjects())
-    }
-
-    fun onProjectClicked(project: Project) {
-        view.selectProject(project)
-    }
-}

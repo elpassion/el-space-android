@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
 import retrofit2.http.POST
@@ -30,6 +31,6 @@ interface ReportAdd {
     }
 
     object ApiProvider : Provider<Api>({
-        throw NotImplementedError()
+        RetrofitProvider.get().create(Api::class.java)
     })
 }

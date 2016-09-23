@@ -1,8 +1,6 @@
 package pl.elpassion.project.choose
 
-import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepository
 
 interface ProjectChoose {
     interface View {
@@ -10,5 +8,4 @@ interface ProjectChoose {
 
         fun selectProject(project: Project)
     }
-
 }

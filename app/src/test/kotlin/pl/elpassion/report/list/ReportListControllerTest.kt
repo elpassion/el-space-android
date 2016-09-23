@@ -187,6 +187,14 @@ class ReportListControllerTest {
         verify(view, times(1)).openAddReportScreen("1999-01-02")
     }
 
+    @Test
+    fun shouldOpenEditReportScreenOnReport() {
+        val report = newReport()
+        controller.onReport(report)
+
+        verify(view, times(1)).openEditReportScreen(report)
+    }
+
     private fun stubApiToReturnNever() {
         whenever(api.getReports()).thenReturn(Observable.never())
     }

@@ -19,7 +19,7 @@ interface ReportList {
 
         fun openAddReportScreen(date: String)
 
-        fun showMonth(monthName: String)
+        fun showMonthName(monthName: String)
     }
 
 }

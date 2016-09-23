@@ -44,7 +44,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
         }
 
         view.showDays(days)
-        view.showMonth(date.getFullMonthName())
+        view.showMonthName(date.getFullMonthName())
     }
 
     private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)

@@ -42,7 +42,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonth("October")
+        verify(view, times(1)).showMonthName("October")
     }
 
     @Test
@@ -52,7 +52,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonth("November")
+        verify(view, times(1)).showMonthName("November")
     }
 
     @Test
@@ -137,7 +137,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onNextMonth()
 
-        verify(view, times(1)).showMonth("August")
+        verify(view, times(1)).showMonthName("August")
     }
 
     @Test
@@ -163,7 +163,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onPreviousMonth()
 
-        verify(view, times(1)).showMonth("June")
+        verify(view, times(1)).showMonthName("June")
     }
 
     @Test

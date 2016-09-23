@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import pl.elpassion.common.Provider
 import rx.Observable
 
 interface ReportList {
@@ -23,5 +24,7 @@ interface ReportList {
 
         fun openEditReportScreen(report: Report)
     }
+
+    object ServiceProvider : Provider<Service>( { ReportListService() } )
 
 }

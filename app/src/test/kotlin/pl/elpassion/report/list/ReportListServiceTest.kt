@@ -14,9 +14,18 @@ class ReportListServiceTest {
     fun shouldCorrectlyMapReportsYear() {
         val subscriber = TestSubscriber<List<Report>>()
         val reportApi = mock<ReportApi>()
-        whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(newReportFromApi(createdAt = "2012-07-15T11:56:31.919+02:00"))))
+        whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(newReportFromApi(createdAt = "2012-06-01T11:56:31.919+02:00"))))
         ReportListService(reportApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(year = 2012)))
+    }
+
+    @Test
+    fun shouldCorrectlyMapReportsMonth() {
+        val subscriber = TestSubscriber<List<Report>>()
+        val reportApi = mock<ReportApi>()
+        whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(newReportFromApi(createdAt = "2016-01-01T11:56:31.919+02:00"))))
+        ReportListService(reportApi).getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(month = 1)))
     }
 
     private fun newReportFromApi(createdAt: String): ReportFromApi {

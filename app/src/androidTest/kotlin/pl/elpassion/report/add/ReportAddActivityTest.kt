@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
@@ -63,10 +64,16 @@ class ReportAddActivityTest {
         onId(R.id.reportAddDescription).typeText("Description").hasText("Description")
     }
 
-    private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject())) {
+    @Test
+    fun shouldShowDateToUser() {
+        stubRepositoryAndStart(date = "2016-09-23")
+        onId(R.id.reportAddDate).hasText("2016-09-23")
+    }
+
+    private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
         whenever(repository.getPossibleProjects()).thenReturn(projects)
         ProjectRepositoryProvider.override = { repository }
-        rule.startActivity()
+        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
 }
 

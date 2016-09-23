@@ -19,6 +19,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         controller.onCreate()
+        reportAddDate.text = intent.getStringExtra(ADD_DATE_KEY)
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
     }
@@ -43,8 +44,9 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         private val ADD_DATE_KEY = "dateKey"
 
         fun start(context: Context, date: String) {
-            val intent = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }
-            context.startActivity(intent)
+            context.startActivity(intent(context, date))
         }
+
+        fun intent(context: Context, date: String) = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }
     }
 }

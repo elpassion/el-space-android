@@ -7,10 +7,19 @@ import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.report.add.ReportAddActivity
+import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
-    val controller by lazy { ReportListController(ReportList.ServiceProvider.get(), this) }
+    val controller by lazy { ReportListController(object : ReportList.Service {
+        val service = ReportList.ServiceProvider.get()
+        override fun getReports(): Observable<List<Report>> {
+           return service.getReports().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }
+
+    }, this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

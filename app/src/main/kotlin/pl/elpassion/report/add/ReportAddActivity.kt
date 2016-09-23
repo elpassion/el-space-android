@@ -10,10 +10,19 @@ import pl.elpassion.R
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.common.Project
 import pl.elpassion.project.common.ProjectRepositoryProvider
+import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
-    val controller by lazy { ReportAddController(this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get()) }
+    val controller by lazy {
+        ReportAddController(this, ProjectRepositoryProvider.get(), object : ReportAdd.Api {
+            override fun addReport(date: String, projectId: String, hours: String, description: String): Observable<Unit> {
+                return ReportAdd.ApiProvider.get().addReport(date, projectId, hours, description).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            }
+        })
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

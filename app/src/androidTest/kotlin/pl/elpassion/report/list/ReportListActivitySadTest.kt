@@ -28,6 +28,5 @@ class ReportListActivitySadTest {
         onId(R.id.reportListError).isDisplayed().hasText(R.string.report_list_error)
     }
 
-
 }
 

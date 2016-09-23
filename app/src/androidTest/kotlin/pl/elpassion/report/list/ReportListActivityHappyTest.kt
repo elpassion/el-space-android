@@ -10,6 +10,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.hasChildWithText
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
 import rx.Observable
@@ -32,10 +33,9 @@ class ReportListActivityHappyTest {
         onId(R.id.reportListError).isNotDisplayed()
     }
 
-
     @Test
-    fun shouldShowDayFirstOnScreen() {
-        onText("1").isDisplayed()
+    fun shouldShowDayFirstOnContainer() {
+        onId(R.id.reportsContainer).hasChildWithText("1")
     }
 
 }

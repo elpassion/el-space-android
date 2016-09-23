@@ -1,8 +1,10 @@
 package pl.elpassion.report.list
 
 import android.support.test.rule.ActivityTestRule
+import com.elpassion.android.commons.espresso.isDisplayed
 import com.elpassion.android.commons.espresso.isNotDisplayed
 import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -30,6 +32,11 @@ class ReportListActivityHappyTest {
         onId(R.id.reportListError).isNotDisplayed()
     }
 
+
+    @Test
+    fun shouldShowDayFirstOnScreen() {
+        onText("1").isDisplayed()
+    }
 
 }
 

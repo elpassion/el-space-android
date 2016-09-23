@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 class ReportListServiceTest {
 
     val subscriber = TestSubscriber<List<Report>>()
-    val reportApi = mock<ReportApi>()
+    val reportApi = mock<ReportList.ReportApi>()
 
     @Test
     fun shouldCorrectlyMapReportsYear() {

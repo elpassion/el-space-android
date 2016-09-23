@@ -33,4 +33,9 @@ interface ReportList {
         })
     })
 
+    interface ReportApi {
+        fun getReports(): Observable<List<ReportFromApi>>
+    }
+
 }
+

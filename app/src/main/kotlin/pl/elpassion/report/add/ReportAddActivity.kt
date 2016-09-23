@@ -19,6 +19,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         setContentView(R.layout.report_add_activity)
         controller.onCreate()
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
+        reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
     }
 
     override fun showSelectedProject(project: Project) {

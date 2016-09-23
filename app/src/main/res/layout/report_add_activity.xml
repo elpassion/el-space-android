@@ -5,13 +5,17 @@
     android:orientation="vertical">
 
     <TextView
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:id="@+id/reportAddProjectName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="name" />
 
-    <TextView
+    <EditText
+        android:id="@+id/reportAddHours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:text="8" />
 </LinearLayout>

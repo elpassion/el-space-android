@@ -1,13 +1,12 @@
 package pl.elpassion.report.add
 
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.R
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
 import pl.elpassion.project.choose.ProjectChooseActivity
@@ -49,7 +48,15 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowHoursInput() {
         stubRepositoryAndStart()
-        onText("8").isDisplayed()
+        onId(R.id.reportAddHours).hasText("8")
+    }
+
+    @Test
+    fun shouldRemovePreviousTextWhenHoursTyped() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddHours).typeText("4")
+        Thread.sleep(10000)
+        onId(R.id.reportAddHours).hasText("4")
     }
 
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject())) {

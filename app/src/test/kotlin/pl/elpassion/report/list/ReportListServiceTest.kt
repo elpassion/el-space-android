@@ -27,6 +27,13 @@ class ReportListServiceTest {
         subscriber.assertValue(listOf(newReport(month = 1)))
     }
 
+    @Test
+    fun shouldCorrectlyMapReportsDays() {
+        stubReportApiToReturn(newReportFromApi(createdAt = "2016-06-21T11:56:31.919+02:00"))
+        ReportListService(reportApi).getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(day = 21)))
+    }
+
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
         whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
     }

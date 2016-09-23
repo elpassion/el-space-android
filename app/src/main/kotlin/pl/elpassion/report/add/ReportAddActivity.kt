@@ -1,6 +1,7 @@
 package pl.elpassion.report.add
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -39,5 +40,11 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     companion object {
         private val REQUEST_CODE = 10001
+        private val ADD_DATE_KEY = "dateKey"
+
+        fun start(context: Context, date: String) {
+            val intent = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }
+            context.startActivity(intent)
+        }
     }
 }

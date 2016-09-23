@@ -10,7 +10,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(days: List<Day>)
+        fun showDays(days: List<Day>, listener: OnDayClickListener)
 
         fun showError()
 
@@ -25,6 +25,6 @@ interface ReportList {
         fun openEditReportScreen(report: Report)
     }
 
-    object ServiceProvider : Provider<Service>( { ReportListService() } )
+    object ServiceProvider : Provider<Service>({ ReportListService() })
 
 }

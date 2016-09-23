@@ -3,12 +3,10 @@ package pl.elpassion.report.list
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
-import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newDay
 import pl.elpassion.project.dto.newReport
 import rx.Observable
-import java.util.*
 
 class ReportListControllerTest {
 
@@ -66,7 +64,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showDays(daysWithReportInFirstDayFromCurrentMonth(report))
+        verify(view, times(1)).showDays(daysWithReportInFirstDayFromCurrentMonth(report), controller)
     }
 
     @Test
@@ -128,7 +126,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onNextMonth()
 
-        verify(view, times(1)).showDays(days)
+        verify(view, times(1)).showDays(days, controller)
     }
 
     @Test
@@ -154,7 +152,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onPreviousMonth()
 
-        verify(view, times(1)).showDays(days)
+        verify(view, times(1)).showDays(days, controller)
     }
 
     @Test
@@ -176,7 +174,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
         val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
-        verify(view, times(1)).showDays(days)
+        verify(view, times(1)).showDays(days, controller)
     }
 
     @Test
@@ -213,7 +211,7 @@ class ReportListControllerTest {
         stubServiceToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
-        verify(view, times(1)).showDays(days)
+        verify(view, times(1)).showDays(days, controller)
     }
 
     private fun daysWithReportInFirstDayFromCurrentMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }

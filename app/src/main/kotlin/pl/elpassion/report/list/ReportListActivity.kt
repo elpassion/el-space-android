@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.report.add.ReportAddActivity
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
@@ -18,7 +19,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         controller.onCreate()
     }
 
-
     override fun openEditReportScreen(report: Report) {
 
     }
@@ -27,6 +27,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openAddReportScreen(date: String) {
+        ReportAddActivity.start(this, date)
     }
 
     override fun hideLoader() {
@@ -39,9 +40,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         reportListError.visibility = VISIBLE
     }
 
-    override fun showDays(days: List<Day>) {
-        reportsContainer.adapter = ReportsAdapter(days.flatMap { listOf(DayItemAdapter(it)) + it.reports.map { report -> ReportItemAdapter(report) } })
+    override fun showDays(days: List<Day>, listener: OnDayClickListener) {
+        reportsContainer.adapter = ReportsAdapter(days.flatMap { listOf(DayItemAdapter(it, listener)) + it.reports.map { report -> ReportItemAdapter(report) } })
     }
-
 }
 

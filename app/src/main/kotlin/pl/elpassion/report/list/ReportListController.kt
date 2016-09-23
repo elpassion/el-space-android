@@ -4,7 +4,7 @@ import pl.elpassion.common.*
 import rx.Subscription
 import java.util.*
 
-class ReportListController(val service: ReportList.Service, val view: ReportList.View) {
+class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener {
 
     private var subscription: Subscription? = null
     private val reportList: MutableList<Report> = ArrayList()
@@ -43,7 +43,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
             }
         }
 
-        view.showDays(days)
+        view.showDays(days, this)
         view.showMonthName(date.getFullMonthName())
     }
 
@@ -59,11 +59,15 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
         iteratorDay.isNotAfter(currentDate)
     }
 
-    fun onDay(dayNumber: Int) {
+    override fun onDay(dayNumber: Int) {
         view.openAddReportScreen(String.format("%d-%02d-%02d", date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
     }
 
     fun onReport(report: Report) {
         view.openEditReportScreen(report)
     }
+}
+
+interface OnDayClickListener {
+    fun onDay(dayNumber: Int)
 }

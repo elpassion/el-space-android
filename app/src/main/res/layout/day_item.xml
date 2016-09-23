@@ -3,19 +3,24 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal">
+              android:orientation="horizontal"
+              android:paddingBottom="10dp"
+              android:paddingTop="16dp">
 
     <TextView
-        android:textSize="25sp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:id="@+id/dayNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="25sp"
         tools:text="1"/>
 
     <TextView
         android:id="@+id/totalHours"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         tools:text="Total: 8.0 hours"/>
 
 </LinearLayout>

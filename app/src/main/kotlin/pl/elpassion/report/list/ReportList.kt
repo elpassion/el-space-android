@@ -2,6 +2,7 @@ package pl.elpassion.report.list
 
 import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
+import retrofit2.http.GET
 import rx.Observable
 
 interface ReportList {
@@ -31,6 +32,7 @@ interface ReportList {
     })
 
     interface ReportApi {
+        @GET("activities")
         fun getReports(): Observable<List<ReportFromApi>>
     }
 
@@ -43,6 +45,7 @@ interface ReportList {
     })
 
     interface ProjectApi {
+        @GET("projects")
         fun getProjects() : Observable<List<Project>>
     }
 

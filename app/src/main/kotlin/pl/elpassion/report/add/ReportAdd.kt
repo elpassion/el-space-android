@@ -22,7 +22,7 @@ interface ReportAdd {
 
     interface Api {
 
-        @POST("api/v1/activities")
+        @POST("activities")
         fun addReport(
                 @Query("date") date: String,
                 @Query("project_id") projectId: String,

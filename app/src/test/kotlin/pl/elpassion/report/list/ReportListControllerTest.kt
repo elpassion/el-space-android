@@ -1,6 +1,7 @@
 package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import rx.Observable
@@ -11,6 +12,11 @@ class ReportListControllerTest {
     val api = mock<ReportList.Api>()
     val view = mock<ReportList.View>()
     val controller = ReportListController(api, view)
+
+    @Before
+    fun setUp() {
+        stubCurrentTime()
+    }
 
     @Test
     fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
@@ -37,6 +43,16 @@ class ReportListControllerTest {
         controller.onCreate()
 
         verify(view, times(1)).showMonth("October")
+    }
+
+    @Test
+    fun shouldReallyShowCorrectMonthName() {
+        stubApiToReturn(emptyList())
+        stubCurrentTime(month = 11)
+
+        controller.onCreate()
+
+        verify(view, times(1)).showMonth("November")
     }
 
     @Test

@@ -1,3 +1,3 @@
 package pl.elpassion.common
 
-object CurrentTimeProvider : Provider<Long>({ throw NotImplementedError() })
+object CurrentTimeProvider : Provider<Long>({ System.currentTimeMillis() })

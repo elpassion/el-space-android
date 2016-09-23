@@ -8,7 +8,8 @@
         android:id="@+id/reportAddDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/reportAddProjectName"
@@ -17,7 +18,8 @@
         android:layout_margin="10dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:text="name" />
+        android:text="name"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/reportAddHours"
@@ -25,14 +27,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:inputType="number"
-        android:text="8" />
+        android:text="8"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/reportAddDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/reportAddAdd"

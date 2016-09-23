@@ -1,6 +1,7 @@
 package pl.elpassion.report.list
 
 import pl.elpassion.common.Provider
+import pl.elpassion.project.common.Project
 import rx.Observable
 
 interface ReportList {
@@ -26,16 +27,28 @@ interface ReportList {
     }
 
     object ServiceProvider : Provider<Service>({
-        ReportListService(ApiProvider.get())
+        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get())
     })
 
     interface ReportApi {
         fun getReports(): Observable<List<ReportFromApi>>
     }
 
-    object ApiProvider : Provider<ReportApi>({
+    object ReportApiProvider : Provider<ReportApi>({
         object : ReportApi {
             override fun getReports(): Observable<List<ReportFromApi>> {
+                return Observable.error(RuntimeException())
+            }
+        }
+    })
+
+    interface ProjectApi {
+        fun getProjects() : Observable<List<Project>>
+    }
+
+    object ProjectApiProvider : Provider<ProjectApi>({
+        object :ProjectApi{
+            override fun getProjects(): Observable<List<Project>> {
                 return Observable.error(RuntimeException())
             }
         }

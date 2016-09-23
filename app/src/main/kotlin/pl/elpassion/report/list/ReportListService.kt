@@ -2,8 +2,8 @@ package pl.elpassion.report.list
 
 import rx.Observable
 
-class ReportListService(val reportApi: ReportList.ReportApi) : ReportList.Service {
+class ReportListService(val reportApi: ReportList.ReportApi, val projectApi: ReportList.ProjectApi) : ReportList.Service {
     override fun getReports(): Observable<List<Report>> {
-        return reportApi.getReports().map { it.map { it.toReport() } }
+        return projectApi.getProjects().flatMap { projects -> reportApi.getReports().map { it.map { it.toReport(projects) } } }
     }
 }

@@ -2,7 +2,10 @@ package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
 import org.junit.Test
+import pl.elpassion.project.common.Project
+import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import rx.Observable
 import rx.observers.TestSubscriber
@@ -12,47 +15,58 @@ class ReportListServiceTest {
 
     val subscriber = TestSubscriber<List<Report>>()
     val reportApi = mock<ReportList.ReportApi>()
+    val projectApi = mock<ReportList.ProjectApi>()
+
+    @Before
+    fun setUp(){
+        stubProjectApiToReturn(newProject(id = "1", name = "Project"))
+    }
+
+    private fun stubProjectApiToReturn(project: Project) {
+        whenever(projectApi.getProjects()).thenReturn(Observable.just(listOf(project)))
+    }
 
     @Test
     fun shouldCorrectlyMapReportsYear() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2012-06-01T11:56:31.919+02:00"))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
+        ReportListService(reportApi,projectApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(year = 2012)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsMonth() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2016-01-01T11:56:31.919+02:00"))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
+        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(month = 1)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDays() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2016-06-21T11:56:31.919+02:00"))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
+        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(day = 21)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsValues() {
         stubReportApiToReturn(newReportFromApi(value = 9.0))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
+        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(reportedHours = 9.0)))
-    }
-
-    @Test
-    fun shouldCorrectlyMapReportsProjectId() {
-        stubReportApiToReturn(newReportFromApi(projectId = 12))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(projectId = 12)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDescription() {
         stubReportApiToReturn(newReportFromApi(description = "1234"))
-        ReportListService(reportApi).getReports().subscribe(subscriber)
+        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(description = "1234")))
+    }
+
+    @Test
+    fun shouldCorrectlyMapReportsProjectsName() {
+        stubProjectApiToReturn(newProject(id = "2", name = "Test"))
+        stubReportApiToReturn(newReportFromApi(projectId = 2))
+        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(projectId = 2, projectName = "Test")))
     }
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {

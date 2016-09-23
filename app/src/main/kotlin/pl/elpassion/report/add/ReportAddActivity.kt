@@ -20,4 +20,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun showSelectedProject(project: Project) {
         reportAddProjectName.text = project.name
     }
+
+    override fun openProjectChooser() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }

@@ -12,12 +12,13 @@ class ReportAddControllerTest {
 
     val view = mock<ReportAdd.View>()
     val api = mock<ProjectRepository>()
+    val controller = ReportAddController(view, api)
 
     @Test
     fun shouldShowPossibleProjects() {
         val projects = listOf(newProject())
         stubApiToReturn(projects)
-        ReportAddController(view, api).onCreate()
+        controller.onCreate()
         verify(view).showSelectedProject(projects.first())
     }
 
@@ -25,8 +26,14 @@ class ReportAddControllerTest {
     fun shouldShowPossibleProjectFormApi() {
         val projects = listOf(newProject("id2", "name2"), newProject())
         stubApiToReturn(projects)
-        ReportAddController(view, api).onCreate()
+        controller.onCreate()
         verify(view).showSelectedProject(projects.first())
+    }
+
+    @Test
+    fun shouldOpenProjectChooserOnProjectClicked() {
+        controller.onProjectClicked()
+        verify(view).openProjectChooser()
     }
 
     private fun stubApiToReturn(list: List<Project>) {

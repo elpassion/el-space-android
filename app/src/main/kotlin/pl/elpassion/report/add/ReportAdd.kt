@@ -7,5 +7,7 @@ interface ReportAdd {
         fun showSelectedProject(project: Project)
 
         fun openProjectChooser()
+
+        fun close()
     }
 }

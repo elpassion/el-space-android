@@ -16,4 +16,8 @@ class ReportAddController(val view: ReportAdd.View, val api: ProjectRepository) 
     fun onSelectProject(project: Project) {
         view.showSelectedProject(project)
     }
+
+    fun onReportAdd(hours: String, description: String) {
+        view.close()
+    }
 }

@@ -42,6 +42,12 @@ class ReportAddControllerTest {
         verify(view).showSelectedProject(newProject())
     }
 
+    @Test
+    fun shouldCloseAfterAddingNewReport() {
+        controller.onReportAdd("8", "description")
+        verify(view).close()
+    }
+
     private fun stubApiToReturn(list: List<Project>) {
         whenever(api.getPossibleProjects()).thenReturn(list)
     }

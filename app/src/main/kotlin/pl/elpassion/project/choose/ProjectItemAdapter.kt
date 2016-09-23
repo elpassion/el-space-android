@@ -7,12 +7,15 @@ import kotlinx.android.synthetic.main.project_item.view.*
 import pl.elpassion.R
 import pl.elpassion.project.common.Project
 
-class ProjectItemAdapter(val project: Project) : ItemAdapter<ProjectItemAdapter.Holder>(R.layout.project_item) {
+class ProjectItemAdapter(val project: Project, val onClickListener: () -> Unit) : ItemAdapter<ProjectItemAdapter.Holder>(R.layout.project_item) {
 
     override fun onCreateViewHolder(itemView: View) = Holder(itemView)
 
     override fun onBindViewHolder(holder: Holder) {
-        holder.itemView.projectName.text = project.name
+        holder.itemView.projectName.apply {
+            text = project.name
+            setOnClickListener { onClickListener() }
+        }
     }
 
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView)

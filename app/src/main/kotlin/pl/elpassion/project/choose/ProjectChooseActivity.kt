@@ -1,6 +1,6 @@
 package pl.elpassion.project.choose
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -23,16 +23,22 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     override fun showPossibleProjects(projects: List<Project>) {
         projectsContainer.layoutManager = LinearLayoutManager(this)
-        projectsContainer.adapter = BaseRecyclerViewAdapter(projects.map { ProjectItemAdapter(it) })
+        projectsContainer.adapter = BaseRecyclerViewAdapter(projects.map {
+            ProjectItemAdapter(it, {
+                controller.onProjectClicked(it)
+            })
+        })
     }
 
     override fun selectProject(project: Project) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_PROJECT, project))
+        finish()
     }
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, ProjectChooseActivity::class.java))
+        val SELECTED_PROJECT = "selected_project"
+        fun startForResult(activity: Activity, requestCode: Int) {
+            activity.startActivityForResult(Intent(activity, ProjectChooseActivity::class.java), requestCode)
         }
     }
 }

@@ -1,5 +1,7 @@
 package pl.elpassion.report.add
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.report_add_activity.*
@@ -24,6 +26,17 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun openProjectChooser() {
-        ProjectChooseActivity.start(this)
+        ProjectChooseActivity.startForResult(this, REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            reportAddProjectName.text = (data!!.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project).name
+        }
+    }
+
+    companion object {
+        private val REQUEST_CODE = 10001
     }
 }

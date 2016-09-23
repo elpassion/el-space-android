@@ -129,6 +129,18 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldShowCorrectMonthOnNextMonth() {
+        stubCurrentTime(year = 2016, month = 7, day = 1)
+        stubApiToReturn(emptyList())
+
+        controller.onCreate()
+        reset(view)
+        controller.onNextMonth()
+
+        verify(view, times(1)).showMonth("August")
+    }
+
+    @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
         val report = Report(2016, 6, 1)
         val days = daysWithReportInFirstDayFromPreviousMonth(report)

@@ -31,6 +31,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
     fun onNextMonth() {
         date.changeToNextMonth()
         showDays()
+        view.showMonth(date.getFullMonthName())
     }
 
     fun onPreviousMonth() {

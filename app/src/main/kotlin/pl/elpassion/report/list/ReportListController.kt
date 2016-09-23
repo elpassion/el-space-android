@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import android.util.Log
 import pl.elpassion.common.*
 import rx.Subscription
 import java.util.*
@@ -18,6 +19,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                     reportList.addAll(reports)
                     showDaysAndUpdateMonthName()
                 }, {
+                    Log.e("Error", it.toString(), it)
                     view.showError()
                 })
     }

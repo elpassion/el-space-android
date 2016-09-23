@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
 import pl.elpassion.project.common.ProjectRepositoryProvider
@@ -38,24 +39,16 @@ interface ReportList {
     }
 
     object ReportApiProvider : Provider<ReportApi>({
-        object : ReportApi {
-            override fun getReports(): Observable<List<ReportFromApi>> {
-                return Observable.error(RuntimeException())
-            }
-        }
+        RetrofitProvider.get().create(ReportApi::class.java)
     })
 
     interface ProjectApi {
         @GET("projects")
-        fun getProjects() : Observable<List<Project>>
+        fun getProjects(): Observable<List<Project>>
     }
 
     object ProjectApiProvider : Provider<ProjectApi>({
-        object :ProjectApi{
-            override fun getProjects(): Observable<List<Project>> {
-                return Observable.error(RuntimeException())
-            }
-        }
+        RetrofitProvider.get().create(ProjectApi::class.java)
     })
 }
 

@@ -15,7 +15,7 @@ class ReportFromApi(val createdAt: Date, val value: Double, val projectId: Long,
                 day = createdAt.dayValue(),
                 reportedHours = value,
                 projectId = projectId,
-                projectName = projects.first { it.id.equals(projectId.toString()) }.name,
+                projectName = projects.firstOrNull { it.id.equals(projectId.toString()) }?.name ?: "Unknown",
                 description = comment)
     }
 

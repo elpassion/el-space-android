@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.dto.newDay
 import pl.elpassion.project.dto.newReport
 import rx.Observable
 
@@ -64,7 +63,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showDays(daysWithReportInFirstDayFromCurrentMonth(report), controller)
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
     }
 
     @Test
@@ -118,7 +117,6 @@ class ReportListControllerTest {
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
         val report = newReport(2016, 6, 1, reportedHours = 1.0)
-        val days = daysWithReportInFirstDayFromNextMonth(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -126,7 +124,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onNextMonth()
 
-        verify(view, times(1)).showDays(days, controller)
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
     }
 
     @Test
@@ -144,7 +142,6 @@ class ReportListControllerTest {
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
         val report = newReport(2016, 6, 1)
-        val days = daysWithReportInFirstDayFromPreviousMonth(report)
         stubCurrentTime(year = 2016, month = 7, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -152,7 +149,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onPreviousMonth()
 
-        verify(view, times(1)).showDays(days, controller)
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
     }
 
     @Test
@@ -173,8 +170,7 @@ class ReportListControllerTest {
         stubServiceToReturn(emptyList())
 
         controller.onCreate()
-        val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
-        verify(view, times(1)).showDays(days, controller)
+        verify(view, times(1)).showDays(argThat { this[0].hasPassed }, any())
     }
 
     @Test
@@ -194,6 +190,17 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
+    @Test
+    fun shouldCorrectlyMapWeekendDays() {
+        stubCurrentTime(year = 2016, month = 9)
+        stubServiceToReturn(emptyList())
+        controller.onCreate()
+        reset(view)
+        controller.onNextMonth()
+
+        verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay}, any())
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.getReports()).thenReturn(Observable.never())
     }
@@ -207,15 +214,10 @@ class ReportListControllerTest {
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..daysInMonth).map { newDay(dayNumber = it) }
         stubServiceToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
-        verify(view, times(1)).showDays(days, controller)
+        verify(view, times(1)).showDays(argThat { this.size == daysInMonth }, any())
     }
-
-    private fun daysWithReportInFirstDayFromCurrentMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
-    private fun daysWithReportInFirstDayFromNextMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = false)) + (2..30).map { newDay(dayNumber = it) }
-    private fun daysWithReportInFirstDayFromPreviousMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = true)) + (2..30).map { newDay(dayNumber = it, hasPassed = true) }
 
 }

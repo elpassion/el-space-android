@@ -39,12 +39,17 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private fun showDaysAndUpdateMonthName() {
         val days = ArrayList<Day>().apply {
             (1..daysForCurrentMonth()).forEach {
-                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it)))
+                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it), isWeekendDay = isWeekendDay(it)))
             }
         }
 
         view.showDays(days, this)
         view.showMonthName(date.getFullMonthName())
+    }
+
+    private fun isWeekendDay(dayNumber: Int): Boolean {
+        val iteratorDay = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
+        return iteratorDay.isWeekendDay()
     }
 
     private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)

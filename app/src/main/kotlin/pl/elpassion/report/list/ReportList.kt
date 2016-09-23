@@ -26,16 +26,19 @@ interface ReportList {
     }
 
     object ServiceProvider : Provider<Service>({
-        ReportListService(object : ReportApi {
-            override fun getReports(): Observable<List<ReportFromApi>> {
-                return Observable.error(RuntimeException())
-            }
-        })
+        ReportListService(ApiProvider.get())
     })
 
     interface ReportApi {
         fun getReports(): Observable<List<ReportFromApi>>
     }
 
+    object ApiProvider : Provider<ReportApi>({
+        object : ReportApi {
+            override fun getReports(): Observable<List<ReportFromApi>> {
+                return Observable.error(RuntimeException())
+            }
+        }
+    })
 }
 

@@ -7,13 +7,15 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.project.dto.Project
+import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepository
+import pl.elpassion.project.common.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
 class ProjectChooseActivityTest {
 
-    val repository = mock<ProjectChoose.Repository>()
+    val repository = mock<ProjectRepository>()
 
     @JvmField @Rule
     val rule = ActivityTestRule<ProjectChooseActivity>(ProjectChooseActivity::class.java, false, false)
@@ -34,7 +36,7 @@ class ProjectChooseActivityTest {
     }
 
     private fun stubRepositoryToReturn(projects: List<Project>) {
-        ProjectChoose.RepositoryProvider.override = { repository }
+        ProjectRepositoryProvider.override = { repository }
         whenever(repository.getPossibleProjects()).thenReturn(projects)
     }
 }

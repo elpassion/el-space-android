@@ -1,3 +1,3 @@
-package pl.elpassion.project.dto
+package pl.elpassion.project.common
 
 data class Project(val id: String, val name: String)

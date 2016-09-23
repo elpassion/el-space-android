@@ -6,11 +6,12 @@ import android.support.v7.widget.LinearLayoutManager
 import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
-import pl.elpassion.project.dto.Project
+import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepositoryProvider
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    val controller by lazy { ProjectChooseController(this, ProjectChoose.RepositoryProvider.get()) }
+    val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

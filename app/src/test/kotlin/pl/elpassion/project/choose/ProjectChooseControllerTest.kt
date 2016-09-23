@@ -4,13 +4,14 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import pl.elpassion.project.dto.Project
+import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.dto.newProject
 
 class ProjectChooseControllerTest {
 
     val view = mock<ProjectChoose.View>()
-    val repository = mock<ProjectChoose.Repository>()
+    val repository = mock<ProjectRepository>()
     val controller = ProjectChooseController(view, repository)
 
     @Test

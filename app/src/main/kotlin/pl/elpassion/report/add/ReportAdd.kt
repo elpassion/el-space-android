@@ -2,6 +2,8 @@ package pl.elpassion.report.add
 
 import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
+import retrofit2.http.POST
+import retrofit2.http.Query
 import rx.Observable
 
 interface ReportAdd {
@@ -18,7 +20,13 @@ interface ReportAdd {
     }
 
     interface Api {
-        fun addReport(): Observable<Unit>
+
+        @POST("api/v1/activities")
+        fun addReport(
+                @Query("date") date: String,
+                @Query("project_id") projectId: String,
+                @Query("value") hours: String,
+                @Query("comment") description: String): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

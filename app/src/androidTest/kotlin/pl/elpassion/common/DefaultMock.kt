@@ -19,7 +19,7 @@ class DeaultMocksRule : TestRule {
 fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {
-            override fun addReport() = Observable.just(Unit)
+            override fun addReport(date: String, projectId: String, hours: String, description: String) = Observable.just(Unit)
         }
     }
 }

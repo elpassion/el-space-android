@@ -5,9 +5,13 @@ import pl.elpassion.project.common.ProjectRepository
 
 class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepository, val api: ReportAdd.Api) {
 
+    lateinit var date: String
+    lateinit var project: Project
+
     fun onCreate(date: String) {
+        this.date = date
         view.showDate(date)
-        view.showSelectedProject(repository.getPossibleProjects().first())
+        onSelectProject(repository.getPossibleProjects().first())
     }
 
     fun onProjectClicked() {
@@ -15,11 +19,12 @@ class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepos
     }
 
     fun onSelectProject(project: Project) {
+        this.project = project
         view.showSelectedProject(project)
     }
 
     fun onReportAdd(hours: String, description: String) {
-        api.addReport().subscribe({
+        api.addReport(date, project.id, hours, description).subscribe({
             view.close()
         }, {
             view.showError()

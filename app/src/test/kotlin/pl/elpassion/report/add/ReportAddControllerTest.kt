@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -19,7 +20,7 @@ class ReportAddControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.addReport()).thenReturn(Observable.just(Unit))
+        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.just(Unit))
         stubRepositoryToReturn()
     }
 
@@ -51,13 +52,15 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
+        onCreate()
         controller.onReportAdd("8", "description")
         verify(view).close()
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addReport()).thenReturn(Observable.error(RuntimeException()))
+        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
+        onCreate()
         controller.onReportAdd("8", "description")
         verify(view).showError()
     }
@@ -66,6 +69,13 @@ class ReportAddControllerTest {
     fun shouldShowDate() {
         onCreate("2016-09-23")
         verify(view).showDate("2016-09-23")
+    }
+    @Test
+    fun shouldUseApi() {
+        whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))
+        onCreate("2016-09-23")
+        controller.onReportAdd("8", "description")
+        verify(view).showError()
     }
 
     private fun onCreate(date: String = "2016-01-01") {

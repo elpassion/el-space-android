@@ -4,13 +4,14 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
+import pl.elpassion.project.choose.ProjectChoose
 import pl.elpassion.project.dto.Project
 import pl.elpassion.project.dto.newProject
 
 class ReportAddControllerTest {
 
     val view = mock<ReportAdd.View>()
-    val api = mock<ReportAdd.Api>()
+    val api = mock<ProjectChoose.Repository>()
 
     @Test
     fun shouldShowPossibleProjects() {
@@ -37,13 +38,9 @@ interface ReportAdd {
     interface View {
         fun showPossibleProjects(projects: List<Project>)
     }
-
-    interface Api {
-        fun getPossibleProjects(): List<Project>
-    }
 }
 
-class ReportAddController(val view: ReportAdd.View, val api: ReportAdd.Api) {
+class ReportAddController(val view: ReportAdd.View, val api: ProjectChoose.Repository) {
     fun onCreate() {
         view.showPossibleProjects(api.getPossibleProjects())
     }

@@ -2,7 +2,6 @@ package pl.elpassion.report.list
 
 import pl.elpassion.common.*
 import rx.Subscription
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
@@ -21,7 +20,8 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
                 }, {
                     view.showError()
                 })
-        view.showMonth(SimpleDateFormat("MMMM", Locale.UK).format(date.time))
+
+        view.showMonth(date.getFullMonthName())
     }
 
     fun onDestroy() {

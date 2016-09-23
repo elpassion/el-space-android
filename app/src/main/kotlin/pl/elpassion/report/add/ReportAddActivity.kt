@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
+import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.common.Project
 import pl.elpassion.project.common.ProjectRepositoryProvider
 
@@ -15,6 +16,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         controller.onCreate()
+        reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
     }
 
     override fun showSelectedProject(project: Project) {
@@ -22,6 +24,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun openProjectChooser() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        ProjectChooseActivity.start(this)
     }
 }

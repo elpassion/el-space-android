@@ -1,5 +1,7 @@
 package pl.elpassion.project.choose
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -26,5 +28,11 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     override fun selectProject(project: Project) {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, ProjectChooseActivity::class.java))
+        }
     }
 }

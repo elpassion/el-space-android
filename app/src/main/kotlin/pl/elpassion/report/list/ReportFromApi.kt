@@ -6,7 +6,7 @@ import pl.elpassion.common.yearValue
 import pl.elpassion.project.common.Project
 import java.util.*
 
-class ReportFromApi(val createdAt: Date, val value: Double?, val projectId: Long?, val comment: String) {
+class ReportFromApi(val createdAt: Date, val value: Double?, val projectId: Long?, val comment: String?) {
 
     fun toReport(projects: List<Project>): Report {
         return Report(
@@ -16,7 +16,7 @@ class ReportFromApi(val createdAt: Date, val value: Double?, val projectId: Long
                 reportedHours = value ?: 0.0,
                 projectId = projectId ?: -1,
                 projectName = projects.firstOrNull { it.id.equals(projectId.toString()) }?.name ?: "Unknown",
-                description = comment)
+                description = comment ?: "")
     }
 
 }

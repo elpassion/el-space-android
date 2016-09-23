@@ -8,19 +8,24 @@ import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.report.add.ReportAddActivity
+import pl.elpassion.report.list.items.DayItemAdapter
+import pl.elpassion.report.list.items.DayNotFilledInItemAdapter
+import pl.elpassion.report.list.items.ReportItemAdapter
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
-    val controller by lazy { ReportListController(object : ReportList.Service {
-        val service = ReportList.ServiceProvider.get()
-        override fun getReports(): Observable<List<Report>> {
-           return service.getReports().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-        }
+    val controller by lazy {
+        ReportListController(object : ReportList.Service {
+            val service = ReportList.ServiceProvider.get()
+            override fun getReports(): Observable<List<Report>> {
+                return service.getReports().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            }
 
-    }, this) }
+        }, this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +57,12 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showDays(days: List<Day>, listener: OnDayClickListener) {
-        reportsContainer.adapter = ReportsAdapter(days.flatMap { listOf(DayItemAdapter(it, listener)) + it.reports.map { report -> ReportItemAdapter(report) } })
+        reportsContainer.adapter = ReportsAdapter(days.flatMap {
+            val dayItem =
+                    if (it.hasPassed && it.reports.isEmpty()) DayNotFilledInItemAdapter(it, listener)
+                    else DayItemAdapter(it, listener)
+            listOf(dayItem) + it.reports.map { report -> ReportItemAdapter(report) }
+        })
     }
 }
 

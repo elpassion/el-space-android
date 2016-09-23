@@ -1,10 +1,11 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.items
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.report_item.view.*
 import pl.elpassion.R
+import pl.elpassion.report.list.Report
 
 class ReportItemAdapter(val report: Report) : ItemAdapter<ReportItemAdapter.VH>(R.layout.report_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)

@@ -1,10 +1,7 @@
 package pl.elpassion.report.list
 
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.isNotDisplayed
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -68,7 +65,7 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldHaveOneDayWithMissingStatus() {
-        onId(R.id.reportsContainer).hasChildWithText("MISSING")
+        onId(R.id.reportsContainer).hasChildWithText(R.string.report_missing)
     }
 
 }

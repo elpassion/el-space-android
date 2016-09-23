@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">El Peon</string>
     <string name="report_list_error">Error</string>
+    <string name="report_missing">MISSING</string>
 </resources>

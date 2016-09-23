@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import pl.elpassion.project.common.Project
 import pl.elpassion.project.common.ProjectRepository
 
 class ReportAddController(val view: ReportAdd.View, val api: ProjectRepository) {
@@ -10,5 +11,9 @@ class ReportAddController(val view: ReportAdd.View, val api: ProjectRepository) 
 
     fun onProjectClicked() {
         view.openProjectChooser()
+    }
+
+    fun onSelectProject(project: Project) {
+        view.showSelectedProject(project)
     }
 }

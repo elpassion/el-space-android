@@ -36,6 +36,12 @@ class ReportAddControllerTest {
         verify(view).openProjectChooser()
     }
 
+    @Test
+    fun shouldShowSelectedProject() {
+        controller.onSelectProject(newProject())
+        verify(view).showSelectedProject(newProject())
+    }
+
     private fun stubApiToReturn(list: List<Project>) {
         whenever(api.getPossibleProjects()).thenReturn(list)
     }

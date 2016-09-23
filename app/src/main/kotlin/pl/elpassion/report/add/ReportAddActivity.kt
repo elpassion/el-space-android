@@ -32,7 +32,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            reportAddProjectName.text = (data!!.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project).name
+            controller.onSelectProject(data!!.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project)
         }
     }
 

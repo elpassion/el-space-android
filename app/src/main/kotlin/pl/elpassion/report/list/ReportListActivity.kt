@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.View.VISIBLE
-import android.widget.TextView
 import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.ItemAdapter
+import kotlinx.android.synthetic.main.report_item.view.*
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 
@@ -45,16 +45,17 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showDays(reports: List<Day>) {
-        reportsContainer.adapter = ReportsAdapter(reports.map { ReportItemAdapter(it.dayNumber) })
+        reportsContainer.adapter = ReportsAdapter(reports.map { ReportItemAdapter(it) })
     }
 
 }
 
-class ReportItemAdapter(val dayNumber: Int) : ItemAdapter<ReportItemAdapter.VH>(R.layout.report_item) {
+class ReportItemAdapter(val day: Day) : ItemAdapter<ReportItemAdapter.VH>(R.layout.report_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {
-        (holder.itemView as TextView).text = dayNumber.toString()
+        holder.itemView.dayNumber.text = day.dayNumber.toString()
+        holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

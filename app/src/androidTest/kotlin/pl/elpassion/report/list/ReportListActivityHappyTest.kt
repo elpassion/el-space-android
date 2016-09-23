@@ -1,10 +1,8 @@
 package pl.elpassion.report.list
 
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.isDisplayed
 import com.elpassion.android.commons.espresso.isNotDisplayed
 import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -23,7 +21,7 @@ class ReportListActivityHappyTest {
     val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java) {
         override fun beforeActivityLaunched() {
             stubCurrentTime(year = 2016, month = 10, day = 1)
-            whenever(service.getReports()).thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description"))))
+            whenever(service.getReports()).thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description", reportedHours = 8.0))))
             ReportList.ServiceProvider.override = { service }
         }
     }
@@ -36,6 +34,11 @@ class ReportListActivityHappyTest {
     @Test
     fun shouldShowDayFirstOnContainer() {
         onId(R.id.reportsContainer).hasChildWithText("1")
+    }
+
+    @Test
+    fun shouldShowCorrectTotalHoursInEveryDay() {
+        onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
     }
 
 }

@@ -34,14 +34,3 @@ class ReportAddControllerTest {
     }
 }
 
-interface ReportAdd {
-    interface View {
-        fun showSelectedProject(projects: Project)
-    }
-}
-
-class ReportAddController(val view: ReportAdd.View, val api: ProjectRepository) {
-    fun onCreate() {
-        view.showSelectedProject(api.getPossibleProjects().first())
-    }
-}

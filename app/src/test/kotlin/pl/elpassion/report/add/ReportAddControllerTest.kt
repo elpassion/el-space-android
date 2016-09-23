@@ -4,9 +4,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import pl.elpassion.project.choose.ProjectChoose
-import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.dto.newProject
 
 class ReportAddControllerTest {
@@ -19,7 +18,7 @@ class ReportAddControllerTest {
         val projects = listOf(newProject())
         stubApiToReturn(projects)
         ReportAddController(view, api).onCreate()
-        verify(view).showPossibleProjects(projects)
+        verify(view).showSelectedProject(projects.first())
     }
 
     @Test
@@ -27,7 +26,7 @@ class ReportAddControllerTest {
         val projects = listOf(newProject("id2", "name2"), newProject())
         stubApiToReturn(projects)
         ReportAddController(view, api).onCreate()
-        verify(view).showPossibleProjects(projects)
+        verify(view).showSelectedProject(projects.first())
     }
 
     private fun stubApiToReturn(list: List<Project>) {
@@ -37,12 +36,12 @@ class ReportAddControllerTest {
 
 interface ReportAdd {
     interface View {
-        fun showPossibleProjects(projects: List<Project>)
+        fun showSelectedProject(projects: Project)
     }
 }
 
 class ReportAddController(val view: ReportAdd.View, val api: ProjectRepository) {
     fun onCreate() {
-        view.showPossibleProjects(api.getPossibleProjects())
+        view.showSelectedProject(api.getPossibleProjects().first())
     }
 }

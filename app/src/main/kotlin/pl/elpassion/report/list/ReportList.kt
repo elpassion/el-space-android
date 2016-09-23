@@ -25,6 +25,12 @@ interface ReportList {
         fun openEditReportScreen(report: Report)
     }
 
-    object ServiceProvider : Provider<Service>({ ReportListService() })
+    object ServiceProvider : Provider<Service>({
+        ReportListService(object : ReportApi {
+            override fun getReports(): Observable<List<ReportFromApi>> {
+                return Observable.error(RuntimeException())
+            }
+        })
+    })
 
 }

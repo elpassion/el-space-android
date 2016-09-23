@@ -4,14 +4,14 @@ import pl.elpassion.common.*
 import rx.Subscription
 import java.util.*
 
-class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
+class ReportListController(val service: ReportList.Service, val view: ReportList.View) {
 
     private var subscription: Subscription? = null
     private val reportList: MutableList<Report> = ArrayList()
     private val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
 
     fun onCreate() {
-        subscription = api.getReports()
+        subscription = service.getReports()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->

@@ -11,9 +11,9 @@ import java.util.*
 
 class ReportListControllerTest {
 
-    val api = mock<ReportList.Api>()
+    val service = mock<ReportList.Service>()
     val view = mock<ReportList.View>()
-    val controller = ReportListController(api, view)
+    val controller = ReportListController(service, view)
 
     @Before
     fun setUp() {
@@ -39,7 +39,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldShowCorrectMonthOnCreate() {
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
         stubCurrentTime(month = 10)
 
         controller.onCreate()
@@ -49,7 +49,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReallyShowCorrectMonthName() {
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
         stubCurrentTime(month = 11)
 
         controller.onCreate()
@@ -61,7 +61,7 @@ class ReportListControllerTest {
     fun shouldMapReturnedReportsToCorrectDays() {
         val report = newReport(2016, 6, 1)
         stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubApiToReturn(listOf(report))
+        stubServiceToReturn(listOf(report))
 
         controller.onCreate()
 
@@ -70,7 +70,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldShowErrorWhenApiCallFails() {
-        stubApiToReturnError()
+        stubServiceToReturnError()
 
         controller.onCreate()
 
@@ -79,7 +79,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldShowLoaderWhenApiCallBegins() {
-        stubApiToReturnNever()
+        stubServiceToReturnNever()
 
         controller.onCreate()
 
@@ -88,7 +88,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldHideLoaderWhenCallIsNotFinishedOnDestroy() {
-        stubApiToReturnNever()
+        stubServiceToReturnNever()
 
         controller.onCreate()
         controller.onDestroy()
@@ -98,7 +98,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldHideLoaderWhenApiCallFinishes() {
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
 
         controller.onCreate()
 
@@ -107,7 +107,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldNotHideLoaderOnDestroyWhenCallFinished() {
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
 
         controller.onCreate()
         reset(view)
@@ -121,7 +121,7 @@ class ReportListControllerTest {
         val report = newReport(2016, 6, 1, reportedHours = 1.0)
         val days = daysWithReportInFirstDayFromNextMonth(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
-        stubApiToReturn(listOf(report))
+        stubServiceToReturn(listOf(report))
 
         controller.onCreate()
         reset(view)
@@ -133,7 +133,7 @@ class ReportListControllerTest {
     @Test
     fun shouldShowCorrectMonthOnNextMonth() {
         stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
 
         controller.onCreate()
         reset(view)
@@ -147,7 +147,7 @@ class ReportListControllerTest {
         val report = newReport(2016, 6, 1)
         val days = daysWithReportInFirstDayFromPreviousMonth(report)
         stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubApiToReturn(listOf(report))
+        stubServiceToReturn(listOf(report))
 
         controller.onCreate()
         reset(view)
@@ -159,7 +159,7 @@ class ReportListControllerTest {
     @Test
     fun shouldShowCorrectMonthOnPreviousMonth() {
         stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
 
         controller.onCreate()
         reset(view)
@@ -171,7 +171,7 @@ class ReportListControllerTest {
     @Test
     fun shouldMarkUnreportedPassedDays() {
         stubCurrentTime(month = 6, day = 1)
-        stubApiToReturn(emptyList())
+        stubServiceToReturn(emptyList())
 
         controller.onCreate()
         val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
@@ -195,16 +195,16 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
-    private fun stubApiToReturnNever() {
-        whenever(api.getReports()).thenReturn(Observable.never())
+    private fun stubServiceToReturnNever() {
+        whenever(service.getReports()).thenReturn(Observable.never())
     }
 
-    private fun stubApiToReturnError() {
-        whenever(api.getReports()).thenReturn(Observable.error(RuntimeException()))
+    private fun stubServiceToReturnError() {
+        whenever(service.getReports()).thenReturn(Observable.error(RuntimeException()))
     }
 
-    private fun stubApiToReturn(list: List<Report>) {
-        whenever(api.getReports()).thenReturn(Observable.just(list))
+    private fun stubServiceToReturn(list: List<Report>) {
+        whenever(service.getReports()).thenReturn(Observable.just(list))
     }
 
     private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
@@ -215,7 +215,7 @@ class ReportListControllerTest {
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
         val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..daysInMonth).map { newDay(dayNumber = it) }
-        stubApiToReturn(apiReturnValue)
+        stubServiceToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
         verify(view, times(1)).showDays(days)

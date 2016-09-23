@@ -4,7 +4,7 @@ import rx.Observable
 
 interface ReportList {
 
-    interface Api {
+    interface Service {
         fun getReports(): Observable<List<Report>>
     }
 

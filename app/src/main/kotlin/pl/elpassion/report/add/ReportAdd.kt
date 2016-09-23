@@ -13,6 +13,8 @@ interface ReportAdd {
         fun close()
 
         fun showError()
+
+        fun showDate(date: String)
     }
 
     interface Api {

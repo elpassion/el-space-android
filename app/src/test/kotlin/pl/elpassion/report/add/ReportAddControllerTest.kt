@@ -20,21 +20,20 @@ class ReportAddControllerTest {
     @Before
     fun setUp() {
         whenever(api.addReport()).thenReturn(Observable.just(Unit))
+        stubRepositoryToReturn()
     }
 
     @Test
     fun shouldShowPossibleProjects() {
-        val projects = listOf(newProject())
-        stubRepositoryToReturn(projects)
-        controller.onCreate()
-        verify(view).showSelectedProject(projects.first())
+        onCreate()
+        verify(view).showSelectedProject(newProject())
     }
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
         val projects = listOf(newProject("id2", "name2"), newProject())
         stubRepositoryToReturn(projects)
-        controller.onCreate()
+        onCreate()
         verify(view).showSelectedProject(projects.first())
     }
 
@@ -63,7 +62,17 @@ class ReportAddControllerTest {
         verify(view).showError()
     }
 
-    private fun stubRepositoryToReturn(list: List<Project>) {
+    @Test
+    fun shouldShowDate() {
+        onCreate("2016-09-23")
+        verify(view).showDate("2016-09-23")
+    }
+
+    private fun onCreate(date: String = "2016-01-01") {
+        controller.onCreate(date)
+    }
+
+    private fun stubRepositoryToReturn(list: List<Project> = listOf(newProject())) {
         whenever(repository.getPossibleProjects()).thenReturn(list)
     }
 }

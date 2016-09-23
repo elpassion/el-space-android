@@ -18,14 +18,19 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
-        controller.onCreate()
-        reportAddDate.text = intent.getStringExtra(ADD_DATE_KEY)
+        controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
-        reportAddAdd.setOnClickListener { controller.onReportAdd(
-                reportAddDate.text.toString(),
-                reportAddDescription.text.toString()
-        ) }
+        reportAddAdd.setOnClickListener {
+            controller.onReportAdd(
+                    reportAddDate.text.toString(),
+                    reportAddDescription.text.toString()
+            )
+        }
+    }
+
+    override fun showDate(date: String) {
+        reportAddDate.text = date
     }
 
     override fun showSelectedProject(project: Project) {

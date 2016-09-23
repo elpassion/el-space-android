@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.hasText
@@ -29,16 +30,16 @@ class ReportAddActivityChoosingProjectTest {
 
     @Test
     fun shouldChangeSelectedProject() {
-        stubRepository(listOf(newProject(), newProject("id2", "name2")))
-        rule.startActivity()
+        stubRepositoryAdnStart(listOf(newProject(), newProject("id2", "name2")))
         onId(R.id.reportAddProjectName).click()
         onText("name2").click()
         onId(R.id.reportAddProjectName).hasText("name2")
     }
 
-    private fun stubRepository(listOf: List<Project>) {
+    private fun stubRepositoryAdnStart(listOf: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
         ProjectRepositoryProvider.override = { repository }
+        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2016-01-01"))
     }
 }
 

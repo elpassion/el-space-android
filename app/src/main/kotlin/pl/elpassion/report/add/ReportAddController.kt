@@ -5,7 +5,8 @@ import pl.elpassion.project.common.ProjectRepository
 
 class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepository, val api: ReportAdd.Api) {
 
-    fun onCreate() {
+    fun onCreate(date: String) {
+        view.showDate(date)
         view.showSelectedProject(repository.getPossibleProjects().first())
     }
 

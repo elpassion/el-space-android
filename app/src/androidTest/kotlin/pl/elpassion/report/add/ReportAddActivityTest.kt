@@ -54,9 +54,13 @@ class ReportAddActivityTest {
     @Test
     fun shouldRemovePreviousTextWhenHoursTyped() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).typeText("4")
-        Thread.sleep(10000)
-        onId(R.id.reportAddHours).hasText("4")
+        onId(R.id.reportAddHours).typeText("4").hasText("4")
+    }
+
+    @Test
+    fun shouldShowDescriptionInput() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddDescription).typeText("Description").hasText("Description")
     }
 
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject())) {

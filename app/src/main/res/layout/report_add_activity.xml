@@ -5,11 +5,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:id="@+id/reportAddProjectName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:text="name" />
 
     <EditText
@@ -18,4 +18,10 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:text="8" />
+
+    <EditText
+        android:id="@+id/reportAddDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text" />
 </LinearLayout>

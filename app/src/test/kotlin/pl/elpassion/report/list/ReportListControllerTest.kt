@@ -155,6 +155,18 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldShowCorrectMonthOnPreviousMonth() {
+        stubCurrentTime(year = 2016, month = 7, day = 1)
+        stubApiToReturn(emptyList())
+
+        controller.onCreate()
+        reset(view)
+        controller.onPreviousMonth()
+
+        verify(view, times(1)).showMonth("June")
+    }
+
+    @Test
     fun shouldMarkUnreportedPassedDays() {
         stubCurrentTime(month = 6, day = 1)
         stubApiToReturn(emptyList())

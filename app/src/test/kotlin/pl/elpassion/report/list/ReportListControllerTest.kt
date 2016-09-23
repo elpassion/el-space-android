@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.project.dto.newDay
+import pl.elpassion.project.dto.newReport
 import rx.Observable
 import java.util.*
 
@@ -58,7 +59,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldMapReturnedReportsToCorrectDays() {
-        val report = Report(2016, 6, 1)
+        val report = newReport(2016, 6, 1)
         stubCurrentTime(year = 2016, month = 6, day = 1)
         stubApiToReturn(listOf(report))
 
@@ -117,7 +118,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
-        val report = Report(2016, 6, 1)
+        val report = newReport(2016, 6, 1)
         val days = daysWithReportInFirstDayFromNextMonth(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
         stubApiToReturn(listOf(report))
@@ -143,7 +144,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
-        val report = Report(2016, 6, 1)
+        val report = newReport(2016, 6, 1)
         val days = daysWithReportInFirstDayFromPreviousMonth(report)
         stubCurrentTime(year = 2016, month = 7, day = 1)
         stubApiToReturn(listOf(report))

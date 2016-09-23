@@ -29,7 +29,7 @@ class ReportListActivityHappyTest {
     val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java) {
         override fun beforeActivityLaunched() {
             ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
-            stubCurrentTime(year = 2016, month = 10, day = 1)
+            stubCurrentTime(year = 2016, month = 10, day = 2)
             whenever(service.getReports()).thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description", reportedHours = 8.0))))
             ReportList.ServiceProvider.override = { service }
         }
@@ -64,6 +64,11 @@ class ReportListActivityHappyTest {
         onText("1").click()
 
         checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldHaveOneDayWithMissingStatus() {
+        onId(R.id.reportsContainer).hasChildWithText("MISSING")
     }
 
 }

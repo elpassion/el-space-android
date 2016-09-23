@@ -3,6 +3,7 @@ package pl.elpassion.report.list
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
@@ -46,6 +47,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showError(it: Throwable) {
+        Log.e("Error", it.message, it)
         reportListError.visibility = VISIBLE
     }
 

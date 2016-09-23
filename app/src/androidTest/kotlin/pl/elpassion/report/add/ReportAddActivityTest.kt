@@ -29,36 +29,33 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldStartWithFirstProjectSelected() {
-        stubRepository(listOf(newProject()))
-        rule.startActivity()
+        stubRepositoryAndStart()
         onText("name").isDisplayed()
     }
 
     @Test
     fun shouldReallyStartWithFirstProjectSelected() {
-        stubRepository(listOf(newProject(name = "Project name")))
-        rule.startActivity()
+        stubRepositoryAndStart(listOf(newProject(name = "Project name")))
         onText("Project name").isDisplayed()
     }
 
     @Test
     fun shouldStartProjectChooserOnProjectClicked() {
-        stubRepository(listOf(newProject()))
-        rule.startActivity()
+        stubRepositoryAndStart()
         onText("name").click()
         checkIntent(ProjectChooseActivity::class.java)
     }
 
     @Test
     fun shouldShowHoursInput() {
-        stubRepository(listOf(newProject()))
-        rule.startActivity()
+        stubRepositoryAndStart()
         onText("8").isDisplayed()
     }
 
-    private fun stubRepository(listOf: List<Project>) {
-        whenever(repository.getPossibleProjects()).thenReturn(listOf)
+    private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject())) {
+        whenever(repository.getPossibleProjects()).thenReturn(projects)
         ProjectRepositoryProvider.override = { repository }
+        rule.startActivity()
     }
 }
 

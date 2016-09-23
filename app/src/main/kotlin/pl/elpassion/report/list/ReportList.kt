@@ -18,6 +18,8 @@ interface ReportList {
         fun hideLoader()
 
         fun openAddReportScreen(date: String)
+
+        fun showMonth(monthName: String)
     }
 
 }

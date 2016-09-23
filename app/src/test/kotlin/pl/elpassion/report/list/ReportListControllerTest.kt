@@ -30,6 +30,16 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldShowCorrectMonthOnCreate() {
+        stubApiToReturn(emptyList())
+        stubCurrentTime(month = 10)
+
+        controller.onCreate()
+
+        verify(view, times(1)).showMonth("October")
+    }
+
+    @Test
     fun shouldMapReturnedReportsToCorrectDays() {
         val report = Report(2016, 6, 1)
         stubCurrentTime(year = 2016, month = 6, day = 1)
@@ -151,7 +161,7 @@ class ReportListControllerTest {
 
     private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
         CurrentTimeProvider.override = {
-            Calendar.getInstance().apply { set(year, month - 1, day) }.timeInMillis
+            Calendar.getInstance().apply { set(year, month - 1, day, 12, 0) }.timeInMillis
         }
     }
 

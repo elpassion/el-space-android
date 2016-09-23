@@ -20,7 +20,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
                 }, {
                     view.showError()
                 })
-
+        view.showMonth("October")
     }
 
     fun onDestroy() {

@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import android.util.Log
 import pl.elpassion.project.common.Project
 import pl.elpassion.project.common.ProjectRepository
 
@@ -27,6 +28,7 @@ class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepos
         api.addReport(date, project.id, hours, description).subscribe({
             view.close()
         }, {
+            Log.e("Eroor", it.toString(), it)
             view.showError()
         })
     }

@@ -32,7 +32,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
         reportAddAdd.setOnClickListener {
             controller.onReportAdd(
-                    reportAddDate.text.toString(),
+                    reportAddHours.text.toString(),
                     reportAddDescription.text.toString()
             )
         }

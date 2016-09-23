@@ -3,6 +3,7 @@ package pl.elpassion.report.list
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.elpassion.android.commons.recycler.ItemAdapter
+import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
 
 class DayItemAdapter(val day: Day) : ItemAdapter<DayItemAdapter.VH>(R.layout.day_item) {

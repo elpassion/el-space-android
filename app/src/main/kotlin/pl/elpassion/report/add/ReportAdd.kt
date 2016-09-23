@@ -24,10 +24,10 @@ interface ReportAdd {
 
         @POST("activities")
         fun addReport(
-                @Query("performed_at") date: String,
-                @Query("project_id") projectId: String,
-                @Query("value") hours: String,
-                @Query("comment") description: String): Observable<Unit>
+                @Query("activity[performed_at]") date: String,
+                @Query("activity[project_id]") projectId: String,
+                @Query("activity[value]") hours: String,
+                @Query("activity[comment]") description: String): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

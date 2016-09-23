@@ -7,10 +7,9 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.project.choose.ProjectChoose
-import pl.elpassion.project.common.ProjectRepositoryProvider
-import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepository
+import pl.elpassion.project.common.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
@@ -26,6 +25,13 @@ class ReportAddActivityTest {
         stubRepository(listOf(newProject()))
         rule.startActivity()
         onText("name").isDisplayed()
+    }
+
+    @Test
+    fun shouldReallyStartWithFirstProjectSelected() {
+        stubRepository(listOf(newProject(name = "Project name")))
+        rule.startActivity()
+        onText("Project name").isDisplayed()
     }
 
     private fun stubRepository(listOf: List<Project>) {

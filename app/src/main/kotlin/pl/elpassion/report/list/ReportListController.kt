@@ -16,12 +16,10 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
                     reportList.addAll(reports)
-                    showDays()
+                    showDaysAndUpdateMonthName()
                 }, {
                     view.showError()
                 })
-
-        view.showMonth(date.getFullMonthName())
     }
 
     fun onDestroy() {
@@ -30,17 +28,15 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
 
     fun onNextMonth() {
         date.changeToNextMonth()
-        showDays()
-        view.showMonth(date.getFullMonthName())
+        showDaysAndUpdateMonthName()
     }
 
     fun onPreviousMonth() {
         date.changeToPreviousMonth()
-        showDays()
-        view.showMonth(date.getFullMonthName())
+        showDaysAndUpdateMonthName()
     }
 
-    private fun showDays() {
+    private fun showDaysAndUpdateMonthName() {
         val days = ArrayList<Day>().apply {
             (1..daysForCurrentMonth()).forEach {
                 add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it)))
@@ -48,6 +44,7 @@ class ReportListController(val api: ReportList.Api, val view: ReportList.View) {
         }
 
         view.showDays(days)
+        view.showMonth(date.getFullMonthName())
     }
 
     private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)

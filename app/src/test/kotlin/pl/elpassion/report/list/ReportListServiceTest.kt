@@ -16,6 +16,7 @@ class ReportListServiceTest {
     val subscriber = TestSubscriber<List<Report>>()
     val reportApi = mock<ReportList.ReportApi>()
     val projectApi = mock<ReportList.ProjectApi>()
+    val service = ReportListService(reportApi, projectApi, mock())
 
     @Before
     fun setUp(){
@@ -29,35 +30,35 @@ class ReportListServiceTest {
     @Test
     fun shouldCorrectlyMapReportsYear() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2012-06-01T11:56:31.919+02:00"))
-        ReportListService(reportApi,projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(year = 2012)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsMonth() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2016-01-01T11:56:31.919+02:00"))
-        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(month = 1)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDays() {
         stubReportApiToReturn(newReportFromApi(createdAt = "2016-06-21T11:56:31.919+02:00"))
-        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(day = 21)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsValues() {
         stubReportApiToReturn(newReportFromApi(value = 9.0))
-        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(reportedHours = 9.0)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDescription() {
         stubReportApiToReturn(newReportFromApi(description = "1234"))
-        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(description = "1234")))
     }
 
@@ -65,7 +66,7 @@ class ReportListServiceTest {
     fun shouldCorrectlyMapReportsProjectsName() {
         stubProjectApiToReturn(newProject(id = "2", name = "Test"))
         stubReportApiToReturn(newReportFromApi(projectId = 2))
-        ReportListService(reportApi, projectApi).getReports().subscribe(subscriber)
+        service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(projectId = 2, projectName = "Test")))
     }
 

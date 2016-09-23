@@ -2,6 +2,7 @@ package pl.elpassion.report.list
 
 import pl.elpassion.common.Provider
 import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepositoryProvider
 import retrofit2.http.GET
 import rx.Observable
 
@@ -28,7 +29,7 @@ interface ReportList {
     }
 
     object ServiceProvider : Provider<Service>({
-        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get())
+        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get(), ProjectRepositoryProvider.get())
     })
 
     interface ReportApi {

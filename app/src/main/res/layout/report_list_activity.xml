@@ -8,6 +8,8 @@
         android:id="@+id/report_list_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/report_list_error"/>
+        android:gravity="center"
+        android:text="@string/report_list_error"
+        android:textSize="25sp"/>
 
 </LinearLayout>

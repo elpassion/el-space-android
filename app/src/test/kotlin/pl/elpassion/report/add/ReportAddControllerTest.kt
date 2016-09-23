@@ -62,7 +62,7 @@ class ReportAddControllerTest {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
         onCreate()
         controller.onReportAdd("8", "description")
-        verify(view).showError()
+        verify(view).showError(any())
     }
 
     @Test
@@ -75,7 +75,7 @@ class ReportAddControllerTest {
         whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))
         onCreate("2016-09-23")
         controller.onReportAdd("8", "description")
-        verify(view).showError()
+        verify(view).showError(any())
     }
 
     private fun onCreate(date: String = "2016-01-01") {

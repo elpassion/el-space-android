@@ -73,7 +73,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showError()
+        verify(view, times(1)).showError(any())
     }
 
     @Test

@@ -15,7 +15,7 @@ interface ReportAdd {
 
         fun close()
 
-        fun showError()
+        fun showError(it: Throwable)
 
         fun showDate(date: String)
     }

@@ -45,7 +45,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun showLoader() {
     }
 
-    override fun showError() {
+    override fun showError(it: Throwable) {
         reportListError.visibility = VISIBLE
     }
 

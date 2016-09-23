@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.project.choose.ProjectChooseActivity
@@ -61,8 +62,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         finish()
     }
 
-    override fun showError() {
-
+    override fun showError(it: Throwable) {
+        Log.e("Error", it.toString(), it)
     }
 
     companion object {

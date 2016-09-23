@@ -16,7 +16,7 @@ interface ReportList {
     interface View {
         fun showDays(days: List<Day>, listener: OnDayClickListener)
 
-        fun showError()
+        fun showError(it: Throwable)
 
         fun showLoader()
 

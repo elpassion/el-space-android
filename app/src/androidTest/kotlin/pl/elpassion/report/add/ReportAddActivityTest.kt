@@ -49,6 +49,13 @@ class ReportAddActivityTest {
         checkIntent(ProjectChooseActivity::class.java)
     }
 
+    @Test
+    fun shouldShowHoursInput() {
+        stubRepository(listOf(newProject()))
+        rule.startActivity()
+        onText("8").isDisplayed()
+    }
+
     private fun stubRepository(listOf: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
         ProjectRepositoryProvider.override = { repository }

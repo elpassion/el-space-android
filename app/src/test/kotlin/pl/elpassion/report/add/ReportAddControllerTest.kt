@@ -5,15 +5,15 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 
-class ReportControllerTest {
+class ReportAddControllerTest {
 
-    val view = mock<Report.View>()
-    val api = mock<Report.Api>()
+    val view = mock<ReportAdd.View>()
+    val api = mock<ReportAdd.Api>()
 
     @Test
     fun shouldShowPossibleProjects() {
         stubApiToReturn(emptyList())
-        ReportController(view, api).onCreate()
+        ReportAddController(view, api).onCreate()
         verify(view).showPossibleProjects(emptyList())
     }
 
@@ -21,7 +21,7 @@ class ReportControllerTest {
     fun shouldShowPossibleProjectFormApi() {
         val projects = listOf(Project())
         stubApiToReturn(projects)
-        ReportController(view, api).onCreate()
+        ReportAddController(view, api).onCreate()
         verify(view).showPossibleProjects(projects)
     }
 
@@ -30,7 +30,7 @@ class ReportControllerTest {
     }
 }
 
-interface Report {
+interface ReportAdd {
     interface View {
         fun showPossibleProjects(projects: List<Project>)
     }
@@ -44,7 +44,7 @@ class Project {
 
 }
 
-class ReportController(val view: Report.View, val api: Report.Api) {
+class ReportAddController(val view: ReportAdd.View, val api: ReportAdd.Api) {
     fun onCreate() {
         view.showPossibleProjects(api.getPossibleProjects())
     }

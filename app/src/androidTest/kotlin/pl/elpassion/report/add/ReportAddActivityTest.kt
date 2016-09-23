@@ -12,12 +12,12 @@ import pl.elpassion.project.dto.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
-class AddReportActivityTest {
+class ReportAddActivityTest {
 
     val repository = mock<ProjectChoose.Repository>()
 
     @JvmField @Rule
-    val rule = ActivityTestRule<AddReportActivity>(AddReportActivity::class.java, false, false)
+    val rule = ActivityTestRule<ReportAddActivity>(ReportAddActivity::class.java, false, false)
 
     @Test
     fun shouldStartWithFirstProjectSelected() {

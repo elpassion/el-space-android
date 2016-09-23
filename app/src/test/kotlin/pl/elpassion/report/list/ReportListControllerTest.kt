@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.project.dto.newDay
 import rx.Observable
 import java.util.*
 
@@ -172,7 +173,7 @@ class ReportListControllerTest {
         stubApiToReturn(emptyList())
 
         controller.onCreate()
-        val days = listOf(Day(1, emptyList(), true)) + (2..30).map { Day(it, emptyList(), false) }
+        val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
         verify(view, times(1)).showDays(days)
     }
 
@@ -206,15 +207,15 @@ class ReportListControllerTest {
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        val days = listOf(Day(1, emptyList(), true)) + (2..daysInMonth).map { Day(it, emptyList(), false) }
+        val days = listOf(newDay(dayNumber = 1, hasPassed = true)) + (2..daysInMonth).map { newDay(dayNumber = it) }
         stubApiToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
         verify(view, times(1)).showDays(days)
     }
 
-    private fun daysWithReportInFirstDayFromCurrentMonth(report: Report) = listOf(Day(1, listOf(report), true)) + (2..30).map { Day(it, emptyList(), false) }
-    private fun daysWithReportInFirstDayFromNextMonth(report: Report) = listOf(Day(1, listOf(report), false)) + (2..30).map { Day(it, emptyList(), false) }
-    private fun daysWithReportInFirstDayFromPreviousMonth(report: Report) = listOf(Day(1, listOf(report), true)) + (2..30).map { Day(it, emptyList(), true) }
+    private fun daysWithReportInFirstDayFromCurrentMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = true)) + (2..30).map { newDay(dayNumber = it) }
+    private fun daysWithReportInFirstDayFromNextMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = false)) + (2..30).map { newDay(dayNumber = it) }
+    private fun daysWithReportInFirstDayFromPreviousMonth(report: Report) = listOf(newDay(dayNumber = 1, reports = listOf(report), hasPassed = true)) + (2..30).map { newDay(dayNumber = it, hasPassed = true) }
 
 }

@@ -10,7 +10,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(reports: List<Day>)
+        fun showDays(days: List<Day>)
 
         fun showError()
 

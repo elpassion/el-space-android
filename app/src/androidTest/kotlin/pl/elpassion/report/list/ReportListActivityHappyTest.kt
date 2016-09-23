@@ -41,5 +41,11 @@ class ReportListActivityHappyTest {
         onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
     }
 
+    @Test
+    fun shouldShowReportOnContainer() {
+        onId(R.id.reportsContainer).hasChildWithText("8.0h - Project")
+        onId(R.id.reportsContainer).hasChildWithText("Description")
+    }
+
 }
 

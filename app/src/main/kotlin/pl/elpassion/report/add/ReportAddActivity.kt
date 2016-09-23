@@ -13,7 +13,7 @@ import pl.elpassion.project.common.ProjectRepositoryProvider
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
-    val controller by lazy { ReportAddController(this, ProjectRepositoryProvider.get()) }
+    val controller by lazy { ReportAddController(this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +45,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun close() {
         finish()
+    }
+
+    override fun showError() {
+
     }
 
     companion object {

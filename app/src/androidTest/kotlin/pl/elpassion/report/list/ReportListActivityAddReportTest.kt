@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.DeaultMocksRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.common.ProjectRepositoryProvider
@@ -17,6 +18,9 @@ import rx.Observable
 class ReportListActivityAddReportTest {
 
     val service = mock<ReportList.Service>()
+
+    @JvmField @Rule
+    val defaultMocks = DeaultMocksRule()
 
     @JvmField @Rule
     val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java) {

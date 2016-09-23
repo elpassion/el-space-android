@@ -118,7 +118,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
-        val report = newReport(2016, 6, 1)
+        val report = newReport(2016, 6, 1, reportedHours = 1.0)
         val days = daysWithReportInFirstDayFromNextMonth(report)
         stubCurrentTime(year = 2016, month = 5, day = 1)
         stubApiToReturn(listOf(report))

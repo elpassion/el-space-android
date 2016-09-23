@@ -1,3 +1,3 @@
 package pl.elpassion.report.list
 
-data class Day(val dayNumber: Int, val reports: List<Report>, val hasPassed: Boolean)
+data class Day(val dayNumber: Int, val reports: List<Report>, val hasPassed: Boolean, val reportedHours: Double = reports.sumByDouble { it.reportedHours })

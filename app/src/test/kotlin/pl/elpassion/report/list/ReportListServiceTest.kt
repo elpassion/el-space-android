@@ -48,18 +48,28 @@ class ReportListServiceTest {
         subscriber.assertValue(listOf(newReport(projectId = 12)))
     }
 
+    @Test
+    fun shouldCorrectlyMapReportsDescription() {
+        stubReportApiToReturn(newReportFromApi(description = "1234"))
+        ReportListService(reportApi).getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(description = "1234")))
+    }
+
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
         whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
     }
 
     private fun newReportFromApi(createdAt: String = "2016-06-01T11:56:31.919+02:00",
                                  value: Double = 4.0,
-                                 projectId: Long = 1): ReportFromApi {
+                                 projectId: Long = 1,
+                                 description: String = "description"): ReportFromApi {
+
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
         return ReportFromApi(
                 createdAt = simpleDateFormat.parse(createdAt),
                 value = value,
-                projectId = projectId)
+                projectId = projectId,
+                comment = description)
     }
 
 }

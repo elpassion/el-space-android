@@ -5,7 +5,7 @@ import pl.elpassion.common.monthValue
 import pl.elpassion.common.yearValue
 import java.util.*
 
-class ReportFromApi(val createdAt: Date, val value : Double, val projectId: Long) {
+class ReportFromApi(val createdAt: Date, val value : Double, val projectId: Long, val comment: String) {
 
     fun toReport(): Report {
         return Report(
@@ -15,7 +15,7 @@ class ReportFromApi(val createdAt: Date, val value : Double, val projectId: Long
                 reportedHours = value,
                 projectId = projectId,
                 projectName = "Project",
-                description = "description")
+                description = comment)
     }
 
 }

@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
+import pl.elpassion.project.dto.Project
+import pl.elpassion.project.dto.newProject
 
 class ReportAddControllerTest {
 
@@ -12,14 +14,15 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowPossibleProjects() {
-        stubApiToReturn(emptyList())
+        val projects = listOf(newProject())
+        stubApiToReturn(projects)
         ReportAddController(view, api).onCreate()
-        verify(view).showPossibleProjects(emptyList())
+        verify(view).showPossibleProjects(projects)
     }
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
-        val projects = listOf(Project())
+        val projects = listOf(newProject("id2", "name2"), newProject())
         stubApiToReturn(projects)
         ReportAddController(view, api).onCreate()
         verify(view).showPossibleProjects(projects)
@@ -38,10 +41,6 @@ interface ReportAdd {
     interface Api {
         fun getPossibleProjects(): List<Project>
     }
-}
-
-class Project {
-
 }
 
 class ReportAddController(val view: ReportAdd.View, val api: ReportAdd.Api) {

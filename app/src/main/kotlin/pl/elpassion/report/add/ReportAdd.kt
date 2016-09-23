@@ -4,6 +4,6 @@ import pl.elpassion.project.common.Project
 
 interface ReportAdd {
     interface View {
-        fun showSelectedProject(projects: Project)
+        fun showSelectedProject(project: Project)
     }
 }

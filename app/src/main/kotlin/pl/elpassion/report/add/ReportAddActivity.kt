@@ -17,7 +17,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         controller.onCreate()
     }
 
-    override fun showSelectedProject(projects: Project) {
-        reportAddProjectName.text = projects.name
+    override fun showSelectedProject(project: Project) {
+        reportAddProjectName.text = project.name
     }
 }

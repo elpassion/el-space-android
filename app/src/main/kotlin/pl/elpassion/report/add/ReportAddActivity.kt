@@ -22,6 +22,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddDate.text = intent.getStringExtra(ADD_DATE_KEY)
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
+        reportAddAdd.setOnClickListener { controller.onReportAdd(
+                reportAddDate.text.toString(),
+                reportAddDescription.text.toString()
+        ) }
     }
 
     override fun showSelectedProject(project: Project) {
@@ -40,7 +44,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun close() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        finish()
     }
 
     companion object {

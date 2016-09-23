@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newDay
 import pl.elpassion.project.dto.newReport
 import rx.Observable
@@ -205,12 +206,6 @@ class ReportListControllerTest {
 
     private fun stubServiceToReturn(list: List<Report>) {
         whenever(service.getReports()).thenReturn(Observable.just(list))
-    }
-
-    private fun stubCurrentTime(year: Int = 2016, month: Int = 6, day: Int = 1) {
-        CurrentTimeProvider.override = {
-            Calendar.getInstance().apply { set(year, month - 1, day, 12, 0) }.timeInMillis
-        }
     }
 
     private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {

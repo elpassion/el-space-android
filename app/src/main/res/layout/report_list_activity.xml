@@ -5,11 +5,12 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/report_list_error"
+        android:id="@+id/reportListError"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/report_list_error"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:visibility="gone"/>
 
 </LinearLayout>

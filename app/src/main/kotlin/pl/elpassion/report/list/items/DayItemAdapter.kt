@@ -16,6 +16,8 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
         holder.itemView.dayNumber.text = day.dayNumber.toString()
         if (day.hasPassed) {
             holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
+        } else {
+            holder.itemView.totalHours.text = null
         }
     }
 

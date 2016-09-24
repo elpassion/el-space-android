@@ -37,31 +37,23 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     private fun showDaysAndUpdateMonthName() {
-        val days = ArrayList<Day>().apply {
-            (1..daysForCurrentMonth()).forEach {
-                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it), isWeekendDay = isWeekendDay(it), name = "$it ${getCalendarForDay(it).dayName()}"))
-            }
+        val days = (1..daysForCurrentMonth()).map { dayNumber ->
+            val calendarForDay = getCalendarForDay(dayNumber)
+            Day(dayNumber = dayNumber,
+                    reports = reportList.filter(isFromSelectedDay(dayNumber)),
+                    hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
+                    isWeekendDay = calendarForDay.isWeekendDay(),
+                    name = "$dayNumber ${calendarForDay.dayName()}")
         }
 
         view.showDays(days, this)
         view.showMonthName(date.getFullMonthName())
     }
 
-    private fun isWeekendDay(dayNumber: Int): Boolean {
-        val iteratorDay = getCalendarForDay(dayNumber)
-        return iteratorDay.isWeekendDay()
-    }
-
     private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
 
     private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
         report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
-    }
-
-    private val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
-        val currentDate = getCurrentTimeCalendar()
-        val iteratorDay = getCalendarForDay(dayNumber)
-        iteratorDay.isNotAfter(currentDate)
     }
 
     private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)

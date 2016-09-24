@@ -34,7 +34,7 @@ class ReportListActivityAddReportTest {
 
     @Test
     fun shouldCloseAddReportActivity() {
-        onText("1").click()
+        onText("1 Sat").click()
         onId(R.id.reportAddDescription).typeText("Description")
         onId(R.id.reportAddAdd).click()
         onId(R.id.reportsContainer).isDisplayed()

@@ -48,8 +48,8 @@ class ReportListActivityHappyTest {
     }
 
     @Test
-    fun shouldShowDayFirstOnContainer() {
-        onId(R.id.reportsContainer).hasChildWithText("1")
+    fun shouldShowCorrectlyDayNameOnWeekendDays() {
+        onId(R.id.reportsContainer).hasChildWithText("1 Sat")
     }
 
     @Test
@@ -65,7 +65,7 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldOpenAddReportScreenOnDayClick() {
-        onText("1").click()
+        onText("1 Sat").click()
 
         checkIntent(ReportAddActivity::class.java)
     }

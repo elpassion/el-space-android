@@ -58,19 +58,9 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldRemovePreviousTextWhenHoursTyped() {
-        stubRepositoryAndStart()
-        onId(R.id.reportAddHours).typeText("4")
-        closeSoftKeyboard()
-        onId(R.id.reportAddHours).hasText("4")
-    }
-
-    @Test
     fun shouldShowDescriptionInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddDescription).typeText("Description")
-        closeSoftKeyboard()
-        onId(R.id.reportAddDescription).hasText("Description")
+        onId(R.id.reportAddDescription).isDisplayed()
     }
 
     @Test

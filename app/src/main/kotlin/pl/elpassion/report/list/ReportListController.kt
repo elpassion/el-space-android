@@ -39,7 +39,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private fun showDaysAndUpdateMonthName() {
         val days = ArrayList<Day>().apply {
             (1..daysForCurrentMonth()).forEach {
-                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it), isWeekendDay = isWeekendDay(it)))
+                add(Day(it, reportList.filter(isFromSelectedDay(it)), isNotAfterNow(it), isWeekendDay = isWeekendDay(it), name = "$it ${getCalendarForDay(it).dayName()}"))
             }
         }
 
@@ -48,7 +48,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     private fun isWeekendDay(dayNumber: Int): Boolean {
-        val iteratorDay = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
+        val iteratorDay = getCalendarForDay(dayNumber)
         return iteratorDay.isWeekendDay()
     }
 
@@ -60,9 +60,11 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 
     private val isNotAfterNow: (Int) -> Boolean = { dayNumber ->
         val currentDate = getCurrentTimeCalendar()
-        val iteratorDay = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
+        val iteratorDay = getCalendarForDay(dayNumber)
         iteratorDay.isNotAfter(currentDate)
     }
+
+    private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
 
     override fun onDay(dayNumber: Int) {
         view.openAddReportScreen(String.format("%d-%02d-%02d", date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))

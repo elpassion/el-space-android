@@ -210,6 +210,15 @@ class ReportListControllerTest {
         verify(view).showDays(argThat { this[0].name == "1 Thu"}, any())
     }
 
+    @Test
+    fun shouldReallyCorrectlyMapDayName() {
+        stubCurrentTime(year = 2016, month = 9)
+        stubServiceToReturn(emptyList())
+        controller.onCreate()
+
+        verify(view).showDays(argThat { this[1].name == "2 Fri"}, any())
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.getReports()).thenReturn(Observable.never())
     }

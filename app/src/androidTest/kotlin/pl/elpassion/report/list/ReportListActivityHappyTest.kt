@@ -101,7 +101,7 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldNotHaveMissingInformationOnWeekendDays() {
-        onView(allOf(hasDescendant(withText("2 Sun")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
+        onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
     @Test

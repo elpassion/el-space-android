@@ -80,10 +80,8 @@ class ReportListActivityHappyTest {
         onId(R.id.reportsContainer).hasChildWithText(R.string.report_missing)
     }
 
-
     @Test
     fun shouldNotHaveMissingInformationOnWeekendDays() {
-        whenever(service.getReports()).thenReturn(Observable.just(emptyList()))
         rule.startActivity()
         onView(allOf(hasDescendant(withText("2")), withId(R.id.weekendDay))).check(matches(not(withText(R.string.report_missing))))
     }

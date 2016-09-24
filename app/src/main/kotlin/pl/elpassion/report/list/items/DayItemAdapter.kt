@@ -13,7 +13,7 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
 
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
-        holder.itemView.dayNumber.text = day.dayNumber.toString()
+        holder.itemView.dayNumber.text = day.name
         if (day.hasPassed) {
             holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
         } else {

@@ -1,6 +1,7 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.closeSoftKeyboard
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
@@ -57,15 +58,9 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldRemovePreviousTextWhenHoursTyped() {
-        stubRepositoryAndStart()
-        onId(R.id.reportAddHours).typeText("4").hasText("4")
-    }
-
-    @Test
     fun shouldShowDescriptionInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddDescription).typeText("Description").hasText("Description")
+        onId(R.id.reportAddDescription).isDisplayed()
     }
 
     @Test

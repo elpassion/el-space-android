@@ -11,6 +11,7 @@ import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.list.items.DayItemAdapter
 import pl.elpassion.report.list.items.DayNotFilledInItemAdapter
 import pl.elpassion.report.list.items.ReportItemAdapter
+import pl.elpassion.report.list.items.WeekendDayItem
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -58,7 +59,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun showDays(days: List<Day>, listener: OnDayClickListener) {
         reportsContainer.adapter = ReportsAdapter(days.flatMap {
-            val dayItem = if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener) else DayItemAdapter(it, listener)
+            val dayItem = if (it.isWeekendDay) WeekendDayItem(it, listener) else
+                if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener)
+                else DayItemAdapter(it, listener)
             listOf(dayItem) + it.reports.map { report -> ReportItemAdapter(report) }
         })
     }

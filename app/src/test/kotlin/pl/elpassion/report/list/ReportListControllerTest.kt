@@ -201,6 +201,15 @@ class ReportListControllerTest {
         verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay}, any())
     }
 
+    @Test
+    fun shouldCorrectlyMapDayName() {
+        stubCurrentTime(year = 2016, month = 9)
+        stubServiceToReturn(emptyList())
+        controller.onCreate()
+
+        verify(view).showDays(argThat { this[0].name == "1 Thu"}, any())
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.getReports()).thenReturn(Observable.never())
     }

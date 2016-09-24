@@ -21,7 +21,6 @@ import pl.elpassion.project.common.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.startActivity
 import rx.Observable
 
 class ReportListActivityHappyTest {
@@ -76,7 +75,7 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldNotHaveMissingInformationOnWeekendDays() {
-        onView(allOf(hasDescendant(withText("2")), withId(R.id.weekendDay))).check(matches(not(withText(R.string.report_missing))))
+        onView(allOf(hasDescendant(withText("2")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
 }

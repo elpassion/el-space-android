@@ -29,7 +29,7 @@ class ReportListActivityHappyTest {
     val service = mock<ReportList.Service>()
 
     @JvmField @Rule
-    val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java, false, false) {
+    val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java) {
         override fun beforeActivityLaunched() {
             ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
             stubCurrentTime(year = 2016, month = 10, day = 4)
@@ -43,32 +43,27 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldNotShowErrorOnView() {
-        rule.startActivity()
         onId(R.id.reportListError).isNotDisplayed()
     }
 
     @Test
     fun shouldShowDayFirstOnContainer() {
-        rule.startActivity()
         onId(R.id.reportsContainer).hasChildWithText("1")
     }
 
     @Test
     fun shouldShowCorrectTotalHoursInEveryDay() {
-        rule.startActivity()
         onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
     }
 
     @Test
     fun shouldShowReportOnContainer() {
-        rule.startActivity()
         onId(R.id.reportsContainer).hasChildWithText("8.0h - Project")
         onId(R.id.reportsContainer).hasChildWithText("Description")
     }
 
     @Test
     fun shouldOpenAddReportScreenOnDayClick() {
-        rule.startActivity()
         onText("1").click()
 
         checkIntent(ReportAddActivity::class.java)
@@ -76,13 +71,11 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldHaveOneDayWithMissingStatus() {
-        rule.startActivity()
         onId(R.id.reportsContainer).hasChildWithText(R.string.report_missing)
     }
 
     @Test
     fun shouldNotHaveMissingInformationOnWeekendDays() {
-        rule.startActivity()
         onView(allOf(hasDescendant(withText("2")), withId(R.id.weekendDay))).check(matches(not(withText(R.string.report_missing))))
     }
 

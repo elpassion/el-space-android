@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import android.support.test.espresso.Espresso
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
@@ -7,7 +8,6 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.DeaultMocksRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.common.ProjectRepositoryProvider
@@ -18,9 +18,6 @@ import rx.Observable
 class ReportListActivityAddReportTest {
 
     val service = mock<ReportList.Service>()
-
-    @JvmField @Rule
-    val defaultMocks = DeaultMocksRule()
 
     @JvmField @Rule
     val rule = object : ActivityTestRule<ReportListActivity>(ReportListActivity::class.java) {
@@ -36,6 +33,7 @@ class ReportListActivityAddReportTest {
     fun shouldCloseAddReportActivity() {
         onText("1 Sat").click()
         onId(R.id.reportAddDescription).typeText("Description")
+        Espresso.closeSoftKeyboard()
         onId(R.id.reportAddAdd).click()
         onId(R.id.reportsContainer).isDisplayed()
     }

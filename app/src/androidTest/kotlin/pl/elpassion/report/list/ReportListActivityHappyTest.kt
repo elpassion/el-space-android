@@ -53,6 +53,11 @@ class ReportListActivityHappyTest {
     }
 
     @Test
+    fun shouldShowCorrectlyDayNameOnNotFilledInDays() {
+        onId(R.id.reportsContainer).hasChildWithText("4 Tue")
+    }
+
+    @Test
     fun shouldShowCorrectTotalHoursInEveryDay() {
         onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
     }

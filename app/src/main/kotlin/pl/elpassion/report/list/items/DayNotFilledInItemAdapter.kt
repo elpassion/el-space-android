@@ -13,7 +13,7 @@ class DayNotFilledInItemAdapter(val day: Day, val listener: OnDayClickListener) 
 
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
-        holder.itemView.dayNumber.text = day.dayNumber.toString()
+        holder.itemView.dayNumber.text = day.name
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

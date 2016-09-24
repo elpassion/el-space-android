@@ -74,8 +74,22 @@ class ReportListActivityHappyTest {
     }
 
     @Test
-    fun shouldOpenAddReportScreenOnDayClick() {
+    fun shouldOpenAddReportScreenOnWeekendDayClick() {
         onText("1 Sat").click()
+
+        checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenAddReportScreenOnNotFilledInDayClick() {
+        onText("4 Tue").click()
+
+        checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenAddReportScreenOnNormalDayClick() {
+        onText("3 Mon").click()
 
         checkIntent(ReportAddActivity::class.java)
     }

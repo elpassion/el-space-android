@@ -101,18 +101,30 @@ class ReportListActivityHappyTest {
 
     @Test
     fun shouldNotHaveMissingInformationOnWeekendDays() {
-        onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
+        verifyIfDayNumberOneHasNotMissingText()
     }
 
     @Test
     fun shouldNotHaveTotalInformationOnNotPassedDays() {
-        onView(allOf(hasDescendant(withText("5 Wed")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+        verifyIfFifthDayHasNoInformationAboutTotal()
     }
 
     @Test
     fun shouldShowTotalInformationOnWeekendDaysIfThereIsAReport() {
-        onView(allOf(hasDescendant(withText("2 Sun")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+        verifyIfWeekendDayWithReportHasTotalInformation()
 
+    }
+
+    private fun verifyIfDayNumberOneHasNotMissingText() {
+        onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
+    }
+
+    private fun verifyIfFifthDayHasNoInformationAboutTotal() {
+        onView(allOf(hasDescendant(withText("5 Wed")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+    }
+
+    private fun verifyIfWeekendDayWithReportHasTotalInformation() {
+        onView(allOf(hasDescendant(withText("2 Sun")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 3.0 hours"))))
     }
 
 }

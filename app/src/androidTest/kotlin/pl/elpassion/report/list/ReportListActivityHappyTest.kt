@@ -78,5 +78,11 @@ class ReportListActivityHappyTest {
         onView(allOf(hasDescendant(withText("2")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
+    @Test
+    fun shouldNotHaveTotalInformationOnNotPassedDays() {
+        onView(allOf(hasDescendant(withText("5")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+    }
+
+
 }
 

@@ -39,6 +39,9 @@ android {
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
         androidTest.java.srcDirs += 'src/testCommon/kotlin'
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 repositories {

@@ -14,11 +14,6 @@ class WeekendDayItem(val day: Day, val listener: OnDayClickListener) : ItemAdapt
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
         holder.itemView.dayNumber.text = day.dayNumber.toString()
-        if (day.reports.isNotEmpty()) {
-            holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
-        } else {
-            holder.itemView.totalHours.text = null
-        }
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

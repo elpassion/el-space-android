@@ -17,11 +17,4 @@
         android:textSize="25sp"
         tools:text="1"/>
 
-    <TextView
-        android:id="@+id/totalHours"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        tools:text="Total: 8.0 hours"/>
-
 </LinearLayout>

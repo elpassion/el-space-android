@@ -32,7 +32,9 @@ class ReportListActivityHappyTest {
         override fun beforeActivityLaunched() {
             ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
             stubCurrentTime(year = 2016, month = 10, day = 4)
-            whenever(service.getReports()).thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 3, projectName = "Project", description = "Description", reportedHours = 8.0))))
+            whenever(service.getReports()).thenReturn(Observable.just(listOf(
+                    newReport(year = 2016, month = 10, day = 3, projectName = "Project", description = "Description", reportedHours = 8.0),
+                    newReport(year = 2016, month = 10, day = 2, reportedHours = 3.0))))
             ReportList.ServiceProvider.override = { service }
         }
     }
@@ -83,6 +85,11 @@ class ReportListActivityHappyTest {
         onView(allOf(hasDescendant(withText("5")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
     }
 
+    @Test
+    fun shouldShowTotalInformationOnWeekendDaysIfThereIsAReport() {
+        onView(allOf(hasDescendant(withText("2")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+
+    }
 
 }
 

@@ -59,7 +59,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun showDays(days: List<Day>, listener: OnDayClickListener) {
         reportsContainer.adapter = ReportsAdapter(days.flatMap {
-            val dayItem = if (it.isWeekendDay) WeekendDayItem(it, listener) else
+            val dayItem = if (it.isWeekendDay && it.reports.isEmpty()) WeekendDayItem(it, listener) else
                 if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener)
                 else DayItemAdapter(it, listener)
             listOf(dayItem) + it.reports.map { report -> ReportItemAdapter(report) }

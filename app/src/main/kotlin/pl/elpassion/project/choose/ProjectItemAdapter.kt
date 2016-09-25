@@ -12,10 +12,8 @@ class ProjectItemAdapter(val project: Project, val onClickListener: () -> Unit) 
     override fun onCreateViewHolder(itemView: View) = Holder(itemView)
 
     override fun onBindViewHolder(holder: Holder) {
-        holder.itemView.projectName.apply {
-            text = project.name
-            setOnClickListener { onClickListener() }
-        }
+        holder.itemView.projectName.text = project.name
+        holder.itemView.setOnClickListener { onClickListener() }
     }
 
     class Holder(itemView: View) : RecyclerView.ViewHolder(itemView)

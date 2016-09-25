@@ -2,6 +2,7 @@ package pl.elpassion.login
 
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.hasText
+import com.elpassion.android.commons.espresso.isDisplayed
 import com.elpassion.android.commons.espresso.onId
 import org.junit.Rule
 import org.junit.Test
@@ -15,6 +16,11 @@ class LoginActivityTest {
     @Test
     fun shouldHaveLoginButton() {
         onId(R.id.loginButton).hasText(R.string.login_button)
+    }
+
+    @Test
+    fun shouldHaveTokenEditText() {
+        onId(R.id.tokenInput).isDisplayed()
     }
 }
 

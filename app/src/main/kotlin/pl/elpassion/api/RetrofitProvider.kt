@@ -6,6 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.elpassion.common.Provider
+import pl.elpassion.login.LoginRepositoryProvider
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,7 +25,7 @@ object RetrofitProvider : Provider<Retrofit>({
 
 fun xTokenInterceptor() = Interceptor { chain ->
     val request = chain.request().newBuilder()
-            .addHeader("X-Access-Token", "1d3f080c9796ced032bb60410f40f47c")
+            .addHeader("X-Access-Token", LoginRepositoryProvider.get().readToken())
             .build()
     chain.proceed(request)
 }

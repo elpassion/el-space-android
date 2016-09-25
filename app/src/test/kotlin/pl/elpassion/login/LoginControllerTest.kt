@@ -61,32 +61,3 @@ class LoginControllerTest {
 
 }
 
-interface Login {
-    interface View {
-        fun openReportListScreen()
-        fun showEmptyLoginError()
-    }
-
-    interface Repository {
-        fun readToken(): String?
-        fun saveToken(token: String)
-    }
-}
-
-class LoginController(val view: Login.View, val loginRepository: Login.Repository) {
-    fun onCreate() {
-        if (loginRepository.readToken() != null) {
-            view.openReportListScreen()
-        }
-    }
-
-    fun onLogin(token: String) {
-        if (token.isNotEmpty()) {
-            loginRepository.saveToken(token)
-            view.openReportListScreen()
-        } else {
-            view.showEmptyLoginError()
-        }
-    }
-
-}

@@ -29,6 +29,12 @@ class LoginControllerTest {
         verify(loginRepository, times(1)).saveToken(token)
     }
 
+    @Test
+    fun shouldNotSaveGivenTokenOnLoginWhenTokenIsEmpty() {
+        controller.onLogin("")
+        verify(loginRepository, never()).saveToken(any())
+    }
+
 }
 
 interface Login {
@@ -50,7 +56,9 @@ class LoginController(val view: Login.View, val loginRepository: Login.Repositor
     }
 
     fun onLogin(token: String) {
-        loginRepository.saveToken(token)
+        if (token.isNotEmpty()) {
+            loginRepository.saveToken(token)
+        }
     }
 
 }

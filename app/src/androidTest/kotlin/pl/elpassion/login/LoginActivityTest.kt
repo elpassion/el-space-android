@@ -50,6 +50,12 @@ class LoginActivityTest {
         checkIntent(ReportListActivity::class.java)
     }
 
+    @Test
+    fun shouldShowErrorWhenProvidedTokenIsEmptyAndLoginButtonIsClicked() {
+        login("")
+        onText(R.string.token_empty_error).isDisplayed()
+    }
+
     private fun login(token: String) {
         onId(R.id.tokenInput).typeText(token)
         onId(R.id.loginButton).click()

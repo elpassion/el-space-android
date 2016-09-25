@@ -14,7 +14,7 @@ import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
 import pl.elpassion.report.list.ReportListActivity
 
-class LoginActivityTest {
+class LoginActivitySadTest {
 
     val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
 

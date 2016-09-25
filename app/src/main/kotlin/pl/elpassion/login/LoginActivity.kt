@@ -15,6 +15,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
+        controller.onCreate()
     }
 
     override fun showEmptyLoginError() {
@@ -23,6 +24,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun openReportListScreen() {
         ReportListActivity.start(this)
+        finish()
     }
 
 }

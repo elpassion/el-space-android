@@ -1,8 +1,9 @@
-package pl.elpassion.project.common
+package pl.elpassion.project
 
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.google.gson.Gson
+import pl.elpassion.common.ContextProvider
 import pl.elpassion.common.Provider
 
 object ProjectRepositoryProvider : Provider<ProjectRepository>({

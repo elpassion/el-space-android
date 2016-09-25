@@ -1,6 +1,6 @@
 package pl.elpassion.report.list
 
-import pl.elpassion.project.common.Project
+import pl.elpassion.project.Project
 
 class ReportFromApi(val performedAt: String, val value: Double?, val projectId: Long?, val comment: String?) {
 

@@ -15,9 +15,9 @@ import pl.elpassion.common.DeaultMocksRule
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
 import pl.elpassion.project.choose.ProjectChooseActivity
-import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepository
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 

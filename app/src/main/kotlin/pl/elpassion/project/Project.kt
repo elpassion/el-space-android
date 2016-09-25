@@ -1,4 +1,4 @@
-package pl.elpassion.project.common
+package pl.elpassion.project
 
 import java.io.Serializable
 

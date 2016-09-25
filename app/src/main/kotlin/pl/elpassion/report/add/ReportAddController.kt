@@ -1,7 +1,7 @@
 package pl.elpassion.report.add
 
-import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepository
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepository
 
 class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepository, val api: ReportAdd.Api) {
 

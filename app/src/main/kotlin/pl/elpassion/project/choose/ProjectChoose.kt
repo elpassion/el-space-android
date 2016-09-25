@@ -1,6 +1,6 @@
 package pl.elpassion.project.choose
 
-import pl.elpassion.project.common.Project
+import pl.elpassion.project.Project
 
 interface ProjectChoose {
     interface View {

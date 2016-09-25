@@ -1,4 +1,4 @@
-package pl.elpassion.project.common
+package pl.elpassion.common
 
 import android.content.Context
 import pl.elpassion.common.Provider

@@ -9,8 +9,8 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.common.ProjectRepository
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import rx.Observable

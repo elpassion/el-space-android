@@ -1,5 +1,6 @@
-package pl.elpassion.common
+package pl.elpassion.common.extensions
 
+import pl.elpassion.common.CurrentTimeProvider
 import java.text.SimpleDateFormat
 import java.util.*
 

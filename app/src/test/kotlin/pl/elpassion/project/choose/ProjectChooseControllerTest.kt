@@ -5,7 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import pl.elpassion.project.common.Project
+import pl.elpassion.project.Project
 import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.dto.newProject
 

@@ -1,8 +1,8 @@
 package pl.elpassion
 
 import android.app.Application
+import pl.elpassion.common.ContextProvider
 import pl.elpassion.common.SchedulersTransformerProvider
-import pl.elpassion.project.common.ContextProvider
 
 class MyFirstApp : Application() {
 

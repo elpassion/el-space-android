@@ -2,7 +2,7 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.project.common.Project
+import pl.elpassion.project.Project
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Observable

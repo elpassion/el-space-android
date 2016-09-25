@@ -9,8 +9,8 @@ import android.util.Log
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.project.choose.ProjectChooseActivity
-import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepositoryProvider
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

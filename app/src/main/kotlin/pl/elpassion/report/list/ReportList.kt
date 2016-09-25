@@ -2,8 +2,8 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepositoryProvider
 import retrofit2.http.GET
 import rx.Observable
 

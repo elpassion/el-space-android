@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
 import rx.Observable
 

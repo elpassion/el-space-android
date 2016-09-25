@@ -8,8 +8,8 @@ import android.support.v7.widget.LinearLayoutManager
 import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
-import pl.elpassion.project.common.Project
-import pl.elpassion.project.common.ProjectRepositoryProvider
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepositoryProvider
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 

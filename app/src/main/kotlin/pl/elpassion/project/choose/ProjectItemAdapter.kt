@@ -5,7 +5,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.project_item.view.*
 import pl.elpassion.R
-import pl.elpassion.project.common.Project
+import pl.elpassion.project.Project
 
 class ProjectItemAdapter(val project: Project, val onClickListener: () -> Unit) : ItemAdapter<ProjectItemAdapter.Holder>(R.layout.project_item) {
 

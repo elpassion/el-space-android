@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingBottom="10dp"
-              android:paddingTop="16dp">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal">
+
+    <include layout="@layout/separator"/>
 
     <TextView
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:id="@+id/dayNumber"
+        style="@style/DayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        tools:text="1"/>
+        tools:text="10 Thu"/>
 
-    <TextView
-        android:id="@+id/totalHours"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="@string/report_missing"/>
+        android:layout_marginStart="@dimen/cell_big_margin"
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            style="@style/DayHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/plus_icon"
+            android:text="@string/report_missing"
+            android:textColor="@color/reportMissing"
+            tools:text="MISSING"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

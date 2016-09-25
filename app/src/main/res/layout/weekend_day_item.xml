@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:paddingBottom="10dp"
-    android:paddingTop="16dp">
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <include layout="@layout/separator"/>
 
     <TextView
         android:id="@+id/dayNumber"
-        android:layout_width="wrap_content"
+        style="@style/DayName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:textSize="25sp"
-        tools:text="1"/>
+        android:background="@color/weekendCell"
+        android:drawableEnd="@drawable/weekend_plus_icon"
+        tools:text="10 Thu"/>
 
 </LinearLayout>

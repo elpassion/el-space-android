@@ -2,6 +2,8 @@ package pl.elpassion.report.list.items
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
@@ -14,6 +16,19 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
         holder.itemView.dayNumber.text = day.name
+        setBottomSeparatorVisibility(holder)
+        setTotalHoursText(holder)
+    }
+
+    private fun setBottomSeparatorVisibility(holder: VH) {
+        if (day.reports.isNotEmpty()) {
+            holder.itemView.bottomSeparator.visibility = VISIBLE
+        } else {
+            holder.itemView.bottomSeparator.visibility = GONE
+        }
+    }
+
+    private fun setTotalHoursText(holder: VH) {
         if (day.hasPassed) {
             holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
         } else {

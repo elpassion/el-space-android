@@ -6,6 +6,7 @@
     <string name="report_add_project_header">PROJECT</string>
     <string name="report_add_hours_header">HOURS</string>
     <string name="report_add_comment_header">COMMENT</string>
-    <string name="report_add_add_button">Add</string>
+    <string name="report_add_add_button">ADD</string>
     <string name="report_add_hours_default_value">8</string>
+    <string name="report_add_description_hint">What did you do today? :)</string>
 </resources>

@@ -21,4 +21,20 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="ReportHeader">
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">@dimen/default_padding_value</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/reportHeaderContent</item>
+        <item name="android:background">@color/reportHeaderCell</item>
+    </style>
+
+    <style name="ReportContent">
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

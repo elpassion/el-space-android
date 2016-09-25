@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
+import pl.elpassion.report.list.ReportListActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -20,7 +21,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun openReportListScreen() {
-
+        ReportListActivity.start(this)
     }
 
 }

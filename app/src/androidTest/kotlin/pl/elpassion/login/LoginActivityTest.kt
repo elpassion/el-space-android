@@ -9,10 +9,16 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.InitIntentsRule
+import pl.elpassion.common.checkIntent
+import pl.elpassion.report.list.ReportListActivity
 
 class LoginActivityTest {
 
     val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
+
+    @JvmField @Rule
+    val intents = InitIntentsRule()
 
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
@@ -37,6 +43,15 @@ class LoginActivityTest {
         onId(R.id.tokenInput).typeText(token)
         onId(R.id.loginButton).click()
         verify(loginRepository, times(1)).saveToken(token)
+    }
+
+    @Test
+    fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
+        val token = "token"
+        onId(R.id.tokenInput).typeText(token)
+        onId(R.id.loginButton).click()
+
+        checkIntent(ReportListActivity::class.java)
     }
 }
 

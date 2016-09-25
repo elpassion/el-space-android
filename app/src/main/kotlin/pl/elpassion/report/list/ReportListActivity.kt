@@ -1,5 +1,7 @@
 package pl.elpassion.report.list
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -68,6 +70,12 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
             if (it.isWeekendDay && it.reports.isEmpty()) WeekendDayItem(it, listener)
             else if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener)
             else DayItemAdapter(it, listener)
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, ReportListActivity::class.java))
+        }
+    }
 
 }
 

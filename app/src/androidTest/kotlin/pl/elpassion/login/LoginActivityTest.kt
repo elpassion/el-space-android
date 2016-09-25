@@ -50,10 +50,9 @@ class LoginActivityTest {
         checkIntent(ReportListActivity::class.java)
     }
 
-    private fun login(token: String): String {
+    private fun login(token: String) {
         onId(R.id.tokenInput).typeText(token)
         onId(R.id.loginButton).click()
-        return token
     }
 }
 

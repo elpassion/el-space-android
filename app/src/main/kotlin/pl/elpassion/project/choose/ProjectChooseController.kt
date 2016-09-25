@@ -5,7 +5,7 @@ import pl.elpassion.project.common.ProjectRepository
 
 class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectRepository) {
     fun onCreate() {
-        view.showPossibleProjects(repository.getPossibleProjects())
+        view.showPossibleProjects(repository.getPossibleProjects().sortedBy { it.name })
     }
 
     fun onProjectClicked(project: Project) {

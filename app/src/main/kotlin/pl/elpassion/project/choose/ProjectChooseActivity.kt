@@ -23,7 +23,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     override fun showPossibleProjects(projects: List<Project>) {
         projectsContainer.layoutManager = LinearLayoutManager(this)
-        projectsContainer.adapter = BaseRecyclerViewAdapter(projects.sortedBy { it.name }.map {
+        projectsContainer.adapter = BaseRecyclerViewAdapter(projects.map {
             ProjectItemAdapter(it, {
                 controller.onProjectClicked(it)
             })

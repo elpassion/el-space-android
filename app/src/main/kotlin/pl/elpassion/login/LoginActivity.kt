@@ -2,6 +2,7 @@ package pl.elpassion.login
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
 import pl.elpassion.report.list.ReportListActivity
@@ -17,7 +18,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showEmptyLoginError() {
-
+        emptyTokenError.visibility = VISIBLE
     }
 
     override fun openReportListScreen() {

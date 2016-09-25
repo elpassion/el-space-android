@@ -56,6 +56,11 @@ class LoginActivityTest {
         onText(R.string.token_empty_error).isDisplayed()
     }
 
+    @Test
+    fun shouldNotHaveErrorInfoOnStart() {
+        onText(R.string.token_empty_error).isNotDisplayed()
+    }
+
     private fun login(token: String) {
         onId(R.id.tokenInput).typeText(token)
         onId(R.id.loginButton).click()

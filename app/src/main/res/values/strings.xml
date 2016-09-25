@@ -11,4 +11,5 @@
     <string name="report_add_description_hint">What did you do today? :)</string>
     <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
+    <string name="token_hint">Provide token from hub website.</string>
 </resources>

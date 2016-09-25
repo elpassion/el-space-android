@@ -43,4 +43,13 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="Button">
+        <item name="android:padding">@dimen/default_padding_value</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
 </resources>

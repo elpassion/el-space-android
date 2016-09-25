@@ -1,5 +1,6 @@
 package pl.elpassion.login
 
+import android.support.test.espresso.Espresso.closeSoftKeyboard
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
@@ -63,6 +64,7 @@ class LoginActivityTest {
 
     private fun login(token: String) {
         onId(R.id.tokenInput).typeText(token)
+        closeSoftKeyboard()
         onId(R.id.loginButton).click()
     }
 }

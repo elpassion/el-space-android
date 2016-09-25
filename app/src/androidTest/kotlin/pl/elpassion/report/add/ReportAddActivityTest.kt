@@ -87,6 +87,12 @@ class ReportAddActivityTest {
         onText(R.string.report_add_hours_header).isDisplayed()
     }
 
+    @Test
+    fun shouldHaveCommentHeader() {
+        stubRepositoryAndStart()
+        onText(R.string.report_add_comment_header).isDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
         whenever(repository.getPossibleProjects()).thenReturn(projects)
         ProjectRepositoryProvider.override = { repository }

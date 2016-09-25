@@ -5,19 +5,20 @@ import org.junit.Test
 
 class LoginControllerTest {
 
+    val view = mock<Login.View>()
+    val loginRepository = mock<Login.Repository>().apply { whenever(isLoggedIn()).thenReturn(false) }
+    val controller = LoginController(view, loginRepository)
+
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
-        val view = mock<Login.View>()
-        val loginRepository = mock<Login.Repository>().apply { whenever(isLoggedIn()).thenReturn(true) }
-        LoginController(view, loginRepository).onCreate()
+        whenever(loginRepository.isLoggedIn()).thenReturn(true)
+        controller.onCreate()
         verify(view, times(1)).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenIfUserIsNotLoggedInOnCreate() {
-        val view = mock<Login.View>()
-        val loginRepository = mock<Login.Repository>().apply { whenever(isLoggedIn()).thenReturn(false) }
-        LoginController(view, loginRepository).onCreate()
+        controller.onCreate()
         verify(view, never()).openReportListScreen()
     }
 
@@ -29,13 +30,13 @@ interface Login {
     }
 
     interface Repository {
-        fun isLoggedIn() : Boolean
+        fun isLoggedIn(): Boolean
     }
 }
 
 class LoginController(val view: Login.View, val loginRepository: Login.Repository) {
     fun onCreate() {
-        if(loginRepository.isLoggedIn()){
+        if (loginRepository.isLoggedIn()) {
             view.openReportListScreen()
         }
     }

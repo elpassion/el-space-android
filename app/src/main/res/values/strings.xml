@@ -9,4 +9,5 @@
     <string name="report_add_add_button">ADD</string>
     <string name="report_add_hours_default_value">8</string>
     <string name="report_add_description_hint">What did you do today? :)</string>
+    <string name="login_button">Login</string>
 </resources>

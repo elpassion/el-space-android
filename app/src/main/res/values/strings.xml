@@ -3,4 +3,5 @@
     <string name="report_list_error">Error</string>
     <string name="report_missing">MISSING</string>
     <string name="report_add_date_header">PERFORMED AT</string>
+    <string name="report_add_project_header">PROJECT</string>
 </resources>

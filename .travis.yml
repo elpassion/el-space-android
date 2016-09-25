@@ -16,6 +16,7 @@ before_install:
   - android-wait-for-emulator
   - sleep 28
   - adb shell input keyevent 82
+  - openssl aes-256-cbc -d -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
 
 after_success:
   - sh scripts/deploy_crashlytics.sh

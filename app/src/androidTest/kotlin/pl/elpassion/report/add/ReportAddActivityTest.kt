@@ -79,7 +79,12 @@ class ReportAddActivityTest {
     fun shouldHaveProjectHeader() {
         stubRepositoryAndStart()
         onText(R.string.report_add_project_header).isDisplayed()
+    }
 
+    @Test
+    fun shouldHaveHoursHeader() {
+        stubRepositoryAndStart()
+        onText(R.string.report_add_hours_header).isDisplayed()
     }
 
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {

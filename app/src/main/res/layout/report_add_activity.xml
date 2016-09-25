@@ -32,6 +32,11 @@
         android:text="name"
         android:textSize="18sp"/>
 
+    <TextView
+        android:text="@string/report_add_hours_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <EditText
         android:id="@+id/reportAddHours"
         android:layout_width="match_parent"

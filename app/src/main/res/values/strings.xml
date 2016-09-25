@@ -4,4 +4,5 @@
     <string name="report_missing">MISSING</string>
     <string name="report_add_date_header">PERFORMED AT</string>
     <string name="report_add_project_header">PROJECT</string>
+    <string name="report_add_hours_header">HOURS</string>
 </resources>

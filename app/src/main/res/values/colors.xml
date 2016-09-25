@@ -11,4 +11,5 @@
     <color name="reportHeader">#4E3D74</color>
     <color name="reportContent">#312E39</color>
     <color name="reportHeaderContent">#312E39</color>
+    <color name="white">#fff</color>
 </resources>

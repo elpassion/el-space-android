@@ -82,11 +82,21 @@
         android:background="@android:color/transparent"
         android:inputType="text"/>
 
-    <Button
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
         android:id="@+id/reportAddAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:gravity="center"
         android:padding="@dimen/default_padding_value"
-        android:text="@string/report_add_add_button"/>
+        android:text="@string/report_add_add_button"
+        android:textColor="@color/white"
+        android:textSize="18sp"/>
 
 </LinearLayout>

@@ -7,7 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.project.Project
-import pl.elpassion.project.common.ProjectRepository
+import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import rx.Observable
 

@@ -6,7 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 import pl.elpassion.project.Project
-import pl.elpassion.project.common.ProjectRepository
+import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 
 class ProjectChooseControllerTest {
@@ -41,7 +41,7 @@ class ProjectChooseControllerTest {
     fun shouldReturnSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "B"), newProject(name = "Z"), newProject(name = "A")))
         controller.onCreate()
-        verify(view ).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z"})
+        verify(view).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
     }
 
     private fun stubRepositoryToReturn(list: List<Project>) {

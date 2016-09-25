@@ -22,6 +22,13 @@ class LoginControllerTest {
         verify(view, never()).openReportListScreen()
     }
 
+    @Test
+    fun shouldSaveGivenTokenOnLogin() {
+        val token = "token"
+        controller.onLogin(token)
+        verify(loginRepository, times(1)).saveToken(token)
+    }
+
 }
 
 interface Login {
@@ -31,6 +38,7 @@ interface Login {
 
     interface Repository {
         fun isLoggedIn(): Boolean
+        fun saveToken(token: String)
     }
 }
 
@@ -39,6 +47,10 @@ class LoginController(val view: Login.View, val loginRepository: Login.Repositor
         if (loginRepository.isLoggedIn()) {
             view.openReportListScreen()
         }
+    }
+
+    fun onLogin(token: String) {
+        loginRepository.saveToken(token)
     }
 
 }

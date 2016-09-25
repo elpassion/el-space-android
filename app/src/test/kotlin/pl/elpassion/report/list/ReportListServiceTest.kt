@@ -1,10 +1,12 @@
 package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.project.common.Project
+import pl.elpassion.project.common.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import rx.Observable
@@ -15,7 +17,8 @@ class ReportListServiceTest {
     val subscriber = TestSubscriber<List<Report>>()
     val reportApi = mock<ReportList.ReportApi>()
     val projectApi = mock<ReportList.ProjectApi>()
-    val service = ReportListService(reportApi, projectApi, mock())
+    val projectRepository = mock<ProjectRepository>()
+    val service = ReportListService(reportApi, projectApi, projectRepository)
 
     @Before
     fun setUp() {
@@ -24,6 +27,10 @@ class ReportListServiceTest {
 
     private fun stubProjectApiToReturn(project: Project) {
         whenever(projectApi.getProjects()).thenReturn(Observable.just(listOf(project)))
+    }
+
+    private fun stubProjectApiToReturn(projects: List<Project>) {
+        whenever(projectApi.getProjects()).thenReturn(Observable.just(projects))
     }
 
     @Test
@@ -67,6 +74,15 @@ class ReportListServiceTest {
         stubReportApiToReturn(newReportFromApi(projectId = 2))
         service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(projectId = 2, projectName = "Test")))
+    }
+
+    @Test
+    fun shouldSaveReturnedProjectsToRepository() {
+        val projects = listOf(newProject(id = "2", name = "A"), newProject(id = "2", name = "B"))
+        stubProjectApiToReturn(projects)
+        stubReportApiToReturn(newReportFromApi(projectId = 2))
+        service.getReports().subscribe(subscriber)
+        verify(projectRepository).saveProjects(projects)
     }
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {

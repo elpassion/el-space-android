@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">El Peon</string>
+    <string name="app_name">El Space</string>
     <string name="report_list_error">Error</string>
     <string name="report_missing">MISSING</string>
     <string name="report_add_date_header">PERFORMED AT</string>

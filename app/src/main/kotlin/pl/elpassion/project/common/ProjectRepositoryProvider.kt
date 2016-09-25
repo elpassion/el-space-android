@@ -1,6 +1,5 @@
 package pl.elpassion.project.common
 
-import android.content.Context
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.google.gson.Gson
@@ -20,8 +19,4 @@ object ProjectRepositoryProvider : Provider<ProjectRepository>({
             return repository.read(PROJECTS_KEY) ?: emptyList()
         }
     }
-})
-
-object ContextProvider : Provider<Context>({
-    throw NotImplementedError()
 })

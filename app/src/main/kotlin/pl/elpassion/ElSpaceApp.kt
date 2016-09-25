@@ -4,7 +4,7 @@ import android.app.Application
 import pl.elpassion.common.ContextProvider
 import pl.elpassion.common.SchedulersTransformerProvider
 
-class MyFirstApp : Application() {
+class ElSpaceApp : Application() {
 
     override fun onCreate() {
         super.onCreate()

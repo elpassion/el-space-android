@@ -30,7 +30,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         setContentView(R.layout.report_add_activity)
         controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
-        reportAddHours.setOnFocusChangeListener { view, b -> if (b) reportAddHours.setText("") }
+        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddAdd.setOnClickListener {
             controller.onReportAdd(
                     reportAddHours.text.toString(),

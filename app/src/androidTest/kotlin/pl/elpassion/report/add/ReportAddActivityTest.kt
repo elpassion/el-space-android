@@ -2,6 +2,8 @@ package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.closeSoftKeyboard
+import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.action.ViewActions.longClick
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
@@ -91,6 +93,18 @@ class ReportAddActivityTest {
     fun shouldHaveCommentHeader() {
         stubRepositoryAndStart()
         onText(R.string.report_add_comment_header).isDisplayed()
+    }
+
+    @Test
+    fun shouldClearTextAfterClickOnHoursInput() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddHours).click().hasText("")
+    }
+
+    @Test
+    fun shouldNotCrashOnLongClickOnHoursInput() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddHours).perform(longClick())
     }
 
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {

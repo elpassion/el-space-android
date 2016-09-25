@@ -53,6 +53,12 @@ class LoginControllerTest {
         verify(view, times(1)).openReportListScreen()
     }
 
+    @Test
+    fun shouldNotOpenReportListScreenIfTokenIsEmptyOnLogin() {
+        controller.onLogin("")
+        verify(view, never()).openReportListScreen()
+    }
+
 }
 
 interface Login {

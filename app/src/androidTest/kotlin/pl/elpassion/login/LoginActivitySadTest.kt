@@ -12,7 +12,10 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
+import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.ReportListActivity
+import pl.elpassion.startActivity
+import rx.Observable
 
 class LoginActivitySadTest {
 
@@ -22,24 +25,28 @@ class LoginActivitySadTest {
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java) {
+    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java, false, false) {
         override fun beforeActivityLaunched() {
+            ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.never()) } }
             LoginRepositoryProvider.override = { loginRepository }
         }
     }
 
     @Test
     fun shouldHaveLoginButton() {
+        rule.startActivity()
         onId(R.id.loginButton).hasText(R.string.login_button)
     }
 
     @Test
     fun shouldHaveTokenEditText() {
+        rule.startActivity()
         onId(R.id.tokenInput).isDisplayed()
     }
 
     @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
+        rule.startActivity()
         val token = "token"
         login(token)
         verify(loginRepository, times(1)).saveToken(token)
@@ -47,18 +54,21 @@ class LoginActivitySadTest {
 
     @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
+        rule.startActivity()
         login("token")
         checkIntent(ReportListActivity::class.java)
     }
 
     @Test
     fun shouldShowErrorWhenProvidedTokenIsEmptyAndLoginButtonIsClicked() {
+        rule.startActivity()
         login("")
         onText(R.string.token_empty_error).isDisplayed()
     }
 
     @Test
     fun shouldNotHaveErrorInfoOnStart() {
+        rule.startActivity()
         onText(R.string.token_empty_error).isNotDisplayed()
     }
 

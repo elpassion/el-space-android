@@ -7,8 +7,10 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
+import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.ReportListActivity
 import pl.elpassion.startActivity
+import rx.Observable
 
 class LoginActivityHappyTest {
 
@@ -20,6 +22,7 @@ class LoginActivityHappyTest {
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java, false, false) {
         override fun beforeActivityLaunched() {
+            ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.never()) } }
             LoginRepositoryProvider.override = { loginRepository }
         }
     }

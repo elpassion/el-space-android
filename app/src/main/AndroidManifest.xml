@@ -21,6 +21,9 @@
         <activity android:name=".project.choose.ProjectChooseActivity"/>
         <activity android:name=".report.add.ReportAddActivity"/>
         <activity android:name=".report.list.ReportListActivity"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="42505f6356175462de2327f99393bf1fdf054841" />
     </application>
 
 </manifest>

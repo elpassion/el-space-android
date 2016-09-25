@@ -1,4 +1,4 @@
-package pl.elpassion.report.list.items
+package pl.elpassion.report.list.adapter.items
 
 import android.support.v7.widget.RecyclerView
 import android.view.View

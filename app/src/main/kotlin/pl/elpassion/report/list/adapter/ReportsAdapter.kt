@@ -1,4 +1,4 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.adapter
 
 import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.ItemAdapter

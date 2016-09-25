@@ -8,10 +8,11 @@ import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.list.items.DayItemAdapter
-import pl.elpassion.report.list.items.DayNotFilledInItemAdapter
-import pl.elpassion.report.list.items.ReportItemAdapter
-import pl.elpassion.report.list.items.WeekendDayItem
+import pl.elpassion.report.list.adapter.ReportsAdapter
+import pl.elpassion.report.list.adapter.items.DayItemAdapter
+import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
+import pl.elpassion.report.list.adapter.items.ReportItemAdapter
+import pl.elpassion.report.list.adapter.items.WeekendDayItem
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

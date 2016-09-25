@@ -69,6 +69,12 @@ class ReportAddActivityTest {
         onId(R.id.reportAddDate).hasText("2016-09-23")
     }
 
+    @Test
+    fun shouldHaveDateHeader() {
+        stubRepositoryAndStart()
+        onText(R.string.report_add_date_header).isDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
         whenever(repository.getPossibleProjects()).thenReturn(projects)
         ProjectRepositoryProvider.override = { repository }

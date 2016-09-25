@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/report_add_date_header"/>
 
     <TextView
         android:id="@+id/reportAddDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/reportAddProjectName"
@@ -19,7 +25,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:text="name"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/reportAddHours"
@@ -28,7 +34,7 @@
         android:layout_margin="10dp"
         android:inputType="number"
         android:text="8"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/reportAddDescription"
@@ -36,12 +42,13 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:inputType="text"
-        android:textSize="18sp" />
+        android:textSize="18sp"/>
 
     <Button
         android:id="@+id/reportAddAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Add" />
+        android:text="Add"/>
+
 </LinearLayout>

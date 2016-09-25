@@ -40,18 +40,20 @@ class LoginActivityTest {
     @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
         val token = "token"
-        onId(R.id.tokenInput).typeText(token)
-        onId(R.id.loginButton).click()
+        login(token)
         verify(loginRepository, times(1)).saveToken(token)
     }
 
     @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
-        val token = "token"
+        login("token")
+        checkIntent(ReportListActivity::class.java)
+    }
+
+    private fun login(token: String): String {
         onId(R.id.tokenInput).typeText(token)
         onId(R.id.loginButton).click()
-
-        checkIntent(ReportListActivity::class.java)
+        return token
     }
 }
 

@@ -35,11 +35,18 @@ class LoginControllerTest {
         verify(loginRepository, never()).saveToken(any())
     }
 
+    @Test
+    fun shouldShowErrorAboutEmptyTokenWhenTokenIsEmpty() {
+        controller.onLogin("")
+        verify(view, times(1)).showEmptyLoginError()
+    }
+
 }
 
 interface Login {
     interface View {
         fun openReportListScreen()
+        fun showEmptyLoginError()
     }
 
     interface Repository {
@@ -59,6 +66,7 @@ class LoginController(val view: Login.View, val loginRepository: Login.Repositor
         if (token.isNotEmpty()) {
             loginRepository.saveToken(token)
         }
+        view.showEmptyLoginError()
     }
 
 }

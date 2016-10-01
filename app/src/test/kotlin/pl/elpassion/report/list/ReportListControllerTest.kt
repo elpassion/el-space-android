@@ -219,6 +219,19 @@ class ReportListControllerTest {
         verify(view).showDays(argThat { this[1].name == "2 Fri"}, any())
     }
 
+    @Test
+    fun shouldNotCollectDuplicatedReports() {
+        val report = newReport(2016, 6, 1)
+        stubCurrentTime(year = 2016, month = 6, day = 1)
+        stubServiceToReturn(listOf(report))
+
+        controller.onCreate()
+        reset(view)
+        controller.onCreate()
+
+        verify(view, times(1)).showDays(argThat { this[0].reports.size == 1 }, any())
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.getReports()).thenReturn(Observable.never())
     }

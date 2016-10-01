@@ -16,6 +16,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->
+                    reportList.clear()
                     reportList.addAll(reports)
                     showDaysAndUpdateMonthName()
                 }, {

@@ -59,6 +59,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun close() {
+        setResult(Activity.RESULT_OK)
         finish()
     }
 
@@ -70,8 +71,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         private val REQUEST_CODE = 10001
         private val ADD_DATE_KEY = "dateKey"
 
-        fun start(context: Context, date: String) {
-            context.startActivity(intent(context, date))
+        fun startForResult(activity: Activity, date: String, requestCode: Int) {
+            activity.startActivityForResult(intent(activity, date), requestCode)
         }
 
         fun intent(context: Context, date: String) = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }

@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -46,7 +47,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openAddReportScreen(date: String) {
-        ReportAddActivity.start(this, date)
+        ReportAddActivity.startForResult(this, date, ADD_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun hideLoader() {
@@ -66,12 +67,20 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            controller.onCreate()
+        }
+    }
+
     private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
             if (it.isWeekendDay && it.reports.isEmpty()) WeekendDayItem(it, listener)
             else if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener)
             else DayItemAdapter(it, listener)
 
     companion object {
+        private val ADD_REPORT_SCREEN_REQUEST_CODE = 100
         fun start(context: Context) {
             context.startActivity(Intent(context, ReportListActivity::class.java))
         }

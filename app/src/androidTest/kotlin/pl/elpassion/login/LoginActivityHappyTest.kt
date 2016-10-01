@@ -22,7 +22,7 @@ class LoginActivityHappyTest {
     @JvmField @Rule
     val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java, false, false) {
         override fun beforeActivityLaunched() {
-            ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.never()) } }
+            ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.just(emptyList())) } }
             LoginRepositoryProvider.override = { loginRepository }
         }
     }

@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.common.hideLoader
+import pl.elpassion.common.showLoader
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.DayItemAdapter
@@ -51,14 +53,16 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun hideLoader() {
+        hideLoader(reportListCoordinator)
     }
 
     override fun showLoader() {
+        showLoader(reportListCoordinator)
     }
 
     override fun showError(it: Throwable) {
         Log.e("Error", it.message, it)
-        reportListError.visibility = VISIBLE
+        Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showDays(days: List<Day>, listener: OnDayClickListener) {

@@ -23,7 +23,7 @@ import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.add.ReportAddActivity
 import rx.Observable
 
-class ReportListActivityHappyTest {
+class ReportListActivityTest {
 
     val service = mock<ReportList.Service>()
 
@@ -41,11 +41,6 @@ class ReportListActivityHappyTest {
 
     @JvmField @Rule
     val intents = InitIntentsRule()
-
-    @Test
-    fun shouldNotShowErrorOnView() {
-        onId(R.id.reportListError).isNotDisplayed()
-    }
 
     @Test
     fun shouldShowCorrectlyDayNameOnWeekendDays() {

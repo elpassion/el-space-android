@@ -18,9 +18,11 @@ before_install:
   - adb shell input keyevent 82
   - openssl aes-256-cbc -d -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
 
-after_success:
-  - sh scripts/deploy_crashlytics.sh
-
 after_script:
   - adb logcat -d
 
+deploy:
+    provider: script
+    script: scripts/deploy_crashlytics.sh
+    on:
+      branch: master

@@ -21,8 +21,5 @@ before_install:
 after_script:
   - adb logcat -d
 
-deploy:
-    provider: script
-    script: scripts/deploy_crashlytics.sh
-    on:
-      branch: master
+after_success:
+  - sh scripts/deploy_crashlytics.sh

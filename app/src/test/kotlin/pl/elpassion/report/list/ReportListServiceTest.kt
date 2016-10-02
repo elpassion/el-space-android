@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -83,6 +84,16 @@ class ReportListServiceTest {
         stubReportApiToReturn(newReportFromApi(projectId = 2))
         service.getReports().subscribe(subscriber)
         verify(projectRepository).saveProjects(projects)
+    }
+
+    @Test
+    fun shouldSaveOnlyDistinctProjects() {
+        val project = newProject(id = "2", name = "A")
+        val projects = listOf(project, project)
+        stubProjectApiToReturn(projects)
+        stubReportApiToReturn(newReportFromApi(projectId = 2))
+        service.getReports().subscribe(subscriber)
+        verify(projectRepository).saveProjects(argThat { size == 1 })
     }
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {

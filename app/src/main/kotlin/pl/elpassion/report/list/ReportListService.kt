@@ -6,6 +6,7 @@ import rx.Observable
 class ReportListService(val reportApi: ReportList.ReportApi, val projectApi: ReportList.ProjectApi, val repository: ProjectRepository) : ReportList.Service {
     override fun getReports(): Observable<List<Report>> {
         return projectApi.getProjects()
+                .map { it.distinct() }
                 .doOnNext { repository.saveProjects(it) }
                 .flatMap { projects ->
                     reportApi.getReports().map { reportList ->

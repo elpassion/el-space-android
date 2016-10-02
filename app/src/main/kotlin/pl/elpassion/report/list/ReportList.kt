@@ -43,7 +43,7 @@ interface ReportList {
     })
 
     interface ProjectApi {
-        @GET("projects")
+        @GET("projects?sort=recent")
         fun getProjects(): Observable<List<Project>>
     }
 

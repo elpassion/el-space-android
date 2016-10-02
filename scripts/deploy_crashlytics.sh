@@ -1,5 +1,5 @@
 #!/bin/bash
-if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+if [ "$TRAVIS_BRANCH" == "master" ]; then
 DIR=$(dirname $0)
 echo $DIR
 RELEASE_NOTES=$(git log --format="%cn @ "$TRAVIS_BRANCH"

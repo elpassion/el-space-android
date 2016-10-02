@@ -22,4 +22,4 @@ after_script:
   - adb logcat -d
 
 after_success:
-  - sh scripts/deploy_crashlytics.sh
+  - bash scripts/deploy_crashlytics.sh

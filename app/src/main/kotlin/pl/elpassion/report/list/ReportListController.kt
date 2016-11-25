@@ -1,11 +1,11 @@
 package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
+
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.*
 import rx.Subscription
 import java.util.*
-
 class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener {
 
     private var subscription: Subscription? = null
@@ -13,6 +13,14 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
 
     fun onCreate() {
+        fetchReports()
+    }
+
+    fun refreshReportList() {
+        fetchReports()
+    }
+
+    private fun fetchReports() {
         subscription = service.getReports()
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }

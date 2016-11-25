@@ -65,7 +65,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            controller.onCreate()
+            controller.refreshReportList()
         }
     }
 

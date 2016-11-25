@@ -2,7 +2,9 @@ package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
 import rx.Observable
@@ -12,6 +14,9 @@ class ReportListControllerTest {
     val service = mock<ReportList.Service>()
     val view = mock<ReportList.View>()
     val controller = ReportListController(service, view)
+
+    @JvmField @Rule
+    val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {

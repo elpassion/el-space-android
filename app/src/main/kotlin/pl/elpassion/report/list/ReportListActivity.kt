@@ -18,20 +18,11 @@ import pl.elpassion.report.list.adapter.items.DayItemAdapter
 import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
 import pl.elpassion.report.list.adapter.items.ReportItemAdapter
 import pl.elpassion.report.list.adapter.items.WeekendDayItem
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     val controller by lazy {
-        ReportListController(object : ReportList.Service {
-            val service = ReportList.ServiceProvider.get()
-            override fun getReports(): Observable<List<Report>> {
-                return service.getReports().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            }
-
-        }, this)
+        ReportListController(ReportList.ServiceProvider.get(), this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

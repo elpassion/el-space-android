@@ -1,7 +1,6 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.onId
@@ -11,7 +10,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.DefaultMocksRule
+import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.ProjectRepositoryProvider
@@ -23,10 +22,7 @@ class ReportAddActivityChoosingProjectTest {
     val repository = mock<ProjectRepository>()
 
     @JvmField @Rule
-    val defaultMocks = DefaultMocksRule()
-
-    @JvmField @Rule
-    val rule = ActivityTestRule<ReportAddActivity>(ReportAddActivity::class.java, false, false)
+    val rule = rule<ReportAddActivity>(autoStart = false)
 
     @Test
     fun shouldChangeSelectedProject() {

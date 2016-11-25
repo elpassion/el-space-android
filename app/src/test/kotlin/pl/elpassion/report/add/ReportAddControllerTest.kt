@@ -5,7 +5,9 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
@@ -17,6 +19,9 @@ class ReportAddControllerTest {
     val api = mock<ReportAdd.Api>()
     val repository = mock<ProjectRepository>()
     val controller = ReportAddController(view, repository, api)
+
+    @JvmField @Rule
+    val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {

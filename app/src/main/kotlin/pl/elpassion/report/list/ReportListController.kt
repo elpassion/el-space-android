@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.*
 import rx.Subscription
@@ -13,6 +14,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 
     fun onCreate() {
         subscription = service.getReports()
+                .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ reports ->

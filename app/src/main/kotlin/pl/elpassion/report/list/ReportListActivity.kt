@@ -58,7 +58,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun showDays(days: List<Day>, listener: OnDayClickListener) {
         reportsContainer.adapter = ReportsAdapter(days.flatMap {
-            listOf(createDayAdapter(it, listener)) + it.reports.map { report -> ReportItemAdapter(report) }
+            listOf(createDayAdapter(it, listener)) + it.reports.map(::ReportItemAdapter)
         })
     }
 

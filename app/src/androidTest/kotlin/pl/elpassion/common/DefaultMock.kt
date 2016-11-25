@@ -8,7 +8,7 @@ import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
 import rx.Observable
 
-class DeaultMocksRule : TestRule {
+class DefaultMocksRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement = object : Statement() {
         override fun evaluate() {
             stubReportAddApi()

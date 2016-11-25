@@ -11,7 +11,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.DeaultMocksRule
+import pl.elpassion.common.DefaultMocksRule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.ProjectRepositoryProvider
@@ -23,7 +23,7 @@ class ReportAddActivityChoosingProjectTest {
     val repository = mock<ProjectRepository>()
 
     @JvmField @Rule
-    val defaultMocks = DeaultMocksRule()
+    val defaultMocks = DefaultMocksRule()
 
     @JvmField @Rule
     val rule = ActivityTestRule<ReportAddActivity>(ReportAddActivity::class.java, false, false)

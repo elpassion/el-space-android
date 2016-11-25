@@ -18,7 +18,6 @@ class DefaultMocksRule : TestRule {
     }
 }
 
-
 fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {

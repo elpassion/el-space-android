@@ -1,11 +1,13 @@
 package pl.elpassion.report.edit
 
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Test
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
+import rx.Observable
 import kotlin.properties.Delegates
 
 class ReportEditControllerTest {
@@ -13,6 +15,11 @@ class ReportEditControllerTest {
     private val view = mock<ReportEdit.View>()
     private val editReportApi = mock<ReportEdit.EditApi>()
     private val controller = ReportEditController(view, editReportApi)
+
+    @Before
+    fun setUp() {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(null))
+    }
 
     @Test
     fun shouldShowCorrectReportOnCreate() {
@@ -69,6 +76,14 @@ class ReportEditControllerTest {
         verify(view, times(1)).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderIfSavingHasNotFinished() {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+        controller.onCreate(newReport())
+        controller.onSaveReport(1.0, "")
+        verify(view, never()).hideLoader()
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
@@ -91,13 +106,15 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     fun onSaveReport(hours: Double, description: String) {
         view.showLoader()
         editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
-        view.hideLoader()
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe()
     }
 
     fun onSelectProject(project: Project) {
         projectId = project.id
         view.updateProjectName(project.name)
     }
+
 }
 
 interface ReportEdit {
@@ -110,6 +127,6 @@ interface ReportEdit {
     }
 
     interface EditApi {
-        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String)
+        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit>
     }
 }

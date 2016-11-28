@@ -1,9 +1,9 @@
 package pl.elpassion.report.edit
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
+import pl.elpassion.project.Project
+import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import kotlin.properties.Delegates
@@ -31,14 +31,22 @@ class ReportEditControllerTest {
     fun shouldCallApiWithCorrectDataOnSaveReport() {
         controller.onCreate(newReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
         controller.onSaveReport(hours = 8.0, description = "description")
-        verify(editReportApi, times(1)).editReport(id = 2, date = "2017-07-02", reportedHour = 8.0, description = "description", projectId = 2)
+        verify(editReportApi, times(1)).editReport(id = 2, date = "2017-07-02", reportedHour = 8.0, description = "description", projectId = "2")
     }
 
     @Test
     fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
         controller.onCreate(newReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
         controller.onSaveReport(hours = 7.5, description = "newDescription")
-        verify(editReportApi, times(1)).editReport(id = 5, date = "2016-01-03", reportedHour = 7.5, description = "newDescription", projectId = 2)
+        verify(editReportApi, times(1)).editReport(id = 5, date = "2016-01-03", reportedHour = 7.5, description = "newDescription", projectId = "2")
+    }
+
+    @Test
+    fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
+        controller.onCreate(newReport(projectId = 10))
+        controller.onSelectProject(newProject(id = "20"))
+        controller.onSaveReport(0.0, "")
+        verify(editReportApi, times(1)).editReport(any(), any(), any(), any(), projectId = eq("20"))
     }
 
 }
@@ -47,10 +55,12 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     private var reportId: Long by Delegates.notNull()
     private lateinit var reportDate: String
+    private lateinit var projectId: String
 
     fun onCreate(report: Report) {
         reportId = report.id
         reportDate = String.format("%d-%02d-%02d", report.year, report.month, report.day)
+        projectId = "${report.projectId}"
         view.showReport(report)
     }
 
@@ -59,7 +69,11 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     }
 
     fun onSaveReport(hours: Double, description: String) {
-        editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = 2)
+        editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+    }
+
+    fun onSelectProject(project: Project) {
+        projectId = project.id
     }
 }
 
@@ -70,6 +84,6 @@ interface ReportEdit {
     }
 
     interface EditApi {
-        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: Int)
+        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String)
     }
 }

@@ -115,8 +115,8 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     }
 
     fun onSaveReport(hours: Double, description: String) {
-        view.showLoader()
         subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+                .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe()
     }

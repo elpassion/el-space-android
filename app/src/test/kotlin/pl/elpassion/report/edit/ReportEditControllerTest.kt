@@ -3,14 +3,9 @@ package pl.elpassion.report.edit
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
-import pl.elpassion.common.extensions.getPerformedAtString
-import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
-import pl.elpassion.report.Report
 import rx.Observable
-import rx.Subscription
-import kotlin.properties.Delegates
 
 class ReportEditControllerTest {
 
@@ -118,60 +113,4 @@ class ReportEditControllerTest {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
     }
 
-}
-
-class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
-
-    private var reportId: Long by Delegates.notNull()
-    private lateinit var reportDate: String
-    private lateinit var projectId: String
-    private var subscription: Subscription? = null
-
-    fun onCreate(report: Report) {
-        reportId = report.id
-        reportDate = getPerformedAtString(report.year, report.month, report.day)
-        projectId = "${report.projectId}"
-        view.showReport(report)
-    }
-
-    fun onChooseProject() {
-        view.openChooseProjectScreen()
-    }
-
-    fun onSaveReport(hours: Double, description: String) {
-        subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    view.close()
-                }, {
-                    view.showError(it)
-                })
-    }
-
-    fun onSelectProject(project: Project) {
-        projectId = project.id
-        view.updateProjectName(project.name)
-    }
-
-    fun onDestroy() {
-        subscription?.unsubscribe()
-    }
-
-}
-
-interface ReportEdit {
-    interface View {
-        fun showReport(report: Report)
-        fun openChooseProjectScreen()
-        fun updateProjectName(projectName: String)
-        fun showLoader()
-        fun hideLoader()
-        fun showError(ex: Throwable)
-        fun close()
-    }
-
-    interface EditApi {
-        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit>
-    }
 }

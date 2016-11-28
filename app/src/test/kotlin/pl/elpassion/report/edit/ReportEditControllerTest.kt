@@ -49,6 +49,12 @@ class ReportEditControllerTest {
         verify(editReportApi, times(1)).editReport(any(), any(), any(), any(), projectId = eq("20"))
     }
 
+    @Test
+    fun shouldUpdateProjectNameOnNewProject() {
+        controller.onSelectProject(newProject(name = "newProject"))
+        verify(view, times(1)).updateProjectName(projectName = "newProject")
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
@@ -74,6 +80,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     fun onSelectProject(project: Project) {
         projectId = project.id
+        view.updateProjectName(project.name)
     }
 }
 
@@ -81,6 +88,7 @@ interface ReportEdit {
     interface View {
         fun showReport(report: Report)
         fun openChooseProjectScreen()
+        fun updateProjectName(projectName: String)
     }
 
     interface EditApi {

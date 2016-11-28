@@ -75,6 +75,7 @@ class ReportAddControllerTest {
         onCreate("2016-09-23")
         verify(view).showDate("2016-09-23")
     }
+
     @Test
     fun shouldUseApi() {
         whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))

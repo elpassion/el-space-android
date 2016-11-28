@@ -79,7 +79,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+        stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
         controller.onSaveReport(1.0, "")
         verify(view, never()).hideLoader()
@@ -87,11 +87,15 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+        stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
         controller.onSaveReport(1.0, "")
         controller.onDestroy()
         verify(view, times(1)).hideLoader()
+    }
+
+    private fun stubEditReportApiToReturnNever() {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
     }
 
 }

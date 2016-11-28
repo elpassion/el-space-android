@@ -63,7 +63,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldMapReturnedReportsToCorrectDays() {
-        val report = newReport(2016, 6, 1)
+        val report = newReport(year = 2016, month = 6, day = 1)
         stubCurrentTime(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -122,7 +122,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
-        val report = newReport(2016, 6, 1, reportedHours = 1.0)
+        val report = newReport(year = 2016, month = 6, day = 1, reportedHours = 1.0)
         stubCurrentTime(year = 2016, month = 5, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -147,7 +147,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
-        val report = newReport(2016, 6, 1)
+        val report = newReport(year = 2016, month = 6, day = 1)
         stubCurrentTime(year = 2016, month = 7, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -227,7 +227,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldNotCollectDuplicatedReports() {
-        val report = newReport(2016, 6, 1)
+        val report = newReport(year = 2016, month = 6, day = 1)
         stubCurrentTime(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 

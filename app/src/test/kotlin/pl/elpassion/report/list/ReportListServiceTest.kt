@@ -97,6 +97,13 @@ class ReportListServiceTest {
         verify(projectRepository).saveProjects(argThat { size == 1 })
     }
 
+    @Test
+    fun shouldCorrectlyMapReportsId() {
+        stubReportApiToReturn(newReportFromApi(id = 1))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(id = 1)))
+    }
+
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
         whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
     }
@@ -104,9 +111,11 @@ class ReportListServiceTest {
     private fun newReportFromApi(performedAt: String = "2016-06-01",
                                  value: Double = 4.0,
                                  projectId: Long = 1,
-                                 description: String = "description"): ReportFromApi {
+                                 description: String = "description",
+                                 id: Long = 1): ReportFromApi {
 
         return ReportFromApi(
+                id = id,
                 performedAt = performedAt,
                 value = value,
                 projectId = projectId,

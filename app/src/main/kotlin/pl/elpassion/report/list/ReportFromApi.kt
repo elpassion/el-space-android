@@ -3,11 +3,12 @@ package pl.elpassion.report.list
 import pl.elpassion.project.Project
 import pl.elpassion.report.Report
 
-class ReportFromApi(val performedAt: String, val value: Double?, val projectId: Long?, val comment: String?) {
+class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, val projectId: Long?, val comment: String?) {
 
     fun toReport(projects: List<Project>): Report {
         val date = performedAt.split("-")
         return Report(
+                id = 1,
                 year = date[0].toInt(),
                 month = date[1].toInt(),
                 day = date[2].toInt(),

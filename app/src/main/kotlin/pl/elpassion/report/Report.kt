@@ -1,6 +1,7 @@
 package pl.elpassion.report
 
 data class Report(
+        val id : Long,
         val year: Int,
         val month: Int,
         val day: Int,

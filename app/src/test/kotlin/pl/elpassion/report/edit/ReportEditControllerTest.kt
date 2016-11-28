@@ -8,6 +8,7 @@ import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import rx.Observable
+import rx.Subscription
 import kotlin.properties.Delegates
 
 class ReportEditControllerTest {
@@ -84,6 +85,15 @@ class ReportEditControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+        controller.onCreate(newReport())
+        controller.onSaveReport(1.0, "")
+        controller.onDestroy()
+        verify(view, times(1)).hideLoader()
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
@@ -91,6 +101,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     private var reportId: Long by Delegates.notNull()
     private lateinit var reportDate: String
     private lateinit var projectId: String
+    private var subscription: Subscription? = null
 
     fun onCreate(report: Report) {
         reportId = report.id
@@ -105,7 +116,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     fun onSaveReport(hours: Double, description: String) {
         view.showLoader()
-        editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+        subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe()
     }
@@ -113,6 +124,10 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     fun onSelectProject(project: Project) {
         projectId = project.id
         view.updateProjectName(project.name)
+    }
+
+    fun onDestroy() {
+        subscription?.unsubscribe()
     }
 
 }

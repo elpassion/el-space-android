@@ -10,7 +10,7 @@ object ProjectRepositoryProvider : Provider<ProjectRepository>({
 
     object : ProjectRepository {
         private val PROJECTS_KEY = "projects_key"
-        val repository = createSharedPrefs<List<Project>>({ PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }, { Gson() })
+        private val repository = createSharedPrefs<List<Project>>({ PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }, { Gson() })
 
         override fun saveProjects(projects: List<Project>) {
             repository.write(PROJECTS_KEY, projects)

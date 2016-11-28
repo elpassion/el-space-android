@@ -9,18 +9,19 @@ import pl.elpassion.report.Report
 
 class ReportEditControllerTest {
 
+    private val view = mock<ReportEdit.View>()
+    private val controller = ReportEditController(view)
+
     @Test
     fun shouldShowCorrectReportOnCreate() {
-        val view = mock<ReportEdit.View>()
         val report = newReport()
-        ReportEditController(view).onCreate(report)
+        controller.onCreate(report)
         verify(view, times(1)).showReport(report)
     }
 
     @Test
     fun shouldOpenChooseProjectScreenOnChooseProject() {
-        val view = mock<ReportEdit.View>()
-        ReportEditController(view).onChooseProject()
+        controller.onChooseProject()
         verify(view, times(1)).openChooseProjectScreen()
     }
 

@@ -3,6 +3,7 @@ package pl.elpassion.report.edit
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
@@ -128,7 +129,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     fun onCreate(report: Report) {
         reportId = report.id
-        reportDate = String.format("%d-%02d-%02d", report.year, report.month, report.day)
+        reportDate = getPerformedAtString(report.year, report.month, report.day)
         projectId = "${report.projectId}"
         view.showReport(report)
     }

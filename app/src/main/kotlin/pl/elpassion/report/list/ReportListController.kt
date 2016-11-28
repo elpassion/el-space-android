@@ -7,6 +7,7 @@ import pl.elpassion.common.extensions.*
 import pl.elpassion.report.Report
 import rx.Subscription
 import java.util.*
+
 class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener {
 
     private var subscription: Subscription? = null
@@ -72,7 +73,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
 
     override fun onDay(dayNumber: Int) {
-        view.openAddReportScreen(String.format("%d-%02d-%02d", date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
+        view.openAddReportScreen(getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
     }
 
     fun onReport(report: Report) {

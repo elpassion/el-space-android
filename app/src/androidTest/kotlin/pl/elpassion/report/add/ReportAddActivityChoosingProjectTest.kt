@@ -26,13 +26,13 @@ class ReportAddActivityChoosingProjectTest {
 
     @Test
     fun shouldChangeSelectedProject() {
-        stubRepositoryAdnStart(listOf(newProject(), newProject("id2", "name2")))
+        stubRepositoryAndStart(listOf(newProject(), newProject("id2", "name2")))
         onId(R.id.reportAddProjectName).click()
         onText("name2").click()
         onId(R.id.reportAddProjectName).hasText("name2")
     }
 
-    private fun stubRepositoryAdnStart(listOf: List<Project>) {
+    private fun stubRepositoryAndStart(listOf: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
         ProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2016-01-01"))

@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
+import kotlin.properties.Delegates
 
 class ReportEditControllerTest {
 
@@ -33,11 +34,23 @@ class ReportEditControllerTest {
         verify(editReportApi, times(1)).editReport(id = 2, date = "2017-07-02", reportedHour = 8.0, description = "description", projectId = 2)
     }
 
+    @Test
+    fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
+        controller.onCreate(newReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
+        controller.onSaveReport(hours = 7.5, description = "newDescription")
+        verify(editReportApi, times(1)).editReport(id = 5, date = "2016-01-03", reportedHour = 7.5, description = "newDescription", projectId = 2)
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
 
+    private var reportId: Long by Delegates.notNull()
+    private lateinit var reportDate: String
+
     fun onCreate(report: Report) {
+        reportId = report.id
+        reportDate = String.format("%d-%02d-%02d", report.year, report.month, report.day)
         view.showReport(report)
     }
 
@@ -46,7 +59,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     }
 
     fun onSaveReport(hours: Double, description: String) {
-        editReportApi.editReport(id = 2, date = "2017-07-02", reportedHour = 8.0, description = "description", projectId = 2 )
+        editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = 2)
     }
 }
 
@@ -57,6 +70,6 @@ interface ReportEdit {
     }
 
     interface EditApi {
-        fun editReport(id: Int, date: String, reportedHour: Double, description: String, projectId: Int)
+        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: Int)
     }
 }

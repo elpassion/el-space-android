@@ -96,7 +96,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
+        stubEditReportApiToReturnError()
         controller.onCreate(newReport())
         controller.onSaveReport(1.0, "")
         verify(view, times(1)).showError(any())
@@ -104,6 +104,10 @@ class ReportEditControllerTest {
 
     private fun stubEditReportApiToReturnNever() {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+    }
+
+    private fun stubEditReportApiToReturnError() {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
     }
 
 }

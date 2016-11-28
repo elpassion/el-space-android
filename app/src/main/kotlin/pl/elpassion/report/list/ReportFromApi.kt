@@ -8,7 +8,7 @@ class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, v
     fun toReport(projects: List<Project>): Report {
         val date = performedAt.split("-")
         return Report(
-                id = 1,
+                id = id,
                 year = date[0].toInt(),
                 month = date[1].toInt(),
                 day = date[2].toInt(),

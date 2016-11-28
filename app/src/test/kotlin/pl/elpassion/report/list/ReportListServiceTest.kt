@@ -104,6 +104,13 @@ class ReportListServiceTest {
         subscriber.assertValue(listOf(newReport(id = 1)))
     }
 
+    @Test
+    fun shouldReallyCorrectlyMapReportsId() {
+        stubReportApiToReturn(newReportFromApi(id = 2))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(id = 2)))
+    }
+
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
         whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
     }

@@ -102,6 +102,13 @@ class ReportEditControllerTest {
         verify(view, times(1)).showError(any())
     }
 
+    @Test
+    fun shouldCloseViewWhenSavingHasNotFailed() {
+        controller.onCreate(newReport())
+        controller.onSaveReport(1.0, "")
+        verify(view, times(1)).close()
+    }
+
     private fun stubEditReportApiToReturnNever() {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
     }
@@ -134,7 +141,11 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
         subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({}, { view.showError(it) })
+                .subscribe({
+                    view.close()
+                }, {
+                    view.showError(it)
+                })
     }
 
     fun onSelectProject(project: Project) {
@@ -156,6 +167,7 @@ interface ReportEdit {
         fun showLoader()
         fun hideLoader()
         fun showError(ex: Throwable)
+        fun close()
     }
 
     interface EditApi {

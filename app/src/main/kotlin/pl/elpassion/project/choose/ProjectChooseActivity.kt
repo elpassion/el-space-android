@@ -36,9 +36,11 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     }
 
     companion object {
-        val SELECTED_PROJECT = "selected_project"
+        private val SELECTED_PROJECT = "selected_project"
         fun startForResult(activity: Activity, requestCode: Int) {
             activity.startActivityForResult(Intent(activity, ProjectChooseActivity::class.java), requestCode)
         }
+
+        fun getProject(data: Intent): Project = data.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project
     }
 }

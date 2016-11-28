@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.DayItemAdapter

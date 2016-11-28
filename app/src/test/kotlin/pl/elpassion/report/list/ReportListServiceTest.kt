@@ -10,6 +10,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
+import pl.elpassion.report.Report
 import rx.Observable
 import rx.observers.TestSubscriber
 

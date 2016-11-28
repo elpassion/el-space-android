@@ -4,6 +4,7 @@ import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.report.Report
 import retrofit2.http.GET
 import rx.Observable
 

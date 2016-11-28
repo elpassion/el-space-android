@@ -4,6 +4,7 @@ import pl.elpassion.api.applySchedulers
 
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.*
+import pl.elpassion.report.Report
 import rx.Subscription
 import java.util.*
 class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener {

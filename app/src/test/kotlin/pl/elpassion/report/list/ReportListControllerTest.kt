@@ -7,6 +7,7 @@ import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
+import pl.elpassion.report.Report
 import rx.Observable
 
 class ReportListControllerTest {

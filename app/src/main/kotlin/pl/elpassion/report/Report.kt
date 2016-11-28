@@ -1,4 +1,4 @@
-package pl.elpassion.report.list
+package pl.elpassion.report
 
 data class Report(
         val year: Int,

@@ -62,6 +62,13 @@ class ReportEditControllerTest {
         verify(view, times(1)).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnSaveReportFinish() {
+        controller.onCreate(newReport())
+        controller.onSaveReport(1.0, "")
+        verify(view, times(1)).hideLoader()
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
@@ -84,6 +91,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     fun onSaveReport(hours: Double, description: String) {
         view.showLoader()
         editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+        view.hideLoader()
     }
 
     fun onSelectProject(project: Project) {
@@ -98,6 +106,7 @@ interface ReportEdit {
         fun openChooseProjectScreen()
         fun updateProjectName(projectName: String)
         fun showLoader()
+        fun hideLoader()
     }
 
     interface EditApi {

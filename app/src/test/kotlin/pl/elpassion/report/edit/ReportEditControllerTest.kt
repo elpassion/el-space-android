@@ -17,6 +17,13 @@ class ReportEditControllerTest {
         verify(view, times(1)).showReport(report)
     }
 
+    @Test
+    fun shouldOpenChooseProjectScreenOnChooseProject() {
+        val view = mock<ReportEdit.View>()
+        ReportEditController(view).onChooseProject()
+        verify(view, times(1)).openChooseProjectScreen()
+    }
+
 }
 
 class ReportEditController(val view: ReportEdit.View) {
@@ -24,10 +31,15 @@ class ReportEditController(val view: ReportEdit.View) {
     fun onCreate(report: Report) {
         view.showReport(report)
     }
+
+    fun onChooseProject() {
+        view.openChooseProjectScreen()
+    }
 }
 
 interface ReportEdit {
     interface View {
         fun showReport(report: Report)
+        fun openChooseProjectScreen()
     }
 }

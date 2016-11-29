@@ -10,7 +10,7 @@ import pl.elpassion.report.Report
 import rx.Observable
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
-
+    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
     private val controller by lazy {
         ReportEditController(this, object : ReportEdit.EditApi {
             override fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit> {
@@ -22,7 +22,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
-        controller.onCreate(intent.getSerializableExtra(REPORT_KEY) as Report)
+        controller.onCreate(report)
         reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
     }
 
@@ -58,7 +58,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     companion object {
-        private val REPORT_KEY = "repot_key"
+        private val REPORT_KEY = "report_key"
 
         fun intent(report: Report) = Intent().apply {
             putExtra(REPORT_KEY, report)

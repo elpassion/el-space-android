@@ -1,6 +1,8 @@
 package pl.elpassion.report.edit
 
+import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +26,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowCorrectReportDate() {
         startActivity(newReport(year = 2010, month = 2, day = 10))
-        onText("2010-02-10").isDisplayed()
+        onId(R.id.reportEditDate).hasText("2010-02-10")
     }
 
     @Test
@@ -36,13 +38,13 @@ class ReportEditActivityTest {
     @Test
     fun shouldHaveCorrectProjectName() {
         startActivity(newReport(projectName = "newProject"))
-        onText("newProject").isDisplayed()
+        onId(R.id.reportEditProjectName).hasText("newProject")
     }
 
     @Test
     fun shouldReallyHaveCorrectProjectName() {
         startActivity(newReport(projectName = "project 123"))
-        onText("project 123").isDisplayed()
+        onId(R.id.reportEditProjectName).hasText("project 123")
     }
 
     @Test

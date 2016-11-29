@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:inputType="numberDecimal"
+        android:labelFor="@+id/reportEditDescription"
         android:text="@string/report_hours_default_value" />
 
     <TextView
@@ -56,4 +57,11 @@
         android:layout_height="wrap_content"
         android:text="@string/report_edit_comment_header" />
 
+    <EditText
+        android:id="@+id/reportEditDescription"
+        style="@style/ReportContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:inputType="text" />
 </LinearLayout>

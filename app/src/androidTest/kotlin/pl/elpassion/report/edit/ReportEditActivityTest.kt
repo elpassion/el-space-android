@@ -68,6 +68,12 @@ class ReportEditActivityTest {
         onText(R.string.report_edit_comment_header).isDisplayed()
     }
 
+    @Test
+    fun shouldHaveCorrectDescription() {
+        startActivity(newReport(description = "Sample description"))
+        onId(R.id.reportEditDescription).hasText("Sample description")
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

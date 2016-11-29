@@ -1,7 +1,6 @@
 package pl.elpassion.report.edit
 
 import android.content.Intent
-
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.report_edit_activity.*
@@ -30,6 +29,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun showReport(report: Report) {
         reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
         reportEditProjectName.text = report.projectName
+        reportEditDescription.setText(report.description)
     }
 
     override fun close() {

@@ -71,9 +71,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
-            if (it.isWeekendDay && it.reports.isEmpty()) WeekendDayItem(it, listener)
-            else if (it.isNotFilledIn()) DayNotFilledInItemAdapter(it, listener)
-            else DayItemAdapter(it, listener)
+            when {
+                it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)
+                it.isNotFilledIn() -> DayNotFilledInItemAdapter(it, listener)
+                else -> DayItemAdapter(it, listener)
+            }
 
     companion object {
         private val ADD_REPORT_SCREEN_REQUEST_CODE = 100

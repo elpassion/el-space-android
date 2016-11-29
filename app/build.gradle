@@ -10,6 +10,7 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.21.6'
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+        classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
     }
 }
 
@@ -17,6 +18,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
+apply plugin: 'jacoco-everywhere'
 
 android {
     compileSdkVersion 24
@@ -35,6 +37,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            testCoverageEnabled = true
             ext.betaDistributionGroupAliases = 'Elpassion'
             ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
         }

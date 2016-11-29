@@ -14,4 +14,5 @@
     <string name="token_hint">Provide token from hub website.</string>
     <string name="report_edit_date_header">PERFORMED AT</string>
     <string name="report_edit_project_header">PROJECT</string>
+    <string name="report_edit_hours_header">HOURS</string>
 </resources>

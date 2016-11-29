@@ -45,6 +45,12 @@ class ReportEditActivityTest {
         onText("project 123").isDisplayed()
     }
 
+    @Test
+    fun shouldHaveCorrectHoursHeader() {
+        startActivity()
+        onText(R.string.report_edit_hours_header).isDisplayed()
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

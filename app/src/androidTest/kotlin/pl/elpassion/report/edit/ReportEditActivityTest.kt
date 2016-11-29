@@ -51,13 +51,13 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldHaveDefault_8_HoursAtTheBegging() {
-        startActivity()
-        onId(R.id.reportEditHours).hasText("8")
+    fun shouldHaveOldPreviousHoursValueAtTheBegging() {
+        startActivity(newReport(reportedHours = 2.32))
+        onId(R.id.reportEditHours).hasText("2.32")
     }
 
     @Test
-    fun shouldWipeDefault_8_HoursOnClick() {
+    fun shouldWipeHoursOnClick() {
         startActivity()
         onId(R.id.reportEditHours).click().hasText("")
     }

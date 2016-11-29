@@ -62,6 +62,12 @@ class ReportEditActivityTest {
         onId(R.id.reportEditHours).click().hasText("")
     }
 
+    @Test
+    fun shouldHaveDescriptionHeader() {
+        startActivity()
+        onText(R.string.report_edit_comment_header).isDisplayed()
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

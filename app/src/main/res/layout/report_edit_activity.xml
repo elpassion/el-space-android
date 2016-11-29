@@ -50,4 +50,10 @@
         android:inputType="numberDecimal"
         android:text="@string/report_hours_default_value" />
 
+    <TextView
+        style="@style/ReportHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_edit_comment_header" />
+
 </LinearLayout>

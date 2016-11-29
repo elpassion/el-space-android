@@ -1,5 +1,7 @@
 package pl.elpassion.report
 
+import java.io.Serializable
+
 data class Report(
         val id : Long,
         val year: Int,
@@ -8,4 +10,4 @@ data class Report(
         val reportedHours: Double,
         val projectName: String,
         val projectId: Long,
-        val description: String)
+        val description: String) : Serializable

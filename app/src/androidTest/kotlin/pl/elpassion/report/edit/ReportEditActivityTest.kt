@@ -27,6 +27,12 @@ class ReportEditActivityTest {
         onText("2010-02-10").isDisplayed()
     }
 
+    @Test
+    fun shouldHaveProjectHeader() {
+        startActivity()
+        onText(R.string.report_edit_project_header).isDisplayed()
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

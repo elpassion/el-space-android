@@ -13,4 +13,5 @@
     <string name="token_empty_error">Token must be provided.</string>
     <string name="token_hint">Provide token from hub website.</string>
     <string name="report_edit_date_header">PERFORMED AT</string>
+    <string name="report_edit_project_header">PROJECT</string>
 </resources>

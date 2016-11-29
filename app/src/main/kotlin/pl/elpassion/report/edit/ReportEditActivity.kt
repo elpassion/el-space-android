@@ -47,7 +47,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun updateProjectName(projectName: String) {
-        throw UnsupportedOperationException("not implemented")
+
     }
 
     override fun openChooseProjectScreen() {

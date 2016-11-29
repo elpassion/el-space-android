@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:inputType="number"
-        android:text="@string/report_add_hours_default_value"
+        android:text="@string/report_hours_default_value"
         tools:text="8"/>
 
     <include layout="@layout/separator"/>

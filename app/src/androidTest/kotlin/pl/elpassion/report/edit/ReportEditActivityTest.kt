@@ -1,9 +1,6 @@
 package pl.elpassion.report.edit
 
-import com.elpassion.android.commons.espresso.hasText
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -57,6 +54,12 @@ class ReportEditActivityTest {
     fun shouldHaveDefault_8_HoursAtTheBegging() {
         startActivity()
         onId(R.id.reportEditHours).hasText("8")
+    }
+
+    @Test
+    fun shouldWipeDefault_8_HoursOnClick() {
+        startActivity()
+        onId(R.id.reportEditHours).click().hasText("")
     }
 
     private fun startActivity(report: Report = newReport()) {

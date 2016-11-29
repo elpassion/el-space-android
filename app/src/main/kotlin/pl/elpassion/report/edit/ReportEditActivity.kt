@@ -15,7 +15,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     private val controller by lazy {
         ReportEditController(this, object : ReportEdit.EditApi {
             override fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit> {
-                throw UnsupportedOperationException("not implemented") 
+                throw UnsupportedOperationException("not implemented")
             }
         })
     }
@@ -24,6 +24,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
         controller.onCreate(intent.getSerializableExtra(REPORT_KEY) as Report)
+        reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
     }
 
     override fun showReport(report: Report) {

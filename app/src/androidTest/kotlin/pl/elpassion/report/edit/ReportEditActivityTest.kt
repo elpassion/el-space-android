@@ -53,6 +53,12 @@ class ReportEditActivityTest {
         onText(R.string.report_edit_hours_header).isDisplayed()
     }
 
+    @Test
+    fun shouldHaveDefault_8_HoursAtTheBegging() {
+        startActivity()
+        onId(R.id.reportEditHours).hasText("8")
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

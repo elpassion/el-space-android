@@ -28,6 +28,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showReport(report: Report) {
         reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
+        reportEditProjectName.text = report.projectName
     }
 
     override fun close() {

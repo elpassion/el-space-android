@@ -39,6 +39,12 @@ class ReportEditActivityTest {
         onText("newProject").isDisplayed()
     }
 
+    @Test
+    fun shouldReallyHaveCorrectProjectName() {
+        startActivity(newReport(projectName = "project 123"))
+        onText("project 123").isDisplayed()
+    }
+
     private fun startActivity(report: Report = newReport()) {
         rule.startActivity(ReportEditActivity.intent(report))
     }

@@ -25,4 +25,14 @@
         android:layout_height="wrap_content"
         android:text="@string/report_edit_project_header" />
 
+    <TextView
+        android:id="@+id/reportAddProjectName"
+        style="@style/ReportContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:drawableEnd="@drawable/arrow_right_icon"
+        android:text="newProject"/>
+
+
 </LinearLayout>

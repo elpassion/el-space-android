@@ -1,5 +1,7 @@
 package pl.elpassion.report.edit
 
+import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onText
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.common.rule
@@ -10,8 +12,8 @@ class ReportEditActivityTest {
     val rule = rule<ReportEditActivity>()
 
     @Test
-    fun initTest() {
-
+    fun shouldHavePerformedAtHeader() {
+        onText("PERFORMED AT").isDisplayed()
     }
 
 }

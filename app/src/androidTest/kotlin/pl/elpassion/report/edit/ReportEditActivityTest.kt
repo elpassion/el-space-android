@@ -6,12 +6,10 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.InitIntentsRule
-import pl.elpassion.common.checkIntent
 import pl.elpassion.common.rule
+import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.ProjectRepositoryProvider
-import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
@@ -21,9 +19,6 @@ class ReportEditActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportEditActivity>(autoStart = false)
-
-    @JvmField @Rule
-    val intentsRule = InitIntentsRule()
 
     @Test
     fun shouldHavePerformedAtHeader() {
@@ -86,16 +81,17 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldStartProjectChooserOnProjectClicked() {
-        startActivity()
-        stubRepositoryAndStart()
+    fun shouldHaveCorrectProjectDisplayedIfItHasBeenChanged() {
+        startActivity(newReport(projectName = "project1"))
+        stubRepositoryAndStart(newProject(name = "project2"))
         onId(R.id.reportEditProjectName).click()
-        checkIntent(ProjectChooseActivity::class.java)
+        onText("project2").click()
+        onId(R.id.reportEditProjectName).hasText("project2")
     }
 
-    private fun stubRepositoryAndStart() {
+    private fun stubRepositoryAndStart(newProject: Project) {
         ProjectRepositoryProvider.override = {
-            mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) }
+            mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject)) }
         }
     }
 

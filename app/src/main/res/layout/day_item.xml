@@ -14,7 +14,9 @@
         android:background="@color/colorWhite"
         android:orientation="horizontal">
 
-        <include layout="@layout/hub_indicator" />
+        <View
+            android:id="@+id/hubIndicator"
+            style="@style/HubIndicator" />
 
         <TextView
             android:id="@+id/dayNumber"

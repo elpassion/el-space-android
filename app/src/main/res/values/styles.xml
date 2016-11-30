@@ -51,4 +51,8 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="HubIndicator">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">3dp</item>
+    </style>
 </resources>

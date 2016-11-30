@@ -12,8 +12,10 @@
         android:layout_height="wrap_content"
         android:background="@color/colorWhite">
 
-        <include
-            layout="@layout/hub_indicator" />
+        <View
+            android:id="@+id/hubIndicator"
+            style="@style/HubIndicator"
+            android:background="@color/missingIndicator" />
 
         <TextView
             android:id="@+id/dayNumber"

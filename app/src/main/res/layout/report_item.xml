@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorWhite"
+    android:background="@drawable/click_indicator_white"
     android:orientation="horizontal">
 
     <View
@@ -14,7 +14,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/report_left_space"
+        android:layout_marginStart="@dimen/report_left_space"
         android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingTop="16dp">

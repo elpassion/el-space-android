@@ -16,5 +16,6 @@
     <color name="missingIndicator">#CF9796</color>
     <color name="filledIndicator">#91ECB3</color>
     <color name="unknownIndicator">#E4E4E4</color>
+    <color name="selectedWhite">#42000000</color>
 
 </resources>

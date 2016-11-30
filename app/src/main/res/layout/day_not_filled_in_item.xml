@@ -1,36 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@drawable/click_indicator_white">
 
-    <include layout="@layout/separator" />
+    <View
+        android:id="@+id/hubIndicator"
+        style="@style/HubIndicator"
+        android:background="@color/missingIndicator" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/dayNumber"
+        style="@style/DayName"
+        android:layout_width="@dimen/report_left_space"
+        android:layout_height="wrap_content"
+        tools:text="10 Thu" />
+
+    <TextView
+        style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite">
+        android:drawableEnd="@drawable/plus_icon"
+        android:text="@string/report_missing"
+        android:textColor="@color/reportMissing" />
 
-        <View
-            android:id="@+id/hubIndicator"
-            style="@style/HubIndicator"
-            android:background="@color/missingIndicator" />
-
-        <TextView
-            android:id="@+id/dayNumber"
-            style="@style/DayName"
-            android:layout_width="@dimen/report_left_space"
-            android:layout_height="wrap_content"
-            tools:text="10 Thu" />
-
-        <TextView
-            style="@style/DayHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/plus_icon"
-            android:text="@string/report_missing"
-            android:textColor="@color/reportMissing" />
-
-    </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

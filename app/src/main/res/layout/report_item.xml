@@ -15,21 +15,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/report_left_space"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:paddingTop="16dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/reportHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/reportHeader"
+            android:textStyle="bold"
             tools:text="4.0 - El Passion Design" />
 
         <TextView
             android:id="@+id/reportContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="12sp"
             tools:text="El Passion Website Design" />
 
     </LinearLayout>

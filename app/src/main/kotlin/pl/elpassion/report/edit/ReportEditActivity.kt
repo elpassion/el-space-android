@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
 import rx.Observable
 
@@ -24,6 +25,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         setContentView(R.layout.report_edit_activity)
         controller.onCreate(report)
         reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
+        reportEditProjectName.setOnClickListener {
+            controller.onChooseProject()
+        }
     }
 
     override fun showReport(report: Report) {
@@ -54,7 +58,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun openChooseProjectScreen() {
-        throw UnsupportedOperationException("not implemented")
+        ProjectChooseActivity.startForResult(this, 1)
     }
 
     companion object {

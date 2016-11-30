@@ -1,10 +1,18 @@
 package pl.elpassion.report.edit
 
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.InitIntentsRule
+import pl.elpassion.common.checkIntent
 import pl.elpassion.common.rule
+import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.choose.ProjectChooseActivity
+import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import pl.elpassion.startActivity
@@ -13,6 +21,9 @@ class ReportEditActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportEditActivity>(autoStart = false)
+
+    @JvmField @Rule
+    val intentsRule = InitIntentsRule()
 
     @Test
     fun shouldHavePerformedAtHeader() {
@@ -72,6 +83,20 @@ class ReportEditActivityTest {
     fun shouldHaveCorrectDescription() {
         startActivity(newReport(description = "Sample description"))
         onId(R.id.reportEditDescription).hasText("Sample description")
+    }
+
+    @Test
+    fun shouldStartProjectChooserOnProjectClicked() {
+        startActivity()
+        stubRepositoryAndStart()
+        onId(R.id.reportEditProjectName).click()
+        checkIntent(ProjectChooseActivity::class.java)
+    }
+
+    private fun stubRepositoryAndStart() {
+        ProjectRepositoryProvider.override = {
+            mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) }
+        }
     }
 
     private fun startActivity(report: Report = newReport()) {

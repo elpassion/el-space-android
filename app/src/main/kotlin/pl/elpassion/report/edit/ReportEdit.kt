@@ -1,5 +1,7 @@
 package pl.elpassion.report.edit
 
+import pl.elpassion.api.RetrofitProvider
+import pl.elpassion.common.Provider
 import pl.elpassion.report.Report
 import rx.Observable
 
@@ -17,4 +19,8 @@ interface ReportEdit {
     interface EditApi {
         fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit>
     }
+
+    object EditApiProvider : Provider<EditApi>({
+        RetrofitProvider.get().create(EditApi::class.java)
+    })
 }

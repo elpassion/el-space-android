@@ -9,16 +9,11 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
-import rx.Observable
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
     private val controller by lazy {
-        ReportEditController(this, object : ReportEdit.EditApi {
-            override fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit> {
-                throw UnsupportedOperationException("not implemented")
-            }
-        })
+        ReportEditController(this, ReportEdit.EditApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +24,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditProjectName.setOnClickListener {
             controller.onChooseProject()
         }
+        reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString().toDouble(), reportEditDescription.text.toString()) }
     }
 
     override fun showReport(report: Report) {
@@ -39,7 +35,6 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun close() {
-        throw UnsupportedOperationException("not implemented")
     }
 
     override fun showError(ex: Throwable) {
@@ -47,11 +42,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun hideLoader() {
-        throw UnsupportedOperationException("not implemented")
     }
 
     override fun showLoader() {
-        throw UnsupportedOperationException("not implemented")
     }
 
     override fun updateProjectName(projectName: String) {

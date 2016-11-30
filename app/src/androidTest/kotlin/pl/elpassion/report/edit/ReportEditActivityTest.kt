@@ -1,8 +1,10 @@
 package pl.elpassion.report.edit
 
+import android.support.test.espresso.action.ViewActions.clearText
+import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -14,11 +16,20 @@ import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import pl.elpassion.startActivity
+import rx.Observable
 
 class ReportEditActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportEditActivity>(autoStart = false)
+
+    private val reportEditApi = mock<ReportEdit.EditApi>()
+
+    @Before
+    fun setUp() {
+        whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(Unit))
+        ReportEdit.EditApiProvider.override = { reportEditApi }
+    }
 
     @Test
     fun shouldHavePerformedAtHeader() {
@@ -93,6 +104,18 @@ class ReportEditActivityTest {
     fun shouldHaveSaveButton() {
         startActivity()
         onId(R.id.reportEditSaveButton).hasText(R.string.report_edit_save_button).isDisplayed()
+    }
+
+    @Test
+    fun shouldCallApiWithCorrectData() {
+        startActivity(newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
+        stubRepositoryAndStart(newProject(name = "project2", id = "2"))
+        onId(R.id.reportEditProjectName).click()
+        onText("project2").click()
+        onId(R.id.reportEditHours).typeText("5.5").perform(closeSoftKeyboard())
+        onId(R.id.reportEditDescription).perform(clearText()).typeText("test2").perform(closeSoftKeyboard())
+        onId(R.id.reportEditSaveButton).click()
+        verify(reportEditApi, times(1)).editReport(id = eq(2), date = eq("2010-10-01"), reportedHour = eq(5.5), description = eq("test2"), projectId = eq("2"))
     }
 
     private fun stubRepositoryAndStart(newProject: Project) {

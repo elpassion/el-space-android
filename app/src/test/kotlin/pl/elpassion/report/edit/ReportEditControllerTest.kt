@@ -2,7 +2,9 @@ package pl.elpassion.report.edit
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import rx.Observable
@@ -12,6 +14,9 @@ class ReportEditControllerTest {
     private val view = mock<ReportEdit.View>()
     private val editReportApi = mock<ReportEdit.EditApi>()
     private val controller = ReportEditController(view, editReportApi)
+
+    @JvmField @Rule
+    val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {

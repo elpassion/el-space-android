@@ -65,12 +65,12 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             controller.refreshReportList()
-        } else if (requestCode == EDIT_REPORT_SCREEN_REQUEST_CODE) {
+        } else if (requestCode == EDIT_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             controller.refreshReportList()
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun createDayAdapter(it: Day, listener: OnDayClickListener) =

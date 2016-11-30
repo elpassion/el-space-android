@@ -1,5 +1,6 @@
 package pl.elpassion.report.edit
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.Project
 import pl.elpassion.report.Report
@@ -26,6 +27,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     fun onSaveReport(hours: String, description: String) {
         subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+                .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({

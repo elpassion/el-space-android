@@ -3,6 +3,9 @@ package pl.elpassion.report.edit
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.report.Report
+import retrofit2.http.PATCH
+import retrofit2.http.Path
+import retrofit2.http.Query
 import rx.Observable
 
 interface ReportEdit {
@@ -17,7 +20,12 @@ interface ReportEdit {
     }
 
     interface EditApi {
-        fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: String): Observable<Unit>
+        @PATCH("activities/{id}")
+        fun editReport(@Path("id") id: Long,
+                       @Query("activity[performed_at]") date: String,
+                       @Query("activity[value]") reportedHour: String,
+                       @Query("activity[comment]") description: String,
+                       @Query("activity[project_id]") projectId: String): Observable<Unit>
     }
 
     object EditApiProvider : Provider<EditApi>({

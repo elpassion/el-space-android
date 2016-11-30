@@ -36,6 +36,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun close() {
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

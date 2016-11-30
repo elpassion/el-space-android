@@ -16,4 +16,5 @@
     <string name="report_edit_project_header">PROJECT</string>
     <string name="report_edit_hours_header">HOURS</string>
     <string name="report_edit_comment_header">COMMENT</string>
+    <string name="report_weekend">Weekend!</string>
 </resources>

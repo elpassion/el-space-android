@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:background="?android:attr/selectableItemBackground">
 
-    <include layout="@layout/separator"/>
+    <include
+        layout="@layout/hub_indicator"
+        android:visibility="invisible" />
 
     <TextView
         android:id="@+id/dayNumber"
         style="@style/DayName"
+        android:layout_width="@dimen/report_left_space"
+        android:layout_height="wrap_content"
+        tools:text="10 Thu" />
+
+    <TextView
+        style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/weekendCell"
-        android:drawableEnd="@drawable/weekend_plus_icon"
-        tools:text="10 Thu"/>
+        android:drawableEnd="@drawable/plus_icon"
+        android:text="@string/report_weekend" />
 
 </LinearLayout>

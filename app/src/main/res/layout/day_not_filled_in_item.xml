@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal">
+    android:background="?android:attr/selectableItemBackground">
 
-    <include layout="@layout/separator"/>
-
-    <TextView
-        android:id="@+id/dayNumber"
-        style="@style/DayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="10 Thu"/>
-
+    <include layout="@layout/separator" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/cell_big_margin"
-        android:orientation="vertical">
+        android:background="@color/colorWhite">
+
+        <include
+            layout="@layout/hub_indicator" />
+
+        <TextView
+            android:id="@+id/dayNumber"
+            style="@style/DayName"
+            android:layout_width="@dimen/report_left_space"
+            android:layout_height="wrap_content"
+            tools:text="10 Thu" />
 
         <TextView
             style="@style/DayHeader"
@@ -29,9 +28,7 @@
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/plus_icon"
             android:text="@string/report_missing"
-            android:textColor="@color/reportMissing"
-            tools:text="MISSING"/>
+            android:textColor="@color/reportMissing" />
 
     </LinearLayout>
-
 </RelativeLayout>

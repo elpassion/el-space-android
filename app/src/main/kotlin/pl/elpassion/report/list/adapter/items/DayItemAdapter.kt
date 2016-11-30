@@ -1,5 +1,7 @@
 package pl.elpassion.report.list.adapter.items
 
+import android.support.annotation.ColorRes
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.elpassion.android.commons.recycler.ItemAdapter
@@ -14,16 +16,26 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
         holder.itemView.dayNumber.text = day.name
-        setTotalHoursText(holder)
+        setTotalHoursTextWithIndicator(holder)
     }
 
-    private fun setTotalHoursText(holder: VH) {
+
+    private fun setTotalHoursTextWithIndicator(holder: VH) {
         if (day.hasPassed) {
-            holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
+            holder.updateTextWithIndicator("Total: ${day.reportedHours} hours", R.color.filledIndicator)
         } else {
-            holder.itemView.totalHours.text = null
+            holder.updateTextWithIndicator(null, R.color.unknownIndicator)
         }
     }
+
+    private fun VH.updateTextWithIndicator(hourText: String?, color: Int) {
+        itemView.apply {
+            totalHours.text = hourText
+            hubIndicator.setBackgroundColorFromRes(color)
+        }
+    }
+
+    private fun View.setBackgroundColorFromRes(@ColorRes color: Int) = setBackgroundColor(ContextCompat.getColor(context, color))
 
     class VH(view: View) : RecyclerView.ViewHolder(view)
 

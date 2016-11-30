@@ -89,6 +89,12 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectName).hasText("project2")
     }
 
+    @Test
+    fun shouldHaveSaveButton() {
+        startActivity()
+        onId(R.id.reportEditSaveButton).hasText(R.string.report_edit_save_button).isDisplayed()
+    }
+
     private fun stubRepositoryAndStart(newProject: Project) {
         ProjectRepositoryProvider.override = {
             mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject)) }

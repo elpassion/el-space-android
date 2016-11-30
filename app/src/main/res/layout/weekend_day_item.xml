@@ -14,6 +14,7 @@
         style="@style/DayName"
         android:layout_width="@dimen/report_left_space"
         android:layout_height="wrap_content"
+        android:textColor="@color/unselectedText"
         tools:text="10 Thu" />
 
     <TextView
@@ -21,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/plus_icon"
-        android:text="@string/report_weekend" />
+        android:text="@string/report_weekend"
+        android:textColor="@color/unselectedText" />
 
 </LinearLayout>

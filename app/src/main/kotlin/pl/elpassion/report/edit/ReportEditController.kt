@@ -24,7 +24,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
         view.openChooseProjectScreen()
     }
 
-    fun onSaveReport(hours: Double, description: String) {
+    fun onSaveReport(hours: String, description: String) {
         subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

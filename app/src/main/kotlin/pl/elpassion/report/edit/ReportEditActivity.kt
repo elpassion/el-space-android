@@ -24,7 +24,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditProjectName.setOnClickListener {
             controller.onChooseProject()
         }
-        reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString().toDouble(), reportEditDescription.text.toString()) }
+        reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString(), reportEditDescription.text.toString()) }
     }
 
     override fun showReport(report: Report) {

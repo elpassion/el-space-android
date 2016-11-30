@@ -34,22 +34,22 @@ class ReportEditControllerTest {
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
         controller.onCreate(newReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
-        controller.onSaveReport(hours = 8.0, description = "description")
-        verify(editReportApi, times(1)).editReport(id = 2, date = "2017-07-02", reportedHour = 8.0, description = "description", projectId = "2")
+        controller.onSaveReport(hours = "8.0", description = "description")
+        verify(editReportApi, times(1)).editReport(id = 2, date = "2017-07-02", reportedHour = "8.0", description = "description", projectId = "2")
     }
 
     @Test
     fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
         controller.onCreate(newReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
-        controller.onSaveReport(hours = 7.5, description = "newDescription")
-        verify(editReportApi, times(1)).editReport(id = 5, date = "2016-01-03", reportedHour = 7.5, description = "newDescription", projectId = "2")
+        controller.onSaveReport(hours = "7.5", description = "newDescription")
+        verify(editReportApi, times(1)).editReport(id = 5, date = "2016-01-03", reportedHour = "7.5", description = "newDescription", projectId = "2")
     }
 
     @Test
     fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
         controller.onCreate(newReport(projectId = 10))
         controller.onSelectProject(newProject(id = "20"))
-        controller.onSaveReport(0.0, "")
+        controller.onSaveReport("0.0", "")
         verify(editReportApi, times(1)).editReport(any(), any(), any(), any(), projectId = eq("20"))
     }
 
@@ -62,14 +62,14 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowLoaderOnSaveReport() {
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         verify(view, times(1)).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnSaveReportFinish() {
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         verify(view, times(1)).hideLoader()
     }
 
@@ -77,7 +77,7 @@ class ReportEditControllerTest {
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         verify(view, never()).hideLoader()
     }
 
@@ -85,7 +85,7 @@ class ReportEditControllerTest {
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         controller.onDestroy()
         verify(view, times(1)).hideLoader()
     }
@@ -94,14 +94,14 @@ class ReportEditControllerTest {
     fun shouldShowErrorWhenSavingReportFails() {
         stubEditReportApiToReturnError()
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         verify(view, times(1)).showError(any())
     }
 
     @Test
     fun shouldCloseViewWhenSavingHasNotFailed() {
         controller.onCreate(newReport())
-        controller.onSaveReport(1.0, "")
+        controller.onSaveReport("1.0", "")
         verify(view, times(1)).close()
     }
 

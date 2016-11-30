@@ -17,7 +17,7 @@ interface ReportEdit {
     }
 
     interface EditApi {
-        fun editReport(id: Long, date: String, reportedHour: Double, description: String, projectId: String): Observable<Unit>
+        fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: String): Observable<Unit>
     }
 
     object EditApiProvider : Provider<EditApi>({

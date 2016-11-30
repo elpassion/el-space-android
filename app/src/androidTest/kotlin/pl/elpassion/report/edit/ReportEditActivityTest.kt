@@ -111,7 +111,7 @@ class ReportEditActivityTest {
         startActivity(newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
         stubRepositoryAndStart(newProject(name = "project2", id = "2"))
         insertData(reportedHours = "5.5", newDescription = "test2")
-        verify(reportEditApi, times(1)).editReport(id = eq(2), date = eq("2010-10-01"), reportedHour = eq(5.5), description = eq("test2"), projectId = eq("2"))
+        verify(reportEditApi, times(1)).editReport(id = eq(2), date = eq("2010-10-01"), reportedHour = eq("5.5"), description = eq("test2"), projectId = eq("2"))
     }
 
     private fun insertData(reportedHours: String, newDescription: String) {

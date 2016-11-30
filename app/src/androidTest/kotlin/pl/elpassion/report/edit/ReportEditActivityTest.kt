@@ -1,5 +1,6 @@
 package pl.elpassion.report.edit
 
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions.clearText
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import com.elpassion.android.commons.espresso.*
@@ -129,7 +130,7 @@ class ReportEditActivityTest {
     }
 
     private fun startActivity(report: Report = newReport()) {
-        rule.startActivity(ReportEditActivity.intent(report))
+        rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }
 

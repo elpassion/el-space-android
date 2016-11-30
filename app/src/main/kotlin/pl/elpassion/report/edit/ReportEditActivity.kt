@@ -1,6 +1,7 @@
 package pl.elpassion.report.edit
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -35,6 +36,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun close() {
+        finish()
     }
 
     override fun showError(ex: Throwable) {
@@ -66,8 +68,12 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         private val REPORT_KEY = "report_key"
         private val REQUEST_CODE = 10001
 
-        fun intent(report: Report) = Intent().apply {
+        fun intent(context: Context, report: Report) = Intent(context, ReportEditActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
+        }
+
+        fun startForResult(activity: Activity, report: Report, requestCode: Int) {
+            activity.startActivityForResult(intent(activity, report), requestCode)
         }
     }
 }

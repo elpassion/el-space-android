@@ -14,6 +14,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
+import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.DayItemAdapter
 import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
@@ -34,7 +35,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openEditReportScreen(report: Report) {
-
+        ReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun showMonthName(monthName: String) {
@@ -57,15 +58,17 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showDays(days: List<Day>, listener: OnDayClickListener) {
+    override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         reportsContainer.adapter = ReportsAdapter(days.flatMap {
-            listOf(createDayAdapter(it, listener)) + it.reports.map(::ReportItemAdapter)
+            listOf(createDayAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
         })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            controller.refreshReportList()
+        } else if (requestCode == EDIT_REPORT_SCREEN_REQUEST_CODE) {
             controller.refreshReportList()
         }
     }
@@ -79,6 +82,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     companion object {
         private val ADD_REPORT_SCREEN_REQUEST_CODE = 100
+        private val EDIT_REPORT_SCREEN_REQUEST_CODE = 105
         fun start(context: Context) {
             context.startActivity(Intent(context, ReportListActivity::class.java))
         }

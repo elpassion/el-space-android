@@ -8,7 +8,7 @@ import pl.elpassion.report.Report
 import rx.Subscription
 import java.util.*
 
-class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener {
+class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private var subscription: Subscription? = null
     private val reportList: MutableList<Report> = ArrayList()
@@ -60,7 +60,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                     name = "$dayNumber ${calendarForDay.dayName()}")
         }
 
-        view.showDays(days, this)
+        view.showDays(days, this, this)
         view.showMonthName(date.getFullMonthName())
     }
 
@@ -76,11 +76,15 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
         view.openAddReportScreen(getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
     }
 
-    fun onReport(report: Report) {
+    override fun onReport(report: Report) {
         view.openEditReportScreen(report)
     }
 }
 
 interface OnDayClickListener {
     fun onDay(dayNumber: Int)
+}
+
+interface OnReportClickListener {
+    fun onReport(report: Report)
 }

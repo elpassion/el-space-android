@@ -69,7 +69,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
     }
 
     @Test
@@ -130,7 +130,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onNextMonth()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
     }
 
     @Test
@@ -155,7 +155,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onPreviousMonth()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any())
+        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
     }
 
     @Test
@@ -176,7 +176,7 @@ class ReportListControllerTest {
         stubServiceToReturn(emptyList())
 
         controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this[0].hasPassed }, any())
+        verify(view, times(1)).showDays(argThat { this[0].hasPassed }, any(), any())
     }
 
     @Test
@@ -204,7 +204,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onNextMonth()
 
-        verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay}, any())
+        verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay }, any(), any())
     }
 
     @Test
@@ -213,7 +213,7 @@ class ReportListControllerTest {
         stubServiceToReturn(emptyList())
         controller.onCreate()
 
-        verify(view).showDays(argThat { this[0].name == "1 Thu"}, any())
+        verify(view).showDays(argThat { this[0].name == "1 Thu" }, any(), any())
     }
 
     @Test
@@ -222,7 +222,7 @@ class ReportListControllerTest {
         stubServiceToReturn(emptyList())
         controller.onCreate()
 
-        verify(view).showDays(argThat { this[1].name == "2 Fri"}, any())
+        verify(view).showDays(argThat { this[1].name == "2 Fri" }, any(), any())
     }
 
     @Test
@@ -235,7 +235,7 @@ class ReportListControllerTest {
         reset(view)
         controller.onCreate()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports.size == 1 }, any())
+        verify(view, times(1)).showDays(argThat { this[0].reports.size == 1 }, any(), any())
     }
 
     private fun stubServiceToReturnNever() {
@@ -254,7 +254,7 @@ class ReportListControllerTest {
         stubServiceToReturn(apiReturnValue)
         stubCurrentTime(month = month)
         controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this.size == daysInMonth }, any())
+        verify(view, times(1)).showDays(argThat { this.size == daysInMonth }, any(), any())
     }
 
 }

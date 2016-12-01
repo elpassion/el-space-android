@@ -2,7 +2,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="default_padding_value">16dp</dimen>
-    <dimen name="report_left_space">100dp</dimen>
+    <dimen name="report_left_space">80dp</dimen>
     <dimen name="report_edge_padding">12dp</dimen>
     <dimen name="small_padding">8dp</dimen>
 

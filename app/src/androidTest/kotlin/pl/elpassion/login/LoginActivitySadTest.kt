@@ -1,13 +1,13 @@
 package pl.elpassion.login
 
 import android.support.test.espresso.Espresso.closeSoftKeyboard
+import android.support.test.espresso.action.ViewActions.replaceText
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -45,7 +45,7 @@ class LoginActivitySadTest {
         onId(R.id.tokenInput).isDisplayed()
     }
 
-    @Test @Ignore("travis fails on this :<")
+    @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
         rule.startActivity()
         val token = "token"
@@ -53,7 +53,7 @@ class LoginActivitySadTest {
         verify(loginRepository, times(1)).saveToken(token)
     }
 
-    @Test @Ignore("travis fails on this as well :<")
+    @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
         rule.startActivity()
         login("token")
@@ -74,7 +74,7 @@ class LoginActivitySadTest {
     }
 
     private fun login(token: String) {
-        onId(R.id.tokenInput).typeText(token)
+        onId(R.id.tokenInput).perform(replaceText(token))
         closeSoftKeyboard()
         onId(R.id.loginButton).click()
     }

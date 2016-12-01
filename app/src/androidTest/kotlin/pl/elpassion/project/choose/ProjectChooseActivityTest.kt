@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
@@ -19,6 +20,12 @@ class ProjectChooseActivityTest {
 
     @JvmField @Rule
     val rule = rule<ProjectChooseActivity>(autoStart = false)
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        stubRepositoryToReturn(emptyList())
+        onToolbarBackArrow().isDisplayed()
+    }
 
     @Test
     fun shouldDisplayProjectFromRepository() {

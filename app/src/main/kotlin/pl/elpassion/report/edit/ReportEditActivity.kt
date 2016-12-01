@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
 
@@ -21,6 +24,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
         controller.onCreate(report)
+        showBackArrowOnActionBar()
         reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
         reportEditProjectName.setOnClickListener {
             controller.onChooseProject()
@@ -59,11 +63,13 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK){
+        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             controller.onSelectProject(ProjectChooseActivity.getProject(data!!))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     companion object {
         private val REPORT_KEY = "report_key"

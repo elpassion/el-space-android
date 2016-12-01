@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
@@ -29,6 +30,12 @@ class ReportEditActivityTest {
     fun setUp() {
         whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(Unit))
         ReportEdit.EditApiProvider.override = { reportEditApi }
+    }
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        startActivity()
+        onToolbarBackArrow().isDisplayed()
     }
 
     @Test

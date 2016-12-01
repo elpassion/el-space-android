@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/report_row_edge_margin"
+    android:layout_marginRight="@dimen/report_row_edge_margin"
     android:background="@drawable/click_indicator_white"
     android:orientation="horizontal">
 

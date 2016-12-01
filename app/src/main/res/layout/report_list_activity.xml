@@ -9,8 +9,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reportsContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/default_padding_value"
-        android:paddingRight="@dimen/default_padding_value" />
+        android:layout_height="match_parent" />
 
 </android.support.design.widget.CoordinatorLayout>

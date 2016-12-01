@@ -2,7 +2,9 @@ package pl.elpassion.report.list
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.matcher.ViewMatchers.*
+import android.support.v7.widget.RecyclerView
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.hasChildWithText
 import com.elpassion.android.commons.espresso.onId
@@ -36,7 +38,8 @@ class ReportListActivityTest {
         stubCurrentTime(year = 2016, month = 10, day = 4)
         whenever(service.getReports()).thenReturn(Observable.just(listOf(
                 newReport(year = 2016, month = 10, day = 3, projectName = "Project", description = "Description", reportedHours = 8.0),
-                newReport(year = 2016, month = 10, day = 2, reportedHours = 3.0))))
+                newReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
+                newReport(year = 2016, month = 10, day = 6, reportedHours = 4.0))))
         ReportList.ServiceProvider.override = { service }
     }
 
@@ -108,7 +111,12 @@ class ReportListActivityTest {
     @Test
     fun shouldShowTotalInformationOnWeekendDaysIfThereIsAReport() {
         verifyIfWeekendDayWithReportHasTotalInformation()
+    }
 
+    @Test
+    fun shouldShowTotalInformationOnDayFromFutureIfThereAreReports() {
+        onView(withId(R.id.reportsContainer)).perform(scrollToPosition<RecyclerView.ViewHolder>(6))
+        verifyIfDayFromFutureWithReportsHasTotalInformation()
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {
@@ -121,6 +129,10 @@ class ReportListActivityTest {
 
     private fun verifyIfWeekendDayWithReportHasTotalInformation() {
         onView(allOf(hasDescendant(withText("2 Sun")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+    }
+
+    private fun verifyIfDayFromFutureWithReportsHasTotalInformation() {
+        onView(allOf(hasDescendant(withText("6 Thu")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 4.0 hours"))))
     }
 
 }

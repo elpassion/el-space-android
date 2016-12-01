@@ -21,7 +21,7 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
 
 
     private fun setTotalHoursTextWithIndicator(holder: VH) {
-        if (day.hasPassed) {
+        if (day.reports.isNotEmpty()) {
             holder.updateTextWithIndicator("Total: ${day.reportedHours} hours", R.color.filledIndicator)
         } else {
             holder.updateTextWithIndicator(null, R.color.unknownIndicator)

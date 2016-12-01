@@ -14,7 +14,7 @@ class ReportItemAdapter(val report: Report, val onReportClickListener: OnReportC
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { onReportClickListener.onReport(report) }
         holder.itemView.reportHeader.text = "${report.reportedHours}h - ${report.projectName}"
-        holder.itemView.reportContent.text = report.description
+        holder.itemView.reportContent.text = report.description.trim()
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

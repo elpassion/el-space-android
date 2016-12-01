@@ -24,6 +24,6 @@
         style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/plus_icon"
+        android:drawableEnd="@drawable/ico_hub_plus_not_active"
         tools:text="Total: 8.0 hours" />
 </LinearLayout>

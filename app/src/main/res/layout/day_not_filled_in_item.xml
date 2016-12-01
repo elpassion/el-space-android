@@ -21,7 +21,7 @@
         style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/plus_icon"
+        android:drawableEnd="@drawable/ico_hub_plus_active"
         android:text="@string/report_missing"
         android:textColor="@color/reportMissing" />
 

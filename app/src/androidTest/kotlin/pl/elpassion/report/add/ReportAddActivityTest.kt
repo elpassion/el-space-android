@@ -10,6 +10,7 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
+import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
@@ -27,6 +28,12 @@ class ReportAddActivityTest {
 
     @JvmField @Rule
     val intentsRule = InitIntentsRule()
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        stubRepositoryAndStart()
+        onToolbarBackArrow().isDisplayed()
+    }
 
     @Test
     fun shouldStartWithFirstProjectSelected() {

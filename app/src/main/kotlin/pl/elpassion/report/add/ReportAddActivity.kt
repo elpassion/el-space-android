@@ -6,8 +6,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
+import pl.elpassion.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.choose.ProjectChooseActivity
@@ -21,6 +24,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
+        showBackArrowOnActionBar()
         controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
@@ -50,6 +54,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             controller.onSelectProject(ProjectChooseActivity.getProject(data!!))
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     override fun close() {
         setResult(Activity.RESULT_OK)

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/click_indicator_white"
-    android:orientation="horizontal"
-    android:paddingBottom="@dimen/small_padding">
+    android:orientation="horizontal">
 
     <View
         android:id="@+id/hubIndicator"
@@ -16,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/report_left_space"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/small_padding">
 
         <TextView
             android:id="@+id/reportHeader"

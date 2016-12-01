@@ -1,8 +1,7 @@
 package pl.elpassion.report.edit
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.action.ViewActions.clearText
-import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
+import android.support.test.espresso.action.ViewActions.*
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
@@ -118,8 +117,8 @@ class ReportEditActivityTest {
     private fun insertData(reportedHours: String, newDescription: String) {
         onId(R.id.reportEditProjectName).click()
         onText("project2").click()
-        onId(R.id.reportEditHours).typeText(reportedHours).perform(closeSoftKeyboard())
-        onId(R.id.reportEditDescription).perform(clearText()).typeText(newDescription).perform(closeSoftKeyboard())
+        onId(R.id.reportEditHours).perform(typeText(reportedHours), closeSoftKeyboard())
+        onId(R.id.reportEditDescription).perform(clearText(), typeText(newDescription), closeSoftKeyboard())
         onId(R.id.reportEditSaveButton).click()
     }
 

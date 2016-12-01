@@ -18,4 +18,5 @@
     <string name="report_edit_comment_header">COMMENT</string>
     <string name="report_weekend">Weekend!</string>
     <string name="report_edit_save_button">Save</string>
+    <string name="action_remove_report">Remove report</string>
 </resources>

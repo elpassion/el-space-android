@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
@@ -13,6 +14,7 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
+
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
@@ -67,6 +69,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
             controller.onSelectProject(ProjectChooseActivity.getProject(data!!))
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.edit_raport_menu, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)

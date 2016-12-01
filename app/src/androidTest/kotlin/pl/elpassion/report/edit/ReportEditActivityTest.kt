@@ -121,6 +121,12 @@ class ReportEditActivityTest {
         verify(reportEditApi, times(1)).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = "2")
     }
 
+    @Test
+    fun shouldHaveVisibleRemoveReportIcon() {
+        startActivity()
+        onId(R.id.action_remove_report).isDisplayed()
+    }
+
     private fun insertData(reportedHours: String, newDescription: String) {
         onId(R.id.reportEditProjectName).click()
         onText("project2").click()

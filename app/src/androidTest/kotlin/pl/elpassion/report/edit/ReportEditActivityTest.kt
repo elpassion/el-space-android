@@ -117,8 +117,8 @@ class ReportEditActivityTest {
     private fun insertData(reportedHours: String, newDescription: String) {
         onId(R.id.reportEditProjectName).click()
         onText("project2").click()
-        onId(R.id.reportEditHours).perform(typeText(reportedHours), closeSoftKeyboard())
-        onId(R.id.reportEditDescription).perform(clearText(), typeText(newDescription), closeSoftKeyboard())
+        onId(R.id.reportEditHours).perform(replaceText(reportedHours), closeSoftKeyboard())
+        onId(R.id.reportEditDescription).perform(clearText(), replaceText(newDescription), closeSoftKeyboard())
         onId(R.id.reportEditSaveButton).click()
     }
 

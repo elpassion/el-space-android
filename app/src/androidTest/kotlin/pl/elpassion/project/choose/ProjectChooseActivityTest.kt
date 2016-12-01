@@ -24,6 +24,7 @@ class ProjectChooseActivityTest {
     @Test
     fun shouldHaveVisibleBackArrow() {
         stubRepositoryToReturn(emptyList())
+        rule.startActivity()
         onToolbarBackArrow().isDisplayed()
     }
 

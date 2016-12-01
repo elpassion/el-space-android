@@ -31,7 +31,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         setContentView(R.layout.report_list_activity)
         reportsContainer.layoutManager = LinearLayoutManager(this)
         controller.onCreate()
-        controller.onPreviousMonth()
     }
 
     override fun openEditReportScreen(report: Report) {

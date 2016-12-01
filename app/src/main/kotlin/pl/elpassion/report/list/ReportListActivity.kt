@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
@@ -16,10 +18,7 @@ import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
-import pl.elpassion.report.list.adapter.items.DayItemAdapter
-import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
-import pl.elpassion.report.list.adapter.items.ReportItemAdapter
-import pl.elpassion.report.list.adapter.items.WeekendDayItem
+import pl.elpassion.report.list.adapter.items.*
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
@@ -32,6 +31,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         setContentView(R.layout.report_list_activity)
         reportsContainer.layoutManager = LinearLayoutManager(this)
         controller.onCreate()
+        controller.onPreviousMonth()
     }
 
     override fun openEditReportScreen(report: Report) {
@@ -59,9 +59,16 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
-        reportsContainer.adapter = ReportsAdapter(days.flatMap {
+        val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
+        val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
+        reportsContainer.adapter = ReportsAdapter(adapterList)
+    }
+
+    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {
+        val itemAdapters = days.flatMap {
             listOf(createDayAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
-        })
+        }
+        return itemAdapters
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

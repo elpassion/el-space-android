@@ -7,7 +7,6 @@ import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
 import rx.Completable
-import rx.Observable
 
 interface ReportEdit {
     interface View {
@@ -26,7 +25,7 @@ interface ReportEdit {
                        @Query("activity[performed_at]") date: String,
                        @Query("activity[value]") reportedHour: String,
                        @Query("activity[comment]") description: String,
-                       @Query("activity[project_id]") projectId: String): Observable<Unit>
+                       @Query("activity[project_id]") projectId: String): Completable
 
         fun removeReport(): Completable
     }

@@ -22,12 +22,13 @@ import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.edit.ReportEdit
+import rx.Completable
 import rx.Observable
 
 class ReportListActivityEditReportTest {
 
     private val service = mock<ReportList.Service>()
-    private val editReportApi = mock<ReportEdit.EditApi>().apply { whenever(editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(Unit)) }
+    private val editReportApi = mock<ReportEdit.EditApi>().apply { whenever(editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete()) }
 
     @JvmField @Rule
     val rule = rule<ReportListActivity> {

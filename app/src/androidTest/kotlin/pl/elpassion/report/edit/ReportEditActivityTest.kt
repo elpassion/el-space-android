@@ -17,7 +17,7 @@ import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import pl.elpassion.startActivity
-import rx.Observable
+import rx.Completable
 
 class ReportEditActivityTest {
 
@@ -28,7 +28,7 @@ class ReportEditActivityTest {
 
     @Before
     fun setUp() {
-        whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(Unit))
+        whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
     }
 

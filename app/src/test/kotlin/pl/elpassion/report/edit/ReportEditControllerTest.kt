@@ -113,30 +113,71 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowLoaderOnRemoveReport() {
+        controller.onCreate(newReport())
+
+        controller.onRemoveReport()
+        
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderOnRemoveReport() {
+        controller.onCreate(newReport())
+
+        controller.onRemoveReport()
+
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldCloseViewWhenRemoveReportHasNotFailed() {
         controller.onCreate(newReport())
+
         controller.onRemoveReport()
+
         verify(view).close()
     }
 
     @Test
     fun shouldShowErrorWhenRemoveReportFails() {
         stubRemoveReportApiToReturnError()
+
         controller.onCreate(newReport())
         controller.onRemoveReport()
+
         verify(view).showError(any())
     }
 
+    @Test
+    fun shouldHideLoaderOnDestroyIfDestroyHasNotFinished() {
+        stubEditReportApiToReturnNever()
+
+        controller.onCreate(newReport())
+        controller.onRemoveReport()
+        controller.onDestroy()
+
+        verify(view).hideLoader()
+    }
+
     private fun stubEditReportApiToReturnNever() {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
+        stubEditReportApiToReturn(Observable.never())
     }
 
     private fun stubEditReportApiToReturnError() {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
+        stubEditReportApiToReturn(Observable.error(RuntimeException()))
+    }
+
+    private fun stubEditReportApiToReturn(observable: Observable<Unit>) {
+        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(observable)
     }
 
     private fun stubRemoveReportApiToReturnError() {
-        whenever(editReportApi.removeReport()).thenReturn(Completable.error(RuntimeException()))
+        stubRemoveReportApiToReturn(Completable.error(RuntimeException()))
+    }
+
+    private fun stubRemoveReportApiToReturn(completable: Completable) {
+        whenever(editReportApi.removeReport()).thenReturn(completable)
     }
 
 }

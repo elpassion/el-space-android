@@ -13,6 +13,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     private lateinit var reportDate: String
     private lateinit var projectId: String
     private var subscription: Subscription? = null
+    private var removeReportSubscription: Subscription? = null
 
     fun onCreate(report: Report) {
         reportId = report.id
@@ -43,7 +44,8 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     }
 
     fun onRemoveReport() {
-        subscription = editReportApi.removeReport()
+        removeReportSubscription = editReportApi.removeReport()
+                .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
@@ -55,6 +57,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
 
     fun onDestroy() {
         subscription?.unsubscribe()
+        removeReportSubscription?.unsubscribe()
     }
 
 }

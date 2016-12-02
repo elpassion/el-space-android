@@ -3,6 +3,7 @@ package pl.elpassion.report.edit
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.report.Report
+import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -33,8 +34,8 @@ interface ReportEdit {
     })
 
     interface RemoveApi {
-        fun removeReport(reportId: Long): Completable
-
+        @DELETE("activities/{id}")
+        fun removeReport(@Path("id") reportId: Long): Completable
     }
 
     object RemoveReportApiProvider : Provider<RemoveApi>({

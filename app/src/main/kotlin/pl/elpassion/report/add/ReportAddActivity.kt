@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_add_activity.*
-import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
@@ -66,7 +65,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)
-        Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

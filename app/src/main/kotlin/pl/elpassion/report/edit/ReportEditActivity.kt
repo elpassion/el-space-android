@@ -10,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_edit_activity.*
-import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -53,7 +52,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)
-        Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(reportEditCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun hideLoader() {

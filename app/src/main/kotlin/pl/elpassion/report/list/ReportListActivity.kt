@@ -8,7 +8,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
+import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
@@ -53,7 +53,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showError(ex: Throwable) {
-        Log.e("Error", ex.message, ex)
+        Crashlytics.logException(ex)
         Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 

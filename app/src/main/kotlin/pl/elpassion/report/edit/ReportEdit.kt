@@ -38,7 +38,7 @@ interface ReportEdit {
         fun removeReport(@Path("id") reportId: Long): Completable
     }
 
-    object RemoveReportApiProvider : Provider<RemoveApi>({
+    object RemoveApiProvider : Provider<RemoveApi>({
         RetrofitProvider.get().create(RemoveApi::class.java)
     })
 }

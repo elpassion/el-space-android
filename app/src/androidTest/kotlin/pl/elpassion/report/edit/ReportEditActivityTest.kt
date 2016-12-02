@@ -32,7 +32,7 @@ class ReportEditActivityTest {
         whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
         whenever(reportRemoveApi.removeReport(any())).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
-        ReportEdit.RemoveReportApiProvider.override = { reportRemoveApi }
+        ReportEdit.RemoveApiProvider.override = { reportRemoveApi }
     }
 
     @Test

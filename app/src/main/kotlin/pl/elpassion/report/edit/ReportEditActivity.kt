@@ -23,7 +23,7 @@ import pl.elpassion.report.Report
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
     private val controller by lazy {
-        ReportEditController(this, ReportEdit.EditApiProvider.get(), ReportEdit.RemoveReportApiProvider.get())
+        ReportEditController(this, ReportEdit.EditApiProvider.get(), ReportEdit.RemoveApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

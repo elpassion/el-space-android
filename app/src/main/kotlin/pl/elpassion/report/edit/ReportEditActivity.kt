@@ -12,6 +12,8 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.common.hideLoader
+import pl.elpassion.common.showLoader
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
 
@@ -51,11 +53,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun hideLoader() {
-        pl.elpassion.common.hideLoader(reportEditCoordinator)
+        hideLoader(reportEditCoordinator)
     }
 
     override fun showLoader() {
-        pl.elpassion.common.showLoader(reportEditCoordinator)
+        showLoader(reportEditCoordinator)
     }
 
     override fun updateProjectName(projectName: String) {

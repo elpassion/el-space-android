@@ -171,8 +171,8 @@ class ReportEditControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderOnDestroyIfDestroyHasNotFinished() {
-        stubEditReportApiToReturnNever()
+    fun shouldHideLoaderOnDestroyIfRemoveReportHasNotFinished() {
+        stubRemoveReportApiToReturn(Completable.never())
 
         controller.onCreate(newReport())
         controller.onRemoveReport()

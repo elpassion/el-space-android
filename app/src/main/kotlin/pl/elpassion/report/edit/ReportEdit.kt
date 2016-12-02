@@ -6,6 +6,7 @@ import pl.elpassion.report.Report
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
+import rx.Completable
 import rx.Observable
 
 interface ReportEdit {
@@ -26,6 +27,8 @@ interface ReportEdit {
                        @Query("activity[value]") reportedHour: String,
                        @Query("activity[comment]") description: String,
                        @Query("activity[project_id]") projectId: String): Observable<Unit>
+
+        fun removeReport(): Completable
     }
 
     object EditApiProvider : Provider<EditApi>({

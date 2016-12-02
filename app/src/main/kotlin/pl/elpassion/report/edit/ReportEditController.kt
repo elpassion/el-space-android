@@ -42,6 +42,17 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
         view.updateProjectName(project.name)
     }
 
+    fun onRemoveReport() {
+        subscription = editReportApi.removeReport()
+                .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    view.close()
+                }, {
+                    view.showError(it)
+                })
+    }
+
     fun onDestroy() {
         subscription?.unsubscribe()
     }

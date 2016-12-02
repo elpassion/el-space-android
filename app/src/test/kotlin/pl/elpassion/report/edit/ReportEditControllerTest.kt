@@ -7,6 +7,7 @@ import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
+import rx.Completable
 import rx.Observable
 
 class ReportEditControllerTest {
@@ -21,6 +22,7 @@ class ReportEditControllerTest {
     @Before
     fun setUp() {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.just(null))
+        whenever(editReportApi.removeReport()).thenReturn(Completable.complete())
     }
 
     @Test
@@ -110,12 +112,31 @@ class ReportEditControllerTest {
         verify(view, times(1)).close()
     }
 
+    @Test
+    fun shouldCloseViewWhenRemoveReportHasNotFailed() {
+        controller.onCreate(newReport())
+        controller.onRemoveReport()
+        verify(view).close()
+    }
+
+    @Test
+    fun shouldShowErrorWhenRemoveReportFails() {
+        stubRemoveReportApiToReturnError()
+        controller.onCreate(newReport())
+        controller.onRemoveReport()
+        verify(view).showError(any())
+    }
+
     private fun stubEditReportApiToReturnNever() {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.never())
     }
 
     private fun stubEditReportApiToReturnError() {
         whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
+    }
+
+    private fun stubRemoveReportApiToReturnError() {
+        whenever(editReportApi.removeReport()).thenReturn(Completable.error(RuntimeException()))
     }
 
 }

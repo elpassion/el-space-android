@@ -13,7 +13,8 @@ class ReportEditControllerTest {
 
     private val view = mock<ReportEdit.View>()
     private val editReportApi = mock<ReportEdit.EditApi>()
-    private val controller = ReportEditController(view, editReportApi)
+    private val removeReportApi = mock<ReportEdit.RemoveApi>()
+    private val controller = ReportEditController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -205,7 +206,7 @@ class ReportEditControllerTest {
     }
 
     private fun stubRemoveReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.removeReport()).thenReturn(completable)
+        whenever(removeReportApi.removeReport()).thenReturn(completable)
     }
 
 }

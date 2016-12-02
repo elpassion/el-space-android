@@ -7,7 +7,9 @@ import pl.elpassion.report.Report
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportEdit.EditApi) {
+class ReportEditController(private val view: ReportEdit.View,
+                           private val editReportApi: ReportEdit.EditApi,
+                           private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var reportId: Long by Delegates.notNull()
     private lateinit var reportDate: String
@@ -44,7 +46,7 @@ class ReportEditController(val view: ReportEdit.View, val editReportApi: ReportE
     }
 
     fun onRemoveReport() {
-        removeReportSubscription = editReportApi.removeReport()
+        removeReportSubscription = removeReportApi.removeReport()
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

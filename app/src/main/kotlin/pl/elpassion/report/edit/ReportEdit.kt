@@ -26,11 +26,18 @@ interface ReportEdit {
                        @Query("activity[value]") reportedHour: String,
                        @Query("activity[comment]") description: String,
                        @Query("activity[project_id]") projectId: String): Completable
-
-        fun removeReport(): Completable
     }
 
     object EditApiProvider : Provider<EditApi>({
         RetrofitProvider.get().create(EditApi::class.java)
+    })
+
+    interface RemoveApi {
+        fun removeReport(): Completable
+
+    }
+
+    object RemoveReportApiProvider : Provider<RemoveApi>({
+        RetrofitProvider.get().create(RemoveApi::class.java)
     })
 }

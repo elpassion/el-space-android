@@ -131,12 +131,9 @@ class ReportEditActivityTest {
     }
 
     @Test
-
     fun shouldCallRemoveReportApiAfterClickOnRemove() {
         startActivity(newReport(id = 2))
-
         onId(R.id.action_remove_report).click()
-
         verify(reportRemoveApi).removeReport(reportId = 2)
     }
 

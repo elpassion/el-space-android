@@ -1,98 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/reportAddCoordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/separator"/>
-
-    <TextView
-        style="@style/ReportHeader"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_add_date_header"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        android:id="@+id/reportAddDate"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        tools:text="2016-09-01"/>
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_add_date_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_add_project_header"/>
+        <TextView
+            android:id="@+id/reportAddDate"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            tools:text="2016-09-01" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        android:id="@+id/reportAddProjectName"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:drawableEnd="@drawable/arrow_right_icon"
-        tools:text="name"/>
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_add_project_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_add_hours_header"/>
+        <TextView
+            android:id="@+id/reportAddProjectName"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableEnd="@drawable/arrow_right_icon"
+            tools:text="name" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <EditText
-        android:id="@+id/reportAddHours"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:inputType="number"
-        android:text="@string/report_add_hours_default_value"
-        tools:text="8"/>
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_add_hours_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_add_comment_header"/>
+        <EditText
+            android:id="@+id/reportAddHours"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:inputType="number"
+            android:text="@string/report_hours_default_value"
+            tools:text="8" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <EditText
-        android:id="@+id/reportAddDescription"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/report_add_description_hint"
-        android:inputType="text"/>
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_add_comment_header" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/Button"
-        android:id="@+id/reportAddAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_add_add_button"/>
+        <EditText
+            android:id="@+id/reportAddDescription"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="@string/report_add_description_hint"
+            android:inputType="text" />
 
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            style="@style/Button"
+            android:id="@+id/reportAddAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_add_add_button" />
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
+

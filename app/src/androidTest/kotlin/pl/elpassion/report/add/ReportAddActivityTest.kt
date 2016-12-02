@@ -1,23 +1,21 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.closeSoftKeyboard
-import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
-import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.DeaultMocksRule
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
-import pl.elpassion.project.choose.ProjectChooseActivity
+import pl.elpassion.common.onToolbarBackArrow
+import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
@@ -26,13 +24,16 @@ class ReportAddActivityTest {
     val repository = mock<ProjectRepository>()
 
     @JvmField @Rule
-    val defaultMocks = DeaultMocksRule()
-
-    @JvmField @Rule
-    val rule = ActivityTestRule<ReportAddActivity>(ReportAddActivity::class.java, false, false)
+    val rule = rule<ReportAddActivity>(autoStart = false)
 
     @JvmField @Rule
     val intentsRule = InitIntentsRule()
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        stubRepositoryAndStart()
+        onToolbarBackArrow().isDisplayed()
+    }
 
     @Test
     fun shouldStartWithFirstProjectSelected() {

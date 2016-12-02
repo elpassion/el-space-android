@@ -8,9 +8,8 @@
 
     <style name="DayName">
         <item name="android:textSize">18sp</item>
-        <item name="android:padding">@dimen/default_padding_value</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <style name="DayHeader">
@@ -18,7 +17,7 @@
         <item name="android:paddingTop">@dimen/default_padding_value</item>
         <item name="android:paddingEnd">@dimen/default_padding_value</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
     <style name="ReportHeader">
@@ -52,4 +51,9 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="HubIndicator">
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">3dp</item>
+    </style>
 </resources>

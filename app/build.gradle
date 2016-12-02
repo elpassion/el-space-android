@@ -1,7 +1,8 @@
 buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
-    ext.retrofit_version = '2.0.2'
+    ext.retrofit_version = '2.1.0'
+    ext.rxJava= '1.1.9'
 
     repositories {
         jcenter()
@@ -10,6 +11,7 @@ buildscript {
     dependencies {
         classpath 'io.fabric.tools:gradle:1.21.6'
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+        classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
     }
 }
 
@@ -17,6 +19,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
+apply plugin: 'jacoco-everywhere'
 
 android {
     compileSdkVersion 24
@@ -35,6 +38,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
+            testCoverageEnabled = true
             ext.betaDistributionGroupAliases = 'Elpassion'
             ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
         }
@@ -60,8 +64,8 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    compile 'io.reactivex:rxjava:1.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
@@ -72,6 +76,7 @@ dependencies {
         transitive = true;
     }
 
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'
     testCompile "com.nhaarman:mockito-kotlin:0.6.1"
 
@@ -79,6 +84,7 @@ dependencies {
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$dexMakerVersion"
     androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     androidTestCompile("com.android.support.test.espresso:espresso-core:$espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }

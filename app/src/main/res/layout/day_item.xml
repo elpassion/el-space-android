@@ -1,40 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:layout_marginLeft="@dimen/report_row_edge_margin"
+    android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:background="@drawable/click_indicator_white"
     android:orientation="horizontal">
 
-    <include layout="@layout/separator"/>
+    <View
+        android:id="@+id/hubIndicator"
+        style="@style/HubIndicator" />
 
     <TextView
         android:id="@+id/dayNumber"
         style="@style/DayName"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/report_left_space"
         android:layout_height="wrap_content"
-        tools:text="10 Thu"/>
+        android:layout_gravity="center_vertical"
+        android:gravity="start"
+        tools:text="10 Thu" />
 
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/totalHours"
+        style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/cell_big_margin"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/totalHours"
-            style="@style/DayHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/plus_icon"
-            tools:text="Total: 8.0 hours"/>
-
-        <include
-            android:id="@+id/bottomSeparator"
-            layout="@layout/separator"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+        android:drawableEnd="@drawable/ico_hub_plus_not_active"
+        tools:text="Total: 8.0 hours" />
+</LinearLayout>

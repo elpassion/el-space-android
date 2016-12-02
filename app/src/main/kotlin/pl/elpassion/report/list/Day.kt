@@ -1,5 +1,7 @@
 package pl.elpassion.report.list
 
+import pl.elpassion.report.Report
+
 data class Day(
         val dayNumber: Int,
         val reports: List<Report>,

@@ -4,30 +4,28 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.view.MenuItem
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
-import pl.elpassion.project.choose.ProjectChooseActivity
+import pl.elpassion.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import pl.elpassion.project.choose.ProjectChooseActivity
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     val controller by lazy {
-        ReportAddController(this, ProjectRepositoryProvider.get(), object : ReportAdd.Api {
-            override fun addReport(date: String, projectId: String, hours: String, description: String): Observable<Unit> {
-                return ReportAdd.ApiProvider.get().addReport(date, projectId, hours, description).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            }
-        })
+        ReportAddController(this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
+        showBackArrowOnActionBar()
         controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
@@ -54,17 +52,20 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            controller.onSelectProject(data!!.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project)
+            controller.onSelectProject(ProjectChooseActivity.getProject(data!!))
         }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     override fun close() {
         setResult(Activity.RESULT_OK)
         finish()
     }
 
-    override fun showError(it: Throwable) {
-        Log.e("Error", it.toString(), it)
+    override fun showError(ex: Throwable) {
+        Crashlytics.logException(ex)
+        Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

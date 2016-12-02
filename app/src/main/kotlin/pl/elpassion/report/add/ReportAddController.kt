@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 
@@ -24,10 +25,12 @@ class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepos
     }
 
     fun onReportAdd(hours: String, description: String) {
-        api.addReport(date, project.id, hours, description).subscribe({
-            view.close()
-        }, {
-            view.showError(it)
-        })
+        api.addReport(date, project.id, hours, description)
+                .applySchedulers()
+                .subscribe({
+                    view.close()
+                }, {
+                    view.showError(it)
+                })
     }
 }

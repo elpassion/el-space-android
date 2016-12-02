@@ -1,18 +1,18 @@
 package pl.elpassion.login
 
 import android.support.test.espresso.Espresso.closeSoftKeyboard
-import android.support.test.rule.ActivityTestRule
+import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.InitIntentsRule
 import pl.elpassion.common.checkIntent
+import pl.elpassion.common.rule
 import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.ReportListActivity
 import pl.elpassion.startActivity
@@ -26,11 +26,9 @@ class LoginActivitySadTest {
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = object : ActivityTestRule<LoginActivity>(LoginActivity::class.java, false, false) {
-        override fun beforeActivityLaunched() {
-            ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.just(emptyList())) } }
-            LoginRepositoryProvider.override = { loginRepository }
-        }
+    val rule = rule<LoginActivity>(autoStart = false) {
+        ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.just(emptyList())) } }
+        LoginRepositoryProvider.override = { loginRepository }
     }
 
     @Test
@@ -45,7 +43,7 @@ class LoginActivitySadTest {
         onId(R.id.tokenInput).isDisplayed()
     }
 
-    @Test @Ignore("travis fails on this :<")
+    @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
         rule.startActivity()
         val token = "token"
@@ -53,7 +51,7 @@ class LoginActivitySadTest {
         verify(loginRepository, times(1)).saveToken(token)
     }
 
-    @Test @Ignore("travis fails on this as well :<")
+    @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
         rule.startActivity()
         login("token")
@@ -74,7 +72,7 @@ class LoginActivitySadTest {
     }
 
     private fun login(token: String) {
-        onId(R.id.tokenInput).typeText(token)
+        onId(R.id.tokenInput).perform(replaceText(token))
         closeSoftKeyboard()
         onId(R.id.loginButton).click()
     }

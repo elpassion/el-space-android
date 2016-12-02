@@ -4,6 +4,7 @@ import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.report.Report
 import retrofit2.http.GET
 import rx.Observable
 
@@ -14,9 +15,9 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(days: List<Day>, listener: OnDayClickListener)
+        fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener)
 
-        fun showError(it: Throwable)
+        fun showError(ex: Throwable)
 
         fun showLoader()
 

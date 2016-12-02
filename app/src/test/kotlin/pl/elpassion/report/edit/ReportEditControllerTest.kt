@@ -206,7 +206,7 @@ class ReportEditControllerTest {
     }
 
     private fun stubRemoveReportApiToReturn(completable: Completable) {
-        whenever(removeReportApi.removeReport()).thenReturn(completable)
+        whenever(removeReportApi.removeReport(any())).thenReturn(completable)
     }
 
 }

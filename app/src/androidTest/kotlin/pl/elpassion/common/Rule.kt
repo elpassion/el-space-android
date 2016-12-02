@@ -34,7 +34,7 @@ fun stubReportEditApi() {
     }
     ReportEdit.RemoveReportApiProvider.override = {
         object : ReportEdit.RemoveApi {
-            override fun removeReport() = Completable.complete()
+            override fun removeReport(reportId: Long) = Completable.complete()
 
         }
     }

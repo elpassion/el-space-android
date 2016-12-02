@@ -46,7 +46,7 @@ class ReportEditController(private val view: ReportEdit.View,
     }
 
     fun onRemoveReport() {
-        removeReportSubscription = removeReportApi.removeReport()
+        removeReportSubscription = removeReportApi.removeReport(reportId)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

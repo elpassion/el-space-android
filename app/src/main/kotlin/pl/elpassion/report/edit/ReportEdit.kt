@@ -33,7 +33,7 @@ interface ReportEdit {
     })
 
     interface RemoveApi {
-        fun removeReport(): Completable
+        fun removeReport(reportId: Long): Completable
 
     }
 

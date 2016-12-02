@@ -30,7 +30,7 @@ class ReportEditActivityTest {
     @Before
     fun setUp() {
         whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
-        whenever(reportRemoveApi.removeReport()).thenReturn(Completable.complete())
+        whenever(reportRemoveApi.removeReport(any())).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
         ReportEdit.RemoveReportApiProvider.override = { reportRemoveApi }
     }
@@ -132,11 +132,12 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldCallRemoveReportApiAfterClickOnRemove() {
-        startActivity()
+        val report = newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2)
+        startActivity(report)
 
         onId(R.id.action_remove_report).click()
 
-        verify(reportRemoveApi).removeReport()
+        verify(reportRemoveApi).removeReport(report.id)
     }
 
     private fun insertData(reportedHours: String, newDescription: String) {

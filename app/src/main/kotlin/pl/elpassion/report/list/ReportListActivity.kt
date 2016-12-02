@@ -54,7 +54,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)
-        Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {

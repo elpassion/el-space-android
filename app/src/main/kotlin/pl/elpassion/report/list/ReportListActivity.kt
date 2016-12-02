@@ -52,8 +52,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         showLoader(reportListCoordinator)
     }
 
-    override fun showError(it: Throwable) {
-        Log.e("Error", it.message, it)
+    override fun showError(ex: Throwable) {
+        Log.e("Error", ex.message, ex)
         Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 

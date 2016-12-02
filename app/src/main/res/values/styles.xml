@@ -52,6 +52,7 @@
     </style>
 
     <style name="HubIndicator">
+        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">3dp</item>
     </style>

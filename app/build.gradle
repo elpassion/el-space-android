@@ -1,7 +1,8 @@
 buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
-    ext.retrofit_version = '2.0.2'
+    ext.retrofit_version = '2.1.0'
+    ext.rxJava= '1.1.9'
 
     repositories {
         jcenter()
@@ -63,8 +64,8 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    compile 'io.reactivex:rxjava:1.2.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'

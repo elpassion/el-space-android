@@ -84,7 +84,14 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_remove_report) {
+            controller.onRemoveReport()
+            return true
+        } else {
+            return handleClickOnBackArrowItem(item)
+        }
+    }
 
     companion object {
         private val REPORT_KEY = "report_key"

@@ -25,11 +25,14 @@ class ReportEditActivityTest {
     val rule = rule<ReportEditActivity>(autoStart = false)
 
     private val reportEditApi = mock<ReportEdit.EditApi>()
+    private val reportRemoveApi = mock<ReportEdit.RemoveApi>()
 
     @Before
     fun setUp() {
         whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
+        whenever(reportRemoveApi.removeReport()).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
+        ReportEdit.RemoveReportApiProvider.override = { reportRemoveApi }
     }
 
     @Test
@@ -125,6 +128,15 @@ class ReportEditActivityTest {
     fun shouldHaveVisibleRemoveReportIcon() {
         startActivity()
         onId(R.id.action_remove_report).isDisplayed()
+    }
+
+    @Test
+    fun shouldCallRemoveReportApiAfterClickOnRemove() {
+        startActivity()
+
+        onId(R.id.action_remove_report).click()
+
+        verify(reportRemoveApi).removeReport()
     }
 
     private fun insertData(reportedHours: String, newDescription: String) {

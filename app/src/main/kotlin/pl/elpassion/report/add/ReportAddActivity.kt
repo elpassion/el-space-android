@@ -62,8 +62,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         finish()
     }
 
-    override fun showError(it: Throwable) {
-        Log.e("Error", it.toString(), it)
+    override fun showError(ex: Throwable) {
+        Log.e("Error", ex.toString(), ex)
     }
 
     companion object {

@@ -131,13 +131,13 @@ class ReportEditActivityTest {
     }
 
     @Test
+
     fun shouldCallRemoveReportApiAfterClickOnRemove() {
-        val report = newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2)
-        startActivity(report)
+        startActivity(newReport(id = 2))
 
         onId(R.id.action_remove_report).click()
 
-        verify(reportRemoveApi).removeReport(report.id)
+        verify(reportRemoveApi).removeReport(reportId = 2)
     }
 
     private fun insertData(reportedHours: String, newDescription: String) {

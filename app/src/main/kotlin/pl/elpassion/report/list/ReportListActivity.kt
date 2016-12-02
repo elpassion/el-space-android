@@ -18,6 +18,7 @@ import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
+import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
@@ -62,7 +63,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
-        reportsContainer.adapter = ReportsAdapter(adapterList)
+        reportsContainer.adapter = ReportsAdapter(addSeparators(adapterList))
     }
 
     private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {

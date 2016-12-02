@@ -7,6 +7,8 @@ import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
+import pl.elpassion.report.edit.ReportEdit
+import rx.Completable
 import rx.Observable
 
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
@@ -14,11 +16,26 @@ inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline befor
         override fun apply(base: Statement?, description: Description?): Statement {
             stubReportAddApi()
             stubProjectRepository()
+            stubReportEditApi()
             return super.apply(base, description)
         }
 
         override fun beforeActivityLaunched() {
             beforeActivity.invoke()
+        }
+    }
+}
+
+fun stubReportEditApi() {
+    ReportEdit.EditApiProvider.override = {
+        object : ReportEdit.EditApi {
+            override fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: String) = Completable.complete()
+        }
+    }
+    ReportEdit.RemoveReportApiProvider.override = {
+        object : ReportEdit.RemoveApi {
+            override fun removeReport() = Completable.complete()
+
         }
     }
 }

@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_edit_activity.*
+import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -49,7 +52,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showError(ex: Throwable) {
-        throw UnsupportedOperationException("not implemented")
+        Crashlytics.logException(ex)
+        Snackbar.make(reportListCoordinator, R.string.report_list_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun hideLoader() {

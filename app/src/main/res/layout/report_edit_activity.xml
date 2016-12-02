@@ -1,98 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/reportEditCoordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/separator"/>
-
-    <TextView
-        style="@style/ReportHeader"
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_edit_date_header" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        android:id="@+id/reportEditDate"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        tools:text="2016-09-01" />
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_edit_date_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_edit_project_header" />
+        <TextView
+            android:id="@+id/reportEditDate"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            tools:text="2016-09-01" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        android:id="@+id/reportEditProjectName"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:drawableEnd="@drawable/arrow_right_icon"
-        tools:text="project" />
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_edit_project_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/reportEditHours"
-        android:text="@string/report_edit_hours_header" />
+        <TextView
+            android:id="@+id/reportEditProjectName"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:drawableEnd="@drawable/arrow_right_icon"
+            tools:text="project" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <EditText
-        android:id="@+id/reportEditHours"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:inputType="numberDecimal"
-        tools:text="@string/report_hours_default_value" />
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/reportEditHours"
+            android:text="@string/report_edit_hours_header" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/ReportHeader"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@+id/reportEditDescription"
-        android:text="@string/report_edit_comment_header" />
+        <EditText
+            android:id="@+id/reportEditHours"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:inputType="numberDecimal"
+            tools:text="@string/report_hours_default_value" />
 
-    <include layout="@layout/separator"/>
+        <include layout="@layout/separator" />
 
-    <EditText
-        android:id="@+id/reportEditDescription"
-        style="@style/ReportContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/report_add_description_hint"
-        android:inputType="text" />
+        <TextView
+            style="@style/ReportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@+id/reportEditDescription"
+            android:text="@string/report_edit_comment_header" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        <include layout="@layout/separator" />
 
-    <TextView
-        style="@style/Button"
-        android:id="@+id/reportEditSaveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/report_edit_save_button"/>
+        <EditText
+            android:id="@+id/reportEditDescription"
+            style="@style/ReportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:hint="@string/report_add_description_hint"
+            android:inputType="text" />
 
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/reportEditSaveButton"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/report_edit_save_button" />
+
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

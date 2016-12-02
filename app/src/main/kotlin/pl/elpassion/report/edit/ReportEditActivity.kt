@@ -51,9 +51,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun hideLoader() {
+        pl.elpassion.common.hideLoader(reportEditCoordinator)
     }
 
     override fun showLoader() {
+        pl.elpassion.common.showLoader(reportEditCoordinator)
     }
 
     override fun updateProjectName(projectName: String) {

@@ -3,8 +3,10 @@ package pl.elpassion.project.choose
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.project_choose_activity.*
@@ -52,11 +54,36 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         finish()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_search) {
+            return true
+        } else {
+            return handleClickOnBackArrowItem(item)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.project_choose_menu, menu)
+        initSearchView(menu)
         return true
+    }
+
+    private fun initSearchView(menu: Menu) {
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        val textChangeListener = object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                controller.searchQuery(query)
+                return true
+            }
+
+            override fun onQueryTextChange(query: String): Boolean {
+                controller.searchQuery(query)
+                return true
+            }
+
+        }
+        searchView.setOnQueryTextListener(textChangeListener)
     }
 
     companion object {

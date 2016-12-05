@@ -6,5 +6,6 @@ class ProjectRecyclerViewAdapter() : BaseRecyclerViewAdapter() {
     fun updateList(projectList: List<ProjectItemAdapter>) {
         adapters.clear()
         adapters.addAll(projectList)
+        notifyDataSetChanged()
     }
 }

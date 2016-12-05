@@ -1,8 +1,6 @@
 package pl.elpassion.project.choose
 
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -51,6 +49,19 @@ class ProjectChooseActivityTest {
         onText("name1").isDisplayed()
         onText("name2").isDisplayed()
     }
+
+    @Test
+    fun shouldDisplayProjectAfterSearch() {
+        stubRepositoryToReturn(listOf(newProject("id1", "name1"), newProject("id2", "name2")))
+        rule.startActivity()
+
+        onId(R.id.action_search).click()
+        onId(R.id.search_src_text).typeText("Name1")
+
+        onText("name1").isDisplayed()
+        onText("name2").doesNotExist()
+    }
+
 
     private fun stubRepositoryToReturn(projects: List<Project>) {
         ProjectRepositoryProvider.override = { repository }

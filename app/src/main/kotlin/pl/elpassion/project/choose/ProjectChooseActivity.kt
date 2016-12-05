@@ -19,8 +19,8 @@ import pl.elpassion.project.ProjectRepositoryProvider
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
-    val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
+    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
+    private val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

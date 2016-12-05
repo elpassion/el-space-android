@@ -23,7 +23,7 @@ import pl.elpassion.report.list.adapter.items.*
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
-    val controller by lazy {
+    private val controller by lazy {
         ReportListController(ReportList.ServiceProvider.get(), this)
     }
 

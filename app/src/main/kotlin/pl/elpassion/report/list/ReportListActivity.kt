@@ -73,6 +73,13 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         return itemAdapters
     }
 
+    private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
+            when {
+                it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)
+                it.isNotFilledIn() -> DayNotFilledInItemAdapter(it, listener)
+                else -> DayItemAdapter(it, listener)
+            }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             controller.refreshReportList()
@@ -81,13 +88,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
-
-    private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
-            when {
-                it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)
-                it.isNotFilledIn() -> DayNotFilledInItemAdapter(it, listener)
-                else -> DayItemAdapter(it, listener)
-            }
 
     companion object {
         private val ADD_REPORT_SCREEN_REQUEST_CODE = 100

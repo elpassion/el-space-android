@@ -16,7 +16,7 @@ class ProjectChooseController(val view: ProjectChoose.View, val repository: Proj
     }
 
     fun searchQuery(query: String) {
-        view.showFiltredProjects(filterProjectByQuery(query))
+        view.showFilteredProjects(filterProjectByQuery(query))
     }
 
     private fun filterProjectByQuery(query: String) = sortedProjectsList.filter { it.name.contains(query, true) }

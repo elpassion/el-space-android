@@ -50,7 +50,7 @@ class ProjectChooseControllerTest {
         controller.onCreate()
         controller.searchQuery("B")
 
-        verify(view).showFiltredProjects(argThat { this[0].name == "B" })
+        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
     }
 
 
@@ -61,7 +61,7 @@ class ProjectChooseControllerTest {
 
         controller.searchQuery("C")
 
-        verify(view).showFiltredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
+        verify(view).showFilteredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
@@ -71,7 +71,7 @@ class ProjectChooseControllerTest {
 
         controller.searchQuery("b")
 
-        verify(view).showFiltredProjects(argThat { this[0].name == "B" })
+        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
     }
 
 

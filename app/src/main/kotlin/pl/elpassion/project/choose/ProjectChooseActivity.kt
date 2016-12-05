@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -15,25 +14,37 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
 
+
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
+    val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_choose_activity)
         showBackArrowOnActionBar()
+        initRecyclerView()
         controller.onCreate()
     }
 
-    override fun showPossibleProjects(projects: List<Project>) {
+    private fun initRecyclerView() {
         projectsContainer.layoutManager = LinearLayoutManager(this)
-        projectsContainer.adapter = BaseRecyclerViewAdapter(projects.map {
-            ProjectItemAdapter(it) { controller.onProjectClicked(it) }
-        })
+        projectsContainer.adapter = projectListAdapter
+    }
+
+    override fun showPossibleProjects(projects: List<Project>) {
+        updateAdapterList(projects)
     }
 
     override fun showFiltredProjects(projects: List<Project>) {
+        updateAdapterList(projects)
+    }
+
+    private fun updateAdapterList(projects: List<Project>) {
+        projectListAdapter.updateList(projects.map {
+            ProjectItemAdapter(it) { controller.onProjectClicked(it) }
+        })
     }
 
     override fun selectProject(project: Project) {

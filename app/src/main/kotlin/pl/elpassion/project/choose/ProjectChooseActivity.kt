@@ -33,6 +33,9 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         })
     }
 
+    override fun showFiltredProjects(projects: List<Project>) {
+    }
+
     override fun selectProject(project: Project) {
         setResult(Activity.RESULT_OK, Intent().putExtra(SELECTED_PROJECT, project))
         finish()

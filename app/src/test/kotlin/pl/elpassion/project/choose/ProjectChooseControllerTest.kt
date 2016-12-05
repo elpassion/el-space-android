@@ -44,6 +44,37 @@ class ProjectChooseControllerTest {
         verify(view).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
     }
 
+    @Test
+    fun shouldShowFilteredProjects() {
+        stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
+        controller.onCreate()
+        controller.searchQuery("B")
+
+        verify(view).showFiltredProjects(argThat { this[0].name == "B" })
+    }
+
+
+    @Test
+    fun shouldShowFilteredSortedProjects() {
+        stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
+        controller.onCreate()
+
+        controller.searchQuery("C")
+
+        verify(view).showFiltredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
+    }
+
+    @Test
+    fun shouldShowFilteredProjectsIgnoreCase() {
+        stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
+        controller.onCreate()
+
+        controller.searchQuery("b")
+
+        verify(view).showFiltredProjects(argThat { this[0].name == "B" })
+    }
+
+
     private fun stubRepositoryToReturn(list: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(list)
     }

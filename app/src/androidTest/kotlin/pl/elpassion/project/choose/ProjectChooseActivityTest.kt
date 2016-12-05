@@ -1,5 +1,6 @@
 package pl.elpassion.project.choose
 
+import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -56,7 +57,7 @@ class ProjectChooseActivityTest {
         rule.startActivity()
 
         onId(R.id.action_search).click()
-        onId(R.id.search_src_text).typeText("Name1")
+        onId(R.id.search_src_text).perform(replaceText("Name1"))
 
         onText("name1").isDisplayed()
         onText("name2").doesNotExist()

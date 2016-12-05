@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
 import kotlinx.android.synthetic.main.project_choose_activity.*
@@ -38,6 +39,11 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.project_choose_menu, menu)
+        return true
+    }
 
     companion object {
         private val SELECTED_PROJECT = "selected_project"

@@ -1,11 +1,13 @@
 package pl.elpassion.project.choose
 
 import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
@@ -26,6 +28,13 @@ class ProjectChooseActivityTest {
         stubRepositoryToReturn(emptyList())
         rule.startActivity()
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun shouldHaveSearchActionIconOnToolbar() {
+        stubRepositoryToReturn(emptyList())
+        rule.startActivity()
+        onId(R.id.action_search).isDisplayed()
     }
 
     @Test

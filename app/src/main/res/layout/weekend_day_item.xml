@@ -16,8 +16,6 @@
         style="@style/DayName"
         android:layout_width="@dimen/report_left_space"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="start"
         android:textColor="@color/unselectedText"
         tools:text="10 Thu" />
 

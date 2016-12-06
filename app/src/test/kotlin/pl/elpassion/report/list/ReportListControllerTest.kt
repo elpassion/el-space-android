@@ -181,9 +181,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenAddReportScreenOnDay() {
-        stubCurrentTime(year = 1999, month = 1)
-
-        controller.onDay(2)
+        controller.onDayDate(date = "1999-01-02")
 
         verify(view, times(1)).openAddReportScreen("1999-01-02")
     }

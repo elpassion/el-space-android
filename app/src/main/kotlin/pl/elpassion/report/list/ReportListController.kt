@@ -53,11 +53,11 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private fun showDaysAndUpdateMonthName() {
         val days = (1..daysForCurrentMonth()).map { dayNumber ->
             val calendarForDay = getCalendarForDay(dayNumber)
-            Day(dayNumber = dayNumber,
-                    reports = reportList.filter(isFromSelectedDay(dayNumber)),
+            Day(reports = reportList.filter(isFromSelectedDay(dayNumber)),
                     hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
                     isWeekendDay = calendarForDay.isWeekendDay(),
-                    name = "$dayNumber ${calendarForDay.dayName()}")
+                    name = "$dayNumber ${calendarForDay.dayName()}",
+                    date = getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
         }
 
         view.showDays(days, this, this)
@@ -72,8 +72,8 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 
     private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
 
-    override fun onDay(dayNumber: Int) {
-        view.openAddReportScreen(getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
+    override fun onDayDate(date: String) {
+        view.openAddReportScreen(date)
     }
 
     override fun onReport(report: Report) {
@@ -82,7 +82,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 }
 
 interface OnDayClickListener {
-    fun onDay(dayNumber: Int)
+    fun onDayDate(date: String)
 }
 
 interface OnReportClickListener {

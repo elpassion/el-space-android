@@ -33,7 +33,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     private fun fetchReports() {
         subscription = Observable.combineLatest(observeDateChange(),
                 fetchReportsFromApi(), { t1, t2 -> Pair(t1, t2) })
-                .map { showDaysAndUpdateMonthName(it.first, it.second) }
+                .map { createDaysWithReports(it.first, it.second) }
                 .subscribe({ days ->
                     view.showDays(days, this, this)
                 }, {
@@ -56,7 +56,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
         dateChangeObserver.setPreviousMonth()
     }
 
-    private fun showDaysAndUpdateMonthName(yearMonth: YearMonth, reportList: List<Report>): List<Day> {
+    private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>): List<Day> {
         val days = (1..yearMonth.month.daysInMonth).map { dayNumber ->
             val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
             Day(reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber)),

@@ -5,14 +5,15 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.*
 import pl.elpassion.report.Report
+import rx.Observable
 import rx.Subscription
 import java.util.*
 
 class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private var subscription: Subscription? = null
-    private val reportList: MutableList<Report> = ArrayList()
-    private val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
+    private val initialDateCalendar: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
+    private val dateChangeObserver by lazy { DateChangeObserver(initialDateCalendar) }
 
     fun onCreate() {
         fetchReports()
@@ -22,53 +23,57 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
         fetchReports()
     }
 
+    fun onDestroy() {
+        subscription?.unsubscribe()
+    }
+
+    private fun observeDateChange() = dateChangeObserver.observe()
+            .doOnNext { view.showMonthName(it.month.monthName) }
+
     private fun fetchReports() {
-        subscription = service.getReports()
-                .applySchedulers()
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({ reports ->
-                    reportList.clear()
-                    reportList.addAll(reports)
-                    showDaysAndUpdateMonthName()
+        subscription = Observable.combineLatest(observeDateChange(),
+                fetchReportsFromApi(), { t1, t2 -> Pair(t1, t2) })
+                .map { showDaysAndUpdateMonthName(it.first, it.second) }
+                .subscribe({ days ->
+                    view.showDays(days, this, this)
                 }, {
                     view.showError(it)
                 })
     }
 
-    fun onDestroy() {
-        subscription?.unsubscribe()
-    }
+    private fun fetchReportsFromApi() =
+            service.getReports()
+                    .applySchedulers()
+                    .doOnSubscribe { view.showLoader() }
+                    .doOnUnsubscribe { view.hideLoader() }
+
 
     fun onNextMonth() {
-        date.changeToNextMonth()
-        showDaysAndUpdateMonthName()
+        dateChangeObserver.setNextMonth()
     }
 
     fun onPreviousMonth() {
-        date.changeToPreviousMonth()
-        showDaysAndUpdateMonthName()
+        dateChangeObserver.setPreviousMonth()
     }
 
-    private fun showDaysAndUpdateMonthName() {
-        val days = (1..date.daysForCurrentMonth()).map { dayNumber ->
-            val calendarForDay = getCalendarForDay(dayNumber)
-            Day(reports = reportList.filter(isFromSelectedDay(dayNumber)),
+    private fun showDaysAndUpdateMonthName(yearMonth: YearMonth, reportList: List<Report>): List<Day> {
+        val days = (1..yearMonth.month.daysInMonth).map { dayNumber ->
+            val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
+            Day(reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber)),
                     hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
                     isWeekendDay = calendarForDay.isWeekendDay(),
                     name = "$dayNumber ${calendarForDay.dayName()}",
-                    date = getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
+                    date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))
         }
 
-        view.showDays(days, this, this)
-        view.showMonthName(date.getFullMonthName())
+        return days
     }
 
-    private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
-        report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
+    private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (Report) -> Boolean = { report ->
+        report.year == yearMonth.year && report.month == yearMonth.month.index + 1 && report.day == day
     }
 
-    private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
+    private fun getCalendarForDay(yearMonth: YearMonth, dayNumber: Int) = getTimeFrom(year = yearMonth.year, month = yearMonth.month.index, day = dayNumber)
 
     override fun onDayDate(date: String) {
         view.openAddReportScreen(date)

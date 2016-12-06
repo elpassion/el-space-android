@@ -51,7 +51,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     private fun showDaysAndUpdateMonthName() {
-        val days = (1..daysForCurrentMonth()).map { dayNumber ->
+        val days = (1..date.daysForCurrentMonth()).map { dayNumber ->
             val calendarForDay = getCalendarForDay(dayNumber)
             Day(reports = reportList.filter(isFromSelectedDay(dayNumber)),
                     hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
@@ -63,8 +63,6 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
         view.showDays(days, this, this)
         view.showMonthName(date.getFullMonthName())
     }
-
-    private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
 
     private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
         report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day

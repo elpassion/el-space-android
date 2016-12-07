@@ -32,6 +32,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         setContentView(R.layout.report_list_activity)
         reportsContainer.layoutManager = LinearLayoutManager(this)
         controller.onCreate()
+        nextMonthButton.setOnClickListener { controller.onNextMonth() }
+        prevMonthButton.setOnClickListener { controller.onPreviousMonth() }
     }
 
     override fun openEditReportScreen(report: Report) {
@@ -39,6 +41,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showMonthName(monthName: String) {
+        monthTitle.text = monthName
     }
 
     override fun openAddReportScreen(date: String) {

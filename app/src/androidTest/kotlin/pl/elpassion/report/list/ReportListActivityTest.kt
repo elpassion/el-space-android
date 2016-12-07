@@ -5,10 +5,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.hasChildWithText
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.core.AllOf.allOf
@@ -117,6 +114,25 @@ class ReportListActivityTest {
     fun shouldShowTotalInformationOnDayFromFutureIfThereAreReports() {
         onView(withId(R.id.reportsContainer)).perform(scrollToPosition<RecyclerView.ViewHolder>(6))
         verifyIfDayFromFutureWithReportsHasTotalInformation()
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameOnStart() {
+        onText("October").isDisplayed()
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameAfterClickOnNextMonth() {
+        onId(R.id.nextMonthButton).click()
+
+        onText("November").isDisplayed()
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameAfterClickOnPrevMonth() {
+        onId(R.id.prevMonthButton).click()
+
+        onText("September").isDisplayed()
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

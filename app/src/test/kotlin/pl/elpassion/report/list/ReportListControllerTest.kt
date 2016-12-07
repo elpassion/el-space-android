@@ -25,23 +25,6 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
-        verifyIfShowCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 10,
-                daysInMonth = 31)
-    }
-
-    @Test
-    fun shouldDisplay30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyListOnCreate() {
-        verifyIfShowCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 11,
-                daysInMonth = 30
-        )
-    }
-
-    @Test
     fun shouldShowCorrectMonthOnCreate() {
         stubServiceToReturn(emptyList())
         stubCurrentTime(month = 10)
@@ -174,17 +157,6 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
-
-
-    @Test
-    fun shouldReallyCorrectlyMapDayName() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-
-        verify(view).showDays(argThat { this[1].name == "2 Fri" }, any(), any())
-    }
-
     @Test
     fun shouldNotCollectDuplicatedReports() {
         val report = newReport(year = 2016, month = 6, day = 1)
@@ -209,12 +181,4 @@ class ReportListControllerTest {
     private fun stubServiceToReturn(list: List<Report>) {
         whenever(service.getReports()).thenReturn(Observable.just(list))
     }
-
-    private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        stubServiceToReturn(apiReturnValue)
-        stubCurrentTime(month = month)
-        controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this.size == daysInMonth }, any(), any())
-    }
-
 }

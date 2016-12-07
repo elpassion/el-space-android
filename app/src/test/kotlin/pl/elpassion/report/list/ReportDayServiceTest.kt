@@ -17,11 +17,36 @@ class ReportDayServiceTest {
     var service = ReportDayServiceImpl(dateChangeObserver, serviceApi)
 
     @Test
+    fun should31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
+        verifyIfMapCorrectListForGivenParams(
+                apiReturnValue = emptyList(),
+                month = 10,
+                daysInMonth = 31)
+    }
+
+    @Test
+    fun should30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyList() {
+        verifyIfMapCorrectListForGivenParams(
+                apiReturnValue = emptyList(),
+                month = 11,
+                daysInMonth = 30
+        )
+    }
+
+    @Test
     fun shouldCorrectlyMapDayName() {
         stubDateChangeObserver(year = 2016, month = 9)
         stubServiceToReturn(emptyList())
 
         assertEquals(getFirstDay().name, "1 Thu")
+    }
+
+    @Test
+    fun shouldReallyCorrectlyMapDayName() {
+        stubDateChangeObserver(year = 2016, month = 9)
+        stubServiceToReturn(emptyList())
+
+        assertEquals(getDays()[1].name, "2 Fri")
     }
 
     @Test
@@ -45,4 +70,11 @@ class ReportDayServiceTest {
         val initialDateCalendar: Calendar = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
         whenever(dateChangeObserver.observe()).thenReturn(Observable.just(initialDateCalendar.toYearMonth()))
     }
+
+    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
+        stubServiceToReturn(apiReturnValue)
+        stubDateChangeObserver(year = 2016, month = month)
+        assertEquals(getDays().size, daysInMonth)
+    }
+
 }

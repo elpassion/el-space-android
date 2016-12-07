@@ -8,4 +8,8 @@ interface ReportDayService {
     fun createDays(): Observable<List<Day>>
 
     fun observeDateChanges(): Observable<YearMonth>
+
+    fun changeMonthToNext()
+
+    fun changeMonthToPrevious()
 }

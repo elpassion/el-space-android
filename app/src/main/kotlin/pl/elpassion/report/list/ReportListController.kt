@@ -1,22 +1,16 @@
 package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
-import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.report.Report
-import pl.elpassion.report.list.service.DateChangeObserverImpl
 import pl.elpassion.report.list.service.ReportDayService
-import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Subscription
-import java.util.*
 
-class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
+class ReportListController(val reportDayService: ReportDayService,
+                           val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private var subscription: Subscription? = null
-    private val initialDateCalendar: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
-    private val dateChangeObserver by lazy { DateChangeObserverImpl(initialDateCalendar) }
-    private lateinit var reportDayServiceImpl: ReportDayService
+
     fun onCreate() {
-        reportDayServiceImpl = ReportDayServiceImpl(dateChangeObserver, service)
         fetchReports()
         subscribeDateChange()
     }
@@ -30,7 +24,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     private fun fetchReports() {
-        subscription = reportDayServiceImpl.createDays()
+        subscription = reportDayService.createDays()
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -42,15 +36,15 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                 })
     }
 
-    private fun subscribeDateChange() = reportDayServiceImpl.observeDateChanges()
+    private fun subscribeDateChange() = reportDayService.observeDateChanges()
             .subscribe { view.showMonthName(it.month.monthName) }
 
     fun onNextMonth() {
-        dateChangeObserver.setNextMonth()
+        reportDayService.changeMonthToNext()
     }
 
     fun onPreviousMonth() {
-        dateChangeObserver.setPreviousMonth()
+        reportDayService.changeMonthToPrevious()
     }
 
     override fun onDayDate(date: String) {

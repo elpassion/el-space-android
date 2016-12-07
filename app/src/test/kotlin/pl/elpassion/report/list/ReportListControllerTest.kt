@@ -7,12 +7,13 @@ import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
-import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
+import java.util.*
 
 class ReportListControllerTest {
 
-    val service = mock<ReportList.Service>()
+    val service = mock<ReportDayService>()
     val view = mock<ReportList.View>()
     val controller = ReportListController(service, view)
 
@@ -25,39 +26,29 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldShowCorrectMonthOnCreate() {
-        stubServiceToReturn(emptyList())
-        stubCurrentTime(month = 10)
+    fun shouldShowCorrectMonthNameOnCreate() {
+        stubServiceToReturnNever()
+        stubDateChangeToReturn(YearMonth(2016, Month(0, "January", 30)))
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonthName("October")
+        verify(view).showMonthName("January")
     }
 
     @Test
-    fun shouldReallyShowCorrectMonthName() {
-        stubServiceToReturn(emptyList())
-        stubCurrentTime(month = 11)
+    fun shouldReallyShowCorrectMonthNameOnCreate() {
+        stubServiceToReturnEmptyList()
+        stubDateChangeToReturn(YearMonth(2016, Month(0, "November", 30)))
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonthName("November")
-    }
-
-    @Test
-    fun shouldMapReturnedReportsToCorrectDays() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
+        verify(view).showMonthName("November")
     }
 
     @Test
     fun shouldShowErrorWhenApiCallFails() {
         stubServiceToReturnError()
+        stubDateChangeToReturn()
 
         controller.onCreate()
 
@@ -67,6 +58,7 @@ class ReportListControllerTest {
     @Test
     fun shouldShowLoaderWhenApiCallBegins() {
         stubServiceToReturnNever()
+        stubDateChangeToReturn()
 
         controller.onCreate()
 
@@ -76,6 +68,7 @@ class ReportListControllerTest {
     @Test
     fun shouldHideLoaderWhenCallIsNotFinishedOnDestroy() {
         stubServiceToReturnNever()
+        stubDateChangeToReturn()
 
         controller.onCreate()
         controller.onDestroy()
@@ -85,61 +78,36 @@ class ReportListControllerTest {
 
     @Test
     fun shouldHideLoaderWhenApiCallFinishes() {
-        stubServiceToReturn(emptyList())
+        stubTodayDateAndEmptyList()
 
         controller.onCreate()
 
-        verify(view, times(1)).hideLoader()
+        verify(view, atLeast(1)).hideLoader()
     }
 
     @Test
-    fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
-        val report = newReport(year = 2016, month = 6, day = 1, reportedHours = 1.0)
-        stubCurrentTime(year = 2016, month = 5, day = 1)
-        stubServiceToReturn(listOf(report))
+    fun shouldCallChangeMonthToNext() {
+        stubTodayDateAndEmptyList()
 
         controller.onCreate()
-        reset(view)
         controller.onNextMonth()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
+        verify(service).changeMonthToNext()
     }
 
     @Test
-    fun shouldShowCorrectMonthOnNextMonth() {
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(emptyList())
+    fun shouldCallChangeMonthToPrevious() {
+        stubTodayDateAndEmptyList()
 
         controller.onCreate()
-        reset(view)
-        controller.onNextMonth()
-
-        verify(view, times(1)).showMonthName("August")
-    }
-
-    @Test
-    fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-        reset(view)
         controller.onPreviousMonth()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
+        verify(service).changeMonthToPrevious()
     }
 
-    @Test
-    fun shouldShowCorrectMonthOnPreviousMonth() {
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        reset(view)
-        controller.onPreviousMonth()
-
-        verify(view, times(1)).showMonthName("June")
+    private fun stubTodayDateAndEmptyList() {
+        stubDateChangeToReturn()
+        stubServiceToReturnEmptyList()
     }
 
     @Test
@@ -157,28 +125,22 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
-    @Test
-    fun shouldNotCollectDuplicatedReports() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-        reset(view)
-        controller.onCreate()
-
-        verify(view, times(1)).showDays(argThat { this[0].reports.size == 1 }, any(), any())
+    private fun stubServiceToReturnNever() {
+        whenever(service.createDays()).thenReturn(Observable.never())
     }
 
-    private fun stubServiceToReturnNever() {
-        whenever(service.getReports()).thenReturn(Observable.never())
+    private fun stubServiceToReturnEmptyList() {
+        whenever(service.createDays()).thenReturn(Observable.just(listOf()))
     }
 
     private fun stubServiceToReturnError() {
-        whenever(service.getReports()).thenReturn(Observable.error(RuntimeException()))
+        whenever(service.createDays()).thenReturn(Observable.error(RuntimeException()))
     }
 
-    private fun stubServiceToReturn(list: List<Report>) {
-        whenever(service.getReports()).thenReturn(Observable.just(list))
+    private fun stubDateChangeToReturn(yearMonth: YearMonth = nowYearMonth()) {
+        whenever(service.observeDateChanges()).thenReturn(Observable.just(yearMonth))
     }
+
+    private fun nowYearMonth() = Calendar.getInstance().toYearMonth()
+
 }

@@ -24,7 +24,7 @@ import pl.elpassion.report.list.adapter.items.*
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private val controller by lazy {
-        ReportListController(ReportList.ServiceProvider.get(), this)
+        ReportListController(ReportList.ReportDayServiceProvider.get(), this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

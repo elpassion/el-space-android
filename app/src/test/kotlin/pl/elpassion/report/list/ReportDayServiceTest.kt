@@ -7,6 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
+import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayServiceImpl
@@ -59,6 +60,15 @@ class ReportDayServiceTest {
         assertTrue(getFirstDay().hasPassed)
     }
 
+    @Test
+    fun shouldMapReturnedReportsToCorrectDays() {
+        val report = newReport(year = 2016, month = 6, day = 1)
+        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        stubServiceToReturn(listOf(report))
+
+        assertEquals(getFirstDay().reports, listOf(report))
+    }
+
     private fun getDays() = service.createDays().toBlocking().first()
 
     private fun getFirstDay() = getDays().first()
@@ -67,8 +77,8 @@ class ReportDayServiceTest {
         whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
     }
 
-    private fun stubDateChangeObserver(year: Int, month: Int) {
-        stubCurrentTime(year = year, month = month)
+    private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {
+        stubCurrentTime(year = year, month = month, day = day)
         val initialDateCalendar: Calendar = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
         whenever(dateChangeObserver.observe()).thenReturn(Observable.just(initialDateCalendar.toYearMonth()))
     }

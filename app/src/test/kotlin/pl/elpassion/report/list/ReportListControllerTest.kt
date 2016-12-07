@@ -110,17 +110,6 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldNotHideLoaderOnDestroyWhenCallFinished() {
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        reset(view)
-        controller.onDestroy()
-
-        verify(view, never()).hideLoader()
-    }
-
-    @Test
     fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
         val report = newReport(year = 2016, month = 6, day = 1, reportedHours = 1.0)
         stubCurrentTime(year = 2016, month = 5, day = 1)

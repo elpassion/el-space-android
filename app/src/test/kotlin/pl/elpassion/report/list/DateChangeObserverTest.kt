@@ -12,7 +12,7 @@ class DateChangeObserverTest {
     val calendar: Calendar = getTimeFrom(year = 2016,
             month = 11,
             day = 10)
-    val dateController = DateChangeObserver(calendar)
+    val dateController = DateChangeObserverImpl(calendar)
     private val initialValueForYearMonth = calendar.toYearMonth()
 
     @Test

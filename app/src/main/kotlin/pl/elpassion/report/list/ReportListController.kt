@@ -10,12 +10,12 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 
     private var subscription: Subscription? = null
     private val initialDateCalendar: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
-    private val dateChangeObserver by lazy { DateChangeObserver(initialDateCalendar) }
-    private lateinit var reportDayService: ReportDayService
+    private val dateChangeObserver by lazy { DateChangeObserverImpl(initialDateCalendar) }
+    private lateinit var reportDayServiceImpl: ReportDayService
     fun onCreate() {
-        reportDayService = ReportDayService(dateChangeObserver, service)
+        reportDayServiceImpl = ReportDayServiceImpl(dateChangeObserver, service)
         fetchReports()
-        subsribeDateChange()
+        subscribeDateChange()
     }
 
     fun refreshReportList() {
@@ -27,7 +27,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     private fun fetchReports() {
-        subscription = reportDayService.createDays()
+        subscription = reportDayServiceImpl.createDays()
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -39,7 +39,7 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                 })
     }
 
-    private fun subsribeDateChange() = reportDayService.observeDateChanges()
+    private fun subscribeDateChange() = reportDayServiceImpl.observeDateChanges()
             .subscribe { view.showMonthName(it.month.monthName) }
 
     fun onNextMonth() {

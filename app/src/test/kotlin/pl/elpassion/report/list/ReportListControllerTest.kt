@@ -160,15 +160,6 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldMarkUnreportedPassedDays() {
-        stubCurrentTime(month = 6, day = 1)
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this[0].hasPassed }, any(), any())
-    }
-
-    @Test
     fun shouldOpenAddReportScreenOnDay() {
         controller.onDayDate(date = "1999-01-02")
 
@@ -183,25 +174,7 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
-    @Test
-    fun shouldCorrectlyMapWeekendDays() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-        reset(view)
-        controller.onNextMonth()
 
-        verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay }, any(), any())
-    }
-
-    @Test
-    fun shouldCorrectlyMapDayName() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-
-        verify(view).showDays(argThat { this[0].name == "1 Thu" }, any(), any())
-    }
 
     @Test
     fun shouldReallyCorrectlyMapDayName() {

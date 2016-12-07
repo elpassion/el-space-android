@@ -3,6 +3,9 @@ package pl.elpassion.report.list
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.DateChangeObserverImpl
+import pl.elpassion.report.list.service.ReportDayService
+import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Subscription
 import java.util.*
 

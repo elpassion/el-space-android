@@ -1,7 +1,10 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.*
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.Day
+import pl.elpassion.report.list.ReportList
+import pl.elpassion.report.list.YearMonth
 import rx.Observable
 
 class ReportDayServiceImpl(private val observeDateChange: DateChangeObserver,

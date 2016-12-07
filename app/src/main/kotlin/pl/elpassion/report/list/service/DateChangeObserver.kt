@@ -1,5 +1,6 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.service
 
+import pl.elpassion.report.list.YearMonth
 import rx.Observable
 
 interface DateChangeObserver {

@@ -8,6 +8,8 @@ import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.DateChangeObserver
+import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 import java.util.*
 

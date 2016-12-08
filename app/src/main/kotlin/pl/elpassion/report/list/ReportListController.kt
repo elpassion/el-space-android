@@ -9,6 +9,7 @@ class ReportListController(val reportDayService: ReportDayService,
                            val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private var subscription: Subscription? = null
+    private var dateChangeSubscription: Subscription? = null
 
     fun onCreate() {
         fetchReports()
@@ -21,6 +22,7 @@ class ReportListController(val reportDayService: ReportDayService,
 
     fun onDestroy() {
         subscription?.unsubscribe()
+        dateChangeSubscription?.unsubscribe()
     }
 
     private fun fetchReports() {
@@ -36,8 +38,10 @@ class ReportListController(val reportDayService: ReportDayService,
                 })
     }
 
-    private fun subscribeDateChange() = reportDayService.observeDateChanges()
-            .subscribe { view.showMonthName(it.month.monthName) }
+    private fun subscribeDateChange() {
+        dateChangeSubscription = reportDayService.observeDateChanges()
+                .subscribe { view.showMonthName(it.month.monthName) }
+    }
 
     fun onNextMonth() {
         reportDayService.changeMonthToNext()

@@ -12,6 +12,7 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.Report
@@ -20,11 +21,15 @@ import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
+import pl.elpassion.report.list.service.DateChangeObserverImpl
+import pl.elpassion.report.list.service.ReportDayServiceImpl
+import java.util.*
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
+    private val dateChangeObserver by lazy { DateChangeObserverImpl(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
 
     private val controller by lazy {
-        ReportListController(ReportList.ReportDayServiceProvider.get(), this)
+        ReportListController(ReportDayServiceImpl(dateChangeObserver, ReportList.ServiceProvider.get()), this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

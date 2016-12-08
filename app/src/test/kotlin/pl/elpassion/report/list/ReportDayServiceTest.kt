@@ -1,6 +1,7 @@
 package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -67,6 +68,20 @@ class ReportDayServiceTest {
         stubServiceToReturn(listOf(report))
 
         assertEquals(getFirstDay().reports, listOf(report))
+    }
+
+    @Test
+    fun shouldCallDataChangeObserverSetNextMonth() {
+        service.changeMonthToNext()
+
+        verify(dateChangeObserver).setNextMonth()
+    }
+
+    @Test
+    fun shouldCallDataChangeObserverSetPreviousMonth() {
+        service.changeMonthToPrevious()
+
+        verify(dateChangeObserver).setPreviousMonth()
     }
 
     private fun getDays() = service.createDays().toBlocking().first()

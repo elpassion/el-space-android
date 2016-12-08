@@ -9,14 +9,6 @@ import rx.Observable
 
 class ReportDayServiceImpl(private val observeDateChange: DateChangeObserver,
                            private val reportListApi: ReportList.Service) : ReportDayService {
-    override fun changeMonthToNext() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun changeMonthToPrevious() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun createDays(): Observable<List<Day>> =
             Observable.combineLatest(observeDateChange.observe(),
                     reportListApi.getReports(), { t1, t2 -> Pair(t1, t2) })
@@ -42,4 +34,12 @@ class ReportDayServiceImpl(private val observeDateChange: DateChangeObserver,
     private fun getCalendarForDay(yearMonth: YearMonth, dayNumber: Int) = getTimeFrom(year = yearMonth.year, month = yearMonth.month.index, day = dayNumber)
 
     override fun observeDateChanges() = observeDateChange.observe()
+
+    override fun changeMonthToNext() {
+        observeDateChange.setNextMonth()
+    }
+
+    override fun changeMonthToPrevious() {
+        observeDateChange.setPreviousMonth()
+    }
 }

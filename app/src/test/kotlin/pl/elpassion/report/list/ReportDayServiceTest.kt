@@ -1,7 +1,6 @@
 package pl.elpassion.report.list
 
 import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -18,7 +17,7 @@ import java.util.*
 class ReportDayServiceTest {
     val dateChangeObserver = mock<DateChangeObserver>()
     val serviceApi = mock<ReportList.Service>()
-    var service = ReportDayServiceImpl(dateChangeObserver, serviceApi)
+    var service = ReportDayServiceImpl(serviceApi)
 
     @Test
     fun shouldCreate31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
@@ -70,21 +69,7 @@ class ReportDayServiceTest {
         assertEquals(getFirstDay().reports, listOf(report))
     }
 
-    @Test
-    fun shouldCallDataChangeObserverSetNextMonth() {
-        service.changeMonthToNext()
-
-        verify(dateChangeObserver).setNextMonth()
-    }
-
-    @Test
-    fun shouldCallDataChangeObserverSetPreviousMonth() {
-        service.changeMonthToPrevious()
-
-        verify(dateChangeObserver).setPreviousMonth()
-    }
-
-    private fun getDays() = service.createDays().toBlocking().first()
+    private fun getDays() = service.createDays(dateChangeObserver.observe()).toBlocking().first()
 
     private fun getFirstDay() = getDays().first()
 

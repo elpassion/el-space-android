@@ -26,10 +26,9 @@ import pl.elpassion.report.list.service.ReportDayServiceImpl
 import java.util.*
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
-    private val dateChangeObserver by lazy { DateChangeObserverImpl(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
 
     private val controller by lazy {
-        ReportListController(ReportDayServiceImpl(dateChangeObserver, ReportList.ServiceProvider.get()), this)
+        ReportListController( ReportDayServiceImpl(ReportList.ServiceProvider.get()), this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

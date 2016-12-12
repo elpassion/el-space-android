@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
@@ -28,7 +30,7 @@ class ReportListControllerTest {
     @Test
     fun shouldShowCorrectMonthNameOnCreate() {
         stubServiceToReturnNever()
-        stubDateChangeToReturn(YearMonth(2016, Month(0, "January", 30)))
+        stubDateChangeToReturn(getTimeFrom(2016, 0, 20))
 
         controller.onCreate()
 
@@ -38,7 +40,7 @@ class ReportListControllerTest {
     @Test
     fun shouldReallyShowCorrectMonthNameOnCreate() {
         stubServiceToReturnEmptyList()
-        stubDateChangeToReturn(YearMonth(2016, Month(0, "November", 30)))
+        stubDateChangeToReturn(getTimeFrom(2016, 10, 20))
 
         controller.onCreate()
 
@@ -48,7 +50,6 @@ class ReportListControllerTest {
     @Test
     fun shouldShowErrorWhenApiCallFails() {
         stubServiceToReturnError()
-        stubDateChangeToReturn()
 
         controller.onCreate()
 
@@ -58,7 +59,6 @@ class ReportListControllerTest {
     @Test
     fun shouldShowLoaderWhenApiCallBegins() {
         stubServiceToReturnNever()
-        stubDateChangeToReturn()
 
         controller.onCreate()
 
@@ -68,7 +68,6 @@ class ReportListControllerTest {
     @Test
     fun shouldHideLoaderWhenCallIsNotFinishedOnDestroy() {
         stubServiceToReturnNever()
-        stubDateChangeToReturn()
 
         controller.onCreate()
         controller.onDestroy()
@@ -85,28 +84,7 @@ class ReportListControllerTest {
         verify(view, atLeast(1)).hideLoader()
     }
 
-    @Test
-    fun shouldCallChangeMonthToNext() {
-        stubTodayDateAndEmptyList()
-
-        controller.onCreate()
-        controller.onNextMonth()
-
-        verify(service).changeMonthToNext()
-    }
-
-    @Test
-    fun shouldCallChangeMonthToPrevious() {
-        stubTodayDateAndEmptyList()
-
-        controller.onCreate()
-        controller.onPreviousMonth()
-
-        verify(service).changeMonthToPrevious()
-    }
-
     private fun stubTodayDateAndEmptyList() {
-        stubDateChangeToReturn()
         stubServiceToReturnEmptyList()
     }
 
@@ -126,21 +104,19 @@ class ReportListControllerTest {
     }
 
     private fun stubServiceToReturnNever() {
-        whenever(service.createDays()).thenReturn(Observable.never())
+        whenever(service.createDays(any())).thenReturn(Observable.never())
     }
 
     private fun stubServiceToReturnEmptyList() {
-        whenever(service.createDays()).thenReturn(Observable.just(listOf()))
+        whenever(service.createDays(any())).thenReturn(Observable.just(listOf()))
     }
 
     private fun stubServiceToReturnError() {
-        whenever(service.createDays()).thenReturn(Observable.error(RuntimeException()))
+        whenever(service.createDays(any())).thenReturn(Observable.error(RuntimeException()))
     }
 
-    private fun stubDateChangeToReturn(yearMonth: YearMonth = nowYearMonth()) {
-        whenever(service.observeDateChanges()).thenReturn(Observable.just(yearMonth))
+    private fun stubDateChangeToReturn(cal: Calendar) {
+        CurrentTimeProvider.override = { cal.timeInMillis }
     }
-
-    private fun nowYearMonth() = Calendar.getInstance().toYearMonth()
 
 }

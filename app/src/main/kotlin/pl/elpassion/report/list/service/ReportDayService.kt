@@ -5,11 +5,5 @@ import pl.elpassion.report.list.YearMonth
 import rx.Observable
 
 interface ReportDayService {
-    fun createDays(): Observable<List<Day>>
-
-    fun observeDateChanges(): Observable<YearMonth>
-
-    fun changeMonthToNext()
-
-    fun changeMonthToPrevious()
+    fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>>
 }

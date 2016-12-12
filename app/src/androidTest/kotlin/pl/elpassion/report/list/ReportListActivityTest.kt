@@ -141,6 +141,11 @@ class ReportListActivityTest {
                 .hasText("September")
     }
 
+    @Test
+    fun shouldDisplayCorrectStringOnNextButton() {
+        onId(R.id.nextMonthButton).hasText(R.string.month_next)
+    }
+
     private fun verifyIfDayNumberOneHasNotMissingText() {
         onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }

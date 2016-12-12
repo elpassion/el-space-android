@@ -21,7 +21,7 @@ class ReportDayServiceTest {
     var service = ReportDayServiceImpl(dateChangeObserver, serviceApi)
 
     @Test
-    fun should31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
+    fun shouldCreate31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
         verifyIfMapCorrectListForGivenParams(
                 apiReturnValue = emptyList(),
                 month = 10,
@@ -29,7 +29,7 @@ class ReportDayServiceTest {
     }
 
     @Test
-    fun should30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyList() {
+    fun shouldCreate30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyList() {
         verifyIfMapCorrectListForGivenParams(
                 apiReturnValue = emptyList(),
                 month = 11,

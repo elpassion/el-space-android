@@ -146,6 +146,11 @@ class ReportListActivityTest {
         onId(R.id.nextMonthButton).hasText(R.string.month_next)
     }
 
+    @Test
+    fun shouldDisplayCorrectStringOnPreviousButton() {
+        onId(R.id.prevMonthButton).hasText(R.string.month_previous)
+    }
+
     private fun verifyIfDayNumberOneHasNotMissingText() {
         onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }

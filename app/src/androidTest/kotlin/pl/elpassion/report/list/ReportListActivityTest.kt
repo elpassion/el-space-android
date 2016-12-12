@@ -118,21 +118,27 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowCorrectlyMonthNameOnStart() {
-        onText("October").isDisplayed()
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("October")
     }
 
     @Test
     fun shouldShowCorrectlyMonthNameAfterClickOnNextMonth() {
         onId(R.id.nextMonthButton).click()
 
-        onText("November").isDisplayed()
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("November")
     }
 
     @Test
     fun shouldShowCorrectlyMonthNameAfterClickOnPrevMonth() {
         onId(R.id.prevMonthButton).click()
 
-        onText("September").isDisplayed()
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("September")
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

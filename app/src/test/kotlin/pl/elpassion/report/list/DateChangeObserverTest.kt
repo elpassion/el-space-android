@@ -4,7 +4,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import pl.elpassion.common.extensions.getTimeFrom
-import pl.elpassion.report.list.service.DateChangeObserverImpl
+import pl.elpassion.report.list.service.DateChangeObserver
 import rx.observers.TestSubscriber
 import java.util.*
 import java.util.Calendar.YEAR
@@ -13,7 +13,7 @@ class DateChangeObserverTest {
     val calendar: Calendar = getTimeFrom(year = 2016,
             month = 11,
             day = 10)
-    val dateController = DateChangeObserverImpl(calendar)
+    val dateController = DateChangeObserver(calendar)
     private val initialValueForYearMonth = calendar.toYearMonth()
 
     @Test

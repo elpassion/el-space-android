@@ -9,13 +9,11 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
-import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 import java.util.*
 
 class ReportDayServiceTest {
-    val dateChangeObserver = mock<DateChangeObserver>()
     val serviceApi = mock<ReportList.Service>()
     var service = ReportDayServiceImpl(serviceApi)
 
@@ -69,9 +67,12 @@ class ReportDayServiceTest {
         assertEquals(getFirstDay().reports, listOf(report))
     }
 
-    private fun getDays() = service.createDays(dateChangeObserver.observe()).toBlocking().first()
+    private fun getDays() = service.createDays(createYearMonthFromTimeProvider()).toBlocking().first()
 
     private fun getFirstDay() = getDays().first()
+
+    private fun createYearMonthFromTimeProvider() =
+            Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
     private fun stubServiceToReturn(list: List<Report>) {
         whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
@@ -79,8 +80,6 @@ class ReportDayServiceTest {
 
     private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {
         stubCurrentTime(year = year, month = month, day = day)
-        val initialDateCalendar: Calendar = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
-        whenever(dateChangeObserver.observe()).thenReturn(Observable.just(initialDateCalendar.toYearMonth()))
     }
 
     private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {

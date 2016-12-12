@@ -21,7 +21,7 @@ import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
-import pl.elpassion.report.list.service.DateChangeObserverImpl
+import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import java.util.*
 

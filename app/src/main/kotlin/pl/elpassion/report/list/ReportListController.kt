@@ -3,7 +3,7 @@ package pl.elpassion.report.list
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.report.Report
-import pl.elpassion.report.list.service.DateChangeObserverImpl
+import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
 import java.util.*
@@ -12,7 +12,7 @@ class ReportListController(val reportDayService: ReportDayService,
                            val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
     private var subscription: Subscription? = null
     private var dateChangeSubscription: Subscription? = null
-    private val dateChangeObserver by lazy { DateChangeObserverImpl(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
+    private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
 
     fun onCreate() {
         fetchReports()

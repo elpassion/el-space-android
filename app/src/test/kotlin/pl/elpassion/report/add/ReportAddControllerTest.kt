@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
+import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
@@ -83,6 +84,15 @@ class ReportAddControllerTest {
         controller.onReportAdd("8", "description")
         verify(view).showError(any())
     }
+
+    @Test
+    fun shouldShowCurrentDateWhenNotDateNotSelected() {
+        stubCurrentTime(2016, 2, 1)
+        controller.onCreate(null)
+
+        verify(view).showDate("2016-02-01")
+    }
+
 
     private fun onCreate(date: String = "2016-01-01") {
         controller.onCreate(date)

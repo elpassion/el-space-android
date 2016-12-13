@@ -19,7 +19,6 @@ class ReportAddControllerTest {
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<ProjectRepository>()
-    val controller = ReportAddController(view, repository, api)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -32,7 +31,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowPossibleProjects() {
-        onCreate()
+        createController().onCreate()
         verify(view).showSelectedProject(newProject())
     }
 
@@ -40,25 +39,29 @@ class ReportAddControllerTest {
     fun shouldShowPossibleProjectFormApi() {
         val projects = listOf(newProject("id2", "name2"), newProject())
         stubRepositoryToReturn(projects)
-        onCreate()
+        val controller = createController()
+
+        controller.onCreate()
+
         verify(view).showSelectedProject(projects.first())
     }
 
     @Test
     fun shouldOpenProjectChooserOnProjectClicked() {
-        controller.onProjectClicked()
+        createController().onProjectClicked()
         verify(view).openProjectChooser()
     }
 
     @Test
     fun shouldShowSelectedProject() {
-        controller.onSelectProject(newProject())
+        createController().onSelectProject(newProject())
         verify(view).showSelectedProject(newProject())
     }
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
-        onCreate()
+        val controller = createController()
+        controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).close()
     }
@@ -66,21 +69,25 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
-        onCreate()
+        val controller = createController()
+        controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).showError(any())
     }
 
     @Test
     fun shouldShowDate() {
-        onCreate("2016-09-23")
+        val controller = createController("2016-09-23")
+        controller.onCreate()
         verify(view).showDate("2016-09-23")
     }
 
     @Test
     fun shouldUseApi() {
         whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))
-        onCreate("2016-09-23")
+        val controller = createController("2016-09-23")
+
+        controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).showError(any())
     }
@@ -88,15 +95,13 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowCurrentDateWhenNotDateNotSelected() {
         stubCurrentTime(2016, 2, 1)
-        controller.onCreate(null)
+        val controller = createController(null)
+        controller.onCreate()
 
         verify(view).showDate("2016-02-01")
     }
 
-
-    private fun onCreate(date: String = "2016-01-01") {
-        controller.onCreate(date)
-    }
+    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(list: List<Project> = listOf(newProject())) {
         whenever(repository.getPossibleProjects()).thenReturn(list)

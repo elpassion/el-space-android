@@ -18,15 +18,16 @@ import pl.elpassion.project.choose.ProjectChooseActivity
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
-    val controller by lazy {
-        ReportAddController(this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
+    private val selectedDate: String? by lazy { intent.getStringExtra(ADD_DATE_KEY) }
+    private val controller by lazy {
+        ReportAddController(selectedDate, this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         showBackArrowOnActionBar()
-        controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
+        controller.onCreate()
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddAdd.setOnClickListener {
@@ -76,6 +77,9 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             activity.startActivityForResult(intent(activity, date), requestCode)
         }
 
-        fun intent(context: Context, date: String) = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }
+        fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)
+
+        fun intent(context: Context, date: String) =  intent(context).apply { putExtra(ADD_DATE_KEY, date) }
+
     }
 }

@@ -8,14 +8,15 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import java.util.Calendar.*
 
-class ReportAddController(private val view: ReportAdd.View, private val repository: ProjectRepository, private val api: ReportAdd.Api) {
+class ReportAddController(val date: String?,
+                          val view: ReportAdd.View,
+                          val repository: ProjectRepository,
+                          val api: ReportAdd.Api) {
+    private val selectedDate: String = date ?: getCurrentDatePerformedAtString()
+    private lateinit var project: Project
 
-    lateinit var date: String
-    lateinit var project: Project
-
-    fun onCreate(selectedDate: String?) {
-        date = selectedDate ?: getCurrentDatePerformedAtString()
-        view.showDate(date)
+    fun onCreate() {
+        view.showDate(selectedDate)
         onSelectProject(repository.getPossibleProjects().first())
     }
 
@@ -34,7 +35,7 @@ class ReportAddController(private val view: ReportAdd.View, private val reposito
     }
 
     fun onReportAdd(hours: String, description: String) {
-        api.addReport(date, project.id, hours, description)
+        api.addReport(selectedDate, project.id, hours, description)
                 .applySchedulers()
                 .subscribe({
                     view.close()

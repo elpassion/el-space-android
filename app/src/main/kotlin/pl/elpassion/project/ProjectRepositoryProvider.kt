@@ -19,5 +19,9 @@ object ProjectRepositoryProvider : Provider<ProjectRepository>({
         override fun getPossibleProjects(): List<Project> {
             return repository.read(PROJECTS_KEY) ?: emptyList()
         }
+
+        override fun hasProjects():Boolean {
+            return repository.contains(PROJECTS_KEY)
+        }
     }
 })

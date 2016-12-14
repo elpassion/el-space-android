@@ -13,12 +13,16 @@ class ReportAddController(val date: String?,
                           val repository: ProjectRepository,
                           val api: ReportAdd.Api) {
     private val selectedDate: String = date ?: getCurrentDatePerformedAtString()
-    private lateinit var project: Project
+    private var project: Project? = null
 
     fun onCreate() {
         view.showDate(selectedDate)
-        onSelectProject(repository.getPossibleProjects().first())
+        if (repository.hasProjects()) {
+            onSelectProject(getLastProject())
+        }
     }
+
+    private fun getLastProject() = repository.getPossibleProjects().first()
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())
@@ -32,10 +36,11 @@ class ReportAddController(val date: String?,
     fun onSelectProject(project: Project) {
         this.project = project
         view.showSelectedProject(project)
+        view.enableAddReportButton()
     }
 
     fun onReportAdd(hours: String, description: String) {
-        api.addReport(selectedDate, project.id, hours, description)
+        api.addReport(selectedDate, project!!.id, hours, description)
                 .applySchedulers()
                 .subscribe({
                     view.close()

@@ -18,6 +18,8 @@ interface ReportAdd {
         fun showError(ex: Throwable)
 
         fun showDate(date: String)
+
+        fun enableAddReportButton()
     }
 
     interface Api {

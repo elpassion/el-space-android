@@ -46,6 +46,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddProjectName.text = project.name
     }
 
+    override fun enableAddReportButton() {
+        reportAddAdd.isEnabled = true
+    }
+
     override fun openProjectChooser() {
         ProjectChooseActivity.startForResult(this, REQUEST_CODE)
     }
@@ -79,7 +83,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
         fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)
 
-        fun intent(context: Context, date: String) =  intent(context).apply { putExtra(ADD_DATE_KEY, date) }
+        fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
 
     }
 }

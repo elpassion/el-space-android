@@ -42,6 +42,18 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldAddButtonDisabledWhenNoCachedProjects() {
+        stubRepositoryAndStart(emptyList())
+        onId(R.id.reportAddAdd).isDisabled()
+    }
+
+    @Test
+    fun shouldAddButtonEnableWhenCachedProjectsAvailable() {
+        stubRepositoryAndStart(emptyList())
+        onId(R.id.reportAddAdd).isEnabled()
+    }
+
+    @Test
     fun shouldReallyStartWithFirstProjectSelected() {
         stubRepositoryAndStart(listOf(newProject(name = "Project name")))
         onText("Project name").isDisplayed()
@@ -110,6 +122,7 @@ class ReportAddActivityTest {
 
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
         whenever(repository.getPossibleProjects()).thenReturn(projects)
+        whenever(repository.hasProjects()).thenReturn(projects.isNotEmpty())
         ProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }

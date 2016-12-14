@@ -9,8 +9,8 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import rx.Observable
 
@@ -19,6 +19,7 @@ class ReportAddControllerTest {
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<CachedProjectRepository>()
+    val project = newProject()
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -31,8 +32,10 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowPossibleProjects() {
-        createController().onCreate()
-        verify(view).showSelectedProject(newProject())
+        val controller = createController()
+        controller.onCreate()
+
+        verify(view).showSelectedProject(project)
     }
 
     @Test
@@ -105,6 +108,7 @@ class ReportAddControllerTest {
 
     private fun stubRepositoryToReturn(list: List<Project> = listOf(newProject())) {
         whenever(repository.getPossibleProjects()).thenReturn(list)
+        whenever(repository.hasProjects()).thenReturn(list.isNotEmpty())
     }
 }
 

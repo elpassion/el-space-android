@@ -4,6 +4,7 @@ buildscript {
     ext.retrofit_version = '2.1.0'
     ext.support_version = '25.0.1'
     ext.rxJava= '1.1.9'
+    ext.elCommon = '0.0.10'
 
     repositories {
         jcenter()
@@ -71,8 +72,8 @@ dependencies {
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "com.elpassion.android.commons:recycler:0.0.9"
-    compile "com.elpassion.android.commons:shared-preferences:0.0.9"
+    compile "com.elpassion.android.commons:recycler:$elCommon"
+    compile "com.elpassion.android.commons:shared-preferences:$elCommon"
     compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
     }
@@ -92,7 +93,7 @@ dependencies {
     androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.elpassion.android.commons:espresso:0.0.9") {
+    androidTestCompile("com.elpassion.android.commons:espresso:$elCommon") {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }

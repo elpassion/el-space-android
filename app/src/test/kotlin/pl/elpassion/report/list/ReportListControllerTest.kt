@@ -4,15 +4,18 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newReport
-import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
+import java.util.*
 
 class ReportListControllerTest {
 
-    val service = mock<ReportList.Service>()
+    val service = mock<ReportDayService>()
     val view = mock<ReportList.View>()
     val controller = ReportListController(service, view)
 
@@ -25,51 +28,23 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldDisplay31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyListOnCreate() {
-        verifyIfShowCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 10,
-                daysInMonth = 31)
-    }
-
-    @Test
-    fun shouldDisplay30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyListOnCreate() {
-        verifyIfShowCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 11,
-                daysInMonth = 30
-        )
-    }
-
-    @Test
-    fun shouldShowCorrectMonthOnCreate() {
-        stubServiceToReturn(emptyList())
-        stubCurrentTime(month = 10)
+    fun shouldShowCorrectMonthNameOnCreate() {
+        stubServiceToReturnNever()
+        stubDateChangeToReturn(getTimeFrom(2016, 0, 20))
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonthName("October")
+        verify(view).showMonthName("January")
     }
 
     @Test
-    fun shouldReallyShowCorrectMonthName() {
-        stubServiceToReturn(emptyList())
-        stubCurrentTime(month = 11)
+    fun shouldReallyShowCorrectMonthNameOnCreate() {
+        stubServiceToReturnEmptyList()
+        stubDateChangeToReturn(getTimeFrom(2016, 10, 20))
 
         controller.onCreate()
 
-        verify(view, times(1)).showMonthName("November")
-    }
-
-    @Test
-    fun shouldMapReturnedReportsToCorrectDays() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
+        verify(view).showMonthName("November")
     }
 
     @Test
@@ -101,71 +76,21 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallFinishes() {
-        stubServiceToReturn(emptyList())
+    fun shouldHideLoaderWhenApiCall() {
+        stubServiceToReturnEmptyListAndNeverEnd()
 
         controller.onCreate()
 
-        verify(view, times(1)).hideLoader()
+        verify(view).hideLoader()
     }
 
     @Test
-    fun shouldReturnCorrectDaysWhenUserChangeMonthToNext() {
-        val report = newReport(year = 2016, month = 6, day = 1, reportedHours = 1.0)
-        stubCurrentTime(year = 2016, month = 5, day = 1)
-        stubServiceToReturn(listOf(report))
+    fun shouldHideLoaderWhenApiCallAndFinishes() {
+        stubServiceToReturnEmptyList()
 
         controller.onCreate()
-        reset(view)
-        controller.onNextMonth()
 
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
-    }
-
-    @Test
-    fun shouldShowCorrectMonthOnNextMonth() {
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        reset(view)
-        controller.onNextMonth()
-
-        verify(view, times(1)).showMonthName("August")
-    }
-
-    @Test
-    fun shouldReturnCorrectDaysWhenUserChangeMonthToPrevious() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-        reset(view)
-        controller.onPreviousMonth()
-
-        verify(view, times(1)).showDays(argThat { this[0].reports == listOf(report) }, any(), any())
-    }
-
-    @Test
-    fun shouldShowCorrectMonthOnPreviousMonth() {
-        stubCurrentTime(year = 2016, month = 7, day = 1)
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        reset(view)
-        controller.onPreviousMonth()
-
-        verify(view, times(1)).showMonthName("June")
-    }
-
-    @Test
-    fun shouldMarkUnreportedPassedDays() {
-        stubCurrentTime(month = 6, day = 1)
-        stubServiceToReturn(emptyList())
-
-        controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this[0].hasPassed }, any(), any())
+        verify(view, atLeast(1)).hideLoader()
     }
 
     @Test
@@ -183,65 +108,25 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
-    @Test
-    fun shouldCorrectlyMapWeekendDays() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-        reset(view)
-        controller.onNextMonth()
-
-        verify(view).showDays(argThat { this[0].isWeekendDay && this[1].isWeekendDay && !this[2].isWeekendDay }, any(), any())
-    }
-
-    @Test
-    fun shouldCorrectlyMapDayName() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-
-        verify(view).showDays(argThat { this[0].name == "1 Thu" }, any(), any())
-    }
-
-    @Test
-    fun shouldReallyCorrectlyMapDayName() {
-        stubCurrentTime(year = 2016, month = 9)
-        stubServiceToReturn(emptyList())
-        controller.onCreate()
-
-        verify(view).showDays(argThat { this[1].name == "2 Fri" }, any(), any())
-    }
-
-    @Test
-    fun shouldNotCollectDuplicatedReports() {
-        val report = newReport(year = 2016, month = 6, day = 1)
-        stubCurrentTime(year = 2016, month = 6, day = 1)
-        stubServiceToReturn(listOf(report))
-
-        controller.onCreate()
-        reset(view)
-        controller.onCreate()
-
-        verify(view, times(1)).showDays(argThat { this[0].reports.size == 1 }, any(), any())
-    }
-
     private fun stubServiceToReturnNever() {
-        whenever(service.getReports()).thenReturn(Observable.never())
+        whenever(service.createDays(any())).thenReturn(Observable.never())
+    }
+
+    private fun stubServiceToReturnEmptyList() {
+        whenever(service.createDays(any())).thenReturn(Observable.just(listOf()))
+    }
+
+    private fun stubServiceToReturnEmptyListAndNeverEnd() {
+        val observable = Observable.just<List<Day>>(listOf()).concatWith(Observable.never())
+        whenever(service.createDays(any())).thenReturn(observable)
     }
 
     private fun stubServiceToReturnError() {
-        whenever(service.getReports()).thenReturn(Observable.error(RuntimeException()))
+        whenever(service.createDays(any())).thenReturn(Observable.error(RuntimeException()))
     }
 
-    private fun stubServiceToReturn(list: List<Report>) {
-        whenever(service.getReports()).thenReturn(Observable.just(list))
-    }
-
-    private fun verifyIfShowCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
-        stubServiceToReturn(apiReturnValue)
-        stubCurrentTime(month = month)
-        controller.onCreate()
-        verify(view, times(1)).showDays(argThat { this.size == daysInMonth }, any(), any())
+    private fun stubDateChangeToReturn(cal: Calendar) {
+        CurrentTimeProvider.override = { cal.timeInMillis }
     }
 
 }

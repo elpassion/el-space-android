@@ -3,19 +3,21 @@ package pl.elpassion.report.list
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.DateChangeObserver
+import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.*
 
-class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
+class ReportListController(val reportDayService: ReportDayService,
+                           val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
-    private var subscription: Subscription? = null
-    private val initialDateCalendar: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
-    private val dateChangeObserver by lazy { DateChangeObserver(initialDateCalendar) }
-    private lateinit var reportDayService: ReportDayService
+    private val subscriptions = CompositeSubscription()
+    private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
+
     fun onCreate() {
-        reportDayService = ReportDayService(dateChangeObserver, service)
         fetchReports()
-        subsribeDateChange()
+        subscribeDateChange()
     }
 
     fun refreshReportList() {
@@ -23,11 +25,11 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
     }
 
     fun onDestroy() {
-        subscription?.unsubscribe()
+        subscriptions.clear()
     }
 
     private fun fetchReports() {
-        subscription = reportDayService.createDays()
+        reportDayService.createDays(dateChangeObserver.observe())
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -37,10 +39,14 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
                 }, {
                     view.showError(it)
                 })
+                .save()
     }
 
-    private fun subsribeDateChange() = reportDayService.observeDateChanges()
-            .subscribe { view.showMonthName(it.month.monthName) }
+    private fun subscribeDateChange() {
+        dateChangeObserver.observe()
+                .subscribe { view.showMonthName(it.month.monthName) }
+                .save()
+    }
 
     fun onNextMonth() {
         dateChangeObserver.setNextMonth()
@@ -56,6 +62,10 @@ class ReportListController(val service: ReportList.Service, val view: ReportList
 
     override fun onReport(report: Report) {
         view.openEditReportScreen(report)
+    }
+
+    private fun Subscription.save() {
+        subscriptions.add(this)
     }
 }
 

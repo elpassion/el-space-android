@@ -5,6 +5,8 @@ import pl.elpassion.common.Provider
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.ReportFromApi
+import pl.elpassion.report.list.service.ReportListService
 import retrofit2.http.GET
 import rx.Observable
 

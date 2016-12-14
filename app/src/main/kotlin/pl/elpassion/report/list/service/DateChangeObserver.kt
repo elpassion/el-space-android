@@ -1,7 +1,9 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.changeToNextMonth
 import pl.elpassion.common.extensions.changeToPreviousMonth
+import pl.elpassion.report.list.YearMonth
+import pl.elpassion.report.list.toYearMonth
 import rx.Observable
 import rx.subjects.BehaviorSubject
 import java.util.*

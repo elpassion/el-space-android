@@ -1,7 +1,8 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.service
 
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.ReportList
 import rx.Observable
 
 class ReportListService(val reportApi: ReportList.ReportApi, val projectApi: ReportList.ProjectApi, val repository: ProjectRepository) : ReportList.Service {

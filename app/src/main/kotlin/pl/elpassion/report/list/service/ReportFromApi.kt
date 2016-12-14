@@ -1,4 +1,4 @@
-package pl.elpassion.report.list
+package pl.elpassion.report.list.service
 
 import pl.elpassion.project.Project
 import pl.elpassion.report.Report

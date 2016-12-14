@@ -11,6 +11,8 @@ import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.ReportFromApi
+import pl.elpassion.report.list.service.ReportListService
 import rx.Observable
 import rx.observers.TestSubscriber
 

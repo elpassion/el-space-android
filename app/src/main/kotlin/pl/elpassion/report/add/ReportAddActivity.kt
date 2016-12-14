@@ -13,14 +13,14 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.choose.ProjectChooseActivity
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val selectedDate: String? by lazy { intent.getStringExtra(ADD_DATE_KEY) }
     private val controller by lazy {
-        ReportAddController(selectedDate, this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
+        ReportAddController(selectedDate, this, CachedProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

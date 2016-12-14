@@ -10,14 +10,14 @@ import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
 class ProjectChooseActivityTest {
 
-    val repository = mock<ProjectRepository>()
+    val repository = mock<CachedProjectRepository>()
 
     @JvmField @Rule
     val rule = rule<ProjectChooseActivity>(autoStart = false)
@@ -65,7 +65,7 @@ class ProjectChooseActivityTest {
 
 
     private fun stubRepositoryToReturn(projects: List<Project>) {
-        ProjectRepositoryProvider.override = { repository }
+        CachedProjectRepositoryProvider.override = { repository }
         whenever(repository.getPossibleProjects()).thenReturn(projects)
     }
 }

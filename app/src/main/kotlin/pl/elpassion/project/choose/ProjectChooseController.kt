@@ -1,9 +1,9 @@
 package pl.elpassion.project.choose
 
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.CachedProjectRepository
 
-class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectRepository) {
+class ProjectChooseController(val view: ProjectChoose.View, val repository: CachedProjectRepository) {
     private lateinit var sortedProjectsList: List<Project>
 
     fun onCreate() {

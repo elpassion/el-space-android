@@ -1,6 +1,6 @@
 package pl.elpassion.project
 
-interface ProjectRepository {
+interface CachedProjectRepository {
     fun getPossibleProjects(): List<Project>
     fun saveProjects(projects: List<Project>)
     fun hasProjects(): Boolean

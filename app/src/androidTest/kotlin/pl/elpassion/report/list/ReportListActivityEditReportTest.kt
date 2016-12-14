@@ -15,8 +15,8 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.edit.ReportEdit
@@ -31,7 +31,7 @@ class ReportListActivityEditReportTest {
     @JvmField @Rule
     val rule = rule<ReportListActivity> {
         ReportEdit.EditApiProvider.override = { editReportApi }
-        ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
+        CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 1)
         whenever(service.getReports())
                 .thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description", reportedHours = 8.0))))

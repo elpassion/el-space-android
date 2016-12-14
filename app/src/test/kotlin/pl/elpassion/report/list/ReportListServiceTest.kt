@@ -7,7 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
@@ -21,7 +21,7 @@ class ReportListServiceTest {
     val subscriber = TestSubscriber<List<Report>>()
     val reportApi = mock<ReportList.ReportApi>()
     val projectApi = mock<ReportList.ProjectApi>()
-    val projectRepository = mock<ProjectRepository>()
+    val projectRepository = mock<CachedProjectRepository>()
     val service = ReportListService(reportApi, projectApi, projectRepository)
 
     @Before

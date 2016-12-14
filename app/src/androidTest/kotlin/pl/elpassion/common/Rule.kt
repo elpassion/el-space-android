@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
 import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
@@ -49,7 +49,7 @@ fun stubReportAddApi() {
 }
 
 fun stubProjectRepository() {
-    ProjectRepositoryProvider.override = {
+    CachedProjectRepositoryProvider.override = {
         mock()
     }
 }

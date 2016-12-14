@@ -12,14 +12,14 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
 class ReportAddActivityChoosingProjectTest {
 
-    val repository = mock<ProjectRepository>()
+    val repository = mock<CachedProjectRepository>()
 
     @JvmField @Rule
     val rule = rule<ReportAddActivity>(autoStart = false)
@@ -34,7 +34,7 @@ class ReportAddActivityChoosingProjectTest {
 
     private fun stubRepositoryAndStart(listOf: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
-        ProjectRepositoryProvider.override = { repository }
+        CachedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2016-01-01"))
     }
 }

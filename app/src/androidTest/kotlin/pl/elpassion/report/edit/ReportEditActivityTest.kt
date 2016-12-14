@@ -11,8 +11,8 @@ import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
@@ -146,8 +146,8 @@ class ReportEditActivityTest {
     }
 
     private fun stubRepositoryAndStart(newProject: Project) {
-        ProjectRepositoryProvider.override = {
-            mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject)) }
+        CachedProjectRepositoryProvider.override = {
+            mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject)) }
         }
     }
 

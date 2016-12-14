@@ -3,7 +3,7 @@ package pl.elpassion.report.list
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ReportFromApi
 import pl.elpassion.report.list.service.ReportListService
@@ -33,7 +33,7 @@ interface ReportList {
     }
 
     object ServiceProvider : Provider<Service>({
-        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get(), ProjectRepositoryProvider.get())
+        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get(), CachedProjectRepositoryProvider.get())
     })
 
     interface ReportApi {

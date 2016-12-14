@@ -1,11 +1,11 @@
 package pl.elpassion.report.list.service
 
-import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.ReportList
 import rx.Observable
 
-class ReportListService(val reportApi: ReportList.ReportApi, val projectApi: ReportList.ProjectApi, val repository: ProjectRepository) : ReportList.Service {
+class ReportListService(val reportApi: ReportList.ReportApi, val projectApi: ReportList.ProjectApi, val repository: CachedProjectRepository) : ReportList.Service {
     override fun getReports(): Observable<List<Report>> {
         return projectApi.getProjects()
                 .map { it.distinct() }

@@ -10,7 +10,7 @@ import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.dto.newProject
 import rx.Observable
 
@@ -18,7 +18,7 @@ class ReportAddControllerTest {
 
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
-    val repository = mock<ProjectRepository>()
+    val repository = mock<CachedProjectRepository>()
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()

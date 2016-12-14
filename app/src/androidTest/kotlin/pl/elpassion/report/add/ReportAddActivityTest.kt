@@ -13,15 +13,15 @@ import pl.elpassion.common.checkIntent
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
 class ReportAddActivityTest {
 
-    val repository = mock<ProjectRepository>()
+    val repository = mock<CachedProjectRepository>()
 
     @JvmField @Rule
     val rule = rule<ReportAddActivity>(autoStart = false)
@@ -123,7 +123,7 @@ class ReportAddActivityTest {
     private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
         whenever(repository.getPossibleProjects()).thenReturn(projects)
         whenever(repository.hasProjects()).thenReturn(projects.isNotEmpty())
-        ProjectRepositoryProvider.override = { repository }
+        CachedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
 }

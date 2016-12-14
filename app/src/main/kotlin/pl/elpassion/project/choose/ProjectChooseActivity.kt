@@ -14,12 +14,12 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
+    private val controller by lazy { ProjectChooseController(this, CachedProjectRepositoryProvider.get()) }
     private val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {

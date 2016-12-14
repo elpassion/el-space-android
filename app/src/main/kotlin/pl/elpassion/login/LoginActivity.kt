@@ -9,7 +9,7 @@ import pl.elpassion.report.list.ReportListActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    val controller = LoginController(this, LoginRepositoryProvider.get())
+    private val controller = LoginController(this, LoginRepositoryProvider.get())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

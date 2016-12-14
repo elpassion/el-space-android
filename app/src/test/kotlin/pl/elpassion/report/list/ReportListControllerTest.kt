@@ -76,16 +76,21 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallFinishes() {
-        stubTodayDateAndEmptyList()
+    fun shouldHideLoaderWhenApiCall() {
+        stubServiceToReturnEmptyListAndNeverEnd()
+
+        controller.onCreate()
+
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenApiCallAndFinishes() {
+        stubServiceToReturnEmptyList()
 
         controller.onCreate()
 
         verify(view, atLeast(1)).hideLoader()
-    }
-
-    private fun stubTodayDateAndEmptyList() {
-        stubServiceToReturnEmptyList()
     }
 
     @Test
@@ -109,6 +114,11 @@ class ReportListControllerTest {
 
     private fun stubServiceToReturnEmptyList() {
         whenever(service.createDays(any())).thenReturn(Observable.just(listOf()))
+    }
+
+    private fun stubServiceToReturnEmptyListAndNeverEnd() {
+        val observable = Observable.just<List<Day>>(listOf()).concatWith(Observable.never())
+        whenever(service.createDays(any())).thenReturn(observable)
     }
 
     private fun stubServiceToReturnError() {

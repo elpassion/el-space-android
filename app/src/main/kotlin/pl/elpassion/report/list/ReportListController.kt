@@ -6,12 +6,13 @@ import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.*
 
 class ReportListController(val reportDayService: ReportDayService,
                            val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
-    private var subscription: Subscription? = null
-    private var dateChangeSubscription: Subscription? = null
+
+    private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
 
     fun onCreate() {
@@ -24,12 +25,11 @@ class ReportListController(val reportDayService: ReportDayService,
     }
 
     fun onDestroy() {
-        subscription?.unsubscribe()
-        dateChangeSubscription?.unsubscribe()
+        subscriptions.clear()
     }
 
     private fun fetchReports() {
-        subscription = reportDayService.createDays(dateChangeObserver.observe())
+        reportDayService.createDays(dateChangeObserver.observe())
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -39,11 +39,13 @@ class ReportListController(val reportDayService: ReportDayService,
                 }, {
                     view.showError(it)
                 })
+                .save()
     }
 
     private fun subscribeDateChange() {
-        dateChangeSubscription = dateChangeObserver.observe()
+        dateChangeObserver.observe()
                 .subscribe { view.showMonthName(it.month.monthName) }
+                .save()
     }
 
     fun onNextMonth() {
@@ -60,6 +62,10 @@ class ReportListController(val reportDayService: ReportDayService,
 
     override fun onReport(report: Report) {
         view.openEditReportScreen(report)
+    }
+
+    private fun Subscription.save() {
+        subscriptions.add(this)
     }
 }
 

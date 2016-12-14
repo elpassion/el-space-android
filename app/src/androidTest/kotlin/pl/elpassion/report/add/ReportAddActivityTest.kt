@@ -49,7 +49,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldAddButtonEnableWhenCachedProjectsAvailable() {
-        stubRepositoryAndStart(emptyList())
+        stubRepositoryAndStart()
         onId(R.id.reportAddAdd).isEnabled()
     }
 

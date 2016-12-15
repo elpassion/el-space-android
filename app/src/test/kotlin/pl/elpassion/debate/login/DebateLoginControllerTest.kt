@@ -74,6 +74,13 @@ class DebateLoginControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnLoginEnd() {
+        onLoginWithCodeReturnToken(code = "12345")
+        logToNewDebate(debateCode = "12345")
+        verify(view).hideLoader()
+    }
+
     private fun logToNewDebate(debateCode: String = "12345") {
         controller.logToNewDebate(debateCode)
     }
@@ -99,6 +106,7 @@ interface DebateLogin {
         fun openDebateScreen()
         fun showLoginFailedError()
         fun showLoader()
+        fun hideLoader()
     }
 
     interface Api {
@@ -127,5 +135,6 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
         }, {
             view.showLoginFailedError()
         })
+        view.hideLoader()
     }
 }

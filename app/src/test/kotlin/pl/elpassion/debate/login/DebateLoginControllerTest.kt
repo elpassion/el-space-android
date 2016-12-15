@@ -31,6 +31,12 @@ class DebateLoginControllerTest {
         verify(view, never()).showLogToPreviousDebateView()
     }
 
+    @Test
+    fun shouldOpenDebateScreenOnLogToPreviousDebate() {
+        controller.onLogToPreviousDebate()
+        verify(view).openDebateScreen()
+    }
+
 }
 
 interface DebateTokenRepository {
@@ -40,6 +46,7 @@ interface DebateTokenRepository {
 interface DebateLogin {
     interface View {
         fun showLogToPreviousDebateView()
+        fun openDebateScreen()
     }
 }
 
@@ -48,5 +55,9 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
         if (tokenRepo.hasToken()) {
             view.showLogToPreviousDebateView()
         }
+    }
+
+    fun onLogToPreviousDebate() {
+        view.openDebateScreen()
     }
 }

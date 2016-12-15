@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
+import rx.Observable
 
 class DebateLoginControllerTest {
 
@@ -37,10 +38,19 @@ class DebateLoginControllerTest {
         verify(view).openDebateScreen()
     }
 
+    @Test
+    fun shouldSaveReturnedTokenOnLogToNewDebate() {
+        val loginApi = mock<DebateLogin.Api>()
+        whenever(loginApi.login("1234")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("authToken")))
+        controller.logToNewDebate("1234")
+        verify(tokenRepo).saveToken("authToken")
+    }
+
 }
 
 interface DebateTokenRepository {
     fun hasToken(): Boolean
+    fun saveToken(authToken: String)
 }
 
 interface DebateLogin {
@@ -48,6 +58,12 @@ interface DebateLogin {
         fun showLogToPreviousDebateView()
         fun openDebateScreen()
     }
+
+    interface Api {
+        fun login(code: String): Observable<LoginResponse>
+        data class LoginResponse(val authToken: String)
+    }
+
 }
 
 class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository) {
@@ -59,5 +75,9 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
 
     fun onLogToPreviousDebate() {
         view.openDebateScreen()
+    }
+
+    fun logToNewDebate(debateCode: String) {
+        tokenRepo.saveToken("authToken")
     }
 }

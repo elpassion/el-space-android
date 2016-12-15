@@ -12,11 +12,13 @@ class ProjectRepositoryTest {
 
     val cachedProjectRepository = mock<CachedProjectRepository>()
     val projectApi = mock<ReportList.ProjectApi>()
-    val projectCachedRepository = ProjectRepositoryImpl(projectApi, cachedProjectRepository)
+    val projectRepository = ProjectRepositoryImpl(projectApi, cachedProjectRepository)
 
     @Test
     fun shouldCallToApiWhenCacheIsEmpty() {
         whenever(cachedProjectRepository.hasProjects()).thenReturn(false)
+
+        projectRepository.getProjects()
 
         verify(projectApi).getProjects()
     }
@@ -25,7 +27,9 @@ class ProjectRepositoryTest {
     fun shouldGetOnlyFromCachedProjectsWhenProjectsCached() {
         whenever(cachedProjectRepository.hasProjects()).thenReturn(true)
 
-        verify(projectCachedRepository).getProjects()
+        projectRepository.getProjects()
+
+        verify(cachedProjectRepository).getPossibleProjects()
         verify(projectApi, never()).getProjects()
     }
 }

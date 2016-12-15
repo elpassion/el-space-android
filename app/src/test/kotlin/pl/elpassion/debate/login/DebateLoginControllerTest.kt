@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import rx.Observable
+import rx.Subscription
 
 class DebateLoginControllerTest {
 
@@ -97,6 +98,12 @@ class DebateLoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderOnDestroyIfCallIsNotInProgress() {
+        controller.onDestroy()
+        verify(view, never()).hideLoader()
+    }
+
     private fun onLoginWithCodeReturnNever(code: String) {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }
@@ -138,6 +145,8 @@ interface DebateLogin {
 
 class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository, private val loginApi: DebateLogin.Api) {
 
+    var subscription : Subscription? = null
+
     fun onCreate() {
         if (tokenRepo.hasToken()) {
             view.showLogToPreviousDebateView()
@@ -150,7 +159,7 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
 
     fun logToNewDebate(debateCode: String) {
         view.showLoader()
-        loginApi.login(debateCode)
+        subscription = loginApi.login(debateCode)
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     tokenRepo.saveToken(it.authToken)
@@ -160,6 +169,6 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun onDestroy() {
-        view.hideLoader()
+        subscription?.unsubscribe()
     }
 }

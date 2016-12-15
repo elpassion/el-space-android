@@ -145,7 +145,7 @@ interface DebateLogin {
 
 class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository, private val loginApi: DebateLogin.Api) {
 
-    var subscription: Subscription? = null
+    private var subscription: Subscription? = null
 
     fun onCreate() {
         if (tokenRepo.hasToken()) {

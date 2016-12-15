@@ -8,7 +8,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import java.util.Calendar.*
 
-class ReportAddController(val view: ReportAdd.View, val repository: ProjectRepository, val api: ReportAdd.Api) {
+class ReportAddController(private val view: ReportAdd.View, private val repository: ProjectRepository, private val api: ReportAdd.Api) {
 
     lateinit var date: String
     lateinit var project: Project

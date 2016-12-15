@@ -4,6 +4,7 @@ class LoginController(private val view: Login.View, private val loginRepository:
 
     fun onCreate() {
         if (loginRepository.readToken() != null) {
+            addShortcutsIfSupported()
             view.openReportListScreen()
         }
     }
@@ -12,8 +13,15 @@ class LoginController(private val view: Login.View, private val loginRepository:
         if (token.isNotEmpty()) {
             loginRepository.saveToken(token)
             view.openReportListScreen()
+            addShortcutsIfSupported()
         } else {
             view.showEmptyLoginError()
+        }
+    }
+
+    private fun addShortcutsIfSupported() {
+        if (view.hasHandlingShortcuts()) {
+            view.creteAppShortcuts()
         }
     }
 

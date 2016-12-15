@@ -23,4 +23,6 @@
     <string name="action_search">Search</string>
     <string name="month_previous">previous</string>
     <string name="month_next">next</string>
+    <string name="shortcut_report_hub_short">Zaraportuj godziny</string>
+    <string name="shortcut_report_hub_long">Dodaj raport godzinowy</string>
 </resources>

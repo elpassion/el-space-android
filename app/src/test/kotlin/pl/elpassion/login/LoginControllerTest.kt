@@ -59,5 +59,21 @@ class LoginControllerTest {
         verify(view, never()).openReportListScreen()
     }
 
+    @Test
+    fun shouldCreateAppShortcutsWhenSupported() {
+        whenever(view.hasHandlingShortcuts()).thenReturn(true)
+        controller.onLogin("login")
+
+        verify(view).creteAppShortcuts()
+    }
+
+    @Test
+    fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
+        controller.onLogin("login")
+        whenever(view.hasHandlingShortcuts()).thenReturn(false)
+
+        verify(view, never()).creteAppShortcuts()
+    }
+
 }
 

@@ -67,6 +67,13 @@ class DebateLoginControllerTest {
         verify(view, never()).showLoginFailedError()
     }
 
+    @Test
+    fun shouldShowLoaderOnLoginStart() {
+        onLoginWithCodeReturnToken(code = "12345")
+        logToNewDebate(debateCode = "12345")
+        verify(view).showLoader()
+    }
+
     private fun logToNewDebate(debateCode: String = "12345") {
         controller.logToNewDebate(debateCode)
     }
@@ -91,6 +98,7 @@ interface DebateLogin {
         fun showLogToPreviousDebateView()
         fun openDebateScreen()
         fun showLoginFailedError()
+        fun showLoader()
     }
 
     interface Api {
@@ -113,6 +121,7 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun logToNewDebate(debateCode: String) {
+        view.showLoader()
         loginApi.login(debateCode).subscribe({
             tokenRepo.saveToken(it.authToken)
         }, {

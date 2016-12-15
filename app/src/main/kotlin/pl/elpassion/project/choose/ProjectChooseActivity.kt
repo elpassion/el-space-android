@@ -9,17 +9,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepositoryProvider
+import pl.elpassion.project.Project
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    private val controller by lazy { ProjectChooseController(this, CachedProjectRepositoryProvider.get()) }
+    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
     private val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,19 +72,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     private fun initSearchView(menu: Menu) {
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
-        val textChangeListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                controller.searchQuery(query)
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-                controller.searchQuery(query)
-                return true
-            }
-
-        }
-        searchView.setOnQueryTextListener(textChangeListener)
+        controller.searchQuery(searchView.queryTextChanges())
     }
 
     companion object {

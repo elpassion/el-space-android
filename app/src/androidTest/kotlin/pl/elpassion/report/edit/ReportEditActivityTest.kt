@@ -3,21 +3,27 @@ package pl.elpassion.report.edit
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions.*
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
-import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
+import pl.elpassion.project.Project
+import pl.elpassion.project.ProjectRepository
+import pl.elpassion.project.choose.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
 import pl.elpassion.startActivity
 import rx.Completable
+import rx.Observable
 
 class ReportEditActivityTest {
 
@@ -121,7 +127,7 @@ class ReportEditActivityTest {
         startActivity(newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
         stubRepositoryAndStart(newProject(name = "project2", id = "2"))
         insertData(reportedHours = "5.5", newDescription = "test2")
-        verify(reportEditApi, times(1)).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = "2")
+        verify(reportEditApi).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = "2")
     }
 
     @Test
@@ -147,7 +153,15 @@ class ReportEditActivityTest {
 
     private fun stubRepositoryAndStart(newProject: Project) {
         CachedProjectRepositoryProvider.override = {
-            mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject)) }
+            mock<CachedProjectRepository>().apply {
+                whenever(getPossibleProjects()).thenReturn(listOf(newProject))
+                whenever(hasProjects()).thenReturn(true)
+            }
+        }
+      ProjectRepositoryProvider.override = {
+            mock<ProjectRepository>().apply {
+                whenever(getProjects()).thenReturn(Observable.just(listOf(newProject)))
+            }
         }
     }
 

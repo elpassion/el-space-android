@@ -1,23 +1,34 @@
 package pl.elpassion.project.choose
 
 import pl.elpassion.project.Project
-import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.ProjectRepository
+import rx.Observable
 
-class ProjectChooseController(val view: ProjectChoose.View, val repository: CachedProjectRepository) {
-    private lateinit var sortedProjectsList: List<Project>
+class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectRepository) {
+    private val projectsObservable: Observable<List<Project>> =
+            repository.getProjects()
+                    .map {
+                        it.sortedBy { it.name }
+                    }.cache()
 
     fun onCreate() {
-        sortedProjectsList = repository.getPossibleProjects().sortedBy { it.name }
-        view.showPossibleProjects(sortedProjectsList)
+        projectsObservable.subscribe {
+            view.showPossibleProjects(it)
+        }
     }
 
     fun onProjectClicked(project: Project) {
         view.selectProject(project)
     }
 
-    fun searchQuery(query: String) {
-        view.showFilteredProjects(filterProjectByQuery(query))
+    fun searchQuery(query: Observable<CharSequence>) {
+        query.map { it.toString() }
+                .switchMap { filterProjectByQuery(it) }
+                .subscribe { view.showFilteredProjects(it) }
     }
 
-    private fun filterProjectByQuery(query: String) = sortedProjectsList.filter { it.name.contains(query, true) }
+    private fun filterProjectByQuery(query: String) = projectsObservable
+            .flatMapIterable { it }
+            .filter { it.name.contains(query, true) }
+            .toList()
 }

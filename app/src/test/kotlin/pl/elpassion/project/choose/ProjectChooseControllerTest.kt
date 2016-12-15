@@ -6,14 +6,15 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 import pl.elpassion.project.Project
-import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
+import rx.Observable
 
 class ProjectChooseControllerTest {
 
     val view = mock<ProjectChoose.View>()
-    val repository = mock<CachedProjectRepository>()
-    val controller = ProjectChooseController(view, repository)
+    val repository = mock<ProjectRepository>()
+    val controller by lazy { ProjectChooseController(view, repository) }
 
     @Test
     fun shouldShowPossibleProjects() {
@@ -33,6 +34,7 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldSelectClickedProject() {
         val project = newProject()
+        stubRepositoryToReturn(listOf(project))
         controller.onProjectClicked(project)
         verify(view).selectProject(project)
     }
@@ -48,7 +50,7 @@ class ProjectChooseControllerTest {
     fun shouldShowFilteredProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         controller.onCreate()
-        controller.searchQuery("B")
+        controller.searchQuery(createSearch("B"))
 
         verify(view).showFilteredProjects(argThat { this[0].name == "B" })
     }
@@ -59,7 +61,7 @@ class ProjectChooseControllerTest {
         stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
         controller.onCreate()
 
-        controller.searchQuery("C")
+        controller.searchQuery(createSearch("C"))
 
         verify(view).showFilteredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
@@ -69,14 +71,15 @@ class ProjectChooseControllerTest {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         controller.onCreate()
 
-        controller.searchQuery("b")
+        controller.searchQuery(createSearch("b"))
 
         verify(view).showFilteredProjects(argThat { this[0].name == "B" })
     }
 
+    private fun createSearch(query: CharSequence) = Observable.just(query)
 
     private fun stubRepositoryToReturn(list: List<Project>) {
-        whenever(repository.getPossibleProjects()).thenReturn(list)
+        whenever(repository.getProjects()).thenReturn(Observable.just(list))
     }
 }
 

@@ -81,6 +81,26 @@ class DebateLoginControllerTest {
         verify(view).hideLoader()
     }
 
+
+    @Test
+    fun shouldNotHideLoaderWhenLoginIsStillInProgress() {
+        onLoginWithCodeReturnNever(code = "12345")
+        logToNewDebate(debateCode = "12345")
+        verify(view, never()).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderOnDestroyIfCallIsStillInProgress() {
+        onLoginWithCodeReturnNever(code = "12345")
+        logToNewDebate(debateCode = "12345")
+        controller.onDestroy()
+        verify(view).hideLoader()
+    }
+
+    private fun onLoginWithCodeReturnNever(code: String) {
+        whenever(loginApi.login(code)).thenReturn(Observable.never())
+    }
+
     private fun logToNewDebate(debateCode: String = "12345") {
         controller.logToNewDebate(debateCode)
     }
@@ -130,11 +150,16 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
 
     fun logToNewDebate(debateCode: String) {
         view.showLoader()
-        loginApi.login(debateCode).subscribe({
-            tokenRepo.saveToken(it.authToken)
-        }, {
-            view.showLoginFailedError()
-        })
+        loginApi.login(debateCode)
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    tokenRepo.saveToken(it.authToken)
+                }, {
+                    view.showLoginFailedError()
+                })
+    }
+
+    fun onDestroy() {
         view.hideLoader()
     }
 }

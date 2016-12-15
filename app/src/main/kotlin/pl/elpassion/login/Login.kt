@@ -4,8 +4,6 @@ interface Login {
     interface View {
         fun openReportListScreen()
         fun showEmptyLoginError()
-        fun hasHandlingShortcuts(): Boolean
-        fun creteAppShortcuts()
     }
 
     interface Repository {

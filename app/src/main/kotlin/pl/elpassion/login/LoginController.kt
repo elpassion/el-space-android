@@ -1,6 +1,10 @@
 package pl.elpassion.login
 
-class LoginController(private val view: Login.View, private val loginRepository: Login.Repository) {
+import pl.elpassion.login.schortcut.ShortcutService
+
+class LoginController(private val view: Login.View,
+                      private val loginRepository: Login.Repository,
+                      private val shortcutService: ShortcutService) {
 
     fun onCreate() {
         if (loginRepository.readToken() != null) {
@@ -20,8 +24,8 @@ class LoginController(private val view: Login.View, private val loginRepository:
     }
 
     private fun addShortcutsIfSupported() {
-        if (view.hasHandlingShortcuts()) {
-            view.creteAppShortcuts()
+        if (shortcutService.hasHandlingShortcuts()) {
+            shortcutService.creteAppShortcuts()
         }
     }
 

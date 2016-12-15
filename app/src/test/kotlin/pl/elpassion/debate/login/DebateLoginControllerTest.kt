@@ -60,6 +60,13 @@ class DebateLoginControllerTest {
         verify(view).showLoginFailedError()
     }
 
+    @Test
+    fun shouldNotShowErrorIfLoginSucceed() {
+        whenever(loginApi.login("12345")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("realAuthToken")))
+        controller.logToNewDebate("12345")
+        verify(view, never()).showLoginFailedError()
+    }
+
 }
 
 interface DebateTokenRepository {
@@ -96,8 +103,8 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     fun logToNewDebate(debateCode: String) {
         loginApi.login(debateCode).subscribe({
             tokenRepo.saveToken(it.authToken)
-        }, {})
-        
-        view.showLoginFailedError()
+        }, {
+            view.showLoginFailedError()
+        })
     }
 }

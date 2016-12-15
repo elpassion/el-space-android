@@ -57,7 +57,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldShowErrorIfLoginFails() {
         onLoginWithCodeReturnError(code = "error")
-        controller.logToNewDebate("error")
+        controller.onLogToNewDebate("error")
         verify(view).showLoginFailedError()
     }
 
@@ -123,7 +123,7 @@ class DebateLoginControllerTest {
     }
 
     private fun logToNewDebate(debateCode: String = "12345") {
-        controller.logToNewDebate(debateCode)
+        controller.onLogToNewDebate(debateCode)
     }
 
     private fun onLoginWithCodeReturnError(code: String) {
@@ -157,7 +157,10 @@ interface DebateLogin {
 
 }
 
-class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository, private val loginApi: DebateLogin.Api) {
+class DebateLoginController(
+        private val view: DebateLogin.View,
+        private val tokenRepo: DebateTokenRepository,
+        private val loginApi: DebateLogin.Api) {
 
     private var subscription: Subscription? = null
 
@@ -171,7 +174,7 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
         view.openDebateScreen()
     }
 
-    fun logToNewDebate(debateCode: String) {
+    fun onLogToNewDebate(debateCode: String) {
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

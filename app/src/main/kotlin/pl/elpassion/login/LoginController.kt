@@ -1,6 +1,7 @@
 package pl.elpassion.login
 
-class LoginController(val view: Login.View, val loginRepository: Login.Repository) {
+class LoginController(private val view: Login.View, private val loginRepository: Login.Repository) {
+
     fun onCreate() {
         if (loginRepository.readToken() != null) {
             view.openReportListScreen()

@@ -6,8 +6,8 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.debate.DebateTokenRepository
 import rx.Observable
-import rx.Subscription
 
 class DebateLoginControllerTest {
 
@@ -134,59 +134,4 @@ class DebateLoginControllerTest {
         whenever(loginApi.login(code)).thenReturn(Observable.just(DebateLogin.Api.LoginResponse(token)))
     }
 
-}
-
-interface DebateTokenRepository {
-    fun hasToken(): Boolean
-    fun saveToken(authToken: String)
-}
-
-interface DebateLogin {
-    interface View {
-        fun showLogToPreviousDebateView()
-        fun openDebateScreen()
-        fun showLoginFailedError()
-        fun showLoader()
-        fun hideLoader()
-    }
-
-    interface Api {
-        fun login(code: String): Observable<LoginResponse>
-        data class LoginResponse(val authToken: String)
-    }
-
-}
-
-class DebateLoginController(
-        private val view: DebateLogin.View,
-        private val tokenRepo: DebateTokenRepository,
-        private val loginApi: DebateLogin.Api) {
-
-    private var subscription: Subscription? = null
-
-    fun onCreate() {
-        if (tokenRepo.hasToken()) {
-            view.showLogToPreviousDebateView()
-        }
-    }
-
-    fun onLogToPreviousDebate() {
-        view.openDebateScreen()
-    }
-
-    fun onLogToNewDebate(debateCode: String) {
-        subscription = loginApi.login(debateCode)
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .doOnNext { tokenRepo.saveToken(it.authToken) }
-                .subscribe({
-                    view.openDebateScreen()
-                }, {
-                    view.showLoginFailedError()
-                })
-    }
-
-    fun onDestroy() {
-        subscription?.unsubscribe()
-    }
 }

@@ -12,7 +12,8 @@ class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
     private val tokenRepo = mock<DebateTokenRepository>()
-    private val controller = DebateLoginController(view, tokenRepo)
+    private val loginApi = mock<DebateLogin.Api>()
+    private val controller = DebateLoginController(view, tokenRepo, loginApi)
 
     @Before
     fun setUp() {
@@ -40,10 +41,16 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldSaveReturnedTokenOnLogToNewDebate() {
-        val loginApi = mock<DebateLogin.Api>()
         whenever(loginApi.login("1234")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("authToken")))
         controller.logToNewDebate("1234")
         verify(tokenRepo).saveToken("authToken")
+    }
+
+    @Test
+    fun shouldReallySaveReturnedTokenOnLogToNewDebate() {
+        whenever(loginApi.login("12345")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("realAuthToken")))
+        controller.logToNewDebate("12345")
+        verify(tokenRepo).saveToken("realAuthToken")
     }
 
 }
@@ -66,7 +73,7 @@ interface DebateLogin {
 
 }
 
-class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository) {
+class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository, private val loginApi: DebateLogin.Api) {
 
     fun onCreate() {
         if (tokenRepo.hasToken()) {
@@ -79,6 +86,8 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun logToNewDebate(debateCode: String) {
-        tokenRepo.saveToken("authToken")
+        loginApi.login(debateCode).subscribe {
+            tokenRepo.saveToken(it.authToken)
+        }
     }
 }

@@ -3,23 +3,25 @@ package pl.elpassion.debate.login
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 
 class DebateLoginControllerTest {
 
+    private val view = mock<DebateLogin.View>()
+    private val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(false) }
+    private val controller = DebateLoginController(view, tokenRepo)
+
     @Test
     fun shouldShowLogToPreviousDebateViewIfTokenIsProvidedOnCreate() {
-        val view = mock<DebateLogin.View>()
-        val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(false) }
-        DebateLoginController(view, tokenRepo).onCreate()
+        controller.onCreate()
         verify(view).showLogToPreviousDebateView()
     }
 
     @Test
     fun shouldNotShowLogToPreviousDebateViewIfTokenIsNotProvidedOnCreate() {
-        val view = mock<DebateLogin.View>()
-        val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(true) }
-        DebateLoginController(view, tokenRepo).onCreate()
+        whenever(tokenRepo.hasToken()).thenReturn(true)
+        controller.onCreate()
         verify(view, never()).showLogToPreviousDebateView()
     }
 

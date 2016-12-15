@@ -4,13 +4,19 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
 import org.junit.Test
 
 class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
-    private val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(true) }
+    private val tokenRepo = mock<DebateTokenRepository>()
     private val controller = DebateLoginController(view, tokenRepo)
+
+    @Before
+    fun setUp() {
+        whenever(tokenRepo.hasToken()).thenReturn(true)
+    }
 
     @Test
     fun shouldShowLogToPreviousDebateViewIfTokenIsProvidedOnCreate() {

@@ -111,6 +111,13 @@ class DebateLoginControllerTest {
         verify(view).openDebateScreen()
     }
 
+    @Test
+    fun shouldNotOpenDebateScreenOnLoginFailure() {
+        onLoginWithCodeReturnError(code = "123")
+        logToNewDebate(debateCode = "123")
+        verify(view, never()).openDebateScreen()
+    }
+
     private fun onLoginWithCodeReturnNever(code: String) {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }
@@ -165,12 +172,12 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun logToNewDebate(debateCode: String) {
-        view.openDebateScreen()
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     tokenRepo.saveToken(it.authToken)
+                    view.openDebateScreen()
                 }, {
                     view.showLoginFailedError()
                 })

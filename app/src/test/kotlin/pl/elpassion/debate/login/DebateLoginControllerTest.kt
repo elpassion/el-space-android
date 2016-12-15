@@ -9,7 +9,7 @@ import org.junit.Test
 class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
-    private val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(false) }
+    private val tokenRepo = mock<DebateTokenRepository> { on { hasToken() }.thenReturn(true) }
     private val controller = DebateLoginController(view, tokenRepo)
 
     @Test
@@ -20,7 +20,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotShowLogToPreviousDebateViewIfTokenIsNotProvidedOnCreate() {
-        whenever(tokenRepo.hasToken()).thenReturn(true)
+        whenever(tokenRepo.hasToken()).thenReturn(false)
         controller.onCreate()
         verify(view, never()).showLogToPreviousDebateView()
     }
@@ -39,7 +39,7 @@ interface DebateLogin {
 
 class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository) {
     fun onCreate() {
-        if (!tokenRepo.hasToken()) {
+        if (tokenRepo.hasToken()) {
             view.showLogToPreviousDebateView()
         }
     }

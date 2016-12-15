@@ -67,6 +67,7 @@ interface DebateLogin {
 }
 
 class DebateLoginController(private val view: DebateLogin.View, private val tokenRepo: DebateTokenRepository) {
+
     fun onCreate() {
         if (tokenRepo.hasToken()) {
             view.showLogToPreviousDebateView()

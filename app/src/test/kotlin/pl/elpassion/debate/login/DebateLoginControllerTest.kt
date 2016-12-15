@@ -41,30 +41,38 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldSaveReturnedTokenOnLogToNewDebate() {
-        whenever(loginApi.login("1234")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("authToken")))
+        onLoginWithCodeReturnToken(code = "1234", token = "authToken")
         controller.logToNewDebate("1234")
         verify(tokenRepo).saveToken("authToken")
     }
 
     @Test
     fun shouldReallySaveReturnedTokenOnLogToNewDebate() {
-        whenever(loginApi.login("12345")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("realAuthToken")))
+        onLoginWithCodeReturnToken(code = "12345", token = "realAuthToken")
         controller.logToNewDebate("12345")
         verify(tokenRepo).saveToken("realAuthToken")
     }
 
     @Test
     fun shouldShowErrorIfLoginFails() {
-        whenever(loginApi.login("error")).thenReturn(Observable.error(RuntimeException()))
+        onLoginWithCodeReturnError(code = "error")
         controller.logToNewDebate("error")
         verify(view).showLoginFailedError()
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
-        whenever(loginApi.login("12345")).thenReturn(Observable.just(DebateLogin.Api.LoginResponse("realAuthToken")))
+        onLoginWithCodeReturnToken(code = "12345", token = "realAuthToken")
         controller.logToNewDebate("12345")
         verify(view, never()).showLoginFailedError()
+    }
+
+    private fun onLoginWithCodeReturnError(code: String) {
+        whenever(loginApi.login(code)).thenReturn(Observable.error(RuntimeException()))
+    }
+
+    private fun onLoginWithCodeReturnToken(code: String, token: String) {
+        whenever(loginApi.login(code)).thenReturn(Observable.just(DebateLogin.Api.LoginResponse(token)))
     }
 
 }

@@ -158,8 +158,8 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun logToNewDebate(debateCode: String) {
-        view.showLoader()
         subscription = loginApi.login(debateCode)
+                .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     tokenRepo.saveToken(it.authToken)

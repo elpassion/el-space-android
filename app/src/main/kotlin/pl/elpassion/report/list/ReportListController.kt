@@ -9,8 +9,8 @@ import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 
-class ReportListController(val reportDayService: ReportDayService,
-                           val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
+class ReportListController(private val reportDayService: ReportDayService,
+                           private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }

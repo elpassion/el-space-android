@@ -1,13 +1,13 @@
 package pl.elpassion.report.list
 
 import android.support.test.espresso.Espresso
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
-import com.elpassion.android.commons.espresso.typeText
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -42,7 +42,7 @@ class ReportListActivityAddReportTest {
     fun shouldCloseAddReportActivityAndMakeSecondCallToUpdateReports() {
         onId(R.id.reportsContainer).check(matches(hasDescendant(not(withText("Description")))))
         onText("1 Sat").click()
-        onId(R.id.reportAddDescription).typeText("Description")
+        onId(R.id.reportAddDescription).perform(ViewActions.replaceText("Description"))
         Espresso.closeSoftKeyboard()
         onId(R.id.reportAddAdd).click()
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("Description"))))

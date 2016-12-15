@@ -1,14 +1,12 @@
 package pl.elpassion.report.list
 
-import android.support.test.espresso.action.ViewActions.clearText
-import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
+import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
-import com.elpassion.android.commons.espresso.typeText
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -44,7 +42,7 @@ class ReportListActivityEditReportTest {
     @Test
     fun shouldCloseEditReportActivityAndMakeSecondCallToUpdateReports() {
         onText("Description").click()
-        onId(R.id.reportEditDescription).perform(clearText()).typeText("new Description").perform(closeSoftKeyboard())
+        onId(R.id.reportEditDescription).perform(clearText(), replaceText("new Description"), closeSoftKeyboard())
         onId(R.id.reportEditSaveButton).click()
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("new Description"))))
     }

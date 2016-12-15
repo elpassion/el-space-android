@@ -175,8 +175,8 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
+                .doOnNext { tokenRepo.saveToken(it.authToken) }
                 .subscribe({
-                    tokenRepo.saveToken(it.authToken)
                     view.openDebateScreen()
                 }, {
                     view.showLoginFailedError()

@@ -104,6 +104,13 @@ class DebateLoginControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldOpenDebateScreenOnLoginSuccess() {
+        onLoginWithCodeReturnToken(code = "12345")
+        logToNewDebate(debateCode = "12345")
+        verify(view).openDebateScreen()
+    }
+
     private fun onLoginWithCodeReturnNever(code: String) {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }
@@ -158,6 +165,7 @@ class DebateLoginController(private val view: DebateLogin.View, private val toke
     }
 
     fun logToNewDebate(debateCode: String) {
+        view.openDebateScreen()
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

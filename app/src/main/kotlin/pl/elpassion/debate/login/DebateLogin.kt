@@ -4,7 +4,6 @@ import rx.Observable
 
 interface DebateLogin {
     interface View {
-        fun showLogToPreviousDebateView()
         fun openDebateScreen(authToken: String)
         fun showLoginFailedError()
         fun showLoader()

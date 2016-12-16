@@ -11,15 +11,19 @@ class DebateLoginController(
     private var subscription: Subscription? = null
 
     fun onLogToDebate(debateCode: String) {
-        subscription = loginApi.login(debateCode)
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .doOnNext { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it.authToken) }
-                .subscribe({
-                    view.openDebateScreen()
-                }, {
-                    view.showLoginFailedError()
-                })
+        if (tokenRepo.hasToken("12345")) {
+            view.openDebateScreen("token")
+        } else {
+            subscription = loginApi.login(debateCode)
+                    .doOnSubscribe { view.showLoader() }
+                    .doOnUnsubscribe { view.hideLoader() }
+                    .doOnNext { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it.authToken) }
+                    .subscribe({
+                        view.openDebateScreen(it.authToken)
+                    }, {
+                        view.showLoginFailedError()
+                    })
+        }
     }
 
     fun onDestroy() {

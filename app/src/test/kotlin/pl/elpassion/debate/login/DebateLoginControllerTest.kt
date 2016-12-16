@@ -1,9 +1,6 @@
 package pl.elpassion.debate.login
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.debate.DebateTokenRepository
@@ -18,7 +15,7 @@ class DebateLoginControllerTest {
 
     @Before
     fun setUp() {
-        whenever(tokenRepo.hasToken()).thenReturn(true)
+        whenever(tokenRepo.hasToken(any())).thenReturn(false)
     }
 
     @Test
@@ -86,16 +83,24 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
-        onLoginWithCodeReturnToken(code = "12345")
+        onLoginWithCodeReturnToken(code = "12345", token = "authToken")
         logToDebate(debateCode = "12345")
-        verify(view).openDebateScreen()
+        verify(view).openDebateScreen("authToken")
     }
 
     @Test
     fun shouldNotOpenDebateScreenOnLoginFailure() {
         onLoginWithCodeReturnError(code = "123")
         logToDebate(debateCode = "123")
-        verify(view, never()).openDebateScreen()
+        verify(view, never()).openDebateScreen(any())
+    }
+
+    @Test
+    fun shouldOpenDebateScreenWithAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
+        whenever(tokenRepo.hasToken(debateCode = "12345")).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate(debateCode = "12345")).thenReturn("token")
+        logToDebate("12345")
+        verify(view).openDebateScreen("token")
     }
 
     private fun onLoginWithCodeReturnNever(code: String) {

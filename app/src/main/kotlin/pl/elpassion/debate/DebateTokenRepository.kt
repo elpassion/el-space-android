@@ -2,5 +2,5 @@ package pl.elpassion.debate
 
 interface DebateTokenRepository {
     fun hasToken(): Boolean
-    fun saveToken(authToken: String)
+    fun saveDebateToken(debateCode: String, authToken: String)
 }

@@ -22,17 +22,17 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveReturnedTokenOnLogToDebate() {
+    fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
         onLoginWithCodeReturnToken(code = "1234", token = "authToken")
         logToDebate(debateCode = "1234")
-        verify(tokenRepo).saveToken("authToken")
+        verify(tokenRepo).saveDebateToken(debateCode = "1234", authToken = "authToken")
     }
 
     @Test
-    fun shouldReallySaveReturnedTokenOnLogToDebate() {
+    fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
         onLoginWithCodeReturnToken(code = "12345", token = "realAuthToken")
         logToDebate(debateCode = "12345")
-        verify(tokenRepo).saveToken("realAuthToken")
+        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
     }
 
     @Test

@@ -14,7 +14,7 @@ class DebateLoginController(
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
-                .doOnNext { tokenRepo.saveToken(it.authToken) }
+                .doOnNext { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it.authToken) }
                 .subscribe({
                     view.openDebateScreen()
                 }, {

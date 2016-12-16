@@ -11,8 +11,8 @@ class DebateLoginController(
     private var subscription: Subscription? = null
 
     fun onLogToDebate(debateCode: String) {
-        if (tokenRepo.hasToken("12345")) {
-            view.openDebateScreen("token")
+        if (tokenRepo.hasToken(debateCode)) {
+            view.openDebateScreen(tokenRepo.getTokenForDebate(debateCode))
         } else {
             subscription = loginApi.login(debateCode)
                     .doOnSubscribe { view.showLoader() }

@@ -9,4 +9,16 @@
         android:layout_height="wrap_content"
         android:text="@string/debate_login_welcome" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/debate_login_instructions" />
+
+    <EditText
+        android:maxLength="5"
+        android:inputType="number"
+        android:id="@+id/debateCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

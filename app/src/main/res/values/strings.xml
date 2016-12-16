@@ -26,4 +26,5 @@
     <string name="shortcut_report_hub_short">Zaraportuj godziny</string>
     <string name="shortcut_report_hub_long">Dodaj raport godzinowy</string>
     <string name="debate_login_welcome">Welcome!</string>
+    <string name="debate_login_instructions">To vote, insert debates PIN number.</string>
 </resources>

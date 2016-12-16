@@ -12,7 +12,14 @@ class DebateLoginController(
     private var subscription: Subscription? = null
 
     fun onLogToDebate(debateCode: String) {
-        makeSubscription(getAuthTokenObservable(debateCode))
+        subscription = getAuthTokenObservable(debateCode)
+                .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    view.openDebateScreen(it)
+                }, {
+                    view.showLoginFailedError()
+                })
     }
 
     private fun getAuthTokenObservable(debateCode: String) =
@@ -23,17 +30,6 @@ class DebateLoginController(
                         .map { it.authToken }
                         .doOnNext { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }
-
-    private fun makeSubscription(observable: Observable<String>) {
-        subscription = observable
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    view.openDebateScreen(it)
-                }, {
-                    view.showLoginFailedError()
-                })
-    }
 
     fun onDestroy() {
         subscription?.unsubscribe()

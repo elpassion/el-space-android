@@ -22,58 +22,58 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveReturnedTokenOnLogToNewDebate() {
+    fun shouldSaveReturnedTokenOnLogToDebate() {
         onLoginWithCodeReturnToken(code = "1234", token = "authToken")
-        logToNewDebate(debateCode = "1234")
+        logToDebate(debateCode = "1234")
         verify(tokenRepo).saveToken("authToken")
     }
 
     @Test
-    fun shouldReallySaveReturnedTokenOnLogToNewDebate() {
+    fun shouldReallySaveReturnedTokenOnLogToDebate() {
         onLoginWithCodeReturnToken(code = "12345", token = "realAuthToken")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(tokenRepo).saveToken("realAuthToken")
     }
 
     @Test
     fun shouldShowErrorIfLoginFails() {
         onLoginWithCodeReturnError(code = "error")
-        controller.onLogToNewDebate("error")
+        controller.onLogToDebate("error")
         verify(view).showLoginFailedError()
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
         onLoginWithCodeReturnToken(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(view, never()).showLoginFailedError()
     }
 
     @Test
     fun shouldShowLoaderOnLoginStart() {
         onLoginWithCodeReturnToken(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnLoginEnd() {
         onLoginWithCodeReturnToken(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderWhenLoginIsStillInProgress() {
         onLoginWithCodeReturnNever(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderOnDestroyIfCallIsStillInProgress() {
         onLoginWithCodeReturnNever(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         controller.onDestroy()
         verify(view).hideLoader()
     }
@@ -87,14 +87,14 @@ class DebateLoginControllerTest {
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
         onLoginWithCodeReturnToken(code = "12345")
-        logToNewDebate(debateCode = "12345")
+        logToDebate(debateCode = "12345")
         verify(view).openDebateScreen()
     }
 
     @Test
     fun shouldNotOpenDebateScreenOnLoginFailure() {
         onLoginWithCodeReturnError(code = "123")
-        logToNewDebate(debateCode = "123")
+        logToDebate(debateCode = "123")
         verify(view, never()).openDebateScreen()
     }
 
@@ -102,8 +102,8 @@ class DebateLoginControllerTest {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }
 
-    private fun logToNewDebate(debateCode: String = "12345") {
-        controller.onLogToNewDebate(debateCode)
+    private fun logToDebate(debateCode: String = "12345") {
+        controller.onLogToDebate(debateCode)
     }
 
     private fun onLoginWithCodeReturnError(code: String) {

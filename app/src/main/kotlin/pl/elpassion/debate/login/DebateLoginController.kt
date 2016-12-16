@@ -10,7 +10,7 @@ class DebateLoginController(
 
     private var subscription: Subscription? = null
 
-    fun onLogToNewDebate(debateCode: String) {
+    fun onLogToDebate(debateCode: String) {
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

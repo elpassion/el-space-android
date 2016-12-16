@@ -22,25 +22,6 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldShowLogToPreviousDebateViewIfTokenIsProvidedOnCreate() {
-        controller.onCreate()
-        verify(view).showLogToPreviousDebateView()
-    }
-
-    @Test
-    fun shouldNotShowLogToPreviousDebateViewIfTokenIsNotProvidedOnCreate() {
-        whenever(tokenRepo.hasToken()).thenReturn(false)
-        controller.onCreate()
-        verify(view, never()).showLogToPreviousDebateView()
-    }
-
-    @Test
-    fun shouldOpenDebateScreenOnLogToPreviousDebate() {
-        controller.onLogToPreviousDebate()
-        verify(view).openDebateScreen()
-    }
-
-    @Test
     fun shouldSaveReturnedTokenOnLogToNewDebate() {
         onLoginWithCodeReturnToken(code = "1234", token = "authToken")
         logToNewDebate(debateCode = "1234")
@@ -81,7 +62,6 @@ class DebateLoginControllerTest {
         logToNewDebate(debateCode = "12345")
         verify(view).hideLoader()
     }
-
 
     @Test
     fun shouldNotHideLoaderWhenLoginIsStillInProgress() {

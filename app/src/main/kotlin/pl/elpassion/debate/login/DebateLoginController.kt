@@ -10,16 +10,6 @@ class DebateLoginController(
 
     private var subscription: Subscription? = null
 
-    fun onCreate() {
-        if (tokenRepo.hasToken()) {
-            view.showLogToPreviousDebateView()
-        }
-    }
-
-    fun onLogToPreviousDebate() {
-        view.openDebateScreen()
-    }
-
     fun onLogToNewDebate(debateCode: String) {
         subscription = loginApi.login(debateCode)
                 .doOnSubscribe { view.showLoader() }

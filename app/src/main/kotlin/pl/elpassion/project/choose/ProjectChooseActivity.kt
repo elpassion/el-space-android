@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
 
 

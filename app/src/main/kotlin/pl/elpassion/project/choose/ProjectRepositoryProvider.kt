@@ -7,5 +7,5 @@ import pl.elpassion.project.ProjectRepositoryImpl
 import pl.elpassion.report.list.ReportList
 
 object ProjectRepositoryProvider : Provider<ProjectRepository>({
-    ProjectRepositoryImpl(ReportList.ProjectApiProvider.get(), CachedProjectRepositoryProvider.get())
+    ProjectRepositoryImpl(ReportList.ProjectListServiceProvider.get(), CachedProjectRepositoryProvider.get())
 })

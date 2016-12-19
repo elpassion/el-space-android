@@ -5,14 +5,14 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import pl.elpassion.report.list.ReportList
+import pl.elpassion.report.list.service.ProjectListService
 
 
 class ProjectRepositoryTest {
 
     val cachedProjectRepository = mock<CachedProjectRepository>()
-    val projectApi = mock<ReportList.ProjectApi>()
-    val projectRepository = ProjectRepositoryImpl(projectApi, cachedProjectRepository)
+    val projectService = mock<ProjectListService>()
+    val projectRepository = ProjectRepositoryImpl(projectService, cachedProjectRepository)
 
     @Test
     fun shouldCallToApiWhenCacheIsEmpty() {
@@ -20,7 +20,7 @@ class ProjectRepositoryTest {
 
         projectRepository.getProjects()
 
-        verify(projectApi).getProjects()
+        verify(projectService).getProjects()
     }
 
     @Test
@@ -30,6 +30,6 @@ class ProjectRepositoryTest {
         projectRepository.getProjects()
 
         verify(cachedProjectRepository).getPossibleProjects()
-        verify(projectApi, never()).getProjects()
+        verify(projectService, never()).getProjects()
     }
 }

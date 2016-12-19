@@ -48,11 +48,9 @@ class ReportListActivityAddReportTest {
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("Description"))))
     }
 
-    private fun stubProjectRepository(): CachedProjectRepository {
-        val projectRepository = mock<CachedProjectRepository>()
-        whenever(projectRepository.hasProjects()).thenReturn(true)
-        whenever(projectRepository.getPossibleProjects()).thenReturn(listOf(newProject()))
-        return projectRepository
+    private fun stubProjectRepository() = mock<CachedProjectRepository>().apply{
+        whenever(hasProjects()).thenReturn(true)
+        whenever(getPossibleProjects()).thenReturn(listOf(newProject()))
     }
 }
 

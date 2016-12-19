@@ -8,10 +8,10 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepository
 import java.util.Calendar.*
 
-class ReportAddController(val date: String?,
-                          val view: ReportAdd.View,
-                          val repository: CachedProjectRepository,
-                          val api: ReportAdd.Api) {
+class ReportAddController(date: String?,
+                          private val view: ReportAdd.View,
+                          private val repository: CachedProjectRepository,
+                          private val api: ReportAdd.Api) {
     private val selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var project: Project? = null
 

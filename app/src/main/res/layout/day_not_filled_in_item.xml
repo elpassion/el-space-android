@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/report_row_edge_margin"
     android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:layout_marginTop="-3dp"
     android:background="@drawable/click_indicator_white">
 
     <View

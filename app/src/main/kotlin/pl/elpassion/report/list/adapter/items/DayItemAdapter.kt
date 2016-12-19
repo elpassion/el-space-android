@@ -1,9 +1,9 @@
 package pl.elpassion.report.list.adapter.items
 
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import com.elpassion.android.commons.recycler.ItemAdapter
 import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
@@ -21,21 +21,16 @@ class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapt
 
 
     private fun setTotalHoursTextWithIndicator(holder: VH) {
-        if (day.reports.isNotEmpty()) {
-            holder.updateTextWithIndicator("Total: ${day.reportedHours} hours", R.color.filledIndicator)
-        } else {
-            holder.updateTextWithIndicator(null, R.color.unknownIndicator)
+        holder.itemView.run {
+            if (day.reports.isNotEmpty()) {
+                totalHours.text = "Total: ${day.reportedHours} hours"
+                hubIndicator.visibility = VISIBLE
+            } else {
+                totalHours.text = null
+                hubIndicator.visibility = GONE
+            }
         }
     }
-
-    private fun VH.updateTextWithIndicator(hourText: String?, color: Int) {
-        itemView.apply {
-            totalHours.text = hourText
-            hubIndicator.setBackgroundColorFromRes(color)
-        }
-    }
-
-    private fun View.setBackgroundColorFromRes(@ColorRes color: Int) = setBackgroundColor(ContextCompat.getColor(context, color))
 
     class VH(view: View) : RecyclerView.ViewHolder(view)
 

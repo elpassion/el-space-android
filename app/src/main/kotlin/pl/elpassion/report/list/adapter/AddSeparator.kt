@@ -1,10 +1,7 @@
 package pl.elpassion.report.list.adapter
 
 import com.elpassion.android.commons.recycler.ItemAdapter
-import pl.elpassion.report.list.adapter.items.DayItemAdapter
-import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
-import pl.elpassion.report.list.adapter.items.ReportItemAdapter
-import pl.elpassion.report.list.adapter.items.SeparatorItemAdapter
+import pl.elpassion.report.list.adapter.items.*
 
 fun addSeparators(adapters: List<ItemAdapter<*>>) = mutableListOf<ItemAdapter<*>>().apply {
     adapters.forEachIndexed { i, itemAdapter ->
@@ -23,5 +20,5 @@ fun addSeparators(adapters: List<ItemAdapter<*>>) = mutableListOf<ItemAdapter<*>
 }
 
 private fun areTwoItemsTheSame(itemAdapter: ItemAdapter<*>, previousItemAdapter: ItemAdapter<*>?): Boolean {
-    return itemAdapter.viewType == previousItemAdapter?.viewType && itemAdapter !is ReportItemAdapter
+    return itemAdapter.viewType == previousItemAdapter?.viewType && itemAdapter !is ReportItemAdapter && itemAdapter !is WeekendDayItem
 }

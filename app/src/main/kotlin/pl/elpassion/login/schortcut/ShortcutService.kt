@@ -2,7 +2,7 @@ package pl.elpassion.login.schortcut
 
 interface ShortcutService {
 
-    fun hasHandlingShortcuts(): Boolean
+    fun isSupportingShortcuts(): Boolean
 
     fun creteAppShortcuts()
 }

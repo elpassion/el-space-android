@@ -24,7 +24,7 @@ class LoginController(private val view: Login.View,
     }
 
     private fun addShortcutsIfSupported() {
-        if (shortcutService.hasHandlingShortcuts()) {
+        if (shortcutService.isSupportingShortcuts()) {
             shortcutService.creteAppShortcuts()
         }
     }

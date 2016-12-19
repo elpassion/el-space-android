@@ -12,7 +12,7 @@ import pl.elpassion.report.add.ReportAddActivity
 
 class ShortcutServiceImpl(val context: Context) : ShortcutService {
 
-    override fun hasHandlingShortcuts() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
+    override fun isSupportingShortcuts() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1
 
     @TargetApi(25)
     override fun creteAppShortcuts() {

@@ -63,7 +63,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldCreateAppShortcutsWhenSupported() {
-        whenever(shortcutService.hasHandlingShortcuts()).thenReturn(true)
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
         controller.onLogin("login")
 
         verify(shortcutService).creteAppShortcuts()
@@ -72,7 +72,7 @@ class LoginControllerTest {
     @Test
     fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
         controller.onLogin("login")
-        whenever(shortcutService.hasHandlingShortcuts()).thenReturn(false)
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
 
         verify(shortcutService, never()).creteAppShortcuts()
     }

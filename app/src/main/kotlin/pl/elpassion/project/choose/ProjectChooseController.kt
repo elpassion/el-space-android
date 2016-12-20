@@ -11,15 +11,6 @@ class ProjectChooseController(private val view: ProjectChoose.View,
 
     private var subscription: Subscription? = null
 
-    fun onProjectClicked(project: Project) {
-        view.selectProject(project)
-    }
-
-    fun projectListObservable()
-            = repository.getProjects()
-            .map { it.sortedBy { it.name } }
-            .applySchedulers()
-
     fun onCreate(query: Observable<CharSequence>) {
         subscription = Observable.combineLatest(projectListObservable(), query, { projectList, querySequence ->
             projectList.filter { it.name.contains(querySequence, true) }
@@ -29,4 +20,19 @@ class ProjectChooseController(private val view: ProjectChoose.View,
             view.showError()
         })
     }
+
+    fun onDestroy() {
+        subscription?.unsubscribe()
+    }
+
+    fun onProjectClicked(project: Project) {
+        view.selectProject(project)
+    }
+
+    private fun projectListObservable(): Observable<List<Project>>
+            = repository.getProjects()
+            .map { it.sortedBy { it.name } }
+            .applySchedulers()
+            .doOnSubscribe { view.showLoader() }
+            .doOnUnsubscribe { view.hideLoader() }
 }

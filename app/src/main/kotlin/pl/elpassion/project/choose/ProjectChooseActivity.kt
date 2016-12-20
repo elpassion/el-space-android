@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
@@ -70,6 +72,15 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     private fun Menu.getSearchView(): SearchView {
         val searchItem = findItem(R.id.action_search)
         return getActionView(searchItem) as SearchView
+    }
+
+    override fun hideLoader() = progressBar.hide()
+
+    override fun showLoader() = progressBar.show()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        controller.onDestroy()
     }
 
     companion object {

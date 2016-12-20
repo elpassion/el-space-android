@@ -9,5 +9,9 @@ interface ProjectChoose {
         fun selectProject(project: Project)
 
         fun showError()
+
+        fun hideLoader()
+
+        fun showLoader()
     }
 }

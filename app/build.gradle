@@ -75,6 +75,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "com.elpassion.android.commons:recycler:$elCommon"
     compile "com.elpassion.android.commons:shared-preferences:$elCommon"
+    compile "com.elpassion.android.commons:view:$elCommon"
     compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
     }

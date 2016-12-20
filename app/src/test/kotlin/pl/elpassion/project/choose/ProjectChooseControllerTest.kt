@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
@@ -95,6 +94,33 @@ class ProjectChooseControllerTest {
         controller.onCreate()
 
         verify(view).showError()
+    }
+
+    @Test
+    fun shouldShowLoadingOnCreate() {
+        stubRepositoryToReturn(emptyList())
+        controller.onCreate()
+
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoadingOnFinishRepositoryCall() {
+        stubRepositoryToReturn(emptyList())
+
+        controller.onCreate()
+
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoadingOnDestroy() {
+        whenever(repository.getProjects()).thenReturn(Observable.never())
+
+        controller.onCreate()
+        controller.onDestroy()
+
+        verify(view).hideLoader()
     }
 
     private fun ProjectChooseController.onCreate() {

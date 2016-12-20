@@ -3,7 +3,7 @@ package pl.elpassion.project.choose
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.MenuItemCompat
+import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
@@ -27,7 +27,6 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         setContentView(R.layout.project_choose_activity)
         showBackArrowOnActionBar()
         initRecyclerView()
-        controller.onCreate()
     }
 
     private fun initRecyclerView() {
@@ -63,14 +62,14 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.project_choose_menu, menu)
-        initSearchView(menu)
+        val searchView = menu.getSearchView()
+        controller.onCreate(searchView.queryTextChanges())
         return true
     }
 
-    private fun initSearchView(menu: Menu) {
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
-        controller.searchQuery(searchView.queryTextChanges())
+    private fun Menu.getSearchView(): SearchView {
+        val searchItem = findItem(R.id.action_search)
+        return getActionView(searchItem) as SearchView
     }
 
     companion object {

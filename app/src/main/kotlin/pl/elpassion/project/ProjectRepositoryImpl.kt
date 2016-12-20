@@ -6,11 +6,10 @@ import rx.Observable
 
 class ProjectRepositoryImpl(private val projectListService: ProjectListService,
                             private val cachedProjectRepository: CachedProjectRepository) : ProjectRepository {
-    override fun getProjects(): Observable<List<Project>> {
-        if (cachedProjectRepository.hasProjects()) {
-            return Observable.just(cachedProjectRepository.getPossibleProjects())
-        } else {
-            return projectListService.getProjects()
-        }
+
+    override fun getProjects(): Observable<List<Project>> =
+         when {
+            cachedProjectRepository.hasProjects() -> Observable.just(cachedProjectRepository.getPossibleProjects())
+            else -> projectListService.getProjects()
     }
 }

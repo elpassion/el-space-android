@@ -14,7 +14,7 @@ class ProjectChooseControllerTest {
 
     val view = mock<ProjectChoose.View>()
     val repository = mock<ProjectRepository>()
-    val controller by lazy { ProjectChooseController(view, repository) }
+    val controller = ProjectChooseController(view, repository)
 
     @Test
     fun shouldShowPossibleProjects() {
@@ -49,7 +49,7 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldShowFilteredProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.searchQuery(createSearch("B"))
+        controller.onCreate(createSearch("B"))
 
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
@@ -59,7 +59,7 @@ class ProjectChooseControllerTest {
     fun shouldShowFilteredSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
 
-        controller.searchQuery(createSearch("C"))
+        controller.onCreate(createSearch("C"))
 
         verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
@@ -68,7 +68,7 @@ class ProjectChooseControllerTest {
     fun shouldShowFilteredProjectsIgnoreCase() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
 
-        controller.searchQuery(createSearch("b"))
+        controller.onCreate(createSearch("b"))
 
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
@@ -77,8 +77,7 @@ class ProjectChooseControllerTest {
     fun shouldCallToRepositoryOnlyOnce() {
         stubRepositoryToReturn(emptyList())
 
-        controller.onCreate()
-        controller.searchQuery(Observable.just("a","b"))
+        controller.onCreate(Observable.just("a", "b"))
 
         verify(repository).getProjects()
     }
@@ -92,6 +91,9 @@ class ProjectChooseControllerTest {
         verify(view).showError()
     }
 
+    private fun ProjectChooseController.onCreate() {
+        onCreate(Observable.just(""))
+    }
 
     private fun createSearch(query: CharSequence) = Observable.just(query)
 

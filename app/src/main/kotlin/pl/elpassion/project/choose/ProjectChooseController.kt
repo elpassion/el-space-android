@@ -1,41 +1,32 @@
 package pl.elpassion.project.choose
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import rx.Observable
+import rx.Subscription
 
 class ProjectChooseController(private val view: ProjectChoose.View,
-                              repository: ProjectRepository) {
+                              private val repository: ProjectRepository) {
 
-    private val projectsObservable: Observable<Project> =
-            repository.getProjects()
-                    .flatMapIterable { it }
-                    .sorted { project, project2 -> project.name.compareTo(project2.name) }
-                    .replay()
-                    .autoConnect()
-
-    fun onCreate() {
-        projectsObservable.subscribeProjects()
-    }
+    private var subscription: Subscription? = null
 
     fun onProjectClicked(project: Project) {
         view.selectProject(project)
     }
 
-    private fun Observable<Project>.subscribeProjects() {
-        this.toList().subscribe({
+    fun projectListObservable()
+            = repository.getProjects()
+            .map { it.sortedBy { it.name } }
+            .applySchedulers()
+
+    fun onCreate(query: Observable<CharSequence>) {
+        subscription = Observable.combineLatest(projectListObservable(), query, { projectList, querySequence ->
+            projectList.filter { it.name.contains(querySequence, true) }
+        }).subscribe({
             view.showPossibleProjects(it)
         }, {
             view.showError()
         })
     }
-
-    fun searchQuery(query: Observable<CharSequence>) {
-        query.map { it.toString() }
-                .switchMap { filterProjectByQuery(it) }
-                .subscribeProjects()
-    }
-
-    private fun filterProjectByQuery(query: String) = projectsObservable
-            .filter { it.name.contains(query, true) }
 }

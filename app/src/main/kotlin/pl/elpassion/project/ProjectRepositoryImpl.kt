@@ -1,6 +1,5 @@
 package pl.elpassion.project
 
-import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.service.ProjectListService
 import rx.Observable
 

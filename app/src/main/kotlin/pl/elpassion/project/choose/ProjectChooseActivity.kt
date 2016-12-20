@@ -39,8 +39,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         updateAdapterList(projects)
     }
 
-    override fun showFilteredProjects(projects: List<Project>) {
-        updateAdapterList(projects)
+    override fun showError() {
     }
 
     private fun updateAdapterList(projects: List<Project>) {

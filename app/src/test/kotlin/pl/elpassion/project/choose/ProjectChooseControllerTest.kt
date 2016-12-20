@@ -49,32 +49,49 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldShowFilteredProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.onCreate()
         controller.searchQuery(createSearch("B"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
 
     @Test
     fun shouldShowFilteredSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
-        controller.onCreate()
 
         controller.searchQuery(createSearch("C"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
     fun shouldShowFilteredProjectsIgnoreCase() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.onCreate()
 
         controller.searchQuery(createSearch("b"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
+
+    @Test
+    fun shouldCallToRepositoryOnlyOnce() {
+        stubRepositoryToReturn(emptyList())
+
+        controller.onCreate()
+        controller.searchQuery(Observable.just("a","b"))
+
+        verify(repository).getProjects()
+    }
+
+    @Test
+    fun shouldShowErrorWhenRepositoryReturnError() {
+        whenever(repository.getProjects()).thenReturn(Observable.error(RuntimeException()))
+
+        controller.onCreate()
+
+        verify(view).showError()
+    }
+
 
     private fun createSearch(query: CharSequence) = Observable.just(query)
 

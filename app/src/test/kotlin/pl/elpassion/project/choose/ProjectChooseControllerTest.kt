@@ -4,13 +4,19 @@ import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import rx.Observable
 
 class ProjectChooseControllerTest {
+
+    @JvmField @Rule
+    val rxSchedulersRule = RxSchedulersRule()
 
     val view = mock<ProjectChoose.View>()
     val repository = mock<ProjectRepository>()

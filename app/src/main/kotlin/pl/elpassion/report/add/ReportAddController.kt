@@ -4,8 +4,8 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
-import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.Project
 import java.util.Calendar.*
 
 class ReportAddController(date: String?,

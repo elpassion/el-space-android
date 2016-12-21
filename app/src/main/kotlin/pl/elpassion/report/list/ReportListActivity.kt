@@ -27,11 +27,13 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     private val controller by lazy {
         ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), this)
     }
+    private val reportsAdapter by lazy { ReportsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_list_activity)
         reportsContainer.layoutManager = LinearLayoutManager(this)
+        reportsContainer.adapter = reportsAdapter
         controller.onCreate()
         nextMonthButton.setOnClickListener { controller.onNextMonth() }
         prevMonthButton.setOnClickListener { controller.onPreviousMonth() }
@@ -67,7 +69,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
-        reportsContainer.adapter = ReportsAdapter(addSeparators(adapterList))
+        reportsAdapter.updateAdapter(addSeparators(adapterList))
     }
 
     private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {

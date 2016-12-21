@@ -1,11 +1,11 @@
 package pl.elpassion.report.list.adapter
 
-import com.elpassion.android.commons.recycler.BaseRecyclerViewAdapter
-import com.elpassion.android.commons.recycler.ItemAdapter
+import com.elpassion.android.commons.recycler.StableItemAdapter
+import com.elpassion.android.commons.recycler.StableRecyclerViewAdapter
 
 
-class ReportsAdapter() : BaseRecyclerViewAdapter() {
-    fun updateAdapter(items: List<ItemAdapter<*>>) {
+class ReportsAdapter() : StableRecyclerViewAdapter() {
+    fun updateAdapter(items: List<StableItemAdapter<*>>) {
         adapters.clear()
         adapters.addAll(items)
         notifyDataSetChanged()

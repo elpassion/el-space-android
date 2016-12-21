@@ -1,14 +1,15 @@
 package pl.elpassion.report.list.adapter.items
 
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.NO_ID
 import android.view.View
-import com.elpassion.android.commons.recycler.ItemAdapter
+import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
 import pl.elpassion.report.list.Day
 import pl.elpassion.report.list.OnDayClickListener
 
-class DayNotFilledInItemAdapter(val day: Day, val listener: OnDayClickListener) : ItemAdapter<DayNotFilledInItemAdapter.VH>(R.layout.day_not_filled_in_item) {
+class DayNotFilledInItemAdapter(val day: Day, val listener: OnDayClickListener) : StableItemAdapter<DayNotFilledInItemAdapter.VH>(NO_ID, R.layout.day_not_filled_in_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

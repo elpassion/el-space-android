@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:layout_marginStart="@dimen/report_left_space"
+        android:layout_marginStart="@dimen/report_item_left_space"
         android:orientation="vertical"
         android:paddingBottom="@dimen/small_padding"
         android:paddingTop="@dimen/small_padding">

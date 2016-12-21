@@ -3,11 +3,12 @@ package pl.elpassion.project.choose
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.elpassion.android.commons.recycler.ItemAdapter
+import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.project_item.view.*
 import pl.elpassion.R
 import pl.elpassion.project.Project
 
-class ProjectItemAdapter(val project: Project, val onClickListener: () -> Unit) : ItemAdapter<ProjectItemAdapter.Holder>(R.layout.project_item) {
+class ProjectItemAdapter(val project: Project, val onClickListener: () -> Unit) : StableItemAdapter<ProjectItemAdapter.Holder>(project.id, R.layout.project_item) {
 
     override fun onCreateViewHolder(itemView: View) = Holder(itemView)
 

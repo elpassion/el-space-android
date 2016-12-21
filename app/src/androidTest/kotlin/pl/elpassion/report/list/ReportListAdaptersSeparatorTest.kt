@@ -11,12 +11,6 @@ import pl.elpassion.report.list.adapter.items.*
 class ReportListAdaptersSeparatorTest {
 
     @Test
-    fun shouldHaveSeparatorBetweenTwoWeekends() {
-        val givenAdapters = addSeparators(listOf(createWeekendItem(), createWeekendItem()))
-        assertTrue(givenAdapters[1] is SeparatorItemAdapter)
-    }
-
-    @Test
     fun shouldNotHaveSeparatorBetweenTwoReportItemAdapters() {
         val givenAdapters = addSeparators(listOf(createReportItem(), createReportItem()))
         assertFalse(givenAdapters[1] is SeparatorItemAdapter)
@@ -54,5 +48,5 @@ class ReportListAdaptersSeparatorTest {
 
     private fun createNotFilledInDayItem() = DayNotFilledInItemAdapter(newDay(), mock())
 
-    private fun newDay() = Day(1, emptyList(), false, 1.0, false, "")
+    private fun newDay() = Day("", "", emptyList(), false, 1.0, false)
 }

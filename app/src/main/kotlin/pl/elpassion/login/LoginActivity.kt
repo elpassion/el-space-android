@@ -5,11 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
+import pl.elpassion.login.schortcut.ShortcutServiceImpl
 import pl.elpassion.report.list.ReportListActivity
+
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    val controller = LoginController(this, LoginRepositoryProvider.get())
+    private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

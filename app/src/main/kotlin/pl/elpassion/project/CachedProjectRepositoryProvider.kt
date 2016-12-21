@@ -6,9 +6,9 @@ import com.google.gson.Gson
 import pl.elpassion.common.ContextProvider
 import pl.elpassion.common.Provider
 
-object ProjectRepositoryProvider : Provider<ProjectRepository>({
+object CachedProjectRepositoryProvider : Provider<CachedProjectRepository>({
 
-    object : ProjectRepository {
+    object : CachedProjectRepository {
         private val PROJECTS_KEY = "projects_key"
         private val repository = createSharedPrefs<List<Project>>({ PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }, { Gson() })
 
@@ -18,6 +18,10 @@ object ProjectRepositoryProvider : Provider<ProjectRepository>({
 
         override fun getPossibleProjects(): List<Project> {
             return repository.read(PROJECTS_KEY) ?: emptyList()
+        }
+
+        override fun hasProjects():Boolean {
+            return repository.contains(PROJECTS_KEY)
         }
     }
 })

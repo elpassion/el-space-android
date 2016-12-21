@@ -12,7 +12,7 @@ class WeekendDayItem(val day: Day, val listener: OnDayClickListener) : ItemAdapt
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {
-        holder.itemView.setOnClickListener { listener.onDay(day.dayNumber) }
+        holder.itemView.setOnClickListener { listener.onDayDate(day.date) }
         holder.itemView.dayNumber.text = day.name
     }
 

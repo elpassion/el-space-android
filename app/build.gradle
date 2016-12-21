@@ -2,7 +2,9 @@ buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
+    ext.support_version = '25.0.1'
     ext.rxJava= '1.1.9'
+    ext.elCommon = '0.0.10'
 
     repositories {
         jcenter()
@@ -22,12 +24,12 @@ apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "pl.elpassion"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -60,6 +62,10 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+configurations.all {
+    resolutionStrategy.force "io.reactivex:rxjava:$rxJava"
+}
+
 dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
@@ -67,11 +73,13 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:1.0.0'
+    compile "com.android.support:appcompat-v7:$support_version"
+    compile "com.android.support:design:$support_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "com.elpassion.android.commons:recycler:0.0.9"
-    compile "com.elpassion.android.commons:shared-preferences:0.0.9"
+    compile "com.elpassion.android.commons:recycler:$elCommon"
+    compile "com.elpassion.android.commons:shared-preferences:$elCommon"
+    compile "com.elpassion.android.commons:view:$elCommon"
     compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
     }
@@ -91,7 +99,7 @@ dependencies {
     androidTestCompile("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile("com.elpassion.android.commons:espresso:0.0.9") {
+    androidTestCompile("com.elpassion.android.commons:espresso:$elCommon") {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }

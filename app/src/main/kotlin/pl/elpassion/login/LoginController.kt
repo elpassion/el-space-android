@@ -1,8 +1,14 @@
 package pl.elpassion.login
 
-class LoginController(val view: Login.View, val loginRepository: Login.Repository) {
+import pl.elpassion.login.schortcut.ShortcutService
+
+class LoginController(private val view: Login.View,
+                      private val loginRepository: Login.Repository,
+                      private val shortcutService: ShortcutService) {
+
     fun onCreate() {
         if (loginRepository.readToken() != null) {
+            addShortcutsIfSupported()
             view.openReportListScreen()
         }
     }
@@ -11,8 +17,15 @@ class LoginController(val view: Login.View, val loginRepository: Login.Repositor
         if (token.isNotEmpty()) {
             loginRepository.saveToken(token)
             view.openReportListScreen()
+            addShortcutsIfSupported()
         } else {
             view.showEmptyLoginError()
+        }
+    }
+
+    private fun addShortcutsIfSupported() {
+        if (shortcutService.isSupportingShortcuts()) {
+            shortcutService.creteAppShortcuts()
         }
     }
 

@@ -12,21 +12,21 @@ import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.choose.ProjectChooseActivity
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
-    val controller by lazy {
-        ReportAddController(this, ProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
+    private val controller by lazy {
+        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, CachedProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         showBackArrowOnActionBar()
-        controller.onCreate(intent.getStringExtra(ADD_DATE_KEY))
+        controller.onCreate()
         reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddAdd.setOnClickListener {
@@ -43,6 +43,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun showSelectedProject(project: Project) {
         reportAddProjectName.text = project.name
+    }
+
+    override fun enableAddReportButton() {
+        reportAddAdd.isEnabled = true
     }
 
     override fun openProjectChooser() {
@@ -76,6 +80,9 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             activity.startActivityForResult(intent(activity, date), requestCode)
         }
 
-        fun intent(context: Context, date: String) = Intent(context, ReportAddActivity::class.java).apply { putExtra(ADD_DATE_KEY, date) }
+        fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)
+
+        fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
+
     }
 }

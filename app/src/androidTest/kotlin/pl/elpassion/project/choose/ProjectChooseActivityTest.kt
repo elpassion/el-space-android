@@ -1,18 +1,20 @@
 package pl.elpassion.project.choose
 
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onText
+import android.support.test.espresso.action.ViewActions.replaceText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
+import rx.Observable
 
 class ProjectChooseActivityTest {
 
@@ -29,6 +31,13 @@ class ProjectChooseActivityTest {
     }
 
     @Test
+    fun shouldHaveSearchActionIconOnToolbar() {
+        stubRepositoryToReturn(emptyList())
+        rule.startActivity()
+        onId(R.id.action_search).isDisplayed()
+    }
+
+    @Test
     fun shouldDisplayProjectFromRepository() {
         stubRepositoryToReturn(listOf(newProject()))
         rule.startActivity()
@@ -37,15 +46,29 @@ class ProjectChooseActivityTest {
 
     @Test
     fun shouldDisplayTwoProjectsFromRepository() {
-        stubRepositoryToReturn(listOf(newProject("id1", "name1"), newProject("id2", "name2")))
+        stubRepositoryToReturn(listOf(newProject(1, "name1"), newProject(2, "name2")))
         rule.startActivity()
         onText("name1").isDisplayed()
         onText("name2").isDisplayed()
     }
 
+    @Ignore
+    @Test
+    fun shouldDisplayProjectAfterSearch() {
+        stubRepositoryToReturn(listOf(newProject(1, "name1"), newProject(2, "name2")))
+        rule.startActivity()
+
+        onId(R.id.action_search).click()
+        onId(R.id.search_src_text).perform(replaceText("Name1"))
+
+        onText("name1").isDisplayed()
+        onText("name2").doesNotExist()
+    }
+
+
     private fun stubRepositoryToReturn(projects: List<Project>) {
         ProjectRepositoryProvider.override = { repository }
-        whenever(repository.getPossibleProjects()).thenReturn(projects)
+        whenever(repository.getProjects()).thenReturn(Observable.just(projects))
     }
 }
 

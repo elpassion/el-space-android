@@ -6,20 +6,20 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/report_row_edge_margin"
     android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:layout_marginTop="-3dp"
     android:background="@drawable/click_indicator_white"
     android:orientation="horizontal">
 
     <View
         android:id="@+id/hubIndicator"
-        style="@style/HubIndicator" />
+        style="@style/HubIndicator"
+        android:background="@color/filledIndicator" />
 
     <TextView
         android:id="@+id/dayNumber"
         style="@style/DayName"
         android:layout_width="@dimen/report_left_space"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:gravity="start"
         tools:text="10 Thu" />
 
     <TextView
@@ -29,4 +29,5 @@
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/ico_hub_plus_not_active"
         tools:text="Total: 8.0 hours" />
+
 </LinearLayout>

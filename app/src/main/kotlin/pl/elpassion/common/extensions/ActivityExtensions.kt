@@ -8,7 +8,7 @@ fun AppCompatActivity.handleClickOnBackArrowItem(item: MenuItem): Boolean {
         onBackPressed()
         return true
     } else {
-        return onOptionsItemSelected(item)
+        return false
     }
 }
 

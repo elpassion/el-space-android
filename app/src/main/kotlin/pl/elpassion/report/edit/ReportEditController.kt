@@ -13,14 +13,14 @@ class ReportEditController(private val view: ReportEdit.View,
 
     private var reportId: Long by Delegates.notNull()
     private lateinit var reportDate: String
-    private lateinit var projectId: String
+    private var projectId: Long by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
     fun onCreate(report: Report) {
         reportId = report.id
         reportDate = getPerformedAtString(report.year, report.month, report.day)
-        projectId = "${report.projectId}"
+        projectId = report.projectId
         view.showReport(report)
     }
 

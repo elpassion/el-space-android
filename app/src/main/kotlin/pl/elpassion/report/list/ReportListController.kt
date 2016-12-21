@@ -1,88 +1,76 @@
 package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
-
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.extensions.*
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.DateChangeObserver
+import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 import java.util.*
 
-class ReportListController(val service: ReportList.Service, val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
+class ReportListController(private val reportDayService: ReportDayService,
+                           private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
-    private var subscription: Subscription? = null
-    private val reportList: MutableList<Report> = ArrayList()
-    private val date: Calendar by lazy { Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) } }
+    private val subscriptions = CompositeSubscription()
+    private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
 
     fun onCreate() {
         fetchReports()
+        subscribeDateChange()
     }
 
     fun refreshReportList() {
         fetchReports()
     }
 
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
     private fun fetchReports() {
-        subscription = service.getReports()
+        reportDayService.createDays(dateChangeObserver.observe())
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({ reports ->
-                    reportList.clear()
-                    reportList.addAll(reports)
-                    showDaysAndUpdateMonthName()
+                .subscribe({ days ->
+                    view.hideLoader()
+                    view.showDays(days, this, this)
                 }, {
                     view.showError(it)
                 })
+                .save()
     }
 
-    fun onDestroy() {
-        subscription?.unsubscribe()
+    private fun subscribeDateChange() {
+        dateChangeObserver.observe()
+                .subscribe { view.showMonthName(it.month.monthName) }
+                .save()
     }
 
     fun onNextMonth() {
-        date.changeToNextMonth()
-        showDaysAndUpdateMonthName()
+        dateChangeObserver.setNextMonth()
     }
 
     fun onPreviousMonth() {
-        date.changeToPreviousMonth()
-        showDaysAndUpdateMonthName()
+        dateChangeObserver.setPreviousMonth()
     }
 
-    private fun showDaysAndUpdateMonthName() {
-        val days = (1..daysForCurrentMonth()).map { dayNumber ->
-            val calendarForDay = getCalendarForDay(dayNumber)
-            Day(dayNumber = dayNumber,
-                    reports = reportList.filter(isFromSelectedDay(dayNumber)),
-                    hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
-                    isWeekendDay = calendarForDay.isWeekendDay(),
-                    name = "$dayNumber ${calendarForDay.dayName()}")
-        }
-
-        view.showDays(days, this, this)
-        view.showMonthName(date.getFullMonthName())
-    }
-
-    private fun daysForCurrentMonth() = date.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-    private fun isFromSelectedDay(day: Int): (Report) -> Boolean = { report ->
-        report.year == date.get(Calendar.YEAR) && report.month == date.get(Calendar.MONTH) + 1 && report.day == day
-    }
-
-    private fun getCalendarForDay(dayNumber: Int) = getTimeFrom(year = date.get(Calendar.YEAR), month = date.get(Calendar.MONTH), day = dayNumber)
-
-    override fun onDay(dayNumber: Int) {
-        view.openAddReportScreen(getPerformedAtString(date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1, dayNumber))
+    override fun onDayDate(date: String) {
+        view.openAddReportScreen(date)
     }
 
     override fun onReport(report: Report) {
         view.openEditReportScreen(report)
     }
+
+    private fun Subscription.save() {
+        subscriptions.add(this)
+    }
 }
 
 interface OnDayClickListener {
-    fun onDay(dayNumber: Int)
+    fun onDayDate(date: String)
 }
 
 interface OnReportClickListener {

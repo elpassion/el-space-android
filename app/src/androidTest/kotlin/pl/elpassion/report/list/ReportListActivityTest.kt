@@ -5,10 +5,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.hasChildWithText
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.core.AllOf.allOf
@@ -21,8 +18,8 @@ import pl.elpassion.common.checkIntent
 import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.add.ReportAddActivity
@@ -34,7 +31,7 @@ class ReportListActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportListActivity> {
-        ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
+        CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
         whenever(service.getReports()).thenReturn(Observable.just(listOf(
                 newReport(year = 2016, month = 10, day = 3, projectName = "Project", description = "Description", reportedHours = 8.0),
@@ -117,6 +114,41 @@ class ReportListActivityTest {
     fun shouldShowTotalInformationOnDayFromFutureIfThereAreReports() {
         onView(withId(R.id.reportsContainer)).perform(scrollToPosition<RecyclerView.ViewHolder>(6))
         verifyIfDayFromFutureWithReportsHasTotalInformation()
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameOnStart() {
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("October")
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameAfterClickOnNextMonth() {
+        onId(R.id.nextMonthButton).click()
+
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("November")
+    }
+
+    @Test
+    fun shouldShowCorrectlyMonthNameAfterClickOnPrevMonth() {
+        onId(R.id.prevMonthButton).click()
+
+        onId(R.id.monthTitle)
+                .isDisplayed()
+                .hasText("September")
+    }
+
+    @Test
+    fun shouldDisplayCorrectDescriptionOnNextButton() {
+        onId(R.id.nextMonthButton).check(matches(withContentDescription(R.string.next_month)))
+    }
+
+    @Test
+    fun shouldDisplayCorrectDescriptionOnPreviousButton() {
+        onId(R.id.prevMonthButton).check(matches(withContentDescription(R.string.previous_month)))
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

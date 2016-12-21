@@ -5,7 +5,7 @@ import android.support.test.rule.ActivityTestRule
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
 import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
@@ -29,7 +29,7 @@ inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline befor
 fun stubReportEditApi() {
     ReportEdit.EditApiProvider.override = {
         object : ReportEdit.EditApi {
-            override fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: String) = Completable.complete()
+            override fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: Long) = Completable.complete()
         }
     }
     ReportEdit.RemoveApiProvider.override = {
@@ -43,13 +43,13 @@ fun stubReportEditApi() {
 fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {
-            override fun addReport(date: String, projectId: String, hours: String, description: String) = Observable.just(Unit)
+            override fun addReport(date: String, projectId: Long, hours: String, description: String) = Observable.just(Unit)
         }
     }
 }
 
 fun stubProjectRepository() {
-    ProjectRepositoryProvider.override = {
+    CachedProjectRepositoryProvider.override = {
         mock()
     }
 }

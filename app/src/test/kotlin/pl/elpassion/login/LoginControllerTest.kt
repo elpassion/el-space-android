@@ -2,12 +2,14 @@ package pl.elpassion.login
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
+import pl.elpassion.login.schortcut.ShortcutService
 
 class LoginControllerTest {
 
     val view = mock<Login.View>()
     val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
-    val controller = LoginController(view, loginRepository)
+    val shortcutService = mock<ShortcutService>()
+    val controller = LoginController(view, loginRepository, shortcutService)
 
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
@@ -57,6 +59,22 @@ class LoginControllerTest {
     fun shouldNotOpenReportListScreenIfTokenIsEmptyOnLogin() {
         controller.onLogin("")
         verify(view, never()).openReportListScreen()
+    }
+
+    @Test
+    fun shouldCreateAppShortcutsWhenSupported() {
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
+        controller.onLogin("login")
+
+        verify(shortcutService).creteAppShortcuts()
+    }
+
+    @Test
+    fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
+        controller.onLogin("login")
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
+
+        verify(shortcutService, never()).creteAppShortcuts()
     }
 
 }

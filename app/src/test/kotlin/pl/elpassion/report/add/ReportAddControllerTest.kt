@@ -8,8 +8,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
+import pl.elpassion.commons.stubCurrentTime
+import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
 import rx.Observable
 
@@ -17,8 +18,8 @@ class ReportAddControllerTest {
 
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
-    val repository = mock<ProjectRepository>()
-    val controller = ReportAddController(view, repository, api)
+    val repository = mock<CachedProjectRepository>()
+    val project = newProject()
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -31,33 +32,39 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowPossibleProjects() {
-        onCreate()
-        verify(view).showSelectedProject(newProject())
+        val controller = createController()
+        controller.onCreate()
+
+        verify(view).showSelectedProject(project)
     }
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
-        val projects = listOf(newProject("id2", "name2"), newProject())
+        val projects = listOf(newProject(2, "name2"), newProject())
         stubRepositoryToReturn(projects)
-        onCreate()
+        val controller = createController()
+
+        controller.onCreate()
+
         verify(view).showSelectedProject(projects.first())
     }
 
     @Test
     fun shouldOpenProjectChooserOnProjectClicked() {
-        controller.onProjectClicked()
+        createController().onProjectClicked()
         verify(view).openProjectChooser()
     }
 
     @Test
     fun shouldShowSelectedProject() {
-        controller.onSelectProject(newProject())
+        createController().onSelectProject(newProject())
         verify(view).showSelectedProject(newProject())
     }
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
-        onCreate()
+        val controller = createController()
+        controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).close()
     }
@@ -65,31 +72,45 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
-        onCreate()
+        val controller = createController()
+        controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).showError(any())
     }
 
     @Test
     fun shouldShowDate() {
-        onCreate("2016-09-23")
+        val controller = createController("2016-09-23")
+        controller.onCreate()
         verify(view).showDate("2016-09-23")
     }
 
     @Test
     fun shouldUseApi() {
-        whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))
-        onCreate("2016-09-23")
+        val exception = RuntimeException()
+        val project = Project(1, "Slack")
+        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Observable.error(exception))
+        val controller = createController("2016-09-23")
+
+        controller.onSelectProject(project)
         controller.onReportAdd("8", "description")
-        verify(view).showError(any())
+        verify(view).showError(exception)
     }
 
-    private fun onCreate(date: String = "2016-01-01") {
-        controller.onCreate(date)
+    @Test
+    fun shouldShowCurrentDateWhenNotDateNotSelected() {
+        stubCurrentTime(2016, 2, 1)
+        val controller = createController(null)
+        controller.onCreate()
+
+        verify(view).showDate("2016-02-01")
     }
+
+    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(list: List<Project> = listOf(newProject())) {
         whenever(repository.getPossibleProjects()).thenReturn(list)
+        whenever(repository.hasProjects()).thenReturn(list.isNotEmpty())
     }
 }
 

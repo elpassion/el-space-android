@@ -6,10 +6,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppThemeWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
     <style name="DayName">
+        <item name="android:layout_marginStart">10dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/defaultTextColor</item>
-        <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity" >start</item>
     </style>
 
     <style name="DayHeader">
@@ -52,8 +59,7 @@
     </style>
 
     <style name="HubIndicator">
-        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">3dp</item>
+        <item name="android:layout_width">2dp</item>
     </style>
 </resources>

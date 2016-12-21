@@ -62,6 +62,10 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
+configurations.all {
+    resolutionStrategy.force "io.reactivex:rxjava:$rxJava"
+}
+
 dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"

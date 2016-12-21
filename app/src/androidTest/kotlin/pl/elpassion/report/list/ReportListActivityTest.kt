@@ -18,8 +18,8 @@ import pl.elpassion.common.checkIntent
 import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.add.ReportAddActivity
@@ -31,7 +31,7 @@ class ReportListActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportListActivity> {
-        ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
+        CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
         whenever(service.getReports()).thenReturn(Observable.just(listOf(
                 newReport(year = 2016, month = 10, day = 3, projectName = "Project", description = "Description", reportedHours = 8.0),

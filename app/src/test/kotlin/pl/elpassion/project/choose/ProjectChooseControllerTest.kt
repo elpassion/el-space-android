@@ -4,12 +4,18 @@ import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.dto.newProject
+import rx.Observable
 
 class ProjectChooseControllerTest {
+
+    @JvmField @Rule
+    val rxSchedulersRule = RxSchedulersRule()
 
     val view = mock<ProjectChoose.View>()
     val repository = mock<ProjectRepository>()
@@ -33,6 +39,7 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldSelectClickedProject() {
         val project = newProject()
+        stubRepositoryToReturn(listOf(project))
         controller.onProjectClicked(project)
         verify(view).selectProject(project)
     }
@@ -47,36 +54,83 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldShowFilteredProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.onCreate()
-        controller.searchQuery("B")
+        controller.onCreate(createSearch("B"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
 
     @Test
     fun shouldShowFilteredSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
-        controller.onCreate()
 
-        controller.searchQuery("C")
+        controller.onCreate(createSearch("C"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
     fun shouldShowFilteredProjectsIgnoreCase() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.onCreate()
 
-        controller.searchQuery("b")
+        controller.onCreate(createSearch("b"))
 
-        verify(view).showFilteredProjects(argThat { this[0].name == "B" })
+        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
+    @Test
+    fun shouldCallToRepositoryOnlyOnce() {
+        stubRepositoryToReturn(emptyList())
+
+        controller.onCreate(Observable.just("a", "b"))
+
+        verify(repository).getProjects()
+    }
+
+    @Test
+    fun shouldShowErrorWhenRepositoryReturnError() {
+        whenever(repository.getProjects()).thenReturn(Observable.error(RuntimeException()))
+
+        controller.onCreate()
+
+        verify(view).showError()
+    }
+
+    @Test
+    fun shouldShowLoadingOnCreate() {
+        stubRepositoryToReturn(emptyList())
+        controller.onCreate()
+
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoadingOnFinishRepositoryCall() {
+        stubRepositoryToReturn(emptyList())
+
+        controller.onCreate()
+
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoadingOnDestroy() {
+        whenever(repository.getProjects()).thenReturn(Observable.never())
+
+        controller.onCreate()
+        controller.onDestroy()
+
+        verify(view).hideLoader()
+    }
+
+    private fun ProjectChooseController.onCreate() {
+        onCreate(Observable.just(""))
+    }
+
+    private fun createSearch(query: CharSequence) = Observable.just(query)
 
     private fun stubRepositoryToReturn(list: List<Project>) {
-        whenever(repository.getPossibleProjects()).thenReturn(list)
+        whenever(repository.getProjects()).thenReturn(Observable.just(list))
     }
 }
 

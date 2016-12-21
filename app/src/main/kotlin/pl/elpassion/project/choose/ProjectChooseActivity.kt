@@ -3,18 +3,20 @@ package pl.elpassion.project.choose
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.MenuItemCompat
+import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
+import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
@@ -27,7 +29,6 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         setContentView(R.layout.project_choose_activity)
         showBackArrowOnActionBar()
         initRecyclerView()
-        controller.onCreate()
     }
 
     private fun initRecyclerView() {
@@ -39,8 +40,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         updateAdapterList(projects)
     }
 
-    override fun showFilteredProjects(projects: List<Project>) {
-        updateAdapterList(projects)
+    override fun showError() {
     }
 
     private fun updateAdapterList(projects: List<Project>) {
@@ -64,26 +64,23 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.project_choose_menu, menu)
-        initSearchView(menu)
+        val searchView = menu.getSearchView()
+        controller.onCreate(searchView.queryTextChanges())
         return true
     }
 
-    private fun initSearchView(menu: Menu) {
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
-        val textChangeListener = object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                controller.searchQuery(query)
-                return true
-            }
+    private fun Menu.getSearchView(): SearchView {
+        val searchItem = findItem(R.id.action_search)
+        return getActionView(searchItem) as SearchView
+    }
 
-            override fun onQueryTextChange(query: String): Boolean {
-                controller.searchQuery(query)
-                return true
-            }
+    override fun hideLoader() = progressBar.hide()
 
-        }
-        searchView.setOnQueryTextListener(textChangeListener)
+    override fun showLoader() = progressBar.show()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        controller.onDestroy()
     }
 
     companion object {

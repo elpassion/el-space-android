@@ -4,20 +4,25 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
+import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepository
 import java.util.Calendar.*
 
-class ReportAddController(private val view: ReportAdd.View, private val repository: ProjectRepository, private val api: ReportAdd.Api) {
+class ReportAddController(date: String?,
+                          private val view: ReportAdd.View,
+                          private val repository: CachedProjectRepository,
+                          private val api: ReportAdd.Api) {
+    private val selectedDate: String = date ?: getCurrentDatePerformedAtString()
+    private var project: Project? = null
 
-    lateinit var date: String
-    lateinit var project: Project
-
-    fun onCreate(selectedDate: String?) {
-        date = selectedDate ?: getCurrentDatePerformedAtString()
-        view.showDate(date)
-        onSelectProject(repository.getPossibleProjects().first())
+    fun onCreate() {
+        view.showDate(selectedDate)
+        if (repository.hasProjects()) {
+            onSelectProject(getLastProject())
+        }
     }
+
+    private fun getLastProject() = repository.getPossibleProjects().first()
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())
@@ -31,10 +36,11 @@ class ReportAddController(private val view: ReportAdd.View, private val reposito
     fun onSelectProject(project: Project) {
         this.project = project
         view.showSelectedProject(project)
+        view.enableAddReportButton()
     }
 
     fun onReportAdd(hours: String, description: String) {
-        api.addReport(date, project.id, hours, description)
+        api.addReport(selectedDate, project!!.id, hours, description)
                 .applySchedulers()
                 .subscribe({
                     view.close()

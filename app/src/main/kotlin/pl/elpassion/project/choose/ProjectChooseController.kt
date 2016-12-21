@@ -1,23 +1,38 @@
 package pl.elpassion.project.choose
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
+import rx.Observable
+import rx.Subscription
 
-class ProjectChooseController(val view: ProjectChoose.View, val repository: ProjectRepository) {
-    private lateinit var sortedProjectsList: List<Project>
+class ProjectChooseController(private val view: ProjectChoose.View,
+                              private val repository: ProjectRepository) {
 
-    fun onCreate() {
-        sortedProjectsList = repository.getPossibleProjects().sortedBy { it.name }
-        view.showPossibleProjects(sortedProjectsList)
+    private var subscription: Subscription? = null
+
+    fun onCreate(query: Observable<CharSequence>) {
+        subscription = Observable.combineLatest(projectListObservable(), query) { projectList, querySequence ->
+            projectList.filter { it.name.contains(querySequence, true) }
+        }.subscribe({
+            view.showPossibleProjects(it)
+        }, {
+            view.showError()
+        })
+    }
+
+    fun onDestroy() {
+        subscription?.unsubscribe()
     }
 
     fun onProjectClicked(project: Project) {
         view.selectProject(project)
     }
 
-    fun searchQuery(query: String) {
-        view.showFilteredProjects(filterProjectByQuery(query))
-    }
-
-    private fun filterProjectByQuery(query: String) = sortedProjectsList.filter { it.name.contains(query, true) }
+    private fun projectListObservable(): Observable<List<Project>>
+            = repository.getProjects()
+            .map { it.sortedBy { it.name } }
+            .applySchedulers()
+            .doOnSubscribe { view.showLoader() }
+            .doOnUnsubscribe { view.hideLoader() }
 }

@@ -1,6 +1,7 @@
 package pl.elpassion.project
 
+import rx.Observable
+
 interface ProjectRepository {
-    fun getPossibleProjects(): List<Project>
-    fun saveProjects(projects: List<Project>)
+    fun getProjects(): Observable<List<Project>>
 }

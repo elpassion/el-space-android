@@ -17,8 +17,8 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.ProjectRepository
-import pl.elpassion.project.ProjectRepositoryProvider
+import pl.elpassion.project.CachedProjectRepository
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.add.ReportAdd
@@ -32,7 +32,7 @@ class ReportListActivityAddReportTest {
     @JvmField @Rule
     val rule = rule<ReportListActivity> {
         ReportAdd.ApiProvider.override = { addReportService }
-        ProjectRepositoryProvider.override = { mock<ProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
+        CachedProjectRepositoryProvider.override = { stubProjectRepository() }
         stubCurrentTime(year = 2016, month = 10, day = 1)
         whenever(service.getReports()).thenReturn(Observable.just(emptyList())).thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description", reportedHours = 8.0))))
         ReportList.ServiceProvider.override = { service }
@@ -46,6 +46,11 @@ class ReportListActivityAddReportTest {
         Espresso.closeSoftKeyboard()
         onId(R.id.reportAddAdd).click()
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("Description"))))
+    }
+
+    private fun stubProjectRepository() = mock<CachedProjectRepository>().apply{
+        whenever(hasProjects()).thenReturn(true)
+        whenever(getPossibleProjects()).thenReturn(listOf(newProject()))
     }
 }
 

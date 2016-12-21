@@ -2,9 +2,11 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
+import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
-import pl.elpassion.project.ProjectRepositoryProvider
 import pl.elpassion.report.Report
+import pl.elpassion.report.list.service.ProjectListService
+import pl.elpassion.report.list.service.ProjectListServiceImpl
 import pl.elpassion.report.list.service.ReportFromApi
 import pl.elpassion.report.list.service.ReportListService
 import retrofit2.http.GET
@@ -33,7 +35,7 @@ interface ReportList {
     }
 
     object ServiceProvider : Provider<Service>({
-        ReportListService(ReportApiProvider.get(), ProjectApiProvider.get(), ProjectRepositoryProvider.get())
+        ReportListService(ReportApiProvider.get(), ProjectListServiceProvider.get())
     })
 
     interface ReportApi {
@@ -52,6 +54,10 @@ interface ReportList {
 
     object ProjectApiProvider : Provider<ProjectApi>({
         RetrofitProvider.get().create(ProjectApi::class.java)
+    })
+
+    object ProjectListServiceProvider : Provider<ProjectListService>({
+        ProjectListServiceImpl(ProjectApiProvider.get(), CachedProjectRepositoryProvider.get())
     })
 }
 

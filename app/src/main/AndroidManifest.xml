@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".project.choose.ProjectChooseActivity"/>
         <activity android:name=".report.add.ReportAddActivity"/>
-        <activity android:name=".report.list.ReportListActivity"/>
+        <activity android:name=".report.list.ReportListActivity"
+            android:theme="@style/AppThemeWithoutActionBar"/>
         <activity android:name=".report.edit.ReportEditActivity"/>
         <activity android:name=".debate.login.DebateLoginActivity"/>
         <meta-data

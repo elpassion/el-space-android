@@ -142,13 +142,13 @@ class ReportListActivityTest {
     }
 
     @Test
-    fun shouldDisplayCorrectStringOnNextButton() {
-        onId(R.id.nextMonthButton).hasText(R.string.month_next)
+    fun shouldDisplayCorrectDescriptionOnNextButton() {
+        onId(R.id.nextMonthButton).check(matches(withContentDescription(R.string.next_month)))
     }
 
     @Test
-    fun shouldDisplayCorrectStringOnPreviousButton() {
-        onId(R.id.prevMonthButton).hasText(R.string.month_previous)
+    fun shouldDisplayCorrectDescriptionOnPreviousButton() {
+        onId(R.id.prevMonthButton).check(matches(withContentDescription(R.string.previous_month)))
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

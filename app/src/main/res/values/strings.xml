@@ -21,10 +21,10 @@
     <string name="action_remove_report">Remove report</string>
     <string name="refresh_action">Refresh</string>
     <string name="action_search">Search</string>
-    <string name="month_previous">previous</string>
-    <string name="month_next">next</string>
     <string name="shortcut_report_hub_short">Zaraportuj godziny</string>
     <string name="shortcut_report_hub_long">Dodaj raport godzinowy</string>
     <string name="debate_login_welcome">Welcome!</string>
     <string name="debate_login_instructions">To vote, insert debates PIN number.</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
 </resources>

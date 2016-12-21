@@ -4,6 +4,7 @@ import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R

@@ -3,12 +3,14 @@ package pl.elpassion.project.choose
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.crashlytics.android.Crashlytics
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
@@ -40,9 +42,6 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         updateAdapterList(projects)
     }
 
-    override fun showError() {
-    }
-
     private fun updateAdapterList(projects: List<Project>) {
         projectListAdapter.updateList(projects.map {
             ProjectItemAdapter(it) { controller.onProjectClicked(it) }
@@ -72,6 +71,11 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     private fun Menu.getSearchView(): SearchView {
         val searchItem = findItem(R.id.action_search)
         return getActionView(searchItem) as SearchView
+    }
+
+    override fun showError(ex: Throwable) {
+        Crashlytics.logException(ex)
+        Snackbar.make(projectsCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun hideLoader() = hideLoader(projectsCoordinator)

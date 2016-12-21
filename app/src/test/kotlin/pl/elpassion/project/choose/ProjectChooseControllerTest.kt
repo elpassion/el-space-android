@@ -89,11 +89,12 @@ class ProjectChooseControllerTest {
 
     @Test
     fun shouldShowErrorWhenRepositoryReturnError() {
-        whenever(repository.getProjects()).thenReturn(Observable.error(RuntimeException()))
+        val exception = RuntimeException()
+        whenever(repository.getProjects()).thenReturn(Observable.error(exception))
 
         controller.onCreate()
 
-        verify(view).showError()
+        verify(view).showError(exception)
     }
 
     @Test

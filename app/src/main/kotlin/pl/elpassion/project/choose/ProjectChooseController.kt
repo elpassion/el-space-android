@@ -17,7 +17,7 @@ class ProjectChooseController(private val view: ProjectChoose.View,
         }.subscribe({
             view.showPossibleProjects(it)
         }, {
-            view.showError()
+            view.showError(it)
         })
     }
 

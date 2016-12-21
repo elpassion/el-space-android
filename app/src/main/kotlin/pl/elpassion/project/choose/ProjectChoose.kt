@@ -8,7 +8,7 @@ interface ProjectChoose {
 
         fun selectProject(project: Project)
 
-        fun showError()
+        fun showError(ex: Throwable)
 
         fun hideLoader()
 

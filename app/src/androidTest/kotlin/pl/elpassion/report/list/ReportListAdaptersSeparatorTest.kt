@@ -6,7 +6,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.list.adapter.addSeparators
-import pl.elpassion.report.list.adapter.items.*
+import pl.elpassion.report.list.adapter.items.DayItemAdapter
+import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
+import pl.elpassion.report.list.adapter.items.ReportItemAdapter
+import pl.elpassion.report.list.adapter.items.SeparatorItemAdapter
 
 class ReportListAdaptersSeparatorTest {
 
@@ -39,8 +42,6 @@ class ReportListAdaptersSeparatorTest {
         val givenAdapters = addSeparators(listOf(createReportItem(), createNotFilledInDayItem()))
         assertTrue(givenAdapters[1] is SeparatorItemAdapter)
     }
-
-    private fun createWeekendItem() = WeekendDayItem(newDay(), mock())
 
     private fun createReportItem() = ReportItemAdapter(newReport(), mock())
 

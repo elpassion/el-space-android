@@ -11,7 +11,7 @@ import pl.elpassion.R
 import pl.elpassion.report.list.Day
 import pl.elpassion.report.list.OnDayClickListener
 
-class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : StableItemAdapter<DayItemAdapter.VH>(NO_ID, R.layout.day_item) {
+class DayItemAdapter(val day: Day, val listener: OnDayClickListener) : StableItemAdapter<DayItemAdapter.VH>(day.uuid, R.layout.day_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

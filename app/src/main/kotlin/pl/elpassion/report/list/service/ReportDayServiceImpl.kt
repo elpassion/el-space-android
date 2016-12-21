@@ -5,6 +5,7 @@ import pl.elpassion.report.Report
 import pl.elpassion.report.list.Day
 import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.YearMonth
+import pl.elpassion.report.list.createDayUUid
 import rx.Observable
 
 class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {
@@ -21,7 +22,8 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
                         hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
                         isWeekendDay = calendarForDay.isWeekendDay(),
                         name = "$dayNumber ${calendarForDay.dayName()}",
-                        date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))
+                        date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber),
+                        uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber))
             }
 
     private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (Report) -> Boolean = { report ->

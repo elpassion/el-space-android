@@ -29,6 +29,14 @@ class ReportEditController(private val view: ReportEdit.View,
     }
 
     fun onSaveReport(hours: String, description: String) {
+        if (description.isEmpty()) {
+            view.showEmptyDescriptionError()
+        } else {
+            sendEditedReport(description, hours)
+        }
+    }
+
+    private fun sendEditedReport(description: String, hours: String) {
         subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }

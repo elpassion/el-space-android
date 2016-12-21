@@ -55,6 +55,10 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         Snackbar.make(reportEditCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showEmptyDescriptionError() {
+        Snackbar.make(reportEditCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
     override fun hideLoader() {
         hideLoader(reportEditCoordinator)
     }

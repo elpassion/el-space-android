@@ -18,6 +18,7 @@ interface ReportEdit {
         fun hideLoader()
         fun showError(ex: Throwable)
         fun close()
+        fun showEmptyDescriptionError()
     }
 
     interface EditApi {

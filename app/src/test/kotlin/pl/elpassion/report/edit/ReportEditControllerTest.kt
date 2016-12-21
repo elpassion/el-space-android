@@ -60,10 +60,18 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowEmptyDescriptionError() {
+        controller.onCreate(newReport())
+        controller.onSaveReport("8", "")
+
+        verify(view).showEmptyDescriptionError()
+    }
+
+    @Test
     fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
         controller.onCreate(newReport(projectId = 10))
         controller.onSelectProject(newProject(id = 20))
-        controller.onSaveReport("0.0", "")
+        controller.onSaveReport("0.0", "description")
 
         verify(editReportApi).editReport(any(), any(), any(), any(), projectId = eq(20))
     }
@@ -79,7 +87,7 @@ class ReportEditControllerTest {
     fun shouldShowLoaderOnSaveReport() {
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
 
         verify(view).showLoader()
     }
@@ -88,7 +96,7 @@ class ReportEditControllerTest {
     fun shouldHideLoaderOnSaveReportFinish() {
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
 
         verify(view).hideLoader()
     }
@@ -98,7 +106,7 @@ class ReportEditControllerTest {
         stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
 
         verify(view, never()).hideLoader()
     }
@@ -108,7 +116,7 @@ class ReportEditControllerTest {
         stubEditReportApiToReturnNever()
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -119,7 +127,7 @@ class ReportEditControllerTest {
         stubEditReportApiToReturnError()
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
 
         verify(view).showError(any())
     }
@@ -128,7 +136,7 @@ class ReportEditControllerTest {
     fun shouldCloseViewWhenSavingHasNotFailed() {
         controller.onCreate(newReport())
 
-        controller.onSaveReport("1.0", "")
+        controller.onSaveReport("1.0", "description")
 
         verify(view).close()
     }

@@ -14,7 +14,7 @@ class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, v
                 day = date[2].toInt(),
                 reportedHours = value ?: 0.0,
                 projectId = projectId ?: -1,
-                projectName = projects.firstOrNull { it.id == projectId.toString() }?.name ?: "Unknown",
+                projectName = projects.firstOrNull { it.id == projectId }?.name ?: "Unknown",
                 description = comment ?: "")
     }
 

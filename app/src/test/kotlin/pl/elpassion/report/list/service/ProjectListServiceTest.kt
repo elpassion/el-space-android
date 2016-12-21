@@ -21,7 +21,7 @@ class ProjectListServiceTest {
 
     @Test
     fun shouldSaveReturnedProjectsToRepository() {
-        val projects = listOf(newProject(id = "2", name = "A"), newProject(id = "2", name = "B"))
+        val projects = listOf(newProject(id = 2, name = "A"), newProject(id = 2, name = "B"))
         stubProjectApiToReturn(projects)
         projectListService.getProjects().subscribe(subscriber)
 
@@ -30,7 +30,7 @@ class ProjectListServiceTest {
 
     @Test
     fun shouldSaveOnlyDistinctProjects() {
-        val project = newProject(id = "2", name = "A")
+        val project = newProject(id = 2, name = "A")
         val projects = listOf(project, project)
         stubProjectApiToReturn(projects)
         projectListService.getProjects().subscribe(subscriber)

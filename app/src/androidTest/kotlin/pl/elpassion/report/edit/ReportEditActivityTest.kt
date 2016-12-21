@@ -125,9 +125,9 @@ class ReportEditActivityTest {
     @Test
     fun shouldCallApiWithCorrectData() {
         startActivity(newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
-        stubRepositoryAndStart(newProject(name = "project2", id = "2"))
+        stubRepositoryAndStart(newProject(name = "project2", id = 2))
         insertData(reportedHours = "5.5", newDescription = "test2")
-        verify(reportEditApi).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = "2")
+        verify(reportEditApi).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = 2)
     }
 
     @Test

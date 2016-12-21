@@ -23,7 +23,7 @@ class ReportListServiceTest {
 
     @Before
     fun setUp() {
-        stubProjectServiceToReturn(newProject(id = "1", name = "Project"))
+        stubProjectServiceToReturn(newProject(id = 1, name = "Project"))
     }
 
     private fun stubProjectServiceToReturn(project: Project) {
@@ -67,7 +67,7 @@ class ReportListServiceTest {
 
     @Test
     fun shouldCorrectlyMapReportsProjectsName() {
-        stubProjectServiceToReturn(newProject(id = "2", name = "Test"))
+        stubProjectServiceToReturn(newProject(id = 2, name = "Test"))
         stubReportApiToReturn(newReportFromApi(projectId = 2))
         service.getReports().subscribe(subscriber)
         subscriber.assertValue(listOf(newReport(projectId = 2, projectName = "Test")))

@@ -27,7 +27,7 @@ interface ReportAdd {
         @POST("activities")
         fun addReport(
                 @Query("activity[performed_at]") date: String,
-                @Query("activity[project_id]") projectId: String,
+                @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
                 @Query("activity[comment]") description: String): Observable<Unit>
     }

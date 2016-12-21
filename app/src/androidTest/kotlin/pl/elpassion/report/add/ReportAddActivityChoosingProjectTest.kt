@@ -26,7 +26,7 @@ class ReportAddActivityChoosingProjectTest {
 
     @Test
     fun shouldChangeSelectedProject() {
-        stubRepositoryAndStart(listOf(newProject(), newProject("id2", "name2")))
+        stubRepositoryAndStart(listOf(newProject(), newProject(2, "name2")))
         onId(R.id.reportAddProjectName).click()
         onText("name2").click()
         onId(R.id.reportAddProjectName).hasText("name2")

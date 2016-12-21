@@ -26,7 +26,7 @@ interface ReportEdit {
                        @Query("activity[performed_at]") date: String,
                        @Query("activity[value]") reportedHour: String,
                        @Query("activity[comment]") description: String,
-                       @Query("activity[project_id]") projectId: String): Completable
+                       @Query("activity[project_id]") projectId: Long): Completable
     }
 
     object EditApiProvider : Provider<EditApi>({

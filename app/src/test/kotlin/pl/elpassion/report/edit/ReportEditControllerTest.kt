@@ -47,7 +47,7 @@ class ReportEditControllerTest {
 
         controller.onSaveReport(hours = "8.0", description = "description")
 
-        verify(editReportApi).editReport(id = 2, date = "2017-07-02", reportedHour = "8.0", description = "description", projectId = "2")
+        verify(editReportApi).editReport(id = 2, date = "2017-07-02", reportedHour = "8.0", description = "description", projectId = 2)
     }
 
     @Test
@@ -56,16 +56,16 @@ class ReportEditControllerTest {
 
         controller.onSaveReport(hours = "7.5", description = "newDescription")
 
-        verify(editReportApi).editReport(id = 5, date = "2016-01-03", reportedHour = "7.5", description = "newDescription", projectId = "2")
+        verify(editReportApi).editReport(id = 5, date = "2016-01-03", reportedHour = "7.5", description = "newDescription", projectId = 2)
     }
 
     @Test
     fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
         controller.onCreate(newReport(projectId = 10))
-        controller.onSelectProject(newProject(id = "20"))
+        controller.onSelectProject(newProject(id = 20))
         controller.onSaveReport("0.0", "")
 
-        verify(editReportApi).editReport(any(), any(), any(), any(), projectId = eq("20"))
+        verify(editReportApi).editReport(any(), any(), any(), any(), projectId = eq(20))
     }
 
     @Test

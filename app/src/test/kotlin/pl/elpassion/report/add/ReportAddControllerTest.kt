@@ -40,7 +40,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowPossibleProjectFormApi() {
-        val projects = listOf(newProject("id2", "name2"), newProject())
+        val projects = listOf(newProject(2, "name2"), newProject())
         stubRepositoryToReturn(projects)
         val controller = createController()
 
@@ -87,12 +87,14 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldUseApi() {
-        whenever(api.addReport("2016-09-23", "id", "8", "description")).thenReturn(Observable.error(RuntimeException()))
+        val exception = RuntimeException()
+        val project = Project(1, "Slack")
+        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Observable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.onCreate()
+        controller.onSelectProject(project)
         controller.onReportAdd("8", "description")
-        verify(view).showError(any())
+        verify(view).showError(exception)
     }
 
     @Test

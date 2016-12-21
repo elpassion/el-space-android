@@ -9,13 +9,13 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import com.elpassion.android.view.hide
-import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.common.hideLoader
+import pl.elpassion.common.showLoader
 import pl.elpassion.project.Project
 
 
@@ -74,9 +74,9 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         return getActionView(searchItem) as SearchView
     }
 
-    override fun hideLoader() = progressBar.hide()
+    override fun hideLoader() = hideLoader(projectsCoordinator)
 
-    override fun showLoader() = progressBar.show()
+    override fun showLoader() = showLoader(projectsCoordinator)
 
     override fun onDestroy() {
         super.onDestroy()

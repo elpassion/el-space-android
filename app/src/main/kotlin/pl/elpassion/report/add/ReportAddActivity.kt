@@ -72,6 +72,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showEmptyDescriptionError() {
+        Snackbar.make(reportAddCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
     companion object {
         private val REQUEST_CODE = 10001
         private val ADD_DATE_KEY = "dateKey"

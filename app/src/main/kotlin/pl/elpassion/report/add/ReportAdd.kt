@@ -20,6 +20,8 @@ interface ReportAdd {
         fun showDate(date: String)
 
         fun enableAddReportButton()
+
+        fun showEmptyDescriptionError()
     }
 
     interface Api {

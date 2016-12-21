@@ -70,6 +70,15 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldShowEmptyDescriptionError() {
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd("8", "")
+
+        verify(view).showEmptyDescriptionError()
+    }
+
+    @Test
     fun shouldShowErrorWhenAddingReportFails() {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
         val controller = createController()

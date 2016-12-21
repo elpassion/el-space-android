@@ -40,6 +40,14 @@ class ReportAddController(date: String?,
     }
 
     fun onReportAdd(hours: String, description: String) {
+        if (description.isEmpty()) {
+            view.showEmptyDescriptionError()
+        } else {
+            sendAddReport(description, hours)
+        }
+    }
+
+    private fun sendAddReport(description: String, hours: String) {
         api.addReport(selectedDate, project!!.id, hours, description)
                 .applySchedulers()
                 .subscribe({

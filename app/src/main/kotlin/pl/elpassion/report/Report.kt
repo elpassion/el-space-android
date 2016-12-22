@@ -11,7 +11,7 @@ data class HourlyReport(
         val reportedHours: Double,
         val project: Project?,
         val description: String,
-        val reportType: HoursReportType) : Serializable, Report
+        val reportType: HourlyReportType) : Serializable, Report
 
 data class DailyReport(
         override val id: Long,
@@ -27,7 +27,7 @@ interface Report {
     val day: Int
 }
 
-enum class HoursReportType {
+enum class HourlyReportType {
     REGULAR,
     PAID_VACATIONS,
 }

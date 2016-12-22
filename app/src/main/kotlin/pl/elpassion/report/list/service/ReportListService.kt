@@ -45,10 +45,10 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 reportType = reportType.toHoursReportType())
     }
 
-    private fun Int.toHoursReportType(): HoursReportType {
+    private fun Int.toHoursReportType(): HourlyReportType {
         return when(this) {
-            0 -> HoursReportType.REGULAR
-            else -> HoursReportType.PAID_VACATIONS
+            0 -> HourlyReportType.REGULAR
+            else -> HourlyReportType.PAID_VACATIONS
         }
     }
 

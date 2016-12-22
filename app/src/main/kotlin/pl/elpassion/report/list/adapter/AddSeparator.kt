@@ -10,7 +10,8 @@ fun addSeparators(adapters: List<StableItemAdapter<*>>) = mutableListOf<StableIt
                 itemAdapter is DayItemAdapter && previousItemAdapter is DayNotFilledInItemAdapter ||
                 itemAdapter is DayItemAdapter && previousItemAdapter is ReportItemAdapter ||
                 itemAdapter is DayNotFilledInItemAdapter && previousItemAdapter is DayItemAdapter ||
-                itemAdapter is DayNotFilledInItemAdapter && previousItemAdapter is ReportItemAdapter) {
+                itemAdapter is DayNotFilledInItemAdapter && previousItemAdapter is ReportItemAdapter ||
+                itemAdapter is DayNotFilledInItemAdapter && previousItemAdapter is DayWithDailyReportsItemAdapter) {
 
             addAll(listOf(SeparatorItemAdapter(), itemAdapter))
         } else {

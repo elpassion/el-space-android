@@ -1,9 +1,6 @@
 package pl.elpassion.report.add
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -76,6 +73,26 @@ class ReportAddControllerTest {
         controller.onReportAdd("8", "")
 
         verify(view).showEmptyDescriptionError()
+    }
+
+    @Test
+    fun shouldShowSelectedDate() {
+        val controller = createController()
+
+        controller.onDateSelect("2016-05-04")
+
+        verify(view).showDate("2016-05-04")
+    }
+
+    @Test
+    fun shouldChangeDateAfterOnCreate() {
+        val controller = createController("2016-01-04")
+        controller.onSelectProject(newProject())
+
+        controller.onDateSelect("2016-05-04")
+        controller.onReportAdd("0.1","Desription")
+
+        verify(api).addReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test

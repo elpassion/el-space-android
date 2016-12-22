@@ -15,6 +15,7 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
+import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
@@ -35,6 +36,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
                     reportAddDescription.text.toString()
             )
         }
+        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
+        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, {controller.onDateSelect(it)}) }
     }
 
     override fun showDate(date: String) {

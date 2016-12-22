@@ -12,7 +12,7 @@ class ReportAddController(date: String?,
                           private val view: ReportAdd.View,
                           private val repository: CachedProjectRepository,
                           private val api: ReportAdd.Api) {
-    private val selectedDate: String = date ?: getCurrentDatePerformedAtString()
+    private var selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var project: Project? = null
 
     fun onCreate() {
@@ -55,5 +55,10 @@ class ReportAddController(date: String?,
                 }, {
                     view.showError(it)
                 })
+    }
+
+    fun onDateSelect(performedDate: String) {
+        selectedDate = performedDate
+        view.showDate(performedDate)
     }
 }

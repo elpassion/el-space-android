@@ -86,6 +86,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
             when {
+                //CR: Why is (isWeekendDay == true) not enough to create weekendDayItem?
                 it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)
                 it.isNotFilledIn() -> DayNotFilledInItemAdapter(it, listener)
                 else -> DayItemAdapter(it, listener)

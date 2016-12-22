@@ -86,14 +86,21 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private fun createDayAdapter(day: Day, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
             when (day) {
-                is DayWithoutReports -> if (day.isWeekend) {
-                    listOf(WeekendDayItem(day, onDayClickListener))
-                } else {
-                    listOf(DayNotFilledInItemAdapter(day, onDayClickListener))
-                }
+                is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClickListener)
                 is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClickListener, onReportClickListener)
+                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day)
                 else -> throw IllegalArgumentException()
             }
+
+    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport) = listOf(DayWithDailyReportsItemAdapter(day))
+
+    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClickListener: OnDayClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {
+        return if (day.isWeekend) {
+            listOf(WeekendDayItem(day, onDayClickListener))
+        } else {
+            listOf(DayNotFilledInItemAdapter(day, onDayClickListener))
+        }
+    }
 
     private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
             listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }

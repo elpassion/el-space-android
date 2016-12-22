@@ -3,7 +3,6 @@ package pl.elpassion.common
 import android.app.Activity
 import android.content.Intent
 import android.support.test.rule.ActivityTestRule
-import com.elpassion.android.commons.espresso.InitIntentsRule
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -13,10 +12,10 @@ import java.util.*
 
 inline fun <reified T : Activity> activityTestRule(autoStart: Boolean = true,
                                                    activityIntent: Intent? = null,
-                                                   disableAnimation: Boolean,
-                                                   noinline before: (() -> Unit) = {}) = {
-    val customTestRules = createCustomTestRules(disableAnimation)
-    RuleChainAdapter(activityTestRuleImpl<T>(activityIntent, autoStart, before), customTestRules)
+                                                   disableAnimation: Boolean = false,
+                                                   noinline before: (() -> Unit) = {}): RuleChainAdapter<T> {
+    val customRules = createCustomTestRules(disableAnimation)
+    return RuleChainAdapter(activityTestRuleImpl<T>(activityIntent, autoStart, before), customRules)
 }
 
 fun createCustomTestRules(disableAnimation: Boolean): ArrayList<TestRule> {
@@ -49,9 +48,10 @@ class RuleChainAdapter<out T : Activity>(private val activityTestRule: ActivityT
     private val rules = buildRuleChain()
 
     private fun buildRuleChain(): RuleChain {
-        val ruleChain = RuleChain.outerRule(InitIntentsRule())
+        //FIXME RuleChain is not builder, every around method create new object instance
+        var ruleChain = RuleChain.outerRule(InitIntentsRule())
         customRules.forEach {
-            ruleChain.around(it)
+            ruleChain = ruleChain.around(it)
         }
         ruleChain.around(activityTestRule)
         return ruleChain

@@ -8,7 +8,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newDayReport
 import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.report.DayReportType
+import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.HourlyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ProjectListService
@@ -108,14 +108,14 @@ class ReportListServiceTest {
     fun shouldMapUnpaidVacationsReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 2))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newDayReport(reportType = DayReportType.UNPAID_VACATIONS)))
+        subscriber.assertValue(listOf(newDayReport(reportType = DailyReportType.UNPAID_VACATIONS)))
     }
 
     @Test
     fun shouldMapSickLeaveReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 3))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newDayReport(reportType = DayReportType.SICK_LEAVE)))
+        subscriber.assertValue(listOf(newDayReport(reportType = DailyReportType.SICK_LEAVE)))
     }
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {

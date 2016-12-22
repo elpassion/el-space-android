@@ -18,7 +18,7 @@ data class DailyReport(
         override val year: Int,
         override val month: Int,
         override val day: Int,
-        val reportType: DayReportType) : Serializable, Report
+        val reportType: DailyReportType) : Serializable, Report
 
 interface Report {
     val id: Long
@@ -32,7 +32,7 @@ enum class HourlyReportType {
     PAID_VACATIONS,
 }
 
-enum class DayReportType {
+enum class DailyReportType {
     UNPAID_VACATIONS,
     SICK_LEAVE
 }

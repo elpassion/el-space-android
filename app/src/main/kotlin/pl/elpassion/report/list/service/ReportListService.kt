@@ -52,10 +52,10 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
         }
     }
 
-    private fun Int.toDayReportType(): DayReportType {
+    private fun Int.toDayReportType(): DailyReportType {
         return when(this) {
-            3 -> DayReportType.SICK_LEAVE
-            else -> DayReportType.UNPAID_VACATIONS
+            3 -> DailyReportType.SICK_LEAVE
+            else -> DailyReportType.UNPAID_VACATIONS
         }
     }
 }

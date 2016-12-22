@@ -10,4 +10,13 @@ data class Report(
         val reportedHours: Double,
         val projectName: String,
         val projectId: Long,
-        val description: String) : Serializable
+        val description: String,
+        val reportType: ReportType) : Serializable
+
+enum class ReportType {
+    REGULAR,
+    UNPAID_VACATIONS,
+    PAID_VACATIONS,
+    SICK_LEAVE,
+    UNKNOWN
+}

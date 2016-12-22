@@ -8,6 +8,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.Report
+import pl.elpassion.report.ReportType
 import pl.elpassion.report.list.service.ProjectListService
 import pl.elpassion.report.list.service.ReportFromApi
 import pl.elpassion.report.list.service.ReportListService
@@ -87,6 +88,41 @@ class ReportListServiceTest {
         subscriber.assertValue(listOf(newReport(id = 2)))
     }
 
+    @Test
+    fun shouldMapRegularReportType() {
+        stubReportApiToReturn(newReportFromApi(reportType = 0))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(reportType = ReportType.REGULAR)))
+    }
+
+    @Test
+    fun shouldMapPaidVacationsReportType() {
+        stubReportApiToReturn(newReportFromApi(reportType = 1))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(reportType = ReportType.PAID_VACATIONS)))
+    }
+
+    @Test
+    fun shouldMapUnpaidVacationsReportType() {
+        stubReportApiToReturn(newReportFromApi(reportType = 2))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(reportType = ReportType.UNPAID_VACATIONS)))
+    }
+
+    @Test
+    fun shouldMapSickLeaveReportType() {
+        stubReportApiToReturn(newReportFromApi(reportType = 3))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(reportType = ReportType.SICK_LEAVE)))
+    }
+
+    @Test
+    fun shouldMapAnyOtherReportTypeToUnknown() {
+        stubReportApiToReturn(newReportFromApi(reportType = 4))
+        service.getReports().subscribe(subscriber)
+        subscriber.assertValue(listOf(newReport(reportType = ReportType.UNKNOWN)))
+    }
+
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
         whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
     }
@@ -95,14 +131,16 @@ class ReportListServiceTest {
                                  value: Double = 4.0,
                                  projectId: Long = 1,
                                  description: String = "description",
-                                 id: Long = 1): ReportFromApi {
+                                 id: Long = 1,
+                                 reportType: Int = 0): ReportFromApi {
 
         return ReportFromApi(
                 id = id,
                 performedAt = performedAt,
                 value = value,
                 projectId = projectId,
-                comment = description)
+                comment = description,
+                reportType = reportType)
     }
 
 }

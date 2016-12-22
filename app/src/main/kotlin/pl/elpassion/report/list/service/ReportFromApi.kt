@@ -2,8 +2,9 @@ package pl.elpassion.report.list.service
 
 import pl.elpassion.project.Project
 import pl.elpassion.report.Report
+import pl.elpassion.report.ReportType
 
-class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, val projectId: Long?, val comment: String?) {
+class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, val projectId: Long?, val comment: String?, val reportType: Int) {
 
     fun toReport(projects: List<Project>): Report {
         val date = performedAt.split("-")
@@ -15,7 +16,17 @@ class ReportFromApi(val id: Long, val performedAt: String, val value: Double?, v
                 reportedHours = value ?: 0.0,
                 projectId = projectId ?: -1,
                 projectName = projects.firstOrNull { it.id == projectId }?.name ?: "Unknown",
-                description = comment ?: "")
+                description = comment ?: "",
+                reportType = mapReportType(reportType))
     }
 
+    private fun mapReportType(reportType: Int): ReportType {
+        return when (reportType) {
+            0 -> ReportType.REGULAR
+            1 -> ReportType.PAID_VACATIONS
+            2 -> ReportType.UNPAID_VACATIONS
+            3 -> ReportType.SICK_LEAVE
+            else -> ReportType.UNKNOWN
+        }
+    }
 }

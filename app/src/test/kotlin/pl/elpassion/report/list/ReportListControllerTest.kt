@@ -124,7 +124,7 @@ class ReportListControllerTest {
     }
 
     private fun stubServiceToReturnEmptyListAndNeverEnd() {
-        val observable = Observable.just<List<Day>>(listOf()).concatWith(Observable.never())
+        val observable = Observable.just<List<RegularDay>>(listOf()).concatWith(Observable.never())
         whenever(service.createDays(any())).thenReturn(observable)
     }
 

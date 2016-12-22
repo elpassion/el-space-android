@@ -71,20 +71,20 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
                 .show()
     }
 
-    override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
+    override fun showDays(days: List<RegularDay>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
         reportsAdapter.updateAdapter(addSeparators(adapterList))
     }
 
-    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
+    private fun createContentItemsAdapters(days: List<RegularDay>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
         val itemAdapters = days.flatMap {
             listOf(createDayAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
         }
         return itemAdapters
     }
 
-    private fun createDayAdapter(it: Day, listener: OnDayClickListener) =
+    private fun createDayAdapter(it: RegularDay, listener: OnDayClickListener) =
             when {
                 //CR: Why is (isWeekendDay == true) not enough to create weekendDayItem?
                 it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)

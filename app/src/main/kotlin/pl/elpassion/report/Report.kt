@@ -3,7 +3,7 @@ package pl.elpassion.report
 import pl.elpassion.project.Project
 import java.io.Serializable
 
-data class HoursReport(
+data class HourlyReport(
         override val id: Long,
         override val year: Int,
         override val month: Int,

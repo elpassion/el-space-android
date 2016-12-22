@@ -2,7 +2,7 @@ package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.*
 import pl.elpassion.report.DailyReport
-import pl.elpassion.report.HoursReport
+import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.*
 import rx.Observable
@@ -25,9 +25,9 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
                             date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber),
                             isWeekend = calendarForDay.isWeekendDay())
 
-                } else if (reports.all { it is HoursReport }) {
+                } else if (reports.all { it is HourlyReport }) {
                     DayWithHourlyReports(uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber),
-                            reports = reports.filterIsInstance<HoursReport>(),
+                            reports = reports.filterIsInstance<HourlyReport>(),
                             hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
                             name = "$dayNumber ${calendarForDay.dayName()}",
                             date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))

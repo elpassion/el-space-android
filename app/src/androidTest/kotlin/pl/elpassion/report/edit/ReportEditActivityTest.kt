@@ -20,7 +20,7 @@ import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.choose.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.report.HoursReport
+import pl.elpassion.report.HourlyReport
 import pl.elpassion.startActivity
 import rx.Completable
 import rx.Observable
@@ -165,7 +165,7 @@ class ReportEditActivityTest {
         }
     }
 
-    private fun startActivity(report: HoursReport = newHoursReport()) {
+    private fun startActivity(report: HourlyReport = newHoursReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }

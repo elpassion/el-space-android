@@ -32,9 +32,9 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 reportType = reportType.toDayReportType())
     }
 
-    private fun ReportFromApi.toHoursReport(projects: List<Project>): HoursReport {
+    private fun ReportFromApi.toHoursReport(projects: List<Project>): HourlyReport {
         val date = performedAt.split("-")
-        return HoursReport(
+        return HourlyReport(
                 id = id,
                 year = date[0].toInt(),
                 month = date[1].toInt(),

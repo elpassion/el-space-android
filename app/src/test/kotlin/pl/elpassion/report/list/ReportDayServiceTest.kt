@@ -9,7 +9,7 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newDayReport
 import pl.elpassion.project.dto.newHoursReport
-import pl.elpassion.report.HoursReport
+import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
@@ -123,7 +123,7 @@ class ReportDayServiceTest {
         stubCurrentTime(year = year, month = month, day = day)
     }
 
-    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<HoursReport>, daysInMonth: Int, month: Int) {
+    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<HourlyReport>, daysInMonth: Int, month: Int) {
         stubServiceToReturn(apiReturnValue)
         stubDateChangeObserver(year = 2016, month = month)
         assertEquals(getDays().size, daysInMonth)

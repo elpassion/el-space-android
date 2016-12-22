@@ -26,7 +26,7 @@ class DayNotFilledInItemAdapter(val day: DayWithoutReports, val listener: OnDayC
             } else {
                 hubIndicator.hide()
                 missingDayInformation.visibility = View.INVISIBLE
-                icoHubPlus.background = ContextCompat.getDrawable(context,R.drawable.ico_hub_plus_active)
+                icoHubPlus.background = ContextCompat.getDrawable(context,R.drawable.ico_hub_plus_not_active)
             }
         }
     }

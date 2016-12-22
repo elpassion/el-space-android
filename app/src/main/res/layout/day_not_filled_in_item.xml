@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="@dimen/default_padding_value"
-        android:layout_marginRight="@dimen/default_padding_value"
-        android:src="@drawable/ico_hub_plus_active" />
+        android:layout_marginRight="@dimen/default_padding_value" />
 
 </LinearLayout>

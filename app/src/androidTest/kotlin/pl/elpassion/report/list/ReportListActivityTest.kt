@@ -159,20 +159,22 @@ class ReportListActivityTest {
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {
-        onView(allOf(hasDescendant(withText("1 Sat")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText(R.string.report_missing)))))
+        onItemWithText("1 Sat").check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
     private fun verifyIfFifthDayHasNoInformationAboutTotal() {
-        onView(allOf(hasDescendant(withText("5 Wed")), withParent(withId(R.id.reportsContainer)))).check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+        onItemWithText("5 Wed").check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
     }
 
     private fun verifyIfWeekendDayWithReportHasTotalInformation() {
-        onView(allOf(hasDescendant(withText("2 Sun")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+        onItemWithText("2 Sun").check(matches(hasDescendant(withText("Total: 3.0 hours"))))
     }
 
     private fun verifyIfDayFromFutureWithReportsHasTotalInformation() {
-        onView(allOf(hasDescendant(withText("6 Thu")), withParent(withId(R.id.reportsContainer)))).check(matches(hasDescendant(withText("Total: 4.0 hours"))))
+        onItemWithText("6 Thu").check(matches(hasDescendant(withText("Total: 4.0 hours"))))
     }
+
+    private fun onItemWithText(text: String) = onView(allOf(hasDescendant(withText(text)), withParent(withId(R.id.reportsContainer))))
 
 }
 

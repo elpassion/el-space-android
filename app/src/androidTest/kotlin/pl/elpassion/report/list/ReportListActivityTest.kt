@@ -142,6 +142,13 @@ class ReportListActivityTest {
     }
 
     @Test
+    fun shouldOpenAddReportOnClickOnFAB() {
+        onId(R.id.fabAddReport).click()
+
+        checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
     fun shouldDisplayCorrectDescriptionOnNextButton() {
         onId(R.id.nextMonthButton).check(matches(withContentDescription(R.string.next_month)))
     }

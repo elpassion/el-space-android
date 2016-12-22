@@ -108,6 +108,13 @@ class ReportListControllerTest {
         verify(view, times(1)).openEditReportScreen(report)
     }
 
+    @Test
+    fun shouldOpenAddReportScreen() {
+        controller.onAddTodayReport()
+
+        verify(view).openAddReportScreen()
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.createDays(any())).thenReturn(Observable.never())
     }

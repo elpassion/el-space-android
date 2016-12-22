@@ -37,6 +37,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         controller.onCreate()
         nextMonthButton.setOnClickListener { controller.onNextMonth() }
         prevMonthButton.setOnClickListener { controller.onPreviousMonth() }
+        fabAddReport.setOnClickListener { controller.onAddTodayReport() }
     }
 
     override fun openEditReportScreen(report: Report) {
@@ -49,6 +50,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun openAddReportScreen(date: String) {
         ReportAddActivity.startForResult(this, date, ADD_REPORT_SCREEN_REQUEST_CODE)
+    }
+
+    override fun openAddReportScreen() {
+        ReportAddActivity.startForResult(this, ADD_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun hideLoader() {

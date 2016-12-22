@@ -84,6 +84,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             activity.startActivityForResult(intent(activity, date), requestCode)
         }
 
+        fun startForResult(activity: Activity, requestCode: Int) {
+            activity.startActivityForResult(intent(activity), requestCode)
+        }
+
         fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)
 
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }

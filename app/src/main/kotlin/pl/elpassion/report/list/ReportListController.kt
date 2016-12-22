@@ -67,6 +67,10 @@ class ReportListController(private val reportDayService: ReportDayService,
     private fun Subscription.save() {
         subscriptions.add(this)
     }
+
+    fun onAddTodayReport() {
+        view.openAddReportScreen()
+    }
 }
 
 interface OnDayClickListener {

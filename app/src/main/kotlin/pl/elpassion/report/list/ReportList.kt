@@ -32,6 +32,8 @@ interface ReportList {
         fun showMonthName(monthName: String)
 
         fun openEditReportScreen(report: Report)
+
+        fun openAddReportScreen()
     }
 
     object ServiceProvider : Provider<Service>({

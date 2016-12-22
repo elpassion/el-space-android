@@ -47,6 +47,12 @@ class ReportListAdaptersSeparatorTest {
         assertTrue(givenAdapters[1] is SeparatorItemAdapter)
     }
 
+    @Test
+    fun shouldHaveSeparatorBetweenDaysWithoutReports() {
+        val givenAdapters = addSeparators(listOf(createNotFilledInDayItem(), createNotFilledInDayItem()))
+        assertTrue(givenAdapters[1] is SeparatorItemAdapter)
+    }
+
     private fun createReportItem() = ReportItemAdapter(newHourlyReport(), mock())
 
     private fun createDayWithHourlyReportItem() = DayItemAdapter(newDayWithHourlyReports(), mock())

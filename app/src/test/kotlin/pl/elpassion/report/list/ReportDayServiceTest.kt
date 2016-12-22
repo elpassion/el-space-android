@@ -7,8 +7,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
+import pl.elpassion.project.dto.newDayReport
 import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.report.HoursReport
+import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 import java.util.*
@@ -59,12 +61,51 @@ class ReportDayServiceTest {
     }
 
     @Test
-    fun shouldMapReturnedReportsToCorrectDays() {
+    fun shouldMapReturnedHourlyReportsToDaysWithHourlyReports() {
         val report = newHoursReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
-        assertEquals(getFirstDay().reports, listOf(report))
+        assertTrue(getFirstDay() is DayWithHourlyReports)
+        assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
+    }
+
+    @Test
+    fun shouldUnreportedPassedDaysWhichAreNotWeekendsHaveReports() {
+        stubDateChangeObserver(year = 2016, month = 6)
+        stubServiceToReturn(emptyList())
+
+        assertTrue(getFirstDay() is DayWithoutReports)
+        assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
+    }
+
+    @Test
+    fun shouldMapReturnedDailyReportsToDaysWithDailyReports() {
+        val report = newDayReport(year = 2016, month = 6, day = 1)
+        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        stubServiceToReturn(listOf(report))
+
+        assertTrue(getFirstDay() is DayWithDailyReport)
+        assertEquals((getFirstDay() as DayWithDailyReport).report, report)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun shouldThrowIllegalArgumentExceptionWhenDayHasDailyReportTogetherWithHourlyReport() {
+        val dailyReport = newDayReport(year = 2016, month = 6, day = 1)
+        val hourlyReport = newHoursReport(year = 2016, month = 6, day = 1)
+        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        stubServiceToReturn(listOf(dailyReport, hourlyReport))
+
+        getFirstDay()
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun shouldThrowIllegalArgumentExceptionWhenDayHasTwoDailyReports() {
+        val dailyReport = newDayReport(year = 2016, month = 6, day = 1)
+        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        stubServiceToReturn(listOf(dailyReport, dailyReport))
+
+        getFirstDay()
     }
 
     private fun getDays() = service.createDays(createYearMonthFromTimeProvider()).toBlocking().first()
@@ -74,7 +115,7 @@ class ReportDayServiceTest {
     private fun createYearMonthFromTimeProvider() =
             Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
-    private fun stubServiceToReturn(list: List<HoursReport>) {
+    private fun stubServiceToReturn(list: List<Report>) {
         whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
     }
 
@@ -87,5 +128,4 @@ class ReportDayServiceTest {
         stubDateChangeObserver(year = 2016, month = month)
         assertEquals(getDays().size, daysInMonth)
     }
-
 }

@@ -35,7 +35,9 @@ class ReportListActivityAddReportTest {
         ReportAdd.ApiProvider.override = { addReportService }
         CachedProjectRepositoryProvider.override = { stubProjectRepository() }
         stubCurrentTime(year = 2016, month = 10, day = 1)
-        whenever(service.getReports()).thenReturn(Observable.just(emptyList())).thenReturn(Observable.just(listOf(newHoursReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0))))
+        whenever(service.getReports())
+                .thenReturn(Observable.just(emptyList()))
+                .thenReturn(Observable.just(listOf(newHoursReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0))))
         ReportList.ServiceProvider.override = { service }
     }
 

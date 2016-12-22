@@ -1,32 +1,49 @@
 package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.*
+import pl.elpassion.report.DayReport
 import pl.elpassion.report.HoursReport
-import pl.elpassion.report.list.RegularDay
-import pl.elpassion.report.list.ReportList
-import pl.elpassion.report.list.YearMonth
-import pl.elpassion.report.list.createDayUUid
+import pl.elpassion.report.Report
+import pl.elpassion.report.list.*
 import rx.Observable
 
 class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {
 
-    override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<RegularDay>> =
+    override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>> =
             Observable.combineLatest(dateChangeObservable,
                     reportListService.getReports(), { t1, t2 -> Pair(t1, t2) })
-                    .map { createDaysWithReports(it.first, it.second.filterIsInstance<HoursReport>()) }
+                    .map { createDaysWithReports(it.first, it.second) }
 
-    private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<HoursReport>) =
+    private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
             (1..yearMonth.month.daysInMonth).map { dayNumber ->
                 val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
-                RegularDay(reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber)),
-                        hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
-                        isWeekendDay = calendarForDay.isWeekendDay(),
-                        name = "$dayNumber ${calendarForDay.dayName()}",
-                        date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber),
-                        uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber))
+                val reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber))
+                if (reports.isEmpty()) {
+                    DayWithoutReports(uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber),
+                            name = "$dayNumber ${calendarForDay.dayName()}",
+                            hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
+                            date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber),
+                            isWeekend = calendarForDay.isWeekendDay())
+
+                } else if (reports.all { it is HoursReport }) {
+                    DayWithHourlyReports(uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber),
+                            reports = reports.filterIsInstance<HoursReport>(),
+                            hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
+                            name = "$dayNumber ${calendarForDay.dayName()}",
+                            date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))
+
+                } else if (reports.all { it is DayReport } && reports.size == 1) {
+                    DayWithDailyReport(uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber),
+                            report = reports.filterIsInstance<DayReport>().first(),
+                            hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
+                            name = "$dayNumber ${calendarForDay.dayName()}",
+                            date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))
+                } else {
+                    throw IllegalArgumentException()
+                }
             }
 
-    private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (HoursReport) -> Boolean = { report ->
+    private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (Report) -> Boolean = { report ->
         report.year == yearMonth.year && report.month == yearMonth.month.index + 1 && report.day == day
     }
 

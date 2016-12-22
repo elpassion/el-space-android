@@ -71,26 +71,32 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
                 .show()
     }
 
-    override fun showDays(days: List<RegularDay>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
+    override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
         reportsAdapter.updateAdapter(addSeparators(adapterList))
     }
 
-    private fun createContentItemsAdapters(days: List<RegularDay>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
+    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
         val itemAdapters = days.flatMap {
-            listOf(createDayAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
+            createDayAdapter(it, onDayClickListener, onReportClickListener)
         }
         return itemAdapters
     }
 
-    private fun createDayAdapter(it: RegularDay, listener: OnDayClickListener) =
-            when {
-                //CR: Why is (isWeekendDay == true) not enough to create weekendDayItem?
-                it.isWeekendDay && it.reports.isEmpty() -> WeekendDayItem(it, listener)
-                it.isNotFilledIn() -> DayNotFilledInItemAdapter(it, listener)
-                else -> DayItemAdapter(it, listener)
+    private fun createDayAdapter(day: Day, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
+            when (day) {
+                is DayWithoutReports -> if (day.isWeekend) {
+                    listOf(WeekendDayItem(day, onDayClickListener))
+                } else {
+                    listOf(DayNotFilledInItemAdapter(day, onDayClickListener))
+                }
+                is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClickListener, onReportClickListener)
+                else -> throw IllegalArgumentException()
             }
+
+    private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
+            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -108,6 +114,5 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
             context.startActivity(Intent(context, ReportListActivity::class.java))
         }
     }
-
 }
 

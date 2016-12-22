@@ -41,7 +41,8 @@ class ReportListActivityTest {
                 newHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
                 newHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),
                 newDailyReport(year = 2016, month = 10, day = 7, reportType = DailyReportType.SICK_LEAVE),
-                newDailyReport(year = 2016, month = 10, day = 8, reportType = DailyReportType.UNPAID_VACATIONS))))
+                newDailyReport(year = 2016, month = 10, day = 8, reportType = DailyReportType.UNPAID_VACATIONS),
+                newHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0))))
         ReportList.ServiceProvider.override = { service }
     }
 
@@ -151,6 +152,11 @@ class ReportListActivityTest {
         onId(R.id.fabAddReport).click()
 
         checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldNotShowMissingInformationWhenDayHasNoReportsButIsFromFuture() {
+        onItemWithText("9 Sun").check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
     @Test

@@ -21,6 +21,7 @@
         tools:text="10 Thu" />
 
     <TextView
+        android:id="@+id/missingDayInformation"
         style="@style/DayHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

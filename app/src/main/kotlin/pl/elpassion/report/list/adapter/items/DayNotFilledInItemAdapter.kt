@@ -20,8 +20,10 @@ class DayNotFilledInItemAdapter(val day: DayWithoutReports, val listener: OnDayC
             dayNumber.text = day.name
             if (day.shouldHaveReports()) {
                 hubIndicator.show()
+                missingDayInformation.show()
             } else {
                 hubIndicator.hide()
+                missingDayInformation.hide()
             }
         }
     }

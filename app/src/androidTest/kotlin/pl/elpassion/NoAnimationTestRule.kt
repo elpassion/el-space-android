@@ -1,16 +1,15 @@
 package pl.elpassion
 
 
-import android.app.Activity
 import android.content.Context
 import android.os.IBinder
 import android.support.test.InstrumentationRegistry.getInstrumentation
-import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
+import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class NoAnimationTestRule<T : Activity>(activityClass: Class<T>) : ActivityTestRule<T>(activityClass) {
+class NoAnimationTestRule() : TestRule {
 
     private val ANIMATION_SCALE_PERMISSION = "android.permission.SET_ANIMATION_SCALE"
     private val context: Context = getInstrumentation().context

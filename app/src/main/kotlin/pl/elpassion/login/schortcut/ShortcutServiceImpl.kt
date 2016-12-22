@@ -26,7 +26,7 @@ class ShortcutServiceImpl(val context: Context) : ShortcutService {
             .setShortLabel(context.getString(R.string.shortcut_report_hub_short))
             .setLongLabel(context.getString(R.string.shortcut_report_hub_long))
             .setIcon(Icon.createWithResource(context, R.mipmap.ic_launcher))
-            .setIntent(ReportAddActivity.intent(context, "").apply { action = Intent.ACTION_MAIN })
+            .setIntent(ReportAddActivity.intent(context).apply { action = Intent.ACTION_MAIN })
             .build()
 
 }

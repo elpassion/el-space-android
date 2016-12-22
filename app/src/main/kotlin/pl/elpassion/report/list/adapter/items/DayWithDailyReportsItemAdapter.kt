@@ -16,7 +16,6 @@ class DayWithDailyReportsItemAdapter(val day: DayWithDailyReport) : ItemAdapter<
         setTotalHoursTextWithIndicator(holder)
     }
 
-
     private fun setTotalHoursTextWithIndicator(holder: VH) {
         holder.itemView.run {
             val dailyReportDescription = if (day.report.reportType == DailyReportType.SICK_LEAVE) {

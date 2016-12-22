@@ -13,7 +13,7 @@ data class HoursReport(
         val description: String,
         val reportType: HoursReportType) : Serializable, Report
 
-data class DayReport(
+data class DailyReport(
         override val id: Long,
         override val year: Int,
         override val month: Int,

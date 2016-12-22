@@ -1,6 +1,6 @@
 package pl.elpassion.report.list
 
-import pl.elpassion.report.DayReport
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.HoursReport
 
 data class DayWithHourlyReports(
@@ -15,7 +15,7 @@ data class DayWithDailyReport(override val uuid: Long,
                               override val name: String,
                               override val date: String,
                               override val hasPassed: Boolean,
-                              val report: DayReport) : Day
+                              val report: DailyReport) : Day
 
 
 

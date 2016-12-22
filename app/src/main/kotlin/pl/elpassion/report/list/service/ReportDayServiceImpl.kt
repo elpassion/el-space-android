@@ -1,7 +1,7 @@
 package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.*
-import pl.elpassion.report.DayReport
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.HoursReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.*
@@ -32,9 +32,9 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
                             name = "$dayNumber ${calendarForDay.dayName()}",
                             date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))
 
-                } else if (reports.all { it is DayReport } && reports.size == 1) {
+                } else if (reports.all { it is DailyReport } && reports.size == 1) {
                     DayWithDailyReport(uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber),
-                            report = reports.filterIsInstance<DayReport>().first(),
+                            report = reports.filterIsInstance<DailyReport>().first(),
                             hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar()),
                             name = "$dayNumber ${calendarForDay.dayName()}",
                             date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber))

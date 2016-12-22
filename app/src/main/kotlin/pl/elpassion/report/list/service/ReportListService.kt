@@ -22,9 +22,9 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
         }
     }
 
-    private fun ReportFromApi.toDayReport(): DayReport {
+    private fun ReportFromApi.toDayReport(): DailyReport {
         val date = performedAt.split("-")
-        return DayReport(
+        return DailyReport(
                 id = id,
                 year = date[0].toInt(),
                 month = date[1].toInt(),

@@ -3,6 +3,8 @@
           package="pl.elpassion">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!--It should't be here-->
+    <uses-permission android:name="android.permission.SET_ANIMATION_SCALE" />
 
     <application
         android:name=".ElSpaceApp"

@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import pl.elpassion.project.dto.newReport
+import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.DayItemAdapter
 import pl.elpassion.report.list.adapter.items.DayNotFilledInItemAdapter
@@ -43,7 +43,7 @@ class ReportListAdaptersSeparatorTest {
         assertTrue(givenAdapters[1] is SeparatorItemAdapter)
     }
 
-    private fun createReportItem() = ReportItemAdapter(newReport(), mock())
+    private fun createReportItem() = ReportItemAdapter(newHoursReport(), mock())
 
     private fun createDayItem() = DayItemAdapter(newDay(), mock())
 

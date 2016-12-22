@@ -18,9 +18,9 @@ import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
 import pl.elpassion.project.ProjectRepository
 import pl.elpassion.project.choose.ProjectRepositoryProvider
+import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.project.dto.newReport
-import pl.elpassion.report.Report
+import pl.elpassion.report.HoursReport
 import pl.elpassion.startActivity
 import rx.Completable
 import rx.Observable
@@ -55,7 +55,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldShowCorrectReportDate() {
-        startActivity(newReport(year = 2010, month = 2, day = 10))
+        startActivity(newHoursReport(year = 2010, month = 2, day = 10))
         onId(R.id.reportEditDate).hasText("2010-02-10")
     }
 
@@ -67,13 +67,13 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldHaveCorrectProjectName() {
-        startActivity(newReport(projectName = "newProject"))
+        startActivity(newHoursReport(project = newProject(name = "newProject")))
         onId(R.id.reportEditProjectName).hasText("newProject")
     }
 
     @Test
     fun shouldReallyHaveCorrectProjectName() {
-        startActivity(newReport(projectName = "project 123"))
+        startActivity(newHoursReport(project = newProject(name = "project 123")))
         onId(R.id.reportEditProjectName).hasText("project 123")
     }
 
@@ -85,7 +85,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldHaveOldPreviousHoursValueAtTheBegging() {
-        startActivity(newReport(reportedHours = 2.32))
+        startActivity(newHoursReport(reportedHours = 2.32))
         onId(R.id.reportEditHours).hasText("2.32")
     }
 
@@ -103,13 +103,13 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldHaveCorrectDescription() {
-        startActivity(newReport(description = "Sample description"))
+        startActivity(newHoursReport(description = "Sample description"))
         onId(R.id.reportEditDescription).hasText("Sample description")
     }
 
     @Test
     fun shouldHaveCorrectProjectDisplayedIfItHasBeenChanged() {
-        startActivity(newReport(projectName = "project1"))
+        startActivity(newHoursReport(project = newProject(name = "project1")))
         stubRepositoryAndStart(newProject(name = "project2"))
         onId(R.id.reportEditProjectName).click()
         onText("project2").click()
@@ -124,7 +124,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldCallApiWithCorrectData() {
-        startActivity(newReport(projectId = 1, description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
+        startActivity(newHoursReport(project = newProject(id = 1), description = "test1", reportedHours = 2.0, year = 2010, month = 10, day = 1, id = 2))
         stubRepositoryAndStart(newProject(name = "project2", id = 2))
         insertData(reportedHours = "5.5", newDescription = "test2")
         verify(reportEditApi).editReport(id = 2, date = "2010-10-01", reportedHour = "5.5", description = "test2", projectId = 2)
@@ -138,7 +138,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldCallRemoveReportApiAfterClickOnRemove() {
-        startActivity(newReport(id = 2))
+        startActivity(newHoursReport(id = 2))
         onId(R.id.action_remove_report).click()
         verify(reportRemoveApi).removeReport(reportId = 2)
     }
@@ -158,14 +158,14 @@ class ReportEditActivityTest {
                 whenever(hasProjects()).thenReturn(true)
             }
         }
-      ProjectRepositoryProvider.override = {
+        ProjectRepositoryProvider.override = {
             mock<ProjectRepository>().apply {
                 whenever(getProjects()).thenReturn(Observable.just(listOf(newProject)))
             }
         }
     }
 
-    private fun startActivity(report: Report = newReport()) {
+    private fun startActivity(report: HoursReport = newHoursReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }

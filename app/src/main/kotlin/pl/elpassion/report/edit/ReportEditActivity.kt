@@ -16,12 +16,12 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.choose.ProjectChooseActivity
-import pl.elpassion.report.Report
+import pl.elpassion.report.HoursReport
 import pl.elpassion.report.datechooser.showDateDialog
 
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
-    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
+    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as HoursReport }
     private val controller by lazy {
         ReportEditController(this, ReportEdit.EditApiProvider.get(), ReportEdit.RemoveApiProvider.get())
     }
@@ -39,8 +39,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString(), reportEditDescription.text.toString()) }
     }
 
-    override fun showReport(report: Report) {
-        reportEditProjectName.text = report.projectName
+    override fun showReport(report: HoursReport) {
+        reportEditProjectName.text = report.project?.name
         reportEditHours.setText("${report.reportedHours}")
         reportEditDescription.setText(report.description)
     }
@@ -104,11 +104,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         private val REPORT_KEY = "report_key"
         private val REQUEST_CODE = 10001
 
-        fun intent(context: Context, report: Report) = Intent(context, ReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: HoursReport) = Intent(context, ReportEditActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 
-        fun startForResult(activity: Activity, report: Report, requestCode: Int) {
+        fun startForResult(activity: Activity, report: HoursReport, requestCode: Int) {
             activity.startActivityForResult(intent(activity, report), requestCode)
         }
     }

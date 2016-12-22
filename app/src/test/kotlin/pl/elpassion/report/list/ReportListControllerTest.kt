@@ -8,7 +8,7 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.dto.newReport
+import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
 import java.util.*
@@ -102,7 +102,7 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenEditReportScreenOnReport() {
-        val report = newReport()
+        val report = newHoursReport()
         controller.onReport(report)
 
         verify(view, times(1)).openEditReportScreen(report)

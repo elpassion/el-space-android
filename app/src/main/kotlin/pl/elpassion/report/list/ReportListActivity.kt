@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.report.Report
+import pl.elpassion.report.HoursReport
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
@@ -40,7 +40,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         fabAddReport.setOnClickListener { controller.onAddTodayReport() }
     }
 
-    override fun openEditReportScreen(report: Report) {
+    override fun openEditReportScreen(report: HoursReport) {
         ReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 

@@ -7,8 +7,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.dto.newReport
-import pl.elpassion.report.Report
+import pl.elpassion.project.dto.newHoursReport
+import pl.elpassion.report.HoursReport
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 import java.util.*
@@ -60,7 +60,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldMapReturnedReportsToCorrectDays() {
-        val report = newReport(year = 2016, month = 6, day = 1)
+        val report = newHoursReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -74,7 +74,7 @@ class ReportDayServiceTest {
     private fun createYearMonthFromTimeProvider() =
             Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
-    private fun stubServiceToReturn(list: List<Report>) {
+    private fun stubServiceToReturn(list: List<HoursReport>) {
         whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
     }
 
@@ -82,7 +82,7 @@ class ReportDayServiceTest {
         stubCurrentTime(year = year, month = month, day = day)
     }
 
-    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<Report>, daysInMonth: Int, month: Int) {
+    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<HoursReport>, daysInMonth: Int, month: Int) {
         stubServiceToReturn(apiReturnValue)
         stubDateChangeObserver(year = 2016, month = month)
         assertEquals(getDays().size, daysInMonth)

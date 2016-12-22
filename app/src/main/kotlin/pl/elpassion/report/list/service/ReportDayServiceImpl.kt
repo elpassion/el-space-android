@@ -1,7 +1,7 @@
 package pl.elpassion.report.list.service
 
 import pl.elpassion.common.extensions.*
-import pl.elpassion.report.Report
+import pl.elpassion.report.HoursReport
 import pl.elpassion.report.list.Day
 import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.YearMonth
@@ -13,9 +13,9 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
     override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>> =
             Observable.combineLatest(dateChangeObservable,
                     reportListService.getReports(), { t1, t2 -> Pair(t1, t2) })
-                    .map { createDaysWithReports(it.first, it.second) }
+                    .map { createDaysWithReports(it.first, it.second.filterIsInstance<HoursReport>()) }
 
-    private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
+    private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<HoursReport>) =
             (1..yearMonth.month.daysInMonth).map { dayNumber ->
                 val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
                 Day(reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber)),
@@ -26,7 +26,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
                         uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber))
             }
 
-    private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (Report) -> Boolean = { report ->
+    private fun isFromSelectedDay(yearMonth: YearMonth, day: Int): (HoursReport) -> Boolean = { report ->
         report.year == yearMonth.year && report.month == yearMonth.month.index + 1 && report.day == day
     }
 

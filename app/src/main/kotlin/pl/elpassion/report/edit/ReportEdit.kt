@@ -2,7 +2,7 @@ package pl.elpassion.report.edit
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.report.Report
+import pl.elpassion.report.HoursReport
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
@@ -11,7 +11,7 @@ import rx.Completable
 
 interface ReportEdit {
     interface View {
-        fun showReport(report: Report)
+        fun showReport(report: HoursReport)
         fun openChooseProjectScreen()
         fun updateProjectName(projectName: String)
         fun showLoader()
@@ -28,7 +28,7 @@ interface ReportEdit {
                        @Query("activity[performed_at]") date: String,
                        @Query("activity[value]") reportedHour: String,
                        @Query("activity[comment]") description: String,
-                       @Query("activity[project_id]") projectId: Long): Completable
+                       @Query("activity[project_id]") projectId: Long?): Completable
     }
 
     object EditApiProvider : Provider<EditApi>({

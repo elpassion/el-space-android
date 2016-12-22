@@ -5,10 +5,12 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.project.Project
+import pl.elpassion.project.dto.newDayReport
+import pl.elpassion.project.dto.newHoursReport
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.project.dto.newReport
+import pl.elpassion.report.DayReportType
+import pl.elpassion.report.HoursReportType
 import pl.elpassion.report.Report
-import pl.elpassion.report.ReportType
 import pl.elpassion.report.list.service.ProjectListService
 import pl.elpassion.report.list.service.ReportFromApi
 import pl.elpassion.report.list.service.ReportListService
@@ -35,35 +37,35 @@ class ReportListServiceTest {
     fun shouldCorrectlyMapReportsYear() {
         stubReportApiToReturn(newReportFromApi(performedAt = "2012-06-01"))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(year = 2012)))
+        subscriber.assertValue(listOf(newHoursReport(year = 2012)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsMonth() {
         stubReportApiToReturn(newReportFromApi(performedAt = "2016-01-01"))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(month = 1)))
+        subscriber.assertValue(listOf(newHoursReport(month = 1)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDays() {
         stubReportApiToReturn(newReportFromApi(performedAt = "2016-06-21"))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(day = 21)))
+        subscriber.assertValue(listOf(newHoursReport(day = 21)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsValues() {
         stubReportApiToReturn(newReportFromApi(value = 9.0))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportedHours = 9.0)))
+        subscriber.assertValue(listOf(newHoursReport(reportedHours = 9.0)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsDescription() {
         stubReportApiToReturn(newReportFromApi(description = "1234"))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(description = "1234")))
+        subscriber.assertValue(listOf(newHoursReport(description = "1234")))
     }
 
     @Test
@@ -71,56 +73,49 @@ class ReportListServiceTest {
         stubProjectServiceToReturn(newProject(id = 2, name = "Test"))
         stubReportApiToReturn(newReportFromApi(projectId = 2))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(projectId = 2, projectName = "Test")))
+        subscriber.assertValue(listOf(newHoursReport(project = newProject(id = 2, name = "Test"))))
     }
 
     @Test
     fun shouldCorrectlyMapReportsId() {
         stubReportApiToReturn(newReportFromApi(id = 1))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(id = 1)))
+        subscriber.assertValue(listOf(newHoursReport(id = 1)))
     }
 
     @Test
     fun shouldReallyCorrectlyMapReportsId() {
         stubReportApiToReturn(newReportFromApi(id = 2))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(id = 2)))
+        subscriber.assertValue(listOf(newHoursReport(id = 2)))
     }
 
     @Test
     fun shouldMapRegularReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 0))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportType = ReportType.REGULAR)))
+        subscriber.assertValue(listOf(newHoursReport(reportType = HoursReportType.REGULAR)))
     }
 
     @Test
     fun shouldMapPaidVacationsReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 1))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportType = ReportType.PAID_VACATIONS)))
+        subscriber.assertValue(listOf(newHoursReport(reportType = HoursReportType.PAID_VACATIONS)))
     }
 
     @Test
     fun shouldMapUnpaidVacationsReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 2))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportType = ReportType.UNPAID_VACATIONS)))
+        subscriber.assertValue(listOf(newDayReport(reportType = DayReportType.UNPAID_VACATIONS)))
     }
 
     @Test
     fun shouldMapSickLeaveReportType() {
         stubReportApiToReturn(newReportFromApi(reportType = 3))
         service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportType = ReportType.SICK_LEAVE)))
-    }
-
-    @Test
-    fun shouldMapAnyOtherReportTypeToUnknown() {
-        stubReportApiToReturn(newReportFromApi(reportType = 4))
-        service.getReports().subscribe(subscriber)
-        subscriber.assertValue(listOf(newReport(reportType = ReportType.UNKNOWN)))
+        subscriber.assertValue(listOf(newDayReport(reportType = DayReportType.SICK_LEAVE)))
     }
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {

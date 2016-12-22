@@ -19,7 +19,7 @@ import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
-import pl.elpassion.project.dto.newHoursReport
+import pl.elpassion.project.dto.newHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.report.add.ReportAdd
 import rx.Completable
@@ -37,7 +37,7 @@ class ReportListActivityAddReportTest {
         stubCurrentTime(year = 2016, month = 10, day = 1)
         whenever(service.getReports())
                 .thenReturn(Observable.just(emptyList()))
-                .thenReturn(Observable.just(listOf(newHoursReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0))))
+                .thenReturn(Observable.just(listOf(newHourlyReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0))))
         ReportList.ServiceProvider.override = { service }
     }
 

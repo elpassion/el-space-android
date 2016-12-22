@@ -7,8 +7,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.dto.newDayReport
-import pl.elpassion.project.dto.newHoursReport
+import pl.elpassion.project.dto.newDailyReport
+import pl.elpassion.project.dto.newHourlyReport
 import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ReportDayServiceImpl
@@ -62,7 +62,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldMapReturnedHourlyReportsToDaysWithHourlyReports() {
-        val report = newHoursReport(year = 2016, month = 6, day = 1)
+        val report = newHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -81,7 +81,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldMapReturnedDailyReportsToDaysWithDailyReports() {
-        val report = newDayReport(year = 2016, month = 6, day = 1)
+        val report = newDailyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -91,8 +91,8 @@ class ReportDayServiceTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun shouldThrowIllegalArgumentExceptionWhenDayHasDailyReportTogetherWithHourlyReport() {
-        val dailyReport = newDayReport(year = 2016, month = 6, day = 1)
-        val hourlyReport = newHoursReport(year = 2016, month = 6, day = 1)
+        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
+        val hourlyReport = newHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(dailyReport, hourlyReport))
 
@@ -101,7 +101,7 @@ class ReportDayServiceTest {
 
     @Test(expected = IllegalArgumentException::class)
     fun shouldThrowIllegalArgumentExceptionWhenDayHasTwoDailyReports() {
-        val dailyReport = newDayReport(year = 2016, month = 6, day = 1)
+        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(dailyReport, dailyReport))
 

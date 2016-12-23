@@ -46,6 +46,8 @@ class ReportAddController(date: String?,
     private fun sendAddReport(description: String, hours: String) {
         api.addReport(selectedDate, project!!.id, hours, description)
                 .applySchedulers()
+                .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     view.close()
                 }, {

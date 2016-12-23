@@ -22,6 +22,10 @@ interface ReportAdd {
         fun enableAddReportButton()
 
         fun showEmptyDescriptionError()
+
+        fun showLoader()
+
+        fun hideLoader()
     }
 
     interface Api {

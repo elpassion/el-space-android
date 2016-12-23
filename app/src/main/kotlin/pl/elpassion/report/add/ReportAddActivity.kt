@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.common.hideLoader
+import pl.elpassion.common.showLoader
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
@@ -55,6 +57,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun openProjectChooser() {
         ProjectChooseActivity.startForResult(this, REQUEST_CODE)
     }
+
+    override fun showLoader() = showLoader(reportAddCoordinator)
+
+    override fun hideLoader() = hideLoader(reportAddCoordinator)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

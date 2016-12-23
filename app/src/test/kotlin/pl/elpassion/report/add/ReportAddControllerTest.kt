@@ -22,7 +22,7 @@ class ReportAddControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.just(Unit))
+        stubApiToReturn(Observable.just(Unit))
         stubRepositoryToReturn()
     }
 
@@ -65,6 +65,27 @@ class ReportAddControllerTest {
         controller.onCreate()
         controller.onReportAdd("8", "description")
         verify(view).close()
+    }
+
+    @Test
+    fun shouldShowLoaderOnAddingNewReport() {
+        stubApiToReturn(Observable.never())
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd("8", "description")
+
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenAddingNewReportFinish() {
+        stubApiToReturn(Observable.just(Unit))
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd("8", "description")
+
+        verify(view).showLoader()
+        verify(view).hideLoader()
     }
 
     @Test
@@ -137,6 +158,10 @@ class ReportAddControllerTest {
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)
+    }
+
+    private fun stubApiToReturn(observable: Observable<Unit>) {
+        whenever(api.addReport(any(), any(), any(), any())).thenReturn(observable)
     }
 }
 

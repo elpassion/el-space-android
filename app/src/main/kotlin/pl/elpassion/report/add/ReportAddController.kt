@@ -4,25 +4,21 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
-import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.Project
+import pl.elpassion.project.last.LastSelectedProjectRepository
 import java.util.Calendar.*
 
 class ReportAddController(date: String?,
                           private val view: ReportAdd.View,
-                          private val repository: CachedProjectRepository,
+                          private val repository: LastSelectedProjectRepository,
                           private val api: ReportAdd.Api) {
     private var selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var project: Project? = null
 
     fun onCreate() {
         view.showDate(selectedDate)
-        if (repository.hasProjects()) {
-            onSelectProject(getLastProject())
-        }
+        repository.getLastProject()?.let { onSelectProject(it) }
     }
-
-    private fun getLastProject() = repository.getPossibleProjects().first()
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())

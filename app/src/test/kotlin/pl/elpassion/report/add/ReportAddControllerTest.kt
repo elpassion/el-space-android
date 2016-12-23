@@ -6,17 +6,16 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
+import pl.elpassion.project.last.LastSelectedProjectRepository
 import rx.Observable
 
 class ReportAddControllerTest {
 
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
-    val repository = mock<CachedProjectRepository>()
-    val project = newProject()
+    val repository = mock<LastSelectedProjectRepository>()
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -28,22 +27,24 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowPossibleProjects() {
+    fun shouldShowPossibleProject() {
+        val project = newProject()
+        stubRepositoryToReturn(project)
         val controller = createController()
+
         controller.onCreate()
 
         verify(view).showSelectedProject(project)
     }
 
     @Test
-    fun shouldShowPossibleProjectFormApi() {
-        val projects = listOf(newProject(2, "name2"), newProject())
-        stubRepositoryToReturn(projects)
+    fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
+        stubRepositoryToReturn(null)
         val controller = createController()
 
         controller.onCreate()
 
-        verify(view).showSelectedProject(projects.first())
+        verify(view, never()).showSelectedProject(any())
     }
 
     @Test
@@ -90,7 +91,7 @@ class ReportAddControllerTest {
         controller.onSelectProject(newProject())
 
         controller.onDateSelect("2016-05-04")
-        controller.onReportAdd("0.1","Desription")
+        controller.onReportAdd("0.1", "Desription")
 
         verify(api).addReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -134,9 +135,8 @@ class ReportAddControllerTest {
 
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
-    private fun stubRepositoryToReturn(list: List<Project> = listOf(newProject())) {
-        whenever(repository.getPossibleProjects()).thenReturn(list)
-        whenever(repository.hasProjects()).thenReturn(list.isNotEmpty())
+    private fun stubRepositoryToReturn(project: Project? = newProject()) {
+        whenever(repository.getLastProject()).thenReturn(project)
     }
 }
 

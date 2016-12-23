@@ -13,15 +13,15 @@ import pl.elpassion.common.checkIntent
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project
-import pl.elpassion.project.CachedProjectRepository
-import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.dto.newProject
+import pl.elpassion.project.last.LastSelectedProjectRepository
+import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.startActivity
 
 class ReportAddActivityTest {
 
-    val repository = mock<CachedProjectRepository>()
+    val repository = mock<LastSelectedProjectRepository>()
 
     @JvmField @Rule
     val rule = rule<ReportAddActivity>(autoStart = false)
@@ -43,7 +43,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldAddButtonDisabledWhenNoCachedProjects() {
-        stubRepositoryAndStart(emptyList())
+        stubRepositoryAndStart(null)
         onId(R.id.reportAddAdd).isDisabled()
     }
 
@@ -55,7 +55,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldReallyStartWithFirstProjectSelected() {
-        stubRepositoryAndStart(listOf(newProject(name = "Project name")))
+        stubRepositoryAndStart(newProject(name = "Project name"))
         onText("Project name").isDisplayed()
     }
 
@@ -120,10 +120,9 @@ class ReportAddActivityTest {
         onId(R.id.reportAddHours).perform(longClick())
     }
 
-    private fun stubRepositoryAndStart(projects: List<Project> = listOf(newProject()), date: String = "2016-01-01") {
-        whenever(repository.getPossibleProjects()).thenReturn(projects)
-        whenever(repository.hasProjects()).thenReturn(projects.isNotEmpty())
-        CachedProjectRepositoryProvider.override = { repository }
+    private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {
+        whenever(repository.getLastProject()).thenReturn(projects)
+        LastSelectedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
 }

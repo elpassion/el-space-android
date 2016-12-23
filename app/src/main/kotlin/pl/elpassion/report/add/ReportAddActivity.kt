@@ -12,15 +12,15 @@ import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
+import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val controller by lazy {
-        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, CachedProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
+        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, LastSelectedProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             )
         }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
-        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, {controller.onDateSelect(it)}) }
+        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
     }
 
     override fun showDate(date: String) {

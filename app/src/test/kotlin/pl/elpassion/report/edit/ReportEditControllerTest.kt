@@ -191,7 +191,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowDateOnCreate() {
-        controller.onCreate(newReport(year = 2011, month = 10, day = 1))
+        controller.onCreate(newHourlyReport(year = 2011, month = 10, day = 1))
 
         verify(view).showDate("2011-10-01")
     }
@@ -205,7 +205,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldChangeDateAfterOnCreate() {
-        controller.onCreate(newReport())
+        controller.onCreate(newHourlyReport())
 
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1", "Desription")
@@ -241,5 +241,4 @@ class ReportEditControllerTest {
     private fun stubRemoveReportApiToReturn(completable: Completable) {
         whenever(removeReportApi.removeReport(any())).thenReturn(completable)
     }
-
 }

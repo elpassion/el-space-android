@@ -2,6 +2,7 @@ package pl.elpassion.report.list
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
@@ -156,6 +157,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldNotShowMissingInformationWhenDayHasNoReportsButIsFromFuture() {
+        scrollToItemWithText("9 Sun")
         onItemWithText("9 Sun").check(matches(not(hasDescendant(withText(R.string.report_missing)))))
     }
 
@@ -197,5 +199,8 @@ class ReportListActivityTest {
 
     private fun onItemWithText(text: String) = onView(allOf(hasDescendant(withText(text)), withParent(withId(R.id.reportsContainer))))
 
+    private fun scrollToItemWithText(s: String) {
+        onView(withId(R.id.reportsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(s))))
+    }
 }
 

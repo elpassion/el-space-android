@@ -9,7 +9,7 @@ import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.last.LastSelectedProjectRepository
-import rx.Observable
+import rx.Completable
 
 class ReportAddControllerTest {
 
@@ -22,7 +22,7 @@ class ReportAddControllerTest {
 
     @Before
     fun setUp() {
-        stubApiToReturn(Observable.just(Unit))
+        stubApiToReturn(Completable.complete())
         stubRepositoryToReturn()
     }
 
@@ -69,7 +69,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowLoaderOnAddingNewReport() {
-        stubApiToReturn(Observable.never())
+        stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
         controller.onReportAdd("8", "description")
@@ -79,7 +79,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportFinish() {
-        stubApiToReturn(Observable.just(Unit))
+        stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
         controller.onReportAdd("8", "description")
@@ -90,7 +90,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
-        stubApiToReturn(Observable.never())
+        stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
         controller.onReportAdd("8", "description")
@@ -98,7 +98,7 @@ class ReportAddControllerTest {
 
         verify(view).hideLoader()
     }
-    
+
     @Test
     fun shouldShowEmptyDescriptionError() {
         val controller = createController()
@@ -130,7 +130,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Observable.error(RuntimeException()))
+        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
         controller.onReportAdd("8", "description")
@@ -148,7 +148,7 @@ class ReportAddControllerTest {
     fun shouldUseApi() {
         val exception = RuntimeException()
         val project = Project(1, "Slack")
-        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Observable.error(exception))
+        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
         controller.onSelectProject(project)
@@ -171,8 +171,8 @@ class ReportAddControllerTest {
         whenever(repository.getLastProject()).thenReturn(project)
     }
 
-    private fun stubApiToReturn(observable: Observable<Unit>) {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(observable)
+    private fun stubApiToReturn(completable: Completable) {
+        whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
     }
 }
 

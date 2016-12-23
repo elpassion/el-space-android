@@ -5,7 +5,7 @@ import pl.elpassion.common.Provider
 import pl.elpassion.project.Project
 import retrofit2.http.POST
 import retrofit2.http.Query
-import rx.Observable
+import rx.Completable
 
 interface ReportAdd {
     interface View {
@@ -35,7 +35,7 @@ interface ReportAdd {
                 @Query("activity[performed_at]") date: String,
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
-                @Query("activity[comment]") description: String): Observable<Unit>
+                @Query("activity[comment]") description: String): Completable
     }
 
     object ApiProvider : Provider<Api>({

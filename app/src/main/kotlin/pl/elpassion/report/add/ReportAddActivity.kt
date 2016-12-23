@@ -42,6 +42,11 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        controller.onDestroy()
+    }
+
     override fun showDate(date: String) {
         reportAddDate.text = date
     }

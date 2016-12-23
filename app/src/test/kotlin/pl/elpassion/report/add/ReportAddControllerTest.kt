@@ -89,6 +89,17 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
+        stubApiToReturn(Observable.never())
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd("8", "description")
+        controller.onDestroy()
+
+        verify(view).hideLoader()
+    }
+    
+    @Test
     fun shouldShowEmptyDescriptionError() {
         val controller = createController()
         controller.onCreate()

@@ -4,7 +4,7 @@ import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ProjectListService
 import pl.elpassion.report.list.service.ProjectListServiceImpl
@@ -32,7 +32,7 @@ interface ReportList {
 
         fun showMonthName(monthName: String)
 
-        fun openEditReportScreen(report: HourlyReport)
+        fun openEditReportScreen(report: RegularHourlyReport)
 
         fun openAddReportScreen()
     }

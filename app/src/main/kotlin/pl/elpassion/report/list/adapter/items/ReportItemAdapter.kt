@@ -5,10 +5,10 @@ import android.view.View
 import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.report_item.view.*
 import pl.elpassion.R
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.list.OnReportClickListener
 
-class ReportItemAdapter(val report: HourlyReport, val onReportClickListener: OnReportClickListener) : StableItemAdapter<ReportItemAdapter.VH>(report.id, R.layout.report_item) {
+class ReportItemAdapter(val report: RegularHourlyReport, val onReportClickListener: OnReportClickListener) : StableItemAdapter<ReportItemAdapter.VH>(report.id, R.layout.report_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

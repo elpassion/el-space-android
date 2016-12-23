@@ -5,7 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.project.dto.newDailyReport
-import pl.elpassion.project.dto.newHourlyReport
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
 
@@ -65,7 +65,7 @@ class ReportListAdaptersSeparatorTest {
         assertFalse(givenAdapters[1] is SeparatorItemAdapter)
     }
 
-    private fun createReportItem() = ReportItemAdapter(newHourlyReport(), mock())
+    private fun createReportItem() = ReportItemAdapter(newRegularHourlyReport(), mock())
 
     private fun createDayWithHourlyReportItem() = DayItemAdapter(newDayWithHourlyReports(), mock())
 
@@ -77,7 +77,7 @@ class ReportListAdaptersSeparatorTest {
 
     private fun createEmptyItem() = EmptyItemAdapter()
 
-    private fun newDayWithHourlyReports() = DayWithHourlyReports(0, "", "", listOf(newHourlyReport()), false, 1.0)
+    private fun newDayWithHourlyReports() = DayWithHourlyReports(0, "", "", listOf(newRegularHourlyReport()), false, 1.0)
 
     private fun newDayWithDailyReports() = DayWithDailyReport(0, "", "", false, newDailyReport())
 

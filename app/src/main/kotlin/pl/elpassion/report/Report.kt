@@ -3,23 +3,6 @@ package pl.elpassion.report
 import pl.elpassion.project.Project
 import java.io.Serializable
 
-data class HourlyReport(
-        override val id: Long,
-        override val year: Int,
-        override val month: Int,
-        override val day: Int,
-        val reportedHours: Double,
-        val project: Project?,
-        val description: String,
-        val reportType: HourlyReportType) : Serializable, Report
-
-data class DailyReport(
-        override val id: Long,
-        override val year: Int,
-        override val month: Int,
-        override val day: Int,
-        val reportType: DailyReportType) : Serializable, Report
-
 interface Report {
     val id: Long
     val year: Int
@@ -27,10 +10,32 @@ interface Report {
     val day: Int
 }
 
-enum class HourlyReportType {
-    REGULAR,
-    PAID_VACATIONS,
+interface HourlyReport : Report {
+    val reportedHours: Double
 }
+
+data class RegularHourlyReport(
+        override val id: Long,
+        override val year: Int,
+        override val month: Int,
+        override val day: Int,
+        override val reportedHours: Double,
+        val project: Project,
+        val description: String) : Serializable, HourlyReport
+
+data class PaidVacationHourlyReport(
+        override val id: Long,
+        override val year: Int,
+        override val month: Int,
+        override val day: Int,
+        override val reportedHours: Double) : Serializable, HourlyReport
+
+data class DailyReport(
+        override val id: Long,
+        override val year: Int,
+        override val month: Int,
+        override val day: Int,
+        val reportType: DailyReportType) : Serializable, Report
 
 enum class DailyReportType {
     UNPAID_VACATIONS,

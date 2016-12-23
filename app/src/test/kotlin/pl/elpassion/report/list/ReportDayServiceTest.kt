@@ -8,7 +8,7 @@ import org.junit.Test
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newDailyReport
-import pl.elpassion.project.dto.newHourlyReport
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.ReportDayServiceImpl
@@ -62,7 +62,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldMapReturnedHourlyReportsToDaysWithHourlyReports() {
-        val report = newHourlyReport(year = 2016, month = 6, day = 1)
+        val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
 
@@ -92,7 +92,7 @@ class ReportDayServiceTest {
     @Test(expected = IllegalArgumentException::class)
     fun shouldThrowIllegalArgumentExceptionWhenDayHasDailyReportTogetherWithHourlyReport() {
         val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-        val hourlyReport = newHourlyReport(year = 2016, month = 6, day = 1)
+        val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(dailyReport, hourlyReport))
 

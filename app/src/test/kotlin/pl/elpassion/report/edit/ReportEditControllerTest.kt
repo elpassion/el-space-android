@@ -6,7 +6,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.project.dto.newHourlyReport
+import pl.elpassion.project.dto.newRegularHourlyReport
 import rx.Completable
 
 class ReportEditControllerTest {
@@ -27,7 +27,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowCorrectReportOnCreate() {
-        val report = newHourlyReport()
+        val report = newRegularHourlyReport()
 
         controller.onCreate(report)
 
@@ -43,7 +43,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newHourlyReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
+        controller.onCreate(newRegularHourlyReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
 
         controller.onSaveReport(hours = "8.0", description = "description")
 
@@ -52,7 +52,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newHourlyReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
+        controller.onCreate(newRegularHourlyReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
 
         controller.onSaveReport(hours = "7.5", description = "newDescription")
 
@@ -61,7 +61,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowEmptyDescriptionError() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
         controller.onSaveReport("8", "")
 
         verify(view).showEmptyDescriptionError()
@@ -69,7 +69,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
-        controller.onCreate(newHourlyReport(project = newProject(id = 10)))
+        controller.onCreate(newRegularHourlyReport(project = newProject(id = 10)))
         controller.onSelectProject(newProject(id = 20))
         controller.onSaveReport("0.0", "description")
 
@@ -85,7 +85,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowLoaderOnSaveReport() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
 
@@ -94,7 +94,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldHideLoaderOnSaveReportFinish() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
 
@@ -104,7 +104,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
 
@@ -114,7 +114,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
         controller.onDestroy()
@@ -125,7 +125,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
         stubEditReportApiToReturnError()
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
 
@@ -134,7 +134,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCloseViewWhenSavingHasNotFailed() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
 
@@ -143,7 +143,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowLoaderOnRemoveReport() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onRemoveReport()
 
@@ -152,7 +152,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldHideLoaderOnRemoveReport() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onRemoveReport()
 
@@ -161,7 +161,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCloseViewWhenRemoveReportHasNotFailed() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onRemoveReport()
 
@@ -172,7 +172,7 @@ class ReportEditControllerTest {
     fun shouldShowErrorWhenRemoveReportFails() {
         stubRemoveReportApiToReturnError()
 
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
         controller.onRemoveReport()
 
         verify(view).showError(any())
@@ -182,7 +182,7 @@ class ReportEditControllerTest {
     fun shouldHideLoaderOnDestroyIfRemoveReportHasNotFinished() {
         stubRemoveReportApiToReturn(Completable.never())
 
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
         controller.onRemoveReport()
         controller.onDestroy()
 
@@ -191,7 +191,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowDateOnCreate() {
-        controller.onCreate(newHourlyReport(year = 2011, month = 10, day = 1))
+        controller.onCreate(newRegularHourlyReport(year = 2011, month = 10, day = 1))
 
         verify(view).showDate("2011-10-01")
     }
@@ -205,7 +205,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldChangeDateAfterOnCreate() {
-        controller.onCreate(newHourlyReport())
+        controller.onCreate(newRegularHourlyReport())
 
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1", "Desription")

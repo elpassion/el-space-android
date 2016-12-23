@@ -3,7 +3,7 @@ package pl.elpassion.report.edit
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.Project
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import rx.Subscription
 import kotlin.properties.Delegates
 
@@ -17,10 +17,10 @@ class ReportEditController(private val view: ReportEdit.View,
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
-    fun onCreate(report: HourlyReport) {
+    fun onCreate(report: RegularHourlyReport) {
         reportId = report.id
         reportDate = getPerformedAtString(report.year, report.month, report.day)
-        projectId = report.project?.id
+        projectId = report.project.id
         view.showReport(report)
         val performedDate = getPerformedAtString(report.year, report.month, report.day)
         onDateSelect(performedDate)
@@ -76,5 +76,4 @@ class ReportEditController(private val view: ReportEdit.View,
         reportDate = performedDate
         view.showDate(performedDate)
     }
-
 }

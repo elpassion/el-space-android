@@ -16,12 +16,12 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.choose.ProjectChooseActivity
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.datechooser.showDateDialog
 
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
-    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as HourlyReport }
+    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as RegularHourlyReport }
     private val controller by lazy {
         ReportEditController(this, ReportEdit.EditApiProvider.get(), ReportEdit.RemoveApiProvider.get())
     }
@@ -39,8 +39,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString(), reportEditDescription.text.toString()) }
     }
 
-    override fun showReport(report: HourlyReport) {
-        reportEditProjectName.text = report.project?.name
+    override fun showReport(report: RegularHourlyReport) {
+        reportEditProjectName.text = report.project.name
         reportEditHours.setText("${report.reportedHours}")
         reportEditDescription.setText(report.description)
     }
@@ -104,11 +104,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         private val REPORT_KEY = "report_key"
         private val REQUEST_CODE = 10001
 
-        fun intent(context: Context, report: HourlyReport) = Intent(context, ReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: RegularHourlyReport) = Intent(context, ReportEditActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 
-        fun startForResult(activity: Activity, report: HourlyReport, requestCode: Int) {
+        fun startForResult(activity: Activity, report: RegularHourlyReport, requestCode: Int) {
             activity.startActivityForResult(intent(activity, report), requestCode)
         }
     }

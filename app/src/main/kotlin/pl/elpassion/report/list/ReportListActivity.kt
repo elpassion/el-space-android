@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.ReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
@@ -40,7 +40,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         fabAddReport.setOnClickListener { controller.onAddTodayReport() }
     }
 
-    override fun openEditReportScreen(report: HourlyReport) {
+    override fun openEditReportScreen(report: RegularHourlyReport) {
         ReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
@@ -103,7 +103,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
-            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
+            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.filterIsInstance<RegularHourlyReport>().map { ReportItemAdapter(it, onReportClickListener) }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

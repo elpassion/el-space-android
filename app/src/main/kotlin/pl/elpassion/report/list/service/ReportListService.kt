@@ -17,9 +17,20 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
 
     fun ReportFromApi.toReport(projects: List<Project>): Report {
         return when (reportType) {
-            0, 1 -> toHoursReport(projects)
+            0 -> toRegularHourlyReport(projects)
+            1-> toPaidVacationHourlyReport()
             else -> toDayReport()
         }
+    }
+
+    private fun ReportFromApi.toPaidVacationHourlyReport(): Report {
+        val date = performedAt.split("-")
+        return PaidVacationHourlyReport(
+                id = id,
+                year = date[0].toInt(),
+                month = date[1].toInt(),
+                day = date[2].toInt(),
+                reportedHours = value ?: 0.0)
     }
 
     private fun ReportFromApi.toDayReport(): DailyReport {
@@ -29,30 +40,22 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 year = date[0].toInt(),
                 month = date[1].toInt(),
                 day = date[2].toInt(),
-                reportType = reportType.toDayReportType())
+                reportType = reportType.toDailyReportType())
     }
 
-    private fun ReportFromApi.toHoursReport(projects: List<Project>): HourlyReport {
+    private fun ReportFromApi.toRegularHourlyReport(projects: List<Project>): HourlyReport {
         val date = performedAt.split("-")
-        return HourlyReport(
+        return RegularHourlyReport(
                 id = id,
                 year = date[0].toInt(),
                 month = date[1].toInt(),
                 day = date[2].toInt(),
                 reportedHours = value ?: 0.0,
-                project = projects.firstOrNull { it.id == projectId },
-                description = comment ?: "",
-                reportType = reportType.toHoursReportType())
+                project = projects.first { it.id == projectId },
+                description = comment ?: "")
     }
 
-    private fun Int.toHoursReportType(): HourlyReportType {
-        return when(this) {
-            0 -> HourlyReportType.REGULAR
-            else -> HourlyReportType.PAID_VACATIONS
-        }
-    }
-
-    private fun Int.toDayReportType(): DailyReportType {
+    private fun Int.toDailyReportType(): DailyReportType {
         return when(this) {
             3 -> DailyReportType.SICK_LEAVE
             else -> DailyReportType.UNPAID_VACATIONS

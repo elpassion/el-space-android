@@ -22,7 +22,7 @@ import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newDailyReport
-import pl.elpassion.project.dto.newHourlyReport
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
@@ -38,12 +38,12 @@ class ReportListActivityTest {
         CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
         whenever(service.getReports()).thenReturn(Observable.just(listOf<Report>(
-                newHourlyReport(year = 2016, month = 10, day = 3, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0),
-                newHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
-                newHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),
+                newRegularHourlyReport(year = 2016, month = 10, day = 3, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0),
+                newRegularHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
+                newRegularHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),
                 newDailyReport(year = 2016, month = 10, day = 7, reportType = DailyReportType.SICK_LEAVE),
                 newDailyReport(year = 2016, month = 10, day = 8, reportType = DailyReportType.UNPAID_VACATIONS),
-                newHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0))))
+                newRegularHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0))))
         ReportList.ServiceProvider.override = { service }
     }
 

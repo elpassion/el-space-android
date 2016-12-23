@@ -2,7 +2,7 @@ package pl.elpassion.report.edit
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
@@ -11,7 +11,7 @@ import rx.Completable
 
 interface ReportEdit {
     interface View {
-        fun showReport(report: HourlyReport)
+        fun showReport(report: RegularHourlyReport)
         fun openChooseProjectScreen()
         fun updateProjectName(projectName: String)
         fun showLoader()

@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.commons.recycler.ItemAdapter
+import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
@@ -77,7 +77,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         reportsAdapter.updateAdapter(addSeparators(adapterList))
     }
 
-    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {
+    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
         val itemAdapters = days.flatMap {
             listOf(createDayAdapter(it, onDayClickListener)) + it.reports.map { ReportItemAdapter(it, onReportClickListener) }
         }

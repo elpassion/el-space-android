@@ -49,5 +49,5 @@ class ReportListAdaptersSeparatorTest {
 
     private fun createNotFilledInDayItem() = DayNotFilledInItemAdapter(newDay(), mock())
 
-    private fun newDay() = Day("", "", emptyList(), false, 1.0, false)
+    private fun newDay() = Day(0, "", "", emptyList(), false, 1.0, false)
 }

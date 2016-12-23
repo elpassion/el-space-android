@@ -94,7 +94,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport) = listOf(DayWithDailyReportsItemAdapter(day))
 
-    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClickListener: OnDayClickListener): List<ItemAdapter<out RecyclerView.ViewHolder>> {
+    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClickListener: OnDayClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
         return if (day.isWeekend) {
             listOf(WeekendDayItem(day, onDayClickListener))
         } else {

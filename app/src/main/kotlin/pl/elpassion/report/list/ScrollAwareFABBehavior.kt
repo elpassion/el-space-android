@@ -1,25 +1,37 @@
 package pl.elpassion.report.list
 
 import android.content.Context
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
-import android.support.v4.view.ViewCompat
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 
-@Suppress("UNUSED")
-class ScrollAwareFABBehavior(private val context: Context, private val attributeSet: AttributeSet) : FloatingActionButton.Behavior() {
 
-    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: FloatingActionButton, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int) {
-        super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed)
-        if (dyConsumed > 0 && child.visibility == View.VISIBLE) {
-            child.hide()
-        } else if (dyConsumed < 0 && child.visibility == View.GONE) {
-            child.show()
-        }
+@Suppress("UNUSED")
+class ScrollAwareFABBehavior(context: Context, private val attributeSet: AttributeSet) : FloatingActionButton.Behavior() {
+    private val toolbarHeight = context.getActionBarSize()
+
+    override fun layoutDependsOn(parent: CoordinatorLayout, fab: FloatingActionButton, dependency: View): Boolean {
+        return dependency is AppBarLayout
     }
 
-    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?, child: FloatingActionButton?, directTargetChild: View?, target: View?, nestedScrollAxes: Int): Boolean {
-        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL
+    override fun onDependentViewChanged(parent: CoordinatorLayout, fab: FloatingActionButton, dependency: View): Boolean {
+        if (dependency is AppBarLayout) {
+            val lp = fab.layoutParams as CoordinatorLayout.LayoutParams
+            val fabBottomMargin = lp.bottomMargin
+            val distanceToScroll = fab.height + fabBottomMargin
+            val ratio = dependency.getY() / toolbarHeight.toFloat()
+            fab.translationY = -distanceToScroll * ratio
+        }
+        return true
+    }
+
+    private fun Context.getActionBarSize(): Int {
+        val typedValue = TypedValue().apply {
+            theme.resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, this, true)
+        }
+        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
     }
 }

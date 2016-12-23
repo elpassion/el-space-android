@@ -12,16 +12,17 @@ class ReportEditController(private val view: ReportEdit.View,
                            private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var reportId: Long by Delegates.notNull()
-    private lateinit var reportDate: String
+    private var reportDate: String  by Delegates.notNull()
     private var projectId: Long by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
     fun onCreate(report: Report) {
         reportId = report.id
-        reportDate = getPerformedAtString(report.year, report.month, report.day)
         projectId = report.projectId
         view.showReport(report)
+        val performedDate = getPerformedAtString(report.year, report.month, report.day)
+        onDateSelect(performedDate)
     }
 
     fun onChooseProject() {
@@ -68,6 +69,11 @@ class ReportEditController(private val view: ReportEdit.View,
     fun onDestroy() {
         subscription?.unsubscribe()
         removeReportSubscription?.unsubscribe()
+    }
+
+    fun onDateSelect(performedDate: String) {
+        reportDate = performedDate
+        view.showDate(performedDate)
     }
 
 }

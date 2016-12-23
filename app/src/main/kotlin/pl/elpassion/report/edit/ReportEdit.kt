@@ -19,6 +19,7 @@ interface ReportEdit {
         fun showError(ex: Throwable)
         fun close()
         fun showEmptyDescriptionError()
+        fun showDate(date: String)
     }
 
     interface EditApi {

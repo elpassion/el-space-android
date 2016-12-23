@@ -18,6 +18,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.Report
+import pl.elpassion.report.datechooser.showDateDialog
 
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
@@ -31,6 +32,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         setContentView(R.layout.report_edit_activity)
         controller.onCreate(report)
         showBackArrowOnActionBar()
+        reportEditDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
         reportEditProjectName.setOnClickListener {
             controller.onChooseProject()
@@ -39,10 +41,13 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showReport(report: Report) {
-        reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
         reportEditProjectName.text = report.projectName
         reportEditHours.setText("${report.reportedHours}")
         reportEditDescription.setText(report.description)
+    }
+
+    override fun showDate(date: String) {
+        reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
     }
 
     override fun close() {

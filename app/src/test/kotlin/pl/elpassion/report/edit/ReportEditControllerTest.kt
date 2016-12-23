@@ -189,6 +189,31 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldShowDateOnCreate() {
+        controller.onCreate(newReport(year = 2011, month = 10, day = 1))
+
+        verify(view).showDate("2011-10-01")
+    }
+
+    @Test
+    fun shouldShowSelectedDate() {
+        controller.onDateSelect("2016-05-04")
+
+        verify(view).showDate("2016-05-04")
+    }
+
+    @Test
+    fun shouldChangeDateAfterOnCreate() {
+        controller.onCreate(newReport())
+
+        controller.onDateSelect("2016-05-04")
+        controller.onSaveReport("0.1", "Desription")
+
+        verify(editReportApi).editReport(any(), eq("2016-05-04"), any(), any(), any())
+    }
+
+
     private fun stubEditReportApiToReturnNever() {
         stubEditReportApiToReturn(Completable.never())
     }

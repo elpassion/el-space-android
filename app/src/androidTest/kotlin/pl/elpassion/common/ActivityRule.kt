@@ -47,15 +47,9 @@ class RuleChainAdapter<out T : Activity>(private val activityTestRule: ActivityT
 
     private val rules = buildRuleChain()
 
-    private fun buildRuleChain(): RuleChain {
-        //FIXME RuleChain is not builder, every around method create new object instance
-        var ruleChain = RuleChain.outerRule(InitIntentsRule())
-        customRules.forEach {
-            ruleChain = ruleChain.around(it)
-        }
-        ruleChain.around(activityTestRule)
-        return ruleChain
-    }
+    private fun buildRuleChain(): RuleChain =
+            customRules.fold(RuleChain.outerRule(InitIntentsRule()), RuleChain::around)
+                    .around(activityTestRule)
 
     override fun apply(base: Statement?, description: Description?): Statement =
             rules.apply(base, description)

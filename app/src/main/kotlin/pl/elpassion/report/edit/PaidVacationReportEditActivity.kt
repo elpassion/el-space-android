@@ -14,6 +14,8 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.common.hideLoader
+import pl.elpassion.common.showLoader
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.datechooser.showDateDialog
 import pl.elpassion.report.edit.service.ReportEditServiceImpl
@@ -54,11 +56,11 @@ class PaidVacationReportEditActivity : AppCompatActivity(), ReportEdit.PaidVacat
     }
 
     override fun hideLoader() {
-        pl.elpassion.common.hideLoader(reportEditCoordinator)
+        hideLoader(reportEditCoordinator)
     }
 
     override fun showLoader() {
-        pl.elpassion.common.showLoader(reportEditCoordinator)
+        showLoader(reportEditCoordinator)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

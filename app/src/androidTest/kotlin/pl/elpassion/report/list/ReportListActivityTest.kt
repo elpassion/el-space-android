@@ -29,6 +29,8 @@ import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
+import pl.elpassion.report.edit.PaidVacationReportEditActivity
+import pl.elpassion.report.edit.RegularReportEditActivity
 import rx.Observable
 
 class ReportListActivityTest {
@@ -188,6 +190,21 @@ class ReportListActivityTest {
     fun shouldShowPaidVacationsInformationForPaidVacationReport() {
         scrollToItemWithText("11 Tue")
         onId(R.id.reportsContainer).hasChildWithText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
+    }
+
+    @Test
+    fun shouldOpenPaidVacationReportEditActivityAfterClickOnPaidVacationReport() {
+        scrollToItemWithText("11 Tue")
+        onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
+
+        checkIntent(PaidVacationReportEditActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenRegularReportEditActivityAfterClickOnRegularReport() {
+        onText("8.0h - Project").click()
+
+        checkIntent(RegularReportEditActivity::class.java)
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

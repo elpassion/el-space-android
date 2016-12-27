@@ -11,7 +11,6 @@ import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
-import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
@@ -47,7 +46,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showDate(date: String) {
-        reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
+        reportEditDate.text = date
     }
 
     override fun close() {

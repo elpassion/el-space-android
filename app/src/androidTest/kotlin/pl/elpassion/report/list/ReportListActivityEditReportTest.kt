@@ -17,8 +17,8 @@ import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.project.dto.newProject
-import pl.elpassion.project.dto.newReport
 import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
 import rx.Observable
@@ -34,8 +34,8 @@ class ReportListActivityEditReportTest {
         CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 1)
         whenever(service.getReports())
-                .thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "Description", reportedHours = 8.0))))
-                .thenReturn(Observable.just(listOf(newReport(year = 2016, month = 10, day = 1, projectName = "Project", description = "new Description", reportedHours = 8.0))))
+                .thenReturn(Observable.just(listOf(newRegularHourlyReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0))))
+                .thenReturn(Observable.just(listOf(newRegularHourlyReport(year = 2016, month = 10, day = 1, project = newProject(name = "Project"), description = "new Description", reportedHours = 8.0))))
         ReportList.ServiceProvider.override = { service }
     }
 

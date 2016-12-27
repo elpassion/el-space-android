@@ -1,28 +1,25 @@
 package pl.elpassion.report.edit
 
 import pl.elpassion.api.applySchedulers
-import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.common.extensions.*
 import pl.elpassion.project.Project
-import pl.elpassion.report.Report
+import pl.elpassion.report.RegularHourlyReport
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class ReportEditController(private val view: ReportEdit.View,
-                           private val editReportApi: ReportEdit.EditApi,
-                           private val removeReportApi: ReportEdit.RemoveApi) {
+class RegularHourlyReportEditController(private val view: ReportEdit.Regular.View,
+                                        private val editReportApi: ReportEdit.Regular.Service,
+                                        private val removeReportApi: ReportEdit.RemoveApi) {
 
-    private var reportId: Long by Delegates.notNull()
-    private var reportDate: String  by Delegates.notNull()
-    private var projectId: Long by Delegates.notNull()
+    private var report: RegularHourlyReport by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
-    fun onCreate(report: Report) {
-        reportId = report.id
-        projectId = report.projectId
-        view.showReport(report)
+    fun onCreate(report: RegularHourlyReport) {
+        this.report = report
         val performedDate = getPerformedAtString(report.year, report.month, report.day)
-        onDateSelect(performedDate)
+        view.showReport(report)
+        view.showDate(performedDate)
     }
 
     fun onChooseProject() {
@@ -38,7 +35,7 @@ class ReportEditController(private val view: ReportEdit.View,
     }
 
     private fun sendEditedReport(description: String, hours: String) {
-        subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+        subscription = editReportApi.edit(report.copy(description = description, reportedHours = hours.toDouble()))
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -50,12 +47,12 @@ class ReportEditController(private val view: ReportEdit.View,
     }
 
     fun onSelectProject(project: Project) {
-        projectId = project.id
+        report = report.copy(project = project)
         view.updateProjectName(project.name)
     }
 
     fun onRemoveReport() {
-        removeReportSubscription = removeReportApi.removeReport(reportId)
+        removeReportSubscription = removeReportApi.removeReport(report.id)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -72,8 +69,8 @@ class ReportEditController(private val view: ReportEdit.View,
     }
 
     fun onDateSelect(performedDate: String) {
-        reportDate = performedDate
+        val calendar = performedDate.toCalendarDate()
+        report = report.copy(day = calendar.dayOfWeek, month = calendar.month + 1, year = calendar.year)
         view.showDate(performedDate)
     }
-
 }

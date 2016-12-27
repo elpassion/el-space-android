@@ -2,6 +2,9 @@
     <string name="app_name">EL Space</string>
     <string name="internet_connection_error">There was a problem. Please, verify your internet connection.</string>
     <string name="report_missing">Missing</string>
+    <string name="report_sick_leave_title">Sick leave :(</string>
+    <string name="report_unpaid_vacations_title">Unpaid vacations</string>
+    <string name="report_paid_vacations_title">Paid vacations</string>
     <string name="report_hours_default_value" translatable="false">8</string>
     <string name="report_add_date_header">PERFORMED AT</string>
     <string name="report_add_project_header">PROJECT</string>

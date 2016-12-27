@@ -1,15 +1,10 @@
 package pl.elpassion.report.edit
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.contrib.PickerActions
-import android.support.test.espresso.matcher.ViewMatchers.withClassName
-import android.widget.DatePicker
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
-import org.hamcrest.Matchers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,14 +13,15 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
-import pl.elpassion.project.dto.newReport
+import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.startActivity
 
 class DateChooserReportEditActivityTest {
 
     @JvmField @Rule
-    val rule = rule<ReportEditActivity>(autoStart = false)
+    val rule = rule<RegularReportEditActivity>(autoStart = false)
 
     @Before
     fun setUp() {
@@ -42,8 +38,8 @@ class DateChooserReportEditActivityTest {
     }
 
 
-    private fun startActivity(report: Report = newReport()) {
-        rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+    private fun startActivity(report: RegularHourlyReport = newRegularHourlyReport()) {
+        rule.startActivity(RegularReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }
 

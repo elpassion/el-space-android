@@ -5,16 +5,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
-import pl.elpassion.project.dto.newProject
-import pl.elpassion.project.dto.newReport
+import pl.elpassion.project.dto.newPaidVacationHourlyReport
+import pl.elpassion.report.PaidVacationHourlyReport
 import rx.Completable
 
-class ReportEditControllerTest {
+class PaidVacationsReportEditControllerTest {
 
-    private val view = mock<ReportEdit.View>()
-    private val editReportApi = mock<ReportEdit.EditApi>()
+    private val view = mock<ReportEdit.PaidVacation.View>()
+    private val editReportApi = mock<ReportEdit.PaidVacation.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = ReportEditController(view, editReportApi, removeReportApi)
+    private val controller = PaidVacationReportEditController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -27,76 +27,49 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowCorrectReportOnCreate() {
-        val report = newReport()
+        val report = newPaidVacationHourlyReport()
 
         controller.onCreate(report)
 
         verify(view).showReport(report)
     }
 
-    @Test
-    fun shouldOpenChooseProjectScreenOnChooseProject() {
-        controller.onChooseProject()
-
-        verify(view).openChooseProjectScreen()
-    }
 
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
+        val report = newPaidVacationHourlyReport(year = 2017, month = 7, day = 2, id = 2, reportedHours = 4.0)
+        controller.onCreate(report)
 
-        controller.onSaveReport(hours = "8.0", description = "description")
+        controller.onSaveReport(hours = "8.0")
 
-        verify(editReportApi).editReport(id = 2, date = "2017-07-02", reportedHour = "8.0", description = "description", projectId = 2)
+        verify(editReportApi).edit(report.copy(reportedHours = 8.0))
     }
 
     @Test
     fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, projectId = 2))
+        val report = newPaidVacationHourlyReport(year = 2016, month = 1, day = 3, id = 5)
+        controller.onCreate(report)
 
-        controller.onSaveReport(hours = "7.5", description = "newDescription")
+        controller.onSaveReport(hours = "7.5")
 
-        verify(editReportApi).editReport(id = 5, date = "2016-01-03", reportedHour = "7.5", description = "newDescription", projectId = 2)
-    }
-
-    @Test
-    fun shouldShowEmptyDescriptionError() {
-        controller.onCreate(newReport())
-        controller.onSaveReport("8", "")
-
-        verify(view).showEmptyDescriptionError()
-    }
-
-    @Test
-    fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
-        controller.onCreate(newReport(projectId = 10))
-        controller.onSelectProject(newProject(id = 20))
-        controller.onSaveReport("0.0", "description")
-
-        verify(editReportApi).editReport(any(), any(), any(), any(), projectId = eq(20))
-    }
-
-    @Test
-    fun shouldUpdateProjectNameOnNewProject() {
-        controller.onSelectProject(newProject(name = "newProject"))
-
-        verify(view).updateProjectName(projectName = "newProject")
+        val paidVacationHourlyReport = report.copy(id = 5, day = 3, month = 1, reportedHours = 7.5)
+        verify(editReportApi).edit(paidVacationHourlyReport)
     }
 
     @Test
     fun shouldShowLoaderOnSaveReport() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
 
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnSaveReportFinish() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
 
         verify(view).hideLoader()
     }
@@ -104,9 +77,9 @@ class ReportEditControllerTest {
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
 
         verify(view, never()).hideLoader()
     }
@@ -114,9 +87,9 @@ class ReportEditControllerTest {
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
         stubEditReportApiToReturnNever()
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -125,25 +98,25 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
         stubEditReportApiToReturnError()
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
 
         verify(view).showError(any())
     }
 
     @Test
     fun shouldCloseViewWhenSavingHasNotFailed() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
-        controller.onSaveReport("1.0", "description")
+        controller.onSaveReport("1.0")
 
         verify(view).close()
     }
 
     @Test
     fun shouldShowLoaderOnRemoveReport() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onRemoveReport()
 
@@ -152,7 +125,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldHideLoaderOnRemoveReport() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onRemoveReport()
 
@@ -161,7 +134,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCloseViewWhenRemoveReportHasNotFailed() {
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onRemoveReport()
 
@@ -172,7 +145,7 @@ class ReportEditControllerTest {
     fun shouldShowErrorWhenRemoveReportFails() {
         stubRemoveReportApiToReturnError()
 
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
         controller.onRemoveReport()
 
         verify(view).showError(any())
@@ -182,7 +155,7 @@ class ReportEditControllerTest {
     fun shouldHideLoaderOnDestroyIfRemoveReportHasNotFinished() {
         stubRemoveReportApiToReturn(Completable.never())
 
-        controller.onCreate(newReport())
+        controller.onCreate(newPaidVacationHourlyReport())
         controller.onRemoveReport()
         controller.onDestroy()
 
@@ -191,13 +164,15 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowDateOnCreate() {
-        controller.onCreate(newReport(year = 2011, month = 10, day = 1))
+        controller.onCreate(newPaidVacationHourlyReport(year = 2011, month = 10, day = 1))
 
         verify(view).showDate("2011-10-01")
     }
 
     @Test
     fun shouldShowSelectedDate() {
+        controller.onCreate(newPaidVacationHourlyReport())
+
         controller.onDateSelect("2016-05-04")
 
         verify(view).showDate("2016-05-04")
@@ -205,14 +180,14 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldChangeDateAfterOnCreate() {
-        controller.onCreate(newReport())
+        val report = newPaidVacationHourlyReport()
+        controller.onCreate(report)
 
         controller.onDateSelect("2016-05-04")
-        controller.onSaveReport("0.1", "Desription")
+        controller.onSaveReport("0.1")
 
-        verify(editReportApi).editReport(any(), eq("2016-05-04"), any(), any(), any())
+        verify(editReportApi).edit(report.copy(day = 4, month = 5, year = 2016, reportedHours = 0.1))
     }
-
 
     private fun stubEditReportApiToReturnNever() {
         stubEditReportApiToReturn(Completable.never())
@@ -227,7 +202,7 @@ class ReportEditControllerTest {
     }
 
     private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(completable)
+        whenever(editReportApi.edit(any<PaidVacationHourlyReport>())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {
@@ -241,5 +216,4 @@ class ReportEditControllerTest {
     private fun stubRemoveReportApiToReturn(completable: Completable) {
         whenever(removeReportApi.removeReport(any())).thenReturn(completable)
     }
-
 }

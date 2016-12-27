@@ -15,3 +15,8 @@ fun Calendar.isWeekendDay(): Boolean = get(Calendar.DAY_OF_WEEK) == Calendar.SAT
 fun Calendar.dayName(): String = SimpleDateFormat("EEE", Locale.UK).run { format(this@dayName.time) }
 fun getPerformedAtString(year: Int, month: Int, day: Int) = String.format("%d-%02d-%02d", year, month, day)
 fun Calendar.daysForCurrentMonth() = getActualMaximum(Calendar.DAY_OF_MONTH)
+fun String.toCalendarDate(): Calendar {
+    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
+    val calendar = Calendar.getInstance().apply { time = date }
+    return calendar
+}

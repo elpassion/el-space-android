@@ -2,10 +2,10 @@ package pl.elpassion.report.edit
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.common.extensions.toCalendarDate
 import pl.elpassion.project.Project
 import pl.elpassion.report.RegularHourlyReport
 import rx.Subscription
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -71,8 +71,7 @@ class RegularHourlyReportEditController(private val view: ReportEdit.Regular.Vie
     }
 
     fun onDateSelect(performedDate: String) {
-        val date = SimpleDateFormat("yyyy-MM-dd").parse(performedDate)
-        val calendar = Calendar.getInstance().apply { time = date }
+        val calendar = performedDate.toCalendarDate()
         report = report.copy(day = calendar.get(Calendar.DAY_OF_WEEK), month = calendar.get(Calendar.MONTH) + 1, year = calendar.get(Calendar.YEAR))
         view.showDate(performedDate)
     }

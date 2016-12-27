@@ -52,15 +52,6 @@
 
         <include layout="@layout/separator" />
 
-        <TextView
-            style="@style/ReportHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:labelFor="@+id/reportEditDescription"
-            android:text="@string/report_edit_comment_header" />
-
-        <include layout="@layout/separator" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"

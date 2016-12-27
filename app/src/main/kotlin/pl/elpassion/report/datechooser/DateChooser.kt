@@ -12,7 +12,7 @@ fun showDateDialog(supportFragmentManager: FragmentManager, dateListener: (Strin
     val now = getCurrentTimeCalendar()
     val dateDialog = BottomSheetDatePickerDialog.newInstance(
             { datePickerDialog, year, monthOfYear, dayOfMonth ->
-                val performedDateAtString = getPerformedAtString(year, monthOfYear, dayOfMonth)
+                val performedDateAtString = getPerformedAtString(year, monthOfYear + 1, dayOfMonth)
                 dateListener(performedDateAtString)
             },
             now.get(Calendar.YEAR),

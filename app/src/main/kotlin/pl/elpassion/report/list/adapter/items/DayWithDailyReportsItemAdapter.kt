@@ -17,12 +17,11 @@ class DayWithDailyReportsItemAdapter(val day: DayWithDailyReport) : StableItemAd
     }
 
     private fun createReportDescription(): Int {
-        val dailyReportDescription = if (day.report.reportType == DailyReportType.SICK_LEAVE) {
+        return if (day.report.reportType == DailyReportType.SICK_LEAVE) {
             R.string.report_sick_leave_title
         } else {
             R.string.report_unpaid_vacations_title
         }
-        return dailyReportDescription
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

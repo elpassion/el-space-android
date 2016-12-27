@@ -5,6 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.project.dto.newDailyReport
+import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
@@ -65,6 +66,12 @@ class ReportListAdaptersSeparatorTest {
         assertFalse(givenAdapters[1] is SeparatorItemAdapter)
     }
 
+    @Test
+    fun shouldNotHaveSeparatorBetweenPaidVacationAndRegularHourlyReport() {
+        val givenAdapters = addSeparators(listOf(createReportItem(), createPaidVacationReportItem()))
+        assertFalse(givenAdapters[1] is SeparatorItemAdapter)
+    }
+
     private fun createReportItem() = RegularHourlyReportItemAdapter(newRegularHourlyReport(), mock())
 
     private fun createDayWithHourlyReportItem() = DayItemAdapter(newDayWithHourlyReports(), mock())
@@ -76,6 +83,8 @@ class ReportListAdaptersSeparatorTest {
     private fun createWeekendDayItem() = WeekendDayItem(newDayWithoutReports(), mock())
 
     private fun createEmptyItem() = EmptyItemAdapter()
+
+    private fun createPaidVacationReportItem() = PaidVacationReportItemAdapter(newPaidVacationHourlyReport(), mock())
 
     private fun newDayWithHourlyReports() = DayWithHourlyReports(0, "", "", listOf(newRegularHourlyReport()), false, 1.0)
 

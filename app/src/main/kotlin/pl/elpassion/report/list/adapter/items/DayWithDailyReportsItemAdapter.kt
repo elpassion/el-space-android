@@ -13,18 +13,16 @@ class DayWithDailyReportsItemAdapter(val day: DayWithDailyReport) : StableItemAd
 
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.dayNumber.text = day.name
-        setTotalHoursTextWithIndicator(holder)
+        holder.itemView.totalHours.setText(createReportDescription())
     }
 
-    private fun setTotalHoursTextWithIndicator(holder: VH) {
-        holder.itemView.run {
-            val dailyReportDescription = if (day.report.reportType == DailyReportType.SICK_LEAVE) {
-                R.string.report_sick_leave_title
-            } else {
-                R.string.report_unpaid_vacations_title
-            }
-            totalHours.setText(dailyReportDescription)
+    private fun createReportDescription(): Int {
+        val dailyReportDescription = if (day.report.reportType == DailyReportType.SICK_LEAVE) {
+            R.string.report_sick_leave_title
+        } else {
+            R.string.report_unpaid_vacations_title
         }
+        return dailyReportDescription
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

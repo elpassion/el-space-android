@@ -7,12 +7,13 @@ import org.junit.Test
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.report.RegularHourlyReport
 import rx.Completable
 
 class RegularHourlyReportEditControllerTest {
 
     private val view = mock<ReportEdit.Regular.View>()
-    private val editReportApi = mock<ReportEdit.EditApi>()
+    private val editReportApi = mock<ReportEdit.Regular.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
     private val controller = RegularHourlyReportEditController(view, editReportApi, removeReportApi)
 
@@ -43,20 +44,22 @@ class RegularHourlyReportEditControllerTest {
 
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newRegularHourlyReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
+        val report = newRegularHourlyReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2))
+        controller.onCreate(report)
 
         controller.onSaveReport(hours = "8.0", description = "description")
 
-        verify(editReportApi).editReport(id = 2, date = "2017-07-02", reportedHour = "8.0", description = "description", projectId = 2)
+        verify(editReportApi).edit(report.copy(reportedHours = 8.0, description = "description"))
     }
 
     @Test
     fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
-        controller.onCreate(newRegularHourlyReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2)))
+        val report = newRegularHourlyReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2))
+        controller.onCreate(report)
 
         controller.onSaveReport(hours = "7.5", description = "newDescription")
 
-        verify(editReportApi).editReport(id = 5, date = "2016-01-03", reportedHour = "7.5", description = "newDescription", projectId = 2)
+        verify(editReportApi).edit(report.copy(reportedHours = 7.5, description = "newDescription"))
     }
 
     @Test
@@ -73,11 +76,13 @@ class RegularHourlyReportEditControllerTest {
         controller.onSelectProject(newProject(id = 20))
         controller.onSaveReport("0.0", "description")
 
-        verify(editReportApi).editReport(any(), any(), any(), any(), projectId = eq(20))
+        verify(editReportApi).edit(argThat { project.id == 20L })
     }
 
     @Test
     fun shouldUpdateProjectNameOnNewProject() {
+        controller.onCreate(newRegularHourlyReport())
+
         controller.onSelectProject(newProject(name = "newProject"))
 
         verify(view).updateProjectName(projectName = "newProject")
@@ -198,6 +203,8 @@ class RegularHourlyReportEditControllerTest {
 
     @Test
     fun shouldShowSelectedDate() {
+        controller.onCreate(newRegularHourlyReport())
+
         controller.onDateSelect("2016-05-04")
 
         verify(view).showDate("2016-05-04")
@@ -210,7 +217,7 @@ class RegularHourlyReportEditControllerTest {
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1", "Desription")
 
-        verify(editReportApi).editReport(any(), eq("2016-05-04"), any(), any(), any())
+        verify(editReportApi).edit(argThat { day == 4 && month == 5 && year == 2016 })
     }
 
     private fun stubEditReportApiToReturnNever() {
@@ -226,7 +233,7 @@ class RegularHourlyReportEditControllerTest {
     }
 
     private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.editReport(any(), any(), any(), any(), any())).thenReturn(completable)
+        whenever(editReportApi.edit(any<RegularHourlyReport>())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {

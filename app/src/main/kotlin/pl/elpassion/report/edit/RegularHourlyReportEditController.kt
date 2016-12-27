@@ -5,25 +5,23 @@ import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.Project
 import pl.elpassion.report.RegularHourlyReport
 import rx.Subscription
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.properties.Delegates
 
 class RegularHourlyReportEditController(private val view: ReportEdit.Regular.View,
-                                        private val editReportApi: ReportEdit.EditApi,
+                                        private val editReportApi: ReportEdit.Regular.Service,
                                         private val removeReportApi: ReportEdit.RemoveApi) {
 
-    private var reportId: Long by Delegates.notNull()
-    private var reportDate: String  by Delegates.notNull()
-    private var projectId: Long? = null
+    private var report: RegularHourlyReport by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
     fun onCreate(report: RegularHourlyReport) {
-        reportId = report.id
-        reportDate = getPerformedAtString(report.year, report.month, report.day)
-        projectId = report.project.id
-        view.showReport(report)
+        this.report = report
         val performedDate = getPerformedAtString(report.year, report.month, report.day)
-        onDateSelect(performedDate)
+        view.showReport(report)
+        view.showDate(performedDate)
     }
 
     fun onChooseProject() {
@@ -39,7 +37,7 @@ class RegularHourlyReportEditController(private val view: ReportEdit.Regular.Vie
     }
 
     private fun sendEditedReport(description: String, hours: String) {
-        subscription = editReportApi.editReport(id = reportId, date = reportDate, reportedHour = hours, description = description, projectId = projectId)
+        subscription = editReportApi.edit(report.copy(description = description, reportedHours = hours.toDouble()))
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -51,12 +49,12 @@ class RegularHourlyReportEditController(private val view: ReportEdit.Regular.Vie
     }
 
     fun onSelectProject(project: Project) {
-        projectId = project.id
+        report = report.copy(project = project)
         view.updateProjectName(project.name)
     }
 
     fun onRemoveReport() {
-        removeReportSubscription = removeReportApi.removeReport(reportId)
+        removeReportSubscription = removeReportApi.removeReport(report.id)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -73,7 +71,9 @@ class RegularHourlyReportEditController(private val view: ReportEdit.Regular.Vie
     }
 
     fun onDateSelect(performedDate: String) {
-        reportDate = performedDate
+        val date = SimpleDateFormat("yyyy-MM-dd").parse(performedDate)
+        val calendar = Calendar.getInstance().apply { time = date }
+        report = report.copy(day = calendar.get(Calendar.DAY_OF_WEEK), month = calendar.get(Calendar.MONTH) + 1, year = calendar.get(Calendar.YEAR))
         view.showDate(performedDate)
     }
 }

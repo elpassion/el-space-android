@@ -22,10 +22,6 @@ class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation
     }
 
     fun onSaveReport(hours: String) {
-        sendEditedReport(hours)
-    }
-
-    private fun sendEditedReport(hours: String) {
         subscription = api.edit(report.copy(reportedHours = hours.toDouble()))
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }

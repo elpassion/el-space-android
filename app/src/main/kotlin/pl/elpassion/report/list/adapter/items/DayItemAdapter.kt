@@ -19,11 +19,8 @@ class DayItemAdapter(val day: DayWithHourlyReports, val listener: OnDayClickList
 
 
     private fun setTotalHoursTextWithIndicator(holder: VH) {
-        holder.itemView.run {
-            totalHours.text = "Total: ${day.reportedHours} hours"
-        }
+        holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)
-
 }

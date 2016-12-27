@@ -1,7 +1,8 @@
 package pl.elpassion.report.edit
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
+import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -96,7 +97,7 @@ class PaidVacationReportActivityTest {
     }
 
     private fun insertData(reportedHours: String) {
-        onId(R.id.reportEditHours).perform(ViewActions.replaceText(reportedHours), ViewActions.closeSoftKeyboard())
+        onId(R.id.reportEditHours).perform(replaceText(reportedHours), closeSoftKeyboard())
         onId(R.id.reportEditSaveButton).click()
     }
 

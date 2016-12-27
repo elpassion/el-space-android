@@ -20,7 +20,7 @@ import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.datechooser.showDateDialog
 
 
-class ReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
+class RegularReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as RegularHourlyReport }
     private val controller by lazy {
         RegularHourlyReportEditController(this, ReportEdit.EditApiProvider.get(), ReportEdit.RemoveApiProvider.get())
@@ -104,7 +104,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
         private val REPORT_KEY = "report_key"
         private val REQUEST_CODE = 10001
 
-        fun intent(context: Context, report: RegularHourlyReport) = Intent(context, ReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: RegularHourlyReport) = Intent(context, RegularReportEditActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 

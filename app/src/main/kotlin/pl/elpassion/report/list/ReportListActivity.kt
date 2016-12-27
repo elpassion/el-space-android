@@ -16,7 +16,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.edit.ReportEditActivity
+import pl.elpassion.report.edit.RegularReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
@@ -41,7 +41,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
-        ReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        RegularReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun showMonthName(monthName: String) {

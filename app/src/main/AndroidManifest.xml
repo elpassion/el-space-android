@@ -23,7 +23,7 @@
         <activity android:name=".report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppThemeWithoutActionBar"/>
-        <activity android:name=".report.edit.ReportEditActivity"/>
+        <activity android:name=".report.edit.RegularReportEditActivity"/>
         <activity android:name=".debate.login.DebateLoginActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"

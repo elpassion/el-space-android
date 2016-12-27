@@ -25,10 +25,10 @@ import pl.elpassion.startActivity
 import rx.Completable
 import rx.Observable
 
-class ReportEditActivityTest {
+class RegularReportEditActivityTest {
 
     @JvmField @Rule
-    val rule = rule<ReportEditActivity>(autoStart = false)
+    val rule = rule<RegularReportEditActivity>(autoStart = false)
 
     private val reportEditApi = mock<ReportEdit.EditApi>()
     private val reportRemoveApi = mock<ReportEdit.RemoveApi>()
@@ -166,7 +166,7 @@ class ReportEditActivityTest {
     }
 
     private fun startActivity(report: RegularHourlyReport = newRegularHourlyReport()) {
-        rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+        rule.startActivity(RegularReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }
 

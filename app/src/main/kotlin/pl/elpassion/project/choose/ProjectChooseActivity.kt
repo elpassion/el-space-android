@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -18,6 +19,7 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.project.ItemAnimatorProvider
 import pl.elpassion.project.Project
 
 
@@ -35,6 +37,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     private fun initRecyclerView() {
         projectsContainer.layoutManager = LinearLayoutManager(this)
+        projectsContainer.itemAnimator = ItemAnimatorProvider.get()
         projectsContainer.adapter = projectListAdapter
     }
 

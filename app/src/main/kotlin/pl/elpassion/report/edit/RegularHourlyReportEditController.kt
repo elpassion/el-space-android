@@ -7,9 +7,9 @@ import pl.elpassion.report.RegularHourlyReport
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class ReportEditController(private val view: ReportEdit.View,
-                           private val editReportApi: ReportEdit.EditApi,
-                           private val removeReportApi: ReportEdit.RemoveApi) {
+class RegularHourlyReportEditController(private val view: ReportEdit.RegularReportView,
+                                       private val editReportApi: ReportEdit.EditApi,
+                                       private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var reportId: Long by Delegates.notNull()
     private var reportDate: String  by Delegates.notNull()

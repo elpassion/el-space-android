@@ -2,6 +2,7 @@ package pl.elpassion.report.edit
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
+import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
@@ -10,7 +11,7 @@ import retrofit2.http.Query
 import rx.Completable
 
 interface ReportEdit {
-    interface View {
+    interface RegularReportView {
         fun showReport(report: RegularHourlyReport)
         fun openChooseProjectScreen()
         fun updateProjectName(projectName: String)
@@ -20,6 +21,20 @@ interface ReportEdit {
         fun close()
         fun showEmptyDescriptionError()
         fun showDate(date: String)
+    }
+
+    interface PaidVacationReportView {
+        fun showReport(report: PaidVacationHourlyReport)
+        fun showLoader()
+        fun hideLoader()
+        fun showError(ex: Throwable)
+        fun close()
+        fun showDate(date: String)
+    }
+
+    interface Service {
+        fun edit(report: RegularHourlyReport): Completable
+        fun edit(report: PaidVacationHourlyReport): Completable
     }
 
     interface EditApi {

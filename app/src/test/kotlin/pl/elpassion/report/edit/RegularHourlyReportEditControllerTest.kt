@@ -9,12 +9,12 @@ import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
 import rx.Completable
 
-class ReportEditControllerTest {
+class RegularHourlyReportEditControllerTest {
 
-    private val view = mock<ReportEdit.View>()
+    private val view = mock<ReportEdit.RegularReportView>()
     private val editReportApi = mock<ReportEdit.EditApi>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = ReportEditController(view, editReportApi, removeReportApi)
+    private val controller = RegularHourlyReportEditController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -212,7 +212,6 @@ class ReportEditControllerTest {
 
         verify(editReportApi).editReport(any(), eq("2016-05-04"), any(), any(), any())
     }
-
 
     private fun stubEditReportApiToReturnNever() {
         stubEditReportApiToReturn(Completable.never())

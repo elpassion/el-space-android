@@ -1,12 +1,9 @@
 package pl.elpassion.report.edit
 
 import pl.elpassion.api.applySchedulers
-import pl.elpassion.common.extensions.getPerformedAtString
-import pl.elpassion.common.extensions.toCalendarDate
+import pl.elpassion.common.extensions.*
 import pl.elpassion.report.PaidVacationHourlyReport
 import rx.Subscription
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.properties.Delegates
 
 class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation.View,
@@ -59,7 +56,7 @@ class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation
 
     fun onDateSelect(performedDate: String) {
         val calendar = performedDate.toCalendarDate()
-        report = report.copy(day = calendar.get(Calendar.DAY_OF_WEEK), month = calendar.get(Calendar.MONTH) + 1, year = calendar.get(Calendar.YEAR))
+        report = report.copy(day = calendar.dayOfWeek, month = calendar.month + 1, year = calendar.year)
         view.showDate(performedDate)
     }
 }

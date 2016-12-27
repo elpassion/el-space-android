@@ -20,3 +20,9 @@ fun String.toCalendarDate(): Calendar {
     val calendar = Calendar.getInstance().apply { time = date }
     return calendar
 }
+val Calendar.dayOfWeek: Int
+    get() = this.get(java.util.Calendar.DAY_OF_WEEK)
+val Calendar.month: Int
+    get() = this.get(java.util.Calendar.MONTH)
+val Calendar.year: Int
+    get() = this.get(java.util.Calendar.YEAR)

@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.properties.Delegates
 
-class PaidVacationReportEditController(private val view: ReportEdit.PaidVacationReportView,
-                                       private val api: ReportEdit.Service,
+class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation.View,
+                                       private val api: ReportEdit.PaidVacation.Service,
                                        private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var report: PaidVacationHourlyReport by Delegates.notNull()

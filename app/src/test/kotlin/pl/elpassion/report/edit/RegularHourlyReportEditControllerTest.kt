@@ -11,7 +11,7 @@ import rx.Completable
 
 class RegularHourlyReportEditControllerTest {
 
-    private val view = mock<ReportEdit.RegularReportView>()
+    private val view = mock<ReportEdit.Regular.View>()
     private val editReportApi = mock<ReportEdit.EditApi>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
     private val controller = RegularHourlyReportEditController(view, editReportApi, removeReportApi)

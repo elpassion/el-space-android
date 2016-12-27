@@ -11,20 +11,8 @@ import retrofit2.http.Query
 import rx.Completable
 
 interface ReportEdit {
-    interface RegularReportView {
-        fun showReport(report: RegularHourlyReport)
-        fun openChooseProjectScreen()
-        fun updateProjectName(projectName: String)
-        fun showLoader()
-        fun hideLoader()
-        fun showError(ex: Throwable)
-        fun close()
-        fun showEmptyDescriptionError()
-        fun showDate(date: String)
-    }
 
-    interface PaidVacationReportView {
-        fun showReport(report: PaidVacationHourlyReport)
+    interface View {
         fun showLoader()
         fun hideLoader()
         fun showError(ex: Throwable)
@@ -32,9 +20,27 @@ interface ReportEdit {
         fun showDate(date: String)
     }
 
-    interface Service {
-        fun edit(report: RegularHourlyReport): Completable
-        fun edit(report: PaidVacationHourlyReport): Completable
+    interface Regular {
+        interface View : ReportEdit.View {
+            fun showReport(report: RegularHourlyReport)
+            fun openChooseProjectScreen()
+            fun updateProjectName(projectName: String)
+            fun showEmptyDescriptionError()
+        }
+
+        interface Service {
+            fun edit(report: RegularHourlyReport): Completable
+        }
+    }
+
+    interface PaidVacation {
+        interface View : ReportEdit.View {
+            fun showReport(report: PaidVacationHourlyReport)
+        }
+
+        interface Service {
+            fun edit(report: PaidVacationHourlyReport): Completable
+        }
     }
 
     interface EditApi {

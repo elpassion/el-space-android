@@ -11,8 +11,8 @@ import rx.Completable
 
 class PaidVacationsReportEditControllerTest {
 
-    private val view = mock<ReportEdit.PaidVacationReportView>()
-    private val editReportApi = mock<ReportEdit.Service>()
+    private val view = mock<ReportEdit.PaidVacation.View>()
+    private val editReportApi = mock<ReportEdit.PaidVacation.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
     private val controller = PaidVacationReportEditController(view, editReportApi, removeReportApi)
 

@@ -14,8 +14,11 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.add.ReportAddActivity
+import pl.elpassion.report.edit.PaidVacationReportEditActivity
 import pl.elpassion.report.edit.RegularReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.addSeparators
@@ -42,6 +45,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
         RegularReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+    }
+
+    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
+        PaidVacationReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun showMonthName(monthName: String) {
@@ -103,7 +110,15 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
-            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.filterIsInstance<RegularHourlyReport>().map { ReportItemAdapter(it, onReportClickListener) }
+            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.map { createReportItemAdapter(it, onReportClickListener) }
+
+    private fun createReportItemAdapter(report: HourlyReport, onReportClickListener: OnReportClickListener): StableItemAdapter<out RecyclerView.ViewHolder> {
+        return if (report is RegularHourlyReport) {
+            RegularHourlyReportItemAdapter(report, onReportClickListener)
+        } else {
+            PaidVacationReportItemAdapter(report as PaidVacationHourlyReport, onReportClickListener)
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

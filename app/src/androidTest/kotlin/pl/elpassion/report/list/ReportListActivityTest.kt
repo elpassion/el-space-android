@@ -1,5 +1,6 @@
 package pl.elpassion.report.list
 
+import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
@@ -22,8 +23,9 @@ import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.dto.newDailyReport
-import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newProject
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
@@ -43,7 +45,8 @@ class ReportListActivityTest {
                 newRegularHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),
                 newDailyReport(year = 2016, month = 10, day = 7, reportType = DailyReportType.SICK_LEAVE),
                 newDailyReport(year = 2016, month = 10, day = 8, reportType = DailyReportType.UNPAID_VACATIONS),
-                newRegularHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0))))
+                newRegularHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0),
+                newPaidVacationHourlyReport(year = 2016, month = 10, day = 10, reportedHours = 3.0))))
         ReportList.ServiceProvider.override = { service }
     }
 
@@ -71,7 +74,7 @@ class ReportListActivityTest {
     }
 
     @Test
-    fun shouldShowReportOnContainer() {
+    fun shouldShowRegularHourlyReportOnContainer() {
         onId(R.id.reportsContainer).hasChildWithText("8.0h - Project")
         onId(R.id.reportsContainer).hasChildWithText("Description")
     }
@@ -179,6 +182,12 @@ class ReportListActivityTest {
     @Test
     fun shouldShowUnpaidVacationsInformationForDailyReportTypeUnpaidVacations() {
         onItemWithText("8 Sat").check(matches(hasDescendant(withText(R.string.report_unpaid_vacations_title))))
+    }
+
+    @Test
+    fun shouldShowPaidVacationsInformationForPaidVacationReport() {
+        scrollToItemWithText("11 Tue")
+        onId(R.id.reportsContainer).hasChildWithText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

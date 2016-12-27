@@ -65,7 +65,7 @@ class ReportListAdaptersSeparatorTest {
         assertFalse(givenAdapters[1] is SeparatorItemAdapter)
     }
 
-    private fun createReportItem() = ReportItemAdapter(newRegularHourlyReport(), mock())
+    private fun createReportItem() = RegularHourlyReportItemAdapter(newRegularHourlyReport(), mock())
 
     private fun createDayWithHourlyReportItem() = DayItemAdapter(newDayWithHourlyReports(), mock())
 

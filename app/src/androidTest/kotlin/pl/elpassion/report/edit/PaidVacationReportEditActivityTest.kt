@@ -19,7 +19,7 @@ import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.startActivity
 import rx.Completable
 
-class PaidVacationReportActivityTest {
+class PaidVacationReportEditActivityTest {
     @JvmField @Rule
     val rule = rule<PaidVacationReportEditActivity>(autoStart = false)
 

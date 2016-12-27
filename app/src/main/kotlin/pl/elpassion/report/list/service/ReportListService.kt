@@ -15,12 +15,10 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 }
             }
 
-    fun ReportFromApi.toReport(projects: List<Project>): Report {
-        return when (reportType) {
-            0 -> toRegularHourlyReport(projects)
-            1-> toPaidVacationHourlyReport()
-            else -> toDayReport()
-        }
+    fun ReportFromApi.toReport(projects: List<Project>) = when (reportType) {
+        0 -> toRegularHourlyReport(projects)
+        1 -> toPaidVacationHourlyReport()
+        else -> toDayReport()
     }
 
     private fun ReportFromApi.toPaidVacationHourlyReport(): Report {
@@ -31,16 +29,6 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 month = date[1].toInt(),
                 day = date[2].toInt(),
                 reportedHours = value ?: 0.0)
-    }
-
-    private fun ReportFromApi.toDayReport(): DailyReport {
-        val date = performedAt.split("-")
-        return DailyReport(
-                id = id,
-                year = date[0].toInt(),
-                month = date[1].toInt(),
-                day = date[2].toInt(),
-                reportType = reportType.toDailyReportType())
     }
 
     private fun ReportFromApi.toRegularHourlyReport(projects: List<Project>): HourlyReport {
@@ -55,10 +43,18 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
                 description = comment ?: "")
     }
 
-    private fun Int.toDailyReportType(): DailyReportType {
-        return when(this) {
-            3 -> DailyReportType.SICK_LEAVE
-            else -> DailyReportType.UNPAID_VACATIONS
-        }
+    private fun ReportFromApi.toDayReport(): DailyReport {
+        val date = performedAt.split("-")
+        return DailyReport(
+                id = id,
+                year = date[0].toInt(),
+                month = date[1].toInt(),
+                day = date[2].toInt(),
+                reportType = reportType.toDailyReportType())
+    }
+
+    private fun Int.toDailyReportType() = when (this) {
+        3 -> DailyReportType.SICK_LEAVE
+        else -> DailyReportType.UNPAID_VACATIONS
     }
 }

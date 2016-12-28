@@ -3,6 +3,7 @@ package pl.elpassion.report.edit.service
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
+import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
@@ -16,7 +17,8 @@ class ReportEditServiceTest {
     @Test
     fun shouldCallApiWithProperDataOfPaidVacationReport() {
         val report = newPaidVacationHourlyReport(day = 1, month = 1, year = 2016, reportedHours = 8.0)
-        service.edit(report)
+        val date = getPerformedAtString(report.year, report.month, report.day)
+        service.edit(report.id, date, report.reportedHours)
 
         verify(api).editReport(id = report.id, date = "2016-01-01", description = "", projectId = null, reportedHour = "8.0")
     }
@@ -24,7 +26,8 @@ class ReportEditServiceTest {
     @Test
     fun shouldReallyCallApiWithProperDataOfPaidVacationReport() {
         val report = newPaidVacationHourlyReport(day = 2, month = 2, year = 2015, reportedHours = 7.0)
-        service.edit(report)
+        val date = getPerformedAtString(report.year, report.month, report.day)
+        service.edit(report.id, date, report.reportedHours)
 
         verify(api).editReport(id = report.id, date = "2015-02-02", description = "", projectId = null, reportedHour = "7.0")
     }

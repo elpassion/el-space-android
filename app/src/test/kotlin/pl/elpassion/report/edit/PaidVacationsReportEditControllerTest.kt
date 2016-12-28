@@ -4,9 +4,10 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
-import pl.elpassion.report.PaidVacationHourlyReport
+import pl.elpassion.project.dto.performedDate
 import rx.Completable
 
 class PaidVacationsReportEditControllerTest {
@@ -14,7 +15,7 @@ class PaidVacationsReportEditControllerTest {
     private val view = mock<ReportEdit.PaidVacation.View>()
     private val editReportApi = mock<ReportEdit.PaidVacation.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = PaidVacationReportEditController(view, editReportApi, removeReportApi)
+    private val controller = AbsenceReportEditController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -31,18 +32,19 @@ class PaidVacationsReportEditControllerTest {
 
         controller.onCreate(report)
 
-        verify(view).showReport(report)
+        verify(view).showReportHours(report.reportedHours)
     }
 
 
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
         val report = newPaidVacationHourlyReport(year = 2017, month = 7, day = 2, id = 2, reportedHours = 4.0)
+        val date = getPerformedAtString(report.year, report.month, report.day)
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "8.0")
 
-        verify(editReportApi).edit(report.copy(reportedHours = 8.0))
+        verify(editReportApi).edit(id = report.id, date = date, reportedHours = 8.0)
     }
 
     @Test
@@ -52,8 +54,7 @@ class PaidVacationsReportEditControllerTest {
 
         controller.onSaveReport(hours = "7.5")
 
-        val paidVacationHourlyReport = report.copy(id = 5, day = 3, month = 1, reportedHours = 7.5)
-        verify(editReportApi).edit(paidVacationHourlyReport)
+        verify(editReportApi).edit(id = report.id, date = report.performedDate(), reportedHours = 7.5)
     }
 
     @Test
@@ -186,7 +187,7 @@ class PaidVacationsReportEditControllerTest {
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1")
 
-        verify(editReportApi).edit(report.copy(day = 4, month = 5, year = 2016, reportedHours = 0.1))
+        verify(editReportApi).edit(id = report.id, date = "2016-05-04", reportedHours = 0.1)
     }
 
     private fun stubEditReportApiToReturnNever() {
@@ -202,7 +203,7 @@ class PaidVacationsReportEditControllerTest {
     }
 
     private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.edit(any<PaidVacationHourlyReport>())).thenReturn(completable)
+        whenever(editReportApi.edit(any(), any(), any())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {

@@ -2,9 +2,10 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
+import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
@@ -62,11 +63,11 @@ class ReportListController(private val reportDayService: ReportDayService,
         view.openAddReportScreen(date)
     }
 
-    override fun onReport(report: HourlyReport) {
-        if (report is RegularHourlyReport) {
-            view.openEditReportScreen(report)
-        } else {
-            view.openPaidVacationEditReportScreen(report as PaidVacationHourlyReport)
+    override fun onReport(report: Report) {
+        when (report) {
+            is RegularHourlyReport -> view.openEditReportScreen(report)
+            is PaidVacationHourlyReport -> view.openPaidVacationEditReportScreen(report)
+            is DailyReport -> view.openAbsenceEditReportScreen(report)
         }
     }
 
@@ -84,5 +85,5 @@ interface OnDayClickListener {
 }
 
 interface OnReportClickListener {
-    fun onReport(report: HourlyReport)
+    fun onReport(report: Report)
 }

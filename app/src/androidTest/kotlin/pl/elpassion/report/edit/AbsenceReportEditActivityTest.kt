@@ -19,9 +19,9 @@ import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.startActivity
 import rx.Completable
 
-class PaidVacationReportEditActivityTest {
+class AbsenceReportEditActivityTest {
     @JvmField @Rule
-    val rule = rule<PaidVacationReportEditActivity>(autoStart = false)
+    val rule = rule<AbsenceReportEditActivity>(autoStart = false)
 
     private val reportEditApi = mock<ReportEdit.EditApi>()
     private val reportRemoveApi = mock<ReportEdit.RemoveApi>()
@@ -102,6 +102,6 @@ class PaidVacationReportEditActivityTest {
     }
 
     private fun startActivity(report: PaidVacationHourlyReport = newPaidVacationHourlyReport()) {
-        rule.startActivity(PaidVacationReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+        rule.startActivity(AbsenceReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }

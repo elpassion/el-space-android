@@ -76,7 +76,7 @@ class ReportListAdaptersSeparatorTest {
 
     private fun createDayWithHourlyReportItem() = DayItemAdapter(newDayWithHourlyReports(), mock())
 
-    private fun createDayWithDailyReportItem() = DayWithDailyReportsItemAdapter(newDayWithDailyReports())
+    private fun createDayWithDailyReportItem() = DayWithDailyReportsItemAdapter(newDayWithDailyReports(), mock())
 
     private fun createNotFilledInDayItem() = DayNotFilledInItemAdapter(newDayWithoutReports(), mock())
 

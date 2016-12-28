@@ -16,11 +16,12 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.edit.PaidVacationReportEditActivity
+import pl.elpassion.report.edit.AbsenceReportEditActivity
 import pl.elpassion.report.edit.RegularReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.*
@@ -61,7 +62,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        PaidVacationReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        AbsenceReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+    }
+
+    override fun openAbsenceEditReportScreen(report: DailyReport) {
+        AbsenceReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun showMonthName(monthName: String) {
@@ -108,11 +113,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
             when (day) {
                 is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClickListener)
                 is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClickListener, onReportClickListener)
-                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day)
+                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day, onReportClickListener)
                 else -> throw IllegalArgumentException()
             }
 
-    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport) = listOf(DayWithDailyReportsItemAdapter(day))
+    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport, onReportClickListener: OnReportClickListener) = listOf(DayWithDailyReportsItemAdapter(day, onReportClickListener))
 
     private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClickListener: OnDayClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {
         return if (day.isWeekend) {

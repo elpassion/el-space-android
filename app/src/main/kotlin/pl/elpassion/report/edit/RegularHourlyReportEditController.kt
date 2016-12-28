@@ -70,7 +70,7 @@ class RegularHourlyReportEditController(private val view: ReportEdit.Regular.Vie
 
     fun onDateSelect(performedDate: String) {
         val calendar = performedDate.toCalendarDate()
-        report = report.copy(day = calendar.dayOfWeek, month = calendar.month + 1, year = calendar.year)
+        report = report.copy(day = calendar.dayOfMonth, month = calendar.month + 1, year = calendar.year)
         view.showDate(performedDate)
     }
 }

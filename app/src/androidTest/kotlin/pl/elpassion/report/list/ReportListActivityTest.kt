@@ -31,7 +31,7 @@ import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.edit.PaidVacationReportEditActivity
+import pl.elpassion.report.edit.AbsenceReportEditActivity
 import pl.elpassion.report.edit.RegularReportEditActivity
 import rx.Observable
 
@@ -199,7 +199,7 @@ class ReportListActivityTest {
         scrollToItemWithText("11 Tue")
         onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
 
-        checkIntent(PaidVacationReportEditActivity::class.java)
+        checkIntent(AbsenceReportEditActivity::class.java)
     }
 
     @Test

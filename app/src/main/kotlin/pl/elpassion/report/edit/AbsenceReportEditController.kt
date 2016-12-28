@@ -1,28 +1,34 @@
 package pl.elpassion.report.edit
 
 import pl.elpassion.api.applySchedulers
-import pl.elpassion.common.extensions.*
-import pl.elpassion.report.PaidVacationHourlyReport
+import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.report.HourlyReport
+import pl.elpassion.report.Report
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation.View,
-                                       private val api: ReportEdit.PaidVacation.Service,
-                                       private val removeReportApi: ReportEdit.RemoveApi) {
+class AbsenceReportEditController(private val view: ReportEdit.PaidVacation.View,
+                                  private val api: ReportEdit.PaidVacation.Service,
+                                  private val removeReportApi: ReportEdit.RemoveApi) {
 
-    private var report: PaidVacationHourlyReport by Delegates.notNull()
+    private var report: Report by Delegates.notNull()
+    private var selectedDate: String by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
-    fun onCreate(report: PaidVacationHourlyReport) {
+    fun onCreate(report: Report) {
         this.report = report
-        view.showReport(report)
         val performedDate = getPerformedAtString(report.year, report.month, report.day)
-        view.showDate(performedDate)
+        onDateSelect(performedDate)
+        if (report is HourlyReport) {
+            view.showReportHours(report.reportedHours)
+        } else {
+            view.hideReportHours()
+        }
     }
 
     fun onSaveReport(hours: String) {
-        subscription = api.edit(report.copy(reportedHours = hours.toDouble()))
+        subscription = api.edit(report.id, selectedDate, hours.toDouble())
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -51,8 +57,7 @@ class PaidVacationReportEditController(private val view: ReportEdit.PaidVacation
     }
 
     fun onDateSelect(performedDate: String) {
-        val calendar = performedDate.toCalendarDate()
-        report = report.copy(day = calendar.dayOfWeek, month = calendar.month + 1, year = calendar.year)
+        selectedDate = performedDate
         view.showDate(performedDate)
     }
 }

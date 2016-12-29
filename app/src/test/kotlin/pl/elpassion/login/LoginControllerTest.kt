@@ -2,7 +2,7 @@ package pl.elpassion.login
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
-import pl.elpassion.login.schortcut.ShortcutService
+import pl.elpassion.login.shortcut.ShortcutService
 
 class LoginControllerTest {
 

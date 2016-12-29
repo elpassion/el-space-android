@@ -1,4 +1,4 @@
-package pl.elpassion.login.schortcut
+package pl.elpassion.login.shortcut
 
 import android.annotation.TargetApi
 import android.content.Context

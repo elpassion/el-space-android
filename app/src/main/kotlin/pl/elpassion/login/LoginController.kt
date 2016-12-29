@@ -1,6 +1,6 @@
 package pl.elpassion.login
 
-import pl.elpassion.login.schortcut.ShortcutService
+import pl.elpassion.login.shortcut.ShortcutService
 
 class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,

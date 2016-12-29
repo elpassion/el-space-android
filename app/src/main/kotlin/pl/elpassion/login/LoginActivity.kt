@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
-import pl.elpassion.login.schortcut.ShortcutServiceImpl
+import pl.elpassion.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.report.list.ReportListActivity
 
 

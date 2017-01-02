@@ -201,6 +201,15 @@ class ReportAddControllerTest {
         verify(view).hideHoursInput()
     }
 
+    @Test
+    fun shouldShowRegularReportDetailsFormAfterChangedToRegularReport() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.REGULAR)
+        verify(view).showRegularReportDetails()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

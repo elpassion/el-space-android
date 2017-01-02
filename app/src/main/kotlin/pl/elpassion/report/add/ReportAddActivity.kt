@@ -98,6 +98,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     }
 
+    override fun showRegularReportDetails() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     companion object {
         private val REQUEST_CODE = 10001
         private val ADD_DATE_KEY = "dateKey"

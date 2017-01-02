@@ -30,6 +30,8 @@ interface ReportAdd {
         fun hideHoursInput()
 
         fun showHoursInput()
+
+        fun showRegularReportDetails()
     }
 
     interface Api {

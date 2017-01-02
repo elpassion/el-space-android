@@ -26,6 +26,8 @@ interface ReportAdd {
         fun showLoader()
 
         fun hideLoader()
+
+        fun hideHoursInput()
     }
 
     interface Api {

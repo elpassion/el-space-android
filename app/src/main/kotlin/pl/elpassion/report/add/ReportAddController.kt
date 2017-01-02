@@ -7,6 +7,7 @@ import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
+import pl.elpassion.report.DailyReportType
 import rx.Subscription
 import java.util.Calendar.*
 
@@ -65,5 +66,9 @@ class ReportAddController(date: String?,
     fun onDateSelect(performedDate: String) {
         selectedDate = performedDate
         view.showDate(performedDate)
+    }
+
+    fun onReportTypeChanged(reportType: ReportType) {
+        view.hideHoursInput()
     }
 }

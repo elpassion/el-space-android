@@ -165,6 +165,15 @@ class ReportAddControllerTest {
         verify(view).showDate("2016-02-01")
     }
 
+    @Test
+    fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        verify(view).hideHoursInput()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

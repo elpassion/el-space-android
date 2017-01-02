@@ -23,7 +23,6 @@ class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         controller = ReportAddDetailsRegularController(this, LastSelectedProjectRepositoryProvider.get())
-        controller?.onCreate()
         view?.reportAddProjectName?.setOnClickListener { controller?.onProjectClicked() }
     }
 

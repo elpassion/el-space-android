@@ -36,6 +36,8 @@ interface ReportAdd {
         fun showPaidVacationsReportDetails()
 
         fun showSickLeaveReportDetails()
+
+        fun showUnpaidVacationsReportDetails()
     }
 
     interface Api {

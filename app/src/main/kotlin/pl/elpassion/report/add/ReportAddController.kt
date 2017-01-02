@@ -76,9 +76,13 @@ class ReportAddController(date: String?,
                 view.showHoursInput()
                 view.showPaidVacationsReportDetails()
             }
-            else -> {
+            ReportType.SICK_LEAVE -> {
                 view.hideHoursInput()
                 view.showSickLeaveReportDetails()
+            }
+            ReportType.UNPAID_VACATIONS -> {
+                view.hideHoursInput()
+                view.showUnpaidVacationsReportDetails()
             }
         }
     }

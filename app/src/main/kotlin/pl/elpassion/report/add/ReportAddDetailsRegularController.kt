@@ -4,9 +4,9 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
 
 class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular,
-                                        repository: LastSelectedProjectRepository) : ReportAddDetails.Controller {
+                                        private val repository: LastSelectedProjectRepository) : ReportAddDetails.Controller {
 
-    init {
+    fun onCreate() {
         repository.getLastProject()?.let {
             view.showSelectedProject(it)
         }

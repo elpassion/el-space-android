@@ -202,7 +202,7 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowRegularReportDetailsFormAfterChangedToRegularReport() {
+    fun shouldShowRegularReportDetailsFormAfterReportTypeChangedToRegularReport() {
         val controller = createController()
         controller.onCreate()
 

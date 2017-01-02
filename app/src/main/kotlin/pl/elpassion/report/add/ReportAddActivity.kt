@@ -16,33 +16,29 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.project.Project
-import pl.elpassion.project.choose.ProjectChooseActivity
-import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val controller by lazy {
-        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, LastSelectedProjectRepositoryProvider.get(), ReportAdd.ApiProvider.get())
+        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
+
+    val items = listOf(ReportAddDetailsRegularFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddProjectName.setOnClickListener { controller.onProjectClicked() }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddAdd.setOnClickListener {
-            controller.onReportAdd(
-                    reportAddHours.text.toString(),
-                    reportAddDescription.text.toString()
-            )
+            controller.onReportAdd(getCurrentReportController())
         }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
+        reportAddReportDetailsForm.adapter = ReportAddPagerAdapter(items, this)
     }
 
     private fun Int.toReportType() = when (this) {
@@ -62,28 +58,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddDate.text = date
     }
 
-    override fun showSelectedProject(project: Project) {
-        reportAddProjectName.text = project.name
-    }
-
     override fun enableAddReportButton() {
         reportAddAdd.isEnabled = true
-    }
-
-    override fun openProjectChooser() {
-        ProjectChooseActivity.startForResult(this, REQUEST_CODE)
     }
 
     override fun showLoader() = showLoader(reportAddCoordinator)
 
     override fun hideLoader() = hideLoader(reportAddCoordinator)
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            controller.onSelectProject(ProjectChooseActivity.getProject(data!!))
-        }
-    }
 
     override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
@@ -95,10 +76,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
-    }
-
-    override fun showEmptyDescriptionError() {
-        Snackbar.make(reportAddCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun hideHoursInput() {
@@ -116,13 +93,17 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun showSickLeaveReportDetails() {
+        reportAddReportDetailsForm.currentItem = 1
     }
 
     override fun showUnpaidVacationsReportDetails() {
     }
 
+    private fun getCurrentReportController(): ReportAddDetails.Controller {
+        return items[reportAddReportDetailsForm.currentItem].controller!!
+    }
+
     companion object {
-        private val REQUEST_CODE = 10001
         private val ADD_DATE_KEY = "dateKey"
 
         fun startForResult(activity: Activity, date: String, requestCode: Int) {

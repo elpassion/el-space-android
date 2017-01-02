@@ -9,9 +9,16 @@ import rx.Completable
 
 interface ReportAdd {
     interface View {
-        fun showSelectedProject(project: Project)
 
-        fun openProjectChooser()
+        interface Regular {
+            fun showSelectedProject(project: Project)
+
+            fun openProjectChooser()
+
+            fun getDescription(): String
+
+            fun showEmptyDescriptionError()
+        }
 
         fun close()
 
@@ -20,8 +27,6 @@ interface ReportAdd {
         fun showDate(date: String)
 
         fun enableAddReportButton()
-
-        fun showEmptyDescriptionError()
 
         fun showLoader()
 

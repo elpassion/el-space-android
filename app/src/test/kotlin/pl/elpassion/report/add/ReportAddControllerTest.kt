@@ -27,43 +27,10 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowPossibleProject() {
-        val project = newProject()
-        stubRepositoryToReturn(project)
-        val controller = createController()
-
-        controller.onCreate()
-
-        verify(view).showSelectedProject(project)
-    }
-
-    @Test
-    fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
-        stubRepositoryToReturn(null)
-        val controller = createController()
-
-        controller.onCreate()
-
-        verify(view, never()).showSelectedProject(any())
-    }
-
-    @Test
-    fun shouldOpenProjectChooserOnProjectClicked() {
-        createController().onProjectClicked()
-        verify(view).openProjectChooser()
-    }
-
-    @Test
-    fun shouldShowSelectedProject() {
-        createController().onSelectProject(newProject())
-        verify(view).showSelectedProject(newProject())
-    }
-
-    @Test
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
         verify(view).close()
     }
 
@@ -72,7 +39,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
 
         verify(view).showLoader()
     }
@@ -82,7 +49,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -93,19 +60,10 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
         controller.onDestroy()
 
         verify(view).hideLoader()
-    }
-
-    @Test
-    fun shouldShowEmptyDescriptionError() {
-        val controller = createController()
-        controller.onCreate()
-        controller.onReportAdd("8", "")
-
-        verify(view).showEmptyDescriptionError()
     }
 
     @Test
@@ -120,10 +78,9 @@ class ReportAddControllerTest {
     @Test
     fun shouldChangeDateAfterOnCreate() {
         val controller = createController("2016-01-04")
-        controller.onSelectProject(newProject())
 
         controller.onDateSelect("2016-05-04")
-        controller.onReportAdd("0.1", "Desription")
+        controller.onReportAdd(createDetailsController())
 
         verify(api).addReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -133,7 +90,7 @@ class ReportAddControllerTest {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
         verify(view).showError(any())
     }
 
@@ -151,8 +108,7 @@ class ReportAddControllerTest {
         whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.onSelectProject(project)
-        controller.onReportAdd("8", "description")
+        controller.onReportAdd(createDetailsController())
         verify(view).showError(exception)
     }
 
@@ -237,7 +193,16 @@ class ReportAddControllerTest {
         verify(view).showUnpaidVacationsReportDetails()
     }
 
-    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
+    @Test
+    fun shouldShowErrorOnDetailsControllerWhenReportIsInvalid() {
+        val controller = createController()
+        controller.onCreate()
+        val detailsController = createDetailsController(isValid = false)
+        controller.onReportAdd(detailsController)
+        verify(detailsController).onError()
+    }
+
+    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)
@@ -245,6 +210,10 @@ class ReportAddControllerTest {
 
     private fun stubApiToReturn(completable: Completable) {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
+    }
+
+    private fun createDetailsController(isValid: Boolean = true): ReportAddDetails.Controller = mock {
+        on { isReportValid() } doReturn isValid
     }
 }
 

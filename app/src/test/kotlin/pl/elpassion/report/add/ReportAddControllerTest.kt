@@ -192,6 +192,15 @@ class ReportAddControllerTest {
         verify(view).showHoursInput()
     }
 
+    @Test
+    fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        verify(view).hideHoursInput()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

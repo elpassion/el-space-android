@@ -42,7 +42,9 @@ interface ReportAdd {
     }
 
     interface Sender {
-        fun sendAddReport(description: String)
+        interface Regular {
+            fun sendAddReport(description: String)
+        }
     }
 
     object ApiProvider : Provider<Api>({

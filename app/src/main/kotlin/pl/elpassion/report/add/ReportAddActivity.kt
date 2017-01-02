@@ -18,7 +18,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.datechooser.showDateDialog
 
-class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender {
+class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.Regular {
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())

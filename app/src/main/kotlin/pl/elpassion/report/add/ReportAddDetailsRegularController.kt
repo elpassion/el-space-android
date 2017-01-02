@@ -4,7 +4,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
 
 class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular,
-                                        private val sender: ReportAdd.Sender,
+                                        private val sender: ReportAdd.Sender.Regular,
                                         private val repository: LastSelectedProjectRepository) : ReportAddDetails.Controller {
 
     fun onCreate() {

@@ -9,7 +9,7 @@ import pl.elpassion.project.last.LastSelectedProjectRepository
 class ReportRegularAddControllerTest {
 
     val view = mock<ReportAdd.View.Regular>()
-    val sender = mock<ReportAdd.Sender>()
+    val sender = mock<ReportAdd.Sender.Regular>()
     val repository = mock<LastSelectedProjectRepository>()
     val controller = createController()
 

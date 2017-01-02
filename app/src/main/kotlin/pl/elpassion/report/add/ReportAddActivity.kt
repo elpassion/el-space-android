@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
+import com.elpassion.android.view.hide
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -40,6 +41,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
+        bottomNavigation.setOnNavigationItemSelectedListener { reportAddHours.hide(); true }
     }
 
     override fun onDestroy() {

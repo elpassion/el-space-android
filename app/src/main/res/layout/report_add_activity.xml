@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/reportAddCoordinator"
+<android.support.design.widget.CoordinatorLayout android:id="@+id/reportAddCoordinator"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -100,6 +100,14 @@
             android:layout_height="wrap_content"
             android:enabled="false"
             android:text="@string/report_add_add_button" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemBackground="@color/colorPrimary"
+            app:itemTextColor="@color/colorWhite"
+            app:menu="@menu/add_raport_button_menu"/>
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -124,6 +124,13 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldHideHoursInputAfterClickOnSickLeaveReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+        onId(R.id.reportAddHours).isNotDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()

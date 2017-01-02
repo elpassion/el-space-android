@@ -1,7 +1,6 @@
 package pl.elpassion.report.add
 
 import com.nhaarman.mockito_kotlin.*
-import org.junit.Assert.assertFalse
 import org.junit.Test
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
@@ -10,13 +9,14 @@ import pl.elpassion.project.last.LastSelectedProjectRepository
 class ReportRegularAddControllerTest {
 
     val view = mock<ReportAdd.View.Regular>()
+    val sender = mock<ReportAdd.Sender>()
     val repository = mock<LastSelectedProjectRepository>()
+    val controller = createController()
 
     @Test
     fun shouldShowPossibleProject() {
         val project = newProject()
         stubRepositoryToReturn(project)
-        val controller = createController()
 
         controller.onCreate()
 
@@ -26,8 +26,6 @@ class ReportRegularAddControllerTest {
     @Test
     fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
         stubRepositoryToReturn(null)
-        val controller = createController()
-
         controller.onCreate()
 
         verify(view, never()).showSelectedProject(any())
@@ -35,29 +33,27 @@ class ReportRegularAddControllerTest {
 
     @Test
     fun shouldOpenProjectChooserOnProjectClicked() {
-        createController().onProjectClicked()
+        controller.onProjectClicked()
         verify(view).openProjectChooser()
     }
 
     @Test
     fun shouldShowSelectedProject() {
-        createController().onSelectProject(newProject())
+        controller.onSelectProject(newProject())
         verify(view).showSelectedProject(newProject())
     }
 
     @Test
-    fun shouldShowReturnFalseWhenDescriptionIsEmpty() {
-        whenever(view.getDescription()).thenReturn("")
-        val controller = createController()
-        controller.onCreate()
-        assertFalse(controller.isReportValid())
+    fun shouldCallSenderAfterOnReportAdded() {
+        whenever(view.getDescription()).thenReturn("description")
+        controller.onReportAdded()
+        verify(sender).sendAddReport("description")
     }
 
     @Test
-    fun shouldShowEmptyDescriptionErrorOnShowError() {
-        val controller = createController()
-        controller.onCreate()
-        controller.onError()
+    fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
+        whenever(view.getDescription()).thenReturn("")
+        controller.onReportAdded()
         verify(view).showEmptyDescriptionError()
     }
 
@@ -65,5 +61,5 @@ class ReportRegularAddControllerTest {
         whenever(repository.getLastProject()).thenReturn(project)
     }
 
-    private fun createController() = ReportAddDetailsRegularController(view, repository)
+    private fun createController() = ReportAddDetailsRegularController(view, sender, repository)
 }

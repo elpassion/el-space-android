@@ -12,36 +12,22 @@ interface ReportAdd {
 
         interface Regular {
             fun showSelectedProject(project: Project)
-
             fun openProjectChooser()
-
             fun getDescription(): String
-
             fun showEmptyDescriptionError()
         }
 
         fun close()
-
         fun showError(ex: Throwable)
-
         fun showDate(date: String)
-
         fun enableAddReportButton()
-
         fun showLoader()
-
         fun hideLoader()
-
         fun hideHoursInput()
-
         fun showHoursInput()
-
         fun showRegularReportDetails()
-
         fun showPaidVacationsReportDetails()
-
         fun showSickLeaveReportDetails()
-
         fun showUnpaidVacationsReportDetails()
     }
 
@@ -53,6 +39,10 @@ interface ReportAdd {
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
                 @Query("activity[comment]") description: String): Completable
+    }
+
+    interface Sender {
+        fun sendAddReport(description: String)
     }
 
     object ApiProvider : Provider<Api>({

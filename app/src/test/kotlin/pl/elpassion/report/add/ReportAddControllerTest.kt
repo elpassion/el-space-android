@@ -30,7 +30,7 @@ class ReportAddControllerTest {
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
         verify(view).close()
     }
 
@@ -39,7 +39,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
 
         verify(view).showLoader()
     }
@@ -49,7 +49,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -60,7 +60,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -80,7 +80,7 @@ class ReportAddControllerTest {
         val controller = createController("2016-01-04")
 
         controller.onDateSelect("2016-05-04")
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
 
         verify(api).addReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -90,7 +90,7 @@ class ReportAddControllerTest {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
         verify(view).showError(any())
     }
 
@@ -108,7 +108,7 @@ class ReportAddControllerTest {
         whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.onReportAdd(createDetailsController())
+        controller.sendAddReport("description", "8")
         verify(view).showError(exception)
     }
 
@@ -193,15 +193,6 @@ class ReportAddControllerTest {
         verify(view).showUnpaidVacationsReportDetails()
     }
 
-    @Test
-    fun shouldShowErrorOnDetailsControllerWhenReportIsInvalid() {
-        val controller = createController()
-        controller.onCreate()
-        val detailsController = createDetailsController(isValid = false)
-        controller.onReportAdd(detailsController)
-        verify(detailsController).onError()
-    }
-
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
@@ -210,10 +201,6 @@ class ReportAddControllerTest {
 
     private fun stubApiToReturn(completable: Completable) {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
-    }
-
-    private fun createDetailsController(isValid: Boolean = true): ReportAddDetails.Controller = mock {
-        on { isReportValid() } doReturn isValid
     }
 }
 

@@ -4,6 +4,7 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
 
 class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular,
+                                        private val sender: ReportAdd.Sender,
                                         private val repository: LastSelectedProjectRepository) : ReportAddDetails.Controller {
 
     fun onCreate() {
@@ -20,9 +21,11 @@ class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular
         view.showSelectedProject(newProject)
     }
 
-    override fun isReportValid() = view.getDescription().isNotBlank()
-
-    override fun onError() {
-        view.showEmptyDescriptionError()
+    override fun onReportAdded() {
+        if (view.getDescription().isNotBlank()) {
+            sender.sendAddReport(view.getDescription())
+        } else {
+            view.showEmptyDescriptionError()
+        }
     }
 }

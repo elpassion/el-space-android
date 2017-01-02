@@ -9,7 +9,6 @@ interface ReportAddDetails {
     }
 
     interface Controller {
-        fun isReportValid(): Boolean
-        fun onError()
+        fun onReportAdded()
     }
 }

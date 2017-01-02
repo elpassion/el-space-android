@@ -18,7 +18,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.datechooser.showDateDialog
 
-class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
+class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender {
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
@@ -101,6 +101,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private fun getCurrentReportController(): ReportAddDetails.Controller {
         return items[reportAddReportDetailsForm.currentItem].controller!!
+    }
+
+    override fun sendAddReport(description: String) {
+        controller.sendAddReport(description, reportAddHours.text.toString())
     }
 
     companion object {

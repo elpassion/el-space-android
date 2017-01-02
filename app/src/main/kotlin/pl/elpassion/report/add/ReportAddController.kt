@@ -4,7 +4,6 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
-import pl.elpassion.project.Project
 import rx.Subscription
 import java.util.Calendar.*
 
@@ -24,14 +23,10 @@ class ReportAddController(date: String?,
     }
 
     fun onReportAdd(detailsController: ReportAddDetails.Controller) {
-        if (detailsController.isReportValid()) {
-            sendAddReport("description", "8")
-        } else {
-            detailsController.onError()
-        }
+        detailsController.onReportAdded()
     }
 
-    private fun sendAddReport(description: String, hours: String) {
+    fun sendAddReport(description: String, hours: String) {
         subscription = api.addReport(selectedDate, 1, hours, description)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }

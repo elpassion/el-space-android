@@ -146,6 +146,13 @@ class ReportAddActivityTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldShowHoursInputAfterClickOnPaidVacationsReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_paid_vacations_report).click()
+        onId(R.id.reportAddHours).isDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {
         whenever(repository.getLastProject()).thenReturn(projects)
         LastSelectedProjectRepositoryProvider.override = { repository }

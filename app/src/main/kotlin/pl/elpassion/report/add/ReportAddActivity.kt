@@ -48,6 +48,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     private fun Int.toReportType() = when (this) {
         R.id.action_regular_report -> ReportType.REGULAR
         R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
+        R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
         else -> throw IllegalArgumentException()
     }
 

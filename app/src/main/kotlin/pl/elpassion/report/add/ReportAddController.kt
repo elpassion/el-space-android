@@ -1,13 +1,11 @@
 package pl.elpassion.report.add
 
 import pl.elpassion.api.applySchedulers
-
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
-import pl.elpassion.report.DailyReportType
 import rx.Subscription
 import java.util.Calendar.*
 
@@ -69,6 +67,10 @@ class ReportAddController(date: String?,
     }
 
     fun onReportTypeChanged(reportType: ReportType) {
-        view.hideHoursInput()
+        if (reportType == ReportType.REGULAR) {
+            view.showHoursInput()
+        } else {
+            view.hideHoursInput()
+        }
     }
 }

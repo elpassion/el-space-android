@@ -94,6 +94,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     }
 
+    override fun showHoursInput() {
+
+    }
+
     companion object {
         private val REQUEST_CODE = 10001
         private val ADD_DATE_KEY = "dateKey"

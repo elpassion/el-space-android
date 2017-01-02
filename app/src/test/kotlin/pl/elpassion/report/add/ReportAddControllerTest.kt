@@ -174,6 +174,15 @@ class ReportAddControllerTest {
         verify(view).hideHoursInput()
     }
 
+    @Test
+    fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.REGULAR)
+        verify(view).showHoursInput()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

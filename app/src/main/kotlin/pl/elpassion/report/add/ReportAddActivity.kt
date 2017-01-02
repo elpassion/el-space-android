@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -41,7 +42,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         }
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
-        bottomNavigation.setOnNavigationItemSelectedListener { reportAddHours.hide(); true }
+        bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
+    }
+
+    private fun Int.toReportType() = when (this) {
+        R.id.action_regular_report -> ReportType.REGULAR
+        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
+        else -> throw IllegalArgumentException()
     }
 
     override fun onDestroy() {
@@ -93,27 +100,23 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun hideHoursInput() {
-
+        reportAddHours.hide()
     }
 
     override fun showHoursInput() {
-
+        reportAddHours.show()
     }
 
     override fun showRegularReportDetails() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showPaidVacationsReportDetails() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showSickLeaveReportDetails() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showUnpaidVacationsReportDetails() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {
@@ -131,6 +134,5 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)
 
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
-
     }
 }

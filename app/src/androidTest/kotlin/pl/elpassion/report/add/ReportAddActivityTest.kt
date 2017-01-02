@@ -131,6 +131,13 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldShowHoursInputAfterClickOnRegularReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_regular_report).click()
+        onId(R.id.reportAddHours).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()

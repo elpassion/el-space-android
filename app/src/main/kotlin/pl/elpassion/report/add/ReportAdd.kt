@@ -32,6 +32,8 @@ interface ReportAdd {
         fun showHoursInput()
 
         fun showRegularReportDetails()
+
+        fun showPaidVacationsReportDetails()
     }
 
     interface Api {

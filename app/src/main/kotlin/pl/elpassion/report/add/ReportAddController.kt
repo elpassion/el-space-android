@@ -67,11 +67,18 @@ class ReportAddController(date: String?,
     }
 
     fun onReportTypeChanged(reportType: ReportType) {
-        if (reportType in listOf(ReportType.REGULAR, ReportType.PAID_VACATIONS)) {
-            view.showHoursInput()
-            view.showRegularReportDetails()
-        } else {
-            view.hideHoursInput()
+        when (reportType) {
+            ReportType.REGULAR -> {
+                view.showHoursInput()
+                view.showRegularReportDetails()
+            }
+            ReportType.PAID_VACATIONS -> {
+                view.showHoursInput()
+                view.showPaidVacationsReportDetails()
+            }
+            else -> {
+                view.hideHoursInput()
+            }
         }
     }
 }

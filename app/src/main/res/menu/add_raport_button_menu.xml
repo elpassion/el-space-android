@@ -13,4 +13,8 @@
         android:id="@+id/action_paid_vacations_report"
         android:title="@string/report_add_action_paid_vacations_report"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_unpaid_vacations_report"
+        android:title="@string/report_add_action_unpaid_vacations_report"
+        app:showAsAction="ifRoom" />
 </menu>

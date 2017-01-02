@@ -78,6 +78,7 @@ class ReportAddController(date: String?,
             }
             else -> {
                 view.hideHoursInput()
+                view.showSickLeaveReportDetails()
             }
         }
     }

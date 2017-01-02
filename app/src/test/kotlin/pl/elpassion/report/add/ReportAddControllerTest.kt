@@ -219,6 +219,15 @@ class ReportAddControllerTest {
         verify(view).showPaidVacationsReportDetails()
     }
 
+    @Test
+    fun shouldShowSickLeaveDetailsFormAfterReportTypeChangedToSickLeave() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        verify(view).showSickLeaveReportDetails()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

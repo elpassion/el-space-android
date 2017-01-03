@@ -86,10 +86,10 @@ class ReportAddActivity : AppCompatActivity(),
     }
 
     override fun showPaidVacationsReportDetails() {
+        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsPaidVacationsFragment }
     }
 
     override fun showSickLeaveReportDetails() {
-        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsPaidVacationsFragment }
     }
 
     override fun showUnpaidVacationsReportDetails() {

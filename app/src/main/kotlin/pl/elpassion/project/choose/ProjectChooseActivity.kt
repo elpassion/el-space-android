@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -20,7 +21,6 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.ItemAnimatorProvider
 import pl.elpassion.project.Project
-import pl.elpassion.report.add.details.ReportAddDetails
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
@@ -97,7 +97,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
             activity.startActivityForResult(Intent(activity, ProjectChooseActivity::class.java), requestCode)
         }
 
-        fun startForResult(fragment: ReportAddDetails.View, requestCode: Int) {
+        fun startForResult(fragment: Fragment, requestCode: Int) {
             fragment.startActivityForResult(Intent(fragment.activity, ProjectChooseActivity::class.java), requestCode)
         }
 

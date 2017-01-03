@@ -46,8 +46,9 @@ class ReportRegularAddControllerTest {
     @Test
     fun shouldCallSenderAfterOnReportAdded() {
         whenever(view.getDescription()).thenReturn("description")
+        whenever(view.getHours()).thenReturn("8")
         controller.onReportAdded()
-        verify(sender).sendAddReport("description")
+        verify(sender).sendAddReport("description", "8")
     }
 
     @Test

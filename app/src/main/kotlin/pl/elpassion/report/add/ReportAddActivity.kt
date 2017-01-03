@@ -18,6 +18,7 @@ import pl.elpassion.report.add.details.ReportAddDetails
 import pl.elpassion.report.add.details.ReportAddDetailsPaidVacationsFragment
 import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
 import pl.elpassion.report.datechooser.showDateDialog
+import pl.elpassion.report.list.adapter.items.RegularHourlyReportItemAdapter
 
 class ReportAddActivity : AppCompatActivity(),
         ReportAdd.View,
@@ -81,14 +82,14 @@ class ReportAddActivity : AppCompatActivity(),
     }
 
     override fun showRegularReportDetails() {
-        reportAddReportDetailsForm.currentItem = 0
+        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsRegularFragment }
     }
 
     override fun showPaidVacationsReportDetails() {
     }
 
     override fun showSickLeaveReportDetails() {
-        reportAddReportDetailsForm.currentItem = 1
+        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsPaidVacationsFragment }
     }
 
     override fun showUnpaidVacationsReportDetails() {

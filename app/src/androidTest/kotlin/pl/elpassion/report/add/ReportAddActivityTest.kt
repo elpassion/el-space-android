@@ -134,7 +134,7 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldShowPaidVacationsDetailsAfterClickOnSickLeaveReportType() {
+    fun shouldShowPaidVacationsDetailsAfterClickOnPaidVacationsReportType() {
         stubRepositoryAndStart()
         onId(R.id.action_paid_vacations_report).click()
 

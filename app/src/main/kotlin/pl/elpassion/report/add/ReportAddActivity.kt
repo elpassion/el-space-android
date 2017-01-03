@@ -28,7 +28,7 @@ class ReportAddActivity : AppCompatActivity(),
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
 
-    val items = listOf<ReportAddDetails.View>(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
+    val items = listOf(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

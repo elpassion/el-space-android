@@ -1,7 +1,6 @@
 package pl.elpassion.report.add.details
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import kotlinx.android.synthetic.main.report_add_details_form_paid_vacations.vie
 import pl.elpassion.R
 import pl.elpassion.common.inflate
 
-class ReportAddDetailsPaidVacationsFragment : Fragment(), ReportAddDetails.View.PaidVacations {
+class ReportAddDetailsPaidVacationsFragment : ReportAddDetailsFragment(), ReportAddDetails.View.PaidVacations {
     override var controller: ReportAddDetails.Controller? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

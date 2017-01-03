@@ -1,4 +1,4 @@
-package pl.elpassion.report.add
+package pl.elpassion.report.add.details
 
 import android.support.v4.app.Fragment
 

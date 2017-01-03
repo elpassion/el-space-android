@@ -16,6 +16,8 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.report.add.details.ReportAddDetails
+import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
 import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.Regular {

@@ -4,6 +4,7 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
+import pl.elpassion.report.add.details.ReportAddDetails
 import rx.Subscription
 import java.util.Calendar.*
 

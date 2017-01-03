@@ -20,7 +20,7 @@ import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.ItemAnimatorProvider
 import pl.elpassion.project.Project
-import pl.elpassion.report.add.ReportAddDetails
+import pl.elpassion.report.add.details.ReportAddDetails
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {

@@ -1,10 +1,12 @@
-package pl.elpassion.report.add
+package pl.elpassion.report.add.details
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.last.LastSelectedProjectRepository
+import pl.elpassion.report.add.ReportAdd
+import pl.elpassion.report.add.details.ReportAddDetailsRegularController
 
 class ReportRegularAddControllerTest {
 

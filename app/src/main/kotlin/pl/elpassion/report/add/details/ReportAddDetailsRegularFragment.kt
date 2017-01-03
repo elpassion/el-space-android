@@ -3,6 +3,7 @@ package pl.elpassion.report.add.details
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,6 +46,7 @@ class ReportAddDetailsRegularFragment : Fragment(), ReportAddDetails.View.Regula
     override fun getDescription(): String = view?.reportAddDescription?.text.toString()
 
     override fun showEmptyDescriptionError() {
+        Snackbar.make(view!!, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun getHours(): String = view?.reportAddHours?.text.toString()

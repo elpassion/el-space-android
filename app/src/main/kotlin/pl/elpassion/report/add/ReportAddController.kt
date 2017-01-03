@@ -46,7 +46,7 @@ class ReportAddController(date: String?,
     }
 
     override fun reportSickLeave() {
-        api.reportSickLeave(selectedDate)
+        callApi(apiCall = api.reportSickLeave(selectedDate))
     }
 
     private fun callApi(apiCall: Completable) {

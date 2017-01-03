@@ -66,7 +66,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openAbsenceEditReportScreen(report: DailyReport) {
-        ReportEditPaidVacationActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        throw NotImplementedError()
     }
 
     override fun showMonthName(monthName: String) {

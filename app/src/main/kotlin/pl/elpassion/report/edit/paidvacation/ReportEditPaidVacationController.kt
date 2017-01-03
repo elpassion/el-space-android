@@ -2,8 +2,7 @@ package pl.elpassion.report.edit.paidvacation
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.getPerformedAtString
-import pl.elpassion.report.HourlyReport
-import pl.elpassion.report.Report
+import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.edit.ReportEdit
 import rx.Subscription
 import kotlin.properties.Delegates
@@ -12,20 +11,16 @@ class ReportEditPaidVacationController(private val view: ReportEdit.PaidVacation
                                        private val api: ReportEdit.PaidVacation.Service,
                                        private val removeReportApi: ReportEdit.RemoveApi) {
 
-    private var report: Report by Delegates.notNull()
+    private var report: PaidVacationHourlyReport by Delegates.notNull()
     private var selectedDate: String by Delegates.notNull()
     private var subscription: Subscription? = null
     private var removeReportSubscription: Subscription? = null
 
-    fun onCreate(report: Report) {
+    fun onCreate(report: PaidVacationHourlyReport) {
         this.report = report
         val performedDate = getPerformedAtString(report.year, report.month, report.day)
         onDateSelect(performedDate)
-        if (report is HourlyReport) {
-            view.showReportHours(report.reportedHours)
-        } else {
-            view.hideReportHours()
-        }
+        view.showReportHours(report.reportedHours)
     }
 
     fun onSaveReport(hours: String) {

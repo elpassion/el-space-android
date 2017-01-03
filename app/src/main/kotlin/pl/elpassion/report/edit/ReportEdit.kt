@@ -35,7 +35,6 @@ interface ReportEdit {
     interface PaidVacation {
         interface View : ReportEdit.View {
             fun showReportHours(reportHours: Double)
-            fun hideReportHours()
         }
 
         interface Service {

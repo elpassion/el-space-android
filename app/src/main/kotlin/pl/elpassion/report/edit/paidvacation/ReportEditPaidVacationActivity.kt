@@ -18,17 +18,14 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
-import pl.elpassion.report.Report
 import pl.elpassion.report.datechooser.showDateDialog
 import pl.elpassion.report.edit.ReportEdit
 import pl.elpassion.report.edit.service.ReportEditServiceImpl
 
 class ReportEditPaidVacationActivity : AppCompatActivity(), ReportEdit.PaidVacation.View {
 
-    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
-    private val hours by lazy { intent.getDoubleExtra(REPORT_HOURS_KEY, 0.00) }
+    private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as PaidVacationHourlyReport }
 
     private val controller by lazy {
         ReportEditPaidVacationController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
@@ -44,12 +41,7 @@ class ReportEditPaidVacationActivity : AppCompatActivity(), ReportEdit.PaidVacat
         reportEditSaveButton.setOnClickListener { controller.onSaveReport(reportEditHours.text.toString()) }
     }
 
-    override fun hideReportHours() {
-        reportEditHours.hide()
-    }
-
     override fun showReportHours(reportHours: Double) {
-        reportEditHours.show()
         reportEditHours.setText("$reportHours")
     }
 
@@ -91,22 +83,12 @@ class ReportEditPaidVacationActivity : AppCompatActivity(), ReportEdit.PaidVacat
 
     companion object {
         private val REPORT_KEY = "report_key"
-        private val REPORT_HOURS_KEY = "report_hours_key"
 
         fun intent(context: Context, report: PaidVacationHourlyReport) = Intent(context, ReportEditPaidVacationActivity::class.java).apply {
-            putExtra(REPORT_KEY, report)
-            putExtra(REPORT_HOURS_KEY, report.reportedHours)
-        }
-
-        fun intent(context: Context, report: DailyReport) = Intent(context, ReportEditPaidVacationActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 
         fun startForResult(activity: Activity, report: PaidVacationHourlyReport, requestCode: Int) {
-            activity.startActivityForResult(intent(activity, report), requestCode)
-        }
-
-        fun startForResult(activity: Activity, report: DailyReport, requestCode: Int) {
             activity.startActivityForResult(intent(activity, report), requestCode)
         }
     }

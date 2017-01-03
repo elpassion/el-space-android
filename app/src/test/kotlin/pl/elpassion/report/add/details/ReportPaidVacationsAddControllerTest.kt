@@ -16,13 +16,13 @@ class ReportPaidVacationsAddControllerTest {
     fun shouldCallApiOnReportAdd() {
         whenever(view.getHours()).thenReturn("8")
         controller.onReportAdded()
-        verify(sender.sendAddReport("8"))
+        verify(sender).sendAddReport("8")
     }
 
     @Test
     fun shouldReallyCallApiOnReportAdd() {
         whenever(view.getHours()).thenReturn("9")
         controller.onReportAdded()
-        verify(sender.sendAddReport("9"))
+        verify(sender).sendAddReport("9")
     }
 }

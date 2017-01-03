@@ -8,8 +8,6 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.view.hide
-import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -21,13 +19,16 @@ import pl.elpassion.report.add.details.ReportAddDetailsPaidVacationsFragment
 import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
 import pl.elpassion.report.datechooser.showDateDialog
 
-class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.Regular {
+class ReportAddActivity : AppCompatActivity(),
+        ReportAdd.View,
+        ReportAddDetails.Sender.Regular,
+        ReportAddDetails.Sender.PaidVacations {
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
 
-    val items = listOf(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
+    val items = listOf<ReportAddDetails.View>(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +99,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.
 
     override fun sendAddReport(description: String, hours: String) {
         controller.sendAddReport(description, hours)
+    }
+
+    override fun sendAddReport(hours: String) {
+        controller.sendAddReport(hours)
     }
 
     companion object {

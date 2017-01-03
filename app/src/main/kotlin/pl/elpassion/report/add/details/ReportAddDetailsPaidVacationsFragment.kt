@@ -21,6 +21,11 @@ class ReportAddDetailsPaidVacationsFragment : Fragment(), ReportAddDetails.View.
         controller = ReportAddDetailsPaidVacationsController(this, activity as ReportAddDetails.Sender.PaidVacations)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        controller = null
+    }
+
     override fun getHours(): String = view?.reportAddHours?.text.toString()
 }
 

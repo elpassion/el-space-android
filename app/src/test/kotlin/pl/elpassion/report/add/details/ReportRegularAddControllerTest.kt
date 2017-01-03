@@ -47,6 +47,7 @@ class ReportRegularAddControllerTest {
     fun shouldCallSenderAfterOnReportAdded() {
         whenever(view.getDescription()).thenReturn("description")
         whenever(view.getHours()).thenReturn("8")
+        controller.onSelectProject(newProject())
         controller.onReportAdded()
         verify(sender).sendAddReport("description", "8")
     }
@@ -56,6 +57,14 @@ class ReportRegularAddControllerTest {
         whenever(view.getDescription()).thenReturn("")
         controller.onReportAdded()
         verify(view).showEmptyDescriptionError()
+    }
+
+    @Test
+    fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
+        whenever(view.getDescription()).thenReturn("description")
+        controller.onCreate()
+        controller.onReportAdded()
+        verify(view).showEmptyProjectError()
     }
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

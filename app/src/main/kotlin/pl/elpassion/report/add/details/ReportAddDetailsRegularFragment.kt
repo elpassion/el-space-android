@@ -48,6 +48,10 @@ class ReportAddDetailsRegularFragment : ReportAddDetailsFragment(), ReportAddDet
         Snackbar.make(view!!, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showEmptyProjectError() {
+        Snackbar.make(view!!, R.string.empty_project_error, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
     override fun getHours(): String = view?.reportAddHours?.text.toString()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

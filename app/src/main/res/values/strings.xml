@@ -35,4 +35,5 @@
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
     <string name="empty_description_error">Description cannot be empty.</string>
+    <string name="empty_project_error">Project name cannot be empty</string>
 </resources>

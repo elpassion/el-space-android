@@ -13,6 +13,7 @@ interface ReportAddDetails {
             fun getDescription(): String
             fun showEmptyDescriptionError()
             fun getHours(): String
+            fun showEmptyProjectError()
         }
 
         interface PaidVacations : View {

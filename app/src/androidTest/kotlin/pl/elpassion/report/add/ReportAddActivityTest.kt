@@ -4,6 +4,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.longClick
+import android.support.test.espresso.action.ViewActions.swipeLeft
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.view.View
 import com.elpassion.android.commons.espresso.*
@@ -12,6 +13,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -117,6 +119,21 @@ class ReportAddActivityTest {
     }
 
     @Test
+    @Ignore //There is no way to test this right know
+    fun shouldRegularReportActionBeSelectedOnStart() {
+        stubRepositoryAndStart()
+        onId(R.id.action_regular_report).isChecked()
+    }
+
+    @Test
+    @Ignore //There is no way to test this right know
+    fun shouldSelectPaidVacationsActionAfterSwipe() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddReportDetailsForm).perform(swipeLeft())
+        onId(R.id.action_paid_vacations_report).isChecked()
+    }
+
+    @Test
     fun shouldShowPaidVacationsDetailsAfterClickOnSickLeaveReportType() {
         stubRepositoryAndStart()
         onId(R.id.action_paid_vacations_report).click()
@@ -132,7 +149,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowRegularDetailsAfterReturnToRegularReportType() {
         stubRepositoryAndStart()
-        onId(R.id.action_sick_leave_report).click()
+        onId(R.id.action_paid_vacations_report).click()
         onId(R.id.action_regular_report).click()
 
         withText(R.string.report_add_comment_header).withDisplayedParent().isDisplayed()

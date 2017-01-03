@@ -4,10 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
+import com.jakewharton.rxbinding.support.v4.view.pageSelections
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
@@ -18,7 +21,6 @@ import pl.elpassion.report.add.details.ReportAddDetails
 import pl.elpassion.report.add.details.ReportAddDetailsPaidVacationsFragment
 import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
 import pl.elpassion.report.datechooser.showDateDialog
-import pl.elpassion.report.list.adapter.items.RegularHourlyReportItemAdapter
 
 class ReportAddActivity : AppCompatActivity(),
         ReportAdd.View,
@@ -42,13 +44,12 @@ class ReportAddActivity : AppCompatActivity(),
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
         reportAddReportDetailsForm.adapter = ReportAddPagerAdapter(items, this)
+        reportAddReportDetailsForm.pageSelections().subscribe(bottomNavigation.selectItemAtPosition())
     }
 
     private fun Int.toReportType() = when (this) {
         R.id.action_regular_report -> ReportType.REGULAR
-        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
         R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
-        R.id.action_unpaid_vacations_report -> ReportType.UNPAID_VACATIONS
         else -> throw IllegalArgumentException()
     }
 
@@ -123,3 +124,19 @@ class ReportAddActivity : AppCompatActivity(),
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
     }
 }
+
+private fun BottomNavigationView.selectItemAtPosition() = rx.functions.Action1 { position: Int ->
+    menu.items[position].isChecked = true
+}
+
+private val Menu.items: List<MenuItem>
+    get() {
+        val results = mutableListOf<MenuItem>()
+        var index = 0
+        val size = size()
+        while (index < size) {
+            results.add(getItem(index))
+            index++
+        }
+        return results
+    }

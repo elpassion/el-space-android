@@ -81,6 +81,7 @@ class ReportAddActivity : AppCompatActivity(),
     }
 
     override fun showRegularReportDetails() {
+        reportAddReportDetailsForm.currentItem = 0
     }
 
     override fun showPaidVacationsReportDetails() {

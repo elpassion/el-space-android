@@ -130,6 +130,19 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldShowRegularDetailsAfterReturnToRegularReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+        onId(R.id.action_regular_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().isDisplayed()
+        withText(R.string.report_add_project_header).withDisplayedParent().isDisplayed()
+        withText("name").withDisplayedParent().isDisplayed()
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()

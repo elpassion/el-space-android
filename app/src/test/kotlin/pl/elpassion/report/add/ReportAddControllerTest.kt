@@ -161,7 +161,21 @@ class ReportAddControllerTest {
     fun shouldSendEmptyDescriptionWhenSendReportInvokedOnlyWithHours() {
         val controller = createController()
         controller.sendAddReport("8")
-        verify(api).addReport(any(), any(), "8", "")
+        verify(api).addReport(any(), any(), eq("8"), eq(""))
+    }
+
+    @Test
+    fun shouldReportUnpaidVacationsToApiAfterReportUnpaidVacations() {
+        val controller = createController("2016-01-01")
+        controller.reportUnpaidVacations()
+        verify(api).reportUnpaidVacations("2016-01-01")
+    }
+
+    @Test
+    fun shouldReportSickLeaveToApiAfterReportSickLeave() {
+        val controller = createController("2016-01-01")
+        controller.reportSickLeave()
+        verify(api).reportSickLeave("2016-01-01")
     }
 
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
@@ -172,6 +186,8 @@ class ReportAddControllerTest {
 
     private fun stubApiToReturn(completable: Completable) {
         whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
+        whenever(api.reportSickLeave(any())).thenReturn(completable)
+        whenever(api.reportUnpaidVacations(any())).thenReturn(completable)
     }
 }
 

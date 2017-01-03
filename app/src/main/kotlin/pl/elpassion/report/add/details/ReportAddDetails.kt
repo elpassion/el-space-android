@@ -29,6 +29,14 @@ interface ReportAddDetails {
         interface PaidVacations {
             fun sendAddReport(hours: String)
         }
+
+        interface SickLeave {
+            fun reportSickLeave()
+        }
+
+        interface UnpaidVacations {
+            fun reportUnpaidVacations()
+        }
     }
 
     interface Controller {

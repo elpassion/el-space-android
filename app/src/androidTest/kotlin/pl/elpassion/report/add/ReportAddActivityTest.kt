@@ -119,14 +119,14 @@ class ReportAddActivityTest {
     }
 
     @Test
-    @Ignore //There is no way to test this right know
+    @Ignore //There is no way to test this right now
     fun shouldRegularReportActionBeSelectedOnStart() {
         stubRepositoryAndStart()
         onId(R.id.action_regular_report).isChecked()
     }
 
     @Test
-    @Ignore //There is no way to test this right know
+    @Ignore //There is no way to test this right now
     fun shouldSelectPaidVacationsActionAfterSwipe() {
         stubRepositoryAndStart()
         onId(R.id.reportAddReportDetailsForm).perform(swipeLeft())

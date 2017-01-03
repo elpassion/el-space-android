@@ -5,6 +5,7 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.report.add.details.ReportAddDetails
+import rx.Completable
 import rx.Subscription
 import java.util.Calendar.*
 
@@ -12,7 +13,9 @@ class ReportAddController(date: String?,
                           private val view: ReportAdd.View,
                           private val api: ReportAdd.Api) :
         ReportAddDetails.Sender.Regular,
-        ReportAddDetails.Sender.PaidVacations {
+        ReportAddDetails.Sender.PaidVacations,
+        ReportAddDetails.Sender.UnpaidVacations,
+        ReportAddDetails.Sender.SickLeave {
 
     private var selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var subscription: Subscription? = null
@@ -31,15 +34,23 @@ class ReportAddController(date: String?,
     }
 
     override fun sendAddReport(description: String, hours: String) {
-        callApi(description = description, hours = hours)
+        callApi(apiCall = api.addReport(selectedDate, 1, hours, description))
     }
 
     override fun sendAddReport(hours: String) {
-        callApi(hours = hours)
+        callApi(apiCall = api.addReport(selectedDate, 1, hours, ""))
     }
 
-    private fun callApi(description: String = "", hours: String) {
-        subscription = api.addReport(selectedDate, 1, hours, description)
+    override fun reportUnpaidVacations() {
+        callApi(apiCall = api.reportUnpaidVacations(selectedDate))
+    }
+
+    override fun reportSickLeave() {
+        api.reportSickLeave(selectedDate)
+    }
+
+    private fun callApi(apiCall: Completable) {
+        subscription = apiCall
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

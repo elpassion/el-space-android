@@ -17,21 +17,24 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.report.add.details.ReportAddDetails
-import pl.elpassion.report.add.details.ReportAddDetailsPaidVacationsFragment
-import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
+import pl.elpassion.report.add.details.*
 import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(),
         ReportAdd.View,
         ReportAddDetails.Sender.Regular,
-        ReportAddDetails.Sender.PaidVacations {
+        ReportAddDetails.Sender.PaidVacations,
+        ReportAddDetails.Sender.SickLeave,
+        ReportAddDetails.Sender.UnpaidVacations {
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
 
-    val items = listOf(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
+    val items = listOf(ReportAddDetailsRegularFragment(),
+            ReportAddDetailsPaidVacationsFragment(),
+            ReportAddDetailsDailyReportFragment(ReportAddDetailsSickLeaveController(this as ReportAddDetails.Sender.SickLeave)),
+            ReportAddDetailsDailyReportFragment(ReportAddUnpaidVacationsController(this as ReportAddDetails.Sender.UnpaidVacations)))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,8 @@ class ReportAddActivity : AppCompatActivity(),
     private fun Int.toReportType() = when (this) {
         R.id.action_regular_report -> ReportType.REGULAR
         R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
+        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
+        R.id.action_unpaid_vacations_report -> ReportType.UNPAID_VACATIONS
         else -> throw IllegalArgumentException()
     }
 
@@ -106,6 +111,14 @@ class ReportAddActivity : AppCompatActivity(),
 
     override fun sendAddReport(hours: String) {
         controller.sendAddReport(hours)
+    }
+
+    override fun reportSickLeave() {
+        controller.reportSickLeave()
+    }
+
+    override fun reportUnpaidVacations() {
+        controller.reportUnpaidVacations()
     }
 
     companion object {

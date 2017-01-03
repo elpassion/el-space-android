@@ -9,7 +9,6 @@ import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
 import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
-import rx.Observable
 
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {
@@ -44,6 +43,10 @@ fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {
             override fun addReport(date: String, projectId: Long, hours: String, description: String) = Completable.complete()
+
+            override fun reportSickLeave(date: String) = Completable.complete()
+
+            override fun reportUnpaidVacations(date: String) = Completable.complete()
         }
     }
 }

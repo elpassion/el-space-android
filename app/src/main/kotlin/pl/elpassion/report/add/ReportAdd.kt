@@ -2,6 +2,7 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
+import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable
@@ -28,6 +29,12 @@ interface ReportAdd {
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
                 @Query("activity[comment]") description: String): Completable
+
+        @GET("activities/report_day_off&report_type=2&type=UnpaidVacation&value=0")
+        fun reportUnpaidVacations(@Query("date") date: String) : Completable
+
+        @GET("activities/report_day_off&report_type=3&type=SickLeave&value=0")
+        fun reportSickLeave(@Query("date") date: String) : Completable
     }
 
     object ApiProvider : Provider<Api>({

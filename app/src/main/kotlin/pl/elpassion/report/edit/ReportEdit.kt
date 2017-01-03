@@ -2,6 +2,7 @@ package pl.elpassion.report.edit
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import retrofit2.http.DELETE
@@ -40,6 +41,14 @@ interface ReportEdit {
 
         interface Service {
             fun edit(report: PaidVacationHourlyReport): Completable
+        }
+    }
+
+    interface Daily {
+        interface View : ReportEdit.View
+
+        interface Service {
+            fun edit(report: DailyReport): Completable
         }
     }
 

@@ -4,10 +4,8 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
-import pl.elpassion.project.dto.performedDate
 import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
 
@@ -40,12 +38,11 @@ class ReportEditPaidVacationControllerTest {
     @Test
     fun shouldCallApiWithCorrectDataOnSaveReport() {
         val report = newPaidVacationHourlyReport(year = 2017, month = 7, day = 2, id = 2, reportedHours = 4.0)
-        val date = getPerformedAtString(report.year, report.month, report.day)
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "8.0")
 
-        verify(editReportApi).edit(id = report.id, date = date, reportedHours = 8.0)
+        verify(editReportApi).edit(report.copy(year = 2017, month = 7, day = 2, id = 2, reportedHours = 8.0))
     }
 
     @Test
@@ -55,7 +52,7 @@ class ReportEditPaidVacationControllerTest {
 
         controller.onSaveReport(hours = "7.5")
 
-        verify(editReportApi).edit(id = report.id, date = report.performedDate(), reportedHours = 7.5)
+        verify(editReportApi).edit(report.copy(year = 2016, month = 1, day = 3, id = 5, reportedHours = 7.5))
     }
 
     @Test
@@ -188,7 +185,7 @@ class ReportEditPaidVacationControllerTest {
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1")
 
-        verify(editReportApi).edit(id = report.id, date = "2016-05-04", reportedHours = 0.1)
+        verify(editReportApi).edit(report.copy(year = 2016, month = 5, day = 4, reportedHours = 0.1))
     }
 
     private fun stubEditReportApiToReturnNever() {
@@ -204,7 +201,7 @@ class ReportEditPaidVacationControllerTest {
     }
 
     private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.edit(any(), any(), any())).thenReturn(completable)
+        whenever(editReportApi.edit(any())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {

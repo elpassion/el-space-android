@@ -31,10 +31,10 @@ class ReportAddActivity : AppCompatActivity(),
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
 
-    val items = listOf(ReportAddDetailsRegularFragment(),
+    private val items = listOf(ReportAddDetailsRegularFragment(),
             ReportAddDetailsPaidVacationsFragment(),
-            ReportAddDetailsDailyReportFragment(ReportAddDetailsSickLeaveController(this as ReportAddDetails.Sender.SickLeave)),
-            ReportAddDetailsDailyReportFragment(ReportAddUnpaidVacationsController(this as ReportAddDetails.Sender.UnpaidVacations)))
+            ReportAddDetailsSickLeaveFragment(),
+            ReportAddDetailsUnpaidVacationsFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,17 +88,23 @@ class ReportAddActivity : AppCompatActivity(),
     }
 
     override fun showRegularReportDetails() {
-        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsRegularFragment }
+        setDetailsFormFor { item -> item is ReportAddDetailsRegularFragment }
     }
 
     override fun showPaidVacationsReportDetails() {
-        reportAddReportDetailsForm.currentItem = items.indexOfFirst { it is ReportAddDetailsPaidVacationsFragment }
+        setDetailsFormFor { item -> item is ReportAddDetailsPaidVacationsFragment }
     }
 
     override fun showSickLeaveReportDetails() {
+        setDetailsFormFor { item -> item is ReportAddDetailsSickLeaveFragment }
     }
 
     override fun showUnpaidVacationsReportDetails() {
+        setDetailsFormFor { item -> item is ReportAddDetailsUnpaidVacationsFragment }
+    }
+
+    private fun setDetailsFormFor(predicate: (ReportAddDetailsFragment) -> Boolean) {
+        reportAddReportDetailsForm.currentItem = items.indexOfFirst(predicate)
     }
 
     private fun getCurrentReportController(): ReportAddDetails.Controller {

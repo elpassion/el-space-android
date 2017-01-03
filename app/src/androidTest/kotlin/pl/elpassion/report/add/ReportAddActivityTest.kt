@@ -160,6 +160,34 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldShowUnpaidVacationsDetailsAfterClickOnUnpaidVacationsReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_unpaid_vacations_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+
+        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowSickLeaveDetailsAfterClickOnSickLeaveReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+
+        onText(R.string.report_add_sick_leave_info).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()

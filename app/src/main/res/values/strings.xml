@@ -17,6 +17,7 @@
     <string name="report_add_action_paid_vacations_report">Paid Vacations</string>
     <string name="report_add_action_unpaid_vacations_report">Unpaid Vacations</string>
     <string name="report_add_sick_leave_info">Sick leave :(</string>
+    <string name="report_add_unpaid_vacations_info">Unpaid vacations</string>
     <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
     <string name="token_hint">Provide token from hub website.</string>

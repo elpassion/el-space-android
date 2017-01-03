@@ -5,6 +5,7 @@ import org.junit.Test
 import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.last.LastSelectedProjectRepository
+import pl.elpassion.report.add.details.regular.ReportAddDetailsRegularController
 
 class ReportRegularAddControllerTest {
 

@@ -1,4 +1,4 @@
-package pl.elpassion.report.add.details
+package pl.elpassion.report.add.details.regular
 
 import android.app.Activity
 import android.content.Intent
@@ -13,6 +13,8 @@ import pl.elpassion.common.inflate
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
+import pl.elpassion.report.add.details.ReportAddDetails
+import pl.elpassion.report.add.details.ReportAddDetailsFragment
 
 class ReportAddDetailsRegularFragment : ReportAddDetailsFragment(), ReportAddDetails.View.Regular {
     override var controller: ReportAddDetailsRegularController? = null

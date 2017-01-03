@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
+import pl.elpassion.report.add.details.paidvacations.ReportAddDetailsPaidVacationsController
 
 class ReportPaidVacationsAddControllerTest {
 

@@ -3,6 +3,7 @@ package pl.elpassion.report.add.details
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
+import pl.elpassion.report.add.details.sickleave.ReportAddDetailsSickLeaveController
 
 class ReportAddDetailsUnpaidVacationsControllerTest {
 

@@ -18,6 +18,10 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.add.details.*
+import pl.elpassion.report.add.details.paidvacations.ReportAddDetailsPaidVacationsFragment
+import pl.elpassion.report.add.details.regular.ReportAddDetailsRegularFragment
+import pl.elpassion.report.add.details.sickleave.ReportAddDetailsSickLeaveFragment
+import pl.elpassion.report.add.details.unpaidvacations.ReportAddDetailsUnpaidVacationsFragment
 import pl.elpassion.report.datechooser.showDateDialog
 
 class ReportAddActivity : AppCompatActivity(),

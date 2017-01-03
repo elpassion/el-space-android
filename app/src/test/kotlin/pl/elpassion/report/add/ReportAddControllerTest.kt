@@ -157,6 +157,13 @@ class ReportAddControllerTest {
         verify(view).showUnpaidVacationsReportDetails()
     }
 
+    @Test
+    fun shouldSendEmptyDescriptionWhenSendReportInvokedOnlyWithHours() {
+        val controller = createController()
+        controller.sendAddReport("8")
+        verify(api).addReport(any(), any(), "8", "")
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

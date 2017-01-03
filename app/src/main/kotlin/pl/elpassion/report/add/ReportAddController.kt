@@ -10,7 +10,10 @@ import java.util.Calendar.*
 
 class ReportAddController(date: String?,
                           private val view: ReportAdd.View,
-                          private val api: ReportAdd.Api) : ReportAdd.Sender.Regular {
+                          private val api: ReportAdd.Api) :
+        ReportAddDetails.Sender.Regular,
+        ReportAddDetails.Sender.PaidVacations {
+
     private var selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var subscription: Subscription? = null
 
@@ -28,6 +31,14 @@ class ReportAddController(date: String?,
     }
 
     override fun sendAddReport(description: String, hours: String) {
+        callApi(description = description, hours = hours)
+    }
+
+    override fun sendAddReport(hours: String) {
+        callApi(hours = hours)
+    }
+
+    private fun callApi(description: String = "", hours: String) {
         subscription = api.addReport(selectedDate, 1, hours, description)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }

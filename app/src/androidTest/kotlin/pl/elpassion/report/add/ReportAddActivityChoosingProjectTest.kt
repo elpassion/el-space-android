@@ -7,14 +7,13 @@ import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.rule
-import pl.elpassion.project.Project
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
+import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
@@ -26,7 +25,6 @@ class ReportAddActivityChoosingProjectTest {
     val rule = rule<ReportAddActivity>(autoStart = false)
 
     @Test
-    @Ignore
     fun shouldChangeSelectedProject() {
         stubRepositoryAndStart(listOf(newProject(), newProject(2, "name2")))
         onId(R.id.reportAddProjectName).click()
@@ -36,6 +34,7 @@ class ReportAddActivityChoosingProjectTest {
 
     private fun stubRepositoryAndStart(listOf: List<Project>) {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
+        whenever(repository.hasProjects()).thenReturn(true)
         CachedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2016-01-01"))
     }

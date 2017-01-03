@@ -1,6 +1,5 @@
 package pl.elpassion.project.dto
 
-import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.project.Project
 import pl.elpassion.report.*
 
@@ -12,5 +11,3 @@ fun newPaidVacationHourlyReport(id: Long = 1, year: Int = 2016, month: Int = 6, 
 
 fun newDailyReport(id: Long = 1, year: Int = 2016, month: Int = 6, day: Int = 1, reportType: DailyReportType = DailyReportType.SICK_LEAVE) =
         DailyReport(id = id, year = year, month = month, day = day, reportType = reportType)
-
-fun Report.performedDate() = getPerformedAtString(year,month,day)

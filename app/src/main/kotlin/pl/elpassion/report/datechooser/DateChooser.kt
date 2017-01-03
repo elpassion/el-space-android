@@ -3,7 +3,7 @@ package pl.elpassion.report.datechooser
 import android.support.v4.app.FragmentManager
 import com.philliphsu.bottomsheetpickers.date.BottomSheetDatePickerDialog
 import pl.elpassion.common.extensions.getCurrentTimeCalendar
-import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.common.extensions.getDateString
 import java.util.*
 
 private val DATE_DIALOG_TAG = "date_dialog"
@@ -12,8 +12,7 @@ fun showDateDialog(supportFragmentManager: FragmentManager, dateListener: (Strin
     val now = getCurrentTimeCalendar()
     val dateDialog = BottomSheetDatePickerDialog.newInstance(
             { datePickerDialog, year, monthOfYear, dayOfMonth ->
-                val performedDateAtString = getPerformedAtString(year, monthOfYear + 1, dayOfMonth)
-                dateListener(performedDateAtString)
+                dateListener(getDateString(year, monthOfYear + 1, dayOfMonth))
             },
             now.get(Calendar.YEAR),
             now.get(Calendar.MONTH),

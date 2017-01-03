@@ -18,9 +18,8 @@ class ReportEditRegularController(private val view: ReportEdit.Regular.View,
 
     fun onCreate(report: RegularHourlyReport) {
         this.report = report
-        val performedDate = getPerformedAtString(report.year, report.month, report.day)
         view.showReport(report)
-        view.showDate(performedDate)
+        view.showDate(report.date)
     }
 
     fun onChooseProject() {

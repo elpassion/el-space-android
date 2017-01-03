@@ -2,7 +2,7 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.extensions.getPerformedAtString
+import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.report.add.details.ReportAddDetails
 import rx.Completable
@@ -26,7 +26,7 @@ class ReportAddController(date: String?,
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())
-        return getPerformedAtString(currentCalendar.get(YEAR), currentCalendar.get(MONTH) + 1, currentCalendar.get(DAY_OF_MONTH))
+        return getDateString(currentCalendar.get(YEAR), currentCalendar.get(MONTH) + 1, currentCalendar.get(DAY_OF_MONTH))
     }
 
     fun onReportAdd(detailsController: ReportAddDetails.Controller) {

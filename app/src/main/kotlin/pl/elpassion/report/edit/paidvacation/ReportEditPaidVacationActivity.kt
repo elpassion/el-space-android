@@ -9,11 +9,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.view.hide
-import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.paid_vacation_report_edit_activity.*
 import pl.elpassion.R
-import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
@@ -46,7 +43,7 @@ class ReportEditPaidVacationActivity : AppCompatActivity(), ReportEdit.PaidVacat
     }
 
     override fun showDate(date: String) {
-        reportEditDate.text = getPerformedAtString(report.year, report.month, report.day)
+        reportEditDate.text = report.date
     }
 
     override fun close() {

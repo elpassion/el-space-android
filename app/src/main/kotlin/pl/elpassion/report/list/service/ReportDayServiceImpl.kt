@@ -24,7 +24,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
 
     private fun createDayWithReports(calendarForDay: Calendar, dayNumber: Int, reports: List<Report>, yearMonth: YearMonth): Day {
         val hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar())
-        val date = getPerformedAtString(yearMonth.year, yearMonth.month.index + 1, dayNumber)
+        val date = getDateString(yearMonth.year, yearMonth.month.index + 1, dayNumber)
         val dayName = "$dayNumber ${calendarForDay.dayName()}"
         val uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber)
         return when {

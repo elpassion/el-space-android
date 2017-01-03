@@ -17,9 +17,8 @@ class ReportEditPaidVacationController(private val view: ReportEdit.PaidVacation
 
     fun onCreate(report: PaidVacationHourlyReport) {
         this.report = report
-        val performedDate = getPerformedAtString(report.year, report.month, report.day)
         view.showReportHours(report.reportedHours)
-        view.showDate(performedDate)
+        view.showDate(report.date)
     }
 
     fun onSaveReport(hours: String) {

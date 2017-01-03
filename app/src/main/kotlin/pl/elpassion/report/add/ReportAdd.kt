@@ -18,6 +18,10 @@ interface ReportAdd {
             fun getHours(): String
         }
 
+        interface PaidVacations {
+            fun getHours(): String
+        }
+
         fun close()
         fun showError(ex: Throwable)
         fun showDate(date: String)
@@ -43,6 +47,10 @@ interface ReportAdd {
     interface Sender {
         interface Regular {
             fun sendAddReport(description: String, hours: String)
+        }
+
+        interface PaidVacations {
+            fun sendAddReport(hours: String)
         }
     }
 

@@ -13,7 +13,6 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.report.add.ReportAdd
-import pl.elpassion.report.add.details.ReportAddDetails
 
 class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.Regular {
     override var controller: ReportAddDetailsRegularController? = null

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        style="@style/ReportHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_add_hours_header" />
+
+    <include layout="@layout/separator" />
+
+    <EditText
+        android:id="@+id/reportAddHours"
+        style="@style/ReportContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:inputType="number"
+        android:text="@string/report_hours_default_value"
+        tools:text="8" />
+</LinearLayout>

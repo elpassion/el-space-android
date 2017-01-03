@@ -17,6 +17,7 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.add.details.ReportAddDetails
+import pl.elpassion.report.add.details.ReportAddDetailsPaidVacationsFragment
 import pl.elpassion.report.add.details.ReportAddDetailsRegularFragment
 import pl.elpassion.report.datechooser.showDateDialog
 
@@ -26,7 +27,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
     }
 
-    val items = listOf(ReportAddDetailsRegularFragment())
+    val items = listOf(ReportAddDetailsRegularFragment(), ReportAddDetailsPaidVacationsFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

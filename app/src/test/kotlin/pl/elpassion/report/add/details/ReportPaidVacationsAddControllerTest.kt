@@ -1,0 +1,28 @@
+package pl.elpassion.report.add.details
+
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Test
+import pl.elpassion.report.add.ReportAdd
+
+class ReportPaidVacationsAddControllerTest {
+
+    val view = mock<ReportAdd.View.PaidVacations>()
+    val sender = mock<ReportAdd.Sender.PaidVacations>()
+    val controller = ReportAddDetailsPaidVacationsController(view, sender)
+
+    @Test
+    fun shouldCallApiOnReportAdd() {
+        whenever(view.getHours()).thenReturn("8")
+        controller.onReportAdded()
+        verify(sender.sendAddReport("8"))
+    }
+
+    @Test
+    fun shouldReallyCallApiOnReportAdd() {
+        whenever(view.getHours()).thenReturn("9")
+        controller.onReportAdded()
+        verify(sender.sendAddReport("9"))
+    }
+}

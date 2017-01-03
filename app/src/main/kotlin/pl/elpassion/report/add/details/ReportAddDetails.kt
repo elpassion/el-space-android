@@ -5,8 +5,6 @@ import pl.elpassion.project.Project
 interface ReportAddDetails {
 
     interface View {
-        val controller: Controller?
-
         interface Regular : View {
             fun showSelectedProject(project: Project)
             fun openProjectChooser()

@@ -9,7 +9,7 @@ import java.util.Calendar.*
 
 class ReportAddController(date: String?,
                           private val view: ReportAdd.View,
-                          private val api: ReportAdd.Api) {
+                          private val api: ReportAdd.Api) : ReportAdd.Sender.Regular {
     private var selectedDate: String = date ?: getCurrentDatePerformedAtString()
     private var subscription: Subscription? = null
 
@@ -26,7 +26,7 @@ class ReportAddController(date: String?,
         detailsController.onReportAdded()
     }
 
-    fun sendAddReport(description: String, hours: String) {
+    override fun sendAddReport(description: String, hours: String) {
         subscription = api.addReport(selectedDate, 1, hours, description)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
@@ -49,22 +49,10 @@ class ReportAddController(date: String?,
 
     fun onReportTypeChanged(reportType: ReportType) {
         when (reportType) {
-            ReportType.REGULAR -> {
-                view.showHoursInput()
-                view.showRegularReportDetails()
-            }
-            ReportType.PAID_VACATIONS -> {
-                view.showHoursInput()
-                view.showPaidVacationsReportDetails()
-            }
-            ReportType.SICK_LEAVE -> {
-                view.hideHoursInput()
-                view.showSickLeaveReportDetails()
-            }
-            ReportType.UNPAID_VACATIONS -> {
-                view.hideHoursInput()
-                view.showUnpaidVacationsReportDetails()
-            }
+            ReportType.REGULAR -> view.showRegularReportDetails()
+            ReportType.PAID_VACATIONS -> view.showPaidVacationsReportDetails()
+            ReportType.SICK_LEAVE -> view.showSickLeaveReportDetails()
+            ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsReportDetails()
         }
     }
 }

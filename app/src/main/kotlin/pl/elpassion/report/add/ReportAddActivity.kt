@@ -31,11 +31,9 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.
         setContentView(R.layout.report_add_activity)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddAdd.setOnClickListener {
             controller.onReportAdd(getCurrentReportController())
         }
-        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
         reportAddReportDetailsForm.adapter = ReportAddPagerAdapter(items, this)
@@ -78,14 +76,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun hideHoursInput() {
-        reportAddHours.hide()
-    }
-
-    override fun showHoursInput() {
-        reportAddHours.show()
-    }
-
     override fun showRegularReportDetails() {
     }
 
@@ -103,8 +93,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAdd.Sender.
         return items[reportAddReportDetailsForm.currentItem].controller!!
     }
 
-    override fun sendAddReport(description: String) {
-        controller.sendAddReport(description, reportAddHours.text.toString())
+    override fun sendAddReport(description: String, hours: String) {
+        controller.sendAddReport(description, hours)
     }
 
     companion object {

@@ -24,6 +24,7 @@ class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.
         super.onViewCreated(view, savedInstanceState)
         controller = ReportAddDetailsRegularController(this, activity as ReportAdd.Sender.Regular, LastSelectedProjectRepositoryProvider.get())
         controller?.onCreate()
+        view?.reportAddHours?.setOnTouchListener { ignored, motionEvent -> view.reportAddHours?.text = null; false }
         view?.reportAddProjectName?.setOnClickListener { controller?.onProjectClicked() }
     }
 
@@ -44,6 +45,8 @@ class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.
 
     override fun showEmptyDescriptionError() {
     }
+
+    override fun getHours(): String = view?.reportAddHours?.text.toString()
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

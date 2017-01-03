@@ -15,6 +15,7 @@ interface ReportAdd {
             fun openProjectChooser()
             fun getDescription(): String
             fun showEmptyDescriptionError()
+            fun getHours(): String
         }
 
         fun close()
@@ -23,8 +24,6 @@ interface ReportAdd {
         fun enableAddReportButton()
         fun showLoader()
         fun hideLoader()
-        fun hideHoursInput()
-        fun showHoursInput()
         fun showRegularReportDetails()
         fun showPaidVacationsReportDetails()
         fun showSickLeaveReportDetails()
@@ -43,7 +42,7 @@ interface ReportAdd {
 
     interface Sender {
         interface Regular {
-            fun sendAddReport(description: String)
+            fun sendAddReport(description: String, hours: String)
         }
     }
 

@@ -122,42 +122,6 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
-        val controller = createController()
-        controller.onCreate()
-
-        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
-        verify(view).hideHoursInput()
-    }
-
-    @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
-        val controller = createController()
-        controller.onCreate()
-
-        controller.onReportTypeChanged(ReportType.REGULAR)
-        verify(view).showHoursInput()
-    }
-
-    @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToPaidVacation() {
-        val controller = createController()
-        controller.onCreate()
-
-        controller.onReportTypeChanged(ReportType.PAID_VACATIONS)
-        verify(view).showHoursInput()
-    }
-
-    @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
-        val controller = createController()
-        controller.onCreate()
-
-        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
-        verify(view).hideHoursInput()
-    }
-
-    @Test
     fun shouldShowRegularReportDetailsFormAfterReportTypeChangedToRegularReport() {
         val controller = createController()
         controller.onCreate()

@@ -127,40 +127,12 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldHideHoursInputAfterClickOnSickLeaveReportType() {
-        stubRepositoryAndStart()
-        onId(R.id.action_sick_leave_report).click()
-        onId(R.id.reportAddHours).isNotDisplayed()
-    }
-
-    @Test
-    fun shouldShowHoursInputAfterClickOnRegularReportType() {
-        stubRepositoryAndStart()
-        onId(R.id.action_regular_report).click()
-        onId(R.id.reportAddHours).isDisplayed()
-    }
-
-    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.reportAddAdd).click()
         onId(R.id.loader).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowHoursInputAfterClickOnPaidVacationsReportType() {
-        stubRepositoryAndStart()
-        onId(R.id.action_paid_vacations_report).click()
-        onId(R.id.reportAddHours).isDisplayed()
-    }
-
-    @Test
-    fun shouldHideHoursInputAfterClickOnUnpaidVacationsReportType() {
-        stubRepositoryAndStart()
-        onId(R.id.action_unpaid_vacations_report).click()
-        onId(R.id.reportAddHours).isNotDisplayed()
     }
 
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {

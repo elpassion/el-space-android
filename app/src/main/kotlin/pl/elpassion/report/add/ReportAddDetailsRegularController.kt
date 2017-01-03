@@ -23,7 +23,7 @@ class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular
 
     override fun onReportAdded() {
         if (view.getDescription().isNotBlank()) {
-            sender.sendAddReport(view.getDescription())
+            sender.sendAddReport(view.getDescription(), view.getHours())
         } else {
             view.showEmptyDescriptionError()
         }

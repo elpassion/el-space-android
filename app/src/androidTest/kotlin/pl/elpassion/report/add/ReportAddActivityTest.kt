@@ -2,11 +2,16 @@ package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.longClick
+import android.support.test.espresso.matcher.ViewMatchers.*
+import android.view.View
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -60,7 +65,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).hasText("8")
+        withId(R.id.reportAddHours).withDisplayedParent().hasText("8")
     }
 
     @Test
@@ -90,7 +95,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveHoursHeader() {
         stubRepositoryAndStart()
-        onText(R.string.report_add_hours_header).isDisplayed()
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
     }
 
     @Test
@@ -102,13 +107,26 @@ class ReportAddActivityTest {
     @Test
     fun shouldClearTextAfterClickOnHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).click().hasText("")
+        withId(R.id.reportAddHours).withDisplayedParent().click().hasText("")
     }
 
     @Test
     fun shouldNotCrashOnLongClickOnHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).perform(longClick())
+        withId(R.id.reportAddHours).withDisplayedParent().perform(longClick())
+    }
+
+    @Test
+    fun shouldShowSickLeaveDetailsAfterClickOnSickLeaveReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
     }
 
     @Test
@@ -125,5 +143,7 @@ class ReportAddActivityTest {
         LastSelectedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
+
+    private fun Matcher<View>.withDisplayedParent() = onView(allOf(this, withParent(isDisplayed())))
 }
 

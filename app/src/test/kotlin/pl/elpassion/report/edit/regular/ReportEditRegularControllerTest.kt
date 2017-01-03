@@ -1,4 +1,4 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.regular
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
@@ -8,14 +8,16 @@ import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.RegularHourlyReport
+import pl.elpassion.report.edit.ReportEdit
+import pl.elpassion.report.edit.regular.ReportEditRegularController
 import rx.Completable
 
-class RegularHourlyReportEditControllerTest {
+class ReportEditRegularControllerTest {
 
     private val view = mock<ReportEdit.Regular.View>()
     private val editReportApi = mock<ReportEdit.Regular.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = RegularHourlyReportEditController(view, editReportApi, removeReportApi)
+    private val controller = ReportEditRegularController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()

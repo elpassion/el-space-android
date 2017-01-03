@@ -1,15 +1,16 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.regular
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.*
 import pl.elpassion.project.Project
 import pl.elpassion.report.RegularHourlyReport
+import pl.elpassion.report.edit.ReportEdit
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class RegularHourlyReportEditController(private val view: ReportEdit.Regular.View,
-                                        private val editReportApi: ReportEdit.Regular.Service,
-                                        private val removeReportApi: ReportEdit.RemoveApi) {
+class ReportEditRegularController(private val view: ReportEdit.Regular.View,
+                                  private val editReportApi: ReportEdit.Regular.Service,
+                                  private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var report: RegularHourlyReport by Delegates.notNull()
     private var subscription: Subscription? = null

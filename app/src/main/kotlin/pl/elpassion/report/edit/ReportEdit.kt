@@ -20,7 +20,7 @@ interface ReportEdit {
     }
 
     interface Regular {
-        interface View {
+        interface View : ReportEdit.View {
             fun showReport(report: RegularHourlyReport)
             fun openChooseProjectScreen()
             fun updateProjectName(projectName: String)
@@ -33,7 +33,7 @@ interface ReportEdit {
     }
 
     interface PaidVacation {
-        interface View {
+        interface View : ReportEdit.View {
             fun showReportHours(reportHours: Double)
             fun hideReportHours()
         }

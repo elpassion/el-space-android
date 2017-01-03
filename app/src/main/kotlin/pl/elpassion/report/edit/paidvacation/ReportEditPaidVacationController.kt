@@ -1,15 +1,16 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.paidvacation
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.Report
+import pl.elpassion.report.edit.ReportEdit
 import rx.Subscription
 import kotlin.properties.Delegates
 
-class AbsenceReportEditController(private val view: ReportEdit.PaidVacation.View,
-                                  private val api: ReportEdit.PaidVacation.Service,
-                                  private val removeReportApi: ReportEdit.RemoveApi) {
+class ReportEditPaidVacationController(private val view: ReportEdit.PaidVacation.View,
+                                       private val api: ReportEdit.PaidVacation.Service,
+                                       private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var report: Report by Delegates.notNull()
     private var selectedDate: String by Delegates.notNull()

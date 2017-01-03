@@ -1,4 +1,4 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.paidvacation
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
@@ -8,14 +8,15 @@ import pl.elpassion.common.extensions.getPerformedAtString
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.performedDate
+import pl.elpassion.report.edit.ReportEdit
 import rx.Completable
 
-class PaidVacationsReportEditControllerTest {
+class ReportEditPaidVacationControllerTest {
 
     private val view = mock<ReportEdit.PaidVacation.View>()
     private val editReportApi = mock<ReportEdit.PaidVacation.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = AbsenceReportEditController(view, editReportApi, removeReportApi)
+    private val controller = ReportEditPaidVacationController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()

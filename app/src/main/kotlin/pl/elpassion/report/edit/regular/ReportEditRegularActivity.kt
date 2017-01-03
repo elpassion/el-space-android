@@ -1,4 +1,4 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.regular
 
 import android.app.Activity
 import android.content.Context
@@ -18,14 +18,15 @@ import pl.elpassion.common.showLoader
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.datechooser.showDateDialog
+import pl.elpassion.report.edit.ReportEdit
 import pl.elpassion.report.edit.service.ReportEditServiceImpl
 
 
-class RegularReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
+class ReportEditRegularActivity : AppCompatActivity(), ReportEdit.Regular.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as RegularHourlyReport }
 
     private val controller by lazy {
-        RegularHourlyReportEditController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
+        ReportEditRegularController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +106,7 @@ class RegularReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
         private val REPORT_KEY = "report_key"
         private val REQUEST_CODE = 10001
 
-        fun intent(context: Context, report: RegularHourlyReport) = Intent(context, RegularReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: RegularHourlyReport) = Intent(context, ReportEditRegularActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 

@@ -16,12 +16,14 @@ import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.report.PaidVacationHourlyReport
+import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
 import pl.elpassion.startActivity
 import rx.Completable
 
-class AbsenceReportEditActivityTest {
+class ReportEditPaidVacationActivityTest {
+
     @JvmField @Rule
-    val rule = rule<AbsenceReportEditActivity>(autoStart = false)
+    val rule = rule<ReportEditPaidVacationActivity>(autoStart = false)
 
     private val reportEditApi = mock<ReportEdit.EditApi>()
     private val reportRemoveApi = mock<ReportEdit.RemoveApi>()
@@ -102,6 +104,6 @@ class AbsenceReportEditActivityTest {
     }
 
     private fun startActivity(report: PaidVacationHourlyReport = newPaidVacationHourlyReport()) {
-        rule.startActivity(AbsenceReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+        rule.startActivity(ReportEditPaidVacationActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }

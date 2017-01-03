@@ -1,4 +1,4 @@
-package pl.elpassion.report.edit
+package pl.elpassion.report.edit.paidvacation
 
 import android.app.Activity
 import android.content.Context
@@ -22,15 +22,16 @@ import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.datechooser.showDateDialog
+import pl.elpassion.report.edit.ReportEdit
 import pl.elpassion.report.edit.service.ReportEditServiceImpl
 
-class AbsenceReportEditActivity : AppCompatActivity(), ReportEdit.PaidVacation.View {
+class ReportEditPaidVacationActivity : AppCompatActivity(), ReportEdit.PaidVacation.View {
 
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as Report }
     private val hours by lazy { intent.getDoubleExtra(REPORT_HOURS_KEY, 0.00) }
 
     private val controller by lazy {
-        AbsenceReportEditController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
+        ReportEditPaidVacationController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,12 +93,12 @@ class AbsenceReportEditActivity : AppCompatActivity(), ReportEdit.PaidVacation.V
         private val REPORT_KEY = "report_key"
         private val REPORT_HOURS_KEY = "report_hours_key"
 
-        fun intent(context: Context, report: PaidVacationHourlyReport) = Intent(context, AbsenceReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: PaidVacationHourlyReport) = Intent(context, ReportEditPaidVacationActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
             putExtra(REPORT_HOURS_KEY, report.reportedHours)
         }
 
-        fun intent(context: Context, report: DailyReport) = Intent(context, AbsenceReportEditActivity::class.java).apply {
+        fun intent(context: Context, report: DailyReport) = Intent(context, ReportEditPaidVacationActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
         }
 

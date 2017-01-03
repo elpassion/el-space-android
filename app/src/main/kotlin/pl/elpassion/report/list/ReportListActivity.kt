@@ -21,8 +21,8 @@ import pl.elpassion.report.HourlyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.edit.AbsenceReportEditActivity
-import pl.elpassion.report.edit.RegularReportEditActivity
+import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
+import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.ReportDayServiceImpl
@@ -58,15 +58,15 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
-        RegularReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditRegularActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        AbsenceReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditPaidVacationActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun openAbsenceEditReportScreen(report: DailyReport) {
-        AbsenceReportEditActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditPaidVacationActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
     override fun showMonthName(monthName: String) {

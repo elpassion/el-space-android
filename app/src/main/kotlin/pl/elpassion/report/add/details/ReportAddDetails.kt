@@ -1,11 +1,33 @@
 package pl.elpassion.report.add.details
 
-import android.support.v4.app.Fragment
+import pl.elpassion.project.Project
 
 interface ReportAddDetails {
 
-    abstract class View : Fragment() {
-        abstract val controller: Controller?
+    interface View {
+        val controller: Controller?
+
+        interface Regular : View {
+            fun showSelectedProject(project: Project)
+            fun openProjectChooser()
+            fun getDescription(): String
+            fun showEmptyDescriptionError()
+            fun getHours(): String
+        }
+
+        interface PaidVacations : View {
+            fun getHours(): String
+        }
+    }
+
+    interface Sender {
+        interface Regular {
+            fun sendAddReport(description: String, hours: String)
+        }
+
+        interface PaidVacations {
+            fun sendAddReport(hours: String)
+        }
     }
 
     interface Controller {

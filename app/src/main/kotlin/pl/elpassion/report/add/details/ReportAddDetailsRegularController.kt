@@ -2,11 +2,9 @@ package pl.elpassion.report.add.details
 
 import pl.elpassion.project.Project
 import pl.elpassion.project.last.LastSelectedProjectRepository
-import pl.elpassion.report.add.ReportAdd
-import pl.elpassion.report.add.details.ReportAddDetails
 
-class ReportAddDetailsRegularController(private val view: ReportAdd.View.Regular,
-                                        private val sender: ReportAdd.Sender.Regular,
+class ReportAddDetailsRegularController(private val view: ReportAddDetails.View.Regular,
+                                        private val sender: ReportAddDetails.Sender.Regular,
                                         private val repository: LastSelectedProjectRepository) : ReportAddDetails.Controller {
 
     fun onCreate() {

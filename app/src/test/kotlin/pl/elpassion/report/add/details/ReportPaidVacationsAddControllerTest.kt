@@ -4,12 +4,11 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import pl.elpassion.report.add.ReportAdd
 
 class ReportPaidVacationsAddControllerTest {
 
-    val view = mock<ReportAdd.View.PaidVacations>()
-    val sender = mock<ReportAdd.Sender.PaidVacations>()
+    val view = mock<ReportAddDetails.View.PaidVacations>()
+    val sender = mock<ReportAddDetails.Sender.PaidVacations>()
     val controller = ReportAddDetailsPaidVacationsController(view, sender)
 
     @Test

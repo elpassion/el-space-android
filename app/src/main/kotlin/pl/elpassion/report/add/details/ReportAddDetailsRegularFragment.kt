@@ -3,6 +3,7 @@ package pl.elpassion.report.add.details
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,8 @@ import pl.elpassion.common.inflate
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
-import pl.elpassion.report.add.ReportAdd
 
-class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.Regular {
+class ReportAddDetailsRegularFragment : Fragment(), ReportAddDetails.View.Regular {
     override var controller: ReportAddDetailsRegularController? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,7 +23,7 @@ class ReportAddDetailsRegularFragment : ReportAddDetails.View(), ReportAdd.View.
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        controller = ReportAddDetailsRegularController(this, activity as ReportAdd.Sender.Regular, LastSelectedProjectRepositoryProvider.get())
+        controller = ReportAddDetailsRegularController(this, activity as ReportAddDetails.Sender.Regular, LastSelectedProjectRepositoryProvider.get())
         controller?.onCreate()
         view?.reportAddHours?.setOnTouchListener { ignored, motionEvent -> view.reportAddHours?.text = null; false }
         view?.reportAddProjectName?.setOnClickListener { controller?.onProjectClicked() }

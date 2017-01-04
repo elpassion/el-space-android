@@ -101,15 +101,29 @@ class ReportEditDailyControllerTest {
         verify(view).close()
     }
 
+    @Test
+    fun shouldShowErrorWhenSavingReportFails() {
+        stubEditReportApiToReturnError()
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+
+        verify(view).showError(any())
+    }
+
     private fun stubEditReportApiToReturnNever() {
         stubEditReportApiToReturn(Completable.never())
     }
 
-    private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.edit(any())).thenReturn(completable)
+    private fun stubEditReportApiToReturnError() {
+        stubEditReportApiToReturn(Completable.error(RuntimeException()))
     }
 
     private fun stubEditReportApiToReturnSuccess() {
         stubEditReportApiToReturn(Completable.complete())
+    }
+
+    private fun stubEditReportApiToReturn(completable: Completable) {
+        whenever(editReportApi.edit(any())).thenReturn(completable)
     }
 }

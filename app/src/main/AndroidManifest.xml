@@ -26,6 +26,7 @@
         <activity android:name=".report.edit.regular.ReportEditRegularActivity"/>
         <activity android:name=".debate.login.DebateLoginActivity"/>
         <activity android:name=".report.edit.paidvacation.ReportEditPaidVacationActivity"/>
+        <activity android:name=".report.edit.daily.ReportEditDailyActivity"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="42505f6356175462de2327f99393bf1fdf054841" />

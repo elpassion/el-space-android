@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_add_24dp"
+        app:srcCompat="@drawable/ic_add_24dp"
         app:layout_anchor="@id/reportsContainer"
         app:layout_anchorGravity="bottom|right|end"
         app:layout_behavior="pl.elpassion.report.list.ScrollAwareFABBehavior" />

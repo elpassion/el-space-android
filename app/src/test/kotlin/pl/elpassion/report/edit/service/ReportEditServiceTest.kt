@@ -3,9 +3,11 @@ package pl.elpassion.report.edit.service
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
+import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.edit.ReportEdit
 
 class ReportEditServiceTest {
@@ -43,5 +45,13 @@ class ReportEditServiceTest {
         service.edit(report)
 
         verify(api).editReport(id = report.id, date = report.date, description = report.description, projectId = report.project.id, reportedHour = "7.0")
+    }
+
+    @Test
+    fun shouldCallApiWithProperDataOfDailyReport() {
+        val report = newDailyReport(day = 1, month = 1, year = 2016, reportType = DailyReportType.SICK_LEAVE)
+        service.edit(report)
+
+        verify(api).editReport(id = report.id, date = report.date, description = "SickLeave", projectId = null, reportedHour = "0")
     }
 }

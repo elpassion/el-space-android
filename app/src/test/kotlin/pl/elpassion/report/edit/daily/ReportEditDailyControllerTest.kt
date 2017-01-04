@@ -92,6 +92,15 @@ class ReportEditDailyControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldCloseViewWhenSavingHasNotFailed() {
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+
+        verify(view).close()
+    }
+
     private fun stubEditReportApiToReturnNever() {
         stubEditReportApiToReturn(Completable.never())
     }

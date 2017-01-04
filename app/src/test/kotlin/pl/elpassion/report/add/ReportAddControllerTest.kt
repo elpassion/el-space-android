@@ -30,7 +30,7 @@ class ReportAddControllerTest {
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
         verify(view).close()
     }
 
@@ -39,7 +39,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
 
         verify(view).showLoader()
     }
@@ -49,7 +49,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -60,7 +60,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -80,7 +80,7 @@ class ReportAddControllerTest {
         val controller = createController("2016-01-04")
 
         controller.onDateSelect("2016-05-04")
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -90,7 +90,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
         verify(view).showError(any())
     }
 
@@ -108,7 +108,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.addRegularReport("description", "8")
+        controller.addRegularReport("description", "8", 1)
         verify(view).showError(exception)
     }
 

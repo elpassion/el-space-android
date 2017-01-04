@@ -48,9 +48,18 @@ class ReportRegularAddControllerTest {
     fun shouldCallSenderAfterOnReportAdded() {
         whenever(view.getDescription()).thenReturn("description")
         whenever(view.getHours()).thenReturn("8")
-        controller.onSelectProject(newProject())
+        controller.onSelectProject(newProject(id = 1))
         controller.onReportAdded()
-        verify(sender).addRegularReport("description", "8")
+        verify(sender).addRegularReport("description", "8", projectId = 1)
+    }
+
+    @Test
+    fun shouldReallyCallSenderAfterOnReportAdded() {
+        whenever(view.getDescription()).thenReturn("description2")
+        whenever(view.getHours()).thenReturn("9")
+        controller.onSelectProject(newProject(id = 2))
+        controller.onReportAdded()
+        verify(sender).addRegularReport("description2", "9", projectId = 2)
     }
 
     @Test

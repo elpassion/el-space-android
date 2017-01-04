@@ -21,7 +21,7 @@ interface ReportAddDetails {
 
     interface Sender {
         interface Regular {
-            fun addRegularReport(description: String, hours: String)
+            fun addRegularReport(description: String, hours: String, projectId: Long)
         }
 
         interface PaidVacations {

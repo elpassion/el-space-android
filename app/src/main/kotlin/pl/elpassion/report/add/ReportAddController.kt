@@ -33,8 +33,8 @@ class ReportAddController(date: String?,
         detailsController.onReportAdded()
     }
 
-    override fun addRegularReport(description: String, hours: String) {
-        callApi(apiCall = api.addRegularReport(selectedDate, 1, hours, description))
+    override fun addRegularReport(description: String, hours: String, projectId: Long) {
+        callApi(apiCall = api.addRegularReport(selectedDate, projectId, hours, description))
     }
 
     override fun addPaidVacationsReport(hours: String) {

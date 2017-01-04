@@ -115,8 +115,8 @@ class ReportAddActivity : AppCompatActivity(),
         return items[reportAddReportDetailsForm.currentItem].controller!!
     }
 
-    override fun addRegularReport(description: String, hours: String) {
-        controller.addRegularReport(description, hours)
+    override fun addRegularReport(description: String, hours: String, projectId: Long) {
+        controller.addRegularReport(description, hours, projectId)
     }
 
     override fun addPaidVacationsReport(hours: String) {

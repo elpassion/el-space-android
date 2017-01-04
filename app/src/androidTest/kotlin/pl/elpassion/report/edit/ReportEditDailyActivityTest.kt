@@ -38,6 +38,12 @@ class ReportEditDailyActivityTest {
         onId(R.id.reportEditDate).hasText("2010-02-10")
     }
 
+    @Test
+    fun shouldHaveSaveButton() {
+        startActivity()
+        onId(R.id.reportEditSaveButton).hasText(R.string.report_edit_save_button).isDisplayed()
+    }
+
     private fun startActivity(report: DailyReport = newDailyReport()) {
         rule.startActivity(ReportEditDailyActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

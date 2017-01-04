@@ -20,4 +20,11 @@
         android:focusableInTouchMode="true"
         tools:text="2016-09-01" />
 
+    <TextView
+        android:id="@+id/reportEditSaveButton"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/report_edit_save_button" />
+
 </android.support.design.widget.CoordinatorLayout>

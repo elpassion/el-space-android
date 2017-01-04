@@ -8,10 +8,9 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
-import pl.elpassion.project.dto.newPaidVacationHourlyReport
-import pl.elpassion.report.PaidVacationHourlyReport
+import pl.elpassion.project.dto.newDailyReport
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.edit.daily.ReportEditDailyActivity
-import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
 import pl.elpassion.startActivity
 
 class ReportEditDailyActivityTest {
@@ -31,7 +30,7 @@ class ReportEditDailyActivityTest {
         onText(R.string.report_edit_date_header).isDisplayed()
     }
 
-    private fun startActivity(report: PaidVacationHourlyReport = newPaidVacationHourlyReport()) {
-        rule.startActivity(ReportEditPaidVacationActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+    private fun startActivity(report: DailyReport = newDailyReport()) {
+        rule.startActivity(ReportEditDailyActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }

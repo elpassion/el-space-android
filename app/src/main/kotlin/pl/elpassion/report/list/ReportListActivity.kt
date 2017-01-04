@@ -133,7 +133,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private fun createReportItemAdapter(report: HourlyReport, onReportClickListener: OnReportClickListener): StableItemAdapter<out RecyclerView.ViewHolder> {
         return if (report is RegularHourlyReport) {
-            RegularHourlyReportItemAdapter(report, onReportClickListener)
+            RegularReportItemAdapter(report, onReportClickListener)
         } else {
             PaidVacationReportItemAdapter(report as PaidVacationHourlyReport, onReportClickListener)
         }

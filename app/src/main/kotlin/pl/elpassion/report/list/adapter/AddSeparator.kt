@@ -8,7 +8,7 @@ fun addSeparators(adapters: List<StableItemAdapter<*>>) = mutableListOf<StableIt
         val previousItemAdapter = adapters.getOrNull(i - 1)
         if (previousItemAdapter != null
                 && itemAdapter !is PaidVacationReportItemAdapter
-                && itemAdapter !is RegularHourlyReportItemAdapter
+                && itemAdapter !is RegularReportItemAdapter
                 && itemAdapter !is WeekendDayItem
                 && itemAdapter !is EmptyItemAdapter) {
             addAll(listOf(SeparatorItemAdapter(), itemAdapter))

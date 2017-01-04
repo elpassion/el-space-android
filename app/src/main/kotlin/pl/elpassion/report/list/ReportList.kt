@@ -40,7 +40,7 @@ interface ReportList {
 
         fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport)
 
-        fun openAbsenceEditReportScreen(report: DailyReport)
+        fun openDailyEditReportScreen(report: DailyReport)
     }
 
     object ServiceProvider : Provider<Service>({

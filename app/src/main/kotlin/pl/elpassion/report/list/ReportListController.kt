@@ -67,7 +67,7 @@ class ReportListController(private val reportDayService: ReportDayService,
         when (report) {
             is RegularHourlyReport -> view.openEditReportScreen(report)
             is PaidVacationHourlyReport -> view.openPaidVacationEditReportScreen(report)
-            is DailyReport -> view.openAbsenceEditReportScreen(report)
+            is DailyReport -> view.openDailyEditReportScreen(report)
         }
     }
 

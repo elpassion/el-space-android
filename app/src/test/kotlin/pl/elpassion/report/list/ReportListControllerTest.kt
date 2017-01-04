@@ -8,8 +8,10 @@ import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getTimeFrom
 import pl.elpassion.commons.RxSchedulersRule
 import pl.elpassion.commons.stubCurrentTime
+import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
 import java.util.*
@@ -115,6 +117,14 @@ class ReportListControllerTest {
         controller.onReport(report)
 
         verify(view, times(1)).openPaidVacationEditReportScreen(report)
+    }
+
+    @Test
+    fun shouldOpenEditDailyScreenOnReportIfReportIsDailyReport() {
+        val report = newDailyReport(reportType = DailyReportType.SICK_LEAVE)
+        controller.onReport(report)
+
+        verify(view, times(1)).openDailyEditReportScreen(report)
     }
 
     @Test

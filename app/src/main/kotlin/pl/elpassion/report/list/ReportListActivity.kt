@@ -65,7 +65,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         ReportEditPaidVacationActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
-    override fun openAbsenceEditReportScreen(report: DailyReport) {
+    override fun openDailyEditReportScreen(report: DailyReport) {
         throw NotImplementedError()
     }
 

@@ -41,7 +41,7 @@ data class DailyReport(
         override val day: Int,
         val reportType: DailyReportType) : Serializable, Report
 
-enum class DailyReportType {
-    UNPAID_VACATIONS,
-    SICK_LEAVE
+enum class DailyReportType(val description: String) {
+    UNPAID_VACATIONS("UnpaidVacation"),
+    SICK_LEAVE("SickLeave")
 }

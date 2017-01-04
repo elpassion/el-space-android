@@ -17,6 +17,6 @@ class ReportEditServiceImpl(private val api: ReportEdit.EditApi) : ReportEdit.Re
     }
 
     override fun edit(report: DailyReport): Completable = with(report) {
-        api.editReport(id = id, date = date, projectId = null, reportedHour = "0", description = "SickLeave")
+        api.editReport(id = id, date = date, projectId = null, reportedHour = "0", description = reportType.description)
     }
 }

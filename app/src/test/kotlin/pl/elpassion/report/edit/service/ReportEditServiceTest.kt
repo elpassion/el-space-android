@@ -54,4 +54,12 @@ class ReportEditServiceTest {
 
         verify(api).editReport(id = report.id, date = report.date, description = "SickLeave", projectId = null, reportedHour = "0")
     }
+
+    @Test
+    fun shouldCallApiWithReallyProperDataOfDailyReport() {
+        val report = newDailyReport(day = 1, month = 1, year = 2016, reportType = DailyReportType.UNPAID_VACATIONS)
+        service.edit(report)
+
+        verify(api).editReport(id = report.id, date = report.date, description = "UnpaidVacation", projectId = null, reportedHour = "0")
+    }
 }

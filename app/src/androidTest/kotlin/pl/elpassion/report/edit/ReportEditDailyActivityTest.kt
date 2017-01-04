@@ -1,7 +1,9 @@
 package pl.elpassion.report.edit
 
 import android.support.test.InstrumentationRegistry
+import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import org.junit.Rule
 import org.junit.Test
@@ -28,6 +30,12 @@ class ReportEditDailyActivityTest {
     fun shouldHavePerformedAtHeader() {
         startActivity()
         onText(R.string.report_edit_date_header).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowCorrectReportDate() {
+        startActivity(newDailyReport(year = 2010, month = 2, day = 10))
+        onId(R.id.reportEditDate).hasText("2010-02-10")
     }
 
     private fun startActivity(report: DailyReport = newDailyReport()) {

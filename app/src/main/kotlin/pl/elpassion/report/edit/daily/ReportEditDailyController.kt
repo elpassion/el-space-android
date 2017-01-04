@@ -9,8 +9,8 @@ import pl.elpassion.report.DailyReport
 import pl.elpassion.report.edit.ReportEdit
 import kotlin.properties.Delegates
 
-class ReportEditDailyController(val view: ReportEdit.Daily.View,
-                                val editReportApi: ReportEdit.Daily.Service) {
+class ReportEditDailyController(private val view: ReportEdit.Daily.View,
+                                private val editReportApi: ReportEdit.Daily.Service) {
 
     private var report: DailyReport by Delegates.notNull()
 

@@ -1,9 +1,6 @@
 package pl.elpassion.report.edit.daily
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -74,7 +71,36 @@ class ReportEditDailyControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderIfSavingHasNotFinished() {
+        stubEditReportApiToReturnNever()
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+
+        verify(view, never()).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
+        stubEditReportApiToReturnNever()
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+        controller.onDestroy()
+
+        verify(view).hideLoader()
+    }
+
+    private fun stubEditReportApiToReturnNever() {
+        stubEditReportApiToReturn(Completable.never())
+    }
+
+    private fun stubEditReportApiToReturn(completable: Completable) {
+        whenever(editReportApi.edit(any())).thenReturn(completable)
+    }
+
     private fun stubEditReportApiToReturnSuccess() {
-        whenever(editReportApi.edit(any())).thenReturn(Completable.complete())
+        stubEditReportApiToReturn(Completable.complete())
     }
 }

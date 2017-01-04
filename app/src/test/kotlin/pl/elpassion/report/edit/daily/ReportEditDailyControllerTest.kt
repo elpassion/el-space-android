@@ -46,6 +46,16 @@ class ReportEditDailyControllerTest {
         verify(editReportApi).edit(report.copy(year = 2017, month = 1, day = 3, id = 2, reportType = DailyReportType.SICK_LEAVE))
     }
 
+    @Test
+    fun shouldShowChangedDateOnDateSelect() {
+        val report = newDailyReport()
+        controller.onCreate(report)
+
+        controller.onDateSelect("2018-09-03")
+
+        verify(view).showDate(report.copy(year = 2018, month = 9, day = 3).date)
+    }
+
     private fun stubEditReportApiToReturnSuccess() {
         whenever(editReportApi.edit(any())).thenReturn(Completable.complete())
     }

@@ -22,6 +22,7 @@ class ReportEditDailyController(val view: ReportEdit.Daily.View,
     fun onDateSelect(date: String) {
         val calendar = date.toCalendarDate()
         report = report.copy(day = calendar.dayOfMonth, month = calendar.month + 1, year = calendar.year)
+        view.showDate(report.date)
     }
 
     fun onSaveReport() {

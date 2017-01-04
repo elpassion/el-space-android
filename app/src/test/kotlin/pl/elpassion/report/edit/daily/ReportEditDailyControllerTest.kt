@@ -56,6 +56,24 @@ class ReportEditDailyControllerTest {
         verify(view).showDate(report.copy(year = 2018, month = 9, day = 3).date)
     }
 
+    @Test
+    fun shouldShowLoaderOnSaveReport() {
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderOnSaveReportFinish() {
+        controller.onCreate(newDailyReport())
+
+        controller.onSaveReport()
+
+        verify(view).hideLoader()
+    }
+
     private fun stubEditReportApiToReturnSuccess() {
         whenever(editReportApi.edit(any())).thenReturn(Completable.complete())
     }

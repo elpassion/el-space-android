@@ -30,11 +30,6 @@ class ReportEditDailyController(val view: ReportEdit.Daily.View,
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    view.close()
-                }, {
-                    view.showError(it)
-                })
     }
 
 }

@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.daily_report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.report.DailyReport
+import pl.elpassion.report.datechooser.showDateDialog
 import pl.elpassion.report.edit.ReportEdit
 import pl.elpassion.report.edit.service.ReportEditServiceImpl
 
@@ -25,22 +26,24 @@ class ReportEditDailyActivity : AppCompatActivity(), ReportEdit.Daily.View {
         setContentView(R.layout.daily_report_edit_activity)
         showBackArrowOnActionBar()
         controller.onCreate(report)
+        reportEditDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
+        reportEditSaveButton.setOnClickListener { controller.onSaveReport() }
     }
 
     override fun showLoader() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun hideLoader() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun showError(ex: Throwable) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException(ex) //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun close() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun showDate(date: String) {

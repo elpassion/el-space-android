@@ -50,7 +50,7 @@ class ReportRegularAddControllerTest {
         whenever(view.getHours()).thenReturn("8")
         controller.onSelectProject(newProject())
         controller.onReportAdded()
-        verify(sender).sendAddReport("description", "8")
+        verify(sender).addRegularReport("description", "8")
     }
 
     @Test

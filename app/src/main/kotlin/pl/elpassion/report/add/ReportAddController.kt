@@ -33,20 +33,20 @@ class ReportAddController(date: String?,
         detailsController.onReportAdded()
     }
 
-    override fun sendAddReport(description: String, hours: String) {
-        callApi(apiCall = api.addReport(selectedDate, 1, hours, description))
+    override fun addRegularReport(description: String, hours: String) {
+        callApi(apiCall = api.addRegularReport(selectedDate, 1, hours, description))
     }
 
-    override fun sendAddReport(hours: String) {
-        callApi(apiCall = api.addReport(selectedDate, 1, hours, ""))
+    override fun addPaidVacationsReport(hours: String) {
+        callApi(apiCall = api.addPaidVacationsReport(selectedDate, hours))
     }
 
-    override fun reportUnpaidVacations() {
-        callApi(apiCall = api.reportUnpaidVacations(selectedDate))
+    override fun addUnpaidVacationsReport() {
+        callApi(apiCall = api.addUnpaidVacationsReport(selectedDate))
     }
 
-    override fun reportSickLeave() {
-        callApi(apiCall = api.reportSickLeave(selectedDate))
+    override fun addSickLeaveReport() {
+        callApi(apiCall = api.addSickLeaveReport(selectedDate))
     }
 
     private fun callApi(apiCall: Completable) {

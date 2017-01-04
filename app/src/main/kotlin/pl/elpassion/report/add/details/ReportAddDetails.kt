@@ -21,19 +21,19 @@ interface ReportAddDetails {
 
     interface Sender {
         interface Regular {
-            fun sendAddReport(description: String, hours: String)
+            fun addRegularReport(description: String, hours: String)
         }
 
         interface PaidVacations {
-            fun sendAddReport(hours: String)
+            fun addPaidVacationsReport(hours: String)
         }
 
         interface SickLeave {
-            fun reportSickLeave()
+            fun addSickLeaveReport()
         }
 
         interface UnpaidVacations {
-            fun reportUnpaidVacations()
+            fun addUnpaidVacationsReport()
         }
     }
 

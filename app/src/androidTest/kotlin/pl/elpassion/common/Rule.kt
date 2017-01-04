@@ -42,11 +42,13 @@ fun stubReportEditApi() {
 fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {
-            override fun addReport(date: String, projectId: Long, hours: String, description: String) = Completable.complete()
+            override fun addRegularReport(date: String, projectId: Long, hours: String, description: String) = Completable.complete()
 
-            override fun reportSickLeave(date: String) = Completable.complete()
+            override fun addPaidVacationsReport(date: String, hours: String) = Completable.complete()
 
-            override fun reportUnpaidVacations(date: String) = Completable.complete()
+            override fun addSickLeaveReport(date: String) = Completable.complete()
+
+            override fun addUnpaidVacationsReport(date: String) = Completable.complete()
         }
     }
 }

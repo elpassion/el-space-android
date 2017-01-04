@@ -23,17 +23,22 @@ interface ReportAdd {
     interface Api {
 
         @POST("activities")
-        fun addReport(
+        fun addRegularReport(
                 @Query("activity[performed_at]") date: String,
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
                 @Query("activity[comment]") description: String): Completable
 
+        @POST("activities?activity[report_type]=1")
+        fun addPaidVacationsReport(
+                @Query("activity[performed_at]") date: String,
+                @Query("activity[value]") hours: String): Completable
+
         @POST("activities?activity[report_type]=2&activity[value]=0")
-        fun reportUnpaidVacations(@Query("activity[performed_at]") date: String): Completable
+        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Completable
 
         @POST("activities?activity[report_type]=3&activity[value]=0")
-        fun reportSickLeave(@Query("activity[performed_at]") date: String): Completable
+        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Completable
     }
 
     object ApiProvider : Provider<Api>({

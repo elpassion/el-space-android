@@ -115,20 +115,20 @@ class ReportAddActivity : AppCompatActivity(),
         return items[reportAddReportDetailsForm.currentItem].controller!!
     }
 
-    override fun sendAddReport(description: String, hours: String) {
-        controller.sendAddReport(description, hours)
+    override fun addRegularReport(description: String, hours: String) {
+        controller.addRegularReport(description, hours)
     }
 
-    override fun sendAddReport(hours: String) {
-        controller.sendAddReport(hours)
+    override fun addPaidVacationsReport(hours: String) {
+        controller.addPaidVacationsReport(hours)
     }
 
-    override fun reportSickLeave() {
-        controller.reportSickLeave()
+    override fun addSickLeaveReport() {
+        controller.addSickLeaveReport()
     }
 
-    override fun reportUnpaidVacations() {
-        controller.reportUnpaidVacations()
+    override fun addUnpaidVacationsReport() {
+        controller.addUnpaidVacationsReport()
     }
 
     companion object {

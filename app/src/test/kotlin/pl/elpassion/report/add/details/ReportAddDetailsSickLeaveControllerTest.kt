@@ -13,6 +13,6 @@ class ReportAddDetailsSickLeaveControllerTest {
         val controller = ReportAddDetailsSickLeaveController(api)
         controller.onReportAdded()
 
-        verify(api).reportSickLeave()
+        verify(api).addSickLeaveReport()
     }
 }

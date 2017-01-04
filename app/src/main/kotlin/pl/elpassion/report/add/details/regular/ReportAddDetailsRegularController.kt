@@ -32,7 +32,7 @@ class ReportAddDetailsRegularController(private val view: ReportAddDetails.View.
         } else if(selectedProject == null){
             view.showEmptyProjectError()
         }else {
-            sender.sendAddReport(view.getDescription(), view.getHours())
+            sender.addRegularReport(view.getDescription(), view.getHours())
         }
     }
 }

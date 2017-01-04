@@ -28,7 +28,7 @@ import rx.Observable
 class ReportListActivityAddReportTest {
 
     val service = mock<ReportList.Service>()
-    val addReportService = mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.complete()) }
+    val addReportService = mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.complete()) }
 
     @JvmField @Rule
     val rule = rule<ReportListActivity> {

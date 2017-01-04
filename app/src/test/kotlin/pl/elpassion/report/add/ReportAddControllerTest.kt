@@ -30,7 +30,7 @@ class ReportAddControllerTest {
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
         verify(view).close()
     }
 
@@ -39,7 +39,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
 
         verify(view).showLoader()
     }
@@ -49,7 +49,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -60,7 +60,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -80,17 +80,17 @@ class ReportAddControllerTest {
         val controller = createController("2016-01-04")
 
         controller.onDateSelect("2016-05-04")
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
 
-        verify(api).addReport(eq("2016-05-04"), any(), any(), any())
+        verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
         verify(view).showError(any())
     }
 
@@ -105,10 +105,10 @@ class ReportAddControllerTest {
     fun shouldUseApi() {
         val exception = RuntimeException()
         val project = Project(1, "Slack")
-        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
+        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.sendAddReport("description", "8")
+        controller.addRegularReport("description", "8")
         verify(view).showError(exception)
     }
 
@@ -158,24 +158,25 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldSendEmptyDescriptionWhenSendReportInvokedOnlyWithHours() {
-        val controller = createController()
-        controller.sendAddReport("8")
-        verify(api).addReport(any(), any(), eq("8"), eq(""))
+    fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
+        val controller = createController("2016-01-01")
+        controller.addUnpaidVacationsReport()
+        verify(api).addUnpaidVacationsReport("2016-01-01")
     }
 
     @Test
-    fun shouldReportUnpaidVacationsToApiAfterReportUnpaidVacations() {
+    fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {
         val controller = createController("2016-01-01")
-        controller.reportUnpaidVacations()
-        verify(api).reportUnpaidVacations("2016-01-01")
+        controller.addSickLeaveReport()
+        verify(api).addSickLeaveReport("2016-01-01")
     }
 
     @Test
-    fun shouldReportSickLeaveToApiAfterReportSickLeave() {
-        val controller = createController("2016-01-01")
-        controller.reportSickLeave()
-        verify(api).reportSickLeave("2016-01-01")
+    fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
+        val controller = createController("2016-09-23")
+
+        controller.addPaidVacationsReport("8")
+        verify(api).addPaidVacationsReport("2016-09-23", "8")
     }
 
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
@@ -185,9 +186,10 @@ class ReportAddControllerTest {
     }
 
     private fun stubApiToReturn(completable: Completable) {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
-        whenever(api.reportSickLeave(any())).thenReturn(completable)
-        whenever(api.reportUnpaidVacations(any())).thenReturn(completable)
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(completable)
+        whenever(api.addSickLeaveReport(any())).thenReturn(completable)
+        whenever(api.addUnpaidVacationsReport(any())).thenReturn(completable)
+        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(completable)
     }
 }
 

@@ -31,6 +31,7 @@ import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
+import pl.elpassion.report.edit.daily.ReportEditDailyActivity
 import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
 import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import rx.Observable
@@ -102,6 +103,13 @@ class ReportListActivityTest {
         onText("3 Mon").click()
 
         checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenEditDailyReportScreenOnDailyReportClick() {
+        onText("7 Fri").click()
+
+        checkIntent(ReportEditDailyActivity::class.java)
     }
 
     @Test

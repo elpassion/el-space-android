@@ -1,5 +1,6 @@
 package pl.elpassion.report.edit.daily
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +22,10 @@ class ReportEditDailyActivity : AppCompatActivity() {
 
         fun intent(context: Context, report: DailyReport) = Intent(context, ReportEditDailyActivity::class.java).apply {
             putExtra(REPORT_KEY, report)
+        }
+
+        fun startForResult(activity: Activity, report: DailyReport, requestCode: Int) {
+            activity.startActivityForResult(ReportEditDailyActivity.intent(activity, report), requestCode)
         }
     }
 }

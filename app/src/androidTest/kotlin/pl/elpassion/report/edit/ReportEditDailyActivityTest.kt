@@ -2,8 +2,10 @@ package pl.elpassion.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onText
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
@@ -21,6 +23,12 @@ class ReportEditDailyActivityTest {
     fun shouldHaveVisibleBackArrow() {
         startActivity()
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun shouldHavePerformedAtHeader() {
+        startActivity()
+        onText(R.string.report_edit_date_header).isDisplayed()
     }
 
     private fun startActivity(report: PaidVacationHourlyReport = newPaidVacationHourlyReport()) {

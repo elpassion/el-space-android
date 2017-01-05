@@ -12,6 +12,7 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
+import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.DailyReportType
@@ -58,13 +59,12 @@ class ReportEditDailyActivityTest {
 
     @Test
     fun shouldCallApiWithCorrectData() {
+        stubCurrentTime(2017, 1, 10)
         startActivity(newDailyReport(year = 2017, month = 1, day = 4, id = 2, reportType = DailyReportType.SICK_LEAVE))
         onId(R.id.reportEditDate).click()
-        onText("2017").click()
-        onText("2016").click()
         onText("OK").click()
         onId(R.id.reportEditSaveButton).click()
-        verify(reportEditApi).editReport(id = 2, date = "2016-01-04", reportedHour = "0", description = "SickLeave", projectId = null)
+        verify(reportEditApi).editReport(id = 2, date = "2017-01-10", reportedHour = "0", description = "SickLeave", projectId = null)
     }
 
     private fun startActivity(report: DailyReport = newDailyReport()) {

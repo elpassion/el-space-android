@@ -67,6 +67,12 @@ class ReportEditDailyActivityTest {
         verify(reportEditApi).editReport(id = 2, date = "2017-01-10", reportedHour = "0", description = "SickLeave", projectId = null)
     }
 
+    @Test
+    fun shouldHaveVisibleRemoveReportIcon() {
+        startActivity()
+        onId(R.id.action_remove_report).isDisplayed()
+    }
+
     private fun startActivity(report: DailyReport = newDailyReport()) {
         rule.startActivity(ReportEditDailyActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import kotlinx.android.synthetic.main.daily_report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
@@ -28,6 +29,11 @@ class ReportEditDailyActivity : AppCompatActivity(), ReportEdit.Daily.View {
         controller.onCreate(report)
         reportEditDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         reportEditSaveButton.setOnClickListener { controller.onSaveReport() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.edit_raport_menu, menu)
+        return true
     }
 
     override fun showLoader() {

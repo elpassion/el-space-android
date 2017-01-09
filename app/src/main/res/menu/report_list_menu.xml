@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_prev_month"
+        android:icon="@drawable/ic_arrow_left_white"
+        android:title="@string/previous_month"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_next_month"
+        android:icon="@drawable/ic_arrow_right_white"
+        android:title="@string/next_month"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -8,6 +8,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
@@ -21,7 +23,6 @@ import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.PaidVacationReportEditActivity
 import pl.elpassion.report.edit.RegularReportEditActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
-import pl.elpassion.report.list.adapter.addSeparators
 import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 
@@ -35,12 +36,24 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_list_activity)
+        setSupportActionBar(toolbar)
         reportsContainer.layoutManager = LinearLayoutManager(this)
         reportsContainer.adapter = reportsAdapter
         controller.onCreate()
-        nextMonthButton.setOnClickListener { controller.onNextMonth() }
-        prevMonthButton.setOnClickListener { controller.onPreviousMonth() }
         fabAddReport.setOnClickListener { controller.onAddTodayReport() }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.report_list_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_prev_month -> controller.onPreviousMonth()
+            R.id.action_next_month -> controller.onNextMonth()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
@@ -52,7 +65,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showMonthName(monthName: String) {
-        monthTitle.text = monthName
+        toolbar.title = monthName
     }
 
     override fun openAddReportScreen(date: String) {

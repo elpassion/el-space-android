@@ -88,7 +88,7 @@ class RegularReportEditActivity : AppCompatActivity(), ReportEdit.Regular.View {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.edit_raport_menu, menu)
+        menuInflater.inflate(R.menu.edit_report_menu, menu)
         return true
     }
 

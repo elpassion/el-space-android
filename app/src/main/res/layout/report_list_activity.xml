@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/previous_month"
                     android:padding="8dp"
-                    android:src="@android:drawable/ic_media_previous" />
+                    android:src="@drawable/ic_arrow_left_white" />
 
                 <ImageView
                     android:id="@+id/nextMonthButton"
@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/next_month"
                     android:padding="8dp"
-                    android:src="@android:drawable/ic_media_next" />
+                    android:src="@drawable/ic_arrow_right_white" />
 
             </LinearLayout>
 

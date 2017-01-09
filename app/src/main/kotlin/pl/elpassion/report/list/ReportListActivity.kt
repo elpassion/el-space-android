@@ -81,7 +81,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
-        reportsAdapter.updateAdapter(addSeparators(adapterList))
+        reportsAdapter.updateAdapter(adapterList)
     }
 
     private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {

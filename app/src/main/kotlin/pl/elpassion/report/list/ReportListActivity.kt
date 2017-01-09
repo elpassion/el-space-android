@@ -65,7 +65,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun showMonthName(monthName: String) {
-        toolbar.title = monthName
+        supportActionBar?.title = monthName
     }
 
     override fun openAddReportScreen(date: String) {

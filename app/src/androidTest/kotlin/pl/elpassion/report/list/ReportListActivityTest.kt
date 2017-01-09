@@ -7,9 +7,11 @@ import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
+import android.widget.TextView
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.core.AllOf.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Rule
@@ -130,25 +132,25 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowCorrectlyMonthNameOnStart() {
-        onId(R.id.monthTitle)
+        onToolbarTitle()
                 .isDisplayed()
                 .hasText("October")
     }
 
     @Test
     fun shouldShowCorrectlyMonthNameAfterClickOnNextMonth() {
-        onId(R.id.nextMonthButton).click()
+        onId(R.id.action_next_month).click()
 
-        onId(R.id.monthTitle)
+        onToolbarTitle()
                 .isDisplayed()
                 .hasText("November")
     }
 
     @Test
     fun shouldShowCorrectlyMonthNameAfterClickOnPrevMonth() {
-        onId(R.id.prevMonthButton).click()
+        onId(R.id.action_prev_month).click()
 
-        onId(R.id.monthTitle)
+        onToolbarTitle()
                 .isDisplayed()
                 .hasText("September")
     }
@@ -168,12 +170,12 @@ class ReportListActivityTest {
 
     @Test
     fun shouldDisplayCorrectDescriptionOnNextButton() {
-        onId(R.id.nextMonthButton).check(matches(withContentDescription(R.string.next_month)))
+        onId(R.id.action_next_month).check(matches(withContentDescription(R.string.next_month)))
     }
 
     @Test
     fun shouldDisplayCorrectDescriptionOnPreviousButton() {
-        onId(R.id.prevMonthButton).check(matches(withContentDescription(R.string.previous_month)))
+        onId(R.id.action_prev_month).check(matches(withContentDescription(R.string.previous_month)))
     }
 
     @Test
@@ -224,6 +226,8 @@ class ReportListActivityTest {
     }
 
     private fun onItemWithText(text: String) = onView(allOf(hasDescendant(withText(text)), withParent(withId(R.id.reportsContainer))))
+
+    private fun onToolbarTitle() = onView(allOf(instanceOf(TextView::class.java), withParent(withId(R.id.toolbar))))
 
     private fun scrollToItemWithText(s: String) {
         onView(withId(R.id.reportsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(s))))

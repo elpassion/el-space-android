@@ -56,6 +56,9 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    dexOptions {
+        javaMaxHeapSize DEX_MAX_HEAP_SIZE
+    }
 }
 
 repositories {

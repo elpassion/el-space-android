@@ -58,6 +58,7 @@ android {
     }
     dexOptions {
         javaMaxHeapSize DEX_MAX_HEAP_SIZE
+        preDexLibraries = System.env.CI != "true"
     }
 }
 

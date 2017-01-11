@@ -20,9 +20,9 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
-        onLoginWithCodeReturnToken(code = "1234", token = "authToken")
-        logToDebate(debateCode = "1234")
-        verify(tokenRepo).saveDebateToken(debateCode = "1234", authToken = "authToken")
+        onLoginWithCodeReturnToken(code = "12348", token = "authToken")
+        logToDebate(debateCode = "12348")
+        verify(tokenRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
     }
 
     @Test
@@ -122,6 +122,12 @@ class DebateLoginControllerTest {
     @Test
     fun shouldShowWrongPinErrorWhenPinHasLessDigitsThan5() {
         logToDebate("")
+        verify(view).showWrongPinError()
+    }
+
+    @Test
+    fun shouldShowWrongPinErrorWhenPinReallyHasLessDigitsThan5() {
+        logToDebate("1234")
         verify(view).showWrongPinError()
     }
 

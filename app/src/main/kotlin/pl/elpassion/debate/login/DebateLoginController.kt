@@ -12,14 +12,18 @@ class DebateLoginController(
     private var subscription: Subscription? = null
 
     fun onLogToDebate(debateCode: String) {
-        subscription = getAuthTokenObservable(debateCode)
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    view.openDebateScreen(it)
-                }, {
-                    view.showLoginFailedError()
-                })
+        if (debateCode.isEmpty()) {
+            view.showWrongPinError()
+        } else {
+            subscription = getAuthTokenObservable(debateCode)
+                    .doOnSubscribe { view.showLoader() }
+                    .doOnUnsubscribe { view.hideLoader() }
+                    .subscribe({
+                        view.openDebateScreen(it)
+                    }, {
+                        view.showLoginFailedError()
+                    })
+        }
     }
 
     private fun getAuthTokenObservable(debateCode: String) =

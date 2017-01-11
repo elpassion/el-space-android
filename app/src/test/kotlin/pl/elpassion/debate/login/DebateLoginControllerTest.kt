@@ -119,6 +119,12 @@ class DebateLoginControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldShowWrongPinErrorWhenPinHasLessDigitsThan5() {
+        logToDebate("")
+        verify(view).showWrongPinError()
+    }
+
     private fun onLoginWithCodeReturnNever(code: String) {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }

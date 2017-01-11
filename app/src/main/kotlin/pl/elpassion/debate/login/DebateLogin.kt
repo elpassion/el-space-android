@@ -8,6 +8,7 @@ interface DebateLogin {
         fun showLoginFailedError()
         fun showLoader()
         fun hideLoader()
+        fun showWrongPinError()
     }
 
     interface Api {

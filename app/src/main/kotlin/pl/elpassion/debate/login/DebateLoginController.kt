@@ -15,15 +15,19 @@ class DebateLoginController(
         if (debateCode.length != 5) {
             view.showWrongPinError()
         } else {
-            subscription = getAuthTokenObservable(debateCode)
-                    .doOnSubscribe { view.showLoader() }
-                    .doOnUnsubscribe { view.hideLoader() }
-                    .subscribe({
-                        view.openDebateScreen(it)
-                    }, {
-                        view.showLoginFailedError()
-                    })
+            makeSubscription(debateCode)
         }
+    }
+
+    private fun makeSubscription(debateCode: String) {
+        subscription = getAuthTokenObservable(debateCode)
+                .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    view.openDebateScreen(it)
+                }, {
+                    view.showLoginFailedError()
+                })
     }
 
     private fun getAuthTokenObservable(debateCode: String) =

@@ -1,8 +1,10 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -18,6 +20,7 @@ import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.last.LastSelectedProjectRepository
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.startActivity
+import rx.Completable
 
 class ReportAddActivityTest {
 
@@ -118,6 +121,15 @@ class ReportAddActivityTest {
     fun shouldNotCrashOnLongClickOnHoursInput() {
         stubRepositoryAndStart()
         onId(R.id.reportAddHours).perform(longClick())
+    }
+
+    @Test
+    fun shouldShowLoaderOnReportAddCall() {
+        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
+        stubRepositoryAndStart()
+        onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
+        onId(R.id.reportAddAdd).click()
+        onId(R.id.loader).isDisplayed()
     }
 
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {

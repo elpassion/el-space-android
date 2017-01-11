@@ -131,6 +131,14 @@ class DebateLoginControllerTest {
         verify(view).showWrongPinError()
     }
 
+    @Test
+    fun shouldNotShowWrongPinErrorWhenPinHas5Digits() {
+        whenever(tokenRepo.hasToken(debateCode = "23456")).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate(debateCode = "23456")).thenReturn("authToken")
+        logToDebate("23456")
+        verify(view, never()).showWrongPinError()
+    }
+
     private fun onLoginWithCodeReturnNever(code: String) {
         whenever(loginApi.login(code)).thenReturn(Observable.never())
     }

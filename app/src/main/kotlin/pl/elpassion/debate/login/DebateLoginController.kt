@@ -12,7 +12,6 @@ class DebateLoginController(
     private var subscription: Subscription? = null
 
     fun onLogToDebate(debateCode: String) {
-        view.showWrongPinError()
         if (debateCode.length >= 5) {
             subscription = getAuthTokenObservable(debateCode)
                     .doOnSubscribe { view.showLoader() }
@@ -22,6 +21,8 @@ class DebateLoginController(
                     }, {
                         view.showLoginFailedError()
                     })
+        } else {
+            view.showWrongPinError()
         }
     }
 

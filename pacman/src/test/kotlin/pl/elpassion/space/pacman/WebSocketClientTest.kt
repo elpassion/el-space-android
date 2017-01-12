@@ -32,6 +32,15 @@ class WebSocketClientTest {
         subscriber.assertValueCount(1)
     }
 
+    @Test
+    fun shouldEmitEventOnApiFailure() {
+        val stub = ApiStub()
+        val client = WebSocketClient(stub, "")
+        client.connect().subscribe(subscriber)
+        stub.listener.onFailure(mock(), null, createResponseStub())
+        subscriber.assertValueCount(1)
+    }
+
     private fun createResponseStub() = Response.Builder()
             .request(createRequestStub())
             .protocol(Protocol.HTTP_2)

@@ -18,6 +18,7 @@ class WebSocketClient(private val api: Api, private val url: String) {
             }
 
             override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
+                subject.onNext(Event())
             }
 
             override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {

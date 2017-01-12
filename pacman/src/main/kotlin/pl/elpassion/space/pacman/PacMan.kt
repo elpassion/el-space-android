@@ -13,11 +13,11 @@ import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabled
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
 import com.indoorway.android.location.sdk.service.PositioningServiceConnection
 import com.indoorway.android.map.sdk.view.IndoorwayMapView
+import kotlinx.android.synthetic.main.pac_man_activity.*
 
 class PacMan : AppCompatActivity() {
 
     val REQUEST_PERMISSION_CODE = 1
-    val indoorwayMapView by lazy { findViewById(R.id.mapView) as IndoorwayMapView }
     var currentPosition: IndoorwayPosition? = null
     var serviceConnection: PositioningServiceConnection? = null
     var lastDialog: AlertDialog? = null
@@ -25,14 +25,15 @@ class PacMan : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pac_man_activity)
-        indoorwayMapView
-                .setOnMapLoadCompletedListener<IndoorwayMapView> {
+        mapView.apply {
+            setOnMapLoadCompletedListener<IndoorwayMapView> {
 
-                }
-                .setOnMapLoadFailedListener<IndoorwayMapView> {
+            }
+            setOnMapLoadFailedListener<IndoorwayMapView> {
 
-                }
-                .loadMap(buildingUuid, mapUuid)
+            }
+            loadMap(buildingUuid, mapUuid)
+        }
     }
 
     override fun onResume() {
@@ -51,10 +52,10 @@ class PacMan : AppCompatActivity() {
             serviceConnection?.apply {
                 setOnPositionChangedListener<PositioningServiceConnection> { position ->
                     currentPosition = position
-                    indoorwayMapView.positionControl.setPosition(position, false)
+                    mapView.positionControl.setPosition(position, false)
                 }
                 setOnHeadingChangedListener<PositioningServiceConnection> { angle ->
-                    indoorwayMapView.positionControl.setHeading(angle)
+                    mapView.positionControl.setHeading(angle)
                 }
                 start(this@PacMan)
             }

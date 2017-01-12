@@ -10,7 +10,9 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     }
 
     fun onResume() {
-        positionService.start()
+        positionService.start().subscribe {
+            view.updatePosition(it)
+        }
     }
 
     fun onPause() {

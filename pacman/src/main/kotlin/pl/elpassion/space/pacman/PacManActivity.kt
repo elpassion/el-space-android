@@ -37,10 +37,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var serviceConnection: PositioningServiceConnection? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
-        PanManController(this, PacManMapView(mapView), object : PacMan.PositionService {
-            override fun start() = Unit
-            override fun stop() = Unit
-        })
+        PanManController(this, PacManMapView(mapView), PacManPositionService())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +66,6 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         try {
             serviceConnection?.apply {
                 setOnPositionChangedListener<PositioningServiceConnection> { position ->
-                    currentPosition = position
                     updatePosition(position)
                 }
                 start(this@PacManActivity)
@@ -109,7 +105,8 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         Log.i("PositionLogger", currentPosition?.coordinates?.getText() ?: "no position")
     }
 
-    private fun updatePosition(position: IndoorwayPosition) {
+    override fun updatePosition(position: IndoorwayPosition) {
+        currentPosition = position
         mapView.markerControl.add(pacMan.asDrawable("pacman", position.coordinates, Size(2f, 2.34f)))
         veryBadInvalidate()
         currentLocationView.text = position.coordinates.getText()
@@ -174,5 +171,15 @@ class PacManMapView(val mapView: IndoorwayMapView) : PacMan.MapView {
             for ((idx, point) in TEST_POINTS.withIndex())
                 add(DrawableCircle(idx.toString(), 0.2f, Color.argb(255, 255, 255 - idx, idx), Color.RED, 0.1f, point))
         }
+    }
+}
+
+class PacManPositionService : PacMan.PositionService {
+    override fun start(): Observable<IndoorwayPosition> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun stop() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

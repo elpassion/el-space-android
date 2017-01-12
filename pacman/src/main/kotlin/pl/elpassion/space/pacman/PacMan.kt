@@ -5,7 +5,9 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
+import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
@@ -34,6 +36,7 @@ class PacMan : AppCompatActivity() {
             }
             loadMap(buildingUuid, mapUuid)
         }
+        logLocationButton.setOnClickListener { logPosition() }
     }
 
     override fun onResume() {
@@ -52,7 +55,7 @@ class PacMan : AppCompatActivity() {
             serviceConnection?.apply {
                 setOnPositionChangedListener<PositioningServiceConnection> { position ->
                     currentPosition = position
-                    mapView.positionControl.setPosition(position, false)
+                    updatePosition(position)
                 }
                 setOnHeadingChangedListener<PositioningServiceConnection> { angle ->
                     mapView.positionControl.setHeading(angle)
@@ -89,6 +92,17 @@ class PacMan : AppCompatActivity() {
                     })
         }
     }
+
+    private fun logPosition() {
+        Log.i("PositionLogger", currentPosition?.coordinates?.getText() ?: "no position")
+    }
+
+    private fun updatePosition(position: IndoorwayPosition) {
+        mapView.positionControl.setPosition(position, false)
+        currentLocationView.text = position.coordinates.getText()
+    }
+
+    private fun Coordinates.getText() = "lat: $latitude, long: $longitude"
 
     private fun showDialog(title: String, message: String,
                            onPositiveButtonClick: (() -> Unit)? = null,

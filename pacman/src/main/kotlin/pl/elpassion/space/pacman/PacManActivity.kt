@@ -24,37 +24,29 @@ import kotlinx.android.synthetic.main.pac_man_activity.*
 import pl.elpassion.space.pacman.model.Size
 import pl.elpassion.space.pacman.model.SpriteRect
 import pl.elpassion.space.pacman.model.SpriteSheet
+import rx.AsyncEmitter
+import rx.Observable
 
 val SPRITE_SHEET_ID = "sprite-sheet"
 val pacMan = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(144, 64, 100, 128), Size(980f, 640f))
 
-class PacManActivity : AppCompatActivity() {
+class PacManActivity : AppCompatActivity(), PacMan.View {
 
     val REQUEST_PERMISSION_CODE = 1
     var currentPosition: IndoorwayPosition? = null
     var serviceConnection: PositioningServiceConnection? = null
     var alertDialog: AlertDialog? = null
+    val controller by lazy { PanManController(this, PacManMapView(mapView)) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pac_man_activity)
-        mapView.apply {
-            setOnMapLoadCompletedListener<IndoorwayMapView> {
-                mapView.markerControl.apply {
-                    // sprite sheet registration
-                    val bitmap = BitmapFactory.decodeResource(resources, R.drawable.sprites)
-                    registerTexture(DrawableTexture(SPRITE_SHEET_ID, bitmap))
-
-                    for ((idx, point) in TEST_POINTS.withIndex())
-                        add(DrawableCircle(idx.toString(), 0.2f, Color.argb(255, 255, 255 - idx, idx), Color.RED, 0.1f, point))
-                }
-            }
-            setOnMapLoadFailedListener<IndoorwayMapView> {
-
-            }
-            loadMap(buildingUuid, mapUuid)
-        }
+        controller.onCreate()
         logLocationButton.setOnClickListener { logPosition() }
+    }
+
+    override fun showMapLoadingError() {
+        showDialog("Map not loaded", "Error while loading map.")
     }
 
     override fun onResume() {
@@ -151,4 +143,31 @@ class PacManActivity : AppCompatActivity() {
         view.requestRender()
     }
 
+}
+
+class PacManMapView(val mapView: IndoorwayMapView) : PacMan.MapView {
+    override fun loadMap(): Observable<Unit> {
+        return Observable.fromAsync<Unit>({ emitter ->
+            mapView.apply {
+                setOnMapLoadCompletedListener<IndoorwayMapView> {
+                    emitter.onNext(Unit)
+                }
+                setOnMapLoadFailedListener<IndoorwayMapView> {
+                    emitter.onError(RuntimeException())
+                }
+                loadMap(buildingUuid, mapUuid)
+            }
+        }, AsyncEmitter.BackpressureMode.BUFFER)
+    }
+
+    override fun initTextures() {
+        mapView.markerControl.apply {
+            // sprite sheet registration
+            val bitmap = BitmapFactory.decodeResource(mapView.context.resources, R.drawable.sprites)
+            registerTexture(DrawableTexture(SPRITE_SHEET_ID, bitmap))
+
+            for ((idx, point) in TEST_POINTS.withIndex())
+                add(DrawableCircle(idx.toString(), 0.2f, Color.argb(255, 255, 255 - idx, idx), Color.RED, 0.1f, point))
+        }
+    }
 }

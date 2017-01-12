@@ -71,9 +71,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                 start(this@PacManActivity)
             }
         } catch (e: MissingPermissionException) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                requestPermissions(arrayOf(e.permission), REQUEST_PERMISSION_CODE)
-            }
+            handleMissingPermissionException(e)
         } catch (e: BLENotSupportedException) {
             showDialog(
                     title = "Sorry",
@@ -98,6 +96,12 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                     onNegativeButtonClick = {
                         closeDialog()
                     })
+        }
+    }
+
+    override fun handleMissingPermissionException(exception: MissingPermissionException) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(exception.permission), REQUEST_PERMISSION_CODE)
         }
     }
 

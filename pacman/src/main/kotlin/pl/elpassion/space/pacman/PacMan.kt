@@ -1,5 +1,6 @@
 package pl.elpassion.space.pacman
 
+import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import rx.Observable
 
@@ -12,6 +13,7 @@ interface PacMan {
     interface View {
         fun showMapLoadingError()
         fun updatePosition(position: IndoorwayPosition)
+        fun handleMissingPermissionException(exception: MissingPermissionException)
     }
 
     interface PositionService {

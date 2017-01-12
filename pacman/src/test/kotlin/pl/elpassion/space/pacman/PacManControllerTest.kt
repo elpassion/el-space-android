@@ -1,5 +1,6 @@
 package pl.elpassion.space.pacman
 
+import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
@@ -60,5 +61,13 @@ class PacManControllerTest {
         panManController.onResume()
         positionSubject.onNext(mock())
         verify(view).updatePosition(any())
+    }
+
+    @Test
+    fun shouldHandleMissingPermissionException() {
+        val exception = MissingPermissionException("permission")
+        panManController.onResume()
+        positionSubject.onError(exception)
+        verify(view).handleMissingPermissionException(exception)
     }
 }

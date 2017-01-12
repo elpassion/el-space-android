@@ -17,13 +17,6 @@ class PacManControllerTest {
     }
 
     @Test
-    fun shouldLoadMapOnCreate() {
-        PanManController(view, mapView).onCreate()
-        loadMapSubject.onNext(Unit)
-        verify(mapView).loadMap()
-    }
-
-    @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {
         PanManController(view, mapView).onCreate()
         loadMapSubject.onError(RuntimeException())

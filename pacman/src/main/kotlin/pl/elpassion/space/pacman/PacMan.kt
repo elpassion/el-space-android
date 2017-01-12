@@ -20,7 +20,7 @@ class PacMan : AppCompatActivity() {
     val REQUEST_PERMISSION_CODE = 1
     var currentPosition: IndoorwayPosition? = null
     var serviceConnection: PositioningServiceConnection? = null
-    var lastDialog: AlertDialog? = null
+    var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,49 +61,58 @@ class PacMan : AppCompatActivity() {
             }
         } catch (e: MissingPermissionException) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val permissions = arrayOf(e.permission)
-                requestPermissions(permissions, REQUEST_PERMISSION_CODE)
+                requestPermissions(arrayOf(e.permission), REQUEST_PERMISSION_CODE)
             }
         } catch (e: BLENotSupportedException) {
-            closeDialog()
-            lastDialog = AlertDialog.Builder(this)
-                    .setTitle("Sorry")
-                    .setMessage("Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
-                    .setCancelable(true)
-                    .show()
+            showDialog(
+                    title = "Sorry",
+                    message = "Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
         } catch (e: BluetoothDisabledException) {
-            closeDialog()
-            lastDialog = AlertDialog.Builder(this)
-                    .setTitle("Please enable bluetooth")
-                    .setMessage("In order to find your indoor position, you need to enable bluetooth on your device.")
-                    .setCancelable(true)
-                    .setPositiveButton("OK", { dialog, which ->
-                        val settingsIntent = Intent()
-                        settingsIntent.action = android.provider.Settings.ACTION_BLUETOOTH_SETTINGS
-                        startActivity(settingsIntent)
+            showDialog(
+                    title = "Please enable bluetooth",
+                    message = "In order to find your indoor position, you need to enable bluetooth on your device.",
+                    onPositiveButtonClick = {
+                        startActivity(Intent().apply { action = android.provider.Settings.ACTION_BLUETOOTH_SETTINGS })
+                    },
+                    onNegativeButtonClick = {
+                        closeDialog()
                     })
-                    .setNegativeButton("Cancel", { dialog, which -> closeDialog() })
-                    .show()
         } catch (e: LocationDisabledException) {
-            closeDialog()
-            lastDialog = AlertDialog.Builder(this)
-                    .setTitle("Please enable location")
-                    .setMessage("In order of finding your indoor position you must enable location in settings.")
-                    .setCancelable(true)
-                    .setPositiveButton("OK", { dialog, which ->
-                        val settingsIntent = Intent()
-                        settingsIntent.action = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
-                        startActivity(settingsIntent)
+            showDialog(
+                    title = "Please enable location",
+                    message = "In order of finding your indoor position you must enable location in settings.",
+                    onPositiveButtonClick = {
+                        startActivity(Intent().apply { action = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS })
+                    },
+                    onNegativeButtonClick = {
+                        closeDialog()
                     })
-                    .setNegativeButton("Cancel", { dialog, which -> closeDialog() })
-                    .show()
         }
     }
 
+    private fun showDialog(title: String, message: String,
+                           onPositiveButtonClick: (() -> Unit)? = null,
+                           onNegativeButtonClick: (() -> Unit)? = null) {
+        closeDialog()
+        alertDialog = AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(true)
+                .apply {
+                    if (onPositiveButtonClick != null) {
+                        setPositiveButton("OK", { dialog, which -> onPositiveButtonClick() })
+                    }
+                    if (onNegativeButtonClick != null) {
+                        setNegativeButton("Cancel", { dialog, which -> onNegativeButtonClick() })
+                    }
+                }
+                .show()
+    }
+
     private fun closeDialog() {
-        if (lastDialog != null) {
-            lastDialog?.dismiss()
+        if (alertDialog != null) {
+            alertDialog?.dismiss()
         }
-        lastDialog = null
+        alertDialog = null
     }
 }

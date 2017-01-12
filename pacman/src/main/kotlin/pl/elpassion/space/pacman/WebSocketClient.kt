@@ -24,7 +24,8 @@ class WebSocketClient(private val api: Api, private val url: String) {
             override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
             }
 
-            override fun onMessage(webSocket: WebSocket?, text: String?) {
+            override fun onMessage(webSocket: WebSocket?, text: String) {
+                subject.onNext(Event.Message(text))
             }
 
             override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {
@@ -39,6 +40,7 @@ class WebSocketClient(private val api: Api, private val url: String) {
     sealed class Event {
         class Opened : Event()
         class Failed : Event()
+        class Message(val body: String) : Event()
     }
 
     interface Api {

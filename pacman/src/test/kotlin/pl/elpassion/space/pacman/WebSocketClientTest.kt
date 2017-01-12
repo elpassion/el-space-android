@@ -42,6 +42,17 @@ class WebSocketClientTest {
         subscriber.assertValueThat { it is WebSocketClient.Event.Failed }
     }
 
+    @Test
+    fun shouldEmitMessageEventOnMessage() {
+        val stub = ApiStub()
+        val client = WebSocketClient(stub, "")
+        client.connect().subscribe(subscriber)
+        stub.listener.onMessage(mock(), stubMessage)
+        subscriber.assertValueThat { it is WebSocketClient.Event.Message && it.body == stubMessage }
+    }
+
+    private val stubMessage = "id: 0, lat: 0, long: 0"
+
     private fun createResponseStub() = Response.Builder()
             .request(createRequestStub())
             .protocol(Protocol.HTTP_2)

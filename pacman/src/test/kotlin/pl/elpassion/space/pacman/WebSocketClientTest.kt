@@ -21,7 +21,7 @@ class WebSocketClientTest {
 
     @Test
     fun shouldConnectToApi() {
-        val client = WebSocketClient(api, "")
+        val client = WebSocketClient("", api)
         client.connect().subscribe()
         verify(api).connect(any(), any())
     }
@@ -29,7 +29,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitOpenedEventOnOpen() {
         val stub = ApiStub()
-        val client = WebSocketClient(stub, "")
+        val client = WebSocketClient("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onOpen(mock(), createResponseStub())
         subscriber.assertValueThat { it is Opened }
@@ -38,7 +38,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitFailedEventOnApiFailure() {
         val stub = ApiStub()
-        val client = WebSocketClient(stub, "")
+        val client = WebSocketClient("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onFailure(mock(), null, createResponseStub())
         subscriber.assertValueThat { it is Failed }
@@ -47,7 +47,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitMessageEventOnMessage() {
         val stub = ApiStub()
-        val client = WebSocketClient(stub, "")
+        val client = WebSocketClient("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onMessage(mock(), stubMessage)
         subscriber.assertValueThat { it is Message && it.body == stubMessage }
@@ -56,7 +56,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitClosedEventOnApiClose() {
         val stub = ApiStub()
-        val client = WebSocketClient(stub, "")
+        val client = WebSocketClient("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onClosed(mock(),0, "")
         subscriber.assertValueThat { it is Closed }
@@ -64,22 +64,22 @@ class WebSocketClientTest {
 
     @Test
     fun shouldCloseWebSocketOnClose() {
-        val client = WebSocketClient(api, "")
+        val client = WebSocketClient("", api)
         client.close()
         verify(api).close()
     }
 
     @Test
     fun shouldSendMessageToApi() {
-        val client = WebSocketClient(api, "")
+        val client = WebSocketClient("", api)
         client.send(Message(stubMessage))
         verify(api).send(stubMessage)
     }
 
     @Ignore
     @Test
-    fun shouldConnectWithRealApi() {
-        val client = WebSocketClient(WebSocketClientApiImpl(), "ws://192.168.1.19:8080/ws")
+    fun shouldConnectToRealApi() {
+        val client = WebSocketClient("ws://192.168.1.19:8080/ws")
         client.connect().subscribe {
             println(it.toString())
         }

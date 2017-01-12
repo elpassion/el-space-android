@@ -8,7 +8,7 @@ import rx.Observable
 import rx.subjects.PublishSubject
 import java.io.Closeable
 
-class WebSocketClient(private val api: Api, private val url: String) : WebSocketListener(), Closeable {
+class WebSocketClient(private val url: String, private val api: Api = WebSocketClientApiImpl()) : WebSocketListener(), Closeable {
 
     val subject = PublishSubject.create<Event>()
 

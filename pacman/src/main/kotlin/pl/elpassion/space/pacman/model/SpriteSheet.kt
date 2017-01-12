@@ -4,11 +4,11 @@ import android.graphics.RectF
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableIcon
 
-class Size(val x: Float, val y: Float)
+data class Size(val x: Float, val y: Float)
 
-class SpriteRect(val x: Int, val y: Int, val sizeX: Int, val sizeY: Int)
+data class SpriteRect(val x: Int, val y: Int, val sizeX: Int, val sizeY: Int)
 
-class SpriteSheet(val textureId: String, spriteRect: SpriteRect, bitmapSize: Size) {
+data class SpriteSheet(val textureId: String, val spriteRect: SpriteRect, val bitmapSize: Size) {
 
     val textureCoords: RectF = RectF(
             spriteRect.x / bitmapSize.x,

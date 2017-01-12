@@ -5,7 +5,6 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
-import rx.Observable
 import rx.subjects.PublishSubject
 
 class PacManControllerTest {
@@ -42,26 +41,5 @@ class PacManControllerTest {
         PanManController(view, mapView).onCreate()
         loadMapSubject.onError(RuntimeException())
         verify(mapView, never()).initTextures()
-    }
-}
-
-class PanManController(val view: PacMan.View, val mapView: PacMan.MapView) {
-    fun onCreate() {
-        mapView.loadMap().subscribe({
-            mapView.initTextures()
-        }, {
-            view.showMapLoadingError()
-        })
-    }
-}
-
-interface PacMan {
-    interface MapView {
-        fun loadMap(): Observable<Unit>
-        fun initTextures()
-    }
-
-    interface View {
-        fun showMapLoadingError()
     }
 }

@@ -20,7 +20,7 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
             view.updatePosition(it)
         }, {
             when(it){
-                is MissingPermissionException -> view.handleMissingPermissionException(it)
+                is MissingPermissionException -> view.handleMissingPermissionException(it.permission)
                 is BLENotSupportedException -> view.handleBLENotSupportedException()
             }
         })

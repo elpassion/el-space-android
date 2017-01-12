@@ -71,7 +71,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                 start(this@PacManActivity)
             }
         } catch (e: MissingPermissionException) {
-            handleMissingPermissionException(e)
+            handleMissingPermissionException(e.permission)
         } catch (e: BLENotSupportedException) {
             handleBLENotSupportedException()
         } catch (e: BluetoothDisabledException) {
@@ -103,9 +103,9 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                 message = "Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
     }
 
-    override fun handleMissingPermissionException(exception: MissingPermissionException) {
+    override fun handleMissingPermissionException(permission: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(arrayOf(exception.permission), REQUEST_PERMISSION_CODE)
+            requestPermissions(arrayOf(permission), REQUEST_PERMISSION_CODE)
         }
     }
 

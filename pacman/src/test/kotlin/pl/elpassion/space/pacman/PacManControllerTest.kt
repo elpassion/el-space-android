@@ -66,17 +66,15 @@ class PacManControllerTest {
 
     @Test
     fun shouldHandleMissingPermissionException() {
-        val exception = MissingPermissionException("permission")
         panManController.onResume()
-        positionSubject.onError(exception)
-        verify(view).handleMissingPermissionException(exception)
+        positionSubject.onError(MissingPermissionException("permission"))
+        verify(view).handleMissingPermissionException("permission")
     }
 
     @Test
     fun shouldHandleBLENotSupportedException() {
-        val exception = BLENotSupportedException()
         panManController.onResume()
-        positionSubject.onError(exception)
+        positionSubject.onError(BLENotSupportedException())
         verify(view).handleBLENotSupportedException()
     }
 }

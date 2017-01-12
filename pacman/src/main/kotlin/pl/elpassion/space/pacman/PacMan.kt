@@ -13,7 +13,7 @@ interface PacMan {
     interface View {
         fun showMapLoadingError()
         fun updatePosition(position: IndoorwayPosition)
-        fun handleMissingPermissionException(exception: MissingPermissionException)
+        fun handleMissingPermissionException(permission: String)
         fun handleBLENotSupportedException()
     }
 

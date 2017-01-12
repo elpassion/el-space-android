@@ -7,6 +7,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocketListener
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import rx.observers.TestSubscriber
 import kotlin.properties.Delegates
@@ -24,12 +25,12 @@ class WebSocketClientTest {
     }
 
     @Test
-    fun shouldEmitEventOnOpen() {
+    fun shouldEmitOpenedEventOnOpen() {
         val stub = ApiStub()
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onOpen(mock(), createResponseStub())
-        subscriber.assertValueCount(1)
+        subscriber.assertValueThat { it is WebSocketClient.Event.Opened }
     }
 
     @Test
@@ -59,4 +60,12 @@ class WebSocketClientTest {
             this.listener = listener
         }
     }
+
+    fun <T> TestSubscriber<T>.assertValueThat(predicate: (T) -> Boolean) {
+        val events = onNextEvents
+        assertEquals(events.size, 1)
+        assert(predicate(events.first()))
+    }
+
+    fun <T> TestSubscriber<T>.assertLastValueThat(predicate: (T) -> Boolean) = assert(predicate(onNextEvents.last()))
 }

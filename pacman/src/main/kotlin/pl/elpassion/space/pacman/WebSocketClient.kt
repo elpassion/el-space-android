@@ -14,11 +14,11 @@ class WebSocketClient(private val api: Api, private val url: String) {
     fun connect(): Observable<Event> {
         api.connect("", object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket?, response: Response?) {
-                subject.onNext(Event())
+                subject.onNext(Event.Opened())
             }
 
             override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
-                subject.onNext(Event())
+                subject.onNext(Event.Failed())
             }
 
             override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
@@ -36,7 +36,10 @@ class WebSocketClient(private val api: Api, private val url: String) {
         return subject
     }
 
-    class Event
+    sealed class Event {
+        class Opened : Event()
+        class Failed : Event()
+    }
 
     interface Api {
         fun connect(url: String, listener: WebSocketListener)

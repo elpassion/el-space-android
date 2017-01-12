@@ -28,7 +28,7 @@ import pl.elpassion.space.pacman.model.SpriteSheet
 val SPRITE_SHEET_ID = "sprite-sheet"
 val pacMan = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(144, 64, 100, 128), Size(980f, 640f))
 
-class PacMan : AppCompatActivity() {
+class PacManActivity : AppCompatActivity() {
 
     val REQUEST_PERMISSION_CODE = 1
     var currentPosition: IndoorwayPosition? = null
@@ -75,7 +75,7 @@ class PacMan : AppCompatActivity() {
                     currentPosition = position
                     updatePosition(position)
                 }
-                start(this@PacMan)
+                start(this@PacManActivity)
             }
         } catch (e: MissingPermissionException) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

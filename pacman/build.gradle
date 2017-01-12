@@ -28,24 +28,25 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE'
+    }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 repositories {
+    mavenCentral()
     maven { url 'https://indoorway.com/sdk/android/repo/maven/' }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile "com.indoorway.android:common:$indoorway_version"
     compile "com.indoorway.android:map:$indoorway_version"
     compile "com.indoorway.android:location:$indoorway_version"
-    testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
-repositories {
-    mavenCentral()
-}
+
+apply from: "../test-dependencies.gradle"

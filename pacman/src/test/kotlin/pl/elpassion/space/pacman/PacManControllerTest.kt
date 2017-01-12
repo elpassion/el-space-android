@@ -20,18 +20,26 @@ class PacManControllerTest {
         PanManController(view, mapView).onCreate()
         verify(view).showMapLoadingError()
     }
+
+    @Test
+    fun shouldInitializeMapOnLoadingSuccess() {
+        PanManController(view, mapView).onCreate()
+        verify(mapView).initTextures()
+    }
 }
 
 class PanManController(val view: PacMan.View, val mapView: PacMan.MapView) {
     fun onCreate() {
         mapView.loadMap()
         view.showMapLoadingError()
+        mapView.initTextures()
     }
 }
 
 interface PacMan {
     interface MapView {
         fun loadMap()
+        fun initTextures()
     }
 
     interface View {

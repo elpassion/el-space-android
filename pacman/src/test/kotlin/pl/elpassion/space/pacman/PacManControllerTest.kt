@@ -49,12 +49,6 @@ class PacManControllerTest {
     }
 
     @Test
-    fun shouldStartLocationListenerOnResume() {
-        panManController.onResume()
-        verify(positionService).start()
-    }
-
-    @Test
     fun shouldStopPositionServiceOnPause() {
         panManController.onResume()
         panManController.onPause()

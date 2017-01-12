@@ -51,6 +51,15 @@ class WebSocketClientTest {
         subscriber.assertValueThat { it is WebSocketClient.Event.Message && it.body == stubMessage }
     }
 
+    @Test
+    fun shouldEmitClosedEventOnApiClose() {
+        val stub = ApiStub()
+        val client = WebSocketClient(stub, "")
+        client.connect().subscribe(subscriber)
+        stub.listener.onClosed(mock(),0, "")
+        subscriber.assertValueThat { it is WebSocketClient.Event.Closed }
+    }
+
     private val stubMessage = "id: 0, lat: 0, long: 0"
 
     private fun createResponseStub() = Response.Builder()

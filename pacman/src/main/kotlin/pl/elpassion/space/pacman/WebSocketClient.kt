@@ -9,9 +9,6 @@ import rx.subjects.PublishSubject
 import java.io.Closeable
 
 class WebSocketClient(private val api: Api, private val url: String) : WebSocketListener(), Closeable {
-    override fun close() {
-        api.close()
-    }
 
     val subject = PublishSubject.create<Event>()
 
@@ -40,6 +37,10 @@ class WebSocketClient(private val api: Api, private val url: String) : WebSocket
 
     override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
         subject.onNext(Event.Closed())
+    }
+
+    override fun close() {
+        api.close()
     }
 
     sealed class Event {

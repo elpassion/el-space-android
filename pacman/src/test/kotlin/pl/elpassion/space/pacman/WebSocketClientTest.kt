@@ -8,6 +8,7 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocketListener
 import org.junit.Assert.assertEquals
+import org.junit.Ignore
 import org.junit.Test
 import rx.observers.TestSubscriber
 import kotlin.properties.Delegates
@@ -65,6 +66,16 @@ class WebSocketClientTest {
         val client = WebSocketClient(api, "")
         client.close()
         verify(api).close()
+    }
+
+    @Ignore
+    @Test
+    fun shouldConnectWithRealApi() {
+        val client = WebSocketClient(WebSocketClientApiImpl(), "ws://192.168.1.19:8080/ws")
+        client.connect().subscribe {
+            println(it.toString())
+        }
+        Thread.sleep(3000)
     }
 
     private val stubMessage = "id: 0, lat: 0, long: 0"

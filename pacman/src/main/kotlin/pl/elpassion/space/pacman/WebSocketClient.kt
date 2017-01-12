@@ -8,7 +8,7 @@ import rx.Observable
 import rx.subjects.PublishSubject
 import java.io.Closeable
 
-class WebSocketClient(private val api: Api, private val url: String) : Closeable {
+class WebSocketClient(private val api: Api, private val url: String) : WebSocketListener(), Closeable {
     override fun close() {
         api.close()
     }
@@ -16,30 +16,30 @@ class WebSocketClient(private val api: Api, private val url: String) : Closeable
     val subject = PublishSubject.create<Event>()
 
     fun connect(): Observable<Event> {
-        api.connect("", object : WebSocketListener() {
-            override fun onOpen(webSocket: WebSocket?, response: Response?) {
-                subject.onNext(Event.Opened())
-            }
-
-            override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
-                subject.onNext(Event.Failed())
-            }
-
-            override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
-            }
-
-            override fun onMessage(webSocket: WebSocket?, text: String) {
-                subject.onNext(Event.Message(text))
-            }
-
-            override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {
-            }
-
-            override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
-                subject.onNext(Event.Closed())
-            }
-        })
+        api.connect(url, this)
         return subject
+    }
+
+    override fun onOpen(webSocket: WebSocket?, response: Response?) {
+        subject.onNext(Event.Opened())
+    }
+
+    override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
+        subject.onNext(Event.Failed())
+    }
+
+    override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
+    }
+
+    override fun onMessage(webSocket: WebSocket?, text: String) {
+        subject.onNext(Event.Message(text))
+    }
+
+    override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {
+    }
+
+    override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
+        subject.onNext(Event.Closed())
     }
 
     sealed class Event {
@@ -53,5 +53,4 @@ class WebSocketClient(private val api: Api, private val url: String) : Closeable
         fun connect(url: String, listener: WebSocketListener)
         fun close()
     }
-
 }

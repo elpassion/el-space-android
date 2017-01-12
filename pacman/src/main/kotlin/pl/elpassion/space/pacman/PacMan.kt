@@ -32,9 +32,9 @@ class PacMan : AppCompatActivity() {
         setContentView(R.layout.pac_man_activity)
         mapView.apply {
             setOnMapLoadCompletedListener<IndoorwayMapView> {
-                mapView.getMarkerControl().apply {
+                mapView.markerControl.apply {
                     for((idx, point) in TEST_POINTS.withIndex())
-                        add(DrawableCircle(idx.toString(), 0.2f, Color.RED, Color.RED, 0.1f, point))
+                        add(DrawableCircle(idx.toString(), 0.2f, Color.argb(255, 255, 255-idx, idx), Color.RED, 0.1f, point))
 
                 }
             }

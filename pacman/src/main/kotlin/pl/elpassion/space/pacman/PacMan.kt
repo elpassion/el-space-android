@@ -1,6 +1,7 @@
 package pl.elpassion.space.pacman
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -15,7 +16,9 @@ import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabled
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
 import com.indoorway.android.location.sdk.service.PositioningServiceConnection
 import com.indoorway.android.map.sdk.view.IndoorwayMapView
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import kotlinx.android.synthetic.main.pac_man_activity.*
+
 
 class PacMan : AppCompatActivity() {
 
@@ -29,7 +32,11 @@ class PacMan : AppCompatActivity() {
         setContentView(R.layout.pac_man_activity)
         mapView.apply {
             setOnMapLoadCompletedListener<IndoorwayMapView> {
+                mapView.getMarkerControl().apply {
+                    for((idx, point) in TEST_POINTS.withIndex())
+                        add(DrawableCircle(idx.toString(), 0.2f, Color.RED, Color.RED, 0.1f, point))
 
+                }
             }
             setOnMapLoadFailedListener<IndoorwayMapView> {
 
@@ -129,4 +136,5 @@ class PacMan : AppCompatActivity() {
         }
         alertDialog = null
     }
+
 }

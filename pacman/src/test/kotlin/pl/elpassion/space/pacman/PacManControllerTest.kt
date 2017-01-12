@@ -3,6 +3,7 @@ package pl.elpassion.space.pacman
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
+import pl.elpassion.space.SubscriptionSubjectVerifier
 import rx.subjects.PublishSubject
 
 
@@ -10,12 +11,12 @@ class PacManControllerTest {
 
     private val view = mock<PacMan.View>()
     private val loadMapSubject = PublishSubject.create<Unit>()
-    private val positionSubject = PublishSubject.create<IndoorwayPosition>()
+    private val positionSubject = SubscriptionSubjectVerifier<IndoorwayPosition>()
     private val mapView = mock<PacMan.MapView>().apply {
         whenever(this.loadMap()).thenReturn(loadMapSubject)
     }
     val positionService = mock<PacMan.PositionService>().apply {
-        whenever(this.start()).thenReturn(positionSubject)
+        whenever(this.start()).thenReturn(positionSubject.observable)
     }
     val panManController = PanManController(view, mapView, positionService)
 
@@ -55,8 +56,9 @@ class PacManControllerTest {
 
     @Test
     fun shouldStopPositionServiceOnPause() {
+        panManController.onResume()
         panManController.onPause()
-        verify(positionService).stop()
+        positionSubject.assertUnsubscribe()
     }
 
     @Test

@@ -16,6 +16,5 @@ interface PacMan {
 
     interface PositionService {
         fun start(): Observable<IndoorwayPosition>
-        fun stop()
     }
 }

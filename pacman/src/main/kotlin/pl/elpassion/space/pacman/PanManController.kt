@@ -1,6 +1,10 @@
 package pl.elpassion.space.pacman
 
+import rx.Subscription
+
 class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService) {
+    private var subscription: Subscription? = null
+
     fun onCreate() {
         mapView.loadMap().subscribe({
             mapView.initTextures()
@@ -10,12 +14,12 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     }
 
     fun onResume() {
-        positionService.start().subscribe {
+        subscription = positionService.start().subscribe {
             view.updatePosition(it)
         }
     }
 
     fun onPause() {
-        positionService.stop()
+        subscription?.unsubscribe()
     }
 }

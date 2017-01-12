@@ -178,8 +178,4 @@ class PacManPositionService : PacMan.PositionService {
     override fun start(): Observable<IndoorwayPosition> {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-
-    override fun stop() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 }

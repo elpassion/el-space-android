@@ -43,14 +43,22 @@ class PacManControllerTest {
         loadMapSubject.onNext(Unit)
         verify(view, never()).showMapLoadingError()
     }
+
+    @Test
+    fun shouldNotInitializeTexturesOnLadingError() {
+        PanManController(view, mapView).onCreate()
+        loadMapSubject.onError(RuntimeException())
+        verify(mapView, never()).initTextures()
+    }
 }
 
 class PanManController(val view: PacMan.View, val mapView: PacMan.MapView) {
     fun onCreate() {
-        mapView.loadMap().subscribe({ }, {
+        mapView.loadMap().subscribe({
+            mapView.initTextures()
+        }, {
             view.showMapLoadingError()
         })
-        mapView.initTextures()
     }
 }
 

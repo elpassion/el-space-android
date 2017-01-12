@@ -34,12 +34,12 @@ class WebSocketClientTest {
     }
 
     @Test
-    fun shouldEmitEventOnApiFailure() {
+    fun shouldEmitFailedEventOnApiFailure() {
         val stub = ApiStub()
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onFailure(mock(), null, createResponseStub())
-        subscriber.assertValueCount(1)
+        subscriber.assertValueThat { it is WebSocketClient.Event.Failed }
     }
 
     private fun createResponseStub() = Response.Builder()

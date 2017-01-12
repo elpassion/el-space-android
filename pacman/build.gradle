@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 buildscript {
     ext.indoorway_version = '1.0.0'
-    ext.androidAsync = '2.1.9'
+    ext.okhttp = '3.5.0'
 }
 
 android {
@@ -49,7 +49,7 @@ dependencies {
     compile "com.indoorway.android:map:$indoorway_version"
     compile "com.indoorway.android:location:$indoorway_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "com.koushikdutta.async:androidasync:$androidAsync"
+    compile "com.squareup.okhttp3:okhttp:$okhttp"
 }
 
 apply from: "../core-dependencies.gradle"

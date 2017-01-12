@@ -45,8 +45,8 @@ class PacMan : AppCompatActivity() {
                     val bitmap = BitmapFactory.decodeResource(resources, R.drawable.sprites)
                     registerTexture(DrawableTexture(SPRITE_SHEET_ID, bitmap))
 
-                    for((idx, point) in TEST_POINTS.withIndex())
-                        add(DrawableCircle(idx.toString(), 0.2f, Color.RED, Color.RED, 0.1f, point))
+                    for ((idx, point) in TEST_POINTS.withIndex())
+                        add(DrawableCircle(idx.toString(), 0.2f, Color.argb(255, 255, 255 - idx, idx), Color.RED, 0.1f, point))
                 }
             }
             setOnMapLoadFailedListener<IndoorwayMapView> {

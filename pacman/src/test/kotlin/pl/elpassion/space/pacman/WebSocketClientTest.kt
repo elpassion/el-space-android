@@ -60,6 +60,13 @@ class WebSocketClientTest {
         subscriber.assertValueThat { it is WebSocketClient.Event.Closed }
     }
 
+    @Test
+    fun shouldCloseWebSocketOnClose() {
+        val client = WebSocketClient(api, "")
+        client.close()
+        verify(api).close()
+    }
+
     private val stubMessage = "id: 0, lat: 0, long: 0"
 
     private fun createResponseStub() = Response.Builder()
@@ -73,6 +80,9 @@ class WebSocketClientTest {
             .build()
 
     class ApiStub : WebSocketClient.Api {
+        override fun close() {
+
+        }
 
         var listener : WebSocketListener by Delegates.notNull<WebSocketListener>()
 

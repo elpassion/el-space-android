@@ -6,8 +6,12 @@ import okhttp3.WebSocketListener
 import okio.ByteString
 import rx.Observable
 import rx.subjects.PublishSubject
+import java.io.Closeable
 
-class WebSocketClient(private val api: Api, private val url: String) {
+class WebSocketClient(private val api: Api, private val url: String) : Closeable {
+    override fun close() {
+        api.close()
+    }
 
     val subject = PublishSubject.create<Event>()
 
@@ -47,6 +51,7 @@ class WebSocketClient(private val api: Api, private val url: String) {
 
     interface Api {
         fun connect(url: String, listener: WebSocketListener)
+        fun close()
     }
 
 }

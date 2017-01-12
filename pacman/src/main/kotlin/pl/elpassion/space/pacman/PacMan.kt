@@ -19,6 +19,6 @@ class PacMan : AppCompatActivity() {
                 .setOnMapLoadFailedListener<IndoorwayMapView> {
 
                 }
-                .loadMap("hk64fd7-c6k", "5LEUvY1VATo")
+                .loadMap(buildingUuid, mapUuid)
     }
 }

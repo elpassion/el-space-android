@@ -10,14 +10,16 @@ import java.io.Closeable
 class WebSocketClientApiImpl : WebSocketClient.Api, Closeable {
 
     private val okHttpClient by lazy { OkHttpClient() }
-    lateinit var webSocket: WebSocket
+    private var webSocket: WebSocket? = null
 
     override fun connect(url: String, listener: WebSocketListener) {
+        webSocket?.let { close() }
         webSocket = okHttpClient.newWebSocket(createRequest(url), listener)
     }
 
     override fun close() {
-        webSocket.close(0, null)
+        webSocket?.close(0, null)
+        webSocket = null
     }
 
     private fun createRequest(url: String) = Request.Builder().url(url) .build()

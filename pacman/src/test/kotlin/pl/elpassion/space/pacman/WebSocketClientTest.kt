@@ -9,12 +9,14 @@ import okhttp3.Response
 import okhttp3.WebSocketListener
 import org.junit.Ignore
 import org.junit.Test
+import pl.elpassion.space.pacman.WebSocketClient.Event
+import pl.elpassion.space.pacman.WebSocketClient.Event.*
 import rx.observers.TestSubscriber
 import kotlin.properties.Delegates
 
 class WebSocketClientTest {
 
-    val subscriber = TestSubscriber<WebSocketClient.Event>()
+    val subscriber = TestSubscriber<Event>()
     val api = mock<WebSocketClient.Api>()
 
     @Test
@@ -30,7 +32,7 @@ class WebSocketClientTest {
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onOpen(mock(), createResponseStub())
-        subscriber.assertValueThat { it is WebSocketClient.Event.Opened }
+        subscriber.assertValueThat { it is Opened }
     }
 
     @Test
@@ -39,7 +41,7 @@ class WebSocketClientTest {
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onFailure(mock(), null, createResponseStub())
-        subscriber.assertValueThat { it is WebSocketClient.Event.Failed }
+        subscriber.assertValueThat { it is Failed }
     }
 
     @Test
@@ -48,7 +50,7 @@ class WebSocketClientTest {
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onMessage(mock(), stubMessage)
-        subscriber.assertValueThat { it is WebSocketClient.Event.Message && it.body == stubMessage }
+        subscriber.assertValueThat { it is Message && it.body == stubMessage }
     }
 
     @Test
@@ -57,7 +59,7 @@ class WebSocketClientTest {
         val client = WebSocketClient(stub, "")
         client.connect().subscribe(subscriber)
         stub.listener.onClosed(mock(),0, "")
-        subscriber.assertValueThat { it is WebSocketClient.Event.Closed }
+        subscriber.assertValueThat { it is Closed }
     }
 
     @Test
@@ -65,6 +67,13 @@ class WebSocketClientTest {
         val client = WebSocketClient(api, "")
         client.close()
         verify(api).close()
+    }
+
+    @Test
+    fun shouldSendMessageToApi() {
+        val client = WebSocketClient(api, "")
+        client.send(Message(stubMessage))
+        verify(api).send(stubMessage)
     }
 
     @Ignore
@@ -90,14 +99,15 @@ class WebSocketClientTest {
             .build()
 
     class ApiStub : WebSocketClient.Api {
-        override fun close() {
-
-        }
 
         var listener : WebSocketListener by Delegates.notNull<WebSocketListener>()
 
         override fun connect(url: String, listener: WebSocketListener) {
             this.listener = listener
         }
+
+        override fun send(message: String) { }
+
+        override fun close() { }
     }
 }

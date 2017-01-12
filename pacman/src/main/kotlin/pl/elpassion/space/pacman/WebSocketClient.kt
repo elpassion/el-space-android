@@ -17,6 +17,10 @@ class WebSocketClient(private val api: Api, private val url: String) : WebSocket
         return subject
     }
 
+    fun send(message: Event.Message) {
+        api.send(message.body)
+    }
+
     override fun onOpen(webSocket: WebSocket?, response: Response?) {
         subject.onNext(Event.Opened())
     }
@@ -52,6 +56,7 @@ class WebSocketClient(private val api: Api, private val url: String) : WebSocket
 
     interface Api {
         fun connect(url: String, listener: WebSocketListener)
+        fun send(message: String)
         fun close()
     }
 }

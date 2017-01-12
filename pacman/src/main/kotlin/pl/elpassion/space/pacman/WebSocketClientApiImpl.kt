@@ -17,6 +17,10 @@ class WebSocketClientApiImpl : WebSocketClient.Api, Closeable {
         webSocket = okHttpClient.newWebSocket(createRequest(url), listener)
     }
 
+    override fun send(message: String) {
+        webSocket?.send(message) ?: throw IllegalStateException("Web socket not connected")
+    }
+
     override fun close() {
         webSocket?.close(0, null)
         webSocket = null

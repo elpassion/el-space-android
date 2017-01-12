@@ -50,4 +50,5 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
+apply from: "../core-dependencies.gradle"
 apply from: "../test-dependencies.gradle"

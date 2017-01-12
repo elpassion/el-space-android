@@ -10,9 +10,9 @@ import rx.subjects.PublishSubject
 
 class PacManControllerTest {
 
-    val view = mock<PacMan.View>()
-    val loadMapSubject = PublishSubject.create<Unit>()
-    val mapView = mock<PacMan.MapView>().apply {
+    private val view = mock<PacMan.View>()
+    private val loadMapSubject = PublishSubject.create<Unit>()
+    private val mapView = mock<PacMan.MapView>().apply {
         whenever(this.loadMap()).thenReturn(loadMapSubject)
     }
 

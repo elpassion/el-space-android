@@ -36,7 +36,10 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var currentPosition: IndoorwayPosition? = null
     var serviceConnection: PositioningServiceConnection? = null
     var alertDialog: AlertDialog? = null
-    val controller by lazy { PanManController(this, PacManMapView(mapView)) }
+    val controller by lazy { PanManController(this, PacManMapView(mapView), object : PacMan.PositionService{
+        override fun start() {
+        }
+    }) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

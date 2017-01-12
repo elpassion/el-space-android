@@ -7,6 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Test
 import rx.subjects.PublishSubject
 
+
 class PacManControllerTest {
 
     private val view = mock<PacMan.View>()
@@ -14,32 +15,40 @@ class PacManControllerTest {
     private val mapView = mock<PacMan.MapView>().apply {
         whenever(this.loadMap()).thenReturn(loadMapSubject)
     }
+    val positionService = mock<PacMan.PositionService>()
+    val panManController = PanManController(view, mapView, positionService)
 
     @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {
-        PanManController(view, mapView).onCreate()
+        panManController.onCreate()
         loadMapSubject.onError(RuntimeException())
         verify(view).showMapLoadingError()
     }
 
     @Test
     fun shouldInitializeMapOnLoadingSuccess() {
-        PanManController(view, mapView).onCreate()
+        panManController.onCreate()
         loadMapSubject.onNext(Unit)
         verify(mapView).initTextures()
     }
 
     @Test
     fun shouldNotShowErrorWhenMapLoadsCorrectly() {
-        PanManController(view, mapView).onCreate()
+        panManController.onCreate()
         loadMapSubject.onNext(Unit)
         verify(view, never()).showMapLoadingError()
     }
 
     @Test
     fun shouldNotInitializeTexturesOnLadingError() {
-        PanManController(view, mapView).onCreate()
+        panManController.onCreate()
         loadMapSubject.onError(RuntimeException())
         verify(mapView, never()).initTextures()
+    }
+
+    @Test
+    fun shouldStartLocationListenerOnResume() {
+        panManController.onResume()
+        verify(positionService).start()
     }
 }

@@ -11,4 +11,8 @@ interface PacMan {
     interface View {
         fun showMapLoadingError()
     }
+
+    interface PositionService {
+        fun start()
+    }
 }

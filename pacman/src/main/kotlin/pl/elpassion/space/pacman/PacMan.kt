@@ -1,6 +1,7 @@
 package pl.elpassion.space.pacman
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.util.Log
 import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
+import com.indoorway.android.gles.GLRendererSurfaceView
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
@@ -17,8 +19,14 @@ import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledEx
 import com.indoorway.android.location.sdk.service.PositioningServiceConnection
 import com.indoorway.android.map.sdk.view.IndoorwayMapView
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
+import com.indoorway.android.map.sdk.view.drawable.textures.DrawableTexture
 import kotlinx.android.synthetic.main.pac_man_activity.*
+import pl.elpassion.space.pacman.model.Size
+import pl.elpassion.space.pacman.model.SpriteRect
+import pl.elpassion.space.pacman.model.SpriteSheet
 
+val SPRITE_SHEET_ID = "sprite-sheet"
+val pacMan = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(144, 64, 100, 128), Size(980f, 640f))
 
 class PacMan : AppCompatActivity() {
 
@@ -32,10 +40,13 @@ class PacMan : AppCompatActivity() {
         setContentView(R.layout.pac_man_activity)
         mapView.apply {
             setOnMapLoadCompletedListener<IndoorwayMapView> {
-                mapView.getMarkerControl().apply {
+                mapView.markerControl.apply {
+                    // sprite sheet registration
+                    val bitmap = BitmapFactory.decodeResource(resources, R.drawable.sprites)
+                    registerTexture(DrawableTexture(SPRITE_SHEET_ID, bitmap))
+
                     for((idx, point) in TEST_POINTS.withIndex())
                         add(DrawableCircle(idx.toString(), 0.2f, Color.RED, Color.RED, 0.1f, point))
-
                 }
             }
             setOnMapLoadFailedListener<IndoorwayMapView> {
@@ -63,9 +74,6 @@ class PacMan : AppCompatActivity() {
                 setOnPositionChangedListener<PositioningServiceConnection> { position ->
                     currentPosition = position
                     updatePosition(position)
-                }
-                setOnHeadingChangedListener<PositioningServiceConnection> { angle ->
-                    mapView.positionControl.setHeading(angle)
                 }
                 start(this@PacMan)
             }
@@ -105,7 +113,8 @@ class PacMan : AppCompatActivity() {
     }
 
     private fun updatePosition(position: IndoorwayPosition) {
-        mapView.positionControl.setPosition(position, false)
+        mapView.markerControl.add(pacMan.asDrawable("pacman", position.coordinates, Size(2f, 2.34f)))
+        veryBadInvalidate()
         currentLocationView.text = position.coordinates.getText()
     }
 
@@ -135,6 +144,11 @@ class PacMan : AppCompatActivity() {
             alertDialog?.dismiss()
         }
         alertDialog = null
+    }
+
+    private fun veryBadInvalidate() {
+        val view: GLRendererSurfaceView = mapView.getChildAt(0) as GLRendererSurfaceView
+        view.requestRender()
     }
 
 }

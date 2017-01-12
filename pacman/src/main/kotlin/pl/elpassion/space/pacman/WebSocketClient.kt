@@ -26,7 +26,7 @@ class WebSocketClient(private val url: String, private val api: Api = WebSocketC
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response) {
-        subject.onNext(Event.Failed())
+        subject.onNext(Event.Failed(t))
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
@@ -50,7 +50,7 @@ class WebSocketClient(private val url: String, private val api: Api = WebSocketC
     sealed class Event {
         class Opened : Event()
         class Closed : Event()
-        class Failed : Event()
+        class Failed(val throwable: Throwable) : Event()
         class Message(val body: String) : Event()
     }
 

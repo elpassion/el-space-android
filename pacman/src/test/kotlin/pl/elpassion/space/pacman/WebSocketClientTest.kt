@@ -40,8 +40,8 @@ class WebSocketClientTest {
         val stub = ApiStub()
         val client = WebSocketClient("", stub)
         client.connect().subscribe(subscriber)
-        stub.listener.onFailure(mock(), null, createResponseStub())
-        subscriber.assertValueThat { it is Failed }
+        stub.listener.onFailure(mock(), IllegalStateException(), createResponseStub())
+        subscriber.assertValueThat { it is Failed && it.throwable is IllegalStateException }
     }
 
     @Test

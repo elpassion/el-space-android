@@ -51,4 +51,10 @@ class PacManControllerTest {
         panManController.onResume()
         verify(positionService).start()
     }
+
+    @Test
+    fun shouldStopPositionServiceOnPause() {
+        panManController.onPause()
+        verify(positionService).stop()
+    }
 }

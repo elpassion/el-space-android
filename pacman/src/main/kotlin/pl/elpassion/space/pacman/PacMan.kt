@@ -14,5 +14,6 @@ interface PacMan {
 
     interface PositionService {
         fun start()
+        fun stop()
     }
 }

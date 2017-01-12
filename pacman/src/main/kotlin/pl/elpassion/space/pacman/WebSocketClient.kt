@@ -21,25 +21,25 @@ class WebSocketClient(private val url: String, private val api: Api = WebSocketC
         api.send(message.body)
     }
 
-    override fun onOpen(webSocket: WebSocket?, response: Response?) {
+    override fun onOpen(webSocket: WebSocket, response: Response) {
         subject.onNext(Event.Opened())
     }
 
-    override fun onFailure(webSocket: WebSocket?, t: Throwable?, response: Response?) {
+    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response) {
         subject.onNext(Event.Failed())
     }
 
-    override fun onClosing(webSocket: WebSocket?, code: Int, reason: String?) {
+    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
     }
 
-    override fun onMessage(webSocket: WebSocket?, text: String) {
+    override fun onMessage(webSocket: WebSocket, text: String) {
         subject.onNext(Event.Message(text))
     }
 
-    override fun onMessage(webSocket: WebSocket?, bytes: ByteString?) {
+    override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
     }
 
-    override fun onClosed(webSocket: WebSocket?, code: Int, reason: String?) {
+    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         subject.onNext(Event.Closed())
     }
 

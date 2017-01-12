@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -75,15 +76,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         } catch (e: BLENotSupportedException) {
             handleBLENotSupportedException()
         } catch (e: BluetoothDisabledException) {
-            showDialog(
-                    title = "Please enable bluetooth",
-                    message = "In order to find your indoor position, you need to enable bluetooth on your device.",
-                    onPositiveButtonClick = {
-                        startActivity(Intent().apply { action = android.provider.Settings.ACTION_BLUETOOTH_SETTINGS })
-                    },
-                    onNegativeButtonClick = {
-                        closeDialog()
-                    })
+            handleBluetoothDisabledException()
         } catch (e: LocationDisabledException) {
             showDialog(
                     title = "Please enable location",
@@ -97,16 +90,28 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         }
     }
 
+    override fun handleMissingPermissionException(permission: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(arrayOf(permission), REQUEST_PERMISSION_CODE)
+        }
+    }
+
     override fun handleBLENotSupportedException() {
         showDialog(
                 title = "Sorry",
                 message = "Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
     }
 
-    override fun handleMissingPermissionException(permission: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(arrayOf(permission), REQUEST_PERMISSION_CODE)
-        }
+    override fun handleBluetoothDisabledException() {
+        showDialog(
+                title = "Please enable bluetooth",
+                message = "In order to find your indoor position, you need to enable bluetooth on your device.",
+                onPositiveButtonClick = {
+                    startActivity(Intent().apply { action = Settings.ACTION_BLUETOOTH_SETTINGS })
+                },
+                onNegativeButtonClick = {
+                    closeDialog()
+                })
     }
 
     private fun logPosition() {

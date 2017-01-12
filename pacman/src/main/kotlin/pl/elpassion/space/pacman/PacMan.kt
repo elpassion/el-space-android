@@ -15,6 +15,7 @@ interface PacMan {
         fun updatePosition(position: IndoorwayPosition)
         fun handleMissingPermissionException(permission: String)
         fun handleBLENotSupportedException()
+        fun handleBluetoothDisabledException()
     }
 
     interface PositionService {

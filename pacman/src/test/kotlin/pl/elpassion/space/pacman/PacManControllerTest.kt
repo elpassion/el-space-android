@@ -4,6 +4,7 @@ import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
+import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
@@ -84,5 +85,12 @@ class PacManControllerTest {
         panManController.onResume()
         positionSubject.onError(BluetoothDisabledException())
         verify(view).handleBluetoothDisabledException()
+    }
+
+    @Test
+    fun shouldHandleLocationDisabledException() {
+        panManController.onResume()
+        positionSubject.onError(LocationDisabledException())
+        verify(view).handleLocationDisabledException()
     }
 }

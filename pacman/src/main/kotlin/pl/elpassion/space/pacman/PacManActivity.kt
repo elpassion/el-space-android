@@ -1,5 +1,6 @@
 package pl.elpassion.space.pacman
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -9,14 +10,10 @@ import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk
-import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
-import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
-import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
 import com.indoorway.android.location.sdk.service.PositioningServiceConnection
 import com.indoorway.android.map.sdk.view.IndoorwayMapView
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
@@ -35,10 +32,9 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
 
     val REQUEST_PERMISSION_CODE = 1
     var currentPosition: IndoorwayPosition? = null
-    var serviceConnection: PositioningServiceConnection? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
-        PanManController(this, PacManMapView(mapView), PacManPositionService())
+        PanManController(this, PacManMapView(mapView), PacManPositionService(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,40 +50,12 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
 
     override fun onResume() {
         super.onResume()
-        serviceConnection = IndoorwayLocationSdk.getInstance().positioningServiceConnection
-        startPositioningService()
+        controller.onResume()
     }
 
     override fun onPause() {
-        serviceConnection?.stop(this)
+        controller.onPause()
         super.onPause()
-    }
-
-    private fun startPositioningService() {
-        try {
-            serviceConnection?.apply {
-                setOnPositionChangedListener<PositioningServiceConnection> { position ->
-                    updatePosition(position)
-                }
-                start(this@PacManActivity)
-            }
-        } catch (e: MissingPermissionException) {
-            handleMissingPermissionException(e.permission)
-        } catch (e: BLENotSupportedException) {
-            handleBLENotSupportedException()
-        } catch (e: BluetoothDisabledException) {
-            handleBluetoothDisabledException()
-        } catch (e: LocationDisabledException) {
-            showDialog(
-                    title = "Please enable location",
-                    message = "In order of finding your indoor position you must enable location in settings.",
-                    onPositiveButtonClick = {
-                        startActivity(Intent().apply { action = android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS })
-                    },
-                    onNegativeButtonClick = {
-                        closeDialog()
-                    })
-        }
     }
 
     override fun handleMissingPermissionException(permission: String) {
@@ -108,6 +76,18 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                 message = "In order to find your indoor position, you need to enable bluetooth on your device.",
                 onPositiveButtonClick = {
                     startActivity(Intent().apply { action = Settings.ACTION_BLUETOOTH_SETTINGS })
+                },
+                onNegativeButtonClick = {
+                    closeDialog()
+                })
+    }
+
+    override fun handleLocationDisabledException() {
+        showDialog(
+                title = "Please enable location",
+                message = "In order of finding your indoor position you must enable location in settings.",
+                onPositiveButtonClick = {
+                    startActivity(Intent().apply { action = Settings.ACTION_LOCATION_SOURCE_SETTINGS })
                 },
                 onNegativeButtonClick = {
                     closeDialog()
@@ -187,8 +167,22 @@ class PacManMapView(val mapView: IndoorwayMapView) : PacMan.MapView {
     }
 }
 
-class PacManPositionService : PacMan.PositionService {
+class PacManPositionService(val context: Context) : PacMan.PositionService {
     override fun start(): Observable<IndoorwayPosition> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.fromAsync({ emitter ->
+            IndoorwayLocationSdk.getInstance().positioningServiceConnection.run {
+                emitter.setCancellation {
+                    stop(context)
+                }
+                setOnPositionChangedListener<PositioningServiceConnection> { position ->
+                    emitter.onNext(position)
+                }
+                try {
+                    start(context)
+                } catch (exception: Exception) {
+                    emitter.onError(exception)
+                }
+            }
+        }, AsyncEmitter.BackpressureMode.BUFFER)
     }
 }

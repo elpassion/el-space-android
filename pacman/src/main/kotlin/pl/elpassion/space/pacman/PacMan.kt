@@ -1,6 +1,5 @@
 package pl.elpassion.space.pacman
 
-import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import rx.Observable
 
@@ -16,6 +15,7 @@ interface PacMan {
         fun handleMissingPermissionException(permission: String)
         fun handleBLENotSupportedException()
         fun handleBluetoothDisabledException()
+        fun handleLocationDisabledException()
     }
 
     interface PositionService {

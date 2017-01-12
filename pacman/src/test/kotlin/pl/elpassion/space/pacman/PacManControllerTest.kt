@@ -2,6 +2,7 @@ package pl.elpassion.space.pacman
 
 import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
+import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
@@ -69,5 +70,13 @@ class PacManControllerTest {
         panManController.onResume()
         positionSubject.onError(exception)
         verify(view).handleMissingPermissionException(exception)
+    }
+
+    @Test
+    fun shouldHandleBLENotSupportedException() {
+        val exception = BLENotSupportedException()
+        panManController.onResume()
+        positionSubject.onError(exception)
+        verify(view).handleBLENotSupportedException()
     }
 }

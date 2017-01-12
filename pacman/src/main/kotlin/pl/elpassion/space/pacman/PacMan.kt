@@ -14,6 +14,7 @@ interface PacMan {
         fun showMapLoadingError()
         fun updatePosition(position: IndoorwayPosition)
         fun handleMissingPermissionException(exception: MissingPermissionException)
+        fun handleBLENotSupportedException()
     }
 
     interface PositionService {

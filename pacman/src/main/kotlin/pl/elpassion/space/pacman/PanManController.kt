@@ -1,5 +1,7 @@
 package pl.elpassion.space.pacman
 
+import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
+import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import rx.Subscription
 
 class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService) {
@@ -14,9 +16,14 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     }
 
     fun onResume() {
-        subscription = positionService.start().subscribe {
+        subscription = positionService.start().subscribe({
             view.updatePosition(it)
-        }
+        }, {
+            when(it){
+                is MissingPermissionException -> view.handleMissingPermissionException(it)
+                is BLENotSupportedException -> view.handleBLENotSupportedException()
+            }
+        })
     }
 
     fun onPause() {

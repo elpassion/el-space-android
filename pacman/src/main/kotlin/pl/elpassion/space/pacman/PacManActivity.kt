@@ -73,9 +73,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         } catch (e: MissingPermissionException) {
             handleMissingPermissionException(e)
         } catch (e: BLENotSupportedException) {
-            showDialog(
-                    title = "Sorry",
-                    message = "Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
+            handleBLENotSupportedException()
         } catch (e: BluetoothDisabledException) {
             showDialog(
                     title = "Please enable bluetooth",
@@ -97,6 +95,12 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                         closeDialog()
                     })
         }
+    }
+
+    override fun handleBLENotSupportedException() {
+        showDialog(
+                title = "Sorry",
+                message = "Bluetooth Low Energy is not supported on your device. We are unable to find your indoor location.")
     }
 
     override fun handleMissingPermissionException(exception: MissingPermissionException) {

@@ -32,7 +32,15 @@ class WebSocketClientTest {
         subscriber.assertValueCount(1)
     }
 
-    private fun createResponseStub() = Response.Builder().request(Request.Builder().url("ws://192.168.1.19:8080/ws").build()).protocol(Protocol.HTTP_2).code(200).build()
+    private fun createResponseStub() = Response.Builder()
+            .request(createRequestStub())
+            .protocol(Protocol.HTTP_2)
+            .code(200)
+            .build()
+
+    private fun createRequestStub() = Request.Builder()
+            .url("ws://192.168.1.19:8080/ws")
+            .build()
 
     class ApiStub : WebSocketClient.Api {
 

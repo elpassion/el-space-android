@@ -28,53 +28,53 @@ class PacManControllerTest {
     val playersService = mock<PacMan.PlayersService>().apply {
         whenever(this.getPlayers()).thenReturn(playersSubject)
     }
-    val panManController = PanManController(view, mapView, positionService, playersService)
+    val pacManController = PanManController(view, mapView, positionService, playersService)
 
     @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onError(RuntimeException())
         verify(view).showMapLoadingError()
     }
 
     @Test
     fun shouldInitializeMapOnLoadingSuccess() {
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onNext(Unit)
         verify(mapView).initTextures()
     }
 
     @Test
     fun shouldNotShowErrorWhenMapLoadsCorrectly() {
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onNext(Unit)
         verify(view, never()).showMapLoadingError()
     }
 
     @Test
     fun shouldNotInitializeTexturesOnLadingError() {
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onError(RuntimeException())
         verify(mapView, never()).initTextures()
     }
 
     @Test
     fun shouldStopPositionServiceOnPause() {
-        panManController.onResume()
-        panManController.onPause()
+        pacManController.onResume()
+        pacManController.onPause()
         positionSubject.assertUnsubscribe()
     }
 
     @Test
     fun shouldUpdatePositionOnReceived() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onNext(mock())
         verify(view).updatePosition(any())
     }
 
     @Test
     fun shouldUpdatePositionOnReceivedOnMap() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onNext(mock())
         verify(mapView).updatePosition(any())
     }
@@ -82,7 +82,7 @@ class PacManControllerTest {
     @Test
     fun shouldUpdatePlayersAfterMapInit() {
         val players = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onNext(Unit)
         playersSubject.onNext(players)
         verify(view).updatePlayers(players)
@@ -91,7 +91,7 @@ class PacManControllerTest {
     @Test
     fun shouldUpdatePlayersTwoTimes() {
         val players1 = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
-        panManController.onCreate()
+        pacManController.onCreate()
         loadMapSubject.onNext(Unit)
         playersSubject.onNext(players1)
         val players2 = listOf(Player(id = "player1", position = Position(63.1, 64.2)))
@@ -102,28 +102,28 @@ class PacManControllerTest {
 
     @Test
     fun shouldHandleMissingPermissionException() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onError(MissingPermissionException("permission"))
         verify(view).handleMissingPermissionException("permission")
     }
 
     @Test
     fun shouldHandleBLENotSupportedException() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onError(BLENotSupportedException())
         verify(view).handleBLENotSupportedException()
     }
 
     @Test
     fun shouldHandleBluetoothDisabledException() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onError(BluetoothDisabledException())
         verify(view).handleBluetoothDisabledException()
     }
 
     @Test
     fun shouldHandleLocationDisabledException() {
-        panManController.onResume()
+        pacManController.onResume()
         positionSubject.onError(LocationDisabledException())
         verify(view).handleLocationDisabledException()
     }

@@ -7,7 +7,7 @@ import okhttp3.WebSocketListener
 import java.io.Closeable
 
 
-class WebSocketClientApiImpl : WebSocketClient.Api, Closeable {
+class WebSocketClientApiImpl : WebSocketClientImpl.Api, Closeable {
 
     private val okHttpClient by lazy { OkHttpClient() }
     private var webSocket: WebSocket? = null

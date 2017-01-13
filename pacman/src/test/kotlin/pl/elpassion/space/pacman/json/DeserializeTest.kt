@@ -8,12 +8,12 @@ import rx.observers.TestSubscriber
 
 class DeserializeTest {
 
-    private val testSubscriber = TestSubscriber.create<LocationUpdateEvent>()
+    private val testSubscriber = TestSubscriber.create<List<LocationUpdateEvent>>()
 
     @Test
     fun shouldDeserializePositionUpdate() {
         val json = stringFromFile("location-update.json")
-        Observable.just(json).deserialize(LocationUpdateEvent::class.java).subscribe(testSubscriber)
-        testSubscriber.assertValue(LocationUpdateEvent("unique_string_player_id", 52.0, 21.0))
+        Observable.just(json).deserialize().subscribe(testSubscriber)
+        testSubscriber.assertValue(listOf(LocationUpdateEvent("unique_string_player_id", 52.0, 21.0)))
     }
 }

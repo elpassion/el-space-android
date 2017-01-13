@@ -1,6 +1,6 @@
-{
+[{
   "event": "location_update",
   "player_id": "unique_string_player_id",
   "latitude": 52.0,
   "longitude": 21.0
-}
+}]

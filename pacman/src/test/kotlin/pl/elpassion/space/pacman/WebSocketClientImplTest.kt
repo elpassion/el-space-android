@@ -9,20 +9,20 @@ import okhttp3.Response
 import okhttp3.WebSocketListener
 import org.junit.Ignore
 import org.junit.Test
-import pl.elpassion.space.pacman.api.WebSocketClient
-import pl.elpassion.space.pacman.api.WebSocketClient.Event
-import pl.elpassion.space.pacman.api.WebSocketClient.Event.*
+import pl.elpassion.space.pacman.api.WebSocketClientImpl
+import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event
+import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event.*
 import rx.observers.TestSubscriber
 import kotlin.properties.Delegates
 
-class WebSocketClientTest {
+class WebSocketClientImplTest {
 
     val subscriber = TestSubscriber<Event>()
-    val api = mock<WebSocketClient.Api>()
+    val api = mock<WebSocketClientImpl.Api>()
 
     @Test
     fun shouldConnectToApi() {
-        val client = WebSocketClient("", api)
+        val client = WebSocketClientImpl("", api)
         client.connect().subscribe()
         verify(api).connect(any(), any())
     }
@@ -30,7 +30,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitOpenedEventOnOpen() {
         val stub = ApiStub()
-        val client = WebSocketClient("", stub)
+        val client = WebSocketClientImpl("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onOpen(mock(), createResponseStub())
         subscriber.assertValueThat { it is Opened }
@@ -39,7 +39,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitFailedEventOnApiFailure() {
         val stub = ApiStub()
-        val client = WebSocketClient("", stub)
+        val client = WebSocketClientImpl("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onFailure(mock(), IllegalStateException(), createResponseStub())
         subscriber.assertValueThat { it is Failed && it.throwable is IllegalStateException }
@@ -48,7 +48,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitMessageEventOnMessage() {
         val stub = ApiStub()
-        val client = WebSocketClient("", stub)
+        val client = WebSocketClientImpl("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onMessage(mock(), stubMessage)
         subscriber.assertValueThat { it is Message && it.body == stubMessage }
@@ -57,7 +57,7 @@ class WebSocketClientTest {
     @Test
     fun shouldEmitClosedEventOnApiClose() {
         val stub = ApiStub()
-        val client = WebSocketClient("", stub)
+        val client = WebSocketClientImpl("", stub)
         client.connect().subscribe(subscriber)
         stub.listener.onClosed(mock(),0, "")
         subscriber.assertValueThat { it is Closed }
@@ -65,14 +65,14 @@ class WebSocketClientTest {
 
     @Test
     fun shouldCloseWebSocketOnClose() {
-        val client = WebSocketClient("", api)
+        val client = WebSocketClientImpl("", api)
         client.close()
         verify(api).close()
     }
 
     @Test
     fun shouldSendMessageToApi() {
-        val client = WebSocketClient("", api)
+        val client = WebSocketClientImpl("", api)
         client.send(Message(stubMessage))
         verify(api).send(stubMessage)
     }
@@ -80,7 +80,7 @@ class WebSocketClientTest {
     @Ignore
     @Test
     fun shouldConnectPlayer1ToRealApi() {
-        val client = WebSocketClient("ws://192.168.1.19:8181/ws")
+        val client = WebSocketClientImpl("ws://192.168.1.19:8181/ws")
         client.connect().subscribe {
             println(when (it) {
                 is Message -> "Message: ${it.body}"
@@ -103,7 +103,7 @@ class WebSocketClientTest {
             .url("ws://192.168.1.19:8080/ws")
             .build()
 
-    class ApiStub : WebSocketClient.Api {
+    class ApiStub : WebSocketClientImpl.Api {
 
         var listener : WebSocketListener by Delegates.notNull<WebSocketListener>()
 

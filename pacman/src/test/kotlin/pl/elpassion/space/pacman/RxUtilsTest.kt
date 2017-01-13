@@ -1,8 +1,8 @@
 package pl.elpassion.space.pacman
 
 import org.junit.Test
-import pl.elpassion.space.pacman.api.WebSocketClient.Event
-import pl.elpassion.space.pacman.api.WebSocketClient.Event.*
+import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event
+import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event.*
 import pl.elpassion.space.pacman.api.asMessageS
 import rx.observers.TestSubscriber
 import rx.subjects.PublishSubject

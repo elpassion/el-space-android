@@ -8,11 +8,11 @@ import rx.Observable
 import rx.subjects.PublishSubject
 import java.io.Closeable
 
-class WebSocketClient(private val url: String, private val api: Api = WebSocketClientApiImpl()) : WebSocketListener(), Closeable {
+class WebSocketClientImpl(private val url: String, private val api: Api = WebSocketClientApiImpl()) : WebSocketListener(), Closeable, WebSocketClient {
 
     val subject = PublishSubject.create<Event>()
 
-    fun connect(): Observable<Event> {
+    override fun connect(): Observable<Event> {
         api.connect(url, this)
         return subject
     }
@@ -60,4 +60,8 @@ class WebSocketClient(private val url: String, private val api: Api = WebSocketC
         fun send(message: String)
         fun close()
     }
+}
+
+interface WebSocketClient {
+    fun connect(): Observable<WebSocketClientImpl.Event>
 }

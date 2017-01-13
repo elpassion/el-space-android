@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
@@ -32,7 +31,6 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pac_man_activity)
         controller.onCreate()
-        logLocationButton.setOnClickListener { logPosition() }
     }
 
     override fun showMapLoadingError() {
@@ -89,14 +87,9 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
                 })
     }
 
-    private fun logPosition() {
-        Log.i("PositionLogger", currentPosition?.coordinates?.getText() ?: "no position")
-    }
-
     override fun updatePosition(position: IndoorwayPosition) {
         currentPosition = position
         veryBadInvalidate()
-        currentLocationView.text = position.coordinates.getText()
     }
 
     override fun addMapObjects(mapObjects: List<MapObject>) {

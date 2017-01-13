@@ -10,18 +10,16 @@ import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
 import pl.elpassion.space.pacman.model.Player
 import pl.elpassion.space.pacman.model.Position
+import rx.Completable
 import rx.subjects.PublishSubject
 
 
 class PacManControllerTest {
 
     private val view = mock<PacMan.View>()
-    private val loadMapSubject = PublishSubject.create<Unit>()
     private val playersSubject = PublishSubject.create<List<Player>>()
     private val positionSubject = SubscriptionSubjectVerifier<IndoorwayPosition>()
-    private val mapView = mock<PacMan.MapView>().apply {
-        whenever(this.loadMap()).thenReturn(loadMapSubject)
-    }
+    private val mapView = mock<PacMan.MapView>()
     val positionService = mock<PacMan.PositionService>().apply {
         whenever(this.start()).thenReturn(positionSubject.observable)
     }
@@ -32,31 +30,32 @@ class PacManControllerTest {
 
     @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {
+        stubMapLoadingError()
         pacManController.onCreate()
-        loadMapSubject.onError(RuntimeException())
         verify(view).showMapLoadingError()
     }
 
     @Test
     fun shouldInitializeMapOnLoadingSuccess() {
+        stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        loadMapSubject.onNext(Unit)
         verify(mapView).initTextures()
     }
 
     @Test
     fun shouldNotShowErrorWhenMapLoadsCorrectly() {
+        stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        loadMapSubject.onNext(Unit)
         verify(view, never()).showMapLoadingError()
     }
 
     @Test
     fun shouldNotInitializeTexturesOnLadingError() {
+        stubMapLoadingError()
         pacManController.onCreate()
-        loadMapSubject.onError(RuntimeException())
         verify(mapView, never()).initTextures()
     }
+
 
     @Test
     fun shouldStopPositionServiceOnPause() {
@@ -82,8 +81,8 @@ class PacManControllerTest {
     @Test
     fun shouldUpdatePlayersAfterMapInit() {
         val players = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        loadMapSubject.onNext(Unit)
         playersSubject.onNext(players)
         verify(view).updatePlayers(players)
     }
@@ -91,8 +90,8 @@ class PacManControllerTest {
     @Test
     fun shouldUpdatePlayersTwoTimes() {
         val players1 = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        loadMapSubject.onNext(Unit)
         playersSubject.onNext(players1)
         val players2 = listOf(Player(id = "player1", position = Position(63.1, 64.2)))
         playersSubject.onNext(players2)
@@ -102,8 +101,8 @@ class PacManControllerTest {
 
     @Test
     fun shouldShowPlayersUpdateErrorWhenUpdateFails() {
+        stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        loadMapSubject.onNext(Unit)
         playersSubject.onError(RuntimeException())
         verify(view).showPlayersUpdateError()
     }
@@ -134,5 +133,13 @@ class PacManControllerTest {
         pacManController.onResume()
         positionSubject.onError(LocationDisabledException())
         verify(view).handleLocationDisabledException()
+    }
+
+    private fun stubMapLoadingSuccessfully() {
+        whenever(mapView.loadMap()).thenReturn(Completable.complete())
+    }
+
+    private fun stubMapLoadingError() {
+        whenever(mapView.loadMap()).thenReturn(Completable.error(RuntimeException()))
     }
 }

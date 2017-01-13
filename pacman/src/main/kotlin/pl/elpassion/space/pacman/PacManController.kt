@@ -13,17 +13,16 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     private val compositeSubscription: CompositeSubscription = CompositeSubscription()
 
     fun onCreate() {
-        mapView.loadMap().subscribe({
-            mapView.initTextures()
-            playersService.getPlayers()
-                    .doOnNext { view.updatePlayers(it) }
-                    .completeOnError { view.showPlayersUpdateError() }
-                    .subscribe()
-                    .save(to = compositeSubscription)
-
-        }, {
-            view.showMapLoadingError()
-        })
+        mapView.loadMap()
+                .doOnCompleted { mapView.initTextures() }
+                .andThen(
+                        playersService.getPlayers()
+                                .doOnNext { view.updatePlayers(it) }
+                                .completeOnError { view.showPlayersUpdateError() })
+                .subscribe({}, {
+                    view.showMapLoadingError()
+                })
+                .save(to = compositeSubscription)
     }
 
     fun onResume() {

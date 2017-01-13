@@ -2,11 +2,12 @@ package pl.elpassion.space.pacman
 
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import pl.elpassion.space.pacman.model.Player
+import rx.Completable
 import rx.Observable
 
 interface PacMan {
     interface MapView {
-        fun loadMap(): Observable<Unit>
+        fun loadMap(): Completable
         fun initTextures()
         fun updatePosition(position: IndoorwayPosition)
     }

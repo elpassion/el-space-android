@@ -89,6 +89,18 @@ class PacManControllerTest {
     }
 
     @Test
+    fun shouldUpdatePlayersTwoTimes() {
+        val players1 = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        panManController.onCreate()
+        loadMapSubject.onNext(Unit)
+        playersSubject.onNext(players1)
+        val players2 = listOf(Player(id = "player1", position = Position(63.1, 64.2)))
+        playersSubject.onNext(players2)
+        verify(view).updatePlayers(players1)
+        verify(view).updatePlayers(players2)
+    }
+
+    @Test
     fun shouldHandleMissingPermissionException() {
         panManController.onResume()
         positionSubject.onError(MissingPermissionException("permission"))

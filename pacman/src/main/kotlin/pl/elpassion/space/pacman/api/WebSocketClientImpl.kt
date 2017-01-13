@@ -10,7 +10,7 @@ import java.io.Closeable
 
 class WebSocketClientImpl(private val url: String, private val api: Api = WebSocketClientApiImpl()) : WebSocketListener(), Closeable, WebSocketClient {
 
-    val subject = PublishSubject.create<Event>()
+    private val subject = PublishSubject.create<Event>()
 
     override fun connect(): Observable<Event> {
         api.connect(url, this)
@@ -25,8 +25,8 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
         subject.onNext(Event.Opened())
     }
 
-    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response) {
-        subject.onNext(Event.Failed(t))
+    override fun onFailure(webSocket: WebSocket, t: Throwable?, response: Response?) {
+        subject.onNext(Event.Failed(t ?: RuntimeException()))
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {

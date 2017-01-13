@@ -1,5 +1,6 @@
 package pl.elpassion.space.pacman.utils
 
+import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
@@ -11,6 +12,8 @@ fun <T> Observable<T>.completeOnError(action: (Throwable) -> Unit) = this
         .doOnError { action(it) }
         .onErrorResumeNext(Observable.empty())
 
-fun <T> Observable<Pair<List<T>, List<T>>>.diff() = this
+fun  Completable.completeOnError(action: (Throwable) -> Unit) = this
+        .doOnError { action(it) }
+        .onErrorResumeNext { Completable.complete() }
 
 

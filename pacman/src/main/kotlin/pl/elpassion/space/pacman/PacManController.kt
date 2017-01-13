@@ -18,7 +18,6 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                 .doOnCompleted {
                     mapView.initTextures()
                 }
-                .doOnError { view.showMapLoadingError() }
                 .andThen(
                         playersService.getPlayers()
                                 .doOnNext { println(it) }
@@ -41,6 +40,7 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                                 }
                                 .completeOnError { view.showPlayersUpdateError() }
                 )
+                .completeOnError { error: Throwable -> view.showMapLoadingError() }
                 .subscribe()
                 .save(to = compositeSubscription)
 

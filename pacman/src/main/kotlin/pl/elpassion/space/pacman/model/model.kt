@@ -46,5 +46,16 @@ data class LocationUpdateEvent(
         @JsonProperty
         val latitude: Double,
         @JsonProperty
-        val longitude: Double
-)
+        val longitude: Double,
+        @JsonProperty
+        val type: Type
+) {
+    enum class Type {
+        @JsonProperty("ghost")
+        GHOST,
+        @JsonProperty("food")
+        FOOD,
+        @JsonProperty("player")
+        PLAYER
+    }
+}

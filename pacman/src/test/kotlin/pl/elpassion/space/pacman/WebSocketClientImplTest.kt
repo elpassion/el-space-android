@@ -84,7 +84,8 @@ class WebSocketClientImplTest {
         client.connect().subscribe {
             println(when (it) {
                 is Message -> "Message: ${it.body}"
-                else -> it.javaClass.simpleName
+                is Failed -> it.throwable
+                else -> it.toString()
             })
             //client.send(Message("{\"event\": \"location_update\", \"player_id\": \"Player1\", \"latitude\": 53.0, \"longitude\": 21.0}"))
         }

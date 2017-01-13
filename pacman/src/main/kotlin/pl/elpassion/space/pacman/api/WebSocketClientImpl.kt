@@ -46,6 +46,7 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
             emitter.onNext(Event.Closed())
         }
     }
+    
     sealed class Event {
         class Opened : Event()
         class Closed : Event()

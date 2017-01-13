@@ -14,6 +14,6 @@ class DeserializeTest {
     fun shouldDeserializePositionUpdate() {
         val json = stringFromFile("location-update.json")
         Observable.just(json).deserialize().subscribe(testSubscriber)
-        testSubscriber.assertValue(listOf(LocationUpdateEvent("unique_string_player_id", 52.0, 21.0)))
+        testSubscriber.assertValue(listOf(LocationUpdateEvent("unique_string_player_id", 52.0, 21.0, LocationUpdateEvent.Type.GHOST)))
     }
 }

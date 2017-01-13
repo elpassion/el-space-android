@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.Toast
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
@@ -42,6 +43,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     }
 
     override fun showPlayersUpdateError() {
+        Toast.makeText(this, "Players update error", Toast.LENGTH_SHORT)
     }
 
     override fun onResume() {

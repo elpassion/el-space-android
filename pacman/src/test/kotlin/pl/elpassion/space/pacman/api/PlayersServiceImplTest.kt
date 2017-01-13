@@ -3,6 +3,7 @@ package pl.elpassion.space.pacman.api
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
@@ -34,6 +35,7 @@ class PlayersServiceImplTest {
 
     @Test
     fun shouldForwardEvents() {
+        eventsSubject.onNext(WebSocketClientImpl.Event.Opened())
         eventsSubject.onNext(WebSocketClientImpl.Event.Message(stringFromFile("location-update.json")))
         subscriber.assertValue(playersList)
     }
@@ -44,8 +46,10 @@ class PlayersServiceImplTest {
     }
 
     @Test
-    fun should() {
-
+    fun shouldForwardErrors() {
+        eventsSubject.onNext(WebSocketClientImpl.Event.Opened())
+        eventsSubject.onNext(WebSocketClientImpl.Event.Failed(RuntimeException()))
+        assertTrue(subscriber.onErrorEvents.isNotEmpty())
     }
 }
 
@@ -53,10 +57,8 @@ class PlayersServiceImplTest {
 class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService {
 
     override fun getPlayers(): Observable<List<Player>> {
-
         return webSocket.connect()
-                .ofType(WebSocketClientImpl.Event.Message::class.java)
-                .map { it.body }
+                .asMessageS()
                 .deserialize()
                 .map { it.map { Player(it.playerId, Position(it.latitude, it.longitude)) } }
     }

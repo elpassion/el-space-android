@@ -78,12 +78,16 @@ class WebSocketClientTest {
 
     @Ignore
     @Test
-    fun shouldConnectToRealApi() {
-        val client = WebSocketClient("ws://192.168.1.19:8080/ws")
+    fun shouldConnectPlayer1ToRealApi() {
+        val client = WebSocketClient("ws://192.168.1.19:8181/ws")
         client.connect().subscribe {
-            println(it.toString())
+            println(when (it) {
+                is Message -> "Message: ${it.body}"
+                else -> it.javaClass.simpleName
+            })
+            client.send(Message("{\"event\": \"location_update\", \"player_id\": \"Player1\", \"latitude\": 53.0, \"longitude\": 21.0}"))
         }
-        Thread.sleep(3000)
+        Thread.sleep(60000)
     }
 
     private val stubMessage = "id: 0, lat: 0, long: 0"

@@ -37,6 +37,7 @@ class WebSocketClient(private val url: String, private val api: Api = WebSocketC
     }
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+        subject.onNext(Event.Message(bytes.utf8()))
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {

@@ -6,11 +6,13 @@ import pl.elpassion.space.pacman.model.LocationUpdateEvent
 import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.model.Position
 import rx.Observable
+import java.util.concurrent.TimeUnit
 
 class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService {
     override fun getPlayers(): Observable<List<MapObject>> {
         return webSocket.connect()
                 .asMessageS()
+                .sample(1, TimeUnit.SECONDS)
                 .deserialize()
                 .map { it.map { it.toMapObject() } }
     }

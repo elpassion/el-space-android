@@ -13,10 +13,11 @@ android {
 
     defaultConfig {
         applicationId "pl.elpassion.space.pacman"
-        minSdkVersion 18
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

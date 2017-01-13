@@ -1,7 +1,8 @@
 package pl.elpassion.space.pacman.utils
 
+import android.graphics.Color
 import com.indoorway.android.common.sdk.model.Coordinates
-import com.indoorway.android.map.sdk.view.drawable.figures.DrawableFigure
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import pl.elpassion.space.pacman.SPRITE_SHEET_ID
 import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.model.Size
@@ -20,12 +21,8 @@ class CreaturePicker {
     fun createPacMan(coordinates: Coordinates) =
             pacMan.asDrawable(pacManName, coordinates, Size(2f, 2.34f))
 
-    fun createCreature(mapObject: MapObject): DrawableFigure =
-            when (mapObject.type) {
-                MapObject.Type.GHOST -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
-                MapObject.Type.FOOD -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
-                MapObject.Type.PLAYER -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
-            }
+    fun createCreature(mapObject: MapObject) =
+            DrawableCircle(mapObject.id, 0.2f, Color.argb(255, 255, 255, 0), Color.RED, 0.1f, mapObject.toCoordinates())
 
     private fun MapObject.toCoordinates() = Coordinates(position.lat, position.long)
 }

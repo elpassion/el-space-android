@@ -1,0 +1,19 @@
+[{
+  "event": "location_update",
+  "player": "ghost",
+  "latitude": 52.0,
+  "longitude": 21.0,
+  "type": "ghost"
+},{
+  "event": "location_update",
+  "player": "food",
+  "latitude": 52.0,
+  "longitude": 21.0,
+  "type": "food"
+},{
+  "event": "location_update",
+  "player": "player",
+  "latitude": 52.0,
+  "longitude": 21.0,
+  "type": "player"
+}]

@@ -16,4 +16,15 @@ class DeserializeTest {
         Observable.just(json).deserialize().subscribe(testSubscriber)
         testSubscriber.assertValue(listOf(LocationUpdateEvent("unique_string_player_id", 52.0, 21.0, LocationUpdateEvent.Type.GHOST)))
     }
+
+    @Test
+    fun shouldDeserializePositionUpdateMultiple() {
+        val json = stringFromFile("location-update-multiple.json")
+        Observable.just(json).deserialize().subscribe(testSubscriber)
+        testSubscriber.assertValue(listOf(
+                LocationUpdateEvent("ghost", 52.0, 21.0, LocationUpdateEvent.Type.GHOST),
+                LocationUpdateEvent("food", 52.0, 21.0, LocationUpdateEvent.Type.FOOD),
+                LocationUpdateEvent("player", 52.0, 21.0, LocationUpdateEvent.Type.PLAYER)
+        ))
+    }
 }

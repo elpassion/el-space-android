@@ -22,7 +22,11 @@ class CreaturePicker {
             pacMan.asDrawable(pacManName, coordinates, Size(2f, 2.34f))
 
     fun createCreature(mapObject: MapObject) =
-            DrawableCircle(mapObject.id, 0.2f, Color.argb(255, 255, 255, 0), Color.RED, 0.1f, mapObject.toCoordinates())
+            when (mapObject.type) {
+                MapObject.Type.GHOST -> DrawableCircle(mapObject.id, 0.2f, Color.argb(255, 255, 255, 0), Color.WHITE, 0.1f, mapObject.toCoordinates())
+                MapObject.Type.FOOD -> DrawableCircle(mapObject.id, 0.2f, Color.argb(255, 255, 255, 0), Color.RED, 0.1f, mapObject.toCoordinates())
+                MapObject.Type.PLAYER -> DrawableCircle(mapObject.id, 0.2f, Color.argb(255, 255, 255, 0), Color.GREEN, 0.1f, mapObject.toCoordinates())
+            }
 
     private fun MapObject.toCoordinates() = Coordinates(position.lat, position.long)
 }

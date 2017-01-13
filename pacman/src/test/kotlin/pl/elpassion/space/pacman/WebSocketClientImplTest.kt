@@ -7,7 +7,6 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocketListener
-import org.junit.Ignore
 import org.junit.Test
 import pl.elpassion.space.pacman.api.WebSocketClientImpl
 import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event
@@ -77,10 +76,9 @@ class WebSocketClientImplTest {
         verify(api).send(stubMessage)
     }
 
-    @Ignore
     @Test
     fun shouldConnectPlayer1ToRealApi() {
-        val client = WebSocketClientImpl("ws://192.168.1.19:8181/ws")
+        val client = WebSocketClientImpl("ws://192.168.1.19:8080/ws")
         client.connect().subscribe {
             println(when (it) {
                 is Message -> "Message: ${it.body}"

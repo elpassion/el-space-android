@@ -12,7 +12,7 @@ class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService
     override fun getPlayers(): Observable<List<MapObject>> {
         return webSocket.connect()
                 .asMessageS()
-                .sample(1, TimeUnit.SECONDS)
+                .sample(500, TimeUnit.MILLISECONDS)
                 .deserialize()
                 .map { it.map { it.toMapObject() } }
     }

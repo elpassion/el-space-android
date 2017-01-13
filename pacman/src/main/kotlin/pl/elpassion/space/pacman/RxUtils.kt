@@ -4,6 +4,8 @@ import pl.elpassion.space.pacman.WebSocketClient.Event
 import pl.elpassion.space.pacman.WebSocketClient.Event.*
 import rx.Notification
 import rx.Observable
+import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 
 fun Observable<Event>.asMessageS(): Observable<String> = this
         .skipWhile { it !is Opened }
@@ -19,3 +21,4 @@ fun Observable<Event>.asMessageS(): Observable<String> = this
         .dematerialize<String>()
 
 
+fun Subscription.save(to: CompositeSubscription) = to.add(this)

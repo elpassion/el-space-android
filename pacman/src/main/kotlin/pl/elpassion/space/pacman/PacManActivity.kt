@@ -19,9 +19,6 @@ import com.indoorway.android.map.sdk.view.IndoorwayMapView
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import com.indoorway.android.map.sdk.view.drawable.textures.DrawableTexture
 import kotlinx.android.synthetic.main.pac_man_activity.*
-import pl.elpassion.space.pacman.model.Size
-import pl.elpassion.space.pacman.model.SpriteRect
-import pl.elpassion.space.pacman.model.SpriteSheet
 import rx.AsyncEmitter
 import rx.Observable
 
@@ -34,7 +31,9 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var currentPosition: IndoorwayPosition? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
-        PanManController(this, PacManMapView(mapView), PacManPositionService(this))
+        PanManController(this, PacManMapView(mapView), PacManPositionService(this), object : PacMan.PlayersService {
+            override fun getPlayers() = TODO()
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,6 +102,10 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         mapView.markerControl.add(pacMan.asDrawable("pacman", position.coordinates, Size(2f, 2.34f)))
         veryBadInvalidate()
         currentLocationView.text = position.coordinates.getText()
+    }
+
+    override fun updatePlayers(players: List<Player>) {
+
     }
 
     private fun Coordinates.getText() = "lat: $latitude, long: $longitude"

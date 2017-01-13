@@ -15,6 +15,7 @@ class PacManControllerTest {
 
     private val view = mock<PacMan.View>()
     private val loadMapSubject = PublishSubject.create<Unit>()
+    private val playersSubject = PublishSubject.create<List<Player>>()
     private val positionSubject = SubscriptionSubjectVerifier<IndoorwayPosition>()
     private val mapView = mock<PacMan.MapView>().apply {
         whenever(this.loadMap()).thenReturn(loadMapSubject)
@@ -22,7 +23,10 @@ class PacManControllerTest {
     val positionService = mock<PacMan.PositionService>().apply {
         whenever(this.start()).thenReturn(positionSubject.observable)
     }
-    val panManController = PanManController(view, mapView, positionService)
+    val playersService = mock<PacMan.PlayersService>().apply {
+        whenever(this.getPlayers()).thenReturn(playersSubject)
+    }
+    val panManController = PanManController(view, mapView, positionService, playersService)
 
     @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {
@@ -64,6 +68,14 @@ class PacManControllerTest {
         panManController.onResume()
         positionSubject.onNext(mock())
         verify(view).updatePosition(any())
+    }
+
+    @Test
+    fun shouldUpdatePlayersOnReceived() {
+        val players = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        panManController.onResume()
+        playersSubject.onNext(players)
+        verify(view).updatePlayers(players)
     }
 
     @Test

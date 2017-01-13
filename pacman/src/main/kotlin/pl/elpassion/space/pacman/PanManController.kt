@@ -4,10 +4,11 @@ import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
-import rx.Subscription
+import rx.subscriptions.CompositeSubscription
 
-class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService) {
-    private var subscription: Subscription? = null
+class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService, val playersService: PacMan.PlayersService) {
+
+    private val compositeSubscription: CompositeSubscription = CompositeSubscription()
 
     fun onCreate() {
         mapView.loadMap().subscribe({
@@ -18,7 +19,7 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     }
 
     fun onResume() {
-        subscription = positionService.start().subscribe({
+        positionService.start().subscribe({
             view.updatePosition(it)
         }, {
             when (it) {
@@ -27,10 +28,15 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                 is BluetoothDisabledException -> view.handleBluetoothDisabledException()
                 is LocationDisabledException -> view.handleLocationDisabledException()
             }
-        })
+        }).save(to = compositeSubscription)
+
+        playersService.getPlayers().subscribe({
+            view.updatePlayers(it)
+        }).save(to = compositeSubscription)
+
     }
 
     fun onPause() {
-        subscription?.unsubscribe()
+        compositeSubscription.clear()
     }
 }

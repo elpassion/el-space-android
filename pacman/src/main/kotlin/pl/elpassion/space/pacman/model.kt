@@ -1,4 +1,4 @@
-package pl.elpassion.space.pacman.model
+package pl.elpassion.space.pacman
 
 import android.graphics.RectF
 import com.indoorway.android.common.sdk.model.Coordinates
@@ -34,3 +34,7 @@ data class SpriteSheet(val textureId: String, val spriteRect: SpriteRect, val bi
     }
 
 }
+
+data class Player(val id: String, val position: Position)
+
+data class Position(val lat: Double, val long: Double)

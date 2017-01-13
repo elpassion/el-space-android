@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import android.widget.Toast
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
@@ -30,7 +31,12 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pac_man_activity)
+        keepScreenAlwaysOn()
         controller.onCreate()
+    }
+
+    private fun keepScreenAlwaysOn() {
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     override fun showMapLoadingError() {

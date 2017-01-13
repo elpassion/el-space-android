@@ -31,7 +31,6 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                                     val oldIds = old.map { it.id }
                                     val newIds = new.map { it.id }
                                     val idsToRemove = oldIds.filterNot { newIds.contains(it) }
-                                    val idsToAdd = newIds.filterNot { oldIds.contains(it) }
                                     old.filter { it.id in idsToRemove } to new
                                 }
                                 .doOnNext { println("rem/add $it") }

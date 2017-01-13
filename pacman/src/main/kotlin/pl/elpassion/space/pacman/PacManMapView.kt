@@ -6,7 +6,6 @@ import com.indoorway.android.map.sdk.view.IndoorwayMapView
 import com.indoorway.android.map.sdk.view.drawable.textures.DrawableTexture
 import pl.elpassion.space.pacman.config.buildingUuid
 import pl.elpassion.space.pacman.config.mapUuid
-import pl.elpassion.space.pacman.model.Size
 import pl.elpassion.space.pacman.utils.CreaturePicker
 import rx.AsyncEmitter
 import rx.Completable
@@ -40,6 +39,6 @@ class PacManMapView(val mapView: IndoorwayMapView) : PacMan.MapView {
     }
 
     override fun updatePosition(position: IndoorwayPosition) {
-        mapView.markerControl.add(CreaturePicker.pacMan.asDrawable(CreaturePicker.pacManName, position.coordinates, Size(2f, 2.34f)))
+        mapView.markerControl.add(CreaturePicker().createPacMan(position.coordinates))
     }
 }

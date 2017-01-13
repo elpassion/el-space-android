@@ -1,7 +1,6 @@
 package pl.elpassion.space.pacman
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -12,12 +11,12 @@ import android.widget.Toast
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
-import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import kotlinx.android.synthetic.main.pac_man_activity.*
 import pl.elpassion.space.pacman.api.PlayersServiceImpl
 import pl.elpassion.space.pacman.api.WebSocketClientApiImpl
 import pl.elpassion.space.pacman.api.WebSocketClientImpl
 import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.utils.CreaturePicker
 
 
 class PacManActivity : AppCompatActivity(), PacMan.View {
@@ -102,10 +101,8 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
 
     override fun updatePlayers(players: List<Player>) {
         for (player in players)
-            mapView.markerControl.add(DrawableCircle(player.id, 0.2f, Color.argb(255, 255, 255, 0), Color.RED, 0.1f, player.toCoordinates()))
+            mapView.markerControl.add(CreaturePicker().createCreature(player))
     }
-
-    private fun Player.toCoordinates() = Coordinates(position.lat, position.long)
 
     private fun Coordinates.getText() = "lat: $latitude, long: $longitude"
 

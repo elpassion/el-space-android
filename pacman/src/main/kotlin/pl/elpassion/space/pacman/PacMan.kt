@@ -8,6 +8,7 @@ interface PacMan {
     interface MapView {
         fun loadMap(): Observable<Unit>
         fun initTextures()
+        fun updatePosition(position: IndoorwayPosition)
     }
 
     interface View {

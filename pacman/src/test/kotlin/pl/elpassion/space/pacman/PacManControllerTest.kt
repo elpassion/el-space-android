@@ -9,6 +9,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
 import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.Position
 import rx.subjects.PublishSubject
 
 
@@ -69,6 +70,13 @@ class PacManControllerTest {
         panManController.onResume()
         positionSubject.onNext(mock())
         verify(view).updatePosition(any())
+    }
+
+    @Test
+    fun shouldUpdatePositionOnReceivedOnMap() {
+        panManController.onResume()
+        positionSubject.onNext(mock())
+        verify(mapView).updatePosition(any())
     }
 
     @Test

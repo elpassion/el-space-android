@@ -12,16 +12,11 @@ import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
 import kotlinx.android.synthetic.main.pac_man_activity.*
 import pl.elpassion.space.pacman.model.Player
-import pl.elpassion.space.pacman.model.Size
-import pl.elpassion.space.pacman.model.SpriteRect
-import pl.elpassion.space.pacman.model.SpriteSheet
 
 
 class PacManActivity : AppCompatActivity(), PacMan.View {
 
     val REQUEST_PERMISSION_CODE = 1
-    val SPRITE_SHEET_ID = "sprite-sheet"
-    val pacMan = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(144, 64, 100, 128), Size(980f, 640f))
     var currentPosition: IndoorwayPosition? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
@@ -93,7 +88,6 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
 
     override fun updatePosition(position: IndoorwayPosition) {
         currentPosition = position
-        mapView.markerControl.add(pacMan.asDrawable("pacman", position.coordinates, Size(2f, 2.34f)))
         veryBadInvalidate()
         currentLocationView.text = position.coordinates.getText()
     }

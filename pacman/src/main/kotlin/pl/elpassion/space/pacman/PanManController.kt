@@ -21,6 +21,7 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
 
     fun onResume() {
         positionService.start().subscribe({
+            mapView.updatePosition(it)
             view.updatePosition(it)
         }, {
             when (it) {

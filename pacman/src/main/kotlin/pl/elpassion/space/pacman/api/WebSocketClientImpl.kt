@@ -4,50 +4,48 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import rx.AsyncEmitter
 import rx.Observable
-import rx.subjects.PublishSubject
 import java.io.Closeable
 
-class WebSocketClientImpl(private val url: String, private val api: Api = WebSocketClientApiImpl()) : WebSocketListener(), Closeable, WebSocketClient {
-
-    private val subject = PublishSubject.create<Event>()
+class WebSocketClientImpl(private val url: String, private val api: Api = WebSocketClientApiImpl()) : Closeable, WebSocketClient {
 
     override fun connect(): Observable<Event> {
-        api.connect(url, this)
-        return subject
+        return Observable.fromAsync({ emitter ->
+            api.connect(url, WebSocketListenerImpl(emitter))
+        }, AsyncEmitter.BackpressureMode.BUFFER)
     }
 
     fun send(message: Event.Message) {
         api.send(message.body)
     }
 
-    override fun onOpen(webSocket: WebSocket, response: Response) {
-        subject.onNext(Event.Opened())
-    }
-
-    override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
-        subject.onNext(Event.Failed(throwable))
-    }
-
-    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-    }
-
-    override fun onMessage(webSocket: WebSocket, text: String) {
-        subject.onNext(Event.Message(text))
-    }
-
-    override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-        subject.onNext(Event.Message(bytes.utf8()))
-    }
-
-    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-        subject.onNext(Event.Closed())
-    }
-
     override fun close() {
         api.close()
     }
 
+
+    class WebSocketListenerImpl(val emitter: AsyncEmitter<Event>) : WebSocketListener() {
+        override fun onOpen(webSocket: WebSocket, response: Response) {
+            emitter.onNext(Event.Opened())
+        }
+
+        override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
+            emitter.onNext(Event.Failed(throwable))
+        }
+
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            emitter.onNext(Event.Message(text))
+        }
+
+        override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
+            emitter.onNext(Event.Message(bytes.utf8()))
+        }
+
+        override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+            emitter.onNext(Event.Closed())
+        }
+    }
     sealed class Event {
         class Opened : Event()
         class Closed : Event()

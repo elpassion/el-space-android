@@ -31,5 +31,6 @@ interface PacMan {
     interface PlayersService {
         fun getPlayers(): Observable<List<MapObject>>
         fun close()
+        fun send(player: String, it: IndoorwayPosition)
     }
 }

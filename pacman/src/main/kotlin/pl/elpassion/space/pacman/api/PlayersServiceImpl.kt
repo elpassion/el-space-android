@@ -1,5 +1,6 @@
 package pl.elpassion.space.pacman.api
 
+import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import pl.elpassion.space.pacman.PacMan
 import pl.elpassion.space.pacman.model.LocationUpdateEvent
 import pl.elpassion.space.pacman.model.MapObject
@@ -12,6 +13,10 @@ class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService
                 .asMessageS()
                 .deserialize()
                 .map { it.map { it.toMapObject() } }
+    }
+
+    override fun send(player: String, it: IndoorwayPosition) {
+        webSocket.send(WebSocketClientImpl.Event.Message("{\"player_id\": \"$player\", \"latitude\": ${it.coordinates.latitude}, \"longitude\": ${it.coordinates.longitude}}"))
     }
 
     override fun close() {

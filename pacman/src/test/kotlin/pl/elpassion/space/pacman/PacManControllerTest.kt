@@ -8,7 +8,7 @@ import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledEx
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
-import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.model.Position
 import rx.Completable
 import rx.subjects.PublishSubject
@@ -17,7 +17,7 @@ import rx.subjects.PublishSubject
 class PacManControllerTest {
 
     private val view = mock<PacMan.View>()
-    private val playersSubject = PublishSubject.create<List<Player>>()
+    private val playersSubject = PublishSubject.create<List<MapObject>>()
     private val positionSubject = SubscriptionSubjectVerifier<IndoorwayPosition>()
     private val mapView = mock<PacMan.MapView>()
     val positionService = mock<PacMan.PositionService>().apply {
@@ -80,27 +80,27 @@ class PacManControllerTest {
 
     @Test
     fun shouldUpdatePlayersAfterMapInit() {
-        val players = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        val players = listOf(MapObject(id = "player1", position = Position(53.1, 54.2)))
         stubMapLoadingSuccessfully()
         pacManController.onCreate()
         playersSubject.onNext(players)
-        verify(view).addPlayers(players)
+        verify(view).addMapObjects(players)
     }
 
     @Test
     fun shouldUpdatePlayersTwoTimes() {
-        val player1 = Player(id = "player1", position = Position(53.1, 54.2))
-        val player2 = Player(id = "player2", position = Position(53.1, 54.2))
+        val player1 = MapObject(id = "player1", position = Position(53.1, 54.2))
+        val player2 = MapObject(id = "player2", position = Position(53.1, 54.2))
         val players1 = listOf(player1, player2)
         val players2 = listOf(player1)
         stubMapLoadingSuccessfully()
         pacManController.onCreate()
         playersSubject.onNext(players1, players2)
-        verify(view, times(2)).removePlayers(emptyList())
-        verify(view).addPlayers(emptyList())
-        verify(view).addPlayers(players1)
-        verify(view).removePlayers(listOf(player2))
-        verify(view).addPlayers(players2)
+        verify(view, times(2)).removeMapObjects(emptyList())
+        verify(view).addMapObjects(emptyList())
+        verify(view).addMapObjects(players1)
+        verify(view).removeMapObjects(listOf(player2))
+        verify(view).addMapObjects(players2)
     }
 
     @Test

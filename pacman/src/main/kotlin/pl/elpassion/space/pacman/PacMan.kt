@@ -1,7 +1,7 @@
 package pl.elpassion.space.pacman
 
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
-import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.MapObject
 import rx.Completable
 import rx.Observable
 
@@ -19,9 +19,9 @@ interface PacMan {
         fun handleBLENotSupportedException()
         fun handleBluetoothDisabledException()
         fun handleLocationDisabledException()
-        fun addPlayers(players: List<Player>)
+        fun addMapObjects(mapObjects: List<MapObject>)
         fun showPlayersUpdateError()
-        fun removePlayers(players: List<Player>)
+        fun removeMapObjects(mapObjects: List<MapObject>)
     }
 
     interface PositionService {
@@ -29,7 +29,7 @@ interface PacMan {
     }
 
     interface PlayersService {
-        fun getPlayers(): Observable<List<Player>>
+        fun getPlayers(): Observable<List<MapObject>>
         fun close()
     }
 }

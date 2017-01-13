@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.pac_man_activity.*
 import pl.elpassion.space.pacman.api.PlayersServiceImpl
 import pl.elpassion.space.pacman.api.WebSocketClientApiImpl
 import pl.elpassion.space.pacman.api.WebSocketClientImpl
-import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.utils.CreaturePicker
 
 
@@ -99,15 +99,15 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         currentLocationView.text = position.coordinates.getText()
     }
 
-    override fun addPlayers(players: List<Player>) {
-        players.forEach {
+    override fun addMapObjects(mapObjects: List<MapObject>) {
+        mapObjects.forEach {
             mapView.markerControl.add(CreaturePicker().createCreature(it))
         }
         veryBadInvalidate()
     }
 
-    override fun removePlayers(players: List<Player>) {
-        players.forEach {
+    override fun removeMapObjects(mapObjects: List<MapObject>) {
+        mapObjects.forEach {
             mapView.markerControl.remove(it.id)
         }
         veryBadInvalidate()

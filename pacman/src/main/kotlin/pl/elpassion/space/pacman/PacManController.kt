@@ -4,7 +4,7 @@ import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
-import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.utils.completeOnError
 import pl.elpassion.space.pacman.utils.save
 import rx.subscriptions.CompositeSubscription
@@ -21,7 +21,7 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                 .andThen(
                         playersService.getPlayers()
                                 .doOnNext { println(it) }
-                                .scan(emptyList<Player>() to emptyList<Player>()) { acc, current ->
+                                .scan(emptyList<MapObject>() to emptyList<MapObject>()) { acc, current ->
                                     acc.second to current
                                 }
                                 .doOnNext { println("old/new $it") }
@@ -33,10 +33,10 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                                     old.filter { it.id in idsToRemove } to new
                                 }
                                 .doOnNext { println("rem/add $it") }
-                                .doOnNext { players ->
-                                    val (playersToDelete, playersToAdd) = players
-                                    view.removePlayers(playersToDelete)
-                                    view.addPlayers(playersToAdd)
+                                .doOnNext { objects ->
+                                    val (objectsToDelete, objectsToAdd) = objects
+                                    view.removeMapObjects(objectsToDelete)
+                                    view.addMapObjects(objectsToAdd)
                                 }
                                 .completeOnError { view.showPlayersUpdateError() }
                 )

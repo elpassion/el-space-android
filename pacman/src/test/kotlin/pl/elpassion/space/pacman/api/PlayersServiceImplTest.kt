@@ -8,7 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
 import pl.elpassion.space.pacman.json.stringFromFile
-import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.model.Position
 import rx.observers.TestSubscriber
 
@@ -18,8 +18,8 @@ class PlayersServiceImplTest {
     private val webSocket = mock<WebSocketClient>().apply {
         whenever(this.connect()).thenReturn(eventsSubject.observable)
     }
-    private val subscriber = TestSubscriber.create<List<Player>>()
-    private val playersList = listOf(Player("unique_string_player_id", Position(52.0, 21.0)))
+    private val subscriber = TestSubscriber.create<List<MapObject>>()
+    private val playersList = listOf(MapObject("unique_string_player_id", Position(52.0, 21.0)))
     private val playersService = PlayersServiceImpl(webSocket)
 
     @Before

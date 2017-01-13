@@ -36,7 +36,7 @@ data class SpriteSheet(val textureId: String, val spriteRect: SpriteRect, val bi
 
 }
 
-data class Player(val id: String, val position: Position)
+data class MapObject(val id: String, val position: Position)
 
 data class Position(val lat: Double, val long: Double)
 

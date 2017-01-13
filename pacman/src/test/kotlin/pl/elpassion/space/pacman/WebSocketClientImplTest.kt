@@ -7,6 +7,7 @@ import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocketListener
+import org.junit.Ignore
 import org.junit.Test
 import pl.elpassion.space.pacman.api.WebSocketClientImpl
 import pl.elpassion.space.pacman.api.WebSocketClientImpl.Event

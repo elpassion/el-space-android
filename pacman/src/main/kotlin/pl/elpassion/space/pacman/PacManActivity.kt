@@ -101,7 +101,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
 
     override fun addPlayers(players: List<Player>) {
         players.forEach {
-            mapView.markerControl.add(CreaturePicker().createCreature(player))
+            mapView.markerControl.add(CreaturePicker().createCreature(it))
         }
         veryBadInvalidate()
     }

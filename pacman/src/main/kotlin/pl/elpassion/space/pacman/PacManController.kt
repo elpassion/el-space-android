@@ -14,32 +14,37 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     private val compositeSubscription: CompositeSubscription = CompositeSubscription()
 
     fun onCreate() {
-        mapView.loadMap().subscribe({
-            mapView.initTextures()
-            playersService.getPlayers()
-                    .scan(emptyList<Player>() to emptyList<Player>()) { acc, current ->
-                        acc.second to current
-                    }
-                    .map { pair ->
-                        val (old, new) = pair
-                        val oldIds = old.map { it.id }
-                        val newIds = new.map { it.id }
-                        val idsToRemove = oldIds.filterNot { newIds.contains(it) }
-                        val idsToAdd = newIds.filterNot { oldIds.contains(it) }
-                        old.filter { it.id in idsToRemove } to new.filter { it.id in idsToAdd }
-                    }
-                    .doOnNext { players ->
-                        val (playersToDelete, playersToAdd) = players
-                        view.removePlayers(playersToDelete)
-                        view.addPlayers(playersToAdd)
-                    }
-                    .completeOnError { view.showPlayersUpdateError() }
-                    .subscribe()
-                    .save(to = compositeSubscription)
+        mapView.loadMap()
+                .doOnCompleted {
+                    mapView.initTextures()
+                }
+                .doOnError { view.showMapLoadingError() }
+                .andThen(
+                        playersService.getPlayers()
+                                .doOnNext { println(it) }
+                                .scan(emptyList<Player>() to emptyList<Player>()) { acc, current ->
+                                    acc.second to current
+                                }
+                                .doOnNext { println("old/new $it") }
+                                .map { pair ->
+                                    val (old, new) = pair
+                                    val oldIds = old.map { it.id }
+                                    val newIds = new.map { it.id }
+                                    val idsToRemove = oldIds.filterNot { newIds.contains(it) }
+                                    val idsToAdd = newIds.filterNot { oldIds.contains(it) }
+                                    old.filter { it.id in idsToRemove } to new
+                                }
+                                .doOnNext { println("rem/add $it") }
+                                .doOnNext { players ->
+                                    val (playersToDelete, playersToAdd) = players
+                                    view.removePlayers(playersToDelete)
+                                    view.addPlayers(playersToAdd)
+                                }
+                                .completeOnError { view.showPlayersUpdateError() }
+                )
+                .subscribe()
+                .save(to = compositeSubscription)
 
-        }, {
-            view.showMapLoadingError()
-        })
     }
 
     fun onResume() {

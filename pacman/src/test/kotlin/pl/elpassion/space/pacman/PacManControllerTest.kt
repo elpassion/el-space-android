@@ -89,13 +89,17 @@ class PacManControllerTest {
 
     @Test
     fun shouldUpdatePlayersTwoTimes() {
-        val players1 = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
+        val player1 = Player(id = "player1", position = Position(53.1, 54.2))
+        val player2 = Player(id = "player2", position = Position(53.1, 54.2))
+        val players1 = listOf(player1, player2)
+        val players2 = listOf(player1)
         stubMapLoadingSuccessfully()
         pacManController.onCreate()
-        playersSubject.onNext(players1)
-        val players2 = listOf(Player(id = "player1", position = Position(63.1, 64.2)))
-        playersSubject.onNext(players2)
+        playersSubject.onNext(players1, players2)
+        verify(view, times(2)).removePlayers(emptyList())
+        verify(view).addPlayers(emptyList())
         verify(view).addPlayers(players1)
+        verify(view).removePlayers(listOf(player2))
         verify(view).addPlayers(players2)
     }
 

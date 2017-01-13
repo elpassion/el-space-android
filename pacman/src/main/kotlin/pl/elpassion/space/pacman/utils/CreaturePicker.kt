@@ -11,7 +11,7 @@ import pl.elpassion.space.pacman.model.SpriteSheet
 class CreaturePicker {
 
     companion object {
-        val pacManName = "pacMan"
+        var pacManName = "pacMan"
         val pacMan = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(144, 64, 100, 128), Size(980f, 640f))
         val redGhostName = "redGhost"
         val redGhost = SpriteSheet(SPRITE_SHEET_ID, SpriteRect(12, 256, 64, 64), Size(980f, 640f))
@@ -21,7 +21,11 @@ class CreaturePicker {
             pacMan.asDrawable(pacManName, coordinates, Size(2f, 2.34f))
 
     fun createCreature(mapObject: MapObject): DrawableFigure =
-            redGhost.asDrawable(redGhostName, mapObject.toCoordinates(), Size(1.5f, 1.5f))
+            when (mapObject.type) {
+                MapObject.Type.GHOST -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
+                MapObject.Type.FOOD -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
+                MapObject.Type.PLAYER -> redGhost.asDrawable(mapObject.id, mapObject.toCoordinates(), Size(1.5f, 1.5f))
+            }
 
     private fun MapObject.toCoordinates() = Coordinates(position.lat, position.long)
 }

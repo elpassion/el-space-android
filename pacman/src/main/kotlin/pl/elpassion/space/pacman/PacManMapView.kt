@@ -2,6 +2,7 @@ package pl.elpassion.space.pacman
 
 import android.graphics.BitmapFactory
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
+import com.indoorway.android.gles.GLRendererSurfaceView
 import com.indoorway.android.map.sdk.view.IndoorwayMapView
 import com.indoorway.android.map.sdk.view.drawable.textures.DrawableTexture
 import pl.elpassion.space.pacman.config.buildingUuid
@@ -40,5 +41,11 @@ class PacManMapView(val mapView: IndoorwayMapView) : PacMan.MapView {
 
     override fun updatePosition(position: IndoorwayPosition) {
         mapView.markerControl.add(CreaturePicker().createPacMan(position.coordinates))
+//        veryBadInvalidate()
+    }
+
+    private fun veryBadInvalidate() {
+        val view: GLRendererSurfaceView = mapView.getChildAt(0) as GLRendererSurfaceView
+        view.requestRender()
     }
 }

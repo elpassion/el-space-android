@@ -110,7 +110,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         mapObjects.forEach {
             mapView.markerControl.remove(it.id)
         }
-        veryBadInvalidate()
+//        veryBadInvalidate()
     }
 
     private fun Coordinates.getText() = "lat: $latitude, long: $longitude"

@@ -36,7 +36,7 @@ data class SpriteSheet(val textureId: String, val spriteRect: SpriteRect, val bi
 
 }
 
-data class MapObject(val id: String, val position: Position, val ghost: MapObject.Type) {
+data class MapObject(val id: String, val position: Position, val type: MapObject.Type) {
     enum class Type {
         GHOST,
         FOOD,

@@ -40,6 +40,17 @@ class PlayersServiceImplTest {
     }
 
     @Test
+    fun shouldForwardEventsWithCorrectTypes() {
+        val playersList = listOf(
+                MapObject("ghost", Position(52.0, 21.0), MapObject.Type.GHOST),
+                MapObject("food", Position(52.0, 21.0), MapObject.Type.FOOD),
+                MapObject("player", Position(52.0, 21.0), MapObject.Type.PLAYER))
+        eventsSubject.onNext(WebSocketClientImpl.Event.Opened())
+        eventsSubject.onNext(WebSocketClientImpl.Event.Message(stringFromFile("location-update-multiple.json")))
+        subscriber.assertValue(playersList)
+    }
+
+    @Test
     fun shouldNotEmitEventsUntilTheyAppear() {
         subscriber.assertNoValues()
     }

@@ -5,6 +5,7 @@ import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedEx
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
 import pl.elpassion.space.pacman.model.MapObject
+import pl.elpassion.space.pacman.utils.CreaturePicker
 import pl.elpassion.space.pacman.utils.completeOnError
 import pl.elpassion.space.pacman.utils.save
 import rx.subscriptions.CompositeSubscription
@@ -48,6 +49,7 @@ class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
 
     fun onResume() {
         positionService.start().subscribe({
+            playersService.send(CreaturePicker.pacManName, it)
             mapView.updatePosition(it)
             view.updatePosition(it)
         }, {

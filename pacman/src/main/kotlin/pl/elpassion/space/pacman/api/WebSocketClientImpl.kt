@@ -16,7 +16,7 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
         }, AsyncEmitter.BackpressureMode.BUFFER)
     }
 
-    fun send(message: Event.Message) {
+    override fun send(message: Event.Message) {
         api.send(message.body)
     }
 
@@ -46,7 +46,7 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
             emitter.onNext(Event.Closed())
         }
     }
-    
+
     sealed class Event {
         class Opened : Event()
         class Closed : Event()
@@ -63,5 +63,6 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
 
 interface WebSocketClient {
     fun connect(): Observable<WebSocketClientImpl.Event>
+    fun send(message: WebSocketClientImpl.Event.Message)
     fun close()
 }

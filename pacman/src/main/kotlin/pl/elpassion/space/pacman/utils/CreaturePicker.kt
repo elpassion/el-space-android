@@ -23,9 +23,9 @@ class CreaturePicker {
 
     fun createCreature(mapObject: MapObject) =
             when (mapObject.type) {
-                MapObject.Type.GHOST -> DrawableCircle(mapObject.id, 1f, Color.RED, Color.argb(255, 255, 255, 0), 0.1f, mapObject.toCoordinates())
-                MapObject.Type.FOOD -> DrawableCircle(mapObject.id, 0.2f, Color.YELLOW, Color.argb(255, 255, 255, 0), 0.1f, mapObject.toCoordinates())
-                MapObject.Type.PLAYER -> DrawableCircle(mapObject.id, 0.8f, Color.GREEN, Color.argb(255, 255, 255, 0), 0.1f, mapObject.toCoordinates())
+                MapObject.Type.GHOST -> DrawableCircle(mapObject.id, 1f, Color.RED, Color.TRANSPARENT, 0.1f, mapObject.toCoordinates())
+                MapObject.Type.FOOD -> DrawableCircle(mapObject.id, 0.2f, Color.YELLOW, Color.TRANSPARENT, 0.1f, mapObject.toCoordinates())
+                MapObject.Type.PLAYER -> DrawableCircle(mapObject.id, 0.8f, Color.GREEN, Color.TRANSPARENT, 0.1f, mapObject.toCoordinates())
             }
 
     private fun MapObject.toCoordinates() = Coordinates(position.lat, position.long)

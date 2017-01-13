@@ -86,7 +86,7 @@ class WebSocketClientImplTest {
                 is Message -> "Message: ${it.body}"
                 else -> it.javaClass.simpleName
             })
-            client.send(Message("{\"event\": \"location_update\", \"player_id\": \"Player1\", \"latitude\": 53.0, \"longitude\": 21.0}"))
+            //client.send(Message("{\"event\": \"location_update\", \"player_id\": \"Player1\", \"latitude\": 53.0, \"longitude\": 21.0}"))
         }
         Thread.sleep(60000)
     }

@@ -26,7 +26,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var currentPosition: IndoorwayPosition? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
-        PanManController(this, PacManMapView(mapView), PacManPositionService(this), PlayersServiceImpl(WebSocketClientImpl("ws://192.168.1.19:8181/ws", WebSocketClientApiImpl())))
+        PacManController(this, PacManMapView(mapView), PacManPositionService(this), PlayersServiceImpl(WebSocketClientImpl("ws://192.168.1.19:8181/ws", WebSocketClientApiImpl())))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

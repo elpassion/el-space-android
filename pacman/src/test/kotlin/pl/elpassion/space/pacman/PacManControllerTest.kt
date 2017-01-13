@@ -28,7 +28,7 @@ class PacManControllerTest {
     val playersService = mock<PacMan.PlayersService>().apply {
         whenever(this.getPlayers()).thenReturn(playersSubject)
     }
-    val pacManController = PanManController(view, mapView, positionService, playersService)
+    val pacManController = PacManController(view, mapView, positionService, playersService)
 
     @Test
     fun shouldShowMapLoadingErrorWhenLoadingMapFailed() {

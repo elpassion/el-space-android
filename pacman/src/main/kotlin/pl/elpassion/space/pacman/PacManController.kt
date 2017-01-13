@@ -8,7 +8,7 @@ import pl.elpassion.space.pacman.utils.completeOnError
 import pl.elpassion.space.pacman.utils.save
 import rx.subscriptions.CompositeSubscription
 
-class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService, val playersService: PacMan.PlayersService) {
+class PacManController(val view: PacMan.View, val mapView: PacMan.MapView, val positionService: PacMan.PositionService, val playersService: PacMan.PlayersService) {
 
     private val compositeSubscription: CompositeSubscription = CompositeSubscription()
 

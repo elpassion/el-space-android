@@ -52,6 +52,7 @@ dependencies {
     compile "com.indoorway.android:location:$indoorway_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "com.squareup.okhttp3:okhttp:$okhttp"
+    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4"
 }
 
 apply from: "../core-dependencies.gradle"

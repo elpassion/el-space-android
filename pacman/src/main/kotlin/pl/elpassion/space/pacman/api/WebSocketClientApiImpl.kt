@@ -4,7 +4,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
+import okio.ByteString
 import java.io.Closeable
+import java.nio.charset.Charset
 
 
 class WebSocketClientApiImpl : WebSocketClientImpl.Api, Closeable {
@@ -18,7 +20,8 @@ class WebSocketClientApiImpl : WebSocketClientImpl.Api, Closeable {
     }
 
     override fun send(message: String) {
-        webSocket?.send(message) ?: throw IllegalStateException("Web socket not connected")
+        webSocket?.send(ByteString.encodeString(message, Charset.defaultCharset()))
+//        webSocket?.send(message) ?: throw IllegalStateException("Web socket not connected")
     }
 
     override fun close() {

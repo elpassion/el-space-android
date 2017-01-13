@@ -10,7 +10,7 @@ class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService
         return webSocket.connect()
                 .asMessageS()
                 .deserialize()
-                .map { it.map { Player(it.playerId, Position(it.latitude, it.longitude)) } }
+                .map { it.map { Player(it.player, Position(it.latitude, it.longitude)) } }
     }
 
     override fun close() {

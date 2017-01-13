@@ -42,7 +42,7 @@ data class Position(val lat: Double, val long: Double)
 
 data class LocationUpdateEvent(
         @JsonProperty
-        val playerId: String,
+        val player: String,
         @JsonProperty
         val latitude: Double,
         @JsonProperty

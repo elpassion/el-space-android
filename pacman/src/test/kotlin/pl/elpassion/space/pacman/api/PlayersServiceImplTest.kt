@@ -37,6 +37,11 @@ class PlayersServiceImplTest {
         eventsSubject.onNext(WebSocketClientImpl.Event.Message(stringFromFile("location-update.json")))
         subscriber.assertValue(playersList)
     }
+
+    @Test
+    fun shouldNotEmitEventsUntilTheyAppear() {
+        subscriber.assertNoValues()
+    }
 }
 
 
@@ -44,8 +49,10 @@ class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService
 
     override fun getPlayers(): Observable<List<Player>> {
 
-        webSocket.connect()
-
-        return Observable.just(listOf(Player("unique_string_player_id", Position(52.0, 21.0))))
+        return webSocket.connect()
+                .ofType(WebSocketClientImpl.Event.Message::class.java)
+                .map { it.body }
+                .deserialize()
+                .map { it.map { Player(it.playerId, Position(it.latitude, it.longitude)) } }
     }
 }

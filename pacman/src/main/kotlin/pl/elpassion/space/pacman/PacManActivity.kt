@@ -41,7 +41,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     }
 
     override fun showPlayersUpdateError() {
-        Toast.makeText(this, "Players update error", Toast.LENGTH_SHORT)
+        Toast.makeText(this, "Players update error", Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {

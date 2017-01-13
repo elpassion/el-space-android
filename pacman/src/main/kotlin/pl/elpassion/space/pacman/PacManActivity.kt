@@ -1,6 +1,7 @@
 package pl.elpassion.space.pacman
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -10,8 +11,12 @@ import android.util.Log
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
+import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import kotlinx.android.synthetic.main.pac_man_activity.*
+import pl.elpassion.space.pacman.config.TEST_POINTS
 import pl.elpassion.space.pacman.model.Player
+import pl.elpassion.space.pacman.model.Position
+import rx.Observable
 
 
 class PacManActivity : AppCompatActivity(), PacMan.View {
@@ -21,7 +26,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var alertDialog: AlertDialog? = null
     val controller by lazy {
         PanManController(this, PacManMapView(mapView), PacManPositionService(this), object : PacMan.PlayersService {
-            override fun getPlayers() = TODO()
+            override fun getPlayers() = Observable.just(TEST_POINTS.mapIndexed { i, coordinates ->  Player( "C$i", Position(coordinates.latitude, coordinates.longitude)) })
         })
     }
 
@@ -93,8 +98,11 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     }
 
     override fun updatePlayers(players: List<Player>) {
-
+        for (player in players)
+            mapView.markerControl.add(DrawableCircle(player.id, 0.2f, Color.argb(255, 255, 255, 0), Color.RED, 0.1f, player.toCoordinates()))
     }
+
+    private fun Player.toCoordinates() = Coordinates(position.lat, position.long)
 
     private fun Coordinates.getText() = "lat: $latitude, long: $longitude"
 

@@ -80,9 +80,10 @@ class PacManControllerTest {
     }
 
     @Test
-    fun shouldUpdatePlayersOnReceived() {
+    fun shouldUpdatePlayersAfterMapInit() {
         val players = listOf(Player(id = "player1", position = Position(53.1, 54.2)))
-        panManController.onResume()
+        panManController.onCreate()
+        loadMapSubject.onNext(Unit)
         playersSubject.onNext(players)
         verify(view).updatePlayers(players)
     }

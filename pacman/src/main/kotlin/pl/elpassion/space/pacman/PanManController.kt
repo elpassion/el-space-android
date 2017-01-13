@@ -14,6 +14,10 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     fun onCreate() {
         mapView.loadMap().subscribe({
             mapView.initTextures()
+            playersService.getPlayers().subscribe({
+                view.updatePlayers(it)
+            }).save(to = compositeSubscription)
+
         }, {
             view.showMapLoadingError()
         })
@@ -31,11 +35,6 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
                 is LocationDisabledException -> view.handleLocationDisabledException()
             }
         }).save(to = compositeSubscription)
-
-        playersService.getPlayers().subscribe({
-            view.updatePlayers(it)
-        }).save(to = compositeSubscription)
-
     }
 
     fun onPause() {

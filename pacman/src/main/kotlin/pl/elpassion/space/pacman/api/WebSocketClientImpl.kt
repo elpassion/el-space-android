@@ -25,8 +25,8 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
         subject.onNext(Event.Opened())
     }
 
-    override fun onFailure(webSocket: WebSocket, t: Throwable?, response: Response?) {
-        subject.onNext(Event.Failed(t ?: RuntimeException()))
+    override fun onFailure(webSocket: WebSocket, throwable: Throwable, response: Response?) {
+        subject.onNext(Event.Failed(throwable))
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {

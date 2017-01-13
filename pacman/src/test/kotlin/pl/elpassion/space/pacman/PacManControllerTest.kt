@@ -8,6 +8,7 @@ import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledEx
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
+import pl.elpassion.space.pacman.model.LocationUpdateEvent
 import pl.elpassion.space.pacman.model.MapObject
 import pl.elpassion.space.pacman.model.Position
 import rx.Completable
@@ -80,7 +81,7 @@ class PacManControllerTest {
 
     @Test
     fun shouldUpdatePlayersAfterMapInit() {
-        val players = listOf(MapObject(id = "player1", position = Position(53.1, 54.2)))
+        val players = listOf(MapObject(id = "player1", position = Position(53.1, 54.2), ghost = MapObject.Type.GHOST))
         stubMapLoadingSuccessfully()
         pacManController.onCreate()
         playersSubject.onNext(players)
@@ -89,8 +90,8 @@ class PacManControllerTest {
 
     @Test
     fun shouldUpdatePlayersTwoTimes() {
-        val player1 = MapObject(id = "player1", position = Position(53.1, 54.2))
-        val player2 = MapObject(id = "player2", position = Position(53.1, 54.2))
+        val player1 = MapObject(id = "player1", position = Position(53.1, 54.2), ghost = MapObject.Type.GHOST)
+        val player2 = MapObject(id = "player2", position = Position(53.1, 54.2), ghost = MapObject.Type.GHOST)
         val players1 = listOf(player1, player2)
         val players2 = listOf(player1)
         stubMapLoadingSuccessfully()

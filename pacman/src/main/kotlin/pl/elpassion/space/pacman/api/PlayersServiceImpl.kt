@@ -20,5 +20,5 @@ class PlayersServiceImpl(val webSocket: WebSocketClient) : PacMan.PlayersService
 }
 
 private fun LocationUpdateEvent.toMapObject(): MapObject {
-    return MapObject(this.player, Position(this.latitude, this.longitude))
+    return MapObject(this.player, Position(this.latitude, this.longitude), MapObject.Type.GHOST)
 }

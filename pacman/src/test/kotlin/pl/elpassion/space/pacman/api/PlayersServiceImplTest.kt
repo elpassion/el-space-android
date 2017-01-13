@@ -19,7 +19,7 @@ class PlayersServiceImplTest {
         whenever(this.connect()).thenReturn(eventsSubject.observable)
     }
     private val subscriber = TestSubscriber.create<List<MapObject>>()
-    private val playersList = listOf(MapObject("unique_string_player_id", Position(52.0, 21.0)))
+    private val playersList = listOf(MapObject("unique_string_player_id", Position(52.0, 21.0), MapObject.Type.GHOST))
     private val playersService = PlayersServiceImpl(webSocket)
 
     @Before

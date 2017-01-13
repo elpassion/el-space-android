@@ -14,10 +14,10 @@ import com.indoorway.android.common.sdk.model.IndoorwayPosition
 import com.indoorway.android.gles.GLRendererSurfaceView
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableCircle
 import kotlinx.android.synthetic.main.pac_man_activity.*
-import pl.elpassion.space.pacman.config.TEST_POINTS
+import pl.elpassion.space.pacman.api.PlayersServiceImpl
+import pl.elpassion.space.pacman.api.WebSocketClientApiImpl
+import pl.elpassion.space.pacman.api.WebSocketClientImpl
 import pl.elpassion.space.pacman.model.Player
-import pl.elpassion.space.pacman.model.Position
-import rx.Observable
 
 
 class PacManActivity : AppCompatActivity(), PacMan.View {
@@ -26,9 +26,7 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
     var currentPosition: IndoorwayPosition? = null
     var alertDialog: AlertDialog? = null
     val controller by lazy {
-        PanManController(this, PacManMapView(mapView), PacManPositionService(this), object : PacMan.PlayersService {
-            override fun getPlayers() = Observable.just(TEST_POINTS.mapIndexed { i, coordinates ->  Player( "C$i", Position(coordinates.latitude, coordinates.longitude)) })
-        })
+        PanManController(this, PacManMapView(mapView), PacManPositionService(this), PlayersServiceImpl(WebSocketClientImpl("ws://192.168.1.19:8181/ws", WebSocketClientApiImpl())))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

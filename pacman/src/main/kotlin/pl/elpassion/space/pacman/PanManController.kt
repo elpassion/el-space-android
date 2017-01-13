@@ -4,6 +4,7 @@ import com.indoorway.android.common.sdk.exceptions.MissingPermissionException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BLENotSupportedException
 import com.indoorway.android.location.sdk.exceptions.bluetooth.BluetoothDisabledException
 import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledException
+import pl.elpassion.space.pacman.utils.completeOnError
 import pl.elpassion.space.pacman.utils.save
 import rx.subscriptions.CompositeSubscription
 
@@ -14,9 +15,11 @@ class PanManController(val view: PacMan.View, val mapView: PacMan.MapView, val p
     fun onCreate() {
         mapView.loadMap().subscribe({
             mapView.initTextures()
-            playersService.getPlayers().subscribe({
-                view.updatePlayers(it)
-            }).save(to = compositeSubscription)
+            playersService.getPlayers()
+                    .doOnNext { view.updatePlayers(it) }
+                    .completeOnError { view.showPlayersUpdateError() }
+                    .subscribe()
+                    .save(to = compositeSubscription)
 
         }, {
             view.showMapLoadingError()

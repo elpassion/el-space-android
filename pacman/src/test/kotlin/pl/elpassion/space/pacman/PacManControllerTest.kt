@@ -101,6 +101,14 @@ class PacManControllerTest {
     }
 
     @Test
+    fun shouldShowPlayersUpdateErrorWhenUpdateFails() {
+        pacManController.onCreate()
+        loadMapSubject.onNext(Unit)
+        playersSubject.onError(RuntimeException())
+        verify(view).showPlayersUpdateError()
+    }
+
+    @Test
     fun shouldHandleMissingPermissionException() {
         pacManController.onResume()
         positionSubject.onError(MissingPermissionException("permission"))

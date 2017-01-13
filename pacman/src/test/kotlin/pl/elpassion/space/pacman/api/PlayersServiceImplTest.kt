@@ -42,6 +42,11 @@ class PlayersServiceImplTest {
     fun shouldNotEmitEventsUntilTheyAppear() {
         subscriber.assertNoValues()
     }
+
+    @Test
+    fun should() {
+
+    }
 }
 
 

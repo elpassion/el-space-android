@@ -41,6 +41,9 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         showDialog("Map not loaded", "Error while loading map.")
     }
 
+    override fun showPlayersUpdateError() {
+    }
+
     override fun onResume() {
         super.onResume()
         controller.onResume()

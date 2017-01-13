@@ -84,7 +84,7 @@ class PacManControllerTest {
         stubMapLoadingSuccessfully()
         pacManController.onCreate()
         playersSubject.onNext(players)
-        verify(view).updatePlayers(players)
+        verify(view).addPlayers(players)
     }
 
     @Test
@@ -95,8 +95,8 @@ class PacManControllerTest {
         playersSubject.onNext(players1)
         val players2 = listOf(Player(id = "player1", position = Position(63.1, 64.2)))
         playersSubject.onNext(players2)
-        verify(view).updatePlayers(players1)
-        verify(view).updatePlayers(players2)
+        verify(view).addPlayers(players1)
+        verify(view).addPlayers(players2)
     }
 
     @Test

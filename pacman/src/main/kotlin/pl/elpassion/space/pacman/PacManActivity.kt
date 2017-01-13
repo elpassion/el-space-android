@@ -99,9 +99,18 @@ class PacManActivity : AppCompatActivity(), PacMan.View {
         currentLocationView.text = position.coordinates.getText()
     }
 
-    override fun updatePlayers(players: List<Player>) {
-        for (player in players)
+    override fun addPlayers(players: List<Player>) {
+        players.forEach {
             mapView.markerControl.add(CreaturePicker().createCreature(player))
+        }
+        veryBadInvalidate()
+    }
+
+    override fun removePlayers(players: List<Player>) {
+        players.forEach {
+            mapView.markerControl.remove(it.id)
+        }
+        veryBadInvalidate()
     }
 
     private fun Coordinates.getText() = "lat: $latitude, long: $longitude"

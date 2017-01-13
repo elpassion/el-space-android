@@ -11,3 +11,6 @@ fun <T> Observable<T>.completeOnError(action: (Throwable) -> Unit) = this
         .doOnError { action(it) }
         .onErrorResumeNext(Observable.empty())
 
+fun <T> Observable<Pair<List<T>, List<T>>>.diff() = this
+
+

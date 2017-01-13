@@ -19,8 +19,9 @@ interface PacMan {
         fun handleBLENotSupportedException()
         fun handleBluetoothDisabledException()
         fun handleLocationDisabledException()
-        fun updatePlayers(players: List<Player>)
+        fun addPlayers(players: List<Player>)
         fun showPlayersUpdateError()
+        fun removePlayers(players: List<Player>)
     }
 
     interface PositionService {

@@ -20,10 +20,11 @@ class PlayersServiceImplTest {
     }
     private val subscriber = TestSubscriber.create<List<Player>>()
     private val playersList = listOf(Player("unique_string_player_id", Position(52.0, 21.0)))
+    private val playersService = PlayersServiceImpl(webSocket)
 
     @Before
     fun setUp() {
-        PlayersServiceImpl(webSocket).getPlayers().subscribe(subscriber)
+        playersService.getPlayers().subscribe(subscriber)
     }
 
     @Test
@@ -48,6 +49,12 @@ class PlayersServiceImplTest {
         eventsSubject.onNext(WebSocketClientImpl.Event.Opened())
         eventsSubject.onNext(WebSocketClientImpl.Event.Failed(RuntimeException()))
         assertTrue(subscriber.onErrorEvents.isNotEmpty())
+    }
+
+    @Test
+    fun shouldCloseSocket() {
+        playersService.close()
+        verify(webSocket).close()
     }
 }
 

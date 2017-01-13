@@ -28,5 +28,6 @@ interface PacMan {
 
     interface PlayersService {
         fun getPlayers(): Observable<List<Player>>
+        fun close()
     }
 }

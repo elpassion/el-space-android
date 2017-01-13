@@ -64,4 +64,5 @@ class WebSocketClientImpl(private val url: String, private val api: Api = WebSoc
 
 interface WebSocketClient {
     fun connect(): Observable<WebSocketClientImpl.Event>
+    fun close()
 }

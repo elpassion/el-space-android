@@ -1,6 +1,7 @@
 package pl.elpassion.space.pacman
 
 import com.indoorway.android.common.sdk.model.IndoorwayPosition
+import pl.elpassion.space.pacman.model.Player
 import rx.Observable
 
 interface PacMan {

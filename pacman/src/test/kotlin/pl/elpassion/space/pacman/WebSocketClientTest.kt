@@ -9,8 +9,9 @@ import okhttp3.Response
 import okhttp3.WebSocketListener
 import org.junit.Ignore
 import org.junit.Test
-import pl.elpassion.space.pacman.WebSocketClient.Event
-import pl.elpassion.space.pacman.WebSocketClient.Event.*
+import pl.elpassion.space.pacman.api.WebSocketClient
+import pl.elpassion.space.pacman.api.WebSocketClient.Event
+import pl.elpassion.space.pacman.api.WebSocketClient.Event.*
 import rx.observers.TestSubscriber
 import kotlin.properties.Delegates
 

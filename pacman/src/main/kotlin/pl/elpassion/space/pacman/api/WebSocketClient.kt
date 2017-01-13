@@ -1,4 +1,4 @@
-package pl.elpassion.space.pacman
+package pl.elpassion.space.pacman.api
 
 import okhttp3.Response
 import okhttp3.WebSocket

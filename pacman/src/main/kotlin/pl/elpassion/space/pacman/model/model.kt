@@ -1,6 +1,7 @@
-package pl.elpassion.space.pacman
+package pl.elpassion.space.pacman.model
 
 import android.graphics.RectF
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.indoorway.android.common.sdk.model.Coordinates
 import com.indoorway.android.map.sdk.view.drawable.figures.DrawableIcon
 
@@ -38,3 +39,12 @@ data class SpriteSheet(val textureId: String, val spriteRect: SpriteRect, val bi
 data class Player(val id: String, val position: Position)
 
 data class Position(val lat: Double, val long: Double)
+
+data class LocationUpdateEvent(
+        @JsonProperty
+        val playerId: String,
+        @JsonProperty
+        val latitude: Double,
+        @JsonProperty
+        val longitude: Double
+)

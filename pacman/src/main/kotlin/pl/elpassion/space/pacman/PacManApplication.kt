@@ -3,6 +3,7 @@ package pl.elpassion.space.pacman
 import android.app.Application
 import com.indoorway.android.location.sdk.IndoorwayLocationSdk
 import com.indoorway.android.map.sdk.IndoorwayMapSdk
+import pl.elpassion.space.pacman.config.trafficApiKey
 
 
 class PacManApplication : Application() {

@@ -1,5 +1,7 @@
-package pl.elpassion.space.pacman
+package pl.elpassion.space.pacman.config
+
 import com.indoorway.android.common.sdk.model.Coordinates
+
 val TEST_POINTS = listOf(
         Coordinates(52.232883888102364, 20.983954366165477),
         Coordinates(52.23288373807415, 20.983954109885598),

@@ -1,6 +1,7 @@
 package pl.elpassion.space.pacman.json
 
 import org.junit.Test
+import pl.elpassion.space.pacman.api.deserialize
 import pl.elpassion.space.pacman.model.LocationUpdateEvent
 import rx.Observable
 import rx.observers.TestSubscriber

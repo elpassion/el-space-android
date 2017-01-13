@@ -8,6 +8,7 @@ import com.indoorway.android.location.sdk.exceptions.location.LocationDisabledEx
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.space.SubscriptionSubjectVerifier
+import pl.elpassion.space.pacman.model.Player
 import rx.subjects.PublishSubject
 
 

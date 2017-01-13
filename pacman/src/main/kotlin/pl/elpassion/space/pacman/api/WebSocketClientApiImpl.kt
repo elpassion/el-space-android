@@ -1,4 +1,4 @@
-package pl.elpassion.space.pacman
+package pl.elpassion.space.pacman.api
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -26,5 +26,5 @@ class WebSocketClientApiImpl : WebSocketClient.Api, Closeable {
         webSocket = null
     }
 
-    private fun createRequest(url: String) = Request.Builder().url(url) .build()
+    private fun createRequest(url: String) = Request.Builder().url(url).build()
 }

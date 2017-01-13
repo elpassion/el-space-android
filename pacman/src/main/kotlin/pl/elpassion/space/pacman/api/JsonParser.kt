@@ -1,4 +1,4 @@
-package pl.elpassion.space.pacman.json
+package pl.elpassion.space.pacman.api
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.PropertyAccessor

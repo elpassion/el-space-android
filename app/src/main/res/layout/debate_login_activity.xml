@@ -21,4 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:text="@string/login_button"
+        android:id="@+id/loginButton"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

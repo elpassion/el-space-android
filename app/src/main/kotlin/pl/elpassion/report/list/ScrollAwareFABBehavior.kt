@@ -1,37 +1,36 @@
 package pl.elpassion.report.list
 
 import android.content.Context
-import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.FloatingActionButton
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
+import android.view.View.INVISIBLE
 
 
 @Suppress("UNUSED")
-class ScrollAwareFABBehavior(context: Context, private val attributeSet: AttributeSet) : FloatingActionButton.Behavior() {
-    private val toolbarHeight = context.getActionBarSize()
+class ScrollAwareFABBehavior(private val context: Context, private val attributeSet: AttributeSet) : CoordinatorLayout.Behavior<FloatingActionButton>() {
 
-    override fun layoutDependsOn(parent: CoordinatorLayout, fab: FloatingActionButton, dependency: View): Boolean {
-        return dependency is AppBarLayout
-    }
-
-    override fun onDependentViewChanged(parent: CoordinatorLayout, fab: FloatingActionButton, dependency: View): Boolean {
-        if (dependency is AppBarLayout) {
-            val lp = fab.layoutParams as CoordinatorLayout.LayoutParams
-            val fabBottomMargin = lp.bottomMargin
-            val distanceToScroll = fab.height + fabBottomMargin
-            val ratio = dependency.getY() / toolbarHeight.toFloat()
-            fab.translationY = -distanceToScroll * ratio
+    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout?,
+                                fab: FloatingActionButton,
+                                target: View?, dxConsumed: Int, dyConsumed: Int,
+                                dxUnconsumed: Int, dyUnconsumed: Int) {
+        super.onNestedScroll(coordinatorLayout, fab, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed)
+        if (dyConsumed > 0 && fab.visibility == View.VISIBLE) {
+            fab.hideFab()
+        } else if (dyConsumed < 0 && fab.visibility != View.VISIBLE) {
+            fab.show()
         }
-        return true
     }
 
-    private fun Context.getActionBarSize(): Int {
-        val typedValue = TypedValue().apply {
-            theme.resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, this, true)
-        }
-        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
+    private fun FloatingActionButton.hideFab() {
+        hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+            override fun onHidden(fab: FloatingActionButton) {
+                fab.visibility = INVISIBLE
+            }
+        })
     }
+
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?, child: FloatingActionButton?,
+                                     directTargetChild: View?, target: View?, nestedScrollAxes: Int) = true
 }

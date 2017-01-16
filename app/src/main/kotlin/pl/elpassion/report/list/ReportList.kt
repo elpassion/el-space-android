@@ -4,6 +4,7 @@ import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
 import pl.elpassion.project.CachedProjectRepositoryProvider
 import pl.elpassion.project.Project
+import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.Report
@@ -38,6 +39,8 @@ interface ReportList {
         fun openAddReportScreen()
 
         fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport)
+
+        fun openDailyEditReportScreen(report: DailyReport)
     }
 
     object ServiceProvider : Provider<Service>({

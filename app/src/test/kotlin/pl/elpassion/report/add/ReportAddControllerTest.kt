@@ -27,43 +27,10 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowPossibleProject() {
-        val project = newProject()
-        stubRepositoryToReturn(project)
-        val controller = createController()
-
-        controller.onCreate()
-
-        verify(view).showSelectedProject(project)
-    }
-
-    @Test
-    fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
-        stubRepositoryToReturn(null)
-        val controller = createController()
-
-        controller.onCreate()
-
-        verify(view, never()).showSelectedProject(any())
-    }
-
-    @Test
-    fun shouldOpenProjectChooserOnProjectClicked() {
-        createController().onProjectClicked()
-        verify(view).openProjectChooser()
-    }
-
-    @Test
-    fun shouldShowSelectedProject() {
-        createController().onSelectProject(newProject())
-        verify(view).showSelectedProject(newProject())
-    }
-
-    @Test
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
         verify(view).close()
     }
 
@@ -72,7 +39,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
 
         verify(view).showLoader()
     }
@@ -82,7 +49,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -93,19 +60,10 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
         controller.onDestroy()
 
         verify(view).hideLoader()
-    }
-
-    @Test
-    fun shouldShowEmptyDescriptionError() {
-        val controller = createController()
-        controller.onCreate()
-        controller.onReportAdd("8", "")
-
-        verify(view).showEmptyDescriptionError()
     }
 
     @Test
@@ -120,20 +78,19 @@ class ReportAddControllerTest {
     @Test
     fun shouldChangeDateAfterOnCreate() {
         val controller = createController("2016-01-04")
-        controller.onSelectProject(newProject())
 
         controller.onDateSelect("2016-05-04")
-        controller.onReportAdd("0.1", "Desription")
+        controller.addRegularReport("description", "8", 1)
 
-        verify(api).addReport(eq("2016-05-04"), any(), any(), any())
+        verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
         verify(view).showError(any())
     }
 
@@ -148,11 +105,10 @@ class ReportAddControllerTest {
     fun shouldUseApi() {
         val exception = RuntimeException()
         val project = Project(1, "Slack")
-        whenever(api.addReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
+        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         val controller = createController("2016-09-23")
 
-        controller.onSelectProject(project)
-        controller.onReportAdd("8", "description")
+        controller.addRegularReport("description", "8", 1)
         verify(view).showError(exception)
     }
 
@@ -165,14 +121,75 @@ class ReportAddControllerTest {
         verify(view).showDate("2016-02-01")
     }
 
-    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, repository, api)
+    @Test
+    fun shouldShowRegularReportDetailsFormAfterReportTypeChangedToRegularReport() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.REGULAR)
+        verify(view).showRegularReportDetails()
+    }
+
+    @Test
+    fun shouldShowPaidVacationDetailsFormAfterReportTypeChangedToPaidVacations() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.PAID_VACATIONS)
+        verify(view).showPaidVacationsReportDetails()
+    }
+
+    @Test
+    fun shouldShowSickLeaveDetailsFormAfterReportTypeChangedToSickLeave() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        verify(view).showSickLeaveReportDetails()
+    }
+
+    @Test
+    fun shouldShowUnpaidVacationsReportDetailsFromAfterReportTypeChangedToUnpaidVacations() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        verify(view).showUnpaidVacationsReportDetails()
+    }
+
+    @Test
+    fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
+        val controller = createController("2016-01-01")
+        controller.addUnpaidVacationsReport()
+        verify(api).addUnpaidVacationsReport("2016-01-01")
+    }
+
+    @Test
+    fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {
+        val controller = createController("2016-01-01")
+        controller.addSickLeaveReport()
+        verify(api).addSickLeaveReport("2016-01-01")
+    }
+
+    @Test
+    fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
+        val controller = createController("2016-09-23")
+
+        controller.addPaidVacationsReport("8")
+        verify(api).addPaidVacationsReport("2016-09-23", "8")
+    }
+
+    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)
     }
 
     private fun stubApiToReturn(completable: Completable) {
-        whenever(api.addReport(any(), any(), any(), any())).thenReturn(completable)
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(completable)
+        whenever(api.addSickLeaveReport(any())).thenReturn(completable)
+        whenever(api.addUnpaidVacationsReport(any())).thenReturn(completable)
+        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(completable)
     }
 }
 

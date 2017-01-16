@@ -1,12 +1,19 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
+import android.support.test.espresso.action.ViewActions.swipeLeft
+import android.support.test.espresso.matcher.ViewMatchers.*
+import android.view.View
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.Matcher
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -45,18 +52,6 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldAddButtonDisabledWhenNoCachedProjects() {
-        stubRepositoryAndStart(null)
-        onId(R.id.reportAddAdd).isDisabled()
-    }
-
-    @Test
-    fun shouldAddButtonEnableWhenCachedProjectsAvailable() {
-        stubRepositoryAndStart()
-        onId(R.id.reportAddAdd).isEnabled()
-    }
-
-    @Test
     fun shouldReallyStartWithFirstProjectSelected() {
         stubRepositoryAndStart(newProject(name = "Project name"))
         onText("Project name").isDisplayed()
@@ -72,7 +67,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).hasText("8")
+        withId(R.id.reportAddHours).withDisplayedParent().hasText("8")
     }
 
     @Test
@@ -102,7 +97,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveHoursHeader() {
         stubRepositoryAndStart()
-        onText(R.string.report_add_hours_header).isDisplayed()
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
     }
 
     @Test
@@ -114,18 +109,87 @@ class ReportAddActivityTest {
     @Test
     fun shouldClearTextAfterClickOnHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).click().hasText("")
+        withId(R.id.reportAddHours).withDisplayedParent().click().hasText("")
     }
 
     @Test
     fun shouldNotCrashOnLongClickOnHoursInput() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddHours).perform(longClick())
+        withId(R.id.reportAddHours).withDisplayedParent().perform(longClick())
+    }
+
+    @Test
+    @Ignore //There is no way to test this right now
+    fun shouldRegularReportActionBeSelectedOnStart() {
+        stubRepositoryAndStart()
+        onId(R.id.action_regular_report).isChecked()
+    }
+
+    @Test
+    @Ignore //There is no way to test this right now
+    fun shouldSelectPaidVacationsActionAfterSwipe() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddReportDetailsForm).perform(swipeLeft())
+        onId(R.id.action_paid_vacations_report).isChecked()
+    }
+
+    @Test
+    fun shouldShowPaidVacationsDetailsAfterClickOnPaidVacationsReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_paid_vacations_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
+    }
+
+    @Test
+    fun shouldShowRegularDetailsAfterReturnToRegularReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_paid_vacations_report).click()
+        onId(R.id.action_regular_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().isDisplayed()
+        withText(R.string.report_add_project_header).withDisplayedParent().isDisplayed()
+        withText("name").withDisplayedParent().isDisplayed()
+        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
+    }
+
+    @Test
+    fun shouldShowUnpaidVacationsDetailsAfterClickOnUnpaidVacationsReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_unpaid_vacations_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+
+        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowSickLeaveDetailsAfterClickOnSickLeaveReportType() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+
+        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withText("name").withDisplayedParent().doesNotExist()
+        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+
+        onText(R.string.report_add_sick_leave_info).isDisplayed()
     }
 
     @Test
     fun shouldShowLoaderOnReportAddCall() {
-        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
+        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.reportAddAdd).click()
@@ -137,5 +201,7 @@ class ReportAddActivityTest {
         LastSelectedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
+
+    private fun Matcher<View>.withDisplayedParent() = onView(allOf(this, withParent(isDisplayed())))
 }
 

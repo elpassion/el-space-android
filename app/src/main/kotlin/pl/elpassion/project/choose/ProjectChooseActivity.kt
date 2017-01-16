@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -92,8 +92,13 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     companion object {
         private val SELECTED_PROJECT = "selected_project"
+
         fun startForResult(activity: Activity, requestCode: Int) {
             activity.startActivityForResult(Intent(activity, ProjectChooseActivity::class.java), requestCode)
+        }
+
+        fun startForResult(fragment: Fragment, requestCode: Int) {
+            fragment.startActivityForResult(Intent(fragment.activity, ProjectChooseActivity::class.java), requestCode)
         }
 
         fun getProject(data: Intent): Project = data.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project

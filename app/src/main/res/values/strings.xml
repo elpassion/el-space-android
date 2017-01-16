@@ -12,6 +12,12 @@
     <string name="report_add_comment_header">COMMENT</string>
     <string name="report_add_add_button">ADD</string>
     <string name="report_add_description_hint">What did you do today? :)</string>
+    <string name="report_add_action_regular_report">Regular Report</string>
+    <string name="report_add_action_sick_leave_report">Sick Leave</string>
+    <string name="report_add_action_paid_vacations_report">Paid Vacations</string>
+    <string name="report_add_action_unpaid_vacations_report">Unpaid Vacations</string>
+    <string name="report_add_sick_leave_info">Sick leave :(</string>
+    <string name="report_add_unpaid_vacations_info">Unpaid vacations</string>
     <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
     <string name="token_hint">Provide token from hub website.</string>
@@ -31,4 +37,5 @@
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
     <string name="empty_description_error">Description cannot be empty.</string>
+    <string name="empty_project_error">Project name cannot be empty</string>
 </resources>

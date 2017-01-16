@@ -2,40 +2,43 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.project.Project
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable
 
 interface ReportAdd {
     interface View {
-        fun showSelectedProject(project: Project)
-
-        fun openProjectChooser()
-
         fun close()
-
         fun showError(ex: Throwable)
-
         fun showDate(date: String)
-
         fun enableAddReportButton()
-
-        fun showEmptyDescriptionError()
-
         fun showLoader()
-
         fun hideLoader()
+        fun showRegularReportDetails()
+        fun showPaidVacationsReportDetails()
+        fun showSickLeaveReportDetails()
+        fun showUnpaidVacationsReportDetails()
     }
 
     interface Api {
 
         @POST("activities")
-        fun addReport(
+        fun addRegularReport(
                 @Query("activity[performed_at]") date: String,
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
                 @Query("activity[comment]") description: String): Completable
+
+        @POST("activities?activity[report_type]=1")
+        fun addPaidVacationsReport(
+                @Query("activity[performed_at]") date: String,
+                @Query("activity[value]") hours: String): Completable
+
+        @POST("activities?activity[report_type]=2&activity[value]=0")
+        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Completable
+
+        @POST("activities?activity[report_type]=3&activity[value]=0")
+        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Completable
     }
 
     object ApiProvider : Provider<Api>({

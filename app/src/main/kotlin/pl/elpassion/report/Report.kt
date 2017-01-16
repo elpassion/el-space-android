@@ -1,5 +1,6 @@
 package pl.elpassion.report
 
+import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.project.Project
 import java.io.Serializable
 
@@ -8,6 +9,9 @@ interface Report {
     val year: Int
     val month: Int
     val day: Int
+
+    val date: String
+        get() = getDateString(year, month, day)
 }
 
 interface HourlyReport : Report {
@@ -37,7 +41,7 @@ data class DailyReport(
         override val day: Int,
         val reportType: DailyReportType) : Serializable, Report
 
-enum class DailyReportType {
-    UNPAID_VACATIONS,
-    SICK_LEAVE
+enum class DailyReportType(val description: String) {
+    UNPAID_VACATIONS("UnpaidVacation"),
+    SICK_LEAVE("SickLeave")
 }

@@ -3,9 +3,11 @@ package pl.elpassion.report.edit.service
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
+import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.dto.newRegularHourlyReport
+import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.edit.ReportEdit
 
 class ReportEditServiceTest {
@@ -18,7 +20,7 @@ class ReportEditServiceTest {
         val report = newPaidVacationHourlyReport(day = 1, month = 1, year = 2016, reportedHours = 8.0)
         service.edit(report)
 
-        verify(api).editReport(id = report.id, date = "2016-01-01", description = "", projectId = null, reportedHour = "8.0")
+        verify(api).editReport(id = report.id, date = report.date, description = "", projectId = null, reportedHour = "8.0")
     }
 
     @Test
@@ -26,7 +28,7 @@ class ReportEditServiceTest {
         val report = newPaidVacationHourlyReport(day = 2, month = 2, year = 2015, reportedHours = 7.0)
         service.edit(report)
 
-        verify(api).editReport(id = report.id, date = "2015-02-02", description = "", projectId = null, reportedHour = "7.0")
+        verify(api).editReport(id = report.id, date = report.date, description = "", projectId = null, reportedHour = "7.0")
     }
 
     @Test
@@ -34,7 +36,7 @@ class ReportEditServiceTest {
         val report = newRegularHourlyReport(day = 1, month = 1, year = 2016, reportedHours = 8.0, description = "123", project = newProject(id = 1))
         service.edit(report)
 
-        verify(api).editReport(id = report.id, date = "2016-01-01", description = report.description, projectId = report.project.id, reportedHour = "8.0")
+        verify(api).editReport(id = report.id, date = report.date, description = report.description, projectId = report.project.id, reportedHour = "8.0")
     }
 
     @Test
@@ -42,6 +44,22 @@ class ReportEditServiceTest {
         val report = newRegularHourlyReport(day = 2, month = 2, year = 2016, reportedHours = 7.0, description = "234", project = newProject(id = 2))
         service.edit(report)
 
-        verify(api).editReport(id = report.id, date = "2016-02-02", description = report.description, projectId = report.project.id, reportedHour = "7.0")
+        verify(api).editReport(id = report.id, date = report.date, description = report.description, projectId = report.project.id, reportedHour = "7.0")
+    }
+
+    @Test
+    fun shouldCallApiWithProperDataOfDailyReport() {
+        val report = newDailyReport(day = 1, month = 1, year = 2016, reportType = DailyReportType.SICK_LEAVE)
+        service.edit(report)
+
+        verify(api).editReport(id = report.id, date = report.date, description = "SickLeave", projectId = null, reportedHour = "0")
+    }
+
+    @Test
+    fun shouldCallApiWithReallyProperDataOfDailyReport() {
+        val report = newDailyReport(day = 1, month = 1, year = 2016, reportType = DailyReportType.UNPAID_VACATIONS)
+        service.edit(report)
+
+        verify(api).editReport(id = report.id, date = report.date, description = "UnpaidVacation", projectId = null, reportedHour = "0")
     }
 }

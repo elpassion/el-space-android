@@ -21,14 +21,15 @@ import pl.elpassion.project.choose.ProjectRepositoryProvider
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.report.RegularHourlyReport
+import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.startActivity
 import rx.Completable
 import rx.Observable
 
-class RegularReportEditActivityTest {
+class ReportEditRegularActivityTest {
 
     @JvmField @Rule
-    val rule = rule<RegularReportEditActivity>(autoStart = false)
+    val rule = rule<ReportEditRegularActivity>(autoStart = false)
 
     private val reportEditApi = mock<ReportEdit.EditApi>()
     private val reportRemoveApi = mock<ReportEdit.RemoveApi>()
@@ -166,7 +167,7 @@ class RegularReportEditActivityTest {
     }
 
     private fun startActivity(report: RegularHourlyReport = newRegularHourlyReport()) {
-        rule.startActivity(RegularReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+        rule.startActivity(ReportEditRegularActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }
 

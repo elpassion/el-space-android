@@ -8,7 +8,7 @@ import pl.elpassion.R
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.list.OnReportClickListener
 
-class RegularHourlyReportItemAdapter(val report: RegularHourlyReport, val onReportClickListener: OnReportClickListener) : StableItemAdapter<RegularHourlyReportItemAdapter.VH>(report.id, R.layout.regular_hourly_report_item) {
+class RegularReportItemAdapter(val report: RegularHourlyReport, val onReportClickListener: OnReportClickListener) : StableItemAdapter<RegularReportItemAdapter.VH>(report.id, R.layout.regular_hourly_report_item) {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

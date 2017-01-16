@@ -31,8 +31,9 @@ import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
-import pl.elpassion.report.edit.PaidVacationReportEditActivity
-import pl.elpassion.report.edit.RegularReportEditActivity
+import pl.elpassion.report.edit.daily.ReportEditDailyActivity
+import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
+import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import rx.Observable
 
 class ReportListActivityTest {
@@ -102,6 +103,14 @@ class ReportListActivityTest {
         onText("3 Mon").click()
 
         checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenEditDailyReportScreenOnDailyReportClick() {
+        scrollToItemWithText("8 Sat")
+        onText("7 Fri").click()
+
+        checkIntent(ReportEditDailyActivity::class.java)
     }
 
     @Test
@@ -185,6 +194,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowUnpaidVacationsInformationForDailyReportTypeUnpaidVacations() {
+        scrollToItemWithText("8 Sat")
         onItemWithText("8 Sat").check(matches(hasDescendant(withText(R.string.report_unpaid_vacations_title))))
     }
 
@@ -199,14 +209,14 @@ class ReportListActivityTest {
         scrollToItemWithText("11 Tue")
         onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
 
-        checkIntent(PaidVacationReportEditActivity::class.java)
+        checkIntent(ReportEditPaidVacationActivity::class.java)
     }
 
     @Test
     fun shouldOpenRegularReportEditActivityAfterClickOnRegularReport() {
         onText("8.0h - Project").click()
 
-        checkIntent(RegularReportEditActivity::class.java)
+        checkIntent(ReportEditRegularActivity::class.java)
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

@@ -15,13 +15,13 @@ import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.RegularHourlyReport
-import pl.elpassion.report.Report
+import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.startActivity
 
 class DateChooserReportEditActivityTest {
 
     @JvmField @Rule
-    val rule = rule<RegularReportEditActivity>(autoStart = false)
+    val rule = rule<ReportEditRegularActivity>(autoStart = false)
 
     @Before
     fun setUp() {
@@ -39,7 +39,7 @@ class DateChooserReportEditActivityTest {
 
 
     private fun startActivity(report: RegularHourlyReport = newRegularHourlyReport()) {
-        rule.startActivity(RegularReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+        rule.startActivity(ReportEditRegularActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
 }
 

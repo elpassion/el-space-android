@@ -1,8 +1,8 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
 import android.support.test.espresso.action.ViewActions.swipeLeft
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -189,7 +189,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldShowLoaderOnReportAddCall() {
-        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
+        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.reportAddAdd).click()

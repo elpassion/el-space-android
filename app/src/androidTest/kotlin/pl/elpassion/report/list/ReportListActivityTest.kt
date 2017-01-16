@@ -107,6 +107,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenEditDailyReportScreenOnDailyReportClick() {
+        scrollToItemWithText("8 Sat")
         onText("7 Fri").click()
 
         checkIntent(ReportEditDailyActivity::class.java)
@@ -193,6 +194,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowUnpaidVacationsInformationForDailyReportTypeUnpaidVacations() {
+        scrollToItemWithText("8 Sat")
         onItemWithText("8 Sat").check(matches(hasDescendant(withText(R.string.report_unpaid_vacations_title))))
     }
 

@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             app:itemBackground="@color/colorPrimary"
             app:itemTextColor="@color/colorWhite"
-            app:menu="@menu/add_raport_button_menu" />
+            app:menu="@menu/add_report_button_menu" />
 
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

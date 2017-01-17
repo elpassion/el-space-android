@@ -10,8 +10,6 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.InitIntentsRule
-import pl.elpassion.common.checkIntent
 import pl.elpassion.common.rule
 import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.ReportListActivity

@@ -1,11 +1,11 @@
 package pl.elpassion.login
 
+import com.elpassion.android.commons.espresso.InitIntentsRule
+import com.elpassion.android.commons.espresso.checkIntent
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.common.InitIntentsRule
-import pl.elpassion.common.checkIntent
 import pl.elpassion.common.rule
 import pl.elpassion.report.list.ReportList
 import pl.elpassion.report.list.ReportListActivity

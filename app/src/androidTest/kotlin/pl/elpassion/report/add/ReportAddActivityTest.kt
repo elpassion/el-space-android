@@ -17,8 +17,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.InitIntentsRule
-import pl.elpassion.common.checkIntent
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
 import pl.elpassion.project.Project

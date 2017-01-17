@@ -17,8 +17,6 @@ import org.hamcrest.core.IsNot.not
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.common.InitIntentsRule
-import pl.elpassion.common.checkIntent
 import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime

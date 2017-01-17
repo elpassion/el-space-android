@@ -47,7 +47,7 @@ class ReportListActivityAddReportTest {
         onText("1 Sat").click()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("Description"))
         Espresso.closeSoftKeyboard()
-        onId(R.id.reportAddAdd).click()
+//        onId(R.id.reportAddAdd).click()
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("Description"))))
     }
 

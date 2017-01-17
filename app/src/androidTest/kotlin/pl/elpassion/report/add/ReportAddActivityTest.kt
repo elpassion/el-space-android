@@ -184,7 +184,7 @@ class ReportAddActivityTest {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
-        onId(R.id.reportAddAdd).click()
+        onId(R.id.addReport).click()
         onId(R.id.loader).isDisplayed()
     }
 

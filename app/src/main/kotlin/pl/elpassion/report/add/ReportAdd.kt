@@ -11,7 +11,6 @@ interface ReportAdd {
         fun close()
         fun showError(ex: Throwable)
         fun showDate(date: String)
-        fun enableAddReportButton()
         fun showLoader()
         fun hideLoader()
         fun showRegularReportDetails()

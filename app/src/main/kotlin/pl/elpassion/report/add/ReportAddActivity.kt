@@ -44,15 +44,25 @@ class ReportAddActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
+        setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddAdd.setOnClickListener {
-            controller.onReportAdd(getCurrentReportController())
-        }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
         bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
         reportAddReportDetailsForm.adapter = ReportAddPagerAdapter(items, this)
         reportAddReportDetailsForm.pageSelections().subscribe(bottomNavigation.selectItemAtPosition())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.add_report_top_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.addReport -> controller.onReportAdd(getCurrentReportController())
+        }
+        return handleClickOnBackArrowItem(item)
     }
 
     private fun Int.toReportType() = when (this) {
@@ -72,15 +82,9 @@ class ReportAddActivity : AppCompatActivity(),
         reportAddDate.setText(date)
     }
 
-    override fun enableAddReportButton() {
-        reportAddAdd.isEnabled = true
-    }
-
     override fun showLoader() = showLoader(reportAddCoordinator)
 
     override fun hideLoader() = hideLoader(reportAddCoordinator)
-
-    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     override fun close() {
         setResult(Activity.RESULT_OK)

@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".project.choose.ProjectChooseActivity" />
-        <activity android:name=".report.add.ReportAddActivity" />
+        <activity
+            android:name=".report.add.ReportAddActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"

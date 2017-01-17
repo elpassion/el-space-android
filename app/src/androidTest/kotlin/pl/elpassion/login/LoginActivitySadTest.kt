@@ -1,7 +1,6 @@
 package pl.elpassion.login
 
 import android.support.test.espresso.Espresso.closeSoftKeyboard
-import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
@@ -70,7 +69,7 @@ class LoginActivitySadTest {
     }
 
     private fun login(token: String) {
-        onId(R.id.tokenInput).perform(replaceText(token))
+        onId(R.id.tokenInput).replaceText(token)
         closeSoftKeyboard()
         onId(R.id.loginButton).click()
     }

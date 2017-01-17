@@ -17,7 +17,8 @@ import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
-import pl.elpassion.report.add.details.*
+import pl.elpassion.report.add.details.ReportAddDetails
+import pl.elpassion.report.add.details.ReportAddDetailsFragment
 import pl.elpassion.report.add.details.paidvacations.ReportAddDetailsPaidVacationsFragment
 import pl.elpassion.report.add.details.regular.ReportAddDetailsRegularFragment
 import pl.elpassion.report.add.details.sickleave.ReportAddDetailsSickLeaveFragment
@@ -153,13 +154,4 @@ private fun BottomNavigationView.selectItemAtPosition() = rx.functions.Action1 {
 }
 
 private val Menu.items: List<MenuItem>
-    get() {
-        val results = mutableListOf<MenuItem>()
-        var index = 0
-        val size = size()
-        while (index < size) {
-            results.add(getItem(index))
-            index++
-        }
-        return results
-    }
+    get() = (0 until size()).map { getItem(it) }

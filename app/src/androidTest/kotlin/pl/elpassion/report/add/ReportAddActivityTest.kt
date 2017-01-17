@@ -89,21 +89,21 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldHaveProjectHeader() {
+    fun shouldHaveProjectHint() {
         stubRepositoryAndStart()
-        onText(R.string.report_add_project_header).isDisplayed()
+        withId(R.id.reportAddProjectName).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_project_header)
     }
 
     @Test
-    fun shouldHaveHoursHeader() {
+    fun shouldHaveHoursHint() {
         stubRepositoryAndStart()
-        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_hours_header)
     }
 
     @Test
-    fun shouldHaveCommentHeader() {
+    fun shouldHaveCommentHint() {
         stubRepositoryAndStart()
-        onText(R.string.report_add_comment_header).isDisplayed()
+        withId(R.id.reportAddDescription).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_description_hint)
     }
 
     @Test
@@ -138,11 +138,9 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_paid_vacations_report).click()
 
-        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
-        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
         withText("name").withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
 
-        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
         withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
     }
 
@@ -152,10 +150,10 @@ class ReportAddActivityTest {
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.action_regular_report).click()
 
-        withText(R.string.report_add_comment_header).withDisplayedParent().isDisplayed()
-        withText(R.string.report_add_project_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddDescription).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_description_hint)
+        withId(R.id.reportAddProjectName).withDisplayedParent().isDisplayed()
         withText("name").withDisplayedParent().isDisplayed()
-        withText(R.string.report_add_hours_header).withDisplayedParent().isDisplayed()
+        withId(R.id.reportAddHours).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_hours_header)
         withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
     }
 
@@ -164,10 +162,8 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_unpaid_vacations_report).click()
 
-        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
-        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
         withText("name").withDisplayedParent().doesNotExist()
-        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
         withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
 
         onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
@@ -178,10 +174,8 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_sick_leave_report).click()
 
-        withText(R.string.report_add_comment_header).withDisplayedParent().doesNotExist()
-        withText(R.string.report_add_project_header).withDisplayedParent().doesNotExist()
+        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
         withText("name").withDisplayedParent().doesNotExist()
-        withText(R.string.report_add_hours_header).withDisplayedParent().doesNotExist()
         withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
 
         onText(R.string.report_add_sick_leave_info).isDisplayed()

@@ -37,7 +37,7 @@ class ReportAddDetailsRegularFragment : ReportAddDetailsFragment(), ReportAddDet
     }
 
     override fun showSelectedProject(project: Project) {
-        view?.reportAddProjectName?.text = project.name
+        view?.reportAddProjectName?.setText(project.name)
     }
 
     override fun openProjectChooser() {

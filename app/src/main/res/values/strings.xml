@@ -7,9 +7,8 @@
     <string name="report_paid_vacations_title">Paid vacations</string>
     <string name="report_hours_default_value" translatable="false">8</string>
     <string name="report_add_date_header">PERFORMED AT</string>
-    <string name="report_add_project_header">PROJECT</string>
-    <string name="report_add_hours_header">HOURS</string>
-    <string name="report_add_comment_header">COMMENT</string>
+    <string name="report_add_project_header">Project</string>
+    <string name="report_add_hours_header">Hours</string>
     <string name="report_add_add_button">ADD</string>
     <string name="report_add_description_hint">What did you do today? :)</string>
     <string name="report_add_action_regular_report">Regular Report</string>

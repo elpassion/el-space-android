@@ -35,6 +35,7 @@
     <string name="debate_login_instructions">To vote, insert debates PIN number.</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>
+    <string name="filter_not_filled">Filter not filled</string>
     <string name="empty_description_error">Description cannot be empty.</string>
     <string name="empty_project_error">Project name cannot be empty</string>
 </resources>

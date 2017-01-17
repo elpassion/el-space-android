@@ -68,7 +68,7 @@ class ReportAddActivity : AppCompatActivity(),
     }
 
     override fun showDate(date: String) {
-        reportAddDate.text = date
+        reportAddDate.setText(date)
     }
 
     override fun enableAddReportButton() {

@@ -85,7 +85,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveDateHeader() {
         stubRepositoryAndStart()
-        onText(R.string.report_add_date_header).isDisplayed()
+        onId(R.id.reportAddDate).textInputEditTextHasHint(R.string.report_add_date_header).isDisplayed()
     }
 
     @Test

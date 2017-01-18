@@ -1,6 +1,7 @@
 package pl.elpassion.report.add.details
 
 import pl.elpassion.project.Project
+import rx.Observable
 
 interface ReportAddDetails {
 
@@ -12,6 +13,8 @@ interface ReportAddDetails {
             fun showEmptyDescriptionError()
             fun getHours(): String
             fun showEmptyProjectError()
+            fun projectClickEvents(): Observable<Unit>
+            fun projectChanges(): Observable<Project>
         }
 
         interface PaidVacations : View {

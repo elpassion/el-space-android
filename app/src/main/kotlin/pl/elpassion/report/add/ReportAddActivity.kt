@@ -16,6 +16,7 @@ import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.datechooser.showDateDialog
+import rx.Observable
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
@@ -66,6 +67,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun showUnpaidVacationsReportDetails() {
     }
 
+    override fun addReportClicks(): Observable<Unit> {
+        return Observable.just(Unit)
+    }
+
     override fun close() {
         setResult(Activity.RESULT_OK)
         finish()
@@ -74,13 +79,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_report_top_menu, menu)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.addReport -> controller.onReportAdd()
-        }
-        return handleClickOnBackArrowItem(item)
     }
 
     override fun onDestroy() {

@@ -10,9 +10,11 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.project.last.LastSelectedProjectRepository
 import rx.Completable
+import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
 
+    private val addReportClicks = PublishSubject.create<Unit>()
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<LastSelectedProjectRepository>()
@@ -24,14 +26,14 @@ class ReportAddControllerTest {
     fun setUp() {
         stubApiToReturn(Completable.complete())
         stubRepositoryToReturn()
+        whenever(view.addReportClicks()).thenReturn(addReportClicks)
     }
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        controller.onReportTypeSwitch(ReportType.REGULAR)
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
         verify(view).close()
     }
 
@@ -40,7 +42,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
 
         verify(view).showLoader()
     }
@@ -50,7 +52,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -61,7 +63,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -79,9 +81,9 @@ class ReportAddControllerTest {
     @Test
     fun shouldAddReportWithChangedDate() {
         val controller = createController("2016-01-04")
-
+        controller.onCreate()
         controller.onDateSelect("2016-05-04")
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -91,7 +93,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        controller.onReportAdd()
+        addReportClicks.onNext(Unit)
         verify(view).showError(any())
     }
 
@@ -102,16 +104,16 @@ class ReportAddControllerTest {
         verify(view).showDate("2016-09-23")
     }
 
-//    @Test
-//    fun shouldUseApi() {
-//        val exception = RuntimeException()
-//        val project = Project(1, "Slack")
-//        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
-//        val controller = createController("2016-09-23")
-//
-//        controller.addRegularReport("description", "8", 1)
-//        verify(view).showError(exception)
-//    }
+    @Test
+    fun shouldShowErrorWhenApiFails() {
+        val exception = RuntimeException()
+        val project = Project(1, "Slack")
+        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
+        createController("2016-09-23").onCreate()
+
+        addReportClicks.onNext(Unit)
+        verify(view).showError(exception)
+    }
 
     @Test
     fun shouldShowCurrentDateWhenNotDateNotSelected() {

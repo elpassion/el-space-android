@@ -1,10 +1,9 @@
 package pl.elpassion.report.add
 
-import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.common.extensions.getTimeFrom
-import rx.Completable
+import rx.Observable
 import rx.Subscription
 import java.util.Calendar.*
 
@@ -17,27 +16,23 @@ class ReportAddController(date: String?,
 
     fun onCreate() {
         view.showDate(selectedDate)
+        subscription = view.addReportClicks()
+                .switchMap {
+                    api.addRegularReport(selectedDate, 1, "8", "description")
+                            .doOnSubscribe { view.showLoader() }
+                            .doOnTerminate { view.hideLoader() }
+                            .doOnUnsubscribe { view.hideLoader() }
+                            .doOnCompleted { view.close() }
+                            .toObservable<Unit>()
+                }
+                .doOnError { view.showError(it) }
+                .onErrorResumeNext { Observable.empty() }
+                .subscribe()
     }
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())
         return getDateString(currentCalendar.get(YEAR), currentCalendar.get(MONTH) + 1, currentCalendar.get(DAY_OF_MONTH))
-    }
-
-    fun onReportAdd() {
-        callApi(api.addRegularReport("2016-05-04", 1, "", ""))
-    }
-
-    private fun callApi(apiCall: Completable) {
-        subscription = apiCall
-                .applySchedulers()
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    view.close()
-                }, {
-                    view.showError(it)
-                })
     }
 
     fun onDestroy() {

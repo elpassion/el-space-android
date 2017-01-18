@@ -5,6 +5,7 @@ import pl.elpassion.common.Provider
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable
+import rx.Observable
 
 interface ReportAdd {
     interface View {
@@ -17,6 +18,7 @@ interface ReportAdd {
         fun showPaidVacationsReportDetails()
         fun showSickLeaveReportDetails()
         fun showUnpaidVacationsReportDetails()
+        fun addReportClicks(): Observable<Unit>
     }
 
     interface Api {

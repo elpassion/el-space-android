@@ -134,6 +134,13 @@ class ReportListControllerTest {
         verify(view).openAddReportScreen()
     }
 
+    @Test
+    fun shouldScrollToTodayOnToday() {
+        controller.onToday()
+
+        verify(view).scrollToToday()
+    }
+
     private fun stubServiceToReturnNever() {
         whenever(service.createDays(any())).thenReturn(Observable.never())
     }

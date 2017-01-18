@@ -41,6 +41,8 @@ interface ReportList {
         fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport)
 
         fun openDailyEditReportScreen(report: DailyReport)
+
+        fun scrollToToday()
     }
 
     object ServiceProvider : Provider<Service>({

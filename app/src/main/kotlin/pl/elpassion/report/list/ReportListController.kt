@@ -51,6 +51,10 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .save()
     }
 
+    fun onToday() {
+        view.scrollToToday()
+    }
+
     fun onNextMonth() {
         dateChangeObserver.setNextMonth()
     }

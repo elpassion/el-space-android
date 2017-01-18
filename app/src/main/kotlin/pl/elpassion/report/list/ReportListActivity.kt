@@ -52,6 +52,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
+            R.id.action_today -> controller.onToday()
             R.id.action_prev_month -> controller.onPreviousMonth()
             R.id.action_next_month -> controller.onNextMonth()
         }
@@ -68,6 +69,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     override fun openDailyEditReportScreen(report: DailyReport) {
         ReportEditDailyActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+    }
+
+    override fun scrollToToday() {
+
     }
 
     override fun showMonthName(monthName: String) {

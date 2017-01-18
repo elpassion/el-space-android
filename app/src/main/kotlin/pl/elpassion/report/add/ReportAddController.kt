@@ -54,10 +54,6 @@ class ReportAddController(private val date: String?,
         subscriptions.clear()
     }
 
-    fun onDateSelect(performedDate: String) {
-        view.showDate(performedDate)
-    }
-
     private fun onReportTypeChanged(reportType: ReportType) {
         when (reportType) {
             ReportType.REGULAR -> showRegularForm()

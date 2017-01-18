@@ -72,19 +72,15 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowSelectedDate() {
-        val controller = createController()
-
-        controller.onDateSelect("2016-05-04")
+    fun shouldShowInitialDateOnCreate() {
+        createController("2016-05-04").onCreate()
 
         verify(view).showDate("2016-05-04")
     }
 
     @Test
     fun shouldAddReportWithChangedDate() {
-        val controller = createController("2016-01-04")
-        controller.onCreate()
-        controller.onDateSelect("2016-05-04")
+        createController("2016-01-04").onCreate()
         addReportClicks.onNext(RegularReport("2016-05-04"))
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
@@ -242,21 +238,22 @@ class ReportAddControllerTest {
         addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
         verify(api).addUnpaidVacationsReport("2016-01-01")
     }
-//
-//    @Test
-//    fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {
-//        val controller = createController("2016-01-01")
-//        controller.addSickLeaveReport()
-//        verify(api).addSickLeaveReport("2016-01-01")
-//    }
-//
-//    @Test
-//    fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
-//        val controller = createController("2016-09-23")
-//
-//        controller.addPaidVacationsReport("8")
-//        verify(api).addPaidVacationsReport("2016-09-23", "8")
-//    }
+
+    @Test
+    fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {
+        createController("2016-01-01").onCreate()
+
+        addReportClicks.onNext(SickLeaveReport("2016-01-01"))
+        verify(api).addSickLeaveReport("2016-01-01")
+    }
+
+    @Test
+    fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
+        createController("2016-09-23").onCreate()
+
+        addReportClicks.onNext(PaidVacationsReport("2016-09-23"))
+        verify(api).addPaidVacationsReport("2016-09-23", "8")
+    }
 
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
 

@@ -58,17 +58,17 @@ class ReportAddControllerTest {
         verify(view).showLoader()
         verify(view).hideLoader()
     }
-//
-//    @Test
-//    fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
-//        stubApiToReturn(Completable.never())
-//        val controller = createController()
-//        controller.onCreate()
-//        controller.addRegularReport("description", "8", 1)
-//        controller.onDestroy()
-//
-//        verify(view).hideLoader()
-//    }
+
+    @Test
+    fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
+        stubApiToReturn(Completable.never())
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd()
+        controller.onDestroy()
+
+        verify(view).hideLoader()
+    }
 
     @Test
     fun shouldShowSelectedDate() {

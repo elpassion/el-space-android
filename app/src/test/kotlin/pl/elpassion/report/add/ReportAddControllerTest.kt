@@ -14,7 +14,8 @@ import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
 
-    private val addReportClicks = PublishSubject.create<Unit>()
+    private val addReportClicks = PublishSubject.create<ReportViewModel>()
+    private val reportTypeChanges = PublishSubject.create<ReportType>()
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<LastSelectedProjectRepository>()
@@ -27,13 +28,14 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         stubRepositoryToReturn()
         whenever(view.addReportClicks()).thenReturn(addReportClicks)
+        whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
     }
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(UnpaidVacationsReport("date"))
         verify(view).close()
     }
 
@@ -42,7 +44,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(UnpaidVacationsReport("date"))
 
         verify(view).showLoader()
     }
@@ -52,7 +54,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.complete())
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(UnpaidVacationsReport("date"))
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -63,7 +65,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(UnpaidVacationsReport("date"))
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -83,7 +85,7 @@ class ReportAddControllerTest {
         val controller = createController("2016-01-04")
         controller.onCreate()
         controller.onDateSelect("2016-05-04")
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(RegularReport("2016-05-04"))
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -93,7 +95,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(RegularReport("date"))
         verify(view).showError(any())
     }
 
@@ -111,7 +113,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(Unit)
+        addReportClicks.onNext(RegularReport("2016-09-23"))
         verify(view).showError(exception)
     }
 
@@ -129,7 +131,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.REGULAR)
+        reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showHoursInput()
     }
 
@@ -138,7 +140,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.REGULAR)
+        reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showDescriptionInput()
     }
 
@@ -147,7 +149,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.REGULAR)
+        reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showProjectChooser()
     }
 
@@ -156,7 +158,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.PAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).showHoursInput()
     }
 
@@ -165,7 +167,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.PAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).hideDescriptionInput()
     }
 
@@ -174,7 +176,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.PAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).hideProjectChooser()
     }
 
@@ -183,7 +185,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideHoursInput()
     }
 
@@ -192,7 +194,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideProjectChooser()
     }
 
@@ -201,7 +203,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideDescriptionInput()
     }
 
@@ -210,7 +212,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideHoursInput()
     }
 
@@ -219,7 +221,7 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideProjectChooser()
     }
 
@@ -228,16 +230,18 @@ class ReportAddControllerTest {
         val controller = createController()
         controller.onCreate()
 
-        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideDescriptionInput()
     }
 
-//    @Test
-//    fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
-//        val controller = createController("2016-01-01")
-//        controller.addUnpaidVacationsReport()
-//        verify(api).addUnpaidVacationsReport("2016-01-01")
-//    }
+    @Test
+    fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
+        val controller = createController("2016-01-01")
+        controller.onCreate()
+
+        addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
+        verify(api).addUnpaidVacationsReport("2016-01-01")
+    }
 //
 //    @Test
 //    fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {

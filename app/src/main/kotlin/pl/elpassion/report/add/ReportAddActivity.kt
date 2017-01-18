@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
+import com.jakewharton.rxbinding.support.design.widget.itemSelections
+import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
@@ -28,9 +31,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
-        bottomNavigation.setOnNavigationItemSelectedListener { controller.onReportTypeChanged(it.itemId.toReportType()); true }
+        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, {}) }
     }
+
+    override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }
 
     private fun Int.toReportType() = when (this) {
         R.id.action_regular_report -> ReportType.REGULAR
@@ -53,8 +57,18 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun addReportClicks(): Observable<Unit> {
-        return Observable.just(Unit)
+    override fun addReportClicks(): Observable<ReportViewModel> {
+        return toolbar.itemClicks().map {
+            val selectedDate = reportAddDate.text.toString()
+            val checkMenuItem = bottomNavigation.menu.items.first { it.isChecked }.itemId
+            when (checkMenuItem) {
+                R.id.action_regular_report -> RegularReport(selectedDate)
+                R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate)
+                R.id.action_unpaid_vacations_report -> UnpaidVacationsReport(selectedDate)
+                R.id.action_sick_leave_report -> SickLeaveReport(selectedDate)
+                else -> throw IllegalArgumentException(checkMenuItem.toString())
+            }
+        }
     }
 
     override fun close() {
@@ -112,3 +126,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
     }
 }
+
+private val Menu.items: List<MenuItem>
+    get() = (0 until size()).map { getItem(it) }

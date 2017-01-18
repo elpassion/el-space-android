@@ -14,13 +14,14 @@ interface ReportAdd {
         fun showDate(date: String)
         fun showLoader()
         fun hideLoader()
-        fun addReportClicks(): Observable<Unit>
+        fun addReportClicks(): Observable<ReportViewModel>
         fun showHoursInput()
         fun showProjectChooser()
         fun showDescriptionInput()
         fun hideDescriptionInput()
         fun hideProjectChooser()
         fun hideHoursInput()
+        fun reportTypeChanges(): Observable<ReportType>
     }
 
     interface Api {

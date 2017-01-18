@@ -188,11 +188,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(filter, never()).filterOnly(any())
-    }
-
-    private fun stubFilterAction(isFiltering: Boolean) {
-        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(isFiltering))
+        verify(filter, never()).fetchFilteredDays(any())
     }
 
     @Test
@@ -202,7 +198,11 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(filter).filterOnly(any())
+        verify(filter).fetchFilteredDays(any())
+    }
+
+    private fun stubFilterAction(isFiltering: Boolean) {
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(isFiltering))
     }
 
     private fun stubServiceToReturnNever() {

@@ -28,7 +28,7 @@ import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
 import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.*
-import pl.elpassion.report.list.service.DayFilter
+import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 
@@ -39,11 +39,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
             override fun shouldFilterReports(): Observable<Boolean> {
                 return Observable.just(false)
             }
-        }, object : DayFilter {
-            override fun filterOnly(days: List<Day>): List<Day> {
-                return days
-            }
-        }, this)
+        }, DayFilterImpl(), this)
     }
     private val reportsAdapter by lazy { ReportsAdapter() }
 

@@ -40,7 +40,7 @@ class ReportListController(private val reportDayService: ReportDayService,
         reportDayService.createDays(dateChangeObserver.observe()).withLatestFrom(actions.shouldFilterReports(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
-                        true -> dayFilter.filterOnly(list)
+                        true -> dayFilter.fetchFilteredDays(list)
                         else -> list
                     }
                 })

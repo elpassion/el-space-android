@@ -71,8 +71,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         ReportEditDailyActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
-    override fun scrollToToday() {
-        reportsContainer.smoothScrollToPosition(31)
+    override fun scrollToDay(day: Int) {
+        reportsContainer.smoothScrollToPosition(day)
     }
 
     override fun showMonthName(monthName: String) {

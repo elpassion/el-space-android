@@ -136,9 +136,18 @@ class ReportListControllerTest {
 
     @Test
     fun shouldScrollToTodayOnToday() {
+        stubCurrentTime(2017, 1, 20)
         controller.onToday()
 
-        verify(view).scrollToToday()
+        verify(view).scrollToDay(20)
+    }
+
+    @Test
+    fun shouldReallyScrollToTodayOnToday() {
+        stubCurrentTime(2017, 1, 31)
+        controller.onToday()
+
+        verify(view).scrollToDay(31)
     }
 
     private fun stubServiceToReturnNever() {

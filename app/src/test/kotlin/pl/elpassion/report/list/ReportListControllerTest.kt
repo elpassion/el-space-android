@@ -19,8 +19,9 @@ import java.util.*
 class ReportListControllerTest {
 
     val service = mock<ReportDayService>()
+    val actions = mock<ReportList.Actions>()
     val view = mock<ReportList.View>()
-    val controller = ReportListController(service, view)
+    val controller = ReportListController(service, actions, view)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -156,6 +157,15 @@ class ReportListControllerTest {
         controller.onToday()
 
         verify(view).scrollToPosition(31)
+    }
+
+    @Test
+    fun shouldListenForFilterActions() {
+        stubServiceToReturnEmptyList()
+
+        controller.onCreate()
+
+        verify(actions).shouldFilterReports()
     }
 
     private fun stubServiceToReturnNever() {

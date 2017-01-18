@@ -45,6 +45,10 @@ interface ReportList {
         fun scrollToPosition(position: Int)
     }
 
+    interface Actions {
+        fun shouldFilterReports(): Observable<Boolean>
+    }
+
     object ServiceProvider : Provider<Service>({
         ReportListService(ReportApiProvider.get(), ProjectListServiceProvider.get())
     })

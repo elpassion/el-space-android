@@ -13,6 +13,7 @@ import rx.subscriptions.CompositeSubscription
 import java.util.*
 
 class ReportListController(private val reportDayService: ReportDayService,
+                           private val actions:ReportList.Actions,
                            private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
@@ -20,6 +21,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     private val todayPositionObserver = TodayPositionObserver()
 
     fun onCreate() {
+        actions.shouldFilterReports()
         fetchReports()
         subscribeDateChange()
         subscribeTodayPosition()

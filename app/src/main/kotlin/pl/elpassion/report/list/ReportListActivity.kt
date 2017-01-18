@@ -29,11 +29,16 @@ import pl.elpassion.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.ReportDayServiceImpl
+import rx.Observable
 
 class ReportListActivity : AppCompatActivity(), ReportList.View {
 
     private val controller by lazy {
-        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), this)
+        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), object : ReportList.Actions {
+            override fun shouldFilterReports(): Observable<Boolean> {
+                return Observable.just(false)
+            }
+        }, this)
     }
     private val reportsAdapter by lazy { ReportsAdapter() }
 

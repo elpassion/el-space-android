@@ -53,9 +53,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showUnpaidVacationsReportDetails() {
-    }
-
     override fun addReportClicks(): Observable<Unit> {
         return Observable.just(Unit)
     }

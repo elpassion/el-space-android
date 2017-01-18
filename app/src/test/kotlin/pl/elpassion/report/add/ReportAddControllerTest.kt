@@ -206,12 +206,30 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowUnpaidVacationsReportDetailsFromAfterReportTypeChangedToUnpaidVacations() {
+    fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
         val controller = createController()
         controller.onCreate()
 
         controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
-        verify(view).showUnpaidVacationsReportDetails()
+        verify(view).hideHoursInput()
+    }
+
+    @Test
+    fun shouldHideProjectChooserAfterReportTypeChangedToUnpaidVacations() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        verify(view).hideProjectChooser()
+    }
+
+    @Test
+    fun shouldShowHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.UNPAID_VACATIONS)
+        verify(view).hideDescriptionInput()
     }
 
 //    @Test

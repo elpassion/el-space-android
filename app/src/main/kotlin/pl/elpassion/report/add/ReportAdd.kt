@@ -14,7 +14,6 @@ interface ReportAdd {
         fun showDate(date: String)
         fun showLoader()
         fun hideLoader()
-        fun showUnpaidVacationsReportDetails()
         fun addReportClicks(): Observable<Unit>
         fun showHoursInput()
         fun showProjectChooser()

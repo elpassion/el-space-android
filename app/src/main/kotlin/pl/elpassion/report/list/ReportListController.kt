@@ -9,6 +9,7 @@ import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
+import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
@@ -37,7 +38,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        reportDayService.createDays(dateChangeObserver.observe()).withLatestFrom(actions.shouldFilterReports(),
+        Observable.combineLatest(reportDayService.createDays(dateChangeObserver.observe()), actions.shouldFilterReports(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)

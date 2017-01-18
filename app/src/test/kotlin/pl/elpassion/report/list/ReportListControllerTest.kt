@@ -192,6 +192,16 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
+        stubServiceToReturnEmptyList()
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false, true))
+
+        controller.onCreate()
+
+        verify(view, times(2)).showDays(any(), any(), any())
+    }
+
+    @Test
     fun shouldFilterDaysWhenFilterIsOn() {
         stubServiceToReturnEmptyList()
         stubFilterAction(true)

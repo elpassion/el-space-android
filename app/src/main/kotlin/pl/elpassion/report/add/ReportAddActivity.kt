@@ -53,9 +53,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showSickLeaveReportDetails() {
-    }
-
     override fun showUnpaidVacationsReportDetails() {
     }
 
@@ -85,6 +82,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun hideProjectChooser() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun hideHoursInput() {
         throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

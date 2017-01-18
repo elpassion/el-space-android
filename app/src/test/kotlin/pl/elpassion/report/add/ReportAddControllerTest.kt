@@ -169,7 +169,6 @@ class ReportAddControllerTest {
         verify(view).hideDescriptionInput()
     }
 
-
     @Test
     fun shouldHideProjectChooserAfterReportTypeChangedToPaidVacations() {
         val controller = createController()
@@ -180,12 +179,30 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowSickLeaveDetailsFormAfterReportTypeChangedToSickLeave() {
+    fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
         val controller = createController()
         controller.onCreate()
 
         controller.onReportTypeChanged(ReportType.SICK_LEAVE)
-        verify(view).showSickLeaveReportDetails()
+        verify(view).hideHoursInput()
+    }
+
+    @Test
+    fun shouldHideProjectChooserAfterReportTypeChangedToSickLeave() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        verify(view).hideProjectChooser()
+    }
+
+    @Test
+    fun shouldHideDescriptionInputAfterReportTypeChangedToSickLeave() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.SICK_LEAVE)
+        verify(view).hideDescriptionInput()
     }
 
     @Test

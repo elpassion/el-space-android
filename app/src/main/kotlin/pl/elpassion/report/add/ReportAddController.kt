@@ -48,9 +48,15 @@ class ReportAddController(date: String?,
         when (reportType) {
             ReportType.REGULAR -> showRegularForm()
             ReportType.PAID_VACATIONS -> showPaidVacationsForm()
-            ReportType.SICK_LEAVE -> view.showSickLeaveReportDetails()
+            ReportType.SICK_LEAVE -> showSickLeaveForm()
             ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsReportDetails()
         }
+    }
+
+    private fun showSickLeaveForm() {
+        view.hideHoursInput()
+        view.hideDescriptionInput()
+        view.hideProjectChooser()
     }
 
     private fun showPaidVacationsForm() {

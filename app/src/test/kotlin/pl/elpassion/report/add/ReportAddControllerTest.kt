@@ -86,14 +86,14 @@ class ReportAddControllerTest {
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
-//    @Test
-//    fun shouldShowErrorWhenAddingReportFails() {
-//        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
-//        val controller = createController()
-//        controller.onCreate()
-//        controller.addRegularReport("description", "8", 1)
-//        verify(view).showError(any())
-//    }
+    @Test
+    fun shouldShowErrorWhenAddingReportFails() {
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd()
+        verify(view).showError(any())
+    }
 
     @Test
     fun shouldShowDate() {

@@ -12,6 +12,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.core.IsNot.not
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -25,6 +26,7 @@ import pl.elpassion.report.add.ReportAdd
 import rx.Completable
 import rx.Observable
 
+@Ignore
 class ReportListActivityAddReportTest {
 
     val service = mock<ReportList.Service>()

@@ -29,9 +29,9 @@ class ReportAddDetailsRegularController(private val view: ReportAddDetails.View.
     override fun onReportAdded() {
         if (view.getDescription().isBlank()) {
             view.showEmptyDescriptionError()
-        } else if(selectedProject == null){
+        } else if (selectedProject == null) {
             view.showEmptyProjectError()
-        }else {
+        } else {
             sender.addRegularReport(view.getDescription(), view.getHours(), selectedProject!!.id)
         }
     }

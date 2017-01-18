@@ -27,6 +27,7 @@ import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.startActivity
 import rx.Completable
 
+@Ignore
 class ReportAddActivityTest {
 
     val repository = mock<LastSelectedProjectRepository>()

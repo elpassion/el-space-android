@@ -8,26 +8,27 @@ import pl.elpassion.R
 //Workaround for https://code.google.com/p/android/issues/detail?id=230171
 class FixedTextInputEditText : TextInputEditText {
 
+    private var delayedText: String = ""
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        applyAttrs(attrs)
+        delayedText = extractTextFromAttrs(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        applyAttrs(attrs)
+        delayedText = extractTextFromAttrs(attrs)
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
         post {
-            setText(R.string.report_hours_default_value)
+            setText(delayedText)
         }
     }
 
-    private fun applyAttrs(attrs: AttributeSet?) {
+    private fun extractTextFromAttrs(attrs: AttributeSet?): String {
         val styledAttrs = context.obtainStyledAttributes(attrs, R.styleable.FixedTextInputEditText, 0, 0)
-        try {
-            val text = styledAttrs.getString(R.styleable.FixedTextInputEditText_ftext)
-            setText(text)
+        return try {
+            styledAttrs.getString(R.styleable.FixedTextInputEditText_text)
         } finally {
             styledAttrs.recycle()
         }

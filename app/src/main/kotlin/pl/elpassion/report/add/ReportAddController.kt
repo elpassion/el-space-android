@@ -25,7 +25,7 @@ class ReportAddController(date: String?,
     }
 
     fun onReportAdd() {
-
+        view.close()
     }
 
     private fun callApi(apiCall: Completable) {
@@ -56,5 +56,9 @@ class ReportAddController(date: String?,
             ReportType.SICK_LEAVE -> view.showSickLeaveReportDetails()
             ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsReportDetails()
         }
+    }
+
+    fun onReportTypeSwitch(reportType: ReportType) {
+
     }
 }

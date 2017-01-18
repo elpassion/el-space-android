@@ -22,6 +22,8 @@ interface ReportAdd {
         fun showHoursInput()
         fun showProjectChooser()
         fun showDescriptionInput()
+        fun hideDescriptionInput()
+        fun hideProjectChooser()
     }
 
     interface Api {

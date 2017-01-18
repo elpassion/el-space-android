@@ -46,14 +46,20 @@ class ReportAddController(date: String?,
 
     fun onReportTypeChanged(reportType: ReportType) {
         when (reportType) {
-            ReportType.REGULAR -> showRegularRequiredFields()
-            ReportType.PAID_VACATIONS -> view.showPaidVacationsReportDetails()
+            ReportType.REGULAR -> showRegularForm()
+            ReportType.PAID_VACATIONS -> showPaidVacationsForm()
             ReportType.SICK_LEAVE -> view.showSickLeaveReportDetails()
             ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsReportDetails()
         }
     }
 
-    private fun showRegularRequiredFields() {
+    private fun showPaidVacationsForm() {
+        view.showHoursInput()
+        view.hideProjectChooser()
+        view.hideDescriptionInput()
+    }
+
+    private fun showRegularForm() {
         view.showDescriptionInput()
         view.showProjectChooser()
         view.showHoursInput()

@@ -27,6 +27,7 @@ class ReportAddController(date: String?,
     fun onReportAdd() {
         view.showLoader()
         view.close()
+        view.hideLoader()
     }
 
     private fun callApi(apiCall: Completable) {

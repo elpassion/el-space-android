@@ -47,17 +47,17 @@ class ReportAddControllerTest {
 
         verify(view).showLoader()
     }
-//
-//    @Test
-//    fun shouldHideLoaderWhenAddingNewReportFinish() {
-//        stubApiToReturn(Completable.complete())
-//        val controller = createController()
-//        controller.onCreate()
-//        controller.addRegularReport("description", "8", 1)
-//
-//        verify(view).showLoader()
-//        verify(view).hideLoader()
-//    }
+
+    @Test
+    fun shouldHideLoaderWhenAddingNewReportFinish() {
+        stubApiToReturn(Completable.complete())
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd()
+
+        verify(view).showLoader()
+        verify(view).hideLoader()
+    }
 //
 //    @Test
 //    fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {

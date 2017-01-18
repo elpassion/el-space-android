@@ -18,7 +18,7 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_filter_not_filled"
+        android:id="@+id/action_filter"
         android:icon="@drawable/filter_off"
         android:title="@string/filter_not_filled"
         app:showAsAction="always"/>

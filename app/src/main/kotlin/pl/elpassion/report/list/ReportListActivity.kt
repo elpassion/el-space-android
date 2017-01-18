@@ -73,6 +73,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun shouldFilterReports(): Observable<Boolean> {
         return Observable.just(false).concatWith(toolbarClicks
+                .filter { it.itemId == R.id.action_filter }
                 .doOnNext {
                     it.isChecked = !it.isChecked
                     val icon = when (it.isChecked) {

@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.StableItemAdapter
+import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.dayOfMonth
@@ -31,6 +32,7 @@ import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
@@ -39,6 +41,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     private val reportsAdapter by lazy { ReportsAdapter() }
+    private val toolbarClicks by lazy {
+        toolbar.itemClicks()
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .share()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +72,16 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun shouldFilterReports(): Observable<Boolean> {
-        return Observable.just(false)
+        return Observable.just(false).concatWith(toolbarClicks
+                .doOnNext {
+                    it.isChecked = !it.isChecked
+                    val icon = when (it.isChecked) {
+                        true -> R.drawable.filter_on
+                        else -> R.drawable.filter_off
+                    }
+                    it.setIcon(icon)
+                }
+                .map { it.isChecked })
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {

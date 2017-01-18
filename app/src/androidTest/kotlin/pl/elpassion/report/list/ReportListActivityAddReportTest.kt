@@ -19,8 +19,8 @@ import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.CachedProjectRepository
 import pl.elpassion.project.CachedProjectRepositoryProvider
-import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.project.dto.newProject
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.add.ReportAdd
 import rx.Completable
 import rx.Observable
@@ -47,7 +47,7 @@ class ReportListActivityAddReportTest {
         onText("1 Sat").click()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("Description"))
         Espresso.closeSoftKeyboard()
-//        onId(R.id.reportAddAdd).click()
+        onId(R.id.addReport).click()
         onId(R.id.reportsContainer).check(matches(hasDescendant(withText("Description"))))
     }
 

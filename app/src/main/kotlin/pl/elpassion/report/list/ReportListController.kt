@@ -7,13 +7,15 @@ import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
+import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 
 class ReportListController(private val reportDayService: ReportDayService,
-                           private val actions:ReportList.Actions,
+                           private val actions: ReportList.Actions,
+                           private val dayFilter: DayFilter,
                            private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
@@ -21,7 +23,6 @@ class ReportListController(private val reportDayService: ReportDayService,
     private val todayPositionObserver = TodayPositionObserver()
 
     fun onCreate() {
-        actions.shouldFilterReports()
         fetchReports()
         subscribeDateChange()
         subscribeTodayPosition()
@@ -36,7 +37,13 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        reportDayService.createDays(dateChangeObserver.observe())
+        reportDayService.createDays(dateChangeObserver.observe()).withLatestFrom(actions.shouldFilterReports(),
+                { list: List<Day>, shouldFilter: Boolean ->
+                    when (shouldFilter) {
+                        true -> dayFilter.filterOnly(list)
+                        else -> list
+                    }
+                })
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

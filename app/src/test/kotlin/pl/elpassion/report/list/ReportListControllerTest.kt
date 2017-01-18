@@ -12,6 +12,7 @@ import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
+import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
 import java.util.*
@@ -20,8 +21,9 @@ class ReportListControllerTest {
 
     val service = mock<ReportDayService>()
     val actions = mock<ReportList.Actions>()
+    val filter = mock<DayFilter>()
     val view = mock<ReportList.View>()
-    val controller = ReportListController(service, actions, view)
+    val controller = ReportListController(service, actions, filter, view)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -166,6 +168,41 @@ class ReportListControllerTest {
         controller.onCreate()
 
         verify(actions).shouldFilterReports()
+    }
+
+    @Test
+    fun shouldUseFilterActionBeforeShowingReportsList() {
+        stubServiceToReturnEmptyList()
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.never())
+
+        controller.onCreate()
+
+        verify(view, never()).showDays(any(), any(), any())
+    }
+
+
+    @Test
+    fun shouldDoNotFilterDaysWhenFilterIsOff() {
+        stubServiceToReturnEmptyList()
+        stubFilterAction(false)
+
+        controller.onCreate()
+
+        verify(filter, never()).filterOnly(any())
+    }
+
+    private fun stubFilterAction(isFiltering: Boolean) {
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(isFiltering))
+    }
+
+    @Test
+    fun shouldFilterDaysWhenFilterIsOn() {
+        stubServiceToReturnEmptyList()
+        stubFilterAction(true)
+
+        controller.onCreate()
+
+        verify(filter).filterOnly(any())
     }
 
     private fun stubServiceToReturnNever() {

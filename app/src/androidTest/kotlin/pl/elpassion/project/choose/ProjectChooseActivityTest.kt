@@ -57,7 +57,7 @@ class ProjectChooseActivityTest {
 
         onId(R.id.action_search).click()
         onId(R.id.search_src_text).replaceText("Name1")
-
+        Thread.sleep(100)
         onText("name1").isDisplayed()
         onText("name2").doesNotExist()
     }

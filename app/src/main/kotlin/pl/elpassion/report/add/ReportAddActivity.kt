@@ -53,12 +53,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showRegularReportDetails() {
-    }
-
-    override fun showPaidVacationsReportDetails() {
-    }
-
     override fun showSickLeaveReportDetails() {
     }
 

@@ -72,7 +72,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun scrollToToday() {
-
+        reportsContainer.smoothScrollToPosition(31)
     }
 
     override fun showMonthName(monthName: String) {

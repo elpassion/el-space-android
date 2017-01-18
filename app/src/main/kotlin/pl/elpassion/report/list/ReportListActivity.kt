@@ -32,15 +32,12 @@ import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
 
-class ReportListActivity : AppCompatActivity(), ReportList.View {
+class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
     private val controller by lazy {
-        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), object : ReportList.Actions {
-            override fun shouldFilterReports(): Observable<Boolean> {
-                return Observable.just(false)
-            }
-        }, DayFilterImpl(), this)
+        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), DayFilterImpl(), this, this)
     }
+
     private val reportsAdapter by lazy { ReportsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +62,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
             R.id.action_next_month -> controller.onNextMonth()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun shouldFilterReports(): Observable<Boolean> {
+        return Observable.just(false)
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {

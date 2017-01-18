@@ -23,7 +23,7 @@ class ReportListControllerTest {
     val actions = mock<ReportList.Actions>()
     val filter = mock<DayFilter>()
     val view = mock<ReportList.View>()
-    val controller = ReportListController(service, actions, filter, view)
+    val controller = ReportListController(service, filter, actions, view)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()

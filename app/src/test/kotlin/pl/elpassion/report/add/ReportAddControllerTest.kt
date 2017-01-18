@@ -1,9 +1,6 @@
 package pl.elpassion.report.add
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -79,16 +76,16 @@ class ReportAddControllerTest {
         verify(view).showDate("2016-05-04")
     }
 
-//    @Test
-//    fun shouldChangeDateAfterOnCreate() {
-//        val controller = createController("2016-01-04")
-//
-//        controller.onDateSelect("2016-05-04")
-//        controller.addRegularReport("description", "8", 1)
-//
-//        verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
-//    }
-//
+    @Test
+    fun shouldAddReportWithChangedDate() {
+        val controller = createController("2016-01-04")
+
+        controller.onDateSelect("2016-05-04")
+        controller.onReportAdd()
+
+        verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
+    }
+
 //    @Test
 //    fun shouldShowErrorWhenAddingReportFails() {
 //        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))

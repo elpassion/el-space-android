@@ -25,9 +25,7 @@ class ReportAddController(date: String?,
     }
 
     fun onReportAdd() {
-        view.showLoader()
-        view.close()
-        view.hideLoader()
+        callApi(api.addRegularReport("2016-05-04", 1, "", ""))
     }
 
     private fun callApi(apiCall: Completable) {

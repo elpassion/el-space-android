@@ -25,6 +25,7 @@ class ReportAddController(date: String?,
     }
 
     fun onReportAdd() {
+        view.showLoader()
         view.close()
     }
 

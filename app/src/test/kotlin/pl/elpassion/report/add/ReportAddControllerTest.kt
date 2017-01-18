@@ -38,15 +38,15 @@ class ReportAddControllerTest {
         verify(view).close()
     }
 
-//    @Test
-//    fun shouldShowLoaderOnAddingNewReport() {
-//        stubApiToReturn(Completable.never())
-//        val controller = createController()
-//        controller.onCreate()
-//        controller.addRegularReport("description", "8", 1)
-//
-//        verify(view).showLoader()
-//    }
+    @Test
+    fun shouldShowLoaderOnAddingNewReport() {
+        stubApiToReturn(Completable.never())
+        val controller = createController()
+        controller.onCreate()
+        controller.onReportAdd()
+
+        verify(view).showLoader()
+    }
 //
 //    @Test
 //    fun shouldHideLoaderWhenAddingNewReportFinish() {

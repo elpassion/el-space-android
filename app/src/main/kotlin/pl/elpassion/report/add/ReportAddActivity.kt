@@ -7,11 +7,9 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
-import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
@@ -74,6 +72,18 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun close() {
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    override fun showHoursInput() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showProjectChooser() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showDescriptionInput() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

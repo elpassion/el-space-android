@@ -125,12 +125,30 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowRegularReportDetailsFormAfterReportTypeChangedToRegularReport() {
+    fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
         val controller = createController()
         controller.onCreate()
 
         controller.onReportTypeChanged(ReportType.REGULAR)
-        verify(view).showRegularReportDetails()
+        verify(view).showHoursInput()
+    }
+
+    @Test
+    fun shouldShowDescriptionInputAfterReportTypeChangedToRegularReport() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.REGULAR)
+        verify(view).showDescriptionInput()
+    }
+
+    @Test
+    fun shouldShowProjectChooserAfterReportTypeChangedToRegularReport() {
+        val controller = createController()
+        controller.onCreate()
+
+        controller.onReportTypeChanged(ReportType.REGULAR)
+        verify(view).showProjectChooser()
     }
 
     @Test

@@ -19,6 +19,9 @@ interface ReportAdd {
         fun showSickLeaveReportDetails()
         fun showUnpaidVacationsReportDetails()
         fun addReportClicks(): Observable<Unit>
+        fun showHoursInput()
+        fun showProjectChooser()
+        fun showDescriptionInput()
     }
 
     interface Api {

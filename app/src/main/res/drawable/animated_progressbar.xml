@@ -1,5 +1,8 @@
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/progressbar" >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/progressbar"
+    tools:targetApi="lollipop">
+
     <target
         android:name="circleGroup"
         android:animation="@anim/progress_anim" />

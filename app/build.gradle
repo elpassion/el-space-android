@@ -78,6 +78,7 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.jakewharton.rxbinding:rxbinding-kotlin:1.0.0'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:1.0.0'
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:1.0.0'
     compile "com.android.support:cardview-v7:$support_version"

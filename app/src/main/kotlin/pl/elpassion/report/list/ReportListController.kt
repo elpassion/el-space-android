@@ -2,6 +2,8 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.extensions.dayOfMonth
+import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
@@ -26,7 +28,23 @@ class ReportListController(private val reportDayService: ReportDayService,
     fun onCreate() {
         fetchReports()
         subscribeDateChange()
-        subscribeTodayPosition()
+        Observable.merge(
+                actions.reportAdd().doOnNext { view.openAddReportScreen() },
+                actions.monthChangeToNext().doOnNext { dateChangeObserver.setNextMonth() },
+                actions.monthChangeToPrev().doOnNext { dateChangeObserver.setPreviousMonth() },
+                actions.scrollToCurrent().doOnNext { onToday() })
+                .subscribe().save()
+    }
+
+    private fun onToday() {
+        val todayPosition = todayPositionObserver.lastPosition
+        if (todayPosition != -1) {
+            view.scrollToPosition(todayPosition)
+        }
+    }
+
+    fun updateTodayPosition(position: Int) {
+        todayPositionObserver.updatePosition(position)
     }
 
     fun refreshReportList() {
@@ -63,29 +81,6 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .save()
     }
 
-    private fun subscribeTodayPosition() {
-        todayPositionObserver.observe().subscribe().save()
-    }
-
-    fun onToday() {
-        val todayPosition = todayPositionObserver.lastPosition
-        if (todayPosition != -1) {
-            view.scrollToPosition(todayPosition)
-        }
-    }
-
-    fun onNextMonth() {
-        dateChangeObserver.setNextMonth()
-    }
-
-    fun onPreviousMonth() {
-        dateChangeObserver.setPreviousMonth()
-    }
-
-    fun updateTodayPosition(position: Int) {
-        todayPositionObserver.updatePosition(position)
-    }
-
     override fun onDayDate(date: String) {
         view.openAddReportScreen(date)
     }
@@ -100,10 +95,6 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun Subscription.save() {
         subscriptions.add(this)
-    }
-
-    fun onAddTodayReport() {
-        view.openAddReportScreen()
     }
 }
 

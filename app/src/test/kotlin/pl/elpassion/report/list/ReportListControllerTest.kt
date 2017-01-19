@@ -31,6 +31,7 @@ class ReportListControllerTest {
     @Before
     fun setUp() {
         stubCurrentTime()
+        stubViewActions()
     }
 
     @Test
@@ -132,7 +133,9 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenAddReportScreen() {
-        controller.onAddTodayReport()
+        whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
+
+        controller.onCreate()
 
         verify(view).openAddReportScreen()
     }
@@ -141,10 +144,10 @@ class ReportListControllerTest {
     fun shouldScrollToCorrectPositionOnTodayWhenNoReports() {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 20)
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
 
-        controller.onCreate()
         controller.updateTodayPosition(20)
-        controller.onToday()
+        controller.onCreate()
 
         verify(view).scrollToPosition(20)
     }
@@ -153,10 +156,10 @@ class ReportListControllerTest {
     fun shouldReallyScrollToCorrectPositionOnTodayWhenNoReports() {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 31)
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
 
-        controller.onCreate()
         controller.updateTodayPosition(31)
-        controller.onToday()
+        controller.onCreate()
 
         verify(view).scrollToPosition(31)
     }
@@ -180,7 +183,6 @@ class ReportListControllerTest {
         verify(view, never()).showDays(any(), any(), any())
     }
 
-
     @Test
     fun shouldDoNotFilterDaysWhenFilterIsOff() {
         stubServiceToReturnEmptyList()
@@ -190,6 +192,7 @@ class ReportListControllerTest {
 
         verify(filter, never()).fetchFilteredDays(any())
     }
+
 
     @Test
     fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
@@ -209,6 +212,14 @@ class ReportListControllerTest {
         controller.onCreate()
 
         verify(filter).fetchFilteredDays(any())
+    }
+
+    private fun stubViewActions() {
+        whenever(actions.reportAdd()).thenReturn(Observable.never())
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false))
+        whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
+        whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.never())
     }
 
     private fun stubFilterAction(isFiltering: Boolean) {

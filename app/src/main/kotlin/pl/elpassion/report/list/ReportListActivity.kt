@@ -9,14 +9,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
-import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.StableItemAdapter
-import com.jakewharton.rxbinding.support.v7.widget.itemClicks
+import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
-import pl.elpassion.common.extensions.dayOfMonth
-import pl.elpassion.common.extensions.getCurrentTimeCalendar
+import pl.elpassion.common.extensions.*
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.DailyReport
@@ -32,7 +30,6 @@ import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
@@ -41,11 +38,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     private val reportsAdapter by lazy { ReportsAdapter() }
-    private val toolbarClicks by lazy {
-        toolbar.itemClicks()
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .share()
-    }
+    private val toolbarClicks by lazy { toolbar.menuClicks() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +47,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         reportsContainer.layoutManager = LinearLayoutManager(this)
         reportsContainer.adapter = reportsAdapter
         controller.onCreate()
-        fabAddReport.setOnClickListener { controller.onAddTodayReport() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -62,18 +54,16 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.action_today -> controller.onToday()
-            R.id.action_prev_month -> controller.onPreviousMonth()
-            R.id.action_next_month -> controller.onNextMonth()
-        }
-        return super.onOptionsItemSelected(item)
-    }
+    override fun reportAdd(): Observable<Unit> = fabAddReport.clicks()
+
+    override fun monthChangeToNext(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_next_month)
+
+    override fun monthChangeToPrev(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_prev_month)
+
+    override fun scrollToCurrent(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_today)
 
     override fun shouldFilterReports(): Observable<Boolean> {
-        return Observable.just(false).concatWith(toolbarClicks
-                .filter { it.itemId == R.id.action_filter }
+        return Observable.just(false).concatWith(toolbarClicks.onMenuItemAction(R.id.action_filter)
                 .doOnNext {
                     it.isChecked = !it.isChecked
                     val icon = when (it.isChecked) {

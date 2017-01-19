@@ -18,9 +18,8 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_filter_not_filled"
-        android:checkable="true"
+        android:id="@+id/action_filter"
+        android:icon="@drawable/filter_off"
         android:title="@string/filter_not_filled"
-        app:actionViewClass="android.widget.CheckBox"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

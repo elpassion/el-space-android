@@ -7,12 +7,16 @@ import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.list.service.DateChangeObserver
+import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
+import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 
 class ReportListController(private val reportDayService: ReportDayService,
+                           private val dayFilter: DayFilter,
+                           private val actions: ReportList.Actions,
                            private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
@@ -22,7 +26,23 @@ class ReportListController(private val reportDayService: ReportDayService,
     fun onCreate() {
         fetchReports()
         subscribeDateChange()
-        subscribeTodayPosition()
+        Observable.merge(
+                actions.reportAdd().doOnNext { view.openAddReportScreen() },
+                actions.monthChangeToNext().doOnNext { dateChangeObserver.setNextMonth() },
+                actions.monthChangeToPrev().doOnNext { dateChangeObserver.setPreviousMonth() },
+                actions.scrollToCurrent().doOnNext { onToday() })
+                .subscribe().save()
+    }
+
+    private fun onToday() {
+        val todayPosition = todayPositionObserver.lastPosition
+        if (todayPosition != -1) {
+            view.scrollToPosition(todayPosition)
+        }
+    }
+
+    fun updateTodayPosition(position: Int) {
+        todayPositionObserver.updatePosition(position)
     }
 
     fun refreshReportList() {
@@ -34,7 +54,13 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        reportDayService.createDays(dateChangeObserver.observe())
+        Observable.combineLatest(reportDayService.createDays(dateChangeObserver.observe()), actions.shouldFilterReports(),
+                { list: List<Day>, shouldFilter: Boolean ->
+                    when (shouldFilter) {
+                        true -> dayFilter.fetchFilteredDays(list)
+                        else -> list
+                    }
+                })
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
@@ -53,29 +79,6 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .save()
     }
 
-    private fun subscribeTodayPosition() {
-        todayPositionObserver.observe().subscribe().save()
-    }
-
-    fun onToday() {
-        val todayPosition = todayPositionObserver.lastPosition
-        if (todayPosition != -1) {
-            view.scrollToPosition(todayPosition)
-        }
-    }
-
-    fun onNextMonth() {
-        dateChangeObserver.setNextMonth()
-    }
-
-    fun onPreviousMonth() {
-        dateChangeObserver.setPreviousMonth()
-    }
-
-    fun updateTodayPosition(position: Int) {
-        todayPositionObserver.updatePosition(position)
-    }
-
     override fun onDayDate(date: String) {
         view.openAddReportScreen(date)
     }
@@ -90,10 +93,6 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun Subscription.save() {
         subscriptions.add(this)
-    }
-
-    fun onAddTodayReport() {
-        view.openAddReportScreen()
     }
 }
 

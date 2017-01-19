@@ -12,6 +12,7 @@ import pl.elpassion.project.dto.newDailyReport
 import pl.elpassion.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.DailyReportType
+import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
 import java.util.*
@@ -19,8 +20,10 @@ import java.util.*
 class ReportListControllerTest {
 
     val service = mock<ReportDayService>()
+    val actions = mock<ReportList.Actions>()
+    val filter = mock<DayFilter>()
     val view = mock<ReportList.View>()
-    val controller = ReportListController(service, view)
+    val controller = ReportListController(service, filter, actions, view)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -28,6 +31,7 @@ class ReportListControllerTest {
     @Before
     fun setUp() {
         stubCurrentTime()
+        stubViewActions()
     }
 
     @Test
@@ -39,6 +43,53 @@ class ReportListControllerTest {
 
         verify(view).showMonthName("January")
     }
+
+    @Test
+    fun shouldCallActionFilterPrevOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).shouldFilterReports()
+    }
+
+    @Test
+    fun shouldCallActionMonthChangeNextOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).monthChangeToNext()
+    }
+
+
+    @Test
+    fun shouldCallActionMonthChangePrevOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).monthChangeToPrev()
+    }
+
+    @Test
+    fun shouldCallActionReportAddOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).reportAdd()
+    }
+
+    @Test
+    fun shouldCallActionScrollToCurrentOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).scrollToCurrent()
+    }
+
 
     @Test
     fun shouldReallyShowCorrectMonthNameOnCreate() {
@@ -129,7 +180,9 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenAddReportScreen() {
-        controller.onAddTodayReport()
+        whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
+
+        controller.onCreate()
 
         verify(view).openAddReportScreen()
     }
@@ -138,10 +191,10 @@ class ReportListControllerTest {
     fun shouldScrollToCorrectPositionOnTodayWhenNoReports() {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 20)
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
 
-        controller.onCreate()
         controller.updateTodayPosition(20)
-        controller.onToday()
+        controller.onCreate()
 
         verify(view).scrollToPosition(20)
     }
@@ -150,12 +203,74 @@ class ReportListControllerTest {
     fun shouldReallyScrollToCorrectPositionOnTodayWhenNoReports() {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 31)
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
 
-        controller.onCreate()
         controller.updateTodayPosition(31)
-        controller.onToday()
+        controller.onCreate()
 
         verify(view).scrollToPosition(31)
+    }
+
+    @Test
+    fun shouldListenForFilterActions() {
+        stubServiceToReturnEmptyList()
+
+        controller.onCreate()
+
+        verify(actions).shouldFilterReports()
+    }
+
+    @Test
+    fun shouldUseFilterActionBeforeShowingReportsList() {
+        stubServiceToReturnEmptyList()
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.never())
+
+        controller.onCreate()
+
+        verify(view, never()).showDays(any(), any(), any())
+    }
+
+    @Test
+    fun shouldDoNotFilterDaysWhenFilterIsOff() {
+        stubServiceToReturnEmptyList()
+        stubFilterAction(false)
+
+        controller.onCreate()
+
+        verify(filter, never()).fetchFilteredDays(any())
+    }
+
+
+    @Test
+    fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
+        stubServiceToReturnEmptyList()
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false, true))
+
+        controller.onCreate()
+
+        verify(view, times(2)).showDays(any(), any(), any())
+    }
+
+    @Test
+    fun shouldFilterDaysWhenFilterIsOn() {
+        stubServiceToReturnEmptyList()
+        stubFilterAction(true)
+
+        controller.onCreate()
+
+        verify(filter).fetchFilteredDays(any())
+    }
+
+    private fun stubViewActions() {
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false))
+        whenever(actions.reportAdd()).thenReturn(Observable.never())
+        whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
+        whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.never())
+    }
+
+    private fun stubFilterAction(isFiltering: Boolean) {
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(isFiltering))
     }
 
     private fun stubServiceToReturnNever() {

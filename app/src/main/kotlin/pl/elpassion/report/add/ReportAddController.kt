@@ -24,42 +24,32 @@ class ReportAddController(private val date: String?,
             view.showSelectedProject(it)
         }
         view.showDate(date ?: getCurrentDatePerformedAtString())
-        subscribeToProjectClickEvents()
-        subscribeToProjectChanges()
-        subscribeToAddReportClicks()
-        subscribeToReportTypeChanges()
-    }
-
-    private fun subscribeToReportTypeChanges() {
-        view.reportTypeChanges()
-                .subscribe({ onReportTypeChanged(it) })
-                .save()
-    }
-
-    private fun subscribeToAddReportClicks() {
-        view.addReportClicks()
-                .switchMap { handleNewReport(it) }
-                .doOnError { view.showError(it) }
-                .onErrorResumeNext { Observable.empty() }
+        Observable.merge(projectClickEvents(), projectChanges(), addReportClicks(), reportTypeChanges())
                 .subscribe()
                 .save()
     }
 
-    private fun subscribeToProjectChanges() {
-        view.projectChanges()
-                .subscribe {
-                    view.showSelectedProject(it)
-                    selectedProject = it
-                }
-                .save()
-    }
+    private fun reportTypeChanges() = view.reportTypeChanges()
+            .doOnNext { onReportTypeChanged(it) }
+            .map { Unit }
 
-    private fun subscribeToProjectClickEvents() {
-        view.projectClickEvents()
-                .subscribe {
+    private fun addReportClicks() = view.addReportClicks()
+            .switchMap { handleNewReport(it) }
+            .doOnError { view.showError(it) }
+            .onErrorResumeNext { Observable.empty() }
+
+    private fun projectChanges() = view.projectChanges()
+            .doOnNext {
+                view.showSelectedProject(it)
+                selectedProject = it
+            }
+            .map { Unit }
+
+    private fun projectClickEvents(): Observable<Unit> {
+        return view.projectClickEvents()
+                .doOnNext {
                     view.openProjectChooser()
                 }
-                .save()
     }
 
     private fun handleNewReport(it: ReportViewModel): Observable<Unit> {
@@ -72,8 +62,8 @@ class ReportAddController(private val date: String?,
         }
     }
 
-    private fun emptyDescriptionErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasDescription() }.doOnNext { view.showEmptyDescriptionError() }.map { }
-    private fun emptyProjectErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasProject() }.doOnNext { view.showEmptyProjectError() }.map { }
+    private fun emptyDescriptionErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasDescription() }.doOnNext { view.showEmptyDescriptionError() }.map { Unit }
+    private fun emptyProjectErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasProject() }.doOnNext { view.showEmptyProjectError() }.map { Unit }
     private fun validReportFlow(it: RegularReport) = Observable.just(it).filter { it.hasProject() && it.hasDescription() }.switchMap { api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description).addLoader().addOnSuccess() }
 
     private fun RegularReport.hasDescription(): Boolean {

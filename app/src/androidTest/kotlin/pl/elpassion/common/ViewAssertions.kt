@@ -6,6 +6,6 @@ import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.not
 
-fun ViewInteraction.hasChildWithText(text: String) = check(matches(hasDescendant(withText(text))))
+fun ViewInteraction.hasChildWithText(text: String): ViewInteraction = check(matches(hasDescendant(withText(text))))
 
-fun ViewInteraction.hasNoChildWithText(text: String) = check(matches(not(hasDescendant(withText(text)))))
+fun ViewInteraction.hasNoChildWithText(text: String): ViewInteraction = check(matches(not(hasDescendant(withText(text)))))

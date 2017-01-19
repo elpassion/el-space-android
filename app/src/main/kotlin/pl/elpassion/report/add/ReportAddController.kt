@@ -1,5 +1,6 @@
 package pl.elpassion.report.add
 
+import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.common.extensions.getTimeFrom
@@ -45,9 +46,9 @@ class ReportAddController(private val date: String?,
     private fun handleNewReport(it: ReportViewModel): Observable<Unit> {
         return when (it) {
             is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(it), emptyProjectErrorFlow(it), validReportFlow(it))
-            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
-            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
-            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
+            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
             else -> Observable.error(IllegalArgumentException(it.toString()))
         }
     }
@@ -67,6 +68,7 @@ class ReportAddController(private val date: String?,
             .switchMap {
                 api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description)
                         .toObservable<Unit>()
+                        .applySchedulers()
                         .addLoader()
                         .doOnCompleted { view.close() }
             }

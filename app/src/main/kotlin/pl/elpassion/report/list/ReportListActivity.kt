@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
@@ -16,7 +17,6 @@ import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.dayOfMonth
 import pl.elpassion.common.extensions.getCurrentTimeCalendar
-import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.HourlyReport
@@ -90,7 +90,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
     }
 
     override fun hideLoader() {
-        hideLoader(reportListCoordinator)
+//        hideLoader(reportListCoordinator)
     }
 
     override fun showLoader() {

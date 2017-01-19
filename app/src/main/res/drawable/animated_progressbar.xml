@@ -5,5 +5,10 @@
 
     <target
         android:name="circleGroup"
-        android:animation="@anim/progress_anim" />
+        android:animation="@anim/progress_circle" />
+
+    <target
+        android:name="circlePath"
+        android:animation="@anim/progress_trim_path_end" />
+
 </animated-vector>

@@ -1,7 +1,7 @@
 package pl.elpassion.common
 
 import android.annotation.TargetApi
-import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.Animatable
 import android.os.Build
 import android.provider.Settings
 import android.support.design.widget.CoordinatorLayout
@@ -20,15 +20,15 @@ fun showLoader(coordinatorLayout: CoordinatorLayout) {
 }
 
 private fun isAnimationEnabled(coordinatorLayout: CoordinatorLayout) =
-        Settings.Global.getInt(coordinatorLayout.context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 0) != 0
+        Settings.Global.getInt(coordinatorLayout.context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1) != 0
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 private fun startAnimation(loaderRoot: View) {
-    (loaderRoot.loaderImage.drawable as AnimatedVectorDrawable).start()
+    (loaderRoot.loaderImage.drawable as? Animatable)?.start()
 }
 
 fun hideLoader(coordinatorLayout: CoordinatorLayout) {
-    coordinatorLayout.loader?.let{
+    coordinatorLayout.loader?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             stopAnimation(it)
         }
@@ -38,5 +38,5 @@ fun hideLoader(coordinatorLayout: CoordinatorLayout) {
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 private fun stopAnimation(loaderRoot: View) {
-    (loaderRoot.loaderImage.drawable as AnimatedVectorDrawable).stop()
+    (loaderRoot.loaderImage.drawable as? Animatable)?.stop()
 }

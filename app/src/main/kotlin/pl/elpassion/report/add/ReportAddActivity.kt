@@ -23,11 +23,10 @@ import pl.elpassion.common.showLoader
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
-import pl.elpassion.report.add.details.ReportAddDetails
 import pl.elpassion.report.datechooser.showDateDialog
 import rx.Observable
 
-class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.View.Regular {
+class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get(), LastSelectedProjectRepositoryProvider.get())

@@ -2,14 +2,14 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
-import pl.elpassion.report.add.details.ReportAddDetails
+import pl.elpassion.project.Project
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable
 import rx.Observable
 
 interface ReportAdd {
-    interface View : ReportAddDetails.View.Regular {
+    interface View {
         fun close()
         fun showError(ex: Throwable)
         fun showDate(date: String)
@@ -26,6 +26,11 @@ interface ReportAdd {
         fun showUnpaidVacationsInfo()
         fun showSickLeaveInfo()
         fun hideAdditionalInfo()
+        fun showSelectedProject(project: Project)
+        fun openProjectChooser()
+        fun showEmptyDescriptionError()
+        fun showEmptyProjectError()
+        fun projectClickEvents(): Observable<Unit>
     }
 
     interface Api {

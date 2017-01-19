@@ -156,9 +156,9 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         return RxView.clicks(reportAddProjectName).map { Unit }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            showSelectedProject(ProjectChooseActivity.getProject(data))
+            showSelectedProject(ProjectChooseActivity.getProject(data!!))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

@@ -5,6 +5,7 @@ buildscript {
     ext.support_version = '25.1.0'
     ext.rxJava= '1.1.9'
     ext.elCommon = '0.0.11'
+    ext.rxBinding = '1.0.0'
 
     repositories {
         jcenter()
@@ -78,10 +79,10 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.jakewharton.rxbinding:rxbinding-kotlin:1.0.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:1.0.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:1.0.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-design-kotlin:1.0.0'
+    compile "com.jakewharton.rxbinding:rxbinding-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxBinding"
     compile "com.android.support:cardview-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"

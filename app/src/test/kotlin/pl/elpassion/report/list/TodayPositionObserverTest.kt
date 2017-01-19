@@ -16,7 +16,7 @@ class TodayPositionObserverTest {
 
         positionObserver.updatePosition(7)
 
-        subscriber.assertValue(7)
+        subscriber.assertValues(-1, 7)
     }
 
     @Test
@@ -29,5 +29,14 @@ class TodayPositionObserverTest {
         positionObserver.updatePosition(7)
 
         assertEquals(positionObserver.lastPosition, 7)
+    }
+
+    @Test
+    fun shouldLastPositionReturnMinusOneBeforeFirstEmittedValue() {
+        val subscriber = TestSubscriber<Int>()
+        positionObserver.observe()
+                .subscribe(subscriber)
+
+        assertEquals(positionObserver.lastPosition, -1)
     }
 }

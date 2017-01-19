@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:clickable="true">
 
-    <ProgressBar
-        android:indeterminate="true"
-        android:indeterminateDrawable="@drawable/animated_progressbar"
+    <ImageView
+        android:id="@+id/loaderImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:src="@drawable/animated_progressbar"/>
 
 </FrameLayout>

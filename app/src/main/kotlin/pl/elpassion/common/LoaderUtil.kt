@@ -1,19 +1,42 @@
 package pl.elpassion.common
 
+import android.annotation.TargetApi
+import android.graphics.drawable.AnimatedVectorDrawable
+import android.os.Build
+import android.provider.Settings
 import android.support.design.widget.CoordinatorLayout
+import android.view.View
+import kotlinx.android.synthetic.main.loader.view.*
 import pl.elpassion.R
 
-fun showLoader(layout: CoordinatorLayout) {
-    if (layout.findViewById(R.id.loader) == null) {
-        val loaderRoot = inflate(layout, R.layout.loader)
-        layout.addView(loaderRoot)
+fun showLoader(coordinatorLayout: CoordinatorLayout) {
+    if (coordinatorLayout.loader == null) {
+        val loaderRoot = inflate(coordinatorLayout, R.layout.loader)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && isAnimationEnabled(coordinatorLayout)) {
+            startAnimation(loaderRoot)
+        }
+        coordinatorLayout.addView(loaderRoot)
     }
 }
 
+private fun isAnimationEnabled(coordinatorLayout: CoordinatorLayout) =
+        Settings.Global.getInt(coordinatorLayout.context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 0) != 0
 
-fun hideLoader(layout: CoordinatorLayout) {
-    val loader = layout.findViewById(R.id.loader)
-    if (loader != null) {
-        layout.removeView(loader)
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+private fun startAnimation(loaderRoot: View) {
+    (loaderRoot.loaderImage.drawable as AnimatedVectorDrawable).start()
+}
+
+fun hideLoader(coordinatorLayout: CoordinatorLayout) {
+    coordinatorLayout.loader?.let{
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            stopAnimation(it)
+        }
+        coordinatorLayout.removeView(it)
     }
+}
+
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+private fun stopAnimation(loaderRoot: View) {
+    (loaderRoot.loaderImage.drawable as AnimatedVectorDrawable).stop()
 }

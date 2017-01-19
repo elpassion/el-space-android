@@ -12,7 +12,9 @@ import pl.elpassion.report.list.DayWithoutReports
 import pl.elpassion.report.list.OnDayClickListener
 import pl.elpassion.report.list.shouldHaveReports
 
-class DayNotFilledInItemAdapter(val day: DayWithoutReports, val listener: OnDayClickListener) : StableItemAdapter<DayNotFilledInItemAdapter.VH>(day.uuid, R.layout.day_not_filled_in_item) {
+class DayNotFilledInItemAdapter(override val day: DayWithoutReports, val listener: OnDayClickListener) :
+        StableItemAdapter<DayNotFilledInItemAdapter.VH>(day.uuid, R.layout.day_not_filled_in_item), DayItem {
+
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

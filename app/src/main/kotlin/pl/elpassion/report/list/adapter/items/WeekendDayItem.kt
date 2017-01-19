@@ -8,7 +8,7 @@ import pl.elpassion.R
 import pl.elpassion.report.list.DayWithoutReports
 import pl.elpassion.report.list.OnDayClickListener
 
-class WeekendDayItem(val day: DayWithoutReports, val listener: OnDayClickListener) : StableItemAdapter<WeekendDayItem.VH>(day.uuid, R.layout.weekend_day_item) {
+class WeekendDayItem(override val day: DayWithoutReports, val listener: OnDayClickListener) : StableItemAdapter<WeekendDayItem.VH>(day.uuid, R.layout.weekend_day_item), DayItem {
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

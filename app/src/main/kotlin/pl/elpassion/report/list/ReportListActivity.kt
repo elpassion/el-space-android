@@ -14,6 +14,8 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.StableItemAdapter
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.common.extensions.dayOfMonth
+import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.report.DailyReport
@@ -71,8 +73,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         ReportEditDailyActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
     }
 
-    override fun scrollToDay(day: Int) {
-        reportsContainer.smoothScrollToPosition(day)
+    override fun scrollToPosition(position: Int) {
+        reportsContainer.smoothScrollToPosition(position)
     }
 
     override fun showMonthName(monthName: String) {
@@ -106,6 +108,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
         val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
         reportsAdapter.updateAdapter(adapterList)
+        val today = getCurrentTimeCalendar().dayOfMonth
+        val todayPosition = adapterList.indexOfFirst {
+            it is DayItem && it.day.date.drop(8) == today.toString()
+        }
+        controller.updateTodayPosition(todayPosition)
     }
 
     private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {

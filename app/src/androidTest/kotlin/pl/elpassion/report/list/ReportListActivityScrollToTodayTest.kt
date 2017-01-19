@@ -12,6 +12,7 @@ import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.hasNoChildWithText
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
+import pl.elpassion.project.dto.newRegularHourlyReport
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.startActivity
@@ -37,6 +38,15 @@ class ReportListActivityScrollToTodayTest {
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("20 Fri")
         onId(R.id.reportsContainer).hasNoChildWithText("31 Tue")
+    }
+
+    @Test
+    fun shouldScrollToTodayOnTodayClickWhenOneReportIsAdded() {
+        stubServiceAndStart(
+                reports = listOf(newRegularHourlyReport(year = 2017, month = 1, day = 1, reportedHours = 3.0)),
+                todayDate = "2017-01-31")
+        onId(R.id.action_today).click()
+        onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
     private fun stubServiceAndStart(reports: List<Report>, todayDate: String) {

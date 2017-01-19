@@ -9,7 +9,9 @@ import pl.elpassion.report.DailyReportType
 import pl.elpassion.report.list.DayWithDailyReport
 import pl.elpassion.report.list.OnReportClickListener
 
-class DayWithDailyReportsItemAdapter(val day: DayWithDailyReport, val onReportClickListener: OnReportClickListener) : StableItemAdapter<DayWithDailyReportsItemAdapter.VH>(day.uuid, R.layout.day_with_daily_report_item) {
+class DayWithDailyReportsItemAdapter(override val day: DayWithDailyReport, val onReportClickListener: OnReportClickListener) :
+        StableItemAdapter<DayWithDailyReportsItemAdapter.VH>(day.uuid, R.layout.day_with_daily_report_item), DayItem {
+
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

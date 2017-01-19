@@ -2,8 +2,6 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.extensions.dayOfMonth
-import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
@@ -19,10 +17,12 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
+    private val todayPositionObserver = TodayPositionObserver()
 
     fun onCreate() {
         fetchReports()
         subscribeDateChange()
+        subscribeTodayPosition()
     }
 
     fun refreshReportList() {
@@ -53,8 +53,15 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .save()
     }
 
+    private fun subscribeTodayPosition() {
+        todayPositionObserver.observe().subscribe().save()
+    }
+
     fun onToday() {
-        view.scrollToDay(getCurrentTimeCalendar().dayOfMonth)
+        val todayPosition = todayPositionObserver.lastPosition
+        if (todayPosition != -1) {
+            view.scrollToPosition(todayPosition)
+        }
     }
 
     fun onNextMonth() {
@@ -63,6 +70,10 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     fun onPreviousMonth() {
         dateChangeObserver.setPreviousMonth()
+    }
+
+    fun updateTodayPosition(position: Int) {
+        todayPositionObserver.updatePosition(position)
     }
 
     override fun onDayDate(date: String) {

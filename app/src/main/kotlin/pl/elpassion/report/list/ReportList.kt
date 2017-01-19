@@ -42,7 +42,7 @@ interface ReportList {
 
         fun openDailyEditReportScreen(report: DailyReport)
 
-        fun scrollToDay(day: Int)
+        fun scrollToPosition(position: Int)
     }
 
     object ServiceProvider : Provider<Service>({

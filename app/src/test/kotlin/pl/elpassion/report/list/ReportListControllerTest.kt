@@ -139,7 +139,7 @@ class ReportListControllerTest {
         stubCurrentTime(2017, 1, 20)
         controller.onToday()
 
-        verify(view).scrollToDay(20)
+        verify(view).scrollToPosition(20)
     }
 
     @Test
@@ -147,7 +147,7 @@ class ReportListControllerTest {
         stubCurrentTime(2017, 1, 31)
         controller.onToday()
 
-        verify(view).scrollToDay(31)
+        verify(view).scrollToPosition(31)
     }
 
     private fun stubServiceToReturnNever() {

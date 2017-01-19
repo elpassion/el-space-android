@@ -8,7 +8,9 @@ import pl.elpassion.R
 import pl.elpassion.report.list.DayWithHourlyReports
 import pl.elpassion.report.list.OnDayClickListener
 
-class DayItemAdapter(val day: DayWithHourlyReports, val listener: OnDayClickListener) : StableItemAdapter<DayItemAdapter.VH>(day.uuid, R.layout.day_item) {
+class DayItemAdapter(override val day: DayWithHourlyReports, val listener: OnDayClickListener) :
+        StableItemAdapter<DayItemAdapter.VH>(day.uuid, R.layout.day_item), DayItem {
+
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
 
     override fun onBindViewHolder(holder: VH) {

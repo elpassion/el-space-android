@@ -45,6 +45,53 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldCallActionFilterPrevOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).shouldFilterReports()
+    }
+
+    @Test
+    fun shouldCallActionMonthChangeNextOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).monthChangeToNext()
+    }
+
+
+    @Test
+    fun shouldCallActionMonthChangePrevOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).monthChangeToPrev()
+    }
+
+    @Test
+    fun shouldCallActionReportAddOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).reportAdd()
+    }
+
+    @Test
+    fun shouldCallActionScrollToCurrentOnCreate() {
+        stubServiceToReturnNever()
+
+        controller.onCreate()
+
+        verify(actions).scrollToCurrent()
+    }
+
+
+    @Test
     fun shouldReallyShowCorrectMonthNameOnCreate() {
         stubServiceToReturnEmptyList()
         stubDateChangeToReturn(getTimeFrom(2016, 10, 20))
@@ -217,6 +264,7 @@ class ReportListControllerTest {
     private fun stubViewActions() {
         whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false))
+        whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
         whenever(actions.scrollToCurrent()).thenReturn(Observable.never())

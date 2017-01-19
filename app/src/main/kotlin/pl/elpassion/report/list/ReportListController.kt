@@ -32,8 +32,19 @@ class ReportListController(private val reportDayService: ReportDayService,
                 actions.reportAdd().doOnNext { view.openAddReportScreen() },
                 actions.monthChangeToNext().doOnNext { dateChangeObserver.setNextMonth() },
                 actions.monthChangeToPrev().doOnNext { dateChangeObserver.setPreviousMonth() },
-                actions.scrollToCurrent().doOnNext { view.scrollToDay(getCurrentTimeCalendar().dayOfMonth) })
+                actions.scrollToCurrent().doOnNext { onToday() })
                 .subscribe().save()
+    }
+
+    private fun onToday() {
+        val todayPosition = todayPositionObserver.lastPosition
+        if (todayPosition != -1) {
+            view.scrollToPosition(todayPosition)
+        }
+    }
+
+    fun updateTodayPosition(position: Int) {
+        todayPositionObserver.updatePosition(position)
     }
 
     fun refreshReportList() {

@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
+import pl.elpassion.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
@@ -160,6 +161,14 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             showSelectedProject(ProjectChooseActivity.getProject(data))
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            return handleClickOnBackArrowItem(item)
+        } else {
+            return false
+        }
     }
 
     companion object {

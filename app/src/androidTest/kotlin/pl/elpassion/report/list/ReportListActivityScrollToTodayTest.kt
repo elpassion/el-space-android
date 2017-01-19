@@ -9,6 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.hasChildWithText
+import pl.elpassion.common.hasNoChildWithText
 import pl.elpassion.common.rule
 import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.report.Report
@@ -25,15 +26,23 @@ class ReportListActivityScrollToTodayTest {
 
     @Test
     fun shouldScrollToTodayOnTodayClickWhenNoReports() {
-        stubServiceAndStart(reports = emptyList())
+        stubServiceAndStart(reports = emptyList(), todayDate = "2017-01-31")
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
-    private fun stubServiceAndStart(reports: List<Report>) {
-        stubCurrentTime(2017, 1, 31)
+    @Test
+    fun shouldReallyScrollToTodayOnTodayClickWhenNoReports() {
+        stubServiceAndStart(reports = emptyList(), todayDate = "2017-01-20")
+        onId(R.id.action_today).click()
+        onId(R.id.reportsContainer).hasChildWithText("20 Fri")
+        onId(R.id.reportsContainer).hasNoChildWithText("31 Tue")
+    }
+
+    private fun stubServiceAndStart(reports: List<Report>, todayDate: String) {
+        stubCurrentTime(todayDate)
         whenever(service.getReports()).thenReturn(Observable.just(reports))
         ReportList.ServiceProvider.override = { service }
-        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2017-01-31"))
+        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), todayDate))
     }
 }

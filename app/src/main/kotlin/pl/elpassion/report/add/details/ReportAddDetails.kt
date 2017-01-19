@@ -12,7 +12,6 @@ interface ReportAddDetails {
             fun showEmptyDescriptionError()
             fun showEmptyProjectError()
             fun projectClickEvents(): Observable<Unit>
-            fun projectChanges(): Observable<Project>
         }
 
         interface PaidVacations : View {

@@ -16,7 +16,6 @@ class ReportAddControllerTest {
 
     private val addReportClicks = PublishSubject.create<ReportViewModel>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
-    private val projectChanges = PublishSubject.create<Project>()
     private val projectClickEvents = PublishSubject.create<Unit>()
 
     val view = mock<ReportAdd.View>()
@@ -32,7 +31,6 @@ class ReportAddControllerTest {
         stubRepositoryToReturn()
         whenever(view.addReportClicks()).thenReturn(addReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
-        whenever(view.projectChanges()).thenReturn(projectChanges)
         whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
     }
 
@@ -277,17 +275,15 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowSelectedProject() {
-        stubRepositoryToReturn(null)
+        stubRepositoryToReturn(newProject(id = 3))
         createController().onCreate()
-        projectChanges.onNext(newProject())
-        verify(view).showSelectedProject(newProject())
+        verify(view).showSelectedProject(newProject(id = 3))
     }
 
     @Test
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
 
-        projectChanges.onNext(newProject(id = 1))
         addReportClicks.onNext(RegularReport("date", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
     }

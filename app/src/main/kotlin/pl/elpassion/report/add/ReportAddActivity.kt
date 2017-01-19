@@ -8,15 +8,20 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.crashlytics.android.Crashlytics
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.design.widget.itemSelections
 import com.jakewharton.rxbinding.support.v7.widget.itemClicks
+import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.Project
+import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.report.add.details.ReportAddDetails
 import pl.elpassion.report.datechooser.showDateDialog
@@ -28,12 +33,15 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get(), LastSelectedProjectRepositoryProvider.get())
     }
 
+    private var selectedProject: Project? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
+        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, {}) }
     }
 
@@ -65,7 +73,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
             val selectedDate = reportAddDate.text.toString()
             val checkMenuItem = bottomNavigation.menu.items.first { it.isChecked }.itemId
             when (checkMenuItem) {
-                R.id.action_regular_report -> RegularReport(selectedDate, null, reportAddDescription.text.toString(), reportAddHours.text.toString())
+                R.id.action_regular_report -> RegularReport(selectedDate, selectedProject, reportAddDescription.text.toString(), reportAddHours.text.toString())
                 R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate, reportAddHours.text.toString())
                 R.id.action_unpaid_vacations_report -> UnpaidVacationsReport(selectedDate)
                 R.id.action_sick_leave_report -> SickLeaveReport(selectedDate)
@@ -80,27 +88,27 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
     }
 
     override fun showHoursInput() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddHours.parent as View).show()
     }
 
     override fun showProjectChooser() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddProjectName.parent as View).show()
     }
 
     override fun showDescriptionInput() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddDescription.parent as View).show()
     }
 
     override fun hideDescriptionInput() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddDescription.parent as View).hide()
     }
 
     override fun hideProjectChooser() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddProjectName.parent as View).hide()
     }
 
     override fun hideHoursInput() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        (reportAddHours.parent as View).hide()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -114,32 +122,36 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
     }
 
     override fun showSelectedProject(project: Project) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        reportAddProjectName.setText(project.name)
+        selectedProject = project
     }
 
     override fun openProjectChooser() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        ProjectChooseActivity.startForResult(this, REQUEST_CODE)
     }
 
     override fun showEmptyDescriptionError() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Snackbar.make(reportAddCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showEmptyProjectError() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Snackbar.make(reportAddCoordinator, R.string.empty_project_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun projectClickEvents(): Observable<Unit> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return RxView.clicks(reportAddProjectName).map { Unit }
     }
 
-    override fun projectChanges(): Observable<Project> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+            showSelectedProject(ProjectChooseActivity.getProject(data))
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
-
 
     companion object {
         private val ADD_DATE_KEY = "dateKey"
+        private val REQUEST_CODE = 555
 
         fun startForResult(activity: Activity, date: String, requestCode: Int) {
             activity.startActivityForResult(intent(activity, date), requestCode)

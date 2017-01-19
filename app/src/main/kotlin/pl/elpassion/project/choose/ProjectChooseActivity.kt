@@ -95,10 +95,6 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
             activity.startActivityForResult(Intent(activity, ProjectChooseActivity::class.java), requestCode)
         }
 
-        fun startForResult(fragment: Fragment, requestCode: Int) {
-            fragment.startActivityForResult(Intent(fragment.activity, ProjectChooseActivity::class.java), requestCode)
-        }
-
         fun getProject(data: Intent): Project = data.getSerializableExtra(ProjectChooseActivity.SELECTED_PROJECT) as Project
     }
 }

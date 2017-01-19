@@ -38,8 +38,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
         addReportClicks.onNext(UnpaidVacationsReport("date"))
         verify(view).close()
     }
@@ -47,8 +46,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowLoaderOnAddingNewReport() {
         stubApiToReturn(Completable.never())
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
         addReportClicks.onNext(UnpaidVacationsReport("date"))
 
         verify(view).showLoader()
@@ -57,8 +55,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldHideLoaderWhenAddingNewReportFinish() {
         stubApiToReturn(Completable.complete())
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
         addReportClicks.onNext(UnpaidVacationsReport("date"))
 
         verify(view).showLoader()
@@ -94,16 +91,16 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
+
         addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
         verify(view).showError(any())
     }
 
     @Test
     fun shouldShowDate() {
-        val controller = createController("2016-09-23")
-        controller.onCreate()
+        createController("2016-09-23").onCreate()
+
         verify(view).showDate("2016-09-23")
     }
 
@@ -121,16 +118,14 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowCurrentDateWhenNotDateNotSelected() {
         stubCurrentTime(2016, 2, 1)
-        val controller = createController(null)
-        controller.onCreate()
+        createController(null).onCreate()
 
         verify(view).showDate("2016-02-01")
     }
 
     @Test
     fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showHoursInput()
@@ -138,8 +133,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowDescriptionInputAfterReportTypeChangedToRegularReport() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showDescriptionInput()
@@ -147,8 +141,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowProjectChooserAfterReportTypeChangedToRegularReport() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showProjectChooser()
@@ -156,8 +149,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowHoursInputAfterReportTypeChangedToPaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).showHoursInput()
@@ -165,8 +157,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideDescriptionInputAfterReportTypeChangedToPaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).hideDescriptionInput()
@@ -174,8 +165,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideProjectChooserAfterReportTypeChangedToPaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).hideProjectChooser()
@@ -183,8 +173,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideHoursInput()
@@ -192,8 +181,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideProjectChooserAfterReportTypeChangedToSickLeave() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideProjectChooser()
@@ -201,8 +189,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideDescriptionInputAfterReportTypeChangedToSickLeave() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).hideDescriptionInput()
@@ -210,8 +197,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideHoursInput()
@@ -219,8 +205,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideProjectChooserAfterReportTypeChangedToUnpaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideProjectChooser()
@@ -228,8 +213,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
-        val controller = createController()
-        controller.onCreate()
+        createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideDescriptionInput()
@@ -237,8 +221,7 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
-        val controller = createController("2016-01-01")
-        controller.onCreate()
+        createController("2016-01-01").onCreate()
 
         addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
         verify(api).addUnpaidVacationsReport("2016-01-01")

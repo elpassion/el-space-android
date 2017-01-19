@@ -135,7 +135,7 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldScrollToTodayOnToday() {
+    fun shouldScrollToCorrectPositionOnTodayWhenNoReports() {
         stubCurrentTime(2017, 1, 20)
         controller.onToday()
 
@@ -143,7 +143,7 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldReallyScrollToTodayOnToday() {
+    fun shouldReallyScrollToCorrectPositionOnTodayWhenNoReports() {
         stubCurrentTime(2017, 1, 31)
         controller.onToday()
 

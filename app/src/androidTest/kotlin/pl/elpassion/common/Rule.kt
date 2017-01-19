@@ -13,6 +13,7 @@ import rx.Completable
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {
         override fun apply(base: Statement?, description: Description?): Statement {
+            Animations.disable()
             stubReportAddApi()
             stubProjectRepository()
             stubReportEditApi()

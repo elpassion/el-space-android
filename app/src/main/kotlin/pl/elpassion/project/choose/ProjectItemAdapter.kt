@@ -2,7 +2,7 @@ package pl.elpassion.project.choose
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.elpassion.android.commons.recycler.StableItemAdapter
+import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import kotlinx.android.synthetic.main.project_item.view.*
 import pl.elpassion.R
 import pl.elpassion.project.Project

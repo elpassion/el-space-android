@@ -1,6 +1,6 @@
 package pl.elpassion.report.list.adapter
 
-import com.elpassion.android.commons.recycler.StableItemAdapter
+import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import pl.elpassion.report.list.adapter.items.*
 
 fun addSeparators(adapters: List<StableItemAdapter<*>>) = mutableListOf<StableItemAdapter<*>>().apply {

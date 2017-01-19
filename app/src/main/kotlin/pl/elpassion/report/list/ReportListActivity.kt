@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.commons.recycler.StableItemAdapter
+import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
+import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
+import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
@@ -25,7 +27,6 @@ import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.report.edit.daily.ReportEditDailyActivity
 import pl.elpassion.report.edit.paidvacation.ReportEditPaidVacationActivity
 import pl.elpassion.report.edit.regular.ReportEditRegularActivity
-import pl.elpassion.report.list.adapter.ReportsAdapter
 import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
@@ -37,7 +38,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), DayFilterImpl(), this, this)
     }
 
-    private val reportsAdapter by lazy { ReportsAdapter() }
+    private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
+    private val reportsAdapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
     private val toolbarClicks by lazy { toolbar.menuClicks() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,8 +122,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
         val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
-        val adapterList = listOf(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
-        reportsAdapter.updateAdapter(adapterList)
+        val adapterList = listOf<StableItemAdapter<*>>(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
+        itemsStrategy.set(adapterList)
+        reportsAdapter.notifyDataSetChanged()
         val today = getCurrentTimeCalendar().dayOfMonth
         val todayPosition = adapterList.indexOfFirst {
             it is DayItem && it.day.date.drop(8) == today.toString()

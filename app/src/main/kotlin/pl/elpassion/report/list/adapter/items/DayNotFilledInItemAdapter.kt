@@ -3,10 +3,10 @@ package pl.elpassion.report.list.adapter.items
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.day_not_filled_in_item.view.*
-import com.elpassion.android.commons.recycler.StableItemAdapter
 import pl.elpassion.R
 import pl.elpassion.report.list.DayWithoutReports
 import pl.elpassion.report.list.OnDayClickListener
@@ -24,11 +24,11 @@ class DayNotFilledInItemAdapter(override val day: DayWithoutReports, val listene
             if (day.shouldHaveReports()) {
                 hubIndicator.show()
                 missingDayInformation.show()
-                icoHubPlus.background = ContextCompat.getDrawable(context,R.drawable.ico_hub_plus_active)
+                icoHubPlus.background = ContextCompat.getDrawable(context, R.drawable.ico_hub_plus_active)
             } else {
                 hubIndicator.hide()
                 missingDayInformation.visibility = View.INVISIBLE
-                icoHubPlus.background = ContextCompat.getDrawable(context,R.drawable.ico_hub_plus_not_active)
+                icoHubPlus.background = ContextCompat.getDrawable(context, R.drawable.ico_hub_plus_not_active)
             }
         }
     }

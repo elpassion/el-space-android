@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -12,6 +11,9 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
+import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
+import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
+import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
@@ -25,7 +27,8 @@ import pl.elpassion.project.Project
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
-    private val projectListAdapter by lazy { ProjectRecyclerViewAdapter() }
+    private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
+    private val adapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +39,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     private fun initRecyclerView() {
         projectsContainer.layoutManager = LinearLayoutManager(this)
-        projectsContainer.adapter = projectListAdapter
+        projectsContainer.adapter = adapter
     }
 
     override fun showPossibleProjects(projects: List<Project>) {
@@ -44,9 +47,10 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     }
 
     private fun updateAdapterList(projects: List<Project>) {
-        projectListAdapter.updateList(projects.map {
+        itemsStrategy.set(projects.map {
             ProjectItemAdapter(it) { controller.onProjectClicked(it) }
         })
+        adapter.notifyDataSetChanged()
     }
 
     override fun selectProject(project: Project) {

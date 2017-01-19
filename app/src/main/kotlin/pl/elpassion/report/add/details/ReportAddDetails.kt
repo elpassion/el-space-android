@@ -9,9 +9,7 @@ interface ReportAddDetails {
         interface Regular : View {
             fun showSelectedProject(project: Project)
             fun openProjectChooser()
-            fun getDescription(): String
             fun showEmptyDescriptionError()
-            fun getHours(): String
             fun showEmptyProjectError()
             fun projectClickEvents(): Observable<Unit>
             fun projectChanges(): Observable<Project>
@@ -23,10 +21,6 @@ interface ReportAddDetails {
     }
 
     interface Sender {
-        interface Regular {
-            fun addRegularReport(description: String, hours: String, projectId: Long)
-        }
-
         interface PaidVacations {
             fun addPaidVacationsReport(hours: String)
         }

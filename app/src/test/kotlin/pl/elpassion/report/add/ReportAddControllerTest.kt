@@ -285,8 +285,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldCallSenderAfterOnReportAdded() {
-        whenever(view.getDescription()).thenReturn("description")
-        whenever(view.getHours()).thenReturn("8")
         createController().onCreate()
 
         projectChanges.onNext(newProject(id = 1))
@@ -296,8 +294,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldReallyCallSenderAfterOnReportAdded() {
-        whenever(view.getDescription()).thenReturn("description2")
-        whenever(view.getHours()).thenReturn("9")
         createController().onCreate()
 
         addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
@@ -306,7 +302,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
-        whenever(view.getDescription()).thenReturn("")
         createController().onCreate()
 
         addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = ""))
@@ -315,7 +310,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
-        whenever(view.getDescription()).thenReturn("description")
         createController().onCreate()
 
         addReportClicks.onNext(RegularReport(selectedDate = "date", project = null, hours = "9", description = "description2"))

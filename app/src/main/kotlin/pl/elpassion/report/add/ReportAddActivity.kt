@@ -23,37 +23,6 @@ import pl.elpassion.report.datechooser.showDateDialog
 import rx.Observable
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.View.Regular {
-    override fun showSelectedProject(project: Project) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun openProjectChooser() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getDescription(): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun showEmptyDescriptionError() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getHours(): String {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun showEmptyProjectError() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun projectClickEvents(): Observable<Unit> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun projectChanges(): Observable<Project> {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     private val controller by lazy {
         ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get(), LastSelectedProjectRepositoryProvider.get())
@@ -143,6 +112,31 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
         super.onDestroy()
         controller.onDestroy()
     }
+
+    override fun showSelectedProject(project: Project) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openProjectChooser() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showEmptyDescriptionError() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showEmptyProjectError() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun projectClickEvents(): Observable<Unit> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun projectChanges(): Observable<Project> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 
     companion object {
         private val ADD_DATE_KEY = "dateKey"

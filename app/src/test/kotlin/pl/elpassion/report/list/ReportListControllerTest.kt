@@ -189,9 +189,11 @@ class ReportListControllerTest {
 
     @Test
     fun shouldScrollToCorrectPositionOnTodayWhenNoReports() {
+        stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 20)
-
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
+
+        controller.updateTodayPosition(20)
         controller.onCreate()
 
         verify(view).scrollToPosition(20)
@@ -199,9 +201,11 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReallyScrollToCorrectPositionOnTodayWhenNoReports() {
+        stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 31)
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
 
+        controller.updateTodayPosition(31)
         controller.onCreate()
 
         verify(view).scrollToPosition(31)
@@ -258,7 +262,7 @@ class ReportListControllerTest {
     }
 
     private fun stubViewActions() {
-        stubFilterAction(true)
+        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false))
         whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())

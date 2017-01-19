@@ -2,8 +2,6 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.extensions.dayOfMonth
-import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport

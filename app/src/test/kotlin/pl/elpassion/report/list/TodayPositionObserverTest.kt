@@ -28,7 +28,7 @@ class TodayPositionObserverTest {
         positionObserver.updatePosition(6)
         positionObserver.updatePosition(7)
 
-        assertEquals(positionObserver.lastPosition, 7)
+        assertEquals(7, positionObserver.lastPosition)
     }
 
     @Test
@@ -37,6 +37,6 @@ class TodayPositionObserverTest {
         positionObserver.observe()
                 .subscribe(subscriber)
 
-        assertEquals(positionObserver.lastPosition, -1)
+        assertEquals(-1, positionObserver.lastPosition)
     }
 }

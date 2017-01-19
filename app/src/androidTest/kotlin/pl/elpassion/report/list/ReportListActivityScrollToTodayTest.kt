@@ -8,6 +8,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.hasNoChildWithText
 import pl.elpassion.common.rule
@@ -27,14 +28,14 @@ class ReportListActivityScrollToTodayTest {
 
     @Test
     fun shouldScrollToTodayOnTodayClickWhenNoReports() {
-        stubServiceAndStart(reports = emptyList(), todayDate = "2017-01-31")
+        stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 31)
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
     @Test
     fun shouldReallyScrollToTodayOnTodayClickWhenNoReports() {
-        stubServiceAndStart(reports = emptyList(), todayDate = "2017-01-20")
+        stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 20)
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("20 Fri")
         onId(R.id.reportsContainer).hasNoChildWithText("31 Tue")
@@ -44,15 +45,17 @@ class ReportListActivityScrollToTodayTest {
     fun shouldScrollToTodayOnTodayClickWhenOneReportIsAdded() {
         stubServiceAndStart(
                 reports = listOf(newRegularHourlyReport(year = 2017, month = 1, day = 1, reportedHours = 3.0)),
-                todayDate = "2017-01-31")
+                year = 2017, month = 1, day = 31)
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
-    private fun stubServiceAndStart(reports: List<Report>, todayDate: String) {
-        stubCurrentTime(todayDate)
+
+    private fun stubServiceAndStart(reports: List<Report>, year: Int = 2016, month: Int = 6, day: Int = 1) {
+        val date = getDateString(year, month, day)
+        stubCurrentTime(date)
         whenever(service.getReports()).thenReturn(Observable.just(reports))
         ReportList.ServiceProvider.override = { service }
-        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), todayDate))
+        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
 }

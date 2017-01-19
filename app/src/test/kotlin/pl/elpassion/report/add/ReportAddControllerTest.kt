@@ -146,6 +146,14 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldHideAdditionalInfoAfterReportTypeChangedToRegularReport() {
+        createController().onCreate()
+
+        reportTypeChanges.onNext(ReportType.REGULAR)
+        verify(view).hideAdditionalInfo()
+    }
+
+    @Test
     fun shouldShowHoursInputAfterReportTypeChangedToPaidVacations() {
         createController().onCreate()
 
@@ -167,6 +175,14 @@ class ReportAddControllerTest {
 
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).hideProjectChooser()
+    }
+
+    @Test
+    fun shouldHideAdditionalInfoAfterReportTypeChangedToPaidVacations() {
+        createController().onCreate()
+
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
+        verify(view).hideAdditionalInfo()
     }
 
     @Test
@@ -194,6 +210,14 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldShowSickLeaveInfoAfterReportTypeChangedToSickLeave() {
+        createController().onCreate()
+
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
+        verify(view).showSickLeaveInfo()
+    }
+
+    @Test
     fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
         createController().onCreate()
 
@@ -210,11 +234,19 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
+    fun shouldHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
         createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).hideDescriptionInput()
+    }
+
+    @Test
+    fun shouldShowUnpaidVacationsInfoAfterReportTypeChangedToUnpaidVacations() {
+        createController().onCreate()
+
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
+        verify(view).showUnpaidVacationsInfo()
     }
 
     @Test

@@ -7,7 +7,6 @@ import com.elpassion.android.commons.espresso.onId
 import com.elpassion.android.commons.espresso.onText
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -18,7 +17,6 @@ import pl.elpassion.project.Project
 import pl.elpassion.project.dto.newProject
 import pl.elpassion.startActivity
 
-@Ignore
 class ReportAddActivityChoosingProjectTest {
 
     val repository = mock<CachedProjectRepository>()

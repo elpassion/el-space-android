@@ -23,6 +23,9 @@ interface ReportAdd {
         fun hideProjectChooser()
         fun hideHoursInput()
         fun reportTypeChanges(): Observable<ReportType>
+        fun showUnpaidVacationsInfo()
+        fun showSickLeaveInfo()
+        fun hideAdditionalInfo()
     }
 
     interface Api {

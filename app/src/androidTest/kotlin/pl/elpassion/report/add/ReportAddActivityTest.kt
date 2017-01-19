@@ -1,19 +1,12 @@
 package pl.elpassion.report.add
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
-import android.support.test.espresso.action.ViewActions.swipeLeft
-import android.support.test.espresso.matcher.ViewMatchers.*
-import android.view.View
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import org.hamcrest.CoreMatchers.allOf
-import org.hamcrest.Matcher
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -27,7 +20,6 @@ import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.startActivity
 import rx.Completable
 
-@Ignore
 class ReportAddActivityTest {
 
     val repository = mock<LastSelectedProjectRepository>()
@@ -66,7 +58,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowHoursInput() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddHours).withDisplayedParent().hasText("8")
+        onId(R.id.reportAddHours).hasText("8")
     }
 
     @Test
@@ -90,46 +82,31 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveProjectHint() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddProjectName).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_project_header)
+        onId(R.id.reportAddProjectName).textInputEditTextHasHint(R.string.report_add_project_header)
     }
 
     @Test
     fun shouldHaveHoursHint() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddHours).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_hours_header)
+        onId(R.id.reportAddHours).textInputEditTextHasHint(R.string.report_add_hours_header)
     }
 
     @Test
     fun shouldHaveCommentHint() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddDescription).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_description_hint)
+        onId(R.id.reportAddDescription).textInputEditTextHasHint(R.string.report_add_description_hint)
     }
 
     @Test
     fun shouldClearTextAfterClickOnHoursInput() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddHours).withDisplayedParent().click().hasText("")
+        onId(R.id.reportAddHours).click().hasText("")
     }
 
     @Test
     fun shouldNotCrashOnLongClickOnHoursInput() {
         stubRepositoryAndStart()
-        withId(R.id.reportAddHours).withDisplayedParent().perform(longClick())
-    }
-
-    @Test
-    @Ignore //There is no way to test this right now
-    fun shouldRegularReportActionBeSelectedOnStart() {
-        stubRepositoryAndStart()
-        onId(R.id.action_regular_report).isChecked()
-    }
-
-    @Test
-    @Ignore //There is no way to test this right now
-    fun shouldSelectPaidVacationsActionAfterSwipe() {
-        stubRepositoryAndStart()
-        onId(R.id.reportAddReportDetailsForm).perform(swipeLeft())
-        onId(R.id.action_paid_vacations_report).isChecked()
+        onId(R.id.reportAddHours).perform(longClick())
     }
 
     @Test
@@ -137,10 +114,10 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_paid_vacations_report).click()
 
-        withText("name").withDisplayedParent().doesNotExist()
-        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
+        onText("name").isNotDisplayed()
+        onId(R.id.reportAddDescription).isNotDisplayed()
 
-        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
+        onId(R.id.reportAddHours).isDisplayed()
     }
 
     @Test
@@ -149,11 +126,11 @@ class ReportAddActivityTest {
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.action_regular_report).click()
 
-        withId(R.id.reportAddDescription).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_description_hint)
-        withId(R.id.reportAddProjectName).withDisplayedParent().isDisplayed()
-        withText("name").withDisplayedParent().isDisplayed()
-        withId(R.id.reportAddHours).withDisplayedParent().textInputEditTextHasHint(R.string.report_add_hours_header)
-        withId(R.id.reportAddHours).withDisplayedParent().isDisplayed()
+        onId(R.id.reportAddDescription).textInputEditTextHasHint(R.string.report_add_description_hint)
+        onId(R.id.reportAddProjectName).isDisplayed()
+        onText("name").isDisplayed()
+        onId(R.id.reportAddHours).textInputEditTextHasHint(R.string.report_add_hours_header)
+        onId(R.id.reportAddHours).isDisplayed()
     }
 
     @Test
@@ -161,9 +138,9 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_unpaid_vacations_report).click()
 
-        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
-        withText("name").withDisplayedParent().doesNotExist()
-        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+        onId(R.id.reportAddDescription).isNotDisplayed()
+        onText("name").isNotDisplayed()
+        onId(R.id.reportAddHours).isNotDisplayed()
 
         onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
     }
@@ -173,9 +150,9 @@ class ReportAddActivityTest {
         stubRepositoryAndStart()
         onId(R.id.action_sick_leave_report).click()
 
-        withId(R.id.reportAddDescription).withDisplayedParent().doesNotExist()
-        withText("name").withDisplayedParent().doesNotExist()
-        withId(R.id.reportAddHours).withDisplayedParent().doesNotExist()
+        onId(R.id.reportAddDescription).isNotDisplayed()
+        onText("name").isNotDisplayed()
+        onId(R.id.reportAddHours).isNotDisplayed()
 
         onText(R.string.report_add_sick_leave_info).isDisplayed()
     }
@@ -194,7 +171,5 @@ class ReportAddActivityTest {
         LastSelectedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }
-
-    private fun Matcher<View>.withDisplayedParent() = onView(allOf(this, withParent(isDisplayed())))
 }
 

@@ -111,6 +111,20 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.
         (reportAddHours.parent as View).hide()
     }
 
+    override fun showSickLeaveInfo() {
+        reportAddAdditionalInfo.show()
+        reportAddAdditionalInfo.setText(R.string.report_add_sick_leave_info)
+    }
+
+    override fun showUnpaidVacationsInfo() {
+        reportAddAdditionalInfo.show()
+        reportAddAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
+    }
+
+    override fun hideAdditionalInfo() {
+        reportAddAdditionalInfo.hide()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_report_top_menu, menu)
         return true

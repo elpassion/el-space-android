@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_regular_report"
-        android:title="@string/report_add_action_regular_report"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_desktop_mac_black_24dp"
+        android:title="@string/report_add_action_regular_report" />
     <item
         android:id="@+id/action_paid_vacations_report"
-        android:title="@string/report_add_action_paid_vacations_report"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_airplanemode_active_black_24dp"
+        android:title="@string/report_add_action_paid_vacations_report" />
     <item
         android:id="@+id/action_sick_leave_report"
-        android:title="@string/report_add_action_sick_leave_report"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_healing_black_24dp"
+        android:title="@string/report_add_action_sick_leave_report" />
     <item
         android:id="@+id/action_unpaid_vacations_report"
-        android:title="@string/report_add_action_unpaid_vacations_report"
-        app:showAsAction="ifRoom" />
+        android:icon="@drawable/ic_airplanemode_inactive_black_24dp"
+        android:title="@string/report_add_action_unpaid_vacations_report" />
 </menu>

@@ -122,6 +122,7 @@
                 android:layout_height="wrap_content"
                 app:itemBackground="@color/colorPrimary"
                 app:itemTextColor="@color/colorWhite"
+                app:itemIconTint="@color/colorWhite"
                 app:menu="@menu/add_report_button_menu" />
         </LinearLayout>
     </LinearLayout>

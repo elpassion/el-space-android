@@ -136,7 +136,11 @@ class ReportListControllerTest {
 
     @Test
     fun shouldScrollToCorrectPositionOnTodayWhenNoReports() {
+        stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 20)
+
+        controller.onCreate()
+        controller.updateTodayPosition(20)
         controller.onToday()
 
         verify(view).scrollToPosition(20)
@@ -144,7 +148,11 @@ class ReportListControllerTest {
 
     @Test
     fun shouldReallyScrollToCorrectPositionOnTodayWhenNoReports() {
+        stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 31)
+
+        controller.onCreate()
+        controller.updateTodayPosition(31)
         controller.onToday()
 
         verify(view).scrollToPosition(31)

@@ -10,6 +10,7 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.hasChildWithText
 import pl.elpassion.common.rule
+import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.report.Report
 import pl.elpassion.report.add.ReportAddActivity
 import pl.elpassion.startActivity
@@ -30,6 +31,7 @@ class ReportListActivityScrollToTodayTest {
     }
 
     private fun stubServiceAndStart(reports: List<Report>) {
+        stubCurrentTime(2017, 1, 31)
         whenever(service.getReports()).thenReturn(Observable.just(reports))
         ReportList.ServiceProvider.override = { service }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2017-01-31"))

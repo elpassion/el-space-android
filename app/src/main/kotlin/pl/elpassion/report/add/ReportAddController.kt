@@ -3,6 +3,9 @@ package pl.elpassion.report.add
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getDateString
 import pl.elpassion.common.extensions.getTimeFrom
+import pl.elpassion.project.Project
+import pl.elpassion.project.last.LastSelectedProjectRepository
+import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
@@ -10,40 +13,89 @@ import java.util.Calendar.*
 
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
-                          private val api: ReportAdd.Api) {
+                          private val api: ReportAdd.Api,
+                          private val repository: LastSelectedProjectRepository) {
 
     private val subscriptions = CompositeSubscription()
+    private var selectedProject: Project? = null
 
     fun onCreate() {
+        repository.getLastProject()?.let {
+            view.showSelectedProject(it)
+        }
         view.showDate(date ?: getCurrentDatePerformedAtString())
+        subscribeToProjectClickEvents()
+        subscribeToProjectChanges()
+        subscribeToAddReportClicks()
+        subscribeToReportTypeChanges()
+    }
+
+    private fun subscribeToReportTypeChanges() {
+        view.reportTypeChanges()
+                .subscribe({ onReportTypeChanged(it) })
+                .save()
+    }
+
+    private fun subscribeToAddReportClicks() {
         view.addReportClicks()
                 .switchMap { handleNewReport(it) }
                 .doOnError { view.showError(it) }
                 .onErrorResumeNext { Observable.empty() }
                 .subscribe()
                 .save()
-        view.reportTypeChanges()
-                .subscribe({ onReportTypeChanged(it) })
+    }
+
+    private fun subscribeToProjectChanges() {
+        view.projectChanges()
+                .subscribe {
+                    view.showSelectedProject(it)
+                    selectedProject = it
+                }
                 .save()
     }
 
-    private fun handleNewReport(report: ReportViewModel): Observable<Unit>? {
-        return dispatchReportToApi(report)
-                .doOnSubscribe { view.showLoader() }
-                .doOnTerminate { view.hideLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
+    private fun subscribeToProjectClickEvents() {
+        view.projectClickEvents()
+                .subscribe {
+                    view.openProjectChooser()
+                }
+                .save()
+    }
+
+    private fun handleNewReport(it: ReportViewModel): Observable<Unit> {
+        return when (it) {
+            is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(it), emptyProjectErrorFlow(it), validReportFlow(it))
+            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).addLoader().addOnSuccess()
+            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).addLoader().addOnSuccess()
+            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).addLoader().addOnSuccess()
+            else -> Observable.error(IllegalArgumentException(it.toString()))
+        }
+    }
+
+    private fun emptyDescriptionErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasDescription() }.doOnNext { view.showEmptyDescriptionError() }.map { }
+    private fun emptyProjectErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it).filter { !it.hasProject() }.doOnNext { view.showEmptyProjectError() }.map { }
+    private fun validReportFlow(it: RegularReport) = Observable.just(it).filter { it.hasProject() && it.hasDescription() }.switchMap { api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description).addLoader().addOnSuccess() }
+
+    private fun RegularReport.hasDescription(): Boolean {
+        return description.isNotBlank()
+    }
+
+    private fun RegularReport.hasProject(): Boolean {
+        return project != null
+    }
+
+    private fun Completable.addOnSuccess(): Observable<Unit> {
+        return this
                 .doOnCompleted { view.close() }
                 .toObservable<Unit>()
     }
 
-    private fun dispatchReportToApi(report: ReportViewModel) = when (report) {
-        is RegularReport -> api.addRegularReport(report.selectedDate, 1, "8", "description")
-        is PaidVacationsReport -> api.addPaidVacationsReport(report.selectedDate, "8")
-        is SickLeaveReport -> api.addSickLeaveReport(report.selectedDate)
-        is UnpaidVacationsReport -> api.addUnpaidVacationsReport(report.selectedDate)
-        else -> throw IllegalArgumentException(report.toString())
+    private fun Completable.addLoader(): Completable {
+        return this
+                .doOnSubscribe { view.showLoader() }
+                .doOnUnsubscribe { view.hideLoader() }
+                .doOnTerminate { view.hideLoader() }
     }
-
 
     private fun getCurrentDatePerformedAtString(): String {
         val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())

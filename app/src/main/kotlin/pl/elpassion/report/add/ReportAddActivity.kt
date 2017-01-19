@@ -16,13 +16,47 @@ import pl.elpassion.R
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
+import pl.elpassion.project.Project
+import pl.elpassion.project.last.LastSelectedProjectRepositoryProvider
+import pl.elpassion.report.add.details.ReportAddDetails
 import pl.elpassion.report.datechooser.showDateDialog
 import rx.Observable
 
-class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
+class ReportAddActivity : AppCompatActivity(), ReportAdd.View, ReportAddDetails.View.Regular {
+    override fun showSelectedProject(project: Project) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun openProjectChooser() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getDescription(): String {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showEmptyDescriptionError() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getHours(): String {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showEmptyProjectError() {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun projectClickEvents(): Observable<Unit> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun projectChanges(): Observable<Project> {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private val controller by lazy {
-        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get())
+        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get(), LastSelectedProjectRepositoryProvider.get())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +96,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             val selectedDate = reportAddDate.text.toString()
             val checkMenuItem = bottomNavigation.menu.items.first { it.isChecked }.itemId
             when (checkMenuItem) {
-                R.id.action_regular_report -> RegularReport(selectedDate)
-                R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate)
+                R.id.action_regular_report -> RegularReport(selectedDate, null, reportAddDescription.text.toString(), reportAddHours.text.toString())
+                R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate, reportAddHours.text.toString())
                 R.id.action_unpaid_vacations_report -> UnpaidVacationsReport(selectedDate)
                 R.id.action_sick_leave_report -> SickLeaveReport(selectedDate)
                 else -> throw IllegalArgumentException(checkMenuItem.toString())

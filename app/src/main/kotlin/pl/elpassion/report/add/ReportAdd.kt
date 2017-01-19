@@ -2,13 +2,14 @@ package pl.elpassion.report.add
 
 import pl.elpassion.api.RetrofitProvider
 import pl.elpassion.common.Provider
+import pl.elpassion.report.add.details.ReportAddDetails
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable
 import rx.Observable
 
 interface ReportAdd {
-    interface View {
+    interface View : ReportAddDetails.View.Regular {
         fun close()
         fun showError(ex: Throwable)
         fun showDate(date: String)

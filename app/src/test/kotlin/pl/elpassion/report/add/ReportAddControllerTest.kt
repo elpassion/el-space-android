@@ -16,6 +16,9 @@ class ReportAddControllerTest {
 
     private val addReportClicks = PublishSubject.create<ReportViewModel>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
+    private val projectChanges = PublishSubject.create<Project>()
+    private val projectClickEvents = PublishSubject.create<Unit>()
+
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<LastSelectedProjectRepository>()
@@ -29,6 +32,8 @@ class ReportAddControllerTest {
         stubRepositoryToReturn()
         whenever(view.addReportClicks()).thenReturn(addReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
+        whenever(view.projectChanges()).thenReturn(projectChanges)
+        whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
     }
 
     @Test
@@ -81,7 +86,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldAddReportWithChangedDate() {
         createController("2016-01-04").onCreate()
-        addReportClicks.onNext(RegularReport("2016-05-04"))
+        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -91,7 +96,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(RegularReport("date"))
+        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
         verify(view).showError(any())
     }
 
@@ -109,7 +114,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(RegularReport("2016-09-23"))
+        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
         verify(view).showError(exception)
     }
 
@@ -251,11 +256,90 @@ class ReportAddControllerTest {
     fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(PaidVacationsReport("2016-09-23"))
+        addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
         verify(api).addPaidVacationsReport("2016-09-23", "8")
     }
 
-    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api)
+    @Test
+    fun shouldShouldUseRegularReportApiToAddRegularReport() {
+        createController("2016-09-23").onCreate()
+
+        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
+        verify(api).addRegularReport("2016-09-23", 1, "8", "description")
+    }
+
+    @Test
+    fun shouldShowPossibleProject() {
+        val project = newProject()
+        stubRepositoryToReturn(project)
+        createController().onCreate()
+
+        verify(view).showSelectedProject(project)
+    }
+
+    @Test
+    fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
+        stubRepositoryToReturn(null)
+        createController().onCreate()
+
+        verify(view, never()).showSelectedProject(any())
+    }
+
+    @Test
+    fun shouldOpenProjectChooserOnProjectClicked() {
+        createController().onCreate()
+        projectClickEvents.onNext(Unit)
+        verify(view).openProjectChooser()
+    }
+
+    @Test
+    fun shouldShowSelectedProject() {
+        stubRepositoryToReturn(null)
+        createController().onCreate()
+        projectChanges.onNext(newProject())
+        verify(view).showSelectedProject(newProject())
+    }
+
+    @Test
+    fun shouldCallSenderAfterOnReportAdded() {
+        whenever(view.getDescription()).thenReturn("description")
+        whenever(view.getHours()).thenReturn("8")
+        createController().onCreate()
+
+        projectChanges.onNext(newProject(id = 1))
+        addReportClicks.onNext(RegularReport("date", project = newProject(id = 1), hours = "8", description = "description"))
+        verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
+    }
+
+    @Test
+    fun shouldReallyCallSenderAfterOnReportAdded() {
+        whenever(view.getDescription()).thenReturn("description2")
+        whenever(view.getHours()).thenReturn("9")
+        createController().onCreate()
+
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        verify(api).addRegularReport(date = "date", hours = "9", projectId = 2, description = "description2")
+    }
+
+    @Test
+    fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
+        whenever(view.getDescription()).thenReturn("")
+        createController().onCreate()
+
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = ""))
+        verify(view).showEmptyDescriptionError()
+    }
+
+    @Test
+    fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
+        whenever(view.getDescription()).thenReturn("description")
+        createController().onCreate()
+
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = null, hours = "9", description = "description2"))
+        verify(view).showEmptyProjectError()
+    }
+
+    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)

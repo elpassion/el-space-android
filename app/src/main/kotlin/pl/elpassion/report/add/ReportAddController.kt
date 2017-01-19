@@ -31,7 +31,7 @@ class ReportAddController(private val date: String?,
             .map { Unit }
 
     private fun addReportClicks() = view.addReportClicks()
-            .switchMap { handleNewReport(it).addLoader().doOnCompleted { view.close() } }
+            .switchMap { handleNewReport(it) }
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
 
@@ -45,9 +45,9 @@ class ReportAddController(private val date: String?,
     private fun handleNewReport(it: ReportViewModel): Observable<Unit> {
         return when (it) {
             is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(it), emptyProjectErrorFlow(it), validReportFlow(it))
-            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).toObservable<Unit>()
-            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).toObservable<Unit>()
-            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).toObservable<Unit>()
+            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
+            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
+            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).toObservable<Unit>().addLoader().doOnCompleted { view.close() }
             else -> Observable.error(IllegalArgumentException(it.toString()))
         }
     }
@@ -67,6 +67,8 @@ class ReportAddController(private val date: String?,
             .switchMap {
                 api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description)
                         .toObservable<Unit>()
+                        .addLoader()
+                        .doOnCompleted { view.close() }
             }
 
     private fun RegularReport.hasDescription() = description.isNotBlank()

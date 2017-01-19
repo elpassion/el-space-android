@@ -344,6 +344,14 @@ class ReportAddControllerTest {
         verify(view).showEmptyProjectError()
     }
 
+    @Test
+    fun shouldNotCloseScreenWhenDescriptionIsEmpty() {
+        createController().onCreate()
+
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(), hours = "9", description = ""))
+        verify(view, never()).close()
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

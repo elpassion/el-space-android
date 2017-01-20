@@ -91,9 +91,7 @@ class ReportListController(private val reportDayService: ReportDayService,
         }
     }
 
-    private fun Subscription.save() {
-        subscriptions.add(this)
-    }
+    private fun Subscription.save() = subscriptions.add(this)
 }
 
 interface OnDayClickListener {

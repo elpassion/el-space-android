@@ -15,7 +15,6 @@ class ScrollAwareFABBehavior(private val context: Context, private val attribute
                                 fab: FloatingActionButton,
                                 target: View?, dxConsumed: Int, dyConsumed: Int,
                                 dxUnconsumed: Int, dyUnconsumed: Int) {
-        super.onNestedScroll(coordinatorLayout, fab, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed)
         if (dyConsumed > 0 && fab.visibility == View.VISIBLE) {
             fab.hideFab()
         } else if (dyConsumed < 0 && fab.visibility != View.VISIBLE) {

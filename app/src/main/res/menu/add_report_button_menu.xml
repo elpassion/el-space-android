@@ -3,7 +3,7 @@
     <item
         android:id="@+id/action_regular_report"
         android:icon="@drawable/ic_desktop_mac_black_24dp"
-        android:title="@string/report_add_action_regular_report" />
+        android:title="@string/report_add_action" />
     <item
         android:id="@+id/action_sick_leave_report"
         android:icon="@drawable/ic_healing_black_24dp"

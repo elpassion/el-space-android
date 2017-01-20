@@ -18,5 +18,6 @@
     <color name="unselectedText">#B3B3B8</color>
     <color name="selectedWhite">#42000000</color>
     <color name="defaultTextColor">#5F5A6A</color>
+    <color name="textUnderline">#e2e2e2</color>
 
 </resources>

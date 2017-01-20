@@ -6,7 +6,7 @@
     <string name="report_unpaid_vacations_title">Unpaid vacations</string>
     <string name="report_paid_vacations_title">Paid vacations</string>
     <string name="report_hours_default_value" translatable="false">8</string>
-    <string name="report_add_date_header">PERFORMED AT</string>
+    <string name="report_add_date_header">Performed at</string>
     <string name="report_add_project_header">Project</string>
     <string name="report_add_hours_header">Hours</string>
     <string name="report_add_add_button">ADD</string>

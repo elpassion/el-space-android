@@ -11,28 +11,28 @@ class DayFilterTest {
 
     @Test
     fun shouldFilterWeekendPassedDay() {
-        val pastWeekendDay = newDayWithoutReports(isWeekend = true, isPassed = true)
+        val pastWeekendDay = newDayWithoutReports(isWeekend = true, hasPassed = true)
 
         assertEquals(filterDays(pastWeekendDay), emptyList<Day>())
     }
 
     @Test
     fun shouldFilterWeekendNotPassedDay() {
-        val futureWeekendDay = newDayWithoutReports(isWeekend = true, isPassed = false)
+        val futureWeekendDay = newDayWithoutReports(isWeekend = true, hasPassed = false)
 
         assertEquals(filterDays(futureWeekendDay), emptyList<Day>())
     }
 
     @Test
     fun shouldFilterNotPassedDay() {
-        val futureDay = newDayWithoutReports(isWeekend = false, isPassed = false)
+        val futureDay = newDayWithoutReports(isWeekend = false, hasPassed = false)
 
         assertEquals(filterDays(futureDay), emptyList<Day>())
     }
 
     @Test
     fun shouldNotFilterPassedNormalDay() {
-        val pastDay = newDayWithoutReports(isWeekend = false, isPassed = true)
+        val pastDay = newDayWithoutReports(isWeekend = false, hasPassed = true)
 
         assertEquals(filterDays(pastDay), listOf(pastDay))
     }
@@ -46,7 +46,7 @@ class DayFilterTest {
 
     private fun filterDays(vararg days: Day) = DayFilterImpl().fetchFilteredDays(days.toList())
 
-    private fun newDayWithoutReports(isWeekend: Boolean = false, isPassed: Boolean = true) = DayWithoutReports(0, "", "", isPassed, isWeekend)
+    private fun newDayWithoutReports(isWeekend: Boolean = false, hasPassed: Boolean = true) = DayWithoutReports(0, "", "", hasPassed, isWeekend)
 
     private fun newDayReports() = DayWithHourlyReports(0, "", "", listOf(), false, 2.00)
 

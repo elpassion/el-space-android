@@ -6,7 +6,10 @@ import java.util.*
 
 fun Calendar.changeToPreviousMonth() = add(Calendar.MONTH, -1)
 fun Calendar.changeToNextMonth() = add(Calendar.MONTH, 1)
-fun Calendar.changeToMonth(month: Int) = set(Calendar.MONTH, month)
+fun Calendar.changeToYearMonth(year: Int, month: Int) {
+    set(Calendar.YEAR, year)
+    set(Calendar.MONTH, month)
+}
 fun Calendar.isNotAfter(sth: Any) = !after(sth)
 fun getCurrentTimeCalendar(): Calendar = Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }
 fun getTimeFrom(year: Int, month: Int, day: Int): Calendar = Calendar.getInstance().apply { set(year, month, day, 12, 0) }

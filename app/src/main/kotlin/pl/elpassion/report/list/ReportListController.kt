@@ -4,6 +4,7 @@ import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
 import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.common.extensions.month
+import pl.elpassion.common.extensions.year
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
@@ -24,6 +25,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
     private val todayPositionObserver = TodayPositionObserver()
+    private val calendar = getCurrentTimeCalendar()
 
     fun onCreate() {
         fetchReports()
@@ -40,8 +42,8 @@ class ReportListController(private val reportDayService: ReportDayService,
         val todayPosition = todayPositionObserver.lastPosition
         if (todayPosition != -1) {
             view.scrollToPosition(todayPosition)
-            if (isNotCurrentMonth()) {
-                dateChangeObserver.setMonth(getCurrentTimeCalendar().month)
+            if (isNotCurrentYearOrMonth()) {
+                dateChangeObserver.setYearMonth(calendar.year, calendar.month)
             }
         }
     }
@@ -98,7 +100,9 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun Subscription.save() = subscriptions.add(this)
 
-    private fun isNotCurrentMonth() = dateChangeObserver.lastDate.month.index != getCurrentTimeCalendar().month
+    private fun isNotCurrentYearOrMonth() = dateChangeObserver.lastDate.let {
+         it.year != calendar.year || it.month.index != calendar.month
+    }
 }
 
 interface OnDayClickListener {

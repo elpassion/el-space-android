@@ -90,15 +90,15 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
-        ReportEditRegularActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditRegularActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        ReportEditPaidVacationActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditPaidVacationActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun openDailyEditReportScreen(report: DailyReport) {
-        ReportEditDailyActivity.startForResult(this, report, EDIT_REPORT_SCREEN_REQUEST_CODE)
+        ReportEditDailyActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun scrollToPosition(position: Int) {
@@ -111,11 +111,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun openAddReportScreen(date: String) {
-        ReportAddActivity.startForResult(this, date, ADD_REPORT_SCREEN_REQUEST_CODE)
+        ReportAddActivity.startForResult(this, date, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun openAddReportScreen() {
-        ReportAddActivity.startForResult(this, ADD_REPORT_SCREEN_REQUEST_CODE)
+        ReportAddActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun hideLoader() {
@@ -183,17 +183,14 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == ADD_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            controller.refreshReportList()
-        } else if (requestCode == EDIT_REPORT_SCREEN_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REPORT_SCREEN_CHANGES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             controller.refreshReportList()
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {
-        private val ADD_REPORT_SCREEN_REQUEST_CODE = 100
-        private val EDIT_REPORT_SCREEN_REQUEST_CODE = 105
+        private val REPORT_SCREEN_CHANGES_REQUEST_CODE = 100
         fun start(context: Context) {
             context.startActivity(Intent(context, ReportListActivity::class.java))
         }

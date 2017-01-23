@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import com.crashlytics.android.Crashlytics
@@ -46,7 +45,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_list_activity)
         setSupportActionBar(toolbar)
-        reportsContainer.layoutManager = LinearLayoutManager(this)
+        reportsContainer.layoutManager = ReportsLinearLayoutManager(this)
         reportsContainer.adapter = reportsAdapter
         controller.onCreate()
     }
@@ -90,6 +89,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun scrollToPosition(position: Int) {
+        appBarLayout.setExpanded(false, true)
         reportsContainer.smoothScrollToPosition(position)
     }
 

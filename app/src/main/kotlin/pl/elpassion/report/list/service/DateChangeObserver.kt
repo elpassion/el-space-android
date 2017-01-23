@@ -12,6 +12,8 @@ class DateChangeObserver(initialDateCalendar: Calendar) {
     private val date: Calendar = initialDateCalendar.clone() as Calendar
     private val dateSubject = BehaviorSubject.create(date.toYearMonth())
 
+    val lastDate: YearMonth get() = dateSubject.toBlocking().first()
+
     fun observe(): Observable<YearMonth> = dateSubject.asObservable()
 
     fun setNextMonth() {

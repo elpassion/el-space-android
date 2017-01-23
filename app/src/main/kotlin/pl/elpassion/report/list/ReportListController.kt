@@ -38,6 +38,9 @@ class ReportListController(private val reportDayService: ReportDayService,
         val todayPosition = todayPositionObserver.lastPosition
         if (todayPosition != -1) {
             view.scrollToPosition(todayPosition)
+            if (dateChangeObserver.lastDate.month.index == 11) {
+                view.showMonthName("January")
+            }
         }
     }
 

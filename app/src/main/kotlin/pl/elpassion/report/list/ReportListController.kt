@@ -2,6 +2,8 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.extensions.getCurrentTimeCalendar
+import pl.elpassion.common.extensions.month
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
@@ -38,8 +40,8 @@ class ReportListController(private val reportDayService: ReportDayService,
         val todayPosition = todayPositionObserver.lastPosition
         if (todayPosition != -1) {
             view.scrollToPosition(todayPosition)
-            if (dateChangeObserver.lastDate.month.index == 11) {
-                view.showMonthName("January")
+            if (isNotCurrentMonth()) {
+                dateChangeObserver.setMonth(getCurrentTimeCalendar().month)
             }
         }
     }
@@ -95,6 +97,8 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun Subscription.save() = subscriptions.add(this)
+
+    private fun isNotCurrentMonth() = dateChangeObserver.lastDate.month.index != getCurrentTimeCalendar().month
 }
 
 interface OnDayClickListener {

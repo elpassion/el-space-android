@@ -226,6 +226,20 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldScrollToCorrectPositionAndReallyChangeMonthOnTodayWhenMonthIsNotCurrent() {
+        stubServiceToReturnEmptyList()
+        stubCurrentTime(2017, 2, 10)
+        whenever(actions.monthChangeToPrev()).thenReturn(Observable.just(Unit, Unit))
+        whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
+
+        controller.updateTodayPosition(10)
+        controller.onCreate()
+
+        verify(view).scrollToPosition(10)
+        verify(view, times(4)).showMonthName(any())
+    }
+
+    @Test
     fun shouldListenForFilterActions() {
         stubServiceToReturnEmptyList()
 

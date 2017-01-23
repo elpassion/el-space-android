@@ -1,5 +1,6 @@
 package pl.elpassion.report.list.service
 
+import pl.elpassion.common.extensions.changeToMonth
 import pl.elpassion.common.extensions.changeToNextMonth
 import pl.elpassion.common.extensions.changeToPreviousMonth
 import pl.elpassion.report.list.YearMonth
@@ -23,6 +24,11 @@ class DateChangeObserver(initialDateCalendar: Calendar) {
 
     fun setPreviousMonth() {
         date.changeToPreviousMonth()
+        notifyObservers()
+    }
+
+    fun setMonth(month: Int) {
+        date.changeToMonth(month)
         notifyObservers()
     }
 

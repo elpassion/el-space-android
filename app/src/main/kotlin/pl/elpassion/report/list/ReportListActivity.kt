@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -12,6 +13,7 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
+import com.jakewharton.rxbinding.support.design.widget.dismisses
 import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
@@ -41,6 +43,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
     private val reportsAdapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
     private val toolbarClicks by lazy { toolbar.menuClicks() }
+    private val errorSnackBar by lazy {
+        Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.refresh_action, {})
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +65,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     override fun refreshingEvents() = reportSwipeToRefresh.refreshes()
 
     override fun reportAdd(): Observable<Unit> = fabAddReport.clicks()
+
+    override fun snackBarRetry(): Observable<Unit> = errorSnackBar.dismisses()
+            .filter { it == DISMISS_EVENT_ACTION }
+            .map { Unit }
 
     override fun monthChangeToNext(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_next_month)
 
@@ -121,9 +131,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)
-        Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.refresh_action, { controller.refreshReportList() })
-                .show()
+        errorSnackBar.show()
     }
 
     override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {

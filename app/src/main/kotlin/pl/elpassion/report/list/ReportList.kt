@@ -54,6 +54,7 @@ interface ReportList {
         fun scrollToCurrent(): Observable<Unit>
         fun reportAdd(): Observable<Unit>
         fun refreshingEvents(): Observable<Unit>
+        fun snackBarRetry(): Observable<Unit>
     }
 
     object ServiceProvider : Provider<Service>({

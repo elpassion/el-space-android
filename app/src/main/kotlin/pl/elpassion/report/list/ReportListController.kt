@@ -79,7 +79,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .addTo(subscriptions)
     }
 
-    private fun refreshingDataObservable() = actions.refreshingEvents().startWith(Unit)
+    private fun refreshingDataObservable() = Observable.merge(Observable.just(Unit), actions.refreshingEvents(), actions.snackBarRetry())
 
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {

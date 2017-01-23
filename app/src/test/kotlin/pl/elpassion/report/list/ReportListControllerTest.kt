@@ -290,6 +290,16 @@ class ReportListControllerTest {
     }
 
     @Test
+    fun shouldCallServiceTwiceWhenRetryFromSnackBar() {
+        stubServiceToReturnNever()
+        whenever(actions.snackBarRetry()).thenReturn(Observable.just(Unit))
+
+        controller.onCreate()
+
+        verify(service, times(2)).createDays(any())
+    }
+
+    @Test
     fun shouldFilterDaysWhenFilterIsOn() {
         stubServiceToReturnEmptyList()
         stubFilterAction(true)

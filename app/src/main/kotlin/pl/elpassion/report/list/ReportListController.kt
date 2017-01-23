@@ -2,6 +2,8 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
+import pl.elpassion.common.extensions.addTo
+import pl.elpassion.common.extensions.catchOnError
 import pl.elpassion.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.common.extensions.month
 import pl.elpassion.common.extensions.year
@@ -13,7 +15,6 @@ import pl.elpassion.report.list.service.DateChangeObserver
 import pl.elpassion.report.list.service.DayFilter
 import pl.elpassion.report.list.service.ReportDayService
 import rx.Observable
-import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 import java.util.*
 
@@ -35,7 +36,8 @@ class ReportListController(private val reportDayService: ReportDayService,
                 actions.monthChangeToNext().doOnNext { dateChangeObserver.setNextMonth() },
                 actions.monthChangeToPrev().doOnNext { dateChangeObserver.setPreviousMonth() },
                 actions.scrollToCurrent().doOnNext { onToday() })
-                .subscribe().save()
+                .subscribe()
+                .addTo(subscriptions)
     }
 
     private fun onToday() {
@@ -61,29 +63,40 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        Observable.combineLatest(reportDayService.createDays(dateChangeObserver.observe()), actions.reportsFilter(),
+        Observable.combineLatest(fetchDays(), actions.reportsFilter(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)
                         else -> list
                     }
                 })
-                .applySchedulers()
-                .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({ days ->
-                    view.hideLoader()
                     view.showDays(days, this, this)
                 }, {
-                    view.showError(it)
                 })
-                .save()
+                .addTo(subscriptions)
     }
+
+    private fun refreshingDataObservable() = actions.refreshingEvents().startWith(Unit)
+
+    private fun fetchDays() = refreshingDataObservable()
+            .switchMap {
+                reportDayService.createDays(dateChangeObserver.observe())
+                        .applySchedulers()
+                        .doOnSubscribe {
+                            if (!view.isDuringPullToRefresh()) {
+                                view.showLoader()
+                            }
+                        }
+                        .doOnNext { view.hideLoader() }
+                        .doOnUnsubscribe { view.hideLoader() }
+                        .catchOnError { view.showError(it) }
+            }
 
     private fun subscribeDateChange() {
         dateChangeObserver.observe()
                 .subscribe { view.showMonthName(it.month.monthName) }
-                .save()
+                .addTo(subscriptions)
     }
 
     override fun onDayDate(date: String) {
@@ -97,8 +110,6 @@ class ReportListController(private val reportDayService: ReportDayService,
             is DailyReport -> view.openDailyEditReportScreen(report)
         }
     }
-
-    private fun Subscription.save() = subscriptions.add(this)
 
     private fun isNotCurrentYearOrMonth() = dateChangeObserver.lastDate.let {
          it.year != calendar.year || it.month.index != calendar.month

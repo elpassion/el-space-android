@@ -111,12 +111,13 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderWhenApiCallBegins() {
+    fun shouldShowLoaderWhenNotDuringPullRefresh() {
         stubServiceToReturnNever()
+        whenever(view.isDuringPullToRefresh()).thenReturn(false)
 
         controller.onCreate()
 
-        verify(view, times(1)).showLoader()
+        verify(view).showLoader()
     }
 
     @Test
@@ -130,8 +131,8 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCall() {
-        stubServiceToReturnEmptyListAndNeverEnd()
+    fun shouldHideLoaderWhenApiCallAndFinishes() {
+        stubServiceToReturnEmptyList()
 
         controller.onCreate()
 
@@ -139,12 +140,12 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallAndFinishes() {
-        stubServiceToReturnEmptyList()
-
+    fun shouldNotShowLoaderWhenDuringPullRefresh() {
+        stubServiceToReturnNever()
+        whenever(view.isDuringPullToRefresh()).thenReturn(true)
         controller.onCreate()
 
-        verify(view, atLeast(1)).hideLoader()
+        verify(view, never()).showLoader()
     }
 
     @Test
@@ -185,6 +186,16 @@ class ReportListControllerTest {
         controller.onCreate()
 
         verify(view).openAddReportScreen()
+    }
+
+    @Test
+    fun shouldCallServiceTwiceWhenPullToRefreshCalledOnCreate() {
+        stubServiceToReturnEmptyList()
+
+        whenever(actions.refreshingEvents()).thenReturn(Observable.just(Unit))
+
+        controller.onCreate()
+        verify(service, times(2)).createDays(any())
     }
 
     @Test
@@ -291,6 +302,7 @@ class ReportListControllerTest {
 
     private fun stubViewActions() {
         whenever(actions.reportsFilter()).thenReturn(Observable.just(false))
+        whenever(actions.refreshingEvents()).thenReturn(Observable.never())
         whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
@@ -307,11 +319,6 @@ class ReportListControllerTest {
 
     private fun stubServiceToReturnEmptyList() {
         whenever(service.createDays(any())).thenReturn(Observable.just(listOf()))
-    }
-
-    private fun stubServiceToReturnEmptyListAndNeverEnd() {
-        val observable = Observable.just<List<Day>>(listOf()).concatWith(Observable.never())
-        whenever(service.createDays(any())).thenReturn(observable)
     }
 
     private fun stubServiceToReturnError() {

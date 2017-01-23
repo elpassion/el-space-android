@@ -12,6 +12,7 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
+import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
@@ -54,6 +55,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         menuInflater.inflate(R.menu.report_list_menu, menu)
         return true
     }
+
+    override fun refreshingEvents() = reportSwipeToRefresh.refreshes()
 
     override fun reportAdd(): Observable<Unit> = fabAddReport.clicks()
 
@@ -106,12 +109,15 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun hideLoader() {
+        reportSwipeToRefresh.isRefreshing = false
         hideLoader(reportListCoordinator)
     }
 
     override fun showLoader() {
         showLoader(reportListCoordinator)
     }
+
+    override fun isDuringPullToRefresh() = reportSwipeToRefresh.isRefreshing
 
     override fun showError(ex: Throwable) {
         Crashlytics.logException(ex)

@@ -43,6 +43,8 @@ interface ReportList {
         fun openDailyEditReportScreen(report: DailyReport)
 
         fun scrollToPosition(position: Int)
+
+        fun isDuringPullToRefresh(): Boolean
     }
 
     interface Actions {
@@ -51,6 +53,7 @@ interface ReportList {
         fun monthChangeToPrev(): Observable<Unit>
         fun scrollToCurrent(): Observable<Unit>
         fun reportAdd(): Observable<Unit>
+        fun refreshingEvents(): Observable<Unit>
     }
 
     object ServiceProvider : Provider<Service>({

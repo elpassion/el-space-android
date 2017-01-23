@@ -2,11 +2,7 @@ package pl.elpassion.report.list
 
 import pl.elpassion.api.applySchedulers
 import pl.elpassion.common.CurrentTimeProvider
-import pl.elpassion.common.extensions.addTo
-import pl.elpassion.common.extensions.catchOnError
-import pl.elpassion.common.extensions.getCurrentTimeCalendar
-import pl.elpassion.common.extensions.month
-import pl.elpassion.common.extensions.year
+import pl.elpassion.common.extensions.*
 import pl.elpassion.report.DailyReport
 import pl.elpassion.report.PaidVacationHourlyReport
 import pl.elpassion.report.RegularHourlyReport
@@ -89,8 +85,10 @@ class ReportListController(private val reportDayService: ReportDayService,
                             }
                         }
                         .doOnNext { view.hideLoader() }
-                        .doOnUnsubscribe { view.hideLoader() }
-                        .catchOnError { view.showError(it) }
+                        .catchOnError {
+                            view.hideLoader()
+                            view.showError(it)
+                        }
             }
 
     private fun subscribeDateChange() {
@@ -112,7 +110,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun isNotCurrentYearOrMonth() = dateChangeObserver.lastDate.let {
-         it.year != calendar.year || it.month.index != calendar.month
+        it.year != calendar.year || it.month.index != calendar.month
     }
 }
 

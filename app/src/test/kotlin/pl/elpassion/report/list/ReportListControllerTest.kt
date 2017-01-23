@@ -121,18 +121,17 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenCallIsNotFinishedOnDestroy() {
-        stubServiceToReturnNever()
+    fun shouldHideLoaderWhenApiCallAndFinishes() {
+        stubServiceToReturnEmptyList()
 
         controller.onCreate()
-        controller.onDestroy()
 
-        verify(view, times(1)).hideLoader()
+        verify(view).hideLoader()
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallAndFinishes() {
-        stubServiceToReturnEmptyList()
+    fun shouldHideLoaderWhenApiCallError() {
+        stubServiceToReturnError()
 
         controller.onCreate()
 

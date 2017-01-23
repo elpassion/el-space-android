@@ -35,9 +35,9 @@ class ReportListActivityScrollToTodayTest {
 
     @Test
     fun shouldReallyScrollToTodayOnTodayClickWhenNoReports() {
-        stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 20)
+        stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 1)
         onId(R.id.action_today).click()
-        onId(R.id.reportsContainer).hasChildWithText("20 Fri")
+        onId(R.id.reportsContainer).hasChildWithText("1 Sun")
         onId(R.id.reportsContainer).hasNoChildWithText("31 Tue")
     }
 

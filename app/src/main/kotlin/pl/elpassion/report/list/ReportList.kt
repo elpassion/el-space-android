@@ -46,7 +46,7 @@ interface ReportList {
     }
 
     interface Actions {
-        fun shouldFilterReports(): Observable<Boolean>
+        fun reportsFilter(): Observable<Boolean>
         fun monthChangeToNext(): Observable<Unit>
         fun monthChangeToPrev(): Observable<Unit>
         fun scrollToCurrent(): Observable<Unit>

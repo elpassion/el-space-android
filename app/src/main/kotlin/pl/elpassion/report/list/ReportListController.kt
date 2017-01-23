@@ -54,7 +54,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        Observable.combineLatest(reportDayService.createDays(dateChangeObserver.observe()), actions.shouldFilterReports(),
+        Observable.combineLatest(reportDayService.createDays(dateChangeObserver.observe()), actions.reportsFilter(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)

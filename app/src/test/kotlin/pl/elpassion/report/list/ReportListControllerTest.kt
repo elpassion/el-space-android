@@ -50,7 +50,7 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(actions).shouldFilterReports()
+        verify(actions).reportsFilter()
     }
 
     @Test
@@ -217,13 +217,13 @@ class ReportListControllerTest {
 
         controller.onCreate()
 
-        verify(actions).shouldFilterReports()
+        verify(actions).reportsFilter()
     }
 
     @Test
     fun shouldUseFilterActionBeforeShowingReportsList() {
         stubServiceToReturnEmptyList()
-        whenever(actions.shouldFilterReports()).thenReturn(Observable.never())
+        whenever(actions.reportsFilter()).thenReturn(Observable.never())
 
         controller.onCreate()
 
@@ -244,7 +244,7 @@ class ReportListControllerTest {
     @Test
     fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
         stubServiceToReturnEmptyList()
-        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false, true))
+        whenever(actions.reportsFilter()).thenReturn(Observable.just(false, true))
 
         controller.onCreate()
 
@@ -262,7 +262,7 @@ class ReportListControllerTest {
     }
 
     private fun stubViewActions() {
-        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(false))
+        whenever(actions.reportsFilter()).thenReturn(Observable.just(false))
         whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
@@ -270,7 +270,7 @@ class ReportListControllerTest {
     }
 
     private fun stubFilterAction(isFiltering: Boolean) {
-        whenever(actions.shouldFilterReports()).thenReturn(Observable.just(isFiltering))
+        whenever(actions.reportsFilter()).thenReturn(Observable.just(isFiltering))
     }
 
     private fun stubServiceToReturnNever() {

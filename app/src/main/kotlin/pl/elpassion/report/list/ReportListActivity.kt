@@ -63,7 +63,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun scrollToCurrent(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_today)
 
-    override fun shouldFilterReports(): Observable<Boolean> {
+    override fun reportsFilter(): Observable<Boolean> {
         return Observable.just(false).concatWith(toolbarClicks.onMenuItemAction(R.id.action_filter)
                 .doOnNext {
                     it.isChecked = !it.isChecked

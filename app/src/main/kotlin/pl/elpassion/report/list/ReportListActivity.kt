@@ -62,6 +62,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         return true
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        controller.onDestroy()
+    }
+
     override fun refreshingEvents() = reportSwipeToRefresh.refreshes()
 
     override fun reportAdd(): Observable<Unit> = fabAddReport.clicks()

@@ -55,6 +55,7 @@ interface ReportList {
         fun reportAdd(): Observable<Unit>
         fun refreshingEvents(): Observable<Unit>
         fun snackBarRetry(): Observable<Unit>
+        fun resultRefresh(): Observable<Unit>
     }
 
     object ServiceProvider : Provider<Service>({

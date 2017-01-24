@@ -40,10 +40,6 @@ class ReportListController(private val reportDayService: ReportDayService,
         todayPositionObserver.updatePosition(position)
     }
 
-    fun refreshReportList() {
-        fetchReports()
-    }
-
     fun onDestroy() {
         subscriptions.clear()
     }
@@ -79,7 +75,8 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .addTo(subscriptions)
     }
 
-    private fun refreshingDataObservable() = Observable.merge(Observable.just(Unit), actions.refreshingEvents(), actions.snackBarRetry())
+    private fun refreshingDataObservable() = Observable.merge(Observable.just(Unit),
+            actions.resultRefresh(), actions.refreshingEvents(), actions.snackBarRetry())
 
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {

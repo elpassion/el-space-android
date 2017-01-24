@@ -33,6 +33,7 @@ import pl.elpassion.report.list.adapter.items.*
 import pl.elpassion.report.list.service.DayFilterImpl
 import pl.elpassion.report.list.service.ReportDayServiceImpl
 import rx.Observable
+import rx.subjects.PublishSubject
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
@@ -43,6 +44,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
     private val reportsAdapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
     private val toolbarClicks by lazy { toolbar.menuClicks() }
+    private val reportScreenResult: PublishSubject<Unit> = PublishSubject.create()
     private val errorSnackBar by lazy {
         Snackbar.make(reportListCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.refresh_action, {})
@@ -80,6 +82,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     override fun monthChangeToPrev(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_prev_month)
 
     override fun scrollToCurrent(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_today)
+
+    override fun resultRefresh(): Observable<Unit> = reportScreenResult.asObservable()
 
     override fun reportsFilter(): Observable<Boolean> {
         return Observable.just(false).concatWith(toolbarClicks.onMenuItemAction(R.id.action_filter)
@@ -189,7 +193,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REPORT_SCREEN_CHANGES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            controller.refreshReportList()
+            reportScreenResult.onNext(Unit)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

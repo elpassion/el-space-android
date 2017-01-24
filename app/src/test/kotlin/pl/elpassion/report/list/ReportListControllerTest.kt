@@ -309,6 +309,15 @@ class ReportListControllerTest {
         verify(filter).fetchFilteredDays(any())
     }
 
+    @Test
+    fun shouldListenForAllRefreshActionsOnCreate() {
+        controller.onCreate()
+
+        verify(actions).refreshingEvents()
+        verify(actions).snackBarRetry()
+        verify(actions).resultRefresh()
+    }
+
     private fun stubViewActions() {
         whenever(actions.reportsFilter()).thenReturn(Observable.just(false))
         whenever(actions.refreshingEvents()).thenReturn(Observable.never())

@@ -148,11 +148,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         val adapterList = listOf<StableItemAdapter<*>>(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
         itemsStrategy.set(adapterList)
         reportsAdapter.notifyDataSetChanged()
-        val today = getCurrentTimeCalendar().dayOfMonth
-        val todayPosition = adapterList.indexOfFirst {
-            it is DayItem && it.day.date.drop(8) == today.toString()
-        }
-        controller.updateTodayPosition(todayPosition)
+        controller.updateTodayPosition(adapterList.indexOfLast { it is DayItem && it.day.hasPassed })
     }
 
     private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> {

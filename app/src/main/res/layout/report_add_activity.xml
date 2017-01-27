@@ -74,8 +74,8 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/report_add_hours_header"
                             android:inputType="number"
-                            app:text="@string/report_hours_default_value"
-                            tools:text="8" />
+                            app:text="@string/report_hours_default_value" />
+
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout

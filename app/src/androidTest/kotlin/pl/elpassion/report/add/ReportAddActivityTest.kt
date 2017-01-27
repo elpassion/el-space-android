@@ -12,6 +12,7 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.common.onToolbarBackArrow
 import pl.elpassion.common.rule
+import pl.elpassion.commons.stubCurrentTime
 import pl.elpassion.project.Project
 import pl.elpassion.project.choose.ProjectChooseActivity
 import pl.elpassion.project.dto.newProject
@@ -164,6 +165,15 @@ class ReportAddActivityTest {
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.addReport).click()
         onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowPickedDateOnScreen() {
+        stubCurrentTime(2017, 1, 28)
+        stubRepositoryAndStart(date = "2017-01-27")
+        onId(R.id.reportAddDate).click()
+        onText("OK").click()
+        onId(R.id.reportAddDate).hasText("2017-01-28")
     }
 
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {

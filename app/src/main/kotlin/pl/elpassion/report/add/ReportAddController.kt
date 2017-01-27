@@ -131,4 +131,8 @@ class ReportAddController(private val date: String?,
     private fun Subscription.save() {
         subscriptions.add(this)
     }
+
+    fun onDateChanged(date: String) {
+        view.showDate(date)
+    }
 }

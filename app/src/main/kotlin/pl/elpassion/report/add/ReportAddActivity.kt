@@ -41,7 +41,11 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         showBackArrowOnActionBar()
         controller.onCreate()
         reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
-        reportAddDate.setOnClickListener { showDateDialog(supportFragmentManager, {}) }
+        reportAddDate.setOnClickListener {
+            showDateDialog(supportFragmentManager) {
+                controller.onDateChanged(it)
+            }
+        }
     }
 
     override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }

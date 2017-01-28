@@ -1,8 +1,8 @@
 package pl.elpassion.login
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.view.View.VISIBLE
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
 import pl.elpassion.login.shortcut.ShortcutServiceImpl
@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun showEmptyLoginError() {
-        emptyTokenError.visibility = VISIBLE
+        Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun openReportListScreen() {

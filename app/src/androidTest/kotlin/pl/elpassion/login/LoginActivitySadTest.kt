@@ -1,11 +1,15 @@
 package pl.elpassion.login
 
 import android.support.test.espresso.Espresso.closeSoftKeyboard
+import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
+import android.support.test.espresso.matcher.ViewMatchers.withText
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.core.IsNot.not
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -65,7 +69,7 @@ class LoginActivitySadTest {
     @Test
     fun shouldNotHaveErrorInfoOnStart() {
         rule.startActivity()
-        onText(R.string.token_empty_error).isNotDisplayed()
+        onId(R.id.loginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
     }
 
     private fun login(token: String) {

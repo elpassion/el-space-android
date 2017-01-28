@@ -29,4 +29,8 @@ class LoginController(private val view: Login.View,
         }
     }
 
+    fun onHub() {
+        view.openHubWebsite()
+    }
+
 }

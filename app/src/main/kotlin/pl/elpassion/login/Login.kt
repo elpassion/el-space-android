@@ -4,6 +4,7 @@ interface Login {
     interface View {
         fun openReportListScreen()
         fun showEmptyLoginError()
+        fun openHubWebsite()
     }
 
     interface Repository {

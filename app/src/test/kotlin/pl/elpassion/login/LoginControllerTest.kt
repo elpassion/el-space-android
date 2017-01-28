@@ -77,5 +77,11 @@ class LoginControllerTest {
         verify(shortcutService, never()).creteAppShortcuts()
     }
 
+    @Test
+    fun shouldOpenHubWebsiteOnHub() {
+        controller.onHub()
+        verify(view).openHubWebsite()
+    }
+
 }
 

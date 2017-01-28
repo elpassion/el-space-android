@@ -29,4 +29,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
         finish()
     }
 
+    override fun openHubWebsite() {
+
+    }
+
 }

@@ -17,9 +17,7 @@ import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.common.extensions.hideInput
 import pl.elpassion.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.common.extensions.showInput
 import pl.elpassion.common.hideLoader
 import pl.elpassion.common.showLoader
 import pl.elpassion.project.Project
@@ -93,27 +91,27 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun showHoursInput() {
-        reportAddHours.showInput()
+        reportAddHoursLayout.show()
     }
 
     override fun showProjectChooser() {
-        reportAddProjectName.showInput()
+        reportAddProjectNameLayout.show()
     }
 
     override fun showDescriptionInput() {
-        reportAddDescription.showInput()
+        reportAddDescriptionLayout.show()
     }
 
     override fun hideDescriptionInput() {
-        reportAddDescription.hideInput()
+        reportAddDescriptionLayout.hide()
     }
 
     override fun hideProjectChooser() {
-        reportAddProjectName.hideInput()
+        reportAddProjectNameLayout.hide()
     }
 
     override fun hideHoursInput() {
-        reportAddHours.hideInput()
+        reportAddHoursLayout.hide()
     }
 
     override fun showSickLeaveInfo() {

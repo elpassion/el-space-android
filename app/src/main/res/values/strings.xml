@@ -39,4 +39,6 @@
     <string name="filter_not_filled">Filter</string>
     <string name="empty_description_error">Description cannot be empty.</string>
     <string name="empty_project_error">Project name cannot be empty</string>
+    <string name="login_hub">HUB</string>
+    <string name="hub_token_uri">https://hub.elpassion.com/employee/settings/api</string>
 </resources>

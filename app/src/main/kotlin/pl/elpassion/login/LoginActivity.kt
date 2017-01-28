@@ -1,5 +1,7 @@
 package pl.elpassion.login
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +19,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_activity)
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
+        loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
     }
 
@@ -30,7 +33,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
     }
 
     override fun openHubWebsite() {
-
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.hub_token_uri)))
+        startActivity(browserIntent)
     }
 
 }

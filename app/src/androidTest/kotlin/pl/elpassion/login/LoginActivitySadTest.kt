@@ -1,7 +1,15 @@
 package pl.elpassion.login
 
+import android.app.Activity
+import android.app.Instrumentation
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso.closeSoftKeyboard
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.Intents.intending
+import android.support.test.espresso.intent.matcher.IntentMatchers.*
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import com.elpassion.android.commons.espresso.*
@@ -9,6 +17,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.IsNot.not
 import org.junit.Rule
 import org.junit.Test
@@ -70,6 +79,15 @@ class LoginActivitySadTest {
     fun shouldNotHaveErrorInfoOnStart() {
         rule.startActivity()
         onId(R.id.loginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
+    }
+
+    @Test
+    fun shouldOpenHubWebsiteOnHub() {
+        rule.startActivity()
+        intending(anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
+        val hubTokenUri = getTargetContext().getString(R.string.hub_token_uri)
+        onId(R.id.loginHubButton).click()
+        intended(allOf(hasData(hubTokenUri), hasAction(ACTION_VIEW)))
     }
 
     private fun login(token: String) {

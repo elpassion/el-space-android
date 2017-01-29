@@ -70,7 +70,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp">
 
-                        <pl.elpassion.common.FixedTextInputEditText
+                        <pl.elpassion.elspace.common.FixedTextInputEditText
                             android:id="@+id/reportAddHours"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

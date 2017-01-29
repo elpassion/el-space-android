@@ -73,5 +73,5 @@
 
 
 #Api Models
--keep class pl.elpassion.report.list.service.ReportFromApi { *; }
--keep class pl.elpassion.project.Project { *; }
+-keep class pl.elpassion.elspace.hub.report.list.service.ReportFromApi { *; }
+-keep class pl.elpassion.elspace.hub.project.Project { *; }

@@ -87,18 +87,17 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun resultRefresh(): Observable<Unit> = reportScreenResult.asObservable()
 
-    override fun reportsFilter(): Observable<Boolean> {
-        return Observable.just(false).concatWith(toolbarClicks.onMenuItemAction(R.id.action_filter)
-                .doOnNext {
-                    it.isChecked = !it.isChecked
-                    val icon = when (it.isChecked) {
-                        true -> R.drawable.filter_on
-                        else -> R.drawable.filter_off
-                    }
-                    it.setIcon(icon)
+    override fun reportsFilter(): Observable<Boolean> = toolbarClicks.onMenuItemAction(R.id.action_filter)
+            .doOnNext {
+                it.isChecked = !it.isChecked
+                val icon = when (it.isChecked) {
+                    true -> R.drawable.filter_on
+                    else -> R.drawable.filter_off
                 }
-                .map { it.isChecked })
-    }
+                it.setIcon(icon)
+            }
+            .map { it.isChecked }
+            .startWith(false)
 
     override fun openEditReportScreen(report: RegularHourlyReport) {
         ReportEditRegularActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)

@@ -111,7 +111,7 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderWhenNotDuringPullRefresh() {
+    fun shouldShowLoaderWhenApiCallBeginsOnStart() {
         stubServiceToReturnNever()
         whenever(view.isDuringPullToRefresh()).thenReturn(false)
 
@@ -121,7 +121,7 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallAndFinishes() {
+    fun shouldHideLoaderWhenApiCallSuccessful() {
         stubServiceToReturnEmptyList()
 
         controller.onCreate()

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_today"
+        android:icon="@drawable/ic_today"
+        android:title="@string/today"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_prev_month"
+        android:icon="@drawable/ic_arrow_left_white"
+        android:title="@string/previous_month"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_next_month"
+        android:icon="@drawable/ic_arrow_right_white"
+        android:title="@string/next_month"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/filter_off"
+        android:title="@string/filter_not_filled"
+        app:showAsAction="always"/>
+</menu>

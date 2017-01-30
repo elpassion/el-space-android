@@ -1,30 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="pl.elpassion">
+    package="pl.elpassion">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".ElSpaceApp"
+        android:name=".elspace.ElSpaceApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.LoginActivity">
+        <activity
+            android:name="pl.elpassion.elspace.hub.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".project.choose.ProjectChooseActivity"/>
-        <activity android:name=".report.add.ReportAddActivity"/>
-        <activity android:name=".report.list.ReportListActivity"
+        <activity android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity" />
+        <activity
+            android:name=".elspace.hub.report.add.ReportAddActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
+        <activity
+            android:name=".elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppThemeWithoutActionBar"/>
-        <activity android:name=".report.edit.ReportEditActivity"/>
-        <activity android:name=".debate.login.DebateLoginActivity"/>
+            android:theme="@style/AppThemeWithoutActionBar" />
+        <activity android:name=".elspace.hub.report.edit.regular.ReportEditRegularActivity" />
+        <activity android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity" />
+        <activity android:name=".elspace.hub.report.edit.paidvacation.ReportEditPaidVacationActivity" />
+        <activity android:name=".elspace.hub.report.edit.daily.ReportEditDailyActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="42505f6356175462de2327f99393bf1fdf054841" />

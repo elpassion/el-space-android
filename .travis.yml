@@ -11,11 +11,7 @@ android:
     - extra-android-m2repository
 
 before_install:
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a --skin 480x800
-  -  emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - sleep 28
-  - adb shell input keyevent 82
+  - sh scripts/emulator.sh
   - openssl aes-256-cbc -d -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
 
 after_script:

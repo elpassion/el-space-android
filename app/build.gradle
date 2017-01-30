@@ -2,9 +2,10 @@ buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
-    ext.support_version = '25.0.1'
+    ext.support_version = '25.1.0'
     ext.rxJava= '1.1.9'
-    ext.elCommon = '0.0.10'
+    ext.elCommon = '0.0.11'
+    ext.rxBinding = '1.0.0'
 
     repositories {
         jcenter()
@@ -33,10 +34,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -54,6 +56,10 @@ android {
     }
     lintOptions {
         disable 'InvalidPackage'
+    }
+    dexOptions {
+        javaMaxHeapSize DEX_MAX_HEAP_SIZE
+        preDexLibraries = System.env.CI != "true"
     }
 }
 
@@ -73,7 +79,11 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile "io.reactivex:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:1.0.0'
+    compile "com.jakewharton.rxbinding:rxbinding-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxBinding"
+    compile "com.android.support:cardview-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -82,6 +92,10 @@ dependencies {
     compile "com.elpassion.android.commons:view:$elCommon"
     compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
+    }
+    compile('com.philliphsu:bottomsheetpickers:2.1.1') {
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+        exclude group: 'com.android.support', module: 'design'
     }
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

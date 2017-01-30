@@ -1,7 +1,6 @@
 package pl.elpassion.elspace.hub.report.list
 
 import pl.elpassion.elspace.api.applySchedulers
-import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.DailyReport
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
@@ -12,7 +11,6 @@ import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
-import java.util.*
 
 class ReportListController(private val reportDayService: ReportDayService,
                            private val dayFilter: DayFilter,
@@ -20,7 +18,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                            private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
-    private val dateChangeObserver by lazy { DateChangeObserver(Calendar.getInstance().apply { time = Date(CurrentTimeProvider.get()) }) }
+    private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar()) }
     private val todayPositionObserver = TodayPositionObserver()
     private val calendar = getCurrentTimeCalendar()
 

@@ -34,8 +34,10 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .addTo(subscriptions)
     }
 
-    fun updateTodayPosition(position: Int) {
-        todayPositionObserver.updatePosition(position)
+    fun updateLastPassedDayPosition(position: Int) {
+        if (isCurrentYearAndMonth()) {
+            todayPositionObserver.updatePosition(position)
+        }
     }
 
     fun onDestroy() {
@@ -43,12 +45,12 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun onToday() {
-        if (isNotCurrentYearOrMonth()) {
+        if (isCurrentYearAndMonth()) {
+            scrollToTodayPosition(todayPositionObserver.lastPosition)
+        } else {
             dateChangeObserver.setYearMonth(calendar.year, calendar.month)
             todayPositionObserver.observe().filter { it != -1 }
                     .subscribe { scrollToTodayPosition(it) }.addTo(subscriptions)
-        } else {
-            scrollToTodayPosition(todayPositionObserver.lastPosition)
         }
     }
 
@@ -110,8 +112,8 @@ class ReportListController(private val reportDayService: ReportDayService,
         }
     }
 
-    private fun isNotCurrentYearOrMonth() = dateChangeObserver.lastDate.let {
-        it.year != calendar.year || it.month.index != calendar.month
+    private fun isCurrentYearAndMonth() = dateChangeObserver.lastDate.let {
+        it.year == calendar.year && it.month.index == calendar.month
     }
 }
 

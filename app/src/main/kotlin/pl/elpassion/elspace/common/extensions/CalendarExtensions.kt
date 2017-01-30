@@ -18,6 +18,7 @@ fun Calendar.getFullMonthName(): String = SimpleDateFormat("MMMM", Locale.UK).fo
 fun Calendar.isWeekendDay(): Boolean = get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY
 fun Calendar.dayName(): String = SimpleDateFormat("EEE", Locale.UK).run { format(this@dayName.time) }
 fun getDateString(year: Int, month: Int, day: Int) = String.format("%d-%02d-%02d", year, month, day)
+fun Calendar.getDateString() = getDateString(year, month + 1, dayOfMonth)
 fun Calendar.daysForCurrentMonth() = getActualMaximum(Calendar.DAY_OF_MONTH)
 fun String.toCalendarDate(): Calendar {
     val date = SimpleDateFormat("yyyy-MM-dd").parse(this)

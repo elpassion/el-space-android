@@ -124,10 +124,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         ReportAddActivity.startForResult(this, date, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
-    override fun openAddReportScreen() {
-        ReportAddActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
     override fun hideLoader() {
         reportSwipeToRefresh.isRefreshing = false
         hideLoader(reportListCoordinator)

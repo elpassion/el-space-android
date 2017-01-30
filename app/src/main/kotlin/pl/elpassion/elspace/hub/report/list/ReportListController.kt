@@ -26,7 +26,7 @@ class ReportListController(private val reportDayService: ReportDayService,
         fetchReports()
         subscribeDateChange()
         Observable.merge(
-                actions.reportAdd().doOnNext { view.openAddReportScreen() },
+                actions.reportAdd().doOnNext { view.openAddReportScreen(calendar.getDateString()) },
                 actions.monthChangeToNext().doOnNext { dateChangeObserver.setNextMonth() },
                 actions.monthChangeToPrev().doOnNext { dateChangeObserver.setPreviousMonth() },
                 actions.scrollToCurrent().doOnNext { onToday() })

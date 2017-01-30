@@ -181,11 +181,12 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenAddReportScreen() {
+        stubCurrentTime(year = 2017, month = 1, day = 30)
         whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
 
-        controller.onCreate()
+        ReportListController(service, filter, actions, view).onCreate()
 
-        verify(view).openAddReportScreen()
+        verify(view).openAddReportScreen("2017-01-30")
     }
 
     @Test

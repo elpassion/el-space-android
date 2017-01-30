@@ -36,8 +36,6 @@ interface ReportList {
 
         fun openEditReportScreen(report: RegularHourlyReport)
 
-        fun openAddReportScreen()
-
         fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport)
 
         fun openDailyEditReportScreen(report: DailyReport)

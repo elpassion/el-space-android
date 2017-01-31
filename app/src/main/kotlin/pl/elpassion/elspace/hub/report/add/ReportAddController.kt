@@ -42,14 +42,12 @@ class ReportAddController(private val date: String?,
                 }
     }
 
-    private fun handleNewReport(reportViewModel: ReportViewModel): Observable<Unit> {
-        return when (reportViewModel) {
-            is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))
-            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            is PaidVacationsReport -> api.addPaidVacationsReport(reportViewModel.selectedDate, reportViewModel.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            is SickLeaveReport -> api.addSickLeaveReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
-        }
+    private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {
+        is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))
+        is UnpaidVacationsReport -> api.addUnpaidVacationsReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+        is PaidVacationsReport -> api.addPaidVacationsReport(reportViewModel.selectedDate, reportViewModel.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+        is SickLeaveReport -> api.addSickLeaveReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+        else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
     }
 
     private fun emptyDescriptionErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)

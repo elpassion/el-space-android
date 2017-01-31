@@ -1,14 +1,13 @@
 package pl.elpassion.elspace.hub.report.add
 
 import pl.elpassion.elspace.api.applySchedulers
-
 import pl.elpassion.elspace.common.CurrentTimeProvider
+import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Completable
 import rx.Observable
-import rx.Subscription
 import rx.subscriptions.CompositeSubscription
 
 class ReportAddController(private val date: String?,
@@ -25,11 +24,11 @@ class ReportAddController(private val date: String?,
         view.showDate(date ?: getCurrentDatePerformedAtString())
         view.projectClickEvents()
                 .subscribe { view.openProjectChooser() }
-                .save()
+                .addTo(subscriptions)
 
         addReportClicks()
                 .subscribe()
-                .save()
+                .addTo(subscriptions)
     }
 
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
@@ -136,10 +135,6 @@ class ReportAddController(private val date: String?,
         view.showProjectChooser()
         view.showHoursInput()
         view.hideAdditionalInfo()
-    }
-
-    private fun Subscription.save() {
-        subscriptions.add(this)
     }
 
     fun onDateChanged(date: String) {

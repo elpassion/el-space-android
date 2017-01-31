@@ -22,18 +22,16 @@ class ReportAddController(private val date: String?,
             view.showSelectedProject(it)
         }
         view.showDate(date ?: getCurrentDatePerformedAtString())
-        projectClickEvents()
-                .subscribe()
+        view.projectClickEvents()
+                .subscribe { view.openProjectChooser() }
                 .save()
+
         addReportClicks()
                 .subscribe()
                 .save()
     }
 
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
-
-    private fun projectClickEvents() = view.projectClickEvents()
-            .doOnNext { view.openProjectChooser() }
 
     private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
             .switchMap { callApi(it) }

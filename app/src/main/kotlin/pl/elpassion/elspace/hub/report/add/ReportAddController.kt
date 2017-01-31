@@ -42,13 +42,13 @@ class ReportAddController(private val date: String?,
                 }
     }
 
-    private fun handleNewReport(it: ReportViewModel): Observable<Unit> {
-        return when (it) {
-            is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(it), emptyProjectErrorFlow(it), validReportFlow(it))
-            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(it.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            is PaidVacationsReport -> api.addPaidVacationsReport(it.selectedDate, it.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            is SickLeaveReport -> api.addSickLeaveReport(it.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-            else -> Observable.error(IllegalArgumentException(it.toString()))
+    private fun handleNewReport(reportViewModel: ReportViewModel): Observable<Unit> {
+        return when (reportViewModel) {
+            is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))
+            is UnpaidVacationsReport -> api.addUnpaidVacationsReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+            is PaidVacationsReport -> api.addPaidVacationsReport(reportViewModel.selectedDate, reportViewModel.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+            is SickLeaveReport -> api.addSickLeaveReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+            else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
         }
     }
 

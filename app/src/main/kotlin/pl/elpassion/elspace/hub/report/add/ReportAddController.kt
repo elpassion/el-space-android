@@ -3,11 +3,11 @@ package pl.elpassion.elspace.hub.report.add
 import pl.elpassion.elspace.api.applySchedulers
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.extensions.addTo
+import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Completable
-import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportAddController(private val date: String?,
@@ -36,8 +36,7 @@ class ReportAddController(private val date: String?,
     private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
             .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
             .doOnNext { view.close() }
-            .doOnError { view.showError(it) }
-            .onErrorResumeNext { Observable.never() }
+            .catchOnError { view.showError(it) }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }

@@ -35,12 +35,8 @@ class ReportAddController(private val date: String?,
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
 
-    private fun projectClickEvents(): Observable<Unit> {
-        return view.projectClickEvents()
-                .doOnNext {
-                    view.openProjectChooser()
-                }
-    }
+    private fun projectClickEvents() = view.projectClickEvents()
+            .doOnNext { view.openProjectChooser() }
 
     private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {
         is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))

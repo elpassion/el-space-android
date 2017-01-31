@@ -33,7 +33,8 @@ class ReportAddController(private val date: String?,
 
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
-    private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
+    private fun addReportClicks() = view.addReportClicks()
+            .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
             .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }

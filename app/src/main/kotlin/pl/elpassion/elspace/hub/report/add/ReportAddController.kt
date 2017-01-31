@@ -49,13 +49,11 @@ class ReportAddController(private val date: String?,
         else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
     }
 
-    private fun onReportTypeChanged(reportType: ReportType) {
-        when (reportType) {
-            ReportType.REGULAR -> showRegularForm()
-            ReportType.PAID_VACATIONS -> showPaidVacationsForm()
-            ReportType.SICK_LEAVE -> showSickLeaveForm()
-            ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
-        }
+    private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
+        ReportType.REGULAR -> showRegularForm()
+        ReportType.PAID_VACATIONS -> showPaidVacationsForm()
+        ReportType.SICK_LEAVE -> showSickLeaveForm()
+        ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
     }
 
     private fun emptyDescriptionErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)

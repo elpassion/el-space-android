@@ -55,11 +55,11 @@ class ReportAddController(private val date: String?,
         else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
     }
 
-    private val regularReportHandler = { regularReport: RegularReport ->
-        Observable.merge(emptyDescriptionErrorFlow(regularReport), emptyProjectErrorFlow(regularReport), validReportFlow(regularReport))
+    private val regularReportHandler = { regularReport: ReportViewModel ->
+        Observable.merge(emptyDescriptionErrorFlow(regularReport as RegularReport), emptyProjectErrorFlow(regularReport), validReportFlow(regularReport))
     }
 
-    private val unpaidVacationReportHandler = { unpaidVacationsReport: UnpaidVacationsReport ->
+    private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
         api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
                 .toObservable<Unit>()
                 .applySchedulers()
@@ -67,15 +67,15 @@ class ReportAddController(private val date: String?,
                 .doOnCompleted { view.close() }
     }
 
-    private val paidVacationReportHandler = { paidVacationsReport: PaidVacationsReport ->
-        api.addPaidVacationsReport(paidVacationsReport.selectedDate, paidVacationsReport.hours)
+    private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
+        api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)
                 .toObservable<Unit>()
                 .applySchedulers()
                 .addLoader()
                 .doOnCompleted { view.close() }
     }
 
-    private val sickLeaveReportHandler = { sickLeaveReport: SickLeaveReport ->
+    private val sickLeaveReportHandler = { sickLeaveReport: ReportViewModel ->
         api.addSickLeaveReport(sickLeaveReport.selectedDate)
                 .toObservable<Unit>()
                 .applySchedulers()

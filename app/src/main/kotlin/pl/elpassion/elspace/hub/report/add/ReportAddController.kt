@@ -40,10 +40,6 @@ class ReportAddController(private val date: String?,
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.never() }
 
-    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
-            .applySchedulers()
-            .addLoader()
-
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
             .startWith(ReportType.REGULAR)
@@ -56,6 +52,10 @@ class ReportAddController(private val date: String?,
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
     }
 
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
+            .applySchedulers()
+            .addLoader()
+
     private val regularReportHandler = { regularReport: ReportViewModel ->
         (regularReport as RegularReport).let {
             if (it.hasProject() && it.hasDescription()) {
@@ -67,6 +67,9 @@ class ReportAddController(private val date: String?,
         }
     }
 
+    private fun addRegularReportObservable(regularReport: RegularReport) =
+            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
+
     private fun handleIncorrectRegularReportData(regularReport: RegularReport) {
         if (!regularReport.hasProject()) {
             view.showEmptyProjectError()
@@ -75,19 +78,16 @@ class ReportAddController(private val date: String?,
         }
     }
 
-    private fun addRegularReportObservable(regularReport: RegularReport) =
-            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
-
-    private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
-        api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
-    }
-
     private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
         api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)
     }
 
     private val sickLeaveReportHandler = { sickLeaveReport: ReportViewModel ->
         api.addSickLeaveReport(sickLeaveReport.selectedDate)
+    }
+
+    private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
+        api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {

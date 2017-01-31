@@ -351,6 +351,13 @@ class ReportAddControllerTest {
         verify(view, never()).close()
     }
 
+    @Test
+    fun shouldChangeDate() {
+        createController().onDateChanged("2016-01-01")
+
+        verify(view).showDate("2016-01-01")
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {

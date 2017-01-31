@@ -1,10 +1,12 @@
 package pl.elpassion.elspace.common;
 
-abstract class Provider<T>(private val initializer: () -> T) {
+typealias Initializer<T> = () -> T
+
+abstract class Provider<T>(private val initializer: Initializer<T>) {
 
     private val original by lazy { initializer() }
 
     fun get() = override?.invoke() ?: original
 
-    var override: (() -> T)? = null
+    var override: Initializer<T>? = null
 }

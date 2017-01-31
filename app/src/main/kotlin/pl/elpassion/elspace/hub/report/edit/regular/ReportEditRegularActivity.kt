@@ -34,7 +34,7 @@ class ReportEditRegularActivity : AppCompatActivity(), ReportEdit.Regular.View {
         controller.onCreate(report)
         showBackArrowOnActionBar()
         reportEditDate.setOnClickListener { showDateDialog(supportFragmentManager, { controller.onDateSelect(it) }) }
-        reportEditHours.setOnTouchListener { view, motionEvent -> reportEditHours.text = null;false }
+        reportEditHours.setOnTouchListener { _, _ -> reportEditHours.text = null;false }
         reportEditProjectName.setOnClickListener {
             controller.onChooseProject()
         }

@@ -28,9 +28,6 @@ class ReportAddController(private val date: String?,
         addReportClicks()
                 .subscribe()
                 .save()
-        reportTypeChanges()
-                .subscribe()
-                .save()
     }
 
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
@@ -38,13 +35,14 @@ class ReportAddController(private val date: String?,
     private fun projectClickEvents() = view.projectClickEvents()
             .doOnNext { view.openProjectChooser() }
 
-    private fun addReportClicks() = view.addReportClicks()
-            .switchMap { handleNewReport(it) }
+    private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
+            .switchMap { handleNewReport(it.first) }
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
+            .startWith(ReportType.REGULAR)
             .map { Unit }
 
     private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {

@@ -9,6 +9,7 @@ import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
+
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
                           private val api: ReportAdd.Api,
@@ -82,10 +83,10 @@ class ReportAddController(private val date: String?,
 
     private fun RegularReport.hasProject() = project != null
 
-    private fun <T> Observable<T>.addLoader() =
-            doOnSubscribe { view.showLoader() }
-                    .doOnUnsubscribe { view.hideLoader() }
-                    .doOnTerminate { view.hideLoader() }
+    private fun <T> Observable<T>.addLoader() = this
+            .doOnSubscribe { view.showLoader() }
+            .doOnUnsubscribe { view.hideLoader() }
+            .doOnTerminate { view.hideLoader() }
 
     fun onDestroy() {
         subscriptions.clear()

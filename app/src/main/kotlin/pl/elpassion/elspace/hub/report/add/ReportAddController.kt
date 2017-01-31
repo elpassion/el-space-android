@@ -58,15 +58,20 @@ class ReportAddController(private val date: String?,
 
     private val regularReportHandler = { regularReport: ReportViewModel ->
         (regularReport as RegularReport).let {
-            if (!it.hasProject()) {
-                view.showEmptyProjectError()
-                Completable.never()
-            } else if (!it.hasDescription()) {
-                view.showEmptyDescriptionError()
-                Completable.never()
-            } else {
+            if (it.hasProject() && it.hasDescription()) {
                 addRegularReportObservable(it)
+            } else {
+                handleIncorrectRegularReportData(it)
+                Completable.never()
             }
+        }
+    }
+
+    private fun handleIncorrectRegularReportData(regularReport: RegularReport) {
+        if (!regularReport.hasProject()) {
+            view.showEmptyProjectError()
+        } else if (!regularReport.hasDescription()) {
+            view.showEmptyDescriptionError()
         }
     }
 

@@ -52,7 +52,7 @@ class ReportAddController(private val date: String?,
         }
     }
 
-    private fun emptyDescriptionErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it)
+    private fun emptyDescriptionErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)
             .filter { !it.hasDescription() }
             .doOnNext { view.showEmptyDescriptionError() }
             .map { Unit }

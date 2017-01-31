@@ -40,7 +40,7 @@ class ReportAddController(private val date: String?,
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.never() }
 
-    private fun callApi(it: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = it.second(it.first)
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
             .applySchedulers()
             .addLoader()
 

@@ -38,6 +38,7 @@ class ReportAddControllerTest {
     fun shouldCloseAfterAddingNewReport() {
         createController().onCreate()
         addUnpaidVacationReport()
+
         verify(view).close()
     }
 

@@ -36,9 +36,13 @@ class ReportAddController(private val date: String?,
             .doOnNext { view.openProjectChooser() }
 
     private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
-            .switchMap { it.second(it.first) }
+            .switchMap { callApi(it) }
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
+
+    private fun callApi(it: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = it.second(it.first)
+            .applySchedulers()
+            .addLoader()
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
@@ -53,30 +57,39 @@ class ReportAddController(private val date: String?,
     }
 
     private val regularReportHandler = { regularReport: ReportViewModel ->
-        Observable.merge(emptyDescriptionErrorFlow(regularReport as RegularReport), emptyProjectErrorFlow(regularReport), validReportFlow(regularReport))
+        (regularReport as RegularReport).let {
+            if (!it.hasProject()) {
+                view.showEmptyProjectError()
+                Observable.empty<Unit>()
+            } else if (!it.hasDescription()) {
+                view.showEmptyDescriptionError()
+                Observable.empty<Unit>()
+            } else {
+                addRegularReportObservable(it)
+            }
+        }
     }
+
+    private fun addRegularReportObservable(regularReport: RegularReport) =
+            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
+                    .toObservable<Unit>()
+                    .doOnCompleted { view.close() }
 
     private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
         api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
                 .toObservable<Unit>()
-                .applySchedulers()
-                .addLoader()
                 .doOnCompleted { view.close() }
     }
 
     private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
         api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)
                 .toObservable<Unit>()
-                .applySchedulers()
-                .addLoader()
                 .doOnCompleted { view.close() }
     }
 
     private val sickLeaveReportHandler = { sickLeaveReport: ReportViewModel ->
         api.addSickLeaveReport(sickLeaveReport.selectedDate)
                 .toObservable<Unit>()
-                .applySchedulers()
-                .addLoader()
                 .doOnCompleted { view.close() }
     }
 
@@ -86,27 +99,6 @@ class ReportAddController(private val date: String?,
         ReportType.SICK_LEAVE -> showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
     }
-
-    private fun emptyDescriptionErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)
-            .filter { !it.hasDescription() }
-            .doOnNext { view.showEmptyDescriptionError() }
-            .map { Unit }
-
-    private fun emptyProjectErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)
-            .filter { !it.hasProject() }
-            .doOnNext { view.showEmptyProjectError() }
-            .map { Unit }
-
-    private fun validReportFlow(regularReport: RegularReport) = Observable.just(regularReport)
-            .filter { it.hasProject() && it.hasDescription() }
-            .switchMap { addRegularReportObservable(it) }
-
-    private fun addRegularReportObservable(regularReport: RegularReport) =
-            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
-                    .toObservable<Unit>()
-                    .applySchedulers()
-                    .addLoader()
-                    .doOnCompleted { view.close() }
 
     private fun RegularReport.hasDescription() = description.isNotBlank()
 

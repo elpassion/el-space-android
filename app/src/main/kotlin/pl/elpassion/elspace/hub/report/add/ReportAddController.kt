@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.hub.report.add
 
 import pl.elpassion.elspace.api.applySchedulers
+
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
@@ -8,7 +9,6 @@ import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
-
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
                           private val api: ReportAdd.Api,
@@ -26,17 +26,19 @@ class ReportAddController(private val date: String?,
                 .save()
     }
 
-    private fun reportTypeChanges() = view.reportTypeChanges()
-            .doOnNext { onReportTypeChanged(it) }
-            .map { Unit }
+    private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
+
+    private fun projectClickEvents() = view.projectClickEvents()
+            .doOnNext { view.openProjectChooser() }
 
     private fun addReportClicks() = view.addReportClicks()
             .switchMap { handleNewReport(it) }
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
 
-    private fun projectClickEvents() = view.projectClickEvents()
-            .doOnNext { view.openProjectChooser() }
+    private fun reportTypeChanges() = view.reportTypeChanges()
+            .doOnNext { onReportTypeChanged(it) }
+            .map { Unit }
 
     private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {
         is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))
@@ -44,6 +46,15 @@ class ReportAddController(private val date: String?,
         is PaidVacationsReport -> api.addPaidVacationsReport(reportViewModel.selectedDate, reportViewModel.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
         is SickLeaveReport -> api.addSickLeaveReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
         else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
+    }
+
+    private fun onReportTypeChanged(reportType: ReportType) {
+        when (reportType) {
+            ReportType.REGULAR -> showRegularForm()
+            ReportType.PAID_VACATIONS -> showPaidVacationsForm()
+            ReportType.SICK_LEAVE -> showSickLeaveForm()
+            ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
+        }
     }
 
     private fun emptyDescriptionErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)
@@ -76,19 +87,8 @@ class ReportAddController(private val date: String?,
                     .doOnUnsubscribe { view.hideLoader() }
                     .doOnTerminate { view.hideLoader() }
 
-    private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
-
     fun onDestroy() {
         subscriptions.clear()
-    }
-
-    private fun onReportTypeChanged(reportType: ReportType) {
-        when (reportType) {
-            ReportType.REGULAR -> showRegularForm()
-            ReportType.PAID_VACATIONS -> showPaidVacationsForm()
-            ReportType.SICK_LEAVE -> showSickLeaveForm()
-            ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
-        }
     }
 
     private fun showUnpaidVacationsForm() {

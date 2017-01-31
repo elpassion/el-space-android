@@ -64,13 +64,14 @@ class ReportAddController(private val date: String?,
 
     private fun validReportFlow(regularReport: RegularReport) = Observable.just(regularReport)
             .filter { it.hasProject() && it.hasDescription() }
-            .switchMap {
-                api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description)
-                        .toObservable<Unit>()
-                        .applySchedulers()
-                        .addLoader()
-                        .doOnCompleted { view.close() }
-            }
+            .switchMap { addRegularReportObservable(it) }
+
+    private fun addRegularReportObservable(regularReport: RegularReport) =
+            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
+                    .toObservable<Unit>()
+                    .applySchedulers()
+                    .addLoader()
+                    .doOnCompleted { view.close() }
 
     private fun RegularReport.hasDescription() = description.isNotBlank()
 

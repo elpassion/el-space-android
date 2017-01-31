@@ -109,18 +109,11 @@ class ReportAddController(private val date: String?,
         subscriptions.clear()
     }
 
-    private fun showUnpaidVacationsForm() {
-        view.hideHoursInput()
-        view.hideDescriptionInput()
-        view.hideProjectChooser()
-        view.showUnpaidVacationsInfo()
-    }
-
-    private fun showSickLeaveForm() {
-        view.hideHoursInput()
-        view.hideDescriptionInput()
-        view.hideProjectChooser()
-        view.showSickLeaveInfo()
+    private fun showRegularForm() {
+        view.showDescriptionInput()
+        view.showProjectChooser()
+        view.showHoursInput()
+        view.hideAdditionalInfo()
     }
 
     private fun showPaidVacationsForm() {
@@ -130,11 +123,18 @@ class ReportAddController(private val date: String?,
         view.hideAdditionalInfo()
     }
 
-    private fun showRegularForm() {
-        view.showDescriptionInput()
-        view.showProjectChooser()
-        view.showHoursInput()
-        view.hideAdditionalInfo()
+    private fun showSickLeaveForm() {
+        view.hideHoursInput()
+        view.hideDescriptionInput()
+        view.hideProjectChooser()
+        view.showSickLeaveInfo()
+    }
+
+    private fun showUnpaidVacationsForm() {
+        view.hideHoursInput()
+        view.hideDescriptionInput()
+        view.hideProjectChooser()
+        view.showUnpaidVacationsInfo()
     }
 
     fun onDateChanged(date: String) {

@@ -42,11 +42,39 @@ class ReportAddController(private val date: String?,
             .map { Unit }
 
     private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {
-        is RegularReport -> Observable.merge(emptyDescriptionErrorFlow(reportViewModel), emptyProjectErrorFlow(reportViewModel), validReportFlow(reportViewModel))
-        is UnpaidVacationsReport -> api.addUnpaidVacationsReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-        is PaidVacationsReport -> api.addPaidVacationsReport(reportViewModel.selectedDate, reportViewModel.hours).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
-        is SickLeaveReport -> api.addSickLeaveReport(reportViewModel.selectedDate).toObservable<Unit>().applySchedulers().addLoader().doOnCompleted { view.close() }
+        is RegularReport -> regularReportHandler.invoke(reportViewModel)
+        is UnpaidVacationsReport -> unpaidVacationReportHandler.invoke(reportViewModel)
+        is PaidVacationsReport -> paidVacationReportHandler.invoke(reportViewModel)
+        is SickLeaveReport -> sickLeaveReportHandler.invoke(reportViewModel)
         else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
+    }
+
+    private val regularReportHandler = { regularReport: RegularReport ->
+        Observable.merge(emptyDescriptionErrorFlow(regularReport), emptyProjectErrorFlow(regularReport), validReportFlow(regularReport))
+    }
+
+    private val unpaidVacationReportHandler = { unpaidVacationsReport: UnpaidVacationsReport ->
+        api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
+                .toObservable<Unit>()
+                .applySchedulers()
+                .addLoader()
+                .doOnCompleted { view.close() }
+    }
+
+    private val paidVacationReportHandler = { paidVacationsReport: PaidVacationsReport ->
+        api.addPaidVacationsReport(paidVacationsReport.selectedDate, paidVacationsReport.hours)
+                .toObservable<Unit>()
+                .applySchedulers()
+                .addLoader()
+                .doOnCompleted { view.close() }
+    }
+
+    private val sickLeaveReportHandler = { sickLeaveReport: SickLeaveReport ->
+        api.addSickLeaveReport(sickLeaveReport.selectedDate)
+                .toObservable<Unit>()
+                .applySchedulers()
+                .addLoader()
+                .doOnCompleted { view.close() }
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {

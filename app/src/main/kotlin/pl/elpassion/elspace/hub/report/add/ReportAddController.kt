@@ -8,7 +8,6 @@ import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Observable
 import rx.Subscription
 import rx.subscriptions.CompositeSubscription
-import java.util.Calendar.*
 
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
@@ -82,10 +81,7 @@ class ReportAddController(private val date: String?,
                     .doOnUnsubscribe { view.hideLoader() }
                     .doOnTerminate { view.hideLoader() }
 
-    private fun getCurrentDatePerformedAtString(): String {
-        val currentCalendar = getTimeFrom(timeInMillis = CurrentTimeProvider.get())
-        return getDateString(currentCalendar.get(YEAR), currentCalendar.get(MONTH) + 1, currentCalendar.get(DAY_OF_MONTH))
-    }
+    private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
     fun onDestroy() {
         subscriptions.clear()

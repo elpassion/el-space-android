@@ -57,12 +57,12 @@ class ReportAddController(private val date: String?,
             .doOnNext { view.showEmptyDescriptionError() }
             .map { Unit }
 
-    private fun emptyProjectErrorFlow(it: RegularReport): Observable<Unit> = Observable.just(it)
+    private fun emptyProjectErrorFlow(regularReport: RegularReport): Observable<Unit> = Observable.just(regularReport)
             .filter { !it.hasProject() }
             .doOnNext { view.showEmptyProjectError() }
             .map { Unit }
 
-    private fun validReportFlow(it: RegularReport) = Observable.just(it)
+    private fun validReportFlow(regularReport: RegularReport) = Observable.just(regularReport)
             .filter { it.hasProject() && it.hasDescription() }
             .switchMap {
                 api.addRegularReport(it.selectedDate, it.project!!.id, it.hours, it.description)

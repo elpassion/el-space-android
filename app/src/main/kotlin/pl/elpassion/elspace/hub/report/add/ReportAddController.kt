@@ -36,21 +36,20 @@ class ReportAddController(private val date: String?,
             .doOnNext { view.openProjectChooser() }
 
     private fun addReportClicks() = view.addReportClicks().withLatestFrom(reportTypeChanges(), { a, b -> a to b })
-            .switchMap { handleNewReport(it.first) }
+            .switchMap { it.second(it.first) }
             .doOnError { view.showError(it) }
             .onErrorResumeNext { Observable.empty() }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
             .startWith(ReportType.REGULAR)
-            .map { Unit }
+            .map { chooseReportHandler(it) }
 
-    private fun handleNewReport(reportViewModel: ReportViewModel) = when (reportViewModel) {
-        is RegularReport -> regularReportHandler.invoke(reportViewModel)
-        is UnpaidVacationsReport -> unpaidVacationReportHandler.invoke(reportViewModel)
-        is PaidVacationsReport -> paidVacationReportHandler.invoke(reportViewModel)
-        is SickLeaveReport -> sickLeaveReportHandler.invoke(reportViewModel)
-        else -> Observable.error(IllegalArgumentException(reportViewModel.toString()))
+    private fun chooseReportHandler(reportType: ReportType) = when (reportType) {
+        ReportType.REGULAR -> regularReportHandler
+        ReportType.PAID_VACATIONS -> paidVacationReportHandler
+        ReportType.SICK_LEAVE -> sickLeaveReportHandler
+        ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
     }
 
     private val regularReportHandler = { regularReport: ReportViewModel ->

@@ -22,7 +22,13 @@ class ReportAddController(private val date: String?,
             view.showSelectedProject(it)
         }
         view.showDate(date ?: getCurrentDatePerformedAtString())
-        Observable.merge(projectClickEvents(), addReportClicks(), reportTypeChanges())
+        projectClickEvents()
+                .subscribe()
+                .save()
+        addReportClicks()
+                .subscribe()
+                .save()
+        reportTypeChanges()
                 .subscribe()
                 .save()
     }

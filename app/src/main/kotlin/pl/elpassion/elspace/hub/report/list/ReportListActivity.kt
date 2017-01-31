@@ -158,7 +158,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
                 is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClickListener)
                 is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClickListener, onReportClickListener)
                 is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day, onReportClickListener)
-                else -> throw IllegalArgumentException()
             }
 
     private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport, onReportClickListener: OnReportClickListener) = listOf(DayWithDailyReportsItemAdapter(day, onReportClickListener))

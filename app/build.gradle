@@ -9,6 +9,7 @@ buildscript {
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-dev/" }
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
@@ -100,7 +101,7 @@ dependencies {
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'
-    testCompile "com.nhaarman:mockito-kotlin:0.6.1"
+    testCompile "com.nhaarman:mockito-kotlin:1.2.0"
 
     androidTestCompile "com.crittercism.dexmaker:dexmaker:$dexMakerVersion"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
@@ -118,7 +119,7 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
     }
 
-    androidTestCompile("com.nhaarman:mockito-kotlin:0.6.0") {
+    androidTestCompile("com.nhaarman:mockito-kotlin:1.2.0") {
         exclude group: 'org.mockito'
     }
 }

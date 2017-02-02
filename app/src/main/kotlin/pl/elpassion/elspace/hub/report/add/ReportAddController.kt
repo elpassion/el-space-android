@@ -57,25 +57,22 @@ class ReportAddController(private val date: String?,
 
     private val regularReportHandler = { regularReport: ReportViewModel ->
         (regularReport as RegularReport).let {
-            if (it.hasProject() && it.hasDescription()) {
-                addRegularReportObservable(it)
-            } else {
-                handleIncorrectRegularReportData(it)
-                Completable.never()
+            when {
+                !regularReport.hasProject() -> {
+                    view.showEmptyProjectError()
+                    Completable.never()
+                }
+                !regularReport.hasDescription() -> {
+                    view.showEmptyDescriptionError()
+                    Completable.never()
+                }
+                else -> addRegularReportObservable(it)
             }
         }
     }
 
     private fun addRegularReportObservable(regularReport: RegularReport) =
             api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
-
-    private fun handleIncorrectRegularReportData(regularReport: RegularReport) {
-        if (!regularReport.hasProject()) {
-            view.showEmptyProjectError()
-        } else if (!regularReport.hasDescription()) {
-            view.showEmptyDescriptionError()
-        }
-    }
 
     private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
         api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)

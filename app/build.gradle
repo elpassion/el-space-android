@@ -25,12 +25,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
 
-compileKotlin {
-    kotlinOptions {
-        languageVersion = "1.0"
-    }
-}
-
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.1"
@@ -67,6 +61,9 @@ android {
     dexOptions {
         javaMaxHeapSize DEX_MAX_HEAP_SIZE
         preDexLibraries = System.env.CI != "true"
+    }
+    kotlinOptions {
+        languageVersion = "1.0"
     }
 }
 

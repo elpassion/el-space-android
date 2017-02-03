@@ -3,12 +3,13 @@ buildscript {
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
     ext.support_version = '25.1.0'
-    ext.rxJava= '1.1.9'
+    ext.rxJava = '1.1.9'
     ext.elCommon = '0.0.11'
     ext.rxBinding = '1.0.0'
 
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
@@ -100,7 +101,9 @@ dependencies {
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'
-    testCompile "com.nhaarman:mockito-kotlin:0.6.1"
+    testCompile("com.nhaarman:mockito-kotlin:1.2.0") {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
 
     androidTestCompile "com.crittercism.dexmaker:dexmaker:$dexMakerVersion"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
@@ -118,7 +121,8 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
     }
 
-    androidTestCompile("com.nhaarman:mockito-kotlin:0.6.0") {
+    androidTestCompile("com.nhaarman:mockito-kotlin:1.2.0") {
         exclude group: 'org.mockito'
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
 }

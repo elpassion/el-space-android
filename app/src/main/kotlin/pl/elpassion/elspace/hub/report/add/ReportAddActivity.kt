@@ -40,7 +40,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
+        reportAddHours.setOnTouchListener { _, _ -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener {
             showDateDialog(supportFragmentManager) {
                 controller.onDateChanged(it)

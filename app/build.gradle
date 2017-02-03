@@ -62,10 +62,6 @@ android {
         javaMaxHeapSize DEX_MAX_HEAP_SIZE
         preDexLibraries = System.env.CI != "true"
     }
-    kotlinOptions {
-        languageVersion = "1.0"
-        apiVersion = "1.0"
-    }
 }
 
 repositories {
@@ -105,7 +101,9 @@ dependencies {
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'
-    testCompile "com.nhaarman:mockito-kotlin:1.2.0"
+    testCompile("com.nhaarman:mockito-kotlin:1.2.0") {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
 
     androidTestCompile "com.crittercism.dexmaker:dexmaker:$dexMakerVersion"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$dexMakerVersion"
@@ -125,5 +123,6 @@ dependencies {
 
     androidTestCompile("com.nhaarman:mockito-kotlin:1.2.0") {
         exclude group: 'org.mockito'
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
 }

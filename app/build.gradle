@@ -3,7 +3,7 @@ buildscript {
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
     ext.support_version = '25.1.0'
-    ext.rxJava= '1.1.9'
+    ext.rxJava = '1.1.9'
     ext.elCommon = '0.0.11'
     ext.rxBinding = '1.0.0'
 
@@ -24,6 +24,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
+
+compileKotlin {
+    kotlinOptions {
+        languageVersion = "1.0"
+    }
+}
 
 android {
     compileSdkVersion 25

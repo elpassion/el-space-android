@@ -1,7 +1,7 @@
 buildscript {
-    ext.kotlin_version = '1.1.0-beta-17'
+    ext.kotlin_version = '1.1.0-beta-38'
     repositories {
-        maven { url "https://dl.bintray.com/kotlin/kotlin-dev/" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         jcenter()
     }
     dependencies {
@@ -12,7 +12,7 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url "https://dl.bintray.com/kotlin/kotlin-dev/" }
+        maven { url "https://dl.bintray.com/kotlin/kotlin-eap-1.1/" }
         jcenter()
     }
 }

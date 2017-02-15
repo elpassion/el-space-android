@@ -135,16 +135,19 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddHoursLayout.hide()
         reportAddDescriptionLayout.hide()
         reportAddProjectNameLayout.hide()
-        reportAddAdditionalInfo.show()
-        reportAddAdditionalInfo.setText(R.string.report_add_sick_leave_info)
+        showAdditionalInfo(R.string.report_add_sick_leave_info)
     }
 
     override fun showUnpaidVacationsForm() {
         reportAddHoursLayout.hide()
         reportAddDescriptionLayout.hide()
         reportAddProjectNameLayout.hide()
+        showAdditionalInfo(R.string.report_add_unpaid_vacations_info)
+    }
+
+    private fun showAdditionalInfo(additionalInfoResourceId: Int) {
         reportAddAdditionalInfo.show()
-        reportAddAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
+        reportAddAdditionalInfo.setText(additionalInfoResourceId)
     }
 
     override fun projectClickEvents(): Observable<Unit> {

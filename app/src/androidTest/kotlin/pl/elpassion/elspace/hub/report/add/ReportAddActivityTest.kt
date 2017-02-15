@@ -176,6 +176,16 @@ class ReportAddActivityTest {
         onId(R.id.reportAddDate).hasText("2017-01-28")
     }
 
+    @Test
+    fun shouldShowOnlyRegularFormOnRegularReport() {
+        stubRepositoryAndStart()
+        onId(R.id.action_regular_report).click()
+        onId(R.id.reportAddDescriptionLayout).isDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isDisplayed()
+        onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {
         whenever(repository.getLastProject()).thenReturn(projects)
         LastSelectedProjectRepositoryProvider.override = { repository }

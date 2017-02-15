@@ -123,35 +123,11 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
+    fun shouldShowRegularFormAfterReportTypeChangedToRegularReport() {
         createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showHoursInput()
-    }
-
-    @Test
-    fun shouldShowDescriptionInputAfterReportTypeChangedToRegularReport() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowProjectChooserAfterReportTypeChangedToRegularReport() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showProjectChooser()
-    }
-
-    @Test
-    fun shouldHideAdditionalInfoAfterReportTypeChangedToRegularReport() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).hideAdditionalInfo()
+        verify(view).showRegularForm()
     }
 
     @Test

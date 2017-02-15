@@ -155,6 +155,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.empty_project_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showRegularForm() {
+        showDescriptionInput()
+        showProjectChooser()
+        showHoursInput()
+        hideAdditionalInfo()
+    }
+
     override fun projectClickEvents(): Observable<Unit> {
         return RxView.clicks(reportAddProjectName).map { Unit }
     }

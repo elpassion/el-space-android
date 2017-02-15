@@ -107,10 +107,7 @@ class ReportAddController(private val date: String?,
     }
 
     private fun showRegularForm() {
-        view.showDescriptionInput()
-        view.showProjectChooser()
-        view.showHoursInput()
-        view.hideAdditionalInfo()
+        view.showRegularForm()
     }
 
     private fun showPaidVacationsForm() {

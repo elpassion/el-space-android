@@ -90,44 +90,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         finish()
     }
 
-    fun showHoursInput() {
-        reportAddHoursLayout.show()
-    }
-
-    fun showProjectChooser() {
-        reportAddProjectNameLayout.show()
-    }
-
-    fun showDescriptionInput() {
-        reportAddDescriptionLayout.show()
-    }
-
-    fun hideDescriptionInput() {
-        reportAddDescriptionLayout.hide()
-    }
-
-    fun hideProjectChooser() {
-        reportAddProjectNameLayout.hide()
-    }
-
-    fun hideHoursInput() {
-        reportAddHoursLayout.hide()
-    }
-
-    fun showSickLeaveInfo() {
-        reportAddAdditionalInfo.show()
-        reportAddAdditionalInfo.setText(R.string.report_add_sick_leave_info)
-    }
-
-    fun showUnpaidVacationsInfo() {
-        reportAddAdditionalInfo.show()
-        reportAddAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
-    }
-
-    fun hideAdditionalInfo() {
-        reportAddAdditionalInfo.hide()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_report_top_menu, menu)
         return true
@@ -156,31 +118,33 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun showRegularForm() {
-        showDescriptionInput()
-        showProjectChooser()
-        showHoursInput()
-        hideAdditionalInfo()
+        reportAddDescriptionLayout.show()
+        reportAddProjectNameLayout.show()
+        reportAddHoursLayout.show()
+        reportAddAdditionalInfo.hide()
     }
 
     override fun showPaidVacationsForm() {
-        showHoursInput()
-        hideProjectChooser()
-        hideDescriptionInput()
-        hideAdditionalInfo()
+        reportAddHoursLayout.show()
+        reportAddProjectNameLayout.hide()
+        reportAddDescriptionLayout.hide()
+        reportAddAdditionalInfo.hide()
     }
 
     override fun showSickLeaveForm() {
-        hideHoursInput()
-        hideDescriptionInput()
-        hideProjectChooser()
-        showSickLeaveInfo()
+        reportAddHoursLayout.hide()
+        reportAddDescriptionLayout.hide()
+        reportAddProjectNameLayout.hide()
+        reportAddAdditionalInfo.show()
+        reportAddAdditionalInfo.setText(R.string.report_add_sick_leave_info)
     }
 
     override fun showUnpaidVacationsForm() {
-        hideHoursInput()
-        hideDescriptionInput()
-        hideProjectChooser()
-        showUnpaidVacationsInfo()
+        reportAddHoursLayout.hide()
+        reportAddDescriptionLayout.hide()
+        reportAddProjectNameLayout.hide()
+        reportAddAdditionalInfo.show()
+        reportAddAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
     }
 
     override fun projectClickEvents(): Observable<Unit> {

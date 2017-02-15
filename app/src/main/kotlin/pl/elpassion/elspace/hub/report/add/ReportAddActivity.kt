@@ -176,6 +176,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         showSickLeaveInfo()
     }
 
+    override fun showUnpaidVacationsForm() {
+        hideHoursInput()
+        hideDescriptionInput()
+        hideProjectChooser()
+        showUnpaidVacationsInfo()
+    }
+
     override fun projectClickEvents(): Observable<Unit> {
         return RxView.clicks(reportAddProjectName).map { Unit }
     }

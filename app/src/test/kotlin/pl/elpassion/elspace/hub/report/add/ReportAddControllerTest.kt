@@ -147,35 +147,11 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
+    fun shouldShowUnpaidVacationFormAfterReportTypeChangeToUnpaidVacation() {
         createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideHoursInput()
-    }
-
-    @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowUnpaidVacationsInfoAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).showUnpaidVacationsInfo()
+        verify(view).showUnpaidVacationsForm()
     }
 
     @Test

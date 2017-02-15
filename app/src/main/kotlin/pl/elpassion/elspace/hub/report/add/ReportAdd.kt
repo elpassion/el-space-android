@@ -34,6 +34,7 @@ interface ReportAdd {
         fun showRegularForm()
         fun showPaidVacationsForm()
         fun showSickLeaveForm()
+        fun showUnpaidVacationsForm()
     }
 
     interface Api {

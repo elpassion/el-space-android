@@ -119,10 +119,7 @@ class ReportAddController(private val date: String?,
     }
 
     private fun showUnpaidVacationsForm() {
-        view.hideHoursInput()
-        view.hideDescriptionInput()
-        view.hideProjectChooser()
-        view.showUnpaidVacationsInfo()
+        view.showUnpaidVacationsForm()
     }
 
     fun onDateChanged(date: String) {

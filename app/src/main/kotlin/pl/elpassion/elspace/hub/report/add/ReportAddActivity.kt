@@ -125,8 +125,10 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun showPaidVacationsForm() {
+        reportAddAdditionalInfo.hide()
         reportAddHoursLayout.show()
-        hideRegularReportInputs()
+        reportAddProjectNameLayout.hide()
+        reportAddDescriptionLayout.hide()
     }
 
     override fun showSickLeaveForm() {
@@ -142,7 +144,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     private fun hideRegularReportInputs() {
         reportAddProjectNameLayout.hide()
         reportAddDescriptionLayout.hide()
-        reportAddAdditionalInfo.hide()
+        reportAddHoursLayout.hide()
     }
 
     private fun showAdditionalInfo(additionalInfoResourceId: Int) {

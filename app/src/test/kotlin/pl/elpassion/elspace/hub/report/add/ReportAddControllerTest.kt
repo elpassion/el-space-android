@@ -139,35 +139,11 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
+    fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
         createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideHoursInput()
-    }
-
-    @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowSickLeaveInfoAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).showSickLeaveInfo()
+        verify(view).showSickLeaveForm()
     }
 
     @Test

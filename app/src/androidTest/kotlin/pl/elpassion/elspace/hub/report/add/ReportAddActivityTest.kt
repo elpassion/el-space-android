@@ -196,6 +196,16 @@ class ReportAddActivityTest {
         onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
     }
 
+    @Test
+    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+        onText(R.string.report_add_sick_leave_info).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {
         whenever(repository.getLastProject()).thenReturn(projects)
         LastSelectedProjectRepositoryProvider.override = { repository }

@@ -33,6 +33,7 @@ interface ReportAdd {
         fun projectClickEvents(): Observable<Unit>
         fun showRegularForm()
         fun showPaidVacationsForm()
+        fun showSickLeaveForm()
     }
 
     interface Api {

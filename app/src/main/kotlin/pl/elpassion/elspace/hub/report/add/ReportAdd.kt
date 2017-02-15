@@ -16,16 +16,7 @@ interface ReportAdd {
         fun showLoader()
         fun hideLoader()
         fun addReportClicks(): Observable<ReportViewModel>
-        fun showHoursInput()
-        fun showProjectChooser()
-        fun showDescriptionInput()
-        fun hideDescriptionInput()
-        fun hideProjectChooser()
-        fun hideHoursInput()
         fun reportTypeChanges(): Observable<ReportType>
-        fun showUnpaidVacationsInfo()
-        fun showSickLeaveInfo()
-        fun hideAdditionalInfo()
         fun showSelectedProject(project: Project)
         fun openProjectChooser()
         fun showEmptyDescriptionError()

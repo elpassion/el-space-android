@@ -90,41 +90,41 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         finish()
     }
 
-    override fun showHoursInput() {
+    fun showHoursInput() {
         reportAddHoursLayout.show()
     }
 
-    override fun showProjectChooser() {
+    fun showProjectChooser() {
         reportAddProjectNameLayout.show()
     }
 
-    override fun showDescriptionInput() {
+    fun showDescriptionInput() {
         reportAddDescriptionLayout.show()
     }
 
-    override fun hideDescriptionInput() {
+    fun hideDescriptionInput() {
         reportAddDescriptionLayout.hide()
     }
 
-    override fun hideProjectChooser() {
+    fun hideProjectChooser() {
         reportAddProjectNameLayout.hide()
     }
 
-    override fun hideHoursInput() {
+    fun hideHoursInput() {
         reportAddHoursLayout.hide()
     }
 
-    override fun showSickLeaveInfo() {
+    fun showSickLeaveInfo() {
         reportAddAdditionalInfo.show()
         reportAddAdditionalInfo.setText(R.string.report_add_sick_leave_info)
     }
 
-    override fun showUnpaidVacationsInfo() {
+    fun showUnpaidVacationsInfo() {
         reportAddAdditionalInfo.show()
         reportAddAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
     }
 
-    override fun hideAdditionalInfo() {
+    fun hideAdditionalInfo() {
         reportAddAdditionalInfo.hide()
     }
 

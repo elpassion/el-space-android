@@ -40,7 +40,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
-        reportAddHours.setOnTouchListener { view, motionEvent -> reportAddHours.text = null; false }
+        reportAddHours.setOnTouchListener { _, _ -> reportAddHours.text = null; false }
         reportAddDate.setOnClickListener {
             showDateDialog(supportFragmentManager) {
                 controller.onDateChanged(it)
@@ -180,10 +180,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
         fun startForResult(activity: Activity, date: String, requestCode: Int) {
             activity.startActivityForResult(intent(activity, date), requestCode)
-        }
-
-        fun startForResult(activity: Activity, requestCode: Int) {
-            activity.startActivityForResult(intent(activity), requestCode)
         }
 
         fun intent(context: Context) = Intent(context, ReportAddActivity::class.java)

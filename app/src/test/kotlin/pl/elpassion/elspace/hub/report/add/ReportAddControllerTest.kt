@@ -37,7 +37,8 @@ class ReportAddControllerTest {
     @Test
     fun shouldCloseAfterAddingNewReport() {
         createController().onCreate()
-        addReportClicks.onNext(UnpaidVacationsReport("date"))
+        addUnpaidVacationReport()
+
         verify(view).close()
     }
 
@@ -45,7 +46,7 @@ class ReportAddControllerTest {
     fun shouldShowLoaderOnAddingNewReport() {
         stubApiToReturn(Completable.never())
         createController().onCreate()
-        addReportClicks.onNext(UnpaidVacationsReport("date"))
+        addUnpaidVacationReport()
 
         verify(view).showLoader()
     }
@@ -54,7 +55,7 @@ class ReportAddControllerTest {
     fun shouldHideLoaderWhenAddingNewReportFinish() {
         stubApiToReturn(Completable.complete())
         createController().onCreate()
-        addReportClicks.onNext(UnpaidVacationsReport("date"))
+        addUnpaidVacationReport()
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -65,7 +66,7 @@ class ReportAddControllerTest {
         stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
-        addReportClicks.onNext(UnpaidVacationsReport("date"))
+        addUnpaidVacationReport()
         controller.onDestroy()
 
         verify(view).hideLoader()
@@ -252,16 +253,14 @@ class ReportAddControllerTest {
     @Test
     fun shouldReportUnpaidVacationsToApiAfterAddReportUnpaidVacations() {
         createController("2016-01-01").onCreate()
-
-        addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
+        addUnpaidVacationReport()
         verify(api).addUnpaidVacationsReport("2016-01-01")
     }
 
     @Test
     fun shouldReportSickLeaveToApiAfterAddReportSickLeave() {
         createController("2016-01-01").onCreate()
-
-        addReportClicks.onNext(SickLeaveReport("2016-01-01"))
+        addSickLeaveReport()
         verify(api).addSickLeaveReport("2016-01-01")
     }
 
@@ -269,7 +268,7 @@ class ReportAddControllerTest {
     fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
+        addPaidVacationReport()
         verify(api).addPaidVacationsReport("2016-09-23", "8")
     }
 
@@ -352,6 +351,13 @@ class ReportAddControllerTest {
         verify(view, never()).close()
     }
 
+    @Test
+    fun shouldChangeDate() {
+        createController().onDateChanged("2016-01-01")
+
+        verify(view).showDate("2016-01-01")
+    }
+
     private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
@@ -363,6 +369,21 @@ class ReportAddControllerTest {
         whenever(api.addSickLeaveReport(any())).thenReturn(completable)
         whenever(api.addUnpaidVacationsReport(any())).thenReturn(completable)
         whenever(api.addPaidVacationsReport(any(), any())).thenReturn(completable)
+    }
+
+    private fun addUnpaidVacationReport() {
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
+        addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
+    }
+
+    private fun addSickLeaveReport() {
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
+        addReportClicks.onNext(SickLeaveReport("2016-01-01"))
+    }
+
+    private fun addPaidVacationReport() {
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
+        addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
     }
 }
 

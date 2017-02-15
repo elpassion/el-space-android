@@ -186,6 +186,16 @@ class ReportAddActivityTest {
         onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
     }
 
+    @Test
+    fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
+        stubRepositoryAndStart()
+        onId(R.id.action_paid_vacations_report).click()
+        onId(R.id.reportAddHoursLayout).isDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
+    }
+
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {
         whenever(repository.getLastProject()).thenReturn(projects)
         LastSelectedProjectRepositoryProvider.override = { repository }

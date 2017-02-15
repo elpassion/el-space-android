@@ -162,6 +162,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         hideAdditionalInfo()
     }
 
+    override fun showPaidVacationsForm() {
+        showHoursInput()
+        hideProjectChooser()
+        hideDescriptionInput()
+        hideAdditionalInfo()
+    }
+
     override fun projectClickEvents(): Observable<Unit> {
         return RxView.clicks(reportAddProjectName).map { Unit }
     }

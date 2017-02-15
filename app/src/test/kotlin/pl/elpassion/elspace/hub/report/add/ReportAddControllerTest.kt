@@ -131,35 +131,11 @@ class ReportAddControllerTest {
     }
 
     @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToPaidVacations() {
+    fun shouldShowPaidVacationsFormAfterReportTypeChangedToPaidVacations() {
         createController().onCreate()
 
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).showHoursInput()
-    }
-
-    @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideAdditionalInfoAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideAdditionalInfo()
+        verify(view).showPaidVacationsForm()
     }
 
     @Test

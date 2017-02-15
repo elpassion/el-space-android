@@ -32,6 +32,7 @@ interface ReportAdd {
         fun showEmptyProjectError()
         fun projectClickEvents(): Observable<Unit>
         fun showRegularForm()
+        fun showPaidVacationsForm()
     }
 
     interface Api {

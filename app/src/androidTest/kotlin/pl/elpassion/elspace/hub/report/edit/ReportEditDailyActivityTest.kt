@@ -2,10 +2,7 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +26,8 @@ class ReportEditDailyActivityTest {
 
     @Before
     fun setUp() {
-        whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
+        whenever(reportEditApi.editReport(any(), any(), any(), any(), anyOrNull())).thenReturn(Completable.complete())
+//        whenever(reportEditApi.editReport(2, "2017-01-10", "0", "SickLeave", null)).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
     }
 

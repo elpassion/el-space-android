@@ -4,10 +4,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions.closeSoftKeyboard
 import android.support.test.espresso.action.ViewActions.replaceText
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +27,7 @@ class ReportEditPaidVacationActivityTest {
 
     @Before
     fun setUp() {
-        whenever(reportEditApi.editReport(any(), any(), any(), any(), any())).thenReturn(Completable.complete())
+        whenever(reportEditApi.editReport(any(), any(), any(), any(), anyOrNull())).thenReturn(Completable.complete())
         whenever(reportRemoveApi.removeReport(any())).thenReturn(Completable.complete())
         ReportEdit.EditApiProvider.override = { reportEditApi }
         ReportEdit.RemoveApiProvider.override = { reportRemoveApi }

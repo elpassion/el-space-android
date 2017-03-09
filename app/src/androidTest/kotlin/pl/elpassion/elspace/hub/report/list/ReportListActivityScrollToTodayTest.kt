@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.report.list
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.onId
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -54,7 +55,7 @@ class ReportListActivityScrollToTodayTest {
     private fun stubServiceAndStart(reports: List<Report>, year: Int = 2016, month: Int = 6, day: Int = 1) {
         val date = getDateString(year, month, day)
         stubCurrentTime(date)
-        whenever(service.getReports()).thenReturn(Observable.just(reports))
+        whenever(service.getReports(any())).thenReturn(Observable.just(reports))
         ReportList.ServiceProvider.override = { service }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
     }

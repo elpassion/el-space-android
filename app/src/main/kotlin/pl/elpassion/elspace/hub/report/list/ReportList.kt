@@ -18,7 +18,7 @@ import rx.Observable
 interface ReportList {
 
     interface Service {
-        fun getReports(): Observable<List<Report>>
+        fun getReports(yearMonth: YearMonth): Observable<List<Report>>
     }
 
     interface View {

@@ -12,7 +12,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
 
     override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>> =
             Observable.combineLatest(dateChangeObservable,
-                    reportListService.getReports(), { t1, t2 -> Pair(t1, t2) })
+                    reportListService.getReports(getCurrentTimeCalendar().toYearMonth()), { t1, t2 -> Pair(t1, t2) })
                     .map { createDaysWithReports(it.first, it.second) }
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =

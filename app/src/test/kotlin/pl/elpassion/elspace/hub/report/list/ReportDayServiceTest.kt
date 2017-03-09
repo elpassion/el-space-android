@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.report.list
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertEquals
@@ -116,7 +117,7 @@ class ReportDayServiceTest {
             Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
     private fun stubServiceToReturn(list: List<Report>) {
-        whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
+        whenever(serviceApi.getReports(any())).thenReturn(Observable.just(list))
     }
 
     private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {

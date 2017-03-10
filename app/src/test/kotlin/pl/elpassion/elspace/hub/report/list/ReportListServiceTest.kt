@@ -19,6 +19,7 @@ import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
 import rx.Observable
 import rx.observers.TestSubscriber
+import java.util.*
 
 class ReportListServiceTest {
 
@@ -39,14 +40,14 @@ class ReportListServiceTest {
     @Test
     fun shouldCorrectlyMapReportsYear() {
         stubReportApiToReturn(newReportFromApi(performedAt = "2012-06-01"))
-        getReports(newYearMonth(2012, 6))
+        getReports(newYearMonth(2012, Calendar.JUNE))
         subscriber.assertValue(listOf(newRegularHourlyReport(year = 2012)))
     }
 
     @Test
     fun shouldCorrectlyMapReportsMonth() {
         stubReportApiToReturn(newReportFromApi(performedAt = "2016-01-01"))
-        getReports(newYearMonth(2016, 1))
+        getReports(newYearMonth(2016, Calendar.FEBRUARY))
         subscriber.assertValue(listOf(newRegularHourlyReport(month = 1)))
     }
 
@@ -124,8 +125,15 @@ class ReportListServiceTest {
     @Test
     fun shouldCallApiWithStartAndEndDate() {
         stubReportApiToReturn(newReportFromApi())
-        getReports(newYearMonth(2017, 3))
+        getReports(newYearMonth(2017, Calendar.MARCH))
         verify(reportApi).getReports("2017-03-01", "2017-03-31")
+    }
+
+    @Test
+    fun shouldCallApiWithStartAndEndDateBasedOnProvidedYearMonth() {
+        stubReportApiToReturn(newReportFromApi())
+        getReports(newYearMonth(2017, Calendar.FEBRUARY))
+        verify(reportApi).getReports("2017-02-01", "2017-02-28")
     }
 
     private fun getReports(yearMonth: YearMonth = newYearMonth(2016, 6)) {

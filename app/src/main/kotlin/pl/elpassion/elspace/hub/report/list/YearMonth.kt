@@ -1,7 +1,9 @@
 package pl.elpassion.elspace.hub.report.list
 
 import pl.elpassion.elspace.common.extensions.daysForCurrentMonth
+import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getFullMonthName
+import pl.elpassion.elspace.common.extensions.getTimeFrom
 import java.util.*
 
 data class YearMonth(val year: Int, val month: Month)
@@ -16,3 +18,8 @@ fun Calendar.toYearMonth() =
                         index = get(Calendar.MONTH),
                         daysInMonth = daysForCurrentMonth(),
                         monthName = getFullMonthName()))
+
+fun YearMonth.toMonthDateRange(): Pair<String, String> {
+    val calendar = getTimeFrom(year, month.index, 1)
+    return calendar.getDateString() to getTimeFrom(year, month.index, calendar.daysForCurrentMonth()).getDateString()
+}

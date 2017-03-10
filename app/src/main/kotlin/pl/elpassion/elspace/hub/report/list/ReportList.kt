@@ -13,12 +13,13 @@ import pl.elpassion.elspace.hub.report.list.service.ProjectListServiceImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
 import retrofit2.http.GET
+import retrofit2.http.Query
 import rx.Observable
 
 interface ReportList {
 
     interface Service {
-        fun getReports(): Observable<List<Report>>
+        fun getReports(yearMonth: YearMonth): Observable<List<Report>>
     }
 
     interface View {
@@ -62,7 +63,10 @@ interface ReportList {
 
     interface ReportApi {
         @GET("activities")
-        fun getReports(): Observable<List<ReportFromApi>>
+        fun getReports(
+                @Query("start_date") startDate: String,
+                @Query("end_date") endDate: String
+        ): Observable<List<ReportFromApi>>
     }
 
     object ReportApiProvider : Provider<ReportApi>({

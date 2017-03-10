@@ -10,6 +10,8 @@ import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
 import rx.Observable
+import rx.Scheduler
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 
 class ReportListController(private val reportDayService: ReportDayService,
@@ -80,7 +82,7 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {
-                reportDayService.createDays(dateChangeObserver.observe())
+                reportDayService.createDays(dateChangeObserver.observe().observeOn(Schedulers.io()))
                         .applySchedulers()
                         .doOnSubscribe {
                             if (!view.isDuringPullToRefresh()) {

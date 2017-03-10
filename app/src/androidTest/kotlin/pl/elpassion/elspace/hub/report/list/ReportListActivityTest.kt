@@ -9,6 +9,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.Matchers.instanceOf
@@ -42,7 +43,7 @@ class ReportListActivityTest {
     val rule = rule<ReportListActivity> {
         CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
-        whenever(service.getReports()).thenReturn(Observable.just(listOf<Report>(
+        whenever(service.getReports(any())).thenReturn(Observable.just(listOf<Report>(
                 newRegularHourlyReport(year = 2016, month = 10, day = 3, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),

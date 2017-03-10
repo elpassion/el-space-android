@@ -2,6 +2,7 @@ package pl.elpassion.elspace.hub.login
 
 import com.elpassion.android.commons.espresso.InitIntentsRule
 import com.elpassion.android.commons.espresso.checkIntent
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -21,7 +22,7 @@ class LoginActivityHappyTest {
 
     @JvmField @Rule
     val rule = rule<LoginActivity>(autoStart = false) {
-        ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports()).thenReturn(Observable.just(emptyList())) } }
+        ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports(any())).thenReturn(Observable.just(emptyList())) } }
         LoginRepositoryProvider.override = { loginRepository }
     }
 

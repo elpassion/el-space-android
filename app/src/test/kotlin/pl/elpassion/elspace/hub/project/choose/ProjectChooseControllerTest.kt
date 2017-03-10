@@ -17,10 +17,10 @@ class ProjectChooseControllerTest {
     val rxSchedulersRule = RxSchedulersRule()
 
     private val view = mock<ProjectChoose.View>()
-    private val repository = mock<ProjectRepository>()
+    private val projectRepository = mock<ProjectRepository>()
     private val subscribeOn = TestScheduler()
     private val observeOn = TestScheduler()
-    private val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn, observeOn))
+    private val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(subscribeOn, observeOn))
 
     @Test
     fun shouldShowPossibleProjects() {
@@ -79,13 +79,13 @@ class ProjectChooseControllerTest {
         stubRepositoryToReturn(emptyList())
         controller.onCreate(Observable.just("a", "b"))
         subscribeOn.triggerActions()
-        verify(repository).getProjects()
+        verify(projectRepository).getProjects()
     }
 
     @Test
     fun shouldShowErrorWhenRepositoryReturnError() {
         val exception = RuntimeException()
-        whenever(repository.getProjects()).thenReturn(Observable.error(exception))
+        whenever(projectRepository.getProjects()).thenReturn(Observable.error(exception))
         onCreate()
         verify(view).showError(exception)
     }
@@ -106,7 +106,7 @@ class ProjectChooseControllerTest {
 
     @Test
     fun shouldHideLoadingOnDestroy() {
-        whenever(repository.getProjects()).thenReturn(Observable.never())
+        whenever(projectRepository.getProjects()).thenReturn(Observable.never())
         onCreate()
         controller.onDestroy()
         verify(view).hideLoader()
@@ -134,7 +134,7 @@ class ProjectChooseControllerTest {
     }
 
     private fun stubRepositoryToReturn(list: List<Project>) {
-        whenever(repository.getProjects()).thenReturn(Observable.just(list))
+        whenever(projectRepository.getProjects()).thenReturn(Observable.just(list))
     }
 }
 

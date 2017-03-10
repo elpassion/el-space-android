@@ -16,11 +16,11 @@ class ProjectChooseControllerTest {
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
 
-    val view = mock<ProjectChoose.View>()
-    val repository = mock<ProjectRepository>()
-    val subscribeOn = TestScheduler()
-    val observeOn = TestScheduler()
-    val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn, observeOn))
+    private val view = mock<ProjectChoose.View>()
+    private val repository = mock<ProjectRepository>()
+    private val subscribeOn = TestScheduler()
+    private val observeOn = TestScheduler()
+    private val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn, observeOn))
 
     @Test
     fun shouldShowPossibleProjects() {

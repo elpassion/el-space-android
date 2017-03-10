@@ -17,16 +17,18 @@ import com.elpassion.android.commons.recycler.components.stable.StableItemAdapte
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
+import rx.schedulers.Schedulers
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
+    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get(), SchedulersSupplier(Schedulers.io())) }
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
     private val adapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
 

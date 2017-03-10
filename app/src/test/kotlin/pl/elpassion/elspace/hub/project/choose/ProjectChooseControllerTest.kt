@@ -1,16 +1,15 @@
 package pl.elpassion.elspace.hub.project.choose
 
-import com.nhaarman.mockito_kotlin.argThat
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.commons.RxSchedulersRule
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.dto.newProject
 import rx.Observable
+import rx.schedulers.TestScheduler
 
 class ProjectChooseControllerTest {
 
@@ -19,12 +18,13 @@ class ProjectChooseControllerTest {
 
     val view = mock<ProjectChoose.View>()
     val repository = mock<ProjectRepository>()
-    val controller = ProjectChooseController(view, repository)
+    val subscribeOn = TestScheduler()
+    val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn))
 
     @Test
     fun shouldShowPossibleProjects() {
         stubRepositoryToReturn(emptyList())
-        controller.onCreate()
+        onCreate()
         verify(view).showPossibleProjects(emptyList())
     }
 
@@ -32,7 +32,7 @@ class ProjectChooseControllerTest {
     fun shouldShowPossibleProjectFormRepository() {
         val projects = listOf(newProject())
         stubRepositoryToReturn(projects)
-        controller.onCreate()
+        onCreate()
         verify(view).showPossibleProjects(projects)
     }
 
@@ -47,15 +47,14 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldReturnSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "B"), newProject(name = "Z"), newProject(name = "A")))
-        controller.onCreate()
+        onCreate()
         verify(view).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
     }
 
     @Test
     fun shouldShowFilteredProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        controller.onCreate(createSearch("B"))
-
+        onCreate("B")
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
@@ -63,27 +62,22 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldShowFilteredSortedProjects() {
         stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
-
-        controller.onCreate(createSearch("C"))
-
+        onCreate("C")
         verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
     fun shouldShowFilteredProjectsIgnoreCase() {
         stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-
-        controller.onCreate(createSearch("b"))
-
+        onCreate("b")
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
     @Test
     fun shouldCallToRepositoryOnlyOnce() {
         stubRepositoryToReturn(emptyList())
-
         controller.onCreate(Observable.just("a", "b"))
-
+        subscribeOn.triggerActions()
         verify(repository).getProjects()
     }
 
@@ -91,44 +85,43 @@ class ProjectChooseControllerTest {
     fun shouldShowErrorWhenRepositoryReturnError() {
         val exception = RuntimeException()
         whenever(repository.getProjects()).thenReturn(Observable.error(exception))
-
-        controller.onCreate()
-
+        onCreate()
         verify(view).showError(exception)
     }
 
     @Test
     fun shouldShowLoadingOnCreate() {
         stubRepositoryToReturn(emptyList())
-        controller.onCreate()
-
+        onCreate()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoadingOnFinishRepositoryCall() {
         stubRepositoryToReturn(emptyList())
-
-        controller.onCreate()
-
+        onCreate()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoadingOnDestroy() {
         whenever(repository.getProjects()).thenReturn(Observable.never())
-
-        controller.onCreate()
+        onCreate()
         controller.onDestroy()
-
         verify(view).hideLoader()
     }
 
-    private fun ProjectChooseController.onCreate() {
-        onCreate(Observable.just(""))
+    @Test
+    fun shouldFetchProjectsOnCorrectScheduler() {
+        stubRepositoryToReturn(emptyList())
+        controller.onCreate(Observable.just("any"))
+        verify(view, never()).showPossibleProjects(any())
     }
 
-    private fun createSearch(query: CharSequence) = Observable.just(query)
+    private fun onCreate(query: String = "") {
+        controller.onCreate(Observable.just(query))
+        subscribeOn.triggerActions()
+    }
 
     private fun stubRepositoryToReturn(list: List<Project>) {
         whenever(repository.getProjects()).thenReturn(Observable.just(list))

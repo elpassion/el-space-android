@@ -1,13 +1,14 @@
 package pl.elpassion.elspace.hub.project.choose
 
-import pl.elpassion.elspace.api.applySchedulers
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import rx.Observable
 import rx.Subscription
 
 class ProjectChooseController(private val view: ProjectChoose.View,
-                              private val repository: ProjectRepository) {
+                              private val repository: ProjectRepository,
+                              private val schedulers: SchedulersSupplier) {
 
     private var subscription: Subscription? = null
 
@@ -31,8 +32,8 @@ class ProjectChooseController(private val view: ProjectChoose.View,
 
     private fun projectListObservable(): Observable<List<Project>>
             = repository.getProjects()
+            .subscribeOn(schedulers.subscribeOn)
             .map { it.sortedBy { it.name } }
-            .applySchedulers()
             .doOnSubscribe { view.showLoader() }
             .doOnUnsubscribe { view.hideLoader() }
 }

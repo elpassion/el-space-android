@@ -2,7 +2,7 @@ buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
-    ext.support_version = '25.2.0'
+    ext.support_version = '25.1.0'
     ext.rxJava = '1.1.9'
     ext.elCommon = '0.0.11'
     ext.rxBinding = '1.0.0'
@@ -26,7 +26,7 @@ apply plugin: 'jacoco-everywhere'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.1"
     defaultConfig {
         applicationId "pl.elpassion.elspace"
         minSdkVersion 19

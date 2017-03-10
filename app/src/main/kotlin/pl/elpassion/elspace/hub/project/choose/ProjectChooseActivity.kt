@@ -23,12 +23,13 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
+import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get(), SchedulersSupplier(Schedulers.io())) }
+    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread())) }
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
     private val adapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
 

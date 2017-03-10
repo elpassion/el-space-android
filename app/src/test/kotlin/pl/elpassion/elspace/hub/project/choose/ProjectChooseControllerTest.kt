@@ -19,7 +19,8 @@ class ProjectChooseControllerTest {
     val view = mock<ProjectChoose.View>()
     val repository = mock<ProjectRepository>()
     val subscribeOn = TestScheduler()
-    val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn))
+    val observeOn = TestScheduler()
+    val controller = ProjectChooseController(view, repository, SchedulersSupplier(subscribeOn, observeOn))
 
     @Test
     fun shouldShowPossibleProjects() {
@@ -118,9 +119,18 @@ class ProjectChooseControllerTest {
         verify(view, never()).showPossibleProjects(any())
     }
 
+    @Test
+    fun shouldObserveProjectsOnCorrectScheduler() {
+        stubRepositoryToReturn(emptyList())
+        controller.onCreate(Observable.just("any"))
+        subscribeOn.triggerActions()
+        verify(view, never()).showPossibleProjects(any())
+    }
+
     private fun onCreate(query: String = "") {
         controller.onCreate(Observable.just(query))
         subscribeOn.triggerActions()
+        observeOn.triggerActions()
     }
 
     private fun stubRepositoryToReturn(list: List<Project>) {

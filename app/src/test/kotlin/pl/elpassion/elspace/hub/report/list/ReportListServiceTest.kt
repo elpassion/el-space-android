@@ -1,6 +1,8 @@
 package pl.elpassion.elspace.hub.report.list
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -119,6 +121,13 @@ class ReportListServiceTest {
         subscriber.assertValue(listOf(newDailyReport(reportType = DailyReportType.SICK_LEAVE)))
     }
 
+    @Test
+    fun shouldCallApiWithStartAndEndDate() {
+        stubReportApiToReturn(newReportFromApi())
+        getReports(newYearMonth(2017, 3))
+        verify(reportApi).getReports("2017-03-01", "2017-03-31")
+    }
+
     private fun getReports(yearMonth: YearMonth = newYearMonth(2016, 6)) {
         service.getReports(yearMonth).subscribe(subscriber)
     }
@@ -126,7 +135,7 @@ class ReportListServiceTest {
     private fun newYearMonth(year: Int, month: Int) = getTimeFrom(year, month, 1).toYearMonth()
 
     private fun stubReportApiToReturn(reportFromApi: ReportFromApi) {
-        whenever(reportApi.getReports()).thenReturn(Observable.just(listOf(reportFromApi)))
+        whenever(reportApi.getReports(any(), any())).thenReturn(Observable.just(listOf(reportFromApi)))
     }
 
     private fun newReportFromApi(performedAt: String = "2016-06-01",

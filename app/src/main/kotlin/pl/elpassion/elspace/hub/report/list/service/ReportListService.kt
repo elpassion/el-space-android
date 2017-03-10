@@ -11,7 +11,7 @@ class ReportListService(private val reportApi: ReportList.ReportApi,
 
     override fun getReports(yearMonth: YearMonth): Observable<List<Report>> = projectApi.getProjects()
             .flatMap { projects ->
-                reportApi.getReports().map { reportList ->
+                reportApi.getReports("2017-03-01", "2017-03-31").map { reportList ->
                     reportList.map { reportFromApi -> reportFromApi.toReport(projects) }
                 }
             }

@@ -2,10 +2,8 @@ package pl.elpassion.elspace.hub.project.choose
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.commons.RxSchedulersRule
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.dto.newProject
@@ -15,9 +13,6 @@ import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 class ProjectChooseControllerTest {
-
-    @JvmField @Rule
-    val rxSchedulersRule = RxSchedulersRule()
 
     private val view = mock<ProjectChoose.View>()
     private val publishSubject = PublishSubject.create<List<Project>>()

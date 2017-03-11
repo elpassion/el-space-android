@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.hub.project.choose
 
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -9,7 +10,9 @@ import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.dto.newProject
 import rx.Observable
+import rx.schedulers.Schedulers.trampoline
 import rx.schedulers.TestScheduler
+import rx.subjects.PublishSubject
 
 class ProjectChooseControllerTest {
 
@@ -17,23 +20,29 @@ class ProjectChooseControllerTest {
     val rxSchedulersRule = RxSchedulersRule()
 
     private val view = mock<ProjectChoose.View>()
+    private val publishSubject = PublishSubject.create<List<Project>>()
     private val projectRepository = mock<ProjectRepository>()
-    private val subscribeOn = TestScheduler()
-    private val observeOn = TestScheduler()
-    private val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(subscribeOn, observeOn))
+    private val subscribeOnScheduler = TestScheduler()
+    private val observeOnScheduler = TestScheduler()
+    private val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(trampoline(), trampoline()))
+
+    @Before
+    fun setUp() {
+        whenever(projectRepository.getProjects()).thenReturn(publishSubject)
+    }
 
     @Test
     fun shouldShowPossibleProjects() {
-        stubRepositoryToReturn(emptyList())
         onCreate()
+        emitProjects(emptyList())
         verify(view).showPossibleProjects(emptyList())
     }
 
     @Test
     fun shouldShowPossibleProjectFormRepository() {
         val projects = listOf(newProject())
-        stubRepositoryToReturn(projects)
         onCreate()
+        emitProjects(projects)
         verify(view).showPossibleProjects(projects)
     }
 
@@ -46,96 +55,95 @@ class ProjectChooseControllerTest {
 
     @Test
     fun shouldReturnSortedProjects() {
-        stubRepositoryToReturn(listOf(newProject(name = "B"), newProject(name = "Z"), newProject(name = "A")))
         onCreate()
+        emitProjects(listOf(newProject(name = "B"), newProject(name = "Z"), newProject(name = "A")))
         verify(view).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
     }
 
     @Test
     fun shouldShowFilteredProjects() {
-        stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         onCreate("B")
+        emitProjects(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
-
     @Test
     fun shouldShowFilteredSortedProjects() {
-        stubRepositoryToReturn(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
         onCreate("C")
+        emitProjects(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
         verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
     fun shouldShowFilteredProjectsIgnoreCase() {
-        stubRepositoryToReturn(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         onCreate("b")
+        emitProjects(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
         verify(view).showPossibleProjects(argThat { this[0].name == "B" })
     }
 
     @Test
     fun shouldCallToRepositoryOnlyOnce() {
-        stubRepositoryToReturn(emptyList())
         controller.onCreate(Observable.just("a", "b"))
-        subscribeOn.triggerActions()
+        emitProjects(emptyList())
         verify(projectRepository).getProjects()
     }
 
     @Test
     fun shouldShowErrorWhenRepositoryReturnError() {
         val exception = RuntimeException()
-        whenever(projectRepository.getProjects()).thenReturn(Observable.error(exception))
         onCreate()
+        publishSubject.onError(exception)
         verify(view).showError(exception)
     }
 
     @Test
     fun shouldShowLoadingOnCreate() {
-        stubRepositoryToReturn(emptyList())
         onCreate()
+        emitProjects(emptyList())
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoadingOnFinishRepositoryCall() {
-        stubRepositoryToReturn(emptyList())
         onCreate()
+        emitProjects(emptyList())
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoadingOnDestroy() {
-        whenever(projectRepository.getProjects()).thenReturn(Observable.never())
         onCreate()
         controller.onDestroy()
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldFetchProjectsOnCorrectScheduler() {
-        stubRepositoryToReturn(emptyList())
+    fun shouldSubscribeProjectsOnCorrectScheduler() {
+        val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(subscribeOnScheduler, trampoline()) )
         controller.onCreate(Observable.just("any"))
         verify(view, never()).showPossibleProjects(any())
+        subscribeOnScheduler.triggerActions()
+        emitProjects(emptyList())
+        verify(view).showPossibleProjects(any())
     }
 
     @Test
     fun shouldObserveProjectsOnCorrectScheduler() {
-        stubRepositoryToReturn(emptyList())
+        val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(trampoline(), observeOnScheduler) )
         controller.onCreate(Observable.just("any"))
-        subscribeOn.triggerActions()
         verify(view, never()).showPossibleProjects(any())
-        observeOn.triggerActions()
+        emitProjects(emptyList())
+        observeOnScheduler.triggerActions()
         verify(view).showPossibleProjects(any())
     }
 
     private fun onCreate(query: String = "") {
         controller.onCreate(Observable.just(query))
-        subscribeOn.triggerActions()
-        observeOn.triggerActions()
     }
 
-    private fun stubRepositoryToReturn(list: List<Project>) {
-        whenever(projectRepository.getProjects()).thenReturn(Observable.just(list))
+    private fun emitProjects(projects: List<Project>) {
+        publishSubject.onNext(projects)
+        publishSubject.onCompleted()
     }
 }
 

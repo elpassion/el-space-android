@@ -97,7 +97,7 @@ class ProjectChooseControllerTest {
     }
 
     @Test
-    fun shouldShowLoadingOnCreate() {
+    fun shouldShowLoaderOnCreate() {
         onCreate()
         emitProjects(emptyList())
         verify(view).showLoader()

@@ -111,7 +111,7 @@ class ProjectChooseControllerTest {
     }
 
     @Test
-    fun shouldHideLoadingOnDestroy() {
+    fun shouldHideLoaderOnDestroy() {
         onCreate()
         controller.onDestroy()
         verify(view).hideLoader()

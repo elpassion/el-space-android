@@ -23,6 +23,8 @@ class ReportAddControllerTest {
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<LastSelectedProjectRepository>()
+    val subscribeOn = TestScheduler()
+    val observeOn = TestScheduler()
 
     @Before
     fun setUp() {
@@ -263,7 +265,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldSubscribeOnGivenScheduler() {
-        val subscribeOn = TestScheduler()
         createController(subscribeOnScheduler = subscribeOn).onCreate()
         addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(view, never()).hideLoader()
@@ -273,7 +274,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldObserveOnGivenScheduler() {
-        val observeOn = TestScheduler()
         createController(observeOnScheduler = observeOn).onCreate()
         addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(view, never()).hideLoader()

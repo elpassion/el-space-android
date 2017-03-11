@@ -19,12 +19,11 @@ class ReportAddControllerTest {
     private val addReportClicks = PublishSubject.create<ReportViewModel>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
     private val projectClickEvents = PublishSubject.create<Unit>()
-
-    val view = mock<ReportAdd.View>()
-    val api = mock<ReportAdd.Api>()
-    val repository = mock<LastSelectedProjectRepository>()
-    val subscribeOn = TestScheduler()
-    val observeOn = TestScheduler()
+    private val view = mock<ReportAdd.View>()
+    private val api = mock<ReportAdd.Api>()
+    private val repository = mock<LastSelectedProjectRepository>()
+    private val subscribeOn = TestScheduler()
+    private val observeOn = TestScheduler()
 
     @Before
     fun setUp() {

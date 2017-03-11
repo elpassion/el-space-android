@@ -8,7 +8,6 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import rx.Completable
 import rx.Scheduler
 import rx.schedulers.Schedulers.trampoline
 import rx.schedulers.TestScheduler
@@ -24,27 +23,37 @@ class ReportAddControllerTest {
     private val repository = mock<LastSelectedProjectRepository>()
     private val subscribeOn = TestScheduler()
     private val observeOn = TestScheduler()
+    private val addReportSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
-        stubApiToReturn(Completable.complete())
+        stubApiToReturn()
         stubRepositoryToReturn()
         whenever(view.addReportClicks()).thenReturn(addReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
     }
 
+    private fun stubApiToReturn() {
+        addReportSubject.toCompletable().run {
+            whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(this)
+            whenever(api.addSickLeaveReport(any())).thenReturn(this)
+            whenever(api.addUnpaidVacationsReport(any())).thenReturn(this)
+            whenever(api.addPaidVacationsReport(any(), any())).thenReturn(this)
+        }
+    }
+
     @Test
     fun shouldCloseAfterAddingNewReport() {
         createController().onCreate()
         addUnpaidVacationReport()
+        completeReportAdd()
 
         verify(view).close()
     }
 
     @Test
     fun shouldShowLoaderOnAddingNewReport() {
-        stubApiToReturn(Completable.never())
         createController().onCreate()
         addUnpaidVacationReport()
 
@@ -53,9 +62,9 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportFinish() {
-        stubApiToReturn(Completable.complete())
         createController().onCreate()
         addUnpaidVacationReport()
+        completeReportAdd()
 
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -63,7 +72,6 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
-        stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
         addUnpaidVacationReport()
@@ -89,10 +97,10 @@ class ReportAddControllerTest {
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         createController().onCreate()
 
         addReportClicks.onNext(newRegularReport())
+        addReportSubject.onError(RuntimeException())
         verify(view).showError(any())
     }
 
@@ -106,10 +114,10 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowErrorWhenApiFails() {
         val exception = RuntimeException()
-        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(exception))
         createController("2016-09-23").onCreate()
 
         addReportClicks.onNext(newRegularReport())
+        addReportSubject.onError(exception)
         verify(view).showError(exception)
     }
 
@@ -267,6 +275,7 @@ class ReportAddControllerTest {
         addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
+        completeReportAdd()
         verify(view).hideLoader()
     }
 
@@ -275,6 +284,7 @@ class ReportAddControllerTest {
         createController(observeOnScheduler = observeOn).onCreate()
         addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
+        completeReportAdd()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }
@@ -289,11 +299,9 @@ class ReportAddControllerTest {
         whenever(repository.getLastProject()).thenReturn(project)
     }
 
-    private fun stubApiToReturn(completable: Completable) {
-        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(completable)
-        whenever(api.addSickLeaveReport(any())).thenReturn(completable)
-        whenever(api.addUnpaidVacationsReport(any())).thenReturn(completable)
-        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(completable)
+    private fun completeReportAdd() {
+        addReportSubject.onNext(Unit)
+        addReportSubject.onCompleted()
     }
 
     private fun addUnpaidVacationReport() {

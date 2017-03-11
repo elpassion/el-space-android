@@ -39,7 +39,7 @@ class ProjectChooseControllerTest {
     }
 
     @Test
-    fun shouldShowPossibleProjectFormRepository() {
+    fun shouldReallyProjectFromRepository() {
         val projects = listOf(newProject())
         onCreate()
         emitProjects(projects)

@@ -40,7 +40,6 @@ class ProjectChooseControllerTest {
     @Test
     fun shouldSelectClickedProject() {
         val project = newProject()
-        stubRepositoryToReturn(listOf(project))
         controller.onProjectClicked(project)
         verify(view).selectProject(project)
     }

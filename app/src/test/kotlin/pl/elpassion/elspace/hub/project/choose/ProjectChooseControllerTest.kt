@@ -104,7 +104,7 @@ class ProjectChooseControllerTest {
     }
 
     @Test
-    fun shouldHideLoadingOnFinishRepositoryCall() {
+    fun shouldHideLoaderOnRepositoryCallFinish() {
         onCreate()
         emitProjects(emptyList())
         verify(view).hideLoader()

@@ -124,6 +124,8 @@ class ProjectChooseControllerTest {
         controller.onCreate(Observable.just("any"))
         subscribeOn.triggerActions()
         verify(view, never()).showPossibleProjects(any())
+        observeOn.triggerActions()
+        verify(view).showPossibleProjects(any())
     }
 
     private fun onCreate(query: String = "") {

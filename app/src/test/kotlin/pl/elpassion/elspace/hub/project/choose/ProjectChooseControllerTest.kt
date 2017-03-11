@@ -32,10 +32,10 @@ class ProjectChooseControllerTest {
     }
 
     @Test
-    fun shouldShowPossibleProjects() {
+    fun shouldShowProjectsFromRepository() {
         onCreate()
         emitProjects(emptyList())
-        verify(view).showPossibleProjects(emptyList())
+        verify(view).showProjects(emptyList())
     }
 
     @Test
@@ -43,7 +43,7 @@ class ProjectChooseControllerTest {
         val projects = listOf(newProject())
         onCreate()
         emitProjects(projects)
-        verify(view).showPossibleProjects(projects)
+        verify(view).showProjects(projects)
     }
 
     @Test
@@ -57,28 +57,28 @@ class ProjectChooseControllerTest {
     fun shouldReturnSortedProjects() {
         onCreate()
         emitProjects(listOf(newProject(name = "B"), newProject(name = "Z"), newProject(name = "A")))
-        verify(view).showPossibleProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
+        verify(view).showProjects(argThat { this[0].name == "A" && this[1].name == "B" && this[2].name == "Z" })
     }
 
     @Test
     fun shouldShowFilteredProjects() {
         onCreate("B")
         emitProjects(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
+        verify(view).showProjects(argThat { this[0].name == "B" })
     }
 
     @Test
     fun shouldShowFilteredSortedProjects() {
         onCreate("C")
         emitProjects(listOf(newProject(name = "Bcd"), newProject(name = "Cde"), newProject(name = "Abc")))
-        verify(view).showPossibleProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
+        verify(view).showProjects(argThat { this[0].name == "Abc" && this[1].name == "Bcd" && this[2].name == "Cde" })
     }
 
     @Test
     fun shouldShowFilteredProjectsIgnoreCase() {
         onCreate("b")
         emitProjects(listOf(newProject(name = "A"), newProject(name = "A"), newProject(name = "B")))
-        verify(view).showPossibleProjects(argThat { this[0].name == "B" })
+        verify(view).showProjects(argThat { this[0].name == "B" })
     }
 
     @Test
@@ -121,20 +121,20 @@ class ProjectChooseControllerTest {
     fun shouldSubscribeProjectsOnCorrectScheduler() {
         val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(subscribeOnScheduler, trampoline()) )
         controller.onCreate(Observable.just("any"))
-        verify(view, never()).showPossibleProjects(any())
+        verify(view, never()).showProjects(any())
         subscribeOnScheduler.triggerActions()
         emitProjects(emptyList())
-        verify(view).showPossibleProjects(any())
+        verify(view).showProjects(any())
     }
 
     @Test
     fun shouldObserveProjectsOnCorrectScheduler() {
         val controller = ProjectChooseController(view, projectRepository, SchedulersSupplier(trampoline(), observeOnScheduler) )
         controller.onCreate(Observable.just("any"))
-        verify(view, never()).showPossibleProjects(any())
+        verify(view, never()).showProjects(any())
         emitProjects(emptyList())
         observeOnScheduler.triggerActions()
-        verify(view).showPossibleProjects(any())
+        verify(view).showProjects(any())
     }
 
     private fun onCreate(query: String = "") {

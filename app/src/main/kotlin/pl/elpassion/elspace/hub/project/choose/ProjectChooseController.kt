@@ -16,7 +16,7 @@ class ProjectChooseController(private val view: ProjectChoose.View,
         subscription = Observable.combineLatest(projectListObservable(), query) { projectList, querySequence ->
             projectList.filter { it.name.contains(querySequence, true) }
         }.subscribe({
-            view.showPossibleProjects(it)
+            view.showProjects(it)
         }, {
             view.showError(it)
         })

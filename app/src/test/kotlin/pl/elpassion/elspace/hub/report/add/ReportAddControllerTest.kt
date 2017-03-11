@@ -48,7 +48,6 @@ class ReportAddControllerTest {
         createController().onCreate()
         addUnpaidVacationReport()
         completeReportAdd()
-
         verify(view).close()
     }
 
@@ -56,7 +55,6 @@ class ReportAddControllerTest {
     fun shouldShowLoaderOnAddingNewReport() {
         createController().onCreate()
         addUnpaidVacationReport()
-
         verify(view).showLoader()
     }
 
@@ -65,7 +63,6 @@ class ReportAddControllerTest {
         createController().onCreate()
         addUnpaidVacationReport()
         completeReportAdd()
-
         verify(view).showLoader()
         verify(view).hideLoader()
     }
@@ -76,14 +73,12 @@ class ReportAddControllerTest {
         controller.onCreate()
         addUnpaidVacationReport()
         controller.onDestroy()
-
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldShowInitialDateOnCreate() {
         createController("2016-05-04").onCreate()
-
         verify(view).showDate("2016-05-04")
     }
 
@@ -91,14 +86,12 @@ class ReportAddControllerTest {
     fun shouldAddReportWithChangedDate() {
         createController("2016-01-04").onCreate()
         addReportClicks.onNext(newRegularReport(selectedDate = "2016-05-04"))
-
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport())
         addReportSubject.onError(RuntimeException())
         verify(view).showError(any())
@@ -107,7 +100,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowDate() {
         createController("2016-09-23").onCreate()
-
         verify(view).showDate("2016-09-23")
     }
 
@@ -115,7 +107,6 @@ class ReportAddControllerTest {
     fun shouldShowErrorWhenApiFails() {
         val exception = RuntimeException()
         createController("2016-09-23").onCreate()
-
         addReportClicks.onNext(newRegularReport())
         addReportSubject.onError(exception)
         verify(view).showError(exception)
@@ -125,14 +116,12 @@ class ReportAddControllerTest {
     fun shouldShowCurrentDateWhenNotDateNotSelected() {
         stubCurrentTime(2016, 2, 1)
         createController(null).onCreate()
-
         verify(view).showDate("2016-02-01")
     }
 
     @Test
     fun shouldShowRegularFormAfterReportTypeChangedToRegularReport() {
         createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showRegularForm()
     }
@@ -140,7 +129,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowPaidVacationsFormAfterReportTypeChangedToPaidVacations() {
         createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).showPaidVacationsForm()
     }
@@ -148,7 +136,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
         createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
     }
@@ -156,7 +143,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowUnpaidVacationFormAfterReportTypeChangeToUnpaidVacation() {
         createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()
     }
@@ -178,7 +164,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
         createController("2016-09-23").onCreate()
-
         addPaidVacationReport()
         verify(api).addPaidVacationsReport("2016-09-23", "8")
     }
@@ -186,7 +171,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShouldUseRegularReportApiToAddRegularReport() {
         createController("2016-09-23").onCreate()
-
         addReportClicks.onNext(newRegularReport(selectedDate = "2016-09-23", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("2016-09-23", 1, "8", "description")
     }
@@ -196,7 +180,6 @@ class ReportAddControllerTest {
         val project = newProject()
         stubRepositoryToReturn(project)
         createController().onCreate()
-
         verify(view).showSelectedProject(project)
     }
 
@@ -204,7 +187,6 @@ class ReportAddControllerTest {
     fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
         stubRepositoryToReturn(null)
         createController().onCreate()
-
         verify(view, never()).showSelectedProject(any())
     }
 
@@ -225,7 +207,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
     }
@@ -233,7 +214,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldReallyCallSenderAfterOnReportAdded() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(api).addRegularReport(date = "date", hours = "9", projectId = 2, description = "description2")
     }
@@ -241,7 +221,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport(description = ""))
         verify(view).showEmptyDescriptionError()
     }
@@ -249,7 +228,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport(project = null))
         verify(view).showEmptyProjectError()
     }
@@ -257,7 +235,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldNotCloseScreenWhenDescriptionIsEmpty() {
         createController().onCreate()
-
         addReportClicks.onNext(newRegularReport(description = ""))
         verify(view, never()).close()
     }
@@ -265,7 +242,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldChangeDate() {
         createController().onDateChanged("2016-01-01")
-
         verify(view).showDate("2016-01-01")
     }
 
@@ -319,4 +295,3 @@ class ReportAddControllerTest {
         addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
     }
 }
-

@@ -82,7 +82,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldAddReportWithChangedDate() {
         createController("2016-01-04").onCreate()
-        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "2016-05-04"))
 
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
@@ -92,7 +92,7 @@ class ReportAddControllerTest {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
+        addReportClicks.onNext(newRegularReport())
         verify(view).showError(any())
     }
 
@@ -106,11 +106,10 @@ class ReportAddControllerTest {
     @Test
     fun shouldShowErrorWhenApiFails() {
         val exception = RuntimeException()
-        val project = Project(1, "Slack")
-        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(exception))
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
+        addReportClicks.onNext(newRegularReport())
         verify(view).showError(exception)
     }
 
@@ -180,7 +179,7 @@ class ReportAddControllerTest {
     fun shouldShouldUseRegularReportApiToAddRegularReport() {
         createController("2016-09-23").onCreate()
 
-        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "2016-09-23", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("2016-09-23", 1, "8", "description")
     }
 
@@ -219,7 +218,7 @@ class ReportAddControllerTest {
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport("date", project = newProject(id = 1), hours = "8", description = "description"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
     }
 
@@ -227,7 +226,7 @@ class ReportAddControllerTest {
     fun shouldReallyCallSenderAfterOnReportAdded() {
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(api).addRegularReport(date = "date", hours = "9", projectId = 2, description = "description2")
     }
 
@@ -235,7 +234,7 @@ class ReportAddControllerTest {
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = ""))
+        addReportClicks.onNext(newRegularReport(description = ""))
         verify(view).showEmptyDescriptionError()
     }
 
@@ -243,7 +242,7 @@ class ReportAddControllerTest {
     fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = null, hours = "9", description = "description2"))
+        addReportClicks.onNext(newRegularReport(project = null))
         verify(view).showEmptyProjectError()
     }
 
@@ -251,7 +250,7 @@ class ReportAddControllerTest {
     fun shouldNotCloseScreenWhenDescriptionIsEmpty() {
         createController().onCreate()
 
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(), hours = "9", description = ""))
+        addReportClicks.onNext(newRegularReport(description = ""))
         verify(view, never()).close()
     }
 
@@ -265,7 +264,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldSubscribeOnGivenScheduler() {
         createController(subscribeOnScheduler = subscribeOn).onCreate()
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -274,11 +273,14 @@ class ReportAddControllerTest {
     @Test
     fun shouldObserveOnGivenScheduler() {
         createController(observeOnScheduler = observeOn).onCreate()
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }
+
+    private fun newRegularReport(selectedDate: String = "date", project: Project? = newProject(id = 1), hours: String = "8", description: String = "description")
+            = RegularReport(selectedDate = selectedDate, project = project, hours = hours, description = description)
 
     private fun createController(date: String? = "2016-01-01", subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
             ReportAddController(date, view, api, repository, SchedulersSupplier(subscribeOn = subscribeOnScheduler, observeOn = observeOnScheduler))

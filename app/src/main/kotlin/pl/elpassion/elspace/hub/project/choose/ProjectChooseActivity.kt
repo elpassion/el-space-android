@@ -45,7 +45,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         projectsContainer.adapter = adapter
     }
 
-    override fun showPossibleProjects(projects: List<Project>) {
+    override fun showProjects(projects: List<Project>) {
         updateAdapterList(projects)
     }
 

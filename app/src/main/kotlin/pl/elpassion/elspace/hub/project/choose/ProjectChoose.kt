@@ -4,7 +4,7 @@ import pl.elpassion.elspace.hub.project.Project
 
 interface ProjectChoose {
     interface View {
-        fun showPossibleProjects(projects: List<Project>)
+        fun showProjects(projects: List<Project>)
 
         fun selectProject(project: Project)
 

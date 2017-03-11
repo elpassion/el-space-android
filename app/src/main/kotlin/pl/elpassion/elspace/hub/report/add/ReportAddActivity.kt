@@ -16,6 +16,7 @@ import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
@@ -25,11 +26,18 @@ import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val controller by lazy {
-        ReportAddController(intent.getStringExtra(ADD_DATE_KEY), this, ReportAdd.ApiProvider.get(), LastSelectedProjectRepositoryProvider.get())
+        ReportAddController(
+                date =  intent.getStringExtra(ADD_DATE_KEY),
+                view = this,
+                api = ReportAdd.ApiProvider.get(),
+                repository = LastSelectedProjectRepositoryProvider.get(),
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     private var selectedProject: Project? = null

@@ -2,14 +2,16 @@ package pl.elpassion.elspace.hub.report.add
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.elspace.commons.RxSchedulersRule
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import rx.Completable
+import rx.Scheduler
+import rx.schedulers.Schedulers.trampoline
+import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
@@ -21,9 +23,6 @@ class ReportAddControllerTest {
     val view = mock<ReportAdd.View>()
     val api = mock<ReportAdd.Api>()
     val repository = mock<LastSelectedProjectRepository>()
-
-    @JvmField @Rule
-    val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {
@@ -262,7 +261,28 @@ class ReportAddControllerTest {
         verify(view).showDate("2016-01-01")
     }
 
-    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
+    @Test
+    fun shouldSubscribeOnGivenScheduler() {
+        val subscribeOn = TestScheduler()
+        createController(subscribeOnScheduler = subscribeOn).onCreate()
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldObserveOnGivenScheduler() {
+        val observeOn = TestScheduler()
+        createController(observeOnScheduler = observeOn).onCreate()
+        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        verify(view, never()).hideLoader()
+        observeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    private fun createController(date: String? = "2016-01-01", subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
+            ReportAddController(date, view, api, repository, SchedulersSupplier(subscribeOn = subscribeOnScheduler, observeOn = observeOnScheduler))
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)

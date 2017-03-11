@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report.add
 
-import pl.elpassion.elspace.api.applySchedulers
 import pl.elpassion.elspace.common.CurrentTimeProvider
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
@@ -13,7 +13,8 @@ import rx.subscriptions.CompositeSubscription
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
                           private val api: ReportAdd.Api,
-                          private val repository: LastSelectedProjectRepository) {
+                          private val repository: LastSelectedProjectRepository,
+                          private val schedulers: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
 
@@ -52,7 +53,8 @@ class ReportAddController(private val date: String?,
     }
 
     private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
-            .applySchedulers()
+            .subscribeOn(schedulers.subscribeOn)
+            .observeOn(schedulers.observeOn)
             .addLoader()
 
     private val regularReportHandler = { regularReport: ReportViewModel ->

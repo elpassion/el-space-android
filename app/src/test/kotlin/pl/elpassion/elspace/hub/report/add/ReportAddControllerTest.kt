@@ -27,14 +27,14 @@ class ReportAddControllerTest {
 
     @Before
     fun setUp() {
-        stubApiToReturn()
+        stubApiToReturnSubject()
         stubRepositoryToReturn()
         whenever(view.addReportClicks()).thenReturn(addReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
     }
 
-    private fun stubApiToReturn() {
+    private fun stubApiToReturnSubject() {
         addReportSubject.toCompletable().run {
             whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(this)
             whenever(api.addSickLeaveReport(any())).thenReturn(this)

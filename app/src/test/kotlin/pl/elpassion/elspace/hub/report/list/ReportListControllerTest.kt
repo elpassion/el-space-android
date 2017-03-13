@@ -39,27 +39,21 @@ class ReportListControllerTest {
     fun shouldShowCorrectMonthNameOnCreate() {
         stubServiceToReturnNever()
         stubDateChangeToReturn(getTimeFrom(2016, 0, 20))
-
         controller.onCreate()
-
         verify(view).showMonthName("January")
     }
 
     @Test
     fun shouldCallActionFilterPrevOnCreate() {
         stubServiceToReturnNever()
-
         controller.onCreate()
-
         verify(actions).reportsFilter()
     }
 
     @Test
     fun shouldCallActionMonthChangeNextOnCreate() {
         stubServiceToReturnNever()
-
         controller.onCreate()
-
         verify(actions).monthChangeToNext()
     }
 
@@ -67,27 +61,21 @@ class ReportListControllerTest {
     @Test
     fun shouldCallActionMonthChangePrevOnCreate() {
         stubServiceToReturnNever()
-
         controller.onCreate()
-
         verify(actions).monthChangeToPrev()
     }
 
     @Test
     fun shouldCallActionReportAddOnCreate() {
         stubServiceToReturnNever()
-
         controller.onCreate()
-
         verify(actions).reportAdd()
     }
 
     @Test
     fun shouldCallActionScrollToCurrentOnCreate() {
         stubServiceToReturnNever()
-
         controller.onCreate()
-
         verify(actions).scrollToCurrent()
     }
 
@@ -96,18 +84,14 @@ class ReportListControllerTest {
     fun shouldReallyShowCorrectMonthNameOnCreate() {
         stubServiceToReturnEmptyList()
         stubDateChangeToReturn(getTimeFrom(2016, 10, 20))
-
         controller.onCreate()
-
         verify(view).showMonthName("November")
     }
 
     @Test
     fun shouldShowErrorWhenApiCallFails() {
         stubServiceToReturnError()
-
         controller.onCreate()
-
         verify(view, times(1)).showError(any())
     }
 
@@ -115,27 +99,21 @@ class ReportListControllerTest {
     fun shouldShowLoaderWhenApiCallBeginsOnStart() {
         stubServiceToReturnNever()
         whenever(view.isDuringPullToRefresh()).thenReturn(false)
-
         controller.onCreate()
-
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenApiCallSuccessful() {
         stubServiceToReturnEmptyList()
-
         controller.onCreate()
-
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenApiCallError() {
         stubServiceToReturnError()
-
         controller.onCreate()
-
         verify(view).hideLoader()
     }
 
@@ -144,14 +122,12 @@ class ReportListControllerTest {
         stubServiceToReturnNever()
         whenever(view.isDuringPullToRefresh()).thenReturn(true)
         controller.onCreate()
-
         verify(view, never()).showLoader()
     }
 
     @Test
     fun shouldOpenAddReportScreenOnDay() {
         controller.onDayDate(date = "1999-01-02")
-
         verify(view, times(1)).openAddReportScreen("1999-01-02")
     }
 
@@ -159,7 +135,6 @@ class ReportListControllerTest {
     fun shouldOpenEditRegularReportScreenOnReportIfReportIsRegularReport() {
         val report = newRegularHourlyReport()
         controller.onReport(report)
-
         verify(view, times(1)).openEditReportScreen(report)
     }
 
@@ -167,7 +142,6 @@ class ReportListControllerTest {
     fun shouldOpenEditPaidVacationScreenOnReportIfReportIsPaidVacationReport() {
         val report = newPaidVacationHourlyReport()
         controller.onReport(report)
-
         verify(view, times(1)).openPaidVacationEditReportScreen(report)
     }
 
@@ -175,7 +149,6 @@ class ReportListControllerTest {
     fun shouldOpenEditDailyScreenOnReportIfReportIsDailyReport() {
         val report = newDailyReport(reportType = DailyReportType.SICK_LEAVE)
         controller.onReport(report)
-
         verify(view, times(1)).openDailyEditReportScreen(report)
     }
 
@@ -183,18 +156,14 @@ class ReportListControllerTest {
     fun shouldOpenAddReportScreen() {
         stubCurrentTime(year = 2017, month = 1, day = 30)
         whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
-
         ReportListController(service, filter, actions, view).onCreate()
-
         verify(view).openAddReportScreen("2017-01-30")
     }
 
     @Test
     fun shouldCallServiceTwiceWhenPullToRefreshCalledOnCreate() {
         stubServiceToReturnEmptyList()
-
         whenever(actions.refreshingEvents()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
         verify(service, times(2)).createDays(any())
     }
@@ -204,7 +173,6 @@ class ReportListControllerTest {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 20)
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
         controller.updateLastPassedDayPosition(20)
 
@@ -217,10 +185,8 @@ class ReportListControllerTest {
         stubServiceToReturnEmptyList()
         stubCurrentTime(2017, 1, 31)
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
         controller.updateLastPassedDayPosition(31)
-
         verify(view).scrollToPosition(31)
     }
 
@@ -230,10 +196,8 @@ class ReportListControllerTest {
         stubCurrentTime(2017, 1, 10)
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.just(Unit))
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
         controller.updateLastPassedDayPosition(10)
-
         verify(view).scrollToPosition(10)
         verify(view, times(3)).showMonthName(any())
     }
@@ -244,10 +208,8 @@ class ReportListControllerTest {
         stubCurrentTime(2017, 2, 10)
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.just(Unit, Unit))
         whenever(actions.scrollToCurrent()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
         controller.updateLastPassedDayPosition(10)
-
         verify(view).scrollToPosition(10)
         verify(view, times(4)).showMonthName(any())
     }
@@ -255,9 +217,7 @@ class ReportListControllerTest {
     @Test
     fun shouldListenForFilterActions() {
         stubServiceToReturnEmptyList()
-
         controller.onCreate()
-
         verify(actions).reportsFilter()
     }
 
@@ -265,9 +225,7 @@ class ReportListControllerTest {
     fun shouldUseFilterActionBeforeShowingReportsList() {
         stubServiceToReturnEmptyList()
         whenever(actions.reportsFilter()).thenReturn(Observable.never())
-
         controller.onCreate()
-
         verify(view, never()).showDays(any(), any(), any())
     }
 
@@ -275,9 +233,7 @@ class ReportListControllerTest {
     fun shouldDoNotFilterDaysWhenFilterIsOff() {
         stubServiceToReturnEmptyList()
         stubFilterAction(false)
-
         controller.onCreate()
-
         verify(filter, never()).fetchFilteredDays(any())
     }
 
@@ -286,9 +242,7 @@ class ReportListControllerTest {
     fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
         stubServiceToReturnEmptyList()
         whenever(actions.reportsFilter()).thenReturn(Observable.just(false, true))
-
         controller.onCreate()
-
         verify(view, times(2)).showDays(any(), any(), any())
     }
 
@@ -296,9 +250,7 @@ class ReportListControllerTest {
     fun shouldCallServiceTwiceWhenRetryFromSnackBar() {
         stubServiceToReturnNever()
         whenever(actions.snackBarRetry()).thenReturn(Observable.just(Unit))
-
         controller.onCreate()
-
         verify(service, times(2)).createDays(any())
     }
 
@@ -306,16 +258,13 @@ class ReportListControllerTest {
     fun shouldFilterDaysWhenFilterIsOn() {
         stubServiceToReturnEmptyList()
         stubFilterAction(true)
-
         controller.onCreate()
-
         verify(filter).fetchFilteredDays(any())
     }
 
     @Test
     fun shouldListenForAllRefreshActionsOnCreate() {
         controller.onCreate()
-
         verify(actions).refreshingEvents()
         verify(actions).snackBarRetry()
         verify(actions).resultRefresh()

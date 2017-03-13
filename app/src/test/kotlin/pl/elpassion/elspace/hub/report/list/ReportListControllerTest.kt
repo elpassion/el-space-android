@@ -28,10 +28,12 @@ class ReportListControllerTest {
     private val view = mock<ReportList.View>()
     private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))
     private val daysSubject = PublishSubject.create<List<Day>>()
+    private val filterSubject = PublishSubject.create<Boolean>()
 
     @Before
     fun setUp() {
         whenever(service.createDays(any())).thenReturn(daysSubject)
+        whenever(actions.reportsFilter()).thenReturn(filterSubject)
         stubCurrentTime()
         stubViewActions()
     }
@@ -79,7 +81,6 @@ class ReportListControllerTest {
     fun shouldReallyShowCorrectMonthNameOnCreate() {
         stubDateChangeToReturn(getTimeFrom(2016, 10, 20))
         controller.onCreate()
-        daysSubject.onNext(emptyList())
         verify(view).showMonthName("November")
     }
 
@@ -224,7 +225,6 @@ class ReportListControllerTest {
 
     @Test
     fun shouldDoNotFilterDaysWhenFilterIsOff() {
-        stubFilterAction(false)
         controller.onCreate()
         daysSubject.onNext(emptyList())
         verify(filter, never()).fetchFilteredDays(any())
@@ -233,9 +233,10 @@ class ReportListControllerTest {
 
     @Test
     fun shouldCallShowDaysTwiceWhenFilterIsChanged() {
-        whenever(actions.reportsFilter()).thenReturn(Observable.just(false, true))
-        whenever(service.createDays(any())).thenReturn(Observable.just(emptyList()))
         controller.onCreate()
+        filterSubject.onNext(false)
+        daysSubject.onNext(emptyList())
+        filterSubject.onNext(true)
         verify(view, times(2)).showDays(any(), any(), any())
     }
 
@@ -248,9 +249,9 @@ class ReportListControllerTest {
 
     @Test
     fun shouldFilterDaysWhenFilterIsOn() {
-        stubFilterAction(true)
         controller.onCreate()
         daysSubject.onNext(emptyList())
+        filterSubject.onNext(true)
         verify(filter).fetchFilteredDays(any())
     }
 
@@ -285,16 +286,11 @@ class ReportListControllerTest {
     }
 
     private fun stubViewActions() {
-        whenever(actions.reportsFilter()).thenReturn(Observable.just(false))
         whenever(actions.refreshingEvents()).thenReturn(Observable.never())
         whenever(actions.reportAdd()).thenReturn(Observable.never())
         whenever(actions.monthChangeToNext()).thenReturn(Observable.never())
         whenever(actions.monthChangeToPrev()).thenReturn(Observable.never())
         whenever(actions.scrollToCurrent()).thenReturn(Observable.never())
-    }
-
-    private fun stubFilterAction(isFiltering: Boolean) {
-        whenever(actions.reportsFilter()).thenReturn(Observable.just(isFiltering))
     }
 
     private fun stubDateChangeToReturn(cal: Calendar) {

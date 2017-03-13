@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.menuClicks
 import pl.elpassion.elspace.common.extensions.onMenuItemAction
 import pl.elpassion.elspace.common.extensions.onMenuItemClicks
@@ -35,12 +36,19 @@ import pl.elpassion.elspace.hub.report.list.adapter.items.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import rx.subjects.PublishSubject
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
     private val controller by lazy {
-        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), DayFilterImpl(), this, this)
+        ReportListController(
+                reportDayService = ReportDayServiceImpl(ReportList.ServiceProvider.get()),
+                dayFilter = DayFilterImpl(),
+                actions = this,
+                view = this,
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()

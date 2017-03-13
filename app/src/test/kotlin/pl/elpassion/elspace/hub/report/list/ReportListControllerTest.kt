@@ -6,6 +6,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.common.CurrentTimeProvider
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.commons.RxSchedulersRule
 import pl.elpassion.elspace.commons.stubCurrentTime
@@ -16,6 +17,8 @@ import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
 import rx.Observable
+import rx.schedulers.Schedulers.trampoline
+import rx.schedulers.TestScheduler
 import java.util.*
 
 class ReportListControllerTest {
@@ -24,7 +27,7 @@ class ReportListControllerTest {
     private val actions = mock<ReportList.Actions>()
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
-    private val controller = ReportListController(service, filter, actions, view)
+    private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
@@ -156,7 +159,7 @@ class ReportListControllerTest {
     fun shouldOpenAddReportScreen() {
         stubCurrentTime(year = 2017, month = 1, day = 30)
         whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
-        ReportListController(service, filter, actions, view).onCreate()
+        ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline())).onCreate()
         verify(view).openAddReportScreen("2017-01-30")
     }
 
@@ -268,6 +271,28 @@ class ReportListControllerTest {
         verify(actions).refreshingEvents()
         verify(actions).snackBarRetry()
         verify(actions).resultRefresh()
+    }
+
+    @Test
+    fun shouldSubscribeOnGivenScheduler() {
+        val subscribeOnScheduler = TestScheduler()
+        val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOnScheduler, trampoline()))
+        stubServiceToReturnError()
+        controller.onCreate()
+        verify(view, never()).showError(any())
+        subscribeOnScheduler.triggerActions()
+        verify(view).showError(any())
+    }
+
+    @Test
+    fun shouldObserveOnGivenScheduler() {
+        val observeOnScheduler = TestScheduler()
+        val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(trampoline(), observeOnScheduler))
+        stubServiceToReturnError()
+        controller.onCreate()
+        verify(view, never()).showError(any())
+        observeOnScheduler.triggerActions()
+        verify(view).showError(any())
     }
 
     private fun stubViewActions() {

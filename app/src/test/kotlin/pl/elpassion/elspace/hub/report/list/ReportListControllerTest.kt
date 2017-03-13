@@ -3,12 +3,10 @@ package pl.elpassion.elspace.hub.report.list
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Ignore
-import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.getTimeFrom
-import pl.elpassion.elspace.commons.RxSchedulersRule
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
@@ -28,9 +26,6 @@ class ReportListControllerTest {
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
     private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))
-
-    @JvmField @Rule
-    val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {

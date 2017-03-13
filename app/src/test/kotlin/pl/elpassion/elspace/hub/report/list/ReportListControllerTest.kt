@@ -20,11 +20,11 @@ import java.util.*
 
 class ReportListControllerTest {
 
-    val service = mock<ReportDayService>()
-    val actions = mock<ReportList.Actions>()
-    val filter = mock<DayFilter>()
-    val view = mock<ReportList.View>()
-    val controller = ReportListController(service, filter, actions, view)
+    private val service = mock<ReportDayService>()
+    private val actions = mock<ReportList.Actions>()
+    private val filter = mock<DayFilter>()
+    private val view = mock<ReportList.View>()
+    private val controller = ReportListController(service, filter, actions, view)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()

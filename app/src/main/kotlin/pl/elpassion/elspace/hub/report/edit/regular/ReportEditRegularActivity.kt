@@ -21,13 +21,13 @@ import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
 import pl.elpassion.elspace.hub.report.edit.service.ReportEditServiceImpl
 
-
 class ReportEditRegularActivity : AppCompatActivity(), ReportEdit.Regular.View {
     private val report by lazy { intent.getSerializableExtra(REPORT_KEY) as RegularHourlyReport }
 
     private val controller by lazy {
         ReportEditRegularController(this, ReportEditServiceImpl(ReportEdit.EditApiProvider.get()), ReportEdit.RemoveApiProvider.get())
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)

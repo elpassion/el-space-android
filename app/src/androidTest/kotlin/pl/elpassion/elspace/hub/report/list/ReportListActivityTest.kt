@@ -111,6 +111,14 @@ class ReportListActivityTest {
     }
 
     @Test
+    fun shouldOpenEditReportScreenOnPaidVacationReportClick() {
+        scrollToItemWithText("11 Tue")
+        onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
+
+        checkIntent(ReportEditActivity::class.java)
+    }
+
+    @Test
     fun shouldHaveOneDayWithMissingStatus() {
         onId(R.id.reportsContainer).hasChildWithText(R.string.report_missing)
     }

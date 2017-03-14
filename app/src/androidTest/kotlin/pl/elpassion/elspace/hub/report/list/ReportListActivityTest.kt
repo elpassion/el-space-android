@@ -30,6 +30,7 @@ import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
+import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import rx.Observable
 
 class ReportListActivityTest {
@@ -99,6 +100,14 @@ class ReportListActivityTest {
         onText("3 Mon").click()
 
         checkIntent(ReportAddActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenEditReportScreenOnDailyReportClick() {
+        scrollToItemWithText("8 Sat")
+        onText("7 Fri").click()
+
+        checkIntent(ReportEditActivity::class.java)
     }
 
     @Test

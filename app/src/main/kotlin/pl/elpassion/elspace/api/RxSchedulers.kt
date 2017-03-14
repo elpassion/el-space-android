@@ -5,7 +5,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 @Deprecated(
-        message = "Schedulers schould be passed as a clear dependency",
+        message = "Schedulers should be passed as a clear dependency",
         replaceWith = ReplaceWith("subscribeOn(schedulers.subscribeOn).observeOn(schedulers.observeOn)"))
 fun Completable.applySchedulers(): Completable =
         this.subscribeOn(Schedulers.io())

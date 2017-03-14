@@ -30,9 +30,9 @@ interface ReportList {
 
         fun openAddReportScreen(date: String)
 
-        fun showMonthName(monthName: String)
-
         fun openEditReportScreen(report: Report)
+
+        fun showMonthName(monthName: String)
 
         fun scrollToPosition(position: Int)
 

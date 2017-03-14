@@ -102,10 +102,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
             .map { it.isChecked }
             .startWith(false)
 
-    override fun openEditReportScreen(report: Report) {
-        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
     override fun scrollToPosition(position: Int) {
         appBarLayout.setExpanded(false, true)
         reportsContainer.smoothScrollToPosition(position)
@@ -117,6 +113,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun openAddReportScreen(date: String) {
         ReportAddActivity.startForResult(this, date, REPORT_SCREEN_CHANGES_REQUEST_CODE)
+    }
+
+    override fun openEditReportScreen(report: Report) {
+        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 
     override fun hideLoader() {

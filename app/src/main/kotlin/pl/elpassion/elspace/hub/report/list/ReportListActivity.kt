@@ -29,9 +29,6 @@ import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
-import pl.elpassion.elspace.hub.report.edit.daily.ReportEditDailyActivity
-import pl.elpassion.elspace.hub.report.edit.paidvacation.ReportEditPaidVacationActivity
-import pl.elpassion.elspace.hub.report.edit.regular.ReportEditRegularActivity
 import pl.elpassion.elspace.hub.report.list.adapter.items.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
@@ -107,17 +104,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
             .map { it.isChecked }
             .startWith(false)
 
-    override fun openEditReportScreen(report: RegularHourlyReport) {
-        ReportEditRegularActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
+    override fun openEditReportScreen(report: RegularHourlyReport) = TODO()
 
-    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        ReportEditPaidVacationActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
+    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) = TODO()
 
-    override fun openDailyEditReportScreen(report: DailyReport) {
-        ReportEditDailyActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
+    override fun openDailyEditReportScreen(report: DailyReport) = TODO()
 
     override fun scrollToPosition(position: Int) {
         appBarLayout.setExpanded(false, true)

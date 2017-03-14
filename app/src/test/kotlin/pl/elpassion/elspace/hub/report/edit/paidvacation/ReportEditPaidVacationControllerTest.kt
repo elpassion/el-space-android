@@ -12,16 +12,16 @@ import rx.Completable
 class ReportEditPaidVacationControllerTest {
 
     private val view = mock<ReportEdit.PaidVacation.View>()
-    private val editReportApi = mock<ReportEdit.PaidVacation.Service>()
+    private val editReportService = mock<ReportEdit.PaidVacation.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = ReportEditPaidVacationController(view, editReportApi, removeReportApi)
+    private val controller = ReportEditPaidVacationController(view, editReportService, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {
-        stubEditReportApiToReturnSuccess()
+        stubEditReportServiceToReturnSuccess()
         stubRemoveReportApiToReturnSuccess()
     }
 
@@ -36,23 +36,23 @@ class ReportEditPaidVacationControllerTest {
 
 
     @Test
-    fun shouldCallApiWithCorrectDataOnSaveReport() {
+    fun shouldCallServiceWithCorrectDataOnSaveReport() {
         val report = newPaidVacationHourlyReport(year = 2017, month = 7, day = 2, id = 2, reportedHours = 4.0)
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "8.0")
 
-        verify(editReportApi).edit(report.copy(year = 2017, month = 7, day = 2, id = 2, reportedHours = 8.0))
+        verify(editReportService).edit(report.copy(year = 2017, month = 7, day = 2, id = 2, reportedHours = 8.0))
     }
 
     @Test
-    fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
+    fun shouldReallyCallServiceWithCorrectDataOnSaveReport() {
         val report = newPaidVacationHourlyReport(year = 2016, month = 1, day = 3, id = 5)
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "7.5")
 
-        verify(editReportApi).edit(report.copy(year = 2016, month = 1, day = 3, id = 5, reportedHours = 7.5))
+        verify(editReportService).edit(report.copy(year = 2016, month = 1, day = 3, id = 5, reportedHours = 7.5))
     }
 
     @Test
@@ -75,7 +75,7 @@ class ReportEditPaidVacationControllerTest {
 
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
-        stubEditReportApiToReturnNever()
+        stubEditReportServiceToReturnNever()
         controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onSaveReport("1.0")
@@ -85,7 +85,7 @@ class ReportEditPaidVacationControllerTest {
 
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
-        stubEditReportApiToReturnNever()
+        stubEditReportServiceToReturnNever()
         controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onSaveReport("1.0")
@@ -96,7 +96,7 @@ class ReportEditPaidVacationControllerTest {
 
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
-        stubEditReportApiToReturnError()
+        stubEditReportServiceToReturnError()
         controller.onCreate(newPaidVacationHourlyReport())
 
         controller.onSaveReport("1.0")
@@ -185,23 +185,23 @@ class ReportEditPaidVacationControllerTest {
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1")
 
-        verify(editReportApi).edit(report.copy(year = 2016, month = 5, day = 4, reportedHours = 0.1))
+        verify(editReportService).edit(report.copy(year = 2016, month = 5, day = 4, reportedHours = 0.1))
     }
 
-    private fun stubEditReportApiToReturnNever() {
-        stubEditReportApiToReturn(Completable.never())
+    private fun stubEditReportServiceToReturnNever() {
+        stubEditReportServiceToReturn(Completable.never())
     }
 
-    private fun stubEditReportApiToReturnError() {
-        stubEditReportApiToReturn(Completable.error(RuntimeException()))
+    private fun stubEditReportServiceToReturnError() {
+        stubEditReportServiceToReturn(Completable.error(RuntimeException()))
     }
 
-    private fun stubEditReportApiToReturnSuccess() {
-        stubEditReportApiToReturn(Completable.complete())
+    private fun stubEditReportServiceToReturnSuccess() {
+        stubEditReportServiceToReturn(Completable.complete())
     }
 
-    private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.edit(any())).thenReturn(completable)
+    private fun stubEditReportServiceToReturn(completable: Completable) {
+        whenever(editReportService.edit(any())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {

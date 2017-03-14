@@ -10,7 +10,7 @@ import pl.elpassion.elspace.hub.report.edit.ReportEdit
 import kotlin.properties.Delegates
 
 class ReportEditDailyController(private val view: ReportEdit.Daily.View,
-                                private val editReportApi: ReportEdit.Daily.Service) {
+                                private val editReportService: ReportEdit.Daily.Service) {
 
     private var report: DailyReport by Delegates.notNull()
 
@@ -26,7 +26,7 @@ class ReportEditDailyController(private val view: ReportEdit.Daily.View,
     }
 
     fun onSaveReport() {
-        editReportApi.edit(report)
+        editReportService.edit(report)
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

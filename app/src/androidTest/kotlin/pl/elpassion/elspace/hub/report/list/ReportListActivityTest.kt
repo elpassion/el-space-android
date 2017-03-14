@@ -119,6 +119,13 @@ class ReportListActivityTest {
     }
 
     @Test
+    fun shouldOpenEditReportScreenOnRegularReportClick() {
+        onText("8.0h - Project").click()
+
+        checkIntent(ReportEditActivity::class.java)
+    }
+
+    @Test
     fun shouldHaveOneDayWithMissingStatus() {
         onId(R.id.reportsContainer).hasChildWithText(R.string.report_missing)
     }

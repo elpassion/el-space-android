@@ -27,15 +27,11 @@ inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline befor
 }
 
 fun stubReportEditApi() {
-    ReportEdit.EditApiProvider.override = {
-        object : ReportEdit.EditApi {
-            override fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: Long?) = Completable.complete()
-        }
-    }
-    ReportEdit.RemoveApiProvider.override = {
-        object : ReportEdit.RemoveApi {
+    ReportEdit.ApiProvider.override = {
+        object : ReportEdit.Api {
             override fun removeReport(reportId: Long) = Completable.complete()
 
+            override fun editReport(id: Long, date: String, reportedHour: String, description: String, projectId: Long?) = Completable.complete()
         }
     }
 }

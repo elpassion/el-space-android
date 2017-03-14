@@ -1,14 +1,17 @@
 package pl.elpassion.elspace.hub.report.edit.paidvacation
 
 import pl.elpassion.elspace.api.applySchedulers
-import pl.elpassion.elspace.common.extensions.*
+import pl.elpassion.elspace.common.extensions.dayOfMonth
+import pl.elpassion.elspace.common.extensions.month
+import pl.elpassion.elspace.common.extensions.toCalendarDate
+import pl.elpassion.elspace.common.extensions.year
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
 import rx.Subscription
 import kotlin.properties.Delegates
 
 class ReportEditPaidVacationController(private val view: ReportEdit.PaidVacation.View,
-                                       private val api: ReportEdit.PaidVacation.Service,
+                                       private val service: ReportEdit.PaidVacation.Service,
                                        private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var report: PaidVacationHourlyReport by Delegates.notNull()
@@ -22,7 +25,7 @@ class ReportEditPaidVacationController(private val view: ReportEdit.PaidVacation
     }
 
     fun onSaveReport(hours: String) {
-        subscription = api.edit(report.copy(reportedHours = hours.toDouble()))
+        subscription = service.edit(report.copy(reportedHours = hours.toDouble()))
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

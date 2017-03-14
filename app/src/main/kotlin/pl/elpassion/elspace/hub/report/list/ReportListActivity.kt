@@ -107,7 +107,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun openEditReportScreen(report: RegularHourlyReport) = TODO()
 
-    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) = TODO()
+    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
+        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
+    }
 
     override fun openDailyEditReportScreen(report: DailyReport) {
         ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)

@@ -12,16 +12,16 @@ import rx.Completable
 
 class ReportEditDailyControllerTest {
 
-    private val editReportApi = mock<ReportEdit.Daily.Service>()
+    private val editReportService = mock<ReportEdit.Daily.Service>()
     private val view = mock<ReportEdit.Daily.View>()
-    private val controller = ReportEditDailyController(view, editReportApi)
+    private val controller = ReportEditDailyController(view, editReportService)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {
-        stubEditReportApiToReturnSuccess()
+        stubEditReportServiceToReturnSuccess()
     }
 
     @Test
@@ -33,14 +33,14 @@ class ReportEditDailyControllerTest {
     }
 
     @Test
-    fun shouldCallApiWithCorrectDataOnSaveReport() {
+    fun shouldCallServiceWithCorrectDataOnSaveReport() {
         val report = newDailyReport(year = 2017, month = 7, day = 2, id = 2, reportType = DailyReportType.SICK_LEAVE)
         controller.onCreate(report)
 
         controller.onDateSelect("2017-01-03")
         controller.onSaveReport()
 
-        verify(editReportApi).edit(report.copy(year = 2017, month = 1, day = 3, id = 2, reportType = DailyReportType.SICK_LEAVE))
+        verify(editReportService).edit(report.copy(year = 2017, month = 1, day = 3, id = 2, reportType = DailyReportType.SICK_LEAVE))
     }
 
     @Test
@@ -73,7 +73,7 @@ class ReportEditDailyControllerTest {
 
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
-        stubEditReportApiToReturnNever()
+        stubEditReportServiceToReturnNever()
         controller.onCreate(newDailyReport())
 
         controller.onSaveReport()
@@ -83,7 +83,7 @@ class ReportEditDailyControllerTest {
 
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
-        stubEditReportApiToReturnNever()
+        stubEditReportServiceToReturnNever()
         controller.onCreate(newDailyReport())
 
         controller.onSaveReport()
@@ -103,7 +103,7 @@ class ReportEditDailyControllerTest {
 
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
-        stubEditReportApiToReturnError()
+        stubEditReportServiceToReturnError()
         controller.onCreate(newDailyReport())
 
         controller.onSaveReport()
@@ -111,19 +111,19 @@ class ReportEditDailyControllerTest {
         verify(view).showError(any())
     }
 
-    private fun stubEditReportApiToReturnNever() {
-        stubEditReportApiToReturn(Completable.never())
+    private fun stubEditReportServiceToReturnNever() {
+        stubEditReportServiceToReturn(Completable.never())
     }
 
-    private fun stubEditReportApiToReturnError() {
-        stubEditReportApiToReturn(Completable.error(RuntimeException()))
+    private fun stubEditReportServiceToReturnError() {
+        stubEditReportServiceToReturn(Completable.error(RuntimeException()))
     }
 
-    private fun stubEditReportApiToReturnSuccess() {
-        stubEditReportApiToReturn(Completable.complete())
+    private fun stubEditReportServiceToReturnSuccess() {
+        stubEditReportServiceToReturn(Completable.complete())
     }
 
-    private fun stubEditReportApiToReturn(completable: Completable) {
-        whenever(editReportApi.edit(any())).thenReturn(completable)
+    private fun stubEditReportServiceToReturn(completable: Completable) {
+        whenever(editReportService.edit(any())).thenReturn(completable)
     }
 }

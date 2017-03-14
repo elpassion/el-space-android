@@ -8,6 +8,7 @@ import rx.android.plugins.RxAndroidSchedulersHook
 import rx.plugins.RxJavaHooks
 import rx.schedulers.Schedulers
 
+@Deprecated(message = "Schedulers should be passed as a clear dependency")
 class RxSchedulersRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement = object : Statement() {
         override fun evaluate() {

@@ -4,9 +4,6 @@ import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project
-import pl.elpassion.elspace.hub.report.DailyReport
-import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
-import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ProjectListService
 import pl.elpassion.elspace.hub.report.list.service.ProjectListServiceImpl
@@ -35,11 +32,7 @@ interface ReportList {
 
         fun showMonthName(monthName: String)
 
-        fun openEditReportScreen(report: RegularHourlyReport)
-
-        fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport)
-
-        fun openDailyEditReportScreen(report: DailyReport)
+        fun openEditReportScreen(report: Report)
 
         fun scrollToPosition(position: Int)
 

@@ -2,9 +2,6 @@ package pl.elpassion.elspace.hub.report.list
 
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
-import pl.elpassion.elspace.hub.report.DailyReport
-import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
-import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
@@ -108,11 +105,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     override fun onReport(report: Report) {
-        when (report) {
-            is RegularHourlyReport -> view.openEditReportScreen(report)
-            is PaidVacationHourlyReport -> view.openPaidVacationEditReportScreen(report)
-            is DailyReport -> view.openDailyEditReportScreen(report)
-        }
+        view.openEditReportScreen(report)
     }
 
     private fun isCurrentYearAndMonth() = dateChangeObserver.lastDate.let {

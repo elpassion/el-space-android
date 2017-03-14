@@ -24,10 +24,7 @@ import pl.elpassion.elspace.common.extensions.onMenuItemAction
 import pl.elpassion.elspace.common.extensions.onMenuItemClicks
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.hub.report.DailyReport
-import pl.elpassion.elspace.hub.report.HourlyReport
-import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
-import pl.elpassion.elspace.hub.report.RegularHourlyReport
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.items.*
@@ -105,15 +102,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
             .map { it.isChecked }
             .startWith(false)
 
-    override fun openEditReportScreen(report: RegularHourlyReport) {
-        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
-    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
-    override fun openDailyEditReportScreen(report: DailyReport) {
+    override fun openEditReportScreen(report: Report) {
         ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
     }
 

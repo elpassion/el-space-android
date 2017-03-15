@@ -40,4 +40,11 @@ class ReportEditControllerTest {
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).showPaidVacationsForm()
     }
+
+    @Test
+    fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
+        ReportEditController(newDailyReport(), view).onCreate()
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
+        verify(view).showSickLeaveForm()
+    }
 }

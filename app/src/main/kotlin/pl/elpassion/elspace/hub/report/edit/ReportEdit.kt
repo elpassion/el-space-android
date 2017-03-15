@@ -15,6 +15,7 @@ interface ReportEdit {
     interface View {
         fun showDate(date: String)
         fun showReportedHours(reportedHours: Double)
+        fun showProjectName(name: String)
         fun reportTypeChanges(): Observable<ReportType>
         fun showRegularForm()
         fun showPaidVacationsForm()

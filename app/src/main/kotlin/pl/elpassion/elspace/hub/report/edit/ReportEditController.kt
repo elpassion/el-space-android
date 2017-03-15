@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report.edit
 
 import pl.elpassion.elspace.common.extensions.addTo
-import pl.elpassion.elspace.hub.report.Report
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.add.ReportType
 import rx.subscriptions.CompositeSubscription
 
@@ -13,6 +13,7 @@ class ReportEditController(private val report: Report,
     fun onCreate() {
         view.showDate(report.date)
         view.reportTypeChanges()
+                .startWith(report.type)
                 .doOnNext { onReportTypeChanged(it) }
                 .subscribe()
                 .addTo(subscriptions)
@@ -41,3 +42,13 @@ class ReportEditController(private val report: Report,
         view.showUnpaidVacationsForm()
     }
 }
+
+private val Report.type: ReportType
+    get() = when (this) {
+        is RegularHourlyReport -> ReportType.REGULAR
+        is PaidVacationHourlyReport -> ReportType.PAID_VACATIONS
+        is DailyReport -> when (reportType) {
+            DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
+            DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
+        }
+    }

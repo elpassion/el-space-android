@@ -28,6 +28,12 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowEditedReportTypeOnCreate() {
+        ReportEditController(newRegularHourlyReport(), view).onCreate()
+        verify(view).showRegularForm()
+    }
+
+    @Test
     fun shouldShowRegularFormAfterReportTypeChangedToRegularReport() {
         ReportEditController(newDailyReport(), view).onCreate()
         reportTypeChanges.onNext(ReportType.REGULAR)
@@ -43,14 +49,14 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
-        ReportEditController(newDailyReport(), view).onCreate()
+        ReportEditController(newRegularHourlyReport(), view).onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
     }
 
     @Test
     fun shouldUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
-        ReportEditController(newDailyReport(), view).onCreate()
+        ReportEditController(newRegularHourlyReport(), view).onCreate()
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()
     }

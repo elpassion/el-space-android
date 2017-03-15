@@ -10,6 +10,10 @@ import rx.Completable
 
 interface ReportEdit {
 
+    interface View {
+        fun showDate(date: String)
+    }
+
     interface Api {
 
         @PATCH("activities/{id}")

@@ -33,4 +33,11 @@ class ReportEditControllerTest {
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showRegularForm()
     }
+
+    @Test
+    fun shouldShowPaidVacationsFormAfterReportTypeChangedToPaidVacations() {
+        ReportEditController(newDailyReport(), view).onCreate()
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
+        verify(view).showPaidVacationsForm()
+    }
 }

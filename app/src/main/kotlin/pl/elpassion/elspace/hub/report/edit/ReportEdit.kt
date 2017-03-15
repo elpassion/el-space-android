@@ -16,6 +16,7 @@ interface ReportEdit {
         fun showDate(date: String)
         fun reportTypeChanges(): Observable<ReportType>
         fun showRegularForm()
+        fun showPaidVacationsForm()
     }
 
     interface Api {

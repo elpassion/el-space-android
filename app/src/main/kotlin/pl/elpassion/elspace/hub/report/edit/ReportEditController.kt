@@ -12,6 +12,9 @@ class ReportEditController(private val report: Report,
 
     fun onCreate() {
         view.showDate(report.date)
+        if (report is HourlyReport) {
+            view.showReportedHours(report.reportedHours)
+        }
         view.reportTypeChanges()
                 .startWith(report.type)
                 .doOnNext { onReportTypeChanged(it) }

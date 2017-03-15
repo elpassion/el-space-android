@@ -28,6 +28,12 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowReportedHoursOnCreateWhenEditingHourlyReport() {
+        createController(newRegularHourlyReport(reportedHours = 8.0)).onCreate()
+        verify(view).showReportedHours(8.0)
+    }
+
+    @Test
     fun shouldShowEditedReportTypeOnCreate() {
         createController(newRegularHourlyReport()).onCreate()
         verify(view).showRegularForm()

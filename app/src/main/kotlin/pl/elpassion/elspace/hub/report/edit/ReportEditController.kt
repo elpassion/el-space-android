@@ -21,7 +21,9 @@ class ReportEditController(private val report: Report,
     private fun onReportTypeChanged(reportType: ReportType) =
             if (reportType == ReportType.REGULAR) {
                 view.showRegularForm()
-            } else {
+            } else if (reportType == ReportType.PAID_VACATIONS) {
                 view.showPaidVacationsForm()
+            } else {
+                view.showSickLeaveForm()
             }
 }

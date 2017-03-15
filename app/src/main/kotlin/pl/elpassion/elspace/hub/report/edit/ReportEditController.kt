@@ -13,16 +13,20 @@ class ReportEditController(private val report: Report,
     fun onCreate() {
         view.showDate(report.date)
         if (report is HourlyReport) {
-            view.showReportedHours(report.reportedHours)
-            if (report is RegularHourlyReport) {
-                view.showProjectName(report.project.name)
-            }
+            showHourlyReport(report)
         }
         view.reportTypeChanges()
                 .startWith(report.type)
                 .doOnNext { onReportTypeChanged(it) }
                 .subscribe()
                 .addTo(subscriptions)
+    }
+
+    private fun showHourlyReport(report: HourlyReport) {
+        view.showReportedHours(report.reportedHours)
+        if (report is RegularHourlyReport) {
+            view.showProjectName(report.project.name)
+        }
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {

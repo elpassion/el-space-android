@@ -18,6 +18,7 @@ interface ReportEdit {
         fun showRegularForm()
         fun showPaidVacationsForm()
         fun showSickLeaveForm()
+        fun showUnpaidVacationsForm()
     }
 
     interface Api {

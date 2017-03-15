@@ -18,12 +18,26 @@ class ReportEditController(private val report: Report,
                 .addTo(subscriptions)
     }
 
-    private fun onReportTypeChanged(reportType: ReportType) =
-            if (reportType == ReportType.REGULAR) {
-                view.showRegularForm()
-            } else if (reportType == ReportType.PAID_VACATIONS) {
-                view.showPaidVacationsForm()
-            } else {
-                view.showSickLeaveForm()
-            }
+    private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
+        ReportType.REGULAR -> showRegularForm()
+        ReportType.PAID_VACATIONS -> showPaidVacationsForm()
+        ReportType.SICK_LEAVE -> showSickLeaveForm()
+        ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
+    }
+
+    private fun showRegularForm() {
+        view.showRegularForm()
+    }
+
+    private fun showPaidVacationsForm() {
+        view.showPaidVacationsForm()
+    }
+
+    private fun showSickLeaveForm() {
+        view.showSickLeaveForm()
+    }
+
+    private fun showUnpaidVacationsForm() {
+        view.showUnpaidVacationsForm()
+    }
 }

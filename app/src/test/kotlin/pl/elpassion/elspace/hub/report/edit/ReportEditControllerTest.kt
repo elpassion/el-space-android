@@ -7,6 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
+import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
 import rx.subjects.PublishSubject
 
@@ -22,42 +23,43 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowReportDateOnCreate() {
-        val report = newRegularHourlyReport(year = 2017, month = 1, day = 1)
-        ReportEditController(report, view).onCreate()
+        createController(newRegularHourlyReport(year = 2017, month = 1, day = 1)).onCreate()
         verify(view).showDate("2017-01-01")
     }
 
     @Test
     fun shouldShowEditedReportTypeOnCreate() {
-        ReportEditController(newRegularHourlyReport(), view).onCreate()
+        createController(newRegularHourlyReport()).onCreate()
         verify(view).showRegularForm()
     }
 
     @Test
     fun shouldShowRegularFormAfterReportTypeChangedToRegularReport() {
-        ReportEditController(newDailyReport(), view).onCreate()
+        createController(newDailyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.REGULAR)
         verify(view).showRegularForm()
     }
 
     @Test
     fun shouldShowPaidVacationsFormAfterReportTypeChangedToPaidVacations() {
-        ReportEditController(newDailyReport(), view).onCreate()
+        createController(newDailyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
         verify(view).showPaidVacationsForm()
     }
 
     @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
-        ReportEditController(newRegularHourlyReport(), view).onCreate()
+        createController(newRegularHourlyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
     }
 
     @Test
     fun shouldUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
-        ReportEditController(newRegularHourlyReport(), view).onCreate()
+        createController(newRegularHourlyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()
     }
+
+    private fun createController(report: Report) = ReportEditController(report, view)
 }

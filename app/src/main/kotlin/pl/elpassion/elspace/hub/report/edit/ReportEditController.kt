@@ -14,6 +14,9 @@ class ReportEditController(private val report: Report,
         view.showDate(report.date)
         if (report is HourlyReport) {
             view.showReportedHours(report.reportedHours)
+            if (report is RegularHourlyReport) {
+                view.showProjectName(report.project.name)
+            }
         }
         view.reportTypeChanges()
                 .startWith(report.type)

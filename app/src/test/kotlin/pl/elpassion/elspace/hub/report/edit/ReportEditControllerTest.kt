@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
+import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
@@ -31,6 +32,12 @@ class ReportEditControllerTest {
     fun shouldShowReportedHoursOnCreateWhenEditingHourlyReport() {
         createController(newRegularHourlyReport(reportedHours = 8.0)).onCreate()
         verify(view).showReportedHours(8.0)
+    }
+
+    @Test
+    fun shouldShowProjectNameOnCreateWhenEditingRegularReport() {
+        createController(newRegularHourlyReport(project = newProject(name = "Slack Time"))).onCreate()
+        verify(view).showProjectName("Slack Time")
     }
 
     @Test

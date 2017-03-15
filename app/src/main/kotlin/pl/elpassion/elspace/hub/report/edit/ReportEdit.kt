@@ -2,16 +2,20 @@ package pl.elpassion.elspace.hub.report.edit
 
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.hub.report.add.ReportType
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
 import rx.Completable
+import rx.Observable
 
 interface ReportEdit {
 
     interface View {
         fun showDate(date: String)
+        fun reportTypeChanges(): Observable<ReportType>
+        fun showRegularForm()
     }
 
     interface Api {

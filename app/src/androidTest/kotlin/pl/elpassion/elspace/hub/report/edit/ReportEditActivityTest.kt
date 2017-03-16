@@ -54,6 +54,12 @@ class ReportEditActivityTest {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
         onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_sick_leave_info)
     }
+    
+    @Test
+    fun shouldShowAdditionalInfoForUnpaidVacations() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
+        onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_unpaid_vacations_info)
+    }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))

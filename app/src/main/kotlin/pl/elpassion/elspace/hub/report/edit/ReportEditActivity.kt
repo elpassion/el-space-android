@@ -47,7 +47,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditAdditionalInfo.setText(R.string.report_add_sick_leave_info)
     }
 
-    override fun showUnpaidVacationsForm() = Unit
+    override fun showUnpaidVacationsForm() {
+        reportEditAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
+    }
 
     private fun Double.toStringWithoutZeroes() = if (this == Math.floor(this)) "%.0f".format(this) else toString()
 

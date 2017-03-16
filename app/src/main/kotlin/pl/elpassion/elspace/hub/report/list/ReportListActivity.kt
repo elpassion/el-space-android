@@ -116,7 +116,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     override fun openEditReportScreen(report: Report) {
-        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE)
+        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE, report)
     }
 
     override fun hideLoader() {

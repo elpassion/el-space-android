@@ -14,8 +14,7 @@ class ReportEditController(private val report: Report,
         showReport()
         view.reportTypeChanges()
                 .startWith(report.type)
-                .doOnNext { onReportTypeChanged(it) }
-                .subscribe()
+                .subscribe { onReportTypeChanged(it) }
                 .addTo(subscriptions)
     }
 

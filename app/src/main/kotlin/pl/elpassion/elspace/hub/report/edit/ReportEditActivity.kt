@@ -45,14 +45,12 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showHourlyForm()
         reportEditProjectNameLayout.show()
         reportEditDescriptionLayout.show()
-        reportEditAdditionalInfo.hide()
     }
 
     override fun showPaidVacationsForm() {
         showHourlyForm()
         reportEditProjectNameLayout.hide()
         reportEditDescriptionLayout.hide()
-        reportEditAdditionalInfo.hide()
     }
 
     override fun showSickLeaveForm() {
@@ -65,8 +63,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     private fun showHourlyForm() {
-        reportEditProjectNameLayout.show()
+        reportEditDateLayout.show()
         reportEditHoursLayout.show()
+        reportEditAdditionalInfo.hide()
     }
 
     private fun showDailyForm() {

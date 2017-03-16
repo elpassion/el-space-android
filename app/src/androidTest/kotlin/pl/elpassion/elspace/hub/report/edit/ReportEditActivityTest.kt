@@ -83,6 +83,16 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
+    
+    @Test
+    fun shouldShowOnlyDailyFormOnSickLeave() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))

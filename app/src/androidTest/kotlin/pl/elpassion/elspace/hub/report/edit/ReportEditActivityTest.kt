@@ -11,6 +11,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
+import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
@@ -69,6 +70,15 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditProjectNameLayout).isDisplayed()
         onId(R.id.reportEditDescriptionLayout).isDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
+        stubReportAndStart(newPaidVacationHourlyReport())
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
 

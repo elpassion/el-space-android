@@ -48,7 +48,12 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditAdditionalInfo.hide()
     }
 
-    override fun showPaidVacationsForm() = Unit
+    override fun showPaidVacationsForm() {
+        reportEditProjectNameLayout.show()
+        reportEditProjectNameLayout.show()
+        reportEditDescriptionLayout.hide()
+        reportEditAdditionalInfo.hide()
+    }
 
     override fun showSickLeaveForm() {
         reportEditAdditionalInfo.setText(R.string.report_add_sick_leave_info)

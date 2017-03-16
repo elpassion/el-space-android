@@ -8,6 +8,7 @@ import com.elpassion.android.commons.espresso.onId
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
@@ -21,6 +22,12 @@ class ReportEditActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportEditActivity>(autoStart = false)
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        stubReportAndStart()
+        onToolbarBackArrow().isDisplayed()
+    }
 
     @Test
     fun shouldShowReportDate() {

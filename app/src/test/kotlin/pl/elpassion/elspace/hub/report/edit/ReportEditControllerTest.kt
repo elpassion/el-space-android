@@ -68,7 +68,7 @@ class ReportEditControllerTest {
     }
 
     @Test
-    fun shouldUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
+    fun shouldShowUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
         createController(newRegularHourlyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()

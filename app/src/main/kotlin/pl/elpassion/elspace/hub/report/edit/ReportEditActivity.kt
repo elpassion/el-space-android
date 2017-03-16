@@ -9,6 +9,7 @@ import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
 import rx.Observable
@@ -21,6 +22,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
         setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         controller.onCreate()
     }
 

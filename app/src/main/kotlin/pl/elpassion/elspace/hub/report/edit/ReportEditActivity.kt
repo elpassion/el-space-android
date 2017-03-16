@@ -20,6 +20,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
+        setSupportActionBar(toolbar)
         controller.onCreate()
     }
 

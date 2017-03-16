@@ -41,6 +41,12 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowDescriptionOnCreateWhenEditingRegularReport() {
+        createController(newRegularHourlyReport(description = "EL Space")).onCreate()
+        verify(view).showDescription("EL Space")
+    }
+
+    @Test
     fun shouldShowEditedReportTypeOnCreate() {
         createController(newRegularHourlyReport()).onCreate()
         verify(view).showRegularForm()

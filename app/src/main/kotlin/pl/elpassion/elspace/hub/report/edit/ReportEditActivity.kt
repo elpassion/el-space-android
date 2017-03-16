@@ -50,7 +50,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showPaidVacationsForm() {
         reportEditProjectNameLayout.show()
-        reportEditProjectNameLayout.show()
+        reportEditProjectNameLayout.hide()
         reportEditDescriptionLayout.hide()
         reportEditAdditionalInfo.hide()
     }

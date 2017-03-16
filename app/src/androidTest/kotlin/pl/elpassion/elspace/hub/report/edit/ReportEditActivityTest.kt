@@ -11,6 +11,7 @@ import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
+import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
 
 class ReportEditActivityTest {
@@ -46,6 +47,12 @@ class ReportEditActivityTest {
     fun shouldShowDescriptionForRegularReport() {
         stubReportAndStart(newRegularHourlyReport(description = "EL Space"))
         onId(R.id.reportEditDescription).hasText("EL Space")
+    }
+    
+    @Test
+    fun shouldShowAdditionalInfoForSickLeave() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
+        onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_sick_leave_info)
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {

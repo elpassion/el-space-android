@@ -5,8 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.daily_report_edit_activity.*
-import kotlinx.android.synthetic.main.report_add_activity.*
+import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
@@ -19,15 +18,16 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
-        setSupportActionBar(toolbar)
         controller.onCreate()
     }
 
     override fun showDate(date: String) {
-        reportEditDate.text = date
+        reportEditDate.setText(date)
     }
 
-    override fun showReportedHours(reportedHours: Double) = Unit
+    override fun showReportedHours(reportedHours: Double) {
+        reportEditHours.setText(reportedHours.toString())
+    }
 
     override fun showProjectName(name: String) = Unit
 

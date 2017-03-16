@@ -23,6 +23,12 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDate).hasText("2016-10-01")
     }
 
+    @Test
+    fun shouldShowReportedHoursForHourlyReport() {
+        stubReportAndStart(newRegularHourlyReport(reportedHours = 6.0))
+        onId(R.id.reportEditHours).hasText("6.0")
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

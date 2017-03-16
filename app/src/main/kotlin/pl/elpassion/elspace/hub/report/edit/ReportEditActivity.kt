@@ -29,7 +29,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditHours.setText(reportedHours.toStringWithoutZeroes())
     }
 
-    override fun showProjectName(name: String) = Unit
+    override fun showProjectName(name: String) {
+        reportEditProjectName.setText(name)
+    }
 
     override fun showDescription(description: String) = Unit
 

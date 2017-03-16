@@ -25,8 +25,14 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldShowReportedHoursForHourlyReport() {
+        stubReportAndStart(newRegularHourlyReport(reportedHours = 6.5))
+        onId(R.id.reportEditHours).hasText("6.5")
+    }
+
+    @Test
+    fun shouldShowReportedHoursForHourlyReportWithoutTrailingZeroes() {
         stubReportAndStart(newRegularHourlyReport(reportedHours = 6.0))
-        onId(R.id.reportEditHours).hasText("6.0")
+        onId(R.id.reportEditHours).hasText("6")
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {

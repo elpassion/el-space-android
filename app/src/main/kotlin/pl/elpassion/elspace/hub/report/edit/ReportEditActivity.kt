@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.hub.report.Report
@@ -39,7 +41,12 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun reportTypeChanges(): Observable<ReportType> = Observable.never()
 
-    override fun showRegularForm() = Unit
+    override fun showRegularForm() {
+        reportEditProjectNameLayout.show()
+        reportEditProjectNameLayout.show()
+        reportEditDescriptionLayout.show()
+        reportEditAdditionalInfo.hide()
+    }
 
     override fun showPaidVacationsForm() = Unit
 

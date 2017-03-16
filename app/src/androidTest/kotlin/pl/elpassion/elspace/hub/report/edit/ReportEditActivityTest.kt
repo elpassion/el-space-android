@@ -2,6 +2,8 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.hasText
+import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.isNotDisplayed
 import com.elpassion.android.commons.espresso.onId
 import org.junit.Rule
 import org.junit.Test
@@ -59,6 +61,15 @@ class ReportEditActivityTest {
     fun shouldShowAdditionalInfoForUnpaidVacations() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
         onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_unpaid_vacations_info)
+    }
+
+    @Test
+    fun shouldShowOnlyRegularFormOnRegularReport() {
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {

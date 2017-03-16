@@ -68,6 +68,7 @@ class ReportEditActivityTest {
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
         onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isDisplayed()
         onId(R.id.reportEditProjectNameLayout).isDisplayed()
         onId(R.id.reportEditDescriptionLayout).isDisplayed()
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
@@ -77,6 +78,7 @@ class ReportEditActivityTest {
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubReportAndStart(newPaidVacationHourlyReport())
         onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()

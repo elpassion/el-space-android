@@ -26,7 +26,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showReportedHours(reportedHours: Double) {
-        reportEditHours.setText(reportedHours.toString())
+        reportEditHours.setText(reportedHours.toStringWithoutZeroes())
     }
 
     override fun showProjectName(name: String) = Unit
@@ -42,6 +42,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun showSickLeaveForm() = Unit
 
     override fun showUnpaidVacationsForm() = Unit
+
+    private fun Double.toStringWithoutZeroes() = if (this == Math.floor(this)) "%.0f".format(this) else toString()
 
     companion object {
 

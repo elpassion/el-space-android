@@ -94,6 +94,16 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
     }
 
+    @Test
+    fun shouldShowOnlyDailyFormOnUnpaidVacations() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

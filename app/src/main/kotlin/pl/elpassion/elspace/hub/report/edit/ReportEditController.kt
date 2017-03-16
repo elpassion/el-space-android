@@ -26,6 +26,7 @@ class ReportEditController(private val report: Report,
         view.showReportedHours(report.reportedHours)
         if (report is RegularHourlyReport) {
             view.showProjectName(report.project.name)
+            view.showDescription(report.description)
         }
     }
 

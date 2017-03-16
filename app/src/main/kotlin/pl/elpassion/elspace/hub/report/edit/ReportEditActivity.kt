@@ -42,14 +42,14 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun reportTypeChanges(): Observable<ReportType> = Observable.never()
 
     override fun showRegularForm() {
-        reportEditProjectNameLayout.show()
+        showHourlyForm()
         reportEditProjectNameLayout.show()
         reportEditDescriptionLayout.show()
         reportEditAdditionalInfo.hide()
     }
 
     override fun showPaidVacationsForm() {
-        reportEditProjectNameLayout.show()
+        showHourlyForm()
         reportEditProjectNameLayout.hide()
         reportEditDescriptionLayout.hide()
         reportEditAdditionalInfo.hide()
@@ -61,6 +61,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showUnpaidVacationsForm() {
         reportEditAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
+    }
+
+    private fun showHourlyForm() {
+        reportEditProjectNameLayout.show()
+        reportEditHoursLayout.show()
     }
 
     private fun Double.toStringWithoutZeroes() = if (this == Math.floor(this)) "%.0f".format(this) else toString()

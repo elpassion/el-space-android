@@ -9,6 +9,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
+import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 
@@ -33,6 +34,12 @@ class ReportEditActivityTest {
     fun shouldShowReportedHoursForHourlyReportWithoutTrailingZeroes() {
         stubReportAndStart(newRegularHourlyReport(reportedHours = 6.0))
         onId(R.id.reportEditHours).hasText("6")
+    }
+
+    @Test
+    fun shouldShowProjectNameForRegularReport() {
+        stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
+        onId(R.id.reportEditProjectName).hasText("Slack Time")
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {

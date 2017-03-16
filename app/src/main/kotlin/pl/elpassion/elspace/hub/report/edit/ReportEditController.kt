@@ -11,15 +11,19 @@ class ReportEditController(private val report: Report,
     private val subscriptions = CompositeSubscription()
 
     fun onCreate() {
-        view.showDate(report.date)
-        if (report is HourlyReport) {
-            showHourlyReport(report)
-        }
+        showReport()
         view.reportTypeChanges()
                 .startWith(report.type)
                 .doOnNext { onReportTypeChanged(it) }
                 .subscribe()
                 .addTo(subscriptions)
+    }
+
+    private fun showReport() {
+        view.showDate(report.date)
+        if (report is HourlyReport) {
+            showHourlyReport(report)
+        }
     }
 
     private fun showHourlyReport(report: HourlyReport) {

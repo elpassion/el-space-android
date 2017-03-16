@@ -60,6 +60,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showUnpaidVacationsForm() {
         reportEditAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
+        showDailyForm()
     }
 
     private fun showHourlyForm() {

@@ -33,7 +33,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditProjectName.setText(name)
     }
 
-    override fun showDescription(description: String) = Unit
+    override fun showDescription(description: String) {
+        reportEditDescription.setText(description)
+    }
 
     override fun reportTypeChanges(): Observable<ReportType> = Observable.never()
 

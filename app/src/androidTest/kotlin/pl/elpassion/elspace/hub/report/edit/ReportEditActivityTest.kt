@@ -42,6 +42,12 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectName).hasText("Slack Time")
     }
 
+    @Test
+    fun shouldShowDescriptionForRegularReport() {
+        stubReportAndStart(newRegularHourlyReport(description = "EL Space"))
+        onId(R.id.reportEditDescription).hasText("EL Space")
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

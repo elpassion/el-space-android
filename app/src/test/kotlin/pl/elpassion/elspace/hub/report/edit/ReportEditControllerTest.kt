@@ -29,6 +29,14 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowUpdatedReportDateOnReportChange() {
+        createController(newDailyReport()).run {
+            onDateChanged("2017-01-02")
+        }
+        verify(view).showDate("2017-01-02")
+    }
+
+    @Test
     fun shouldShowReportedHoursOnCreateWhenEditingHourlyReport() {
         createController(newRegularHourlyReport(reportedHours = 8.0)).onCreate()
         verify(view).showReportedHours(8.0)

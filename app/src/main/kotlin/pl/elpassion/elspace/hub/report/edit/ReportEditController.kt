@@ -18,6 +18,10 @@ class ReportEditController(private val report: Report,
                 .addTo(subscriptions)
     }
 
+    fun onDateChanged(date: String) {
+        view.showDate(date)
+    }
+
     private fun showReport() {
         view.showDate(report.date)
         if (report is HourlyReport) {

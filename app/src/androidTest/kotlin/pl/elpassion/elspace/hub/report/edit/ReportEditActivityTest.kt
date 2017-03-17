@@ -9,6 +9,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
@@ -38,6 +39,14 @@ class ReportEditActivityTest {
     fun shouldShowReportDate() {
         stubReportAndStart(newDailyReport(year = 2016, month = 10, day = 1))
         onId(R.id.reportEditDate).hasText("2016-10-01")
+    }
+
+    @Test
+    fun shouldShowDatePickerOnDateClick() {
+        stubCurrentTime(year = 2016, month = 3, day = 3)
+        stubReportAndStart()
+        onId(R.id.reportEditDate).click()
+        onText("Mar 3, ").isDisplayed()
     }
 
     @Test

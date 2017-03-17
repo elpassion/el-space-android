@@ -14,6 +14,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
+import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import rx.Observable
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
@@ -26,6 +27,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
+        reportEditDate.setOnClickListener {
+            showDateDialog(supportFragmentManager)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

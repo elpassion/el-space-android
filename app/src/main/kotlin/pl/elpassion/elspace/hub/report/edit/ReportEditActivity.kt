@@ -29,7 +29,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showBackArrowOnActionBar()
         controller.onCreate()
         reportEditDate.setOnClickListener {
-            showDateDialog(supportFragmentManager)
+            showDateDialog(supportFragmentManager) {
+                controller.onDateChanged(it)
+            }
         }
         reportEditProjectName.setOnClickListener {
             ProjectChooseActivity.startForResult(this, CHOOSE_PROJECT_REQUEST_CODE)

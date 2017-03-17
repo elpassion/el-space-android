@@ -10,6 +10,7 @@ import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.commons.stubCurrentTime
+import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
@@ -21,6 +22,9 @@ class ReportEditActivityTest {
 
     @JvmField @Rule
     val rule = rule<ReportEditActivity>(autoStart = false)
+
+    @JvmField @Rule
+    val intentsRule = InitIntentsRule()
 
     @Test
     fun shouldHaveVisibleBackArrow() {
@@ -65,6 +69,13 @@ class ReportEditActivityTest {
     fun shouldShowProjectNameForRegularReport() {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
         onId(R.id.reportEditProjectName).hasText("Slack Time")
+    }
+
+    @Test
+    fun shouldStartProjectChooserOnProjectClicked() {
+        stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
+        onText("Slack Time").click()
+        checkIntent(ProjectChooseActivity::class.java)
     }
 
     @Test

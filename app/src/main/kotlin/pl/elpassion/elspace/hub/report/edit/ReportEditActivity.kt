@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
@@ -29,6 +30,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         controller.onCreate()
         reportEditDate.setOnClickListener {
             showDateDialog(supportFragmentManager)
+        }
+        reportEditProjectName.setOnClickListener {
+            ProjectChooseActivity.startForResult(this, CHOOSE_PROJECT_REQUEST_CODE)
         }
     }
 
@@ -99,6 +103,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     companion object {
 
         private val REPORT_KEY = "report_key"
+        private val CHOOSE_PROJECT_REQUEST_CODE = 789
 
         fun startForResult(activity: Activity, requestCode: Int, report: Report) {
             activity.startActivityForResult(intent(activity, report), requestCode)

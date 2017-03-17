@@ -8,11 +8,11 @@ import java.util.*
 
 private val DATE_DIALOG_TAG = "date_dialog"
 
-fun showDateDialog(supportFragmentManager: FragmentManager, dateListener: (String) -> Unit) {
+fun showDateDialog(supportFragmentManager: FragmentManager, dateListener: ((String) -> Unit)? = null) {
     val now = getCurrentTimeCalendar()
     val dateDialog = BottomSheetDatePickerDialog.newInstance(
             { _, year, monthOfYear, dayOfMonth ->
-                dateListener(getDateString(year, monthOfYear + 1, dayOfMonth))
+                dateListener?.invoke(getDateString(year, monthOfYear + 1, dayOfMonth))
             },
             now.get(Calendar.YEAR),
             now.get(Calendar.MONTH),

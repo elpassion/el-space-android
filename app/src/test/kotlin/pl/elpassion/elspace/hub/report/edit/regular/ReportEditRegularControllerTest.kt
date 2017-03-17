@@ -14,16 +14,16 @@ import rx.Completable
 class ReportEditRegularControllerTest {
 
     private val view = mock<ReportEdit.Regular.View>()
-    private val editReportService = mock<ReportEdit.Regular.Service>()
+    private val editReportApi = mock<ReportEdit.Regular.Service>()
     private val removeReportApi = mock<ReportEdit.RemoveApi>()
-    private val controller = ReportEditRegularController(view, editReportService, removeReportApi)
+    private val controller = ReportEditRegularController(view, editReportApi, removeReportApi)
 
     @JvmField @Rule
     val rxSchedulersRule = RxSchedulersRule()
 
     @Before
     fun setUp() {
-        stubEditReportServiceToReturnSuccess()
+        stubEditReportApiToReturnSuccess()
         stubRemoveReportApiToReturnSuccess()
     }
 
@@ -44,23 +44,23 @@ class ReportEditRegularControllerTest {
     }
 
     @Test
-    fun shouldCallServiceWithCorrectDataOnSaveReport() {
+    fun shouldCallApiWithCorrectDataOnSaveReport() {
         val report = newRegularHourlyReport(year = 2017, month = 7, day = 2, id = 2, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2))
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "8.0", description = "description")
 
-        verify(editReportService).edit(report.copy(reportedHours = 8.0, description = "description"))
+        verify(editReportApi).edit(report.copy(reportedHours = 8.0, description = "description"))
     }
 
     @Test
-    fun shouldReallyCallServiceWithCorrectDataOnSaveReport() {
+    fun shouldReallyCallApiWithCorrectDataOnSaveReport() {
         val report = newRegularHourlyReport(year = 2016, month = 1, day = 3, id = 5, description = "DESCRIPTION", reportedHours = 4.0, project = newProject(id = 2))
         controller.onCreate(report)
 
         controller.onSaveReport(hours = "7.5", description = "newDescription")
 
-        verify(editReportService).edit(report.copy(reportedHours = 7.5, description = "newDescription"))
+        verify(editReportApi).edit(report.copy(reportedHours = 7.5, description = "newDescription"))
     }
 
     @Test
@@ -72,12 +72,12 @@ class ReportEditRegularControllerTest {
     }
 
     @Test
-    fun shouldCallServiceWithCorrectProjectIdIfItHasBeenChanged() {
+    fun shouldCallApiWithCorrectProjectIdIfItHasBeenChanged() {
         controller.onCreate(newRegularHourlyReport(project = newProject(id = 10)))
         controller.onSelectProject(newProject(id = 20))
         controller.onSaveReport("0.0", "description")
 
-        verify(editReportService).edit(argThat { project.id == 20L })
+        verify(editReportApi).edit(argThat { project.id == 20L })
     }
 
     @Test
@@ -109,7 +109,7 @@ class ReportEditRegularControllerTest {
 
     @Test
     fun shouldNotHideLoaderIfSavingHasNotFinished() {
-        stubEditReportServiceToReturnNever()
+        stubEditReportApiToReturnNever()
         controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
@@ -119,7 +119,7 @@ class ReportEditRegularControllerTest {
 
     @Test
     fun shouldHideLoaderOnDestroyIfSavingHasNotFinished() {
-        stubEditReportServiceToReturnNever()
+        stubEditReportApiToReturnNever()
         controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
@@ -130,7 +130,7 @@ class ReportEditRegularControllerTest {
 
     @Test
     fun shouldShowErrorWhenSavingReportFails() {
-        stubEditReportServiceToReturnError()
+        stubEditReportApiToReturnError()
         controller.onCreate(newRegularHourlyReport())
 
         controller.onSaveReport("1.0", "description")
@@ -218,23 +218,23 @@ class ReportEditRegularControllerTest {
         controller.onDateSelect("2016-05-04")
         controller.onSaveReport("0.1", "Desription")
 
-        verify(editReportService).edit(argThat { day == 4 && month == 5 && year == 2016 })
+        verify(editReportApi).edit(argThat { day == 4 && month == 5 && year == 2016 })
     }
 
-    private fun stubEditReportServiceToReturnNever() {
-        stubEditReportServiceToReturn(Completable.never())
+    private fun stubEditReportApiToReturnNever() {
+        stubEditReportApiToReturn(Completable.never())
     }
 
-    private fun stubEditReportServiceToReturnError() {
-        stubEditReportServiceToReturn(Completable.error(RuntimeException()))
+    private fun stubEditReportApiToReturnError() {
+        stubEditReportApiToReturn(Completable.error(RuntimeException()))
     }
 
-    private fun stubEditReportServiceToReturnSuccess() {
-        stubEditReportServiceToReturn(Completable.complete())
+    private fun stubEditReportApiToReturnSuccess() {
+        stubEditReportApiToReturn(Completable.complete())
     }
 
-    private fun stubEditReportServiceToReturn(completable: Completable) {
-        whenever(editReportService.edit(any<RegularHourlyReport>())).thenReturn(completable)
+    private fun stubEditReportApiToReturn(completable: Completable) {
+        whenever(editReportApi.edit(any<RegularHourlyReport>())).thenReturn(completable)
     }
 
     private fun stubRemoveReportApiToReturnError() {

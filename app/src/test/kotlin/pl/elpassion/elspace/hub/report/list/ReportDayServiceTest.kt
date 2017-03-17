@@ -20,21 +20,21 @@ import rx.Observable.just
 import java.util.*
 
 class ReportDayServiceTest {
-    val listService = mock<ReportList.Service>()
-    val service = ReportDayServiceImpl(listService)
+    val serviceApi = mock<ReportList.Service>()
+    var service = ReportDayServiceImpl(serviceApi)
 
     @Test
-    fun shouldCreate31DaysWithoutReportsIfIsOctoberAndServiceReturnsEmptyList() {
+    fun shouldCreate31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
         verifyIfMapCorrectListForGivenParams(
-                givenReports = emptyList(),
+                apiReturnValue = emptyList(),
                 month = 10,
                 daysInMonth = 31)
     }
 
     @Test
-    fun shouldCreate30DaysWithoutReportsIfIsNovemberAndServiceReturnsEmptyList() {
+    fun shouldCreate30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyList() {
         verifyIfMapCorrectListForGivenParams(
-                givenReports = emptyList(),
+                apiReturnValue = emptyList(),
                 month = 11,
                 daysInMonth = 30
         )
@@ -118,7 +118,7 @@ class ReportDayServiceTest {
         stubServiceToReturn(emptyList())
 
         getDays(just(yearMonth))
-        verify(listService).getReports(yearMonth)
+        verify(serviceApi).getReports(yearMonth)
     }
 
     @Test
@@ -127,7 +127,7 @@ class ReportDayServiceTest {
         stubServiceToReturn(emptyList())
 
         getDays(just(yearMonth))
-        verify(listService).getReports(yearMonth)
+        verify(serviceApi).getReports(yearMonth)
     }
 
     private fun getDays(dateChangeObservable: Observable<YearMonth> = createYearMonthFromTimeProvider()): List<Day> {
@@ -140,15 +140,15 @@ class ReportDayServiceTest {
             Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
     private fun stubServiceToReturn(list: List<Report>) {
-        whenever(listService.getReports(any())).thenReturn(Observable.just(list))
+        whenever(serviceApi.getReports(any())).thenReturn(Observable.just(list))
     }
 
     private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {
         stubCurrentTime(year = year, month = month, day = day)
     }
 
-    private fun verifyIfMapCorrectListForGivenParams(givenReports: List<HourlyReport>, daysInMonth: Int, month: Int) {
-        stubServiceToReturn(givenReports)
+    private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<HourlyReport>, daysInMonth: Int, month: Int) {
+        stubServiceToReturn(apiReturnValue)
         stubDateChangeObserver(year = 2016, month = month)
         assertEquals(getDays().size, daysInMonth)
     }

@@ -1,10 +1,7 @@
 package pl.elpassion.elspace.hub.report.edit.regular
 
 import pl.elpassion.elspace.api.applySchedulers
-import pl.elpassion.elspace.common.extensions.dayOfMonth
-import pl.elpassion.elspace.common.extensions.month
-import pl.elpassion.elspace.common.extensions.toCalendarDate
-import pl.elpassion.elspace.common.extensions.year
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
@@ -12,7 +9,7 @@ import rx.Subscription
 import kotlin.properties.Delegates
 
 class ReportEditRegularController(private val view: ReportEdit.Regular.View,
-                                  private val editReportService: ReportEdit.Regular.Service,
+                                  private val editReportApi: ReportEdit.Regular.Service,
                                   private val removeReportApi: ReportEdit.RemoveApi) {
 
     private var report: RegularHourlyReport by Delegates.notNull()
@@ -38,7 +35,7 @@ class ReportEditRegularController(private val view: ReportEdit.Regular.View,
     }
 
     private fun sendEditedReport(description: String, hours: String) {
-        subscription = editReportService.edit(report.copy(description = description, reportedHours = hours.toDouble()))
+        subscription = editReportApi.edit(report.copy(description = description, reportedHours = hours.toDouble()))
                 .applySchedulers()
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }

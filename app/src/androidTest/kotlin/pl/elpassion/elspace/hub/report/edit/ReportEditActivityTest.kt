@@ -52,6 +52,15 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDate).click()
         onText("Mar 3, ").isDisplayed()
     }
+    
+    @Test
+    fun shouldShowUpdatedDateOnNewDatePick() {
+        stubCurrentTime(year = 2016, month = 3, day = 3)
+        stubReportAndStart(newDailyReport(year = 2016, month = 3, day = 2))
+        onId(R.id.reportEditDate).click()
+        onText("OK").click()
+        onId(R.id.reportEditDate).hasText("2016-03-03")
+    }
 
     @Test
     fun shouldShowReportedHoursForHourlyReport() {

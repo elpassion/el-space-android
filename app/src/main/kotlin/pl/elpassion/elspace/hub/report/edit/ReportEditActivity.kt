@@ -5,10 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportType
@@ -24,6 +26,14 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            return handleClickOnBackArrowItem(item)
+        } else {
+            return false
+        }
     }
 
     override fun showDate(date: String) {

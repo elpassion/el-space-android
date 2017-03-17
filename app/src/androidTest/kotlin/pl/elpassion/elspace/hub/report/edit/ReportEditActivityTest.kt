@@ -1,10 +1,8 @@
 package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
-import com.elpassion.android.commons.espresso.hasText
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.isNotDisplayed
-import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.*
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -27,6 +25,13 @@ class ReportEditActivityTest {
     fun shouldHaveVisibleBackArrow() {
         stubReportAndStart()
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun shouldExitScreenOnBackArrowClick() {
+        stubReportAndStart()
+        onToolbarBackArrow().click()
+        assertTrue(rule.activity.isFinishing)
     }
 
     @Test
@@ -58,13 +63,13 @@ class ReportEditActivityTest {
         stubReportAndStart(newRegularHourlyReport(description = "EL Space"))
         onId(R.id.reportEditDescription).hasText("EL Space")
     }
-    
+
     @Test
     fun shouldShowAdditionalInfoForSickLeave() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
         onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_sick_leave_info)
     }
-    
+
     @Test
     fun shouldShowAdditionalInfoForUnpaidVacations() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
@@ -90,7 +95,7 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
-    
+
     @Test
     fun shouldShowOnlyDailyFormOnSickLeave() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))

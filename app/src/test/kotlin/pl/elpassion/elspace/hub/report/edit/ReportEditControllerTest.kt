@@ -37,6 +37,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowUpdatedReportDateOnReportChange() {
         createController(newDailyReport()).run {
+            onCreate()
             onDateChanged("2017-01-02")
         }
         verify(view).showDate("2017-01-02")
@@ -57,6 +58,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowUpdatedProjectNameOnProjectChange() {
         createController(newDailyReport()).run {
+            onCreate()
             onProjectChanged(newProject(name = "New project"))
         }
         verify(view).showProjectName("New project")

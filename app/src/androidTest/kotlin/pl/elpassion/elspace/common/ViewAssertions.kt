@@ -9,3 +9,5 @@ import org.hamcrest.CoreMatchers.not
 fun ViewInteraction.hasChildWithText(text: String): ViewInteraction = check(matches(hasDescendant(withText(text))))
 
 fun ViewInteraction.hasNoChildWithText(text: String): ViewInteraction = check(matches(not(hasDescendant(withText(text)))))
+
+fun ViewInteraction.isBottomNavigationItemChecked(): ViewInteraction = check(matches(isBottomNavigationItemDataChecked()))

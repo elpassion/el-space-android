@@ -8,6 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.isBottomNavigationItemChecked
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
@@ -123,6 +124,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.action_regular_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
         onId(R.id.reportEditProjectNameLayout).isDisplayed()
@@ -133,6 +135,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubReportAndStart(newPaidVacationHourlyReport())
+        onId(R.id.action_paid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
@@ -143,6 +146,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowOnlyDailyFormOnSickLeave() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
+        onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
@@ -153,6 +157,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowOnlyDailyFormOnUnpaidVacations() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
+        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()

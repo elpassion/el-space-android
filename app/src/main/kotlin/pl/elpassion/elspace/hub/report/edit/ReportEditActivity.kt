@@ -54,7 +54,12 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showReportType(type: ReportType) {
-
+        bottomNavigation.menu.findItem(when (type) {
+            ReportType.REGULAR -> R.id.action_regular_report
+            ReportType.SICK_LEAVE -> R.id.action_sick_leave_report
+            ReportType.PAID_VACATIONS -> R.id.action_paid_vacations_report
+            ReportType.UNPAID_VACATIONS -> R.id.action_unpaid_vacations_report
+        }).isChecked = true
     }
 
     override fun showDate(date: String) {

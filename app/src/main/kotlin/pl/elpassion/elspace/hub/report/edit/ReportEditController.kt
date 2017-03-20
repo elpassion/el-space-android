@@ -19,6 +19,10 @@ class ReportEditController(private val report: Report,
                 .addTo(subscriptions)
     }
 
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
     fun onDateChanged(date: String) {
         view.showDate(date)
     }

@@ -41,6 +41,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        controller.onDestroy()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_PROJECT_REQUEST_CODE && data != null) {
             controller.onProjectChanged(ProjectChooseActivity.getProject(data))

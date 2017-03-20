@@ -3,7 +3,7 @@ package pl.elpassion.elspace.hub.report.edit
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
-import pl.elpassion.elspace.hub.report.add.ReportType
+import pl.elpassion.elspace.hub.report.ReportType
 import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,

@@ -15,7 +15,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.add.ReportType
+import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import rx.Observable
 

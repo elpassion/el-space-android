@@ -9,7 +9,7 @@ import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.add.ReportType
+import pl.elpassion.elspace.hub.report.ReportType
 import rx.subjects.PublishSubject
 
 class ReportEditControllerTest {

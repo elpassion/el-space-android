@@ -7,6 +7,7 @@ import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
+import pl.elpassion.elspace.hub.report.ReportType
 import rx.Completable
 import rx.subscriptions.CompositeSubscription
 

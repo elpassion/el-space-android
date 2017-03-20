@@ -2,7 +2,7 @@ package pl.elpassion.elspace.hub.report.edit
 
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
-import pl.elpassion.elspace.hub.report.add.ReportType
+import pl.elpassion.elspace.hub.report.ReportType
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path

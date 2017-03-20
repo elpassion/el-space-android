@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.report.add
+package pl.elpassion.elspace.hub.report
 
 enum class ReportType {
     SICK_LEAVE,

@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.report.add
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
+import pl.elpassion.elspace.hub.report.ReportType
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable

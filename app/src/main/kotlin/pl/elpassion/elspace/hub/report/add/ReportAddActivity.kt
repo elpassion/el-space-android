@@ -26,6 +26,7 @@ import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
+import pl.elpassion.elspace.hub.report.toReportType
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -58,14 +59,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }
-
-    private fun Int.toReportType() = when (this) {
-        R.id.action_regular_report -> ReportType.REGULAR
-        R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
-        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
-        R.id.action_unpaid_vacations_report -> ReportType.UNPAID_VACATIONS
-        else -> throw IllegalArgumentException()
-    }
 
     override fun showDate(date: String) {
         reportAddDate.setText(date)

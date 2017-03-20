@@ -28,6 +28,7 @@ class ReportEditController(private val report: Report,
     }
 
     private fun showReport() {
+        view.showReportType(report.type)
         view.showDate(report.date)
         if (report is HourlyReport) {
             showHourlyReport(report)

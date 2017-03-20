@@ -13,6 +13,7 @@ import rx.Observable
 interface ReportEdit {
 
     interface View {
+        fun showReportType(type: ReportType)
         fun showDate(date: String)
         fun showReportedHours(reportedHours: Double)
         fun showProjectName(name: String)

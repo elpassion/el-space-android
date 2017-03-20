@@ -23,6 +23,12 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowReportTypeOnCreate() {
+        createController(newRegularHourlyReport()).onCreate()
+        verify(view).showReportType(ReportType.REGULAR)
+    }
+
+    @Test
     fun shouldShowReportDateOnCreate() {
         createController(newRegularHourlyReport(year = 2017, month = 1, day = 1)).onCreate()
         verify(view).showDate("2017-01-01")

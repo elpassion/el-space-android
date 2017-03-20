@@ -53,6 +53,10 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         }
     }
 
+    override fun showReportType(type: ReportType) {
+
+    }
+
     override fun showDate(date: String) {
         reportEditDate.setText(date)
     }

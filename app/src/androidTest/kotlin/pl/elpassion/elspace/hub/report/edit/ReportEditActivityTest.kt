@@ -2,6 +2,8 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -10,13 +12,17 @@ import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.commons.stubCurrentTime
+import pl.elpassion.elspace.hub.project.Project
+import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
+import pl.elpassion.elspace.hub.project.choose.ProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
+import rx.Observable
 
 class ReportEditActivityTest {
 
@@ -52,7 +58,7 @@ class ReportEditActivityTest {
         onId(R.id.reportEditDate).click()
         onText("Mar 3, ").isDisplayed()
     }
-    
+
     @Test
     fun shouldShowUpdatedDateOnNewDatePick() {
         stubCurrentTime(year = 2016, month = 3, day = 3)
@@ -85,6 +91,15 @@ class ReportEditActivityTest {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
         onText("Slack Time").click()
         checkIntent(ProjectChooseActivity::class.java)
+    }
+
+    @Test
+    fun shouldShowUpdatedProjectNameOnProjectChanged() {
+        stubProjectsRepository(listOf(newProject(name = "Project 1"), newProject(name = "Project 2")))
+        stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Project 1")))
+        onText("Project 1").click()
+        onText("Project 2").click()
+        onId(R.id.reportEditProjectName).hasText("Project 2")
     }
 
     @Test
@@ -147,5 +162,12 @@ class ReportEditActivityTest {
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
+    }
+
+    private fun stubProjectsRepository(projects: List<Project>) {
+        mock<ProjectRepository> {
+            ProjectRepositoryProvider.override = { it }
+            whenever(it.getProjects()).thenReturn(Observable.just(projects))
+        }
     }
 }

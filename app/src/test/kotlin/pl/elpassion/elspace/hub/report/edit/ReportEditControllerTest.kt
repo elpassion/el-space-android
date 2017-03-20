@@ -49,6 +49,14 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowUpdatedProjectNameOnProjectChange() {
+        createController(newDailyReport()).run {
+            onProjectChanged(newProject(name = "New project"))
+        }
+        verify(view).showProjectName("New project")
+    }
+
+    @Test
     fun shouldShowDescriptionOnCreateWhenEditingRegularReport() {
         createController(newRegularHourlyReport(description = "EL Space")).onCreate()
         verify(view).showDescription("EL Space")

@@ -124,45 +124,53 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
-        onId(R.id.action_regular_report).isBottomNavigationItemChecked()
-        onId(R.id.reportEditDateLayout).isDisplayed()
-        onId(R.id.reportEditHoursLayout).isDisplayed()
-        onId(R.id.reportEditProjectNameLayout).isDisplayed()
-        onId(R.id.reportEditDescriptionLayout).isDisplayed()
-        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
+        verifyIsRegularFormDisplayed()
     }
 
     @Test
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubReportAndStart(newPaidVacationHourlyReport())
-        onId(R.id.action_paid_vacations_report).isBottomNavigationItemChecked()
-        onId(R.id.reportEditDateLayout).isDisplayed()
-        onId(R.id.reportEditHoursLayout).isDisplayed()
-        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
-        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
-        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
+        verifyIsPaidVacationsFormDisplayed()
     }
 
     @Test
     fun shouldShowOnlyDailyFormOnSickLeave() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
-        onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
-        onId(R.id.reportEditDateLayout).isDisplayed()
-        onId(R.id.reportEditHoursLayout).isNotDisplayed()
-        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
-        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
-        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+        verifyIsSickLeaveFormDisplayed()
     }
 
     @Test
     fun shouldShowOnlyDailyFormOnUnpaidVacations() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
-        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
-        onId(R.id.reportEditDateLayout).isDisplayed()
-        onId(R.id.reportEditHoursLayout).isNotDisplayed()
-        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
-        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
-        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+        verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowRegularFormOnRegularReportActionCheck() {
+        stubReportAndStart(newDailyReport())
+        onId(R.id.action_regular_report).click()
+        verifyIsRegularFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowPaidVacationsFormOnPaidVacationsReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.action_paid_vacations_report).click()
+        verifyIsPaidVacationsFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.action_sick_leave_report).click()
+        verifyIsSickLeaveFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.action_unpaid_vacations_report).click()
+        verifyIsUnpaidVacationsFormDisplayed()
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
@@ -174,5 +182,41 @@ class ReportEditActivityTest {
             ProjectRepositoryProvider.override = { it }
             whenever(it.getProjects()).thenReturn(Observable.just(projects))
         }
+    }
+
+    private fun verifyIsRegularFormDisplayed() {
+        onId(R.id.action_regular_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
+    }
+
+    private fun verifyIsPaidVacationsFormDisplayed() {
+        onId(R.id.action_paid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
+    }
+
+    private fun verifyIsSickLeaveFormDisplayed() {
+        onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
+    private fun verifyIsUnpaidVacationsFormDisplayed() {
+        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
     }
 }

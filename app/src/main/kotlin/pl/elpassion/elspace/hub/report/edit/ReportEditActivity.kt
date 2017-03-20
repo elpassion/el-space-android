@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
+import com.jakewharton.rxbinding.support.design.widget.itemSelections
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -78,7 +79,15 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditDescription.setText(description)
     }
 
-    override fun reportTypeChanges(): Observable<ReportType> = Observable.never()
+    override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }
+
+    private fun Int.toReportType() = when (this) {
+        R.id.action_regular_report -> ReportType.REGULAR
+        R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
+        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
+        R.id.action_unpaid_vacations_report -> ReportType.UNPAID_VACATIONS
+        else -> throw IllegalArgumentException()
+    }
 
     override fun showRegularForm() {
         showHourlyForm()

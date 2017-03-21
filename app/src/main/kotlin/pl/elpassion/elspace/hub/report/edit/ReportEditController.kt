@@ -7,7 +7,8 @@ import pl.elpassion.elspace.hub.report.ReportType
 import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,
-                           private val view: ReportEdit.View) {
+                           private val view: ReportEdit.View,
+                           private val api: ReportEdit.Api) {
 
     private val subscriptions = CompositeSubscription()
 
@@ -16,6 +17,9 @@ class ReportEditController(private val report: Report,
         view.reportTypeChanges()
                 .startWith(report.type)
                 .subscribe { onReportTypeChanged(it) }
+                .addTo(subscriptions)
+        view.editReportClicks()
+                .subscribe { editReport(it) }
                 .addTo(subscriptions)
     }
 
@@ -52,6 +56,12 @@ class ReportEditController(private val report: Report,
         ReportType.PAID_VACATIONS -> showPaidVacationsForm()
         ReportType.SICK_LEAVE -> showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
+    }
+
+    private fun editReport(model: ReportViewModel) {
+        if (model is RegularReport) {
+            api.editReport(report.id, model.selectedDate, model.hours, model.description, model.project?.id)
+        }
     }
 
     private fun showRegularForm() {

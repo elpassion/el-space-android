@@ -1,25 +1,28 @@
 package pl.elpassion.elspace.hub.report.edit
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
+import pl.elpassion.elspace.hub.report.RegularReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import rx.subjects.PublishSubject
 
 class ReportEditControllerTest {
 
     private val view = mock<ReportEdit.View>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
+    private val editReportClicks = PublishSubject.create<ReportViewModel>()
+    private val api = mock<ReportEdit.Api>()
 
     @Before
     fun setUp() {
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
+        whenever(view.editReportClicks()).thenReturn(editReportClicks)
     }
 
     @Test
@@ -104,5 +107,13 @@ class ReportEditControllerTest {
         verify(view).showUnpaidVacationsForm()
     }
 
-    private fun createController(report: Report) = ReportEditController(report, view)
+    @Test
+    fun shouldEditRegularReportWithChangedData() {
+        val report = newRegularHourlyReport(id = 7, reportedHours = 8.0, year = 2017, month = 1, day = 1, project = newProject(id = 11))
+        createController(report).onCreate()
+        editReportClicks.onNext(RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
+        verify(api).editReport(7, "2017-01-02", "8", "Slack Time", 12)
+    }
+
+    private fun createController(report: Report) = ReportEditController(report, view, api)
 }

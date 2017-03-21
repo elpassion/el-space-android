@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.report.edit
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
@@ -23,6 +24,7 @@ interface ReportEdit {
         fun showPaidVacationsForm()
         fun showSickLeaveForm()
         fun showUnpaidVacationsForm()
+        fun editReportClicks(): Observable<ReportViewModel>
     }
 
     interface Api {

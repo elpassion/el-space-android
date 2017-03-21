@@ -14,16 +14,15 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
-import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
-import pl.elpassion.elspace.hub.report.toActionId
-import pl.elpassion.elspace.hub.report.toReportType
 import rx.Observable
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
-    private val controller by lazy { ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this) }
+    private val controller by lazy {
+        ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this, ReportEdit.ApiProvider.get())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +103,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditAdditionalInfo.setText(R.string.report_add_unpaid_vacations_info)
         showDailyForm()
     }
+
+    override fun editReportClicks(): Observable<ReportViewModel> = Observable.empty()
 
     private fun showHourlyForm() {
         reportEditDateLayout.show()

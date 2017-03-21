@@ -127,5 +127,12 @@ class ReportEditControllerTest {
         verify(api).editReport(70, 2, "2010-05-20", null, null, null)
     }
 
+    @Test
+    fun shouldEditSickLeaveWithChangedData() {
+        createController(newDailyReport(id = 3, year = 2000, month = 3, day = 7)).onCreate()
+        editReportClicks.onNext(SickLeaveReport("2000-03-08"))
+        verify(api).editReport(3, 3, "2000-03-08", null, null, null)
+    }
+
     private fun createController(report: Report) = ReportEditController(report, view, api)
 }

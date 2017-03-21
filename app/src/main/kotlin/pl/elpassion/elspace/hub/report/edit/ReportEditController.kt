@@ -63,6 +63,7 @@ class ReportEditController(private val report: Report,
             is RegularReport -> api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project?.id)
             is PaidVacationsReport -> api.editReport(report.id, ReportType.PAID_VACATIONS.id, model.selectedDate, model.hours, null, null)
             is UnpaidVacationsReport -> api.editReport(report.id, ReportType.UNPAID_VACATIONS.id, model.selectedDate, null, null, null)
+            is SickLeaveReport -> api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
         }
     }
 

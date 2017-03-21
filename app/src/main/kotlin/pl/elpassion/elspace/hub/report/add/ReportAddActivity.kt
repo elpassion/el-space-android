@@ -160,7 +160,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null) {
-            showSelectedProject(ProjectChooseActivity.getProject(data))
+            controller.onProjectChanged(ProjectChooseActivity.getProject(data))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

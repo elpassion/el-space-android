@@ -4,12 +4,10 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
+import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
-import pl.elpassion.elspace.hub.report.RegularReport
-import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.ReportType
-import pl.elpassion.elspace.hub.report.ReportViewModel
+import pl.elpassion.elspace.hub.report.*
 import rx.subjects.PublishSubject
 
 class ReportEditControllerTest {
@@ -113,6 +111,13 @@ class ReportEditControllerTest {
         createController(report).onCreate()
         editReportClicks.onNext(RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
         verify(api).editReport(7, 0, "2017-01-02", "8", "Slack Time", 12)
+    }
+
+    @Test
+    fun shouldEditPaidVacationsWithChangedData() {
+        createController(newPaidVacationHourlyReport(id = 8, year = 2015, month = 3, day = 3, reportedHours = 2.0)).onCreate()
+        editReportClicks.onNext(PaidVacationsReport("2015-03-03", "3"))
+        verify(api).editReport(8, 1, "2015-03-03", "3", null, null)
     }
 
     private fun createController(report: Report) = ReportEditController(report, view, api)

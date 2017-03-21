@@ -61,6 +61,8 @@ class ReportEditController(private val report: Report,
     private fun editReport(model: ReportViewModel) {
         if (model is RegularReport) {
             api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project?.id)
+        } else if (model is PaidVacationsReport) {
+            api.editReport(report.id, ReportType.PAID_VACATIONS.id, model.selectedDate, model.hours, null, null)
         }
     }
 

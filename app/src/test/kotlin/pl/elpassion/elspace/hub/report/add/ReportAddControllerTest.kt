@@ -8,7 +8,7 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.*
 import rx.Scheduler
 import rx.schedulers.Schedulers.trampoline
 import rx.schedulers.TestScheduler

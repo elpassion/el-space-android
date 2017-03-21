@@ -24,9 +24,8 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
-import pl.elpassion.elspace.hub.report.toReportType
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

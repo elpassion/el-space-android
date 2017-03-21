@@ -4,6 +4,7 @@ import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import retrofit2.http.POST
 import retrofit2.http.Query
 import rx.Completable

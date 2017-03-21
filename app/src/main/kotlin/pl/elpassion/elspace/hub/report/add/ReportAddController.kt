@@ -8,7 +8,10 @@ import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
+import pl.elpassion.elspace.hub.report.PaidVacationsReport
+import pl.elpassion.elspace.hub.report.RegularReport
 import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import rx.Completable
 import rx.subscriptions.CompositeSubscription
 

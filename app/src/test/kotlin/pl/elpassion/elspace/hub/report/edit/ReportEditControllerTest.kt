@@ -120,5 +120,12 @@ class ReportEditControllerTest {
         verify(api).editReport(8, 1, "2015-03-03", "3", null, null)
     }
 
+    @Test
+    fun shouldEditUnpaidVacationsWithChangedData() {
+        createController(newDailyReport(id = 70, year = 2010, month = 5, day = 15)).onCreate()
+        editReportClicks.onNext(UnpaidVacationsReport("2010-05-20"))
+        verify(api).editReport(70, 2, "2010-05-20", null, null, null)
+    }
+
     private fun createController(report: Report) = ReportEditController(report, view, api)
 }

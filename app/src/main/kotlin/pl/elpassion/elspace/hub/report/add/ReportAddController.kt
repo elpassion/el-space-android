@@ -34,6 +34,18 @@ class ReportAddController(private val date: String?,
                 .addTo(subscriptions)
     }
 
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
+    fun onDateChanged(date: String) {
+        view.showDate(date)
+    }
+
+    fun onProjectChanged(project: Project) {
+        view.showSelectedProject(project)
+    }
+
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
     private fun addReportClicks() = view.addReportClicks()
@@ -106,10 +118,6 @@ class ReportAddController(private val date: String?,
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }
 
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
     private fun showRegularForm() {
         view.showRegularForm()
     }
@@ -124,13 +132,5 @@ class ReportAddController(private val date: String?,
 
     private fun showUnpaidVacationsForm() {
         view.showUnpaidVacationsForm()
-    }
-
-    fun onDateChanged(date: String) {
-        view.showDate(date)
-    }
-
-    fun onProjectChanged(project: Project) {
-        view.showSelectedProject(project)
     }
 }

@@ -6,6 +6,7 @@ import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
+import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.report.ReportType
 import rx.Completable
@@ -127,5 +128,9 @@ class ReportAddController(private val date: String?,
 
     fun onDateChanged(date: String) {
         view.showDate(date)
+    }
+
+    fun onProjectChanged(project: Project) {
+        view.showSelectedProject(project)
     }
 }

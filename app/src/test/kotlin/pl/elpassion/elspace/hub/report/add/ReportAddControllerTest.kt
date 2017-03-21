@@ -206,6 +206,13 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldShowSelectedProjectOnProjectChange() {
+        val project = newProject()
+        createController().onProjectChanged(project)
+        verify(view).showSelectedProject(project)
+    }
+
+    @Test
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
         addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))

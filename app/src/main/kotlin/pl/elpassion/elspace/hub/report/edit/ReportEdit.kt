@@ -31,9 +31,10 @@ interface ReportEdit {
 
         @PATCH("activities/{id}")
         fun editReport(@Path("id") id: Long,
+                       @Query("activity[report_type]") reportType: Int,
                        @Query("activity[performed_at]") date: String,
-                       @Query("activity[value]") reportedHour: String,
-                       @Query("activity[comment]") description: String,
+                       @Query("activity[value]") reportedHour: String?,
+                       @Query("activity[comment]") description: String?,
                        @Query("activity[project_id]") projectId: Long?): Completable
 
         @DELETE("activities/{id}")

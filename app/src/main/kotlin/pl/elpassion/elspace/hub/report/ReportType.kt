@@ -3,11 +3,11 @@ package pl.elpassion.elspace.hub.report
 import pl.elpassion.R
 import pl.elpassion.elspace.hub.report.ReportType.*
 
-enum class ReportType {
-    SICK_LEAVE,
-    REGULAR,
-    PAID_VACATIONS,
-    UNPAID_VACATIONS
+enum class ReportType(val id: Int) {
+    REGULAR(0),
+    PAID_VACATIONS(1),
+    UNPAID_VACATIONS(2),
+    SICK_LEAVE(3)
 }
 
 fun Int.toReportType() = when (this) {

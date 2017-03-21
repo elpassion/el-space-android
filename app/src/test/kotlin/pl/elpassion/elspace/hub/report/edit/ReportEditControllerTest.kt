@@ -112,7 +112,7 @@ class ReportEditControllerTest {
         val report = newRegularHourlyReport(id = 7, reportedHours = 8.0, year = 2017, month = 1, day = 1, project = newProject(id = 11))
         createController(report).onCreate()
         editReportClicks.onNext(RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
-        verify(api).editReport(7, "2017-01-02", "8", "Slack Time", 12)
+        verify(api).editReport(7, 0, "2017-01-02", "8", "Slack Time", 12)
     }
 
     private fun createController(report: Report) = ReportEditController(report, view, api)

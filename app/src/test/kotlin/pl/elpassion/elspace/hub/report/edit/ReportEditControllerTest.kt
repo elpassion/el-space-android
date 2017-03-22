@@ -149,6 +149,13 @@ class ReportEditControllerTest {
         verify(view).close()
     }
 
+    @Test
+    fun shouldShowLoaderOnEditingReport() {
+        createController(newRegularHourlyReport()).onCreate()
+        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        verify(view).showLoader()
+    }
+
     private fun createController(report: Report) = ReportEditController(report, view, api,
             SchedulersSupplier(trampoline(), trampoline()))
 }

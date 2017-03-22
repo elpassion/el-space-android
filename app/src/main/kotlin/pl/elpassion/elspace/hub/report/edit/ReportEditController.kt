@@ -17,10 +17,7 @@ class ReportEditController(private val report: Report,
 
     fun onCreate() {
         showReport()
-        view.editReportClicks()
-                .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
-                .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
-                .onErrorResumeNext { Observable.empty() }
+        editReportClicks()
                 .subscribe()
                 .addTo(subscriptions)
     }
@@ -44,6 +41,11 @@ class ReportEditController(private val report: Report,
             showHourlyReport(report)
         }
     }
+
+    private fun editReportClicks() = view.editReportClicks()
+            .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
+            .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+            .onErrorResumeNext { Observable.empty() }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .startWith(report.type)

@@ -25,6 +25,7 @@ interface ReportEdit {
         fun showSickLeaveForm()
         fun showUnpaidVacationsForm()
         fun editReportClicks(): Observable<ReportViewModel>
+        fun close()
     }
 
     interface Api {

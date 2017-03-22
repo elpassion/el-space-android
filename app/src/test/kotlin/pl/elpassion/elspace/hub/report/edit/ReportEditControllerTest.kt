@@ -138,6 +138,17 @@ class ReportEditControllerTest {
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
     }
 
+    @Test
+    fun shouldCloseAfterReportEdited() {
+        createController(newRegularHourlyReport()).onCreate()
+        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        editReportSubject.run {
+            onNext(Unit)
+            onCompleted()
+        }
+        verify(view).close()
+    }
+
     private fun createController(report: Report) = ReportEditController(report, view, api,
             SchedulersSupplier(trampoline(), trampoline()))
 }

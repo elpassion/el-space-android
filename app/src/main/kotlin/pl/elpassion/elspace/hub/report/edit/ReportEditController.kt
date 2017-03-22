@@ -45,6 +45,7 @@ class ReportEditController(private val report: Report,
     private fun editReportClicks() = view.editReportClicks()
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
             .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+            .doOnNext { view.close() }
             .onErrorResumeNext { Observable.empty() }
 
     private fun reportTypeChanges() = view.reportTypeChanges()

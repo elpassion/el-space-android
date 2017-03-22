@@ -110,6 +110,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun editReportClicks(): Observable<ReportViewModel> = Observable.never()
 
+    override fun close() = Unit
+
     private fun showHourlyForm() {
         reportEditDateLayout.show()
         reportEditHoursLayout.show()

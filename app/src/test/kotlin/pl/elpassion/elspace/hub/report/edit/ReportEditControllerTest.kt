@@ -18,9 +18,11 @@ class ReportEditControllerTest {
     private val reportTypeChanges = PublishSubject.create<ReportType>()
     private val editReportClicks = PublishSubject.create<ReportViewModel>()
     private val api = mock<ReportEdit.Api>()
+    private val editReportSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
+        whenever(api.editReport(any(), any(), any(), any(), any(), any())).thenReturn(editReportSubject.toCompletable())
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.editReportClicks()).thenReturn(editReportClicks)
     }

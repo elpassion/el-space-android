@@ -1,25 +1,27 @@
 package pl.elpassion.elspace.hub.report.edit
 
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
-import pl.elpassion.elspace.hub.report.ReportType
+import rx.Completable
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,
                            private val view: ReportEdit.View,
-                           private val api: ReportEdit.Api) {
+                           private val api: ReportEdit.Api,
+                           private val schedulers: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
 
     fun onCreate() {
         showReport()
-        view.reportTypeChanges()
-                .startWith(report.type)
-                .subscribe { onReportTypeChanged(it) }
-                .addTo(subscriptions)
         view.editReportClicks()
-                .subscribe { editReport(it) }
+                .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
+                .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+                .onErrorResumeNext { Observable.empty() }
+                .subscribe()
                 .addTo(subscriptions)
     }
 
@@ -43,6 +45,23 @@ class ReportEditController(private val report: Report,
         }
     }
 
+    private fun reportTypeChanges() = view.reportTypeChanges()
+            .startWith(report.type)
+            .doOnNext { onReportTypeChanged(it) }
+            .map { chooseReportEditHandler(it) }
+
+    private fun chooseReportEditHandler(reportType: ReportType) = when (reportType) {
+        ReportType.REGULAR -> regularReportEditHandler
+        ReportType.PAID_VACATIONS -> paidVacationReportEditHandler
+        ReportType.UNPAID_VACATIONS -> unpaidVacationReportEditHandler
+        ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
+    }
+
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) =
+            modelCallPair.second(modelCallPair.first)
+                    .subscribeOn(schedulers.subscribeOn)
+                    .observeOn(schedulers.observeOn)
+
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)
         if (report is RegularHourlyReport) {
@@ -58,13 +77,24 @@ class ReportEditController(private val report: Report,
         ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
     }
 
-    private fun editReport(model: ReportViewModel) {
-        when (model) {
-            is RegularReport -> api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project?.id)
-            is PaidVacationsReport -> api.editReport(report.id, ReportType.PAID_VACATIONS.id, model.selectedDate, model.hours, null, null)
-            is UnpaidVacationsReport -> api.editReport(report.id, ReportType.UNPAID_VACATIONS.id, model.selectedDate, null, null, null)
-            is SickLeaveReport -> api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
+    private val regularReportEditHandler = { model: ReportViewModel ->
+        (model as RegularReport).let {
+            api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project?.id)
         }
+    }
+
+    private val paidVacationReportEditHandler = { model: ReportViewModel ->
+        (model as PaidVacationsReport).let {
+            api.editReport(report.id, ReportType.PAID_VACATIONS.id, model.selectedDate, model.hours, null, null)
+        }
+    }
+
+    private val unpaidVacationReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.UNPAID_VACATIONS.id, model.selectedDate, null, null, null)
+    }
+
+    private val sickLeaveReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
 
     private fun showRegularForm() {

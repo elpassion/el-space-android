@@ -3,11 +3,13 @@ package pl.elpassion.elspace.hub.report.edit
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.*
+import rx.schedulers.Schedulers.trampoline
 import rx.subjects.PublishSubject
 
 class ReportEditControllerTest {
@@ -122,17 +124,18 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldEditUnpaidVacationsWithChangedData() {
-        createController(newDailyReport(id = 70, year = 2010, month = 5, day = 15)).onCreate()
+        createController(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS, id = 70, year = 2010, month = 5, day = 15)).onCreate()
         editReportClicks.onNext(UnpaidVacationsReport("2010-05-20"))
         verify(api).editReport(70, 2, "2010-05-20", null, null, null)
     }
 
     @Test
     fun shouldEditSickLeaveWithChangedData() {
-        createController(newDailyReport(id = 3, year = 2000, month = 3, day = 7)).onCreate()
+        createController(newDailyReport(reportType = DailyReportType.SICK_LEAVE, id = 3, year = 2000, month = 3, day = 7)).onCreate()
         editReportClicks.onNext(SickLeaveReport("2000-03-08"))
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
     }
 
-    private fun createController(report: Report) = ReportEditController(report, view, api)
+    private fun createController(report: Report) = ReportEditController(report, view, api,
+            SchedulersSupplier(trampoline(), trampoline()))
 }

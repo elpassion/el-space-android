@@ -11,17 +11,21 @@ import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.design.widget.itemSelections
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     private val controller by lazy {
-        ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this, ReportEdit.ApiProvider.get())
+        ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this,
+                ReportEdit.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +108,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showDailyForm()
     }
 
-    override fun editReportClicks(): Observable<ReportViewModel> = Observable.empty()
+    override fun editReportClicks(): Observable<ReportViewModel> = Observable.never()
 
     private fun showHourlyForm() {
         reportEditDateLayout.show()

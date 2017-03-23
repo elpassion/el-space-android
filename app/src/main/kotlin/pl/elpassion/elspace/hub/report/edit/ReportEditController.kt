@@ -64,8 +64,7 @@ class ReportEditController(private val report: Report,
             modelCallPair.second(modelCallPair.first)
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
-                    .doOnSubscribe { view.showLoader() }
-                    .doOnCompleted { view.hideLoader() }
+                    .addLoader()
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)
@@ -101,6 +100,10 @@ class ReportEditController(private val report: Report,
     private val sickLeaveReportEditHandler = { model: ReportViewModel ->
         api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
+
+    private fun Completable.addLoader() = this
+            .doOnSubscribe { view.showLoader() }
+            .doOnCompleted { view.hideLoader() }
 
     private fun showRegularForm() {
         view.showRegularForm()

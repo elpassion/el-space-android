@@ -2,9 +2,11 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -23,6 +25,7 @@ import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
+import rx.Completable
 import rx.Observable
 
 class ReportEditActivityTest {
@@ -171,6 +174,20 @@ class ReportEditActivityTest {
         stubReportAndStart(newRegularHourlyReport())
         onId(R.id.action_unpaid_vacations_report).click()
         verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Ignore("Fix schedulers")
+    @Test
+    fun shouldShowLoaderOnReportEditCall() {
+        ReportEdit.ApiProvider.override = {
+            mock<ReportEdit.Api>().apply {
+                whenever(editReport(any(), any(), any(), any(), any(), any())).thenReturn(Completable.never())
+            }
+        }
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.reportEditHours).replaceText("7.5")
+        onId(R.id.editReport).click()
+        onId(R.id.loader).isDisplayed()
     }
 
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {

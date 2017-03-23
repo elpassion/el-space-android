@@ -5,15 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
 import android.view.MenuItem
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.design.widget.itemSelections
+import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.elspace.common.extensions.items
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.*
@@ -59,6 +63,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.edit_report_top_menu, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -113,11 +122,27 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showDailyForm()
     }
 
-    override fun editReportClicks(): Observable<ReportViewModel> = Observable.never()
+    override fun editReportClicks(): Observable<ReportViewModel> =
+            toolbar.itemClicks().filter { it.itemId == R.id.editReport }.map {
+                getReportViewModel(bottomNavigation.menu.items.first { it.isChecked }.itemId)
+            }
+
+    private fun getReportViewModel(checkedMenuItem: Int): ReportViewModel {
+        val date = reportEditDate.text.toString()
+        val hours = reportEditHours.text.toString()
+        val description = reportEditDescription.text.toString()
+        return when (checkedMenuItem) {
+            R.id.action_regular_report -> RegularReport(date, selectedProject, description, hours)
+            R.id.action_paid_vacations_report -> PaidVacationsReport(date, hours)
+            R.id.action_unpaid_vacations_report -> UnpaidVacationsReport(date)
+            R.id.action_sick_leave_report -> SickLeaveReport(date)
+            else -> throw IllegalArgumentException()
+        }
+    }
 
     override fun close() = Unit
 
-    override fun showLoader() = Unit
+    override fun showLoader() = showLoader(reportEditCoordinator)
 
     override fun hideLoader() = Unit
 

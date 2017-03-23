@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.elspace.common.extensions.items
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
@@ -185,6 +186,3 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
     }
 }
-
-private val Menu.items: List<MenuItem>
-    get() = (0 until size()).map { getItem(it) }

@@ -27,6 +27,7 @@ interface ReportEdit {
         fun editReportClicks(): Observable<ReportViewModel>
         fun close()
         fun showLoader()
+        fun hideLoader()
     }
 
     interface Api {

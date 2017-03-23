@@ -65,6 +65,7 @@ class ReportEditController(private val report: Report,
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
                     .doOnSubscribe { view.showLoader() }
+                    .doOnCompleted { view.hideLoader() }
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)

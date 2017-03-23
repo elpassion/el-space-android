@@ -142,10 +142,7 @@ class ReportEditControllerTest {
     fun shouldCloseAfterReportEdited() {
         createController(newRegularHourlyReport()).onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
-        editReportSubject.run {
-            onNext(Unit)
-            onCompleted()
-        }
+        completeReportEdit()
         verify(view).close()
     }
 
@@ -160,14 +157,16 @@ class ReportEditControllerTest {
     fun shouldHideLoaderOnReportEdited() {
         createController(newRegularHourlyReport()).onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
-        editReportSubject.run {
-            onNext(Unit)
-            onCompleted()
-        }
+        completeReportEdit()
         verify(view).showLoader()
         verify(view).hideLoader()
     }
 
     private fun createController(report: Report) = ReportEditController(report, view, api,
             SchedulersSupplier(trampoline(), trampoline()))
+
+    private fun completeReportEdit() = editReportSubject.run {
+        onNext(Unit)
+        onCompleted()
+    }
 }

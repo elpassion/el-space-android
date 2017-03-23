@@ -14,6 +14,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
@@ -27,6 +28,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this,
                 ReportEdit.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
+
+    private var selectedProject: Project? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +54,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_PROJECT_REQUEST_CODE && data != null) {
-            controller.onProjectChanged(ProjectChooseActivity.getProject(data))
+            selectedProject = ProjectChooseActivity.getProject(data).apply {
+                controller.onProjectChanged(this)
+            }
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

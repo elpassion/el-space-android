@@ -97,14 +97,14 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
-        createController(newRegularHourlyReport()).onCreate()
+        createController().onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
     }
 
     @Test
     fun shouldShowUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
-        createController(newRegularHourlyReport()).onCreate()
+        createController().onCreate()
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()
     }
@@ -140,7 +140,7 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldCloseAfterReportEdited() {
-        createController(newRegularHourlyReport()).onCreate()
+        createController().onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
         completeReportEdit()
         verify(view).close()
@@ -148,22 +148,22 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowLoaderOnEditingReport() {
-        createController(newRegularHourlyReport()).onCreate()
+        createController().onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnReportEdited() {
-        createController(newRegularHourlyReport()).onCreate()
+        createController().onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
         completeReportEdit()
         verify(view).showLoader()
         verify(view).hideLoader()
     }
 
-    private fun createController(report: Report) = ReportEditController(report, view, api,
-            SchedulersSupplier(trampoline(), trampoline()))
+    private fun createController(report: Report = newRegularHourlyReport()) =
+            ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 
     private fun completeReportEdit() = editReportSubject.run {
         onNext(Unit)

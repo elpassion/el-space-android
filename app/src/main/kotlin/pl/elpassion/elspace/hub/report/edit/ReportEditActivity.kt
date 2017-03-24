@@ -14,8 +14,8 @@ import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.checkedItemId
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.elspace.common.extensions.items
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
@@ -124,7 +124,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun editReportClicks(): Observable<ReportViewModel> =
             toolbar.itemClicks().filter { it.itemId == R.id.editReport }.map {
-                getReportViewModel(bottomNavigation.menu.items.first { it.isChecked }.itemId)
+                getReportViewModel(bottomNavigation.menu.checkedItemId)
             }
 
     private fun getReportViewModel(checkedMenuItem: Int): ReportViewModel {

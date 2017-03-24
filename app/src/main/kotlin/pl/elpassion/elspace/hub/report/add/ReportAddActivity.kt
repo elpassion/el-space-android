@@ -17,8 +17,8 @@ import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.checkedItemId
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.elspace.common.extensions.items
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
@@ -76,7 +76,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun addReportClicks(): Observable<ReportViewModel> {
         return toolbar.itemClicks().map {
             val selectedDate = reportAddDate.text.toString()
-            val checkMenuItem = bottomNavigation.menu.items.first { it.isChecked }.itemId
+            val checkMenuItem = bottomNavigation.menu.checkedItemId
             when (checkMenuItem) {
                 R.id.action_regular_report -> RegularReport(selectedDate, selectedProject, reportAddDescription.text.toString(), reportAddHours.text.toString())
                 R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate, reportAddHours.text.toString())

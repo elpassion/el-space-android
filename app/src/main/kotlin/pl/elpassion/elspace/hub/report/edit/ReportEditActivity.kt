@@ -29,8 +29,11 @@ import rx.schedulers.Schedulers
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     private val controller by lazy {
-        ReportEditController(intent.getSerializableExtra(REPORT_KEY) as Report, this,
-                ReportEdit.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+        ReportEditController(
+                report = intent.getSerializableExtra(REPORT_KEY) as Report,
+                view = this,
+                api = ReportEdit.ApiProvider.get(),
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     private var selectedProject: Project? = null

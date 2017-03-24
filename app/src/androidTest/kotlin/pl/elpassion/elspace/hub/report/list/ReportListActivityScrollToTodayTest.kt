@@ -2,6 +2,8 @@ package pl.elpassion.elspace.hub.report.list
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.click
+import com.elpassion.android.commons.espresso.doesNotHaveChildWithText
+import com.elpassion.android.commons.espresso.hasChildWithText
 import com.elpassion.android.commons.espresso.onId
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -10,14 +12,12 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.getDateString
-import pl.elpassion.elspace.common.hasChildWithText
-import pl.elpassion.elspace.common.hasNoChildWithText
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
-import pl.elpassion.elspace.common.startActivity
 import rx.Observable
 
 class ReportListActivityScrollToTodayTest {
@@ -39,7 +39,7 @@ class ReportListActivityScrollToTodayTest {
         stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 1)
         onId(R.id.action_today).click()
         onId(R.id.reportsContainer).hasChildWithText("1 Sun")
-        onId(R.id.reportsContainer).hasNoChildWithText("31 Tue")
+        onId(R.id.reportsContainer).doesNotHaveChildWithText("31 Tue")
     }
 
     @Test

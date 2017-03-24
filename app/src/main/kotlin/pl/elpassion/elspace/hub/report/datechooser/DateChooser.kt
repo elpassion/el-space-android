@@ -8,10 +8,10 @@ import java.util.*
 
 private val DATE_DIALOG_TAG = "date_dialog"
 
-fun showDateDialog(supportFragmentManager: FragmentManager, dateListener: (String) -> Unit) {
+fun showDateDialog(fragmentManager: FragmentManager, dateListener: (String) -> Unit) {
     val calendar = getCurrentTimeCalendar()
     val dateDialog = createDateDialog(calendar, dateListener)
-    dateDialog.show(supportFragmentManager, DATE_DIALOG_TAG)
+    dateDialog.show(fragmentManager, DATE_DIALOG_TAG)
 }
 
 private fun createDateDialog(calendar: Calendar, dateListener: (String) -> Unit) =

@@ -5,7 +5,6 @@ import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
 import rx.Completable
-import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,
@@ -46,7 +45,6 @@ class ReportEditController(private val report: Report,
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
             .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
             .doOnNext { view.close() }
-            .onErrorResumeNext { Observable.empty() }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .startWith(report.type)

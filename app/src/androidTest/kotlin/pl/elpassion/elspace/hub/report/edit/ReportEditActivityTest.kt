@@ -178,6 +178,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldShowLoaderOnReportEditCall() {
+        stubReportEditApiToNeverComplete()
         stubReportAndStart(newRegularHourlyReport())
         onId(R.id.reportEditHours).replaceText("7.5")
         onId(R.id.editReport).click()
@@ -192,6 +193,16 @@ class ReportEditActivityTest {
         mock<ProjectRepository> {
             ProjectRepositoryProvider.override = { it }
             whenever(it.getProjects()).thenReturn(Observable.just(projects))
+        }
+    }
+
+    private fun stubReportEditApiToNeverComplete() {
+        ReportEdit.ApiProvider.override = {
+            object : ReportEdit.Api {
+                override fun removeReport(reportId: Long) = Completable.never()
+
+                override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?, description: String?, projectId: Long?): Completable = Completable.never()
+            }
         }
     }
 

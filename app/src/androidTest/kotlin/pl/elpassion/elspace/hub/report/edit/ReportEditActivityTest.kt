@@ -176,14 +176,8 @@ class ReportEditActivityTest {
         verifyIsUnpaidVacationsFormDisplayed()
     }
 
-    @Ignore("Fix schedulers")
     @Test
     fun shouldShowLoaderOnReportEditCall() {
-        ReportEdit.ApiProvider.override = {
-            mock<ReportEdit.Api>().apply {
-                whenever(editReport(any(), any(), any(), any(), any(), any())).thenReturn(Completable.never())
-            }
-        }
         stubReportAndStart(newRegularHourlyReport())
         onId(R.id.reportEditHours).replaceText("7.5")
         onId(R.id.editReport).click()

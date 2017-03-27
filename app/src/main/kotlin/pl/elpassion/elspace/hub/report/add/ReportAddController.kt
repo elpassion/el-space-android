@@ -62,7 +62,7 @@ class ReportAddController(private val date: String?,
             when {
                 !regularReport.hasProject() -> {
                     view.showEmptyProjectError()
-                    Observable.never<Unit>()
+                    Observable.empty()
                 }
                 !regularReport.hasDescription() -> {
                     view.showEmptyDescriptionError()

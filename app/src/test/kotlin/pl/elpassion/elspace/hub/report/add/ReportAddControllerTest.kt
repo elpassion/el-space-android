@@ -270,6 +270,13 @@ class ReportAddControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenProjectIsEmptyOnAddingRegularReport() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularReport(project = null))
+        verify(view).hideLoader()
+    }
+
     private fun newRegularReport(selectedDate: String = "date", project: Project? = newProject(id = 1), hours: String = "8", description: String = "description")
             = RegularReport(selectedDate = selectedDate, project = project, hours = hours, description = description)
 

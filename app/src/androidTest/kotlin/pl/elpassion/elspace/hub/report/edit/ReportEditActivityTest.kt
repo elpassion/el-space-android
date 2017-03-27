@@ -2,11 +2,9 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -203,21 +201,20 @@ class ReportEditActivityTest {
     }
 
     private fun stubReportEditApiToNeverComplete() {
-        ReportEdit.ApiProvider.override = {
-            object : ReportEdit.Api {
-                override fun removeReport(reportId: Long) = Completable.never()
-
-                override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?, description: String?, projectId: Long?): Completable = Completable.never()
-            }
-        }
+        stubReportEditApiToCompleteWith(Completable.never())
     }
 
     private fun stubReportEditApiToImmediatelyComplete() {
+        stubReportEditApiToCompleteWith(Completable.complete())
+    }
+
+    private fun stubReportEditApiToCompleteWith(completable: Completable) {
         ReportEdit.ApiProvider.override = {
             object : ReportEdit.Api {
-                override fun removeReport(reportId: Long) = Completable.complete()
+                override fun removeReport(reportId: Long): Completable = completable
 
-                override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?, description: String?, projectId: Long?): Completable = Completable.complete()
+                override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?,
+                                        description: String?, projectId: Long?): Completable = completable
             }
         }
     }

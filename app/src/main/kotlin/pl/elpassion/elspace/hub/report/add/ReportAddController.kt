@@ -7,7 +7,7 @@ import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import rx.Completable
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportAddController(private val date: String?,
@@ -36,7 +36,7 @@ class ReportAddController(private val date: String?,
 
     private fun addReportClicks() = view.addReportClicks()
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
-            .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+            .switchMap { callApi(it) }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }
 
@@ -52,7 +52,7 @@ class ReportAddController(private val date: String?,
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
     }
 
-    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
             .subscribeOn(schedulers.subscribeOn)
             .observeOn(schedulers.observeOn)
             .addLoader()
@@ -62,11 +62,11 @@ class ReportAddController(private val date: String?,
             when {
                 !regularReport.hasProject() -> {
                     view.showEmptyProjectError()
-                    Completable.never()
+                    Observable.never<Unit>()
                 }
                 !regularReport.hasDescription() -> {
                     view.showEmptyDescriptionError()
-                    Completable.never()
+                    Observable.empty()
                 }
                 else -> addRegularReportObservable(it)
             }
@@ -99,7 +99,7 @@ class ReportAddController(private val date: String?,
 
     private fun RegularReport.hasProject() = project != null
 
-    private fun Completable.addLoader() = this
+    private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }

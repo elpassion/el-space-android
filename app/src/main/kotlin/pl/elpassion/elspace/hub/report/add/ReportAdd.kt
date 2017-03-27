@@ -5,7 +5,6 @@ import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
 import retrofit2.http.POST
 import retrofit2.http.Query
-import rx.Completable
 import rx.Observable
 
 interface ReportAdd {
@@ -35,18 +34,18 @@ interface ReportAdd {
                 @Query("activity[performed_at]") date: String,
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
-                @Query("activity[comment]") description: String): Completable
+                @Query("activity[comment]") description: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=1")
         fun addPaidVacationsReport(
                 @Query("activity[performed_at]") date: String,
-                @Query("activity[value]") hours: String): Completable
+                @Query("activity[value]") hours: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=2&activity[value]=0")
-        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Completable
+        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=3&activity[value]=0")
-        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Completable
+        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

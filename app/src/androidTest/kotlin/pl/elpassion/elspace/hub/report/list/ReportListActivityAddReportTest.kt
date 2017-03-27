@@ -22,13 +22,12 @@ import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.add.ReportAdd
-import rx.Completable
 import rx.Observable
 
 class ReportListActivityAddReportTest {
 
     val service = mock<ReportList.Service>()
-    val addReportService = mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.complete()) }
+    val addReportService = mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Observable.just(Unit)) }
 
     @JvmField @Rule
     val rule = rule<ReportListActivity> {

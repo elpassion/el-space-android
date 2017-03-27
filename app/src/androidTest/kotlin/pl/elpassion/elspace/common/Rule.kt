@@ -9,6 +9,7 @@ import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.add.ReportAdd
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
 import rx.Completable
+import rx.Observable
 
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {
@@ -43,13 +44,13 @@ fun stubReportEditApi() {
 fun stubReportAddApi() {
     ReportAdd.ApiProvider.override = {
         object : ReportAdd.Api {
-            override fun addRegularReport(date: String, projectId: Long, hours: String, description: String) = Completable.complete()
+            override fun addRegularReport(date: String, projectId: Long, hours: String, description: String) = Observable.just(Unit)
 
-            override fun addPaidVacationsReport(date: String, hours: String) = Completable.complete()
+            override fun addPaidVacationsReport(date: String, hours: String) = Observable.just(Unit)
 
-            override fun addSickLeaveReport(date: String) = Completable.complete()
+            override fun addSickLeaveReport(date: String) = Observable.just(Unit)
 
-            override fun addUnpaidVacationsReport(date: String) = Completable.complete()
+            override fun addUnpaidVacationsReport(date: String) = Observable.just(Unit)
         }
     }
 }

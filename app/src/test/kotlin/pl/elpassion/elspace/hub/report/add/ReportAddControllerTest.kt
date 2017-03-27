@@ -35,12 +35,10 @@ class ReportAddControllerTest {
     }
 
     private fun stubApiToReturnSubject() {
-        addReportApi.toCompletable().run {
-            whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(this)
-            whenever(api.addSickLeaveReport(any())).thenReturn(this)
-            whenever(api.addUnpaidVacationsReport(any())).thenReturn(this)
-            whenever(api.addPaidVacationsReport(any(), any())).thenReturn(this)
-        }
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(addReportApi)
+        whenever(api.addSickLeaveReport(any())).thenReturn(addReportApi)
+        whenever(api.addUnpaidVacationsReport(any())).thenReturn(addReportApi)
+        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(addReportApi)
     }
 
     @Test
@@ -262,6 +260,13 @@ class ReportAddControllerTest {
         verify(view, never()).hideLoader()
         completeReportAdd()
         observeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenDescriptionIsEmptyOnAddingRegularReport() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularReport(description = ""))
         verify(view).hideLoader()
     }
 

@@ -19,7 +19,7 @@ import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import rx.Completable
+import rx.Observable
 
 class ReportAddActivityTest {
 
@@ -160,7 +160,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldShowLoaderOnReportAddCall() {
-        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
+        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Observable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.addReport).click()

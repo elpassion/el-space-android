@@ -277,6 +277,16 @@ class ReportAddControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotEndMainEventsStreamOnApiCallFail() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularReport())
+        addReportApi.onError(RuntimeException())
+        verify(view).showLoader()
+        onAddReportClicks.onNext(newRegularReport())
+        verify(view, times(2)).showLoader()
+    }
+
     private fun newRegularReport(selectedDate: String = "date", project: Project? = newProject(id = 1), hours: String = "8", description: String = "description")
             = RegularReport(selectedDate = selectedDate, project = project, hours = hours, description = description)
 

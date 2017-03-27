@@ -38,7 +38,6 @@ class ReportAddController(private val date: String?,
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
             .switchMap { callApi(it) }
             .doOnNext { view.close() }
-            .catchOnError { view.showError(it) }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
@@ -56,6 +55,7 @@ class ReportAddController(private val date: String?,
             .subscribeOn(schedulers.subscribeOn)
             .observeOn(schedulers.observeOn)
             .addLoader()
+            .catchOnError { view.showError(it) }
 
     private val regularReportHandler = { regularReport: ReportViewModel ->
         (regularReport as RegularReport).let {

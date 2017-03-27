@@ -10,10 +10,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.isBottomNavigationItemChecked
-import pl.elpassion.elspace.common.onToolbarBackArrow
-import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
@@ -185,6 +182,15 @@ class ReportEditActivityTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldHideLoaderOnReportEditCallCompleted() {
+        stubReportEditApiToImmediatelyComplete()
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.reportEditHours).replaceText("7.5")
+        onId(R.id.editReport).click()
+        onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }
@@ -202,6 +208,16 @@ class ReportEditActivityTest {
                 override fun removeReport(reportId: Long) = Completable.never()
 
                 override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?, description: String?, projectId: Long?): Completable = Completable.never()
+            }
+        }
+    }
+
+    private fun stubReportEditApiToImmediatelyComplete() {
+        ReportEdit.ApiProvider.override = {
+            object : ReportEdit.Api {
+                override fun removeReport(reportId: Long) = Completable.complete()
+
+                override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?, description: String?, projectId: Long?): Completable = Completable.complete()
             }
         }
     }

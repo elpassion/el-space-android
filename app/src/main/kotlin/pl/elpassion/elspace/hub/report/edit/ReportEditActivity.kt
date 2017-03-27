@@ -17,6 +17,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.checkedItemId
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
@@ -147,7 +148,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showLoader() = showLoader(reportEditCoordinator)
 
-    override fun hideLoader() = Unit
+    override fun hideLoader() = hideLoader(reportEditCoordinator)
 
     private fun showHourlyForm() {
         reportEditDateLayout.show()

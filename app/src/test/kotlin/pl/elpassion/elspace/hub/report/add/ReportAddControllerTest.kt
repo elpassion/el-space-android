@@ -16,7 +16,7 @@ import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
 
-    private val onAddReportClicks = PublishSubject.create<ReportViewModel>()
+    private val addReportClicks = PublishSubject.create<ReportViewModel>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
     private val projectClickEvents = PublishSubject.create<Unit>()
     private val view = mock<ReportAdd.View>()
@@ -24,19 +24,19 @@ class ReportAddControllerTest {
     private val repository = mock<LastSelectedProjectRepository>()
     private val subscribeOn = TestScheduler()
     private val observeOn = TestScheduler()
-    private val addReportApi = PublishSubject.create<Unit>()
+    private val addReportSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
         stubApiToReturnSubject()
         stubRepositoryToReturn()
-        whenever(view.addReportClicks()).thenReturn(onAddReportClicks)
+        whenever(view.addReportClicks()).thenReturn(addReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
     }
 
     private fun stubApiToReturnSubject() {
-        addReportApi.toCompletable().run {
+        addReportSubject.toCompletable().run {
             whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(this)
             whenever(api.addSickLeaveReport(any())).thenReturn(this)
             whenever(api.addUnpaidVacationsReport(any())).thenReturn(this)
@@ -86,15 +86,15 @@ class ReportAddControllerTest {
     @Test
     fun shouldAddReportWithChangedDate() {
         createController("2016-01-04").onCreate()
-        onAddReportClicks.onNext(newRegularReport(selectedDate = "2016-05-04"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "2016-05-04"))
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport())
-        addReportApi.onError(RuntimeException())
+        addReportClicks.onNext(newRegularReport())
+        addReportSubject.onError(RuntimeException())
         verify(view).showError(any())
     }
 
@@ -108,8 +108,8 @@ class ReportAddControllerTest {
     fun shouldShowErrorWhenApiFails() {
         val exception = RuntimeException()
         createController("2016-09-23").onCreate()
-        onAddReportClicks.onNext(newRegularReport())
-        addReportApi.onError(exception)
+        addReportClicks.onNext(newRegularReport())
+        addReportSubject.onError(exception)
         verify(view).showError(exception)
     }
 
@@ -172,7 +172,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldShouldUseRegularReportApiToAddRegularReport() {
         createController("2016-09-23").onCreate()
-        onAddReportClicks.onNext(newRegularReport(selectedDate = "2016-09-23", project = newProject(id = 1), hours = "8", description = "description"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "2016-09-23", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("2016-09-23", 1, "8", "description")
     }
 
@@ -215,35 +215,35 @@ class ReportAddControllerTest {
     @Test
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
     }
 
     @Test
     fun shouldReallyCallSenderAfterOnReportAdded() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        addReportClicks.onNext(newRegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(api).addRegularReport(date = "date", hours = "9", projectId = 2, description = "description2")
     }
 
     @Test
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport(description = ""))
+        addReportClicks.onNext(newRegularReport(description = ""))
         verify(view).showEmptyDescriptionError()
     }
 
     @Test
     fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport(project = null))
+        addReportClicks.onNext(newRegularReport(project = null))
         verify(view).showEmptyProjectError()
     }
 
     @Test
     fun shouldNotCloseScreenWhenDescriptionIsEmpty() {
         createController().onCreate()
-        onAddReportClicks.onNext(newRegularReport(description = ""))
+        addReportClicks.onNext(newRegularReport(description = ""))
         verify(view, never()).close()
     }
 
@@ -256,7 +256,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldSubscribeOnGivenScheduler() {
         createController(subscribeOnScheduler = subscribeOn).onCreate()
-        onAddReportClicks.onNext(newRegularReport())
+        addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         completeReportAdd()
@@ -266,7 +266,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldObserveOnGivenScheduler() {
         createController(observeOnScheduler = observeOn).onCreate()
-        onAddReportClicks.onNext(newRegularReport())
+        addReportClicks.onNext(newRegularReport())
         verify(view, never()).hideLoader()
         completeReportAdd()
         observeOn.triggerActions()
@@ -284,22 +284,22 @@ class ReportAddControllerTest {
     }
 
     private fun completeReportAdd() {
-        addReportApi.onNext(Unit)
-        addReportApi.onCompleted()
+        addReportSubject.onNext(Unit)
+        addReportSubject.onCompleted()
     }
 
     private fun addUnpaidVacationReport() {
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        onAddReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
+        addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
     }
 
     private fun addSickLeaveReport() {
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        onAddReportClicks.onNext(SickLeaveReport("2016-01-01"))
+        addReportClicks.onNext(SickLeaveReport("2016-01-01"))
     }
 
     private fun addPaidVacationReport() {
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        onAddReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
+        addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
     }
 }

@@ -189,6 +189,15 @@ class ReportEditActivityTest {
         onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
     }
 
+    @Test
+    fun shouldCloseScreenOnReportEditCallCompleted() {
+        stubReportEditApiToImmediatelyComplete()
+        stubReportAndStart(newRegularHourlyReport())
+        onId(R.id.reportEditHours).replaceText("7.5")
+        onId(R.id.editReport).click()
+        assertTrue(rule.activity.isFinishing)
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

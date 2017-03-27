@@ -144,7 +144,10 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         }
     }
 
-    override fun close() = Unit
+    override fun close() {
+        setResult(Activity.RESULT_OK)
+        finish()
+    }
 
     override fun showLoader() = showLoader(reportEditCoordinator)
 

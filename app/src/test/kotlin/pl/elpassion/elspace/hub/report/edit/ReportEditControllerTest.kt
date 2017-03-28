@@ -116,35 +116,35 @@ class ReportEditControllerTest {
     fun shouldEditRegularReportWithChangedData() {
         val report = newRegularHourlyReport(id = 7, reportedHours = 8.0, year = 2017, month = 1, day = 1, project = newProject(id = 11))
         createController(report).onCreate()
-        editReportClicks.onNext(RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
+        onEditReportClick(model = RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
         verify(api).editReport(7, 0, "2017-01-02", "8", "Slack Time", 12)
     }
 
     @Test
     fun shouldEditPaidVacationsWithChangedData() {
         createController(newPaidVacationHourlyReport(id = 8, year = 2015, month = 3, day = 3, reportedHours = 2.0)).onCreate()
-        editReportClicks.onNext(PaidVacationsReport("2015-03-03", "3"))
+        onEditReportClick(model = PaidVacationsReport("2015-03-03", "3"))
         verify(api).editReport(8, 1, "2015-03-03", "3", null, null)
     }
 
     @Test
     fun shouldEditUnpaidVacationsWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS, id = 70, year = 2010, month = 5, day = 15)).onCreate()
-        editReportClicks.onNext(UnpaidVacationsReport("2010-05-20"))
+        onEditReportClick(model = UnpaidVacationsReport("2010-05-20"))
         verify(api).editReport(70, 2, "2010-05-20", null, null, null)
     }
 
     @Test
     fun shouldEditSickLeaveWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.SICK_LEAVE, id = 3, year = 2000, month = 3, day = 7)).onCreate()
-        editReportClicks.onNext(SickLeaveReport("2000-03-08"))
+        onEditReportClick(model = SickLeaveReport("2000-03-08"))
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
     }
 
     @Test
     fun shouldCloseAfterReportEdited() {
         createController().onCreate()
-        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        onEditReportClick()
         completeReportEdit()
         verify(view).close()
     }
@@ -152,14 +152,14 @@ class ReportEditControllerTest {
     @Test
     fun shouldShowLoaderOnEditingReport() {
         createController().onCreate()
-        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        onEditReportClick()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldShowErrorWhenEditingReportFails() {
         createController().onCreate()
-        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        onEditReportClick()
         editReportSubject.onError(RuntimeException())
         verify(view).showError()
     }
@@ -167,7 +167,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldHideLoaderOnReportEdited() {
         createController().onCreate()
-        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        onEditReportClick()
         completeReportEdit()
         verify(view).showLoader()
         verify(view).hideLoader()
@@ -175,6 +175,10 @@ class ReportEditControllerTest {
 
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
+
+    private fun onEditReportClick(model: ReportViewModel = RegularReport("2000-01-01", newProject(), "Desc", "8")) {
+        editReportClicks.onNext(model)
+    }
 
     private fun completeReportEdit() = editReportSubject.run {
         onNext(Unit)

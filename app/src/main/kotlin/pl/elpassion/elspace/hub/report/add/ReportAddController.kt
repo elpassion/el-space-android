@@ -60,11 +60,11 @@ class ReportAddController(private val date: String?,
     private val regularReportHandler = { regularReport: ReportViewModel ->
         (regularReport as RegularReport).run {
             when {
-                !hasProject() -> {
+                hasNoProject() -> {
                     view.showEmptyProjectError()
                     Observable.empty()
                 }
-                !hasDescription() -> {
+                hasNoDescription() -> {
                     view.showEmptyDescriptionError()
                     Observable.empty()
                 }
@@ -95,9 +95,9 @@ class ReportAddController(private val date: String?,
         ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
     }
 
-    private fun RegularReport.hasDescription() = description.isNotBlank()
+    private fun RegularReport.hasNoDescription() = description.isBlank()
 
-    private fun RegularReport.hasProject() = project != null
+    private fun RegularReport.hasNoProject() = project == null
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }

@@ -58,17 +58,17 @@ class ReportAddController(private val date: String?,
             .catchOnError { view.showError(it) }
 
     private val regularReportHandler = { regularReport: ReportViewModel ->
-        (regularReport as RegularReport).let {
+        (regularReport as RegularReport).run {
             when {
-                !regularReport.hasProject() -> {
+                !hasProject() -> {
                     view.showEmptyProjectError()
                     Observable.empty()
                 }
-                !regularReport.hasDescription() -> {
+                !hasDescription() -> {
                     view.showEmptyDescriptionError()
                     Observable.empty()
                 }
-                else -> addRegularReportObservable(it)
+                else -> addRegularReportObservable(this)
             }
         }
     }

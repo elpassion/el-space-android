@@ -106,7 +106,8 @@ class ReportEditController(private val report: Report,
 
     private fun Completable.addLoader() = this
             .doOnSubscribe { view.showLoader() }
-            .doOnCompleted { view.hideLoader() }
+            .doOnUnsubscribe { view.hideLoader() }
+            .doOnTerminate { view.hideLoader() }
 
     private fun showRegularForm() {
         view.showRegularForm()

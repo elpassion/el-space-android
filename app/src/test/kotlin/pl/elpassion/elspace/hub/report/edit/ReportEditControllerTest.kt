@@ -165,6 +165,16 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldHideLoaderWhenEditingReportTerminated() {
+        createController().run {
+            onCreate()
+            onEditReportClick()
+            onDestroy()
+        }
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldHideLoaderOnReportEdited() {
         createController().onCreate()
         onEditReportClick()

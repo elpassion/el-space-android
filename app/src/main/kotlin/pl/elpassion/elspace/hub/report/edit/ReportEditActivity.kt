@@ -153,6 +153,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun hideLoader() = hideLoader(reportEditCoordinator)
 
+    override fun showError() = Unit
+
     private fun showHourlyForm() {
         reportEditDateLayout.show()
         reportEditHoursLayout.show()

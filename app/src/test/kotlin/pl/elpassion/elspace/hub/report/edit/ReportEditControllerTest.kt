@@ -1,6 +1,9 @@
 package pl.elpassion.elspace.hub.report.edit
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -151,6 +154,14 @@ class ReportEditControllerTest {
         createController().onCreate()
         editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
         verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldShowErrorWhenEditingReportFails() {
+        createController().onCreate()
+        editReportClicks.onNext(RegularReport("2000-01-01", newProject(), "Slack Time", "8"))
+        editReportSubject.onError(RuntimeException())
+        verify(view).showError()
     }
 
     @Test

@@ -200,6 +200,14 @@ class ReportEditActivityTest {
         onText(R.string.internet_connection_error).isDisplayed()
     }
 
+    @Test
+    fun shouldShowEmptyProjectErrorOnProjectNotSelected() {
+        stubReportAndStart(newDailyReport())
+        onId(R.id.action_regular_report).click()
+        onId(R.id.editReport).click()
+        onText(R.string.empty_project_error).isDisplayed()
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

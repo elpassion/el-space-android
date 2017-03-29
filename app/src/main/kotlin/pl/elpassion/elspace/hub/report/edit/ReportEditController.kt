@@ -83,14 +83,16 @@ class ReportEditController(private val report: Report,
 
     private val regularReportEditHandler = { model: ReportViewModel ->
         (model as RegularReport).let {
-            if (model.project == null) {
-                view.showEmptyProjectError()
-                Completable.never()
-            } else if (model.description.isBlank()) {
-                view.showEmptyDescriptionError()
-                Completable.never()
-            } else {
-                api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project.id)
+            when {
+                model.project == null -> {
+                    view.showEmptyProjectError()
+                    Completable.never()
+                }
+                model.description.isBlank() -> {
+                    view.showEmptyDescriptionError()
+                    Completable.never()
+                }
+                else -> editRegularReport(model, model.project)
             }
         }
     }
@@ -108,6 +110,9 @@ class ReportEditController(private val report: Report,
     private val sickLeaveReportEditHandler = { model: ReportViewModel ->
         api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
+
+    private fun editRegularReport(model: RegularReport, project: Project) =
+            api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, project.id)
 
     private fun Completable.addLoader() = this
             .doOnSubscribe { view.showLoader() }

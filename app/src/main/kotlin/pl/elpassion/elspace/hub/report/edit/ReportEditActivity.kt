@@ -160,6 +160,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         Snackbar.make(reportEditCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showEmptyProjectError() = Unit
+
     private fun showHourlyForm() {
         reportEditDateLayout.show()
         reportEditHoursLayout.show()

@@ -29,6 +29,7 @@ interface ReportEdit {
         fun showLoader()
         fun hideLoader()
         fun showError(ex: Throwable)
+        fun showEmptyProjectError()
     }
 
     interface Api {

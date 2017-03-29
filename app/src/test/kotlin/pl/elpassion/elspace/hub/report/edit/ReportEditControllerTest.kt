@@ -183,6 +183,14 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldShowEmptyProjectErrorWhenNoProjectSelectedInRegularForm() {
+        createController(newDailyReport()).onCreate()
+        reportTypeChanges.onNext(ReportType.REGULAR)
+        onEditReportClick(model = RegularReport("2000-02-03", null, "Slack Time", "8"))
+        verify(view).showEmptyProjectError()
+    }
+
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 

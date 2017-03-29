@@ -83,7 +83,12 @@ class ReportEditController(private val report: Report,
 
     private val regularReportEditHandler = { model: ReportViewModel ->
         (model as RegularReport).let {
-            api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project?.id)
+            if (model.project == null) {
+                view.showEmptyProjectError()
+                Completable.never()
+            } else {
+                api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project.id)
+            }
         }
     }
 

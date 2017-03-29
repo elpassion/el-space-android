@@ -162,6 +162,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showEmptyProjectError() = Unit
 
+    override fun showEmptyDescriptionError() = Unit
+
     private fun showHourlyForm() {
         reportEditDateLayout.show()
         reportEditHoursLayout.show()

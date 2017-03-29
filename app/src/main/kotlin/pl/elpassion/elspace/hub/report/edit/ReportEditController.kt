@@ -86,6 +86,9 @@ class ReportEditController(private val report: Report,
             if (model.project == null) {
                 view.showEmptyProjectError()
                 Completable.never()
+            } else if (model.description.isBlank()) {
+                view.showEmptyDescriptionError()
+                Completable.never()
             } else {
                 api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, model.project.id)
             }

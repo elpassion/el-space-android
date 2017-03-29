@@ -191,6 +191,14 @@ class ReportEditControllerTest {
         verify(view).showEmptyProjectError()
     }
 
+    @Test
+    fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmptyInRegularForm() {
+        createController(newDailyReport()).onCreate()
+        reportTypeChanges.onNext(ReportType.REGULAR)
+        onEditReportClick(model = RegularReport("2000-02-03", newProject(), "", "8"))
+        verify(view).showEmptyDescriptionError()
+    }
+
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 

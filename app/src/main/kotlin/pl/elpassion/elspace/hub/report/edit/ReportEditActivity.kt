@@ -163,7 +163,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         Snackbar.make(reportEditCoordinator, R.string.empty_project_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showEmptyDescriptionError() = Unit
+    override fun showEmptyDescriptionError() {
+        Snackbar.make(reportEditCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
+    }
 
     private fun showHourlyForm() {
         reportEditDateLayout.show()

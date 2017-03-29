@@ -208,6 +208,17 @@ class ReportEditActivityTest {
         onText(R.string.empty_project_error).isDisplayed()
     }
 
+    @Test
+    fun shouldShowEmptyDescriptionErrorOnDescriptionNotFilled() {
+        stubProjectsRepository(listOf(newProject(name = "Project 1")))
+        stubReportAndStart(newDailyReport())
+        onId(R.id.action_regular_report).click()
+        onId(R.id.reportEditProjectName).click()
+        onText("Project 1").click()
+        onId(R.id.editReport).click()
+        onText(R.string.empty_description_error).isDisplayed()
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

@@ -2,6 +2,7 @@ package pl.elpassion.elspace.hub.report.edit
 
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
 import retrofit2.http.DELETE
@@ -17,7 +18,7 @@ interface ReportEdit {
         fun showReportType(type: ReportType)
         fun showDate(date: String)
         fun showReportedHours(reportedHours: Double)
-        fun showProjectName(name: String)
+        fun showProject(project: Project)
         fun showDescription(description: String)
         fun reportTypeChanges(): Observable<ReportType>
         fun showRegularForm()

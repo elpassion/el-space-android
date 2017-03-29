@@ -31,7 +31,7 @@ class ReportEditController(private val report: Report,
     }
 
     fun onProjectChanged(project: Project) {
-        view.showProjectName(project.name)
+        view.showProject(project)
     }
 
     private fun showReport() {
@@ -69,7 +69,7 @@ class ReportEditController(private val report: Report,
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)
         if (report is RegularHourlyReport) {
-            view.showProjectName(report.project.name)
+            view.showProject(report.project)
             view.showDescription(report.description)
         }
     }

@@ -59,17 +59,19 @@ class ReportEditControllerTest {
 
     @Test
     fun shouldShowProjectNameOnCreateWhenEditingRegularReport() {
-        createController(newRegularHourlyReport(project = newProject(name = "Slack Time"))).onCreate()
-        verify(view).showProjectName("Slack Time")
+        val project = newProject(name = "Slack Time")
+        createController(newRegularHourlyReport(project = project)).onCreate()
+        verify(view).showProject(project)
     }
 
     @Test
     fun shouldShowUpdatedProjectNameOnProjectChange() {
+        val project = newProject(name = "New project")
         createController(newDailyReport()).run {
             onCreate()
-            onProjectChanged(newProject(name = "New project"))
+            onProjectChanged(project)
         }
-        verify(view).showProjectName("New project")
+        verify(view).showProject(project)
     }
 
     @Test

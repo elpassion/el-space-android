@@ -64,9 +64,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == CHOOSE_PROJECT_REQUEST_CODE && data != null) {
-            selectedProject = ProjectChooseActivity.getProject(data).apply {
-                controller.onProjectChanged(this)
-            }
+            controller.onProjectChanged(ProjectChooseActivity.getProject(data))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -96,8 +94,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditHours.setText(reportedHours.toStringWithoutZeroes())
     }
 
-    override fun showProjectName(name: String) {
-        reportEditProjectName.setText(name)
+    override fun showProject(project: Project) {
+        selectedProject = project
+        reportEditProjectName.setText(project.name)
     }
 
     override fun showDescription(description: String) {

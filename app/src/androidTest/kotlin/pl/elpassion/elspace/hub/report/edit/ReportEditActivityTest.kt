@@ -192,6 +192,14 @@ class ReportEditActivityTest {
         assertTrue(rule.activity.isFinishing)
     }
 
+    @Test
+    fun shouldShowConnectionErrorOnCallError() {
+        stubReportEditApiToCompleteWith(Completable.error(RuntimeException()))
+        stubReportAndStart()
+        onId(R.id.editReport).click()
+        onText(R.string.internet_connection_error).isDisplayed()
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

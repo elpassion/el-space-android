@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -153,7 +154,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun hideLoader() = hideLoader(reportEditCoordinator)
 
-    override fun showError(ex: Throwable) = Unit
+    override fun showError(ex: Throwable) {
+        Snackbar.make(reportEditCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
+    }
 
     private fun showHourlyForm() {
         reportEditDateLayout.show()

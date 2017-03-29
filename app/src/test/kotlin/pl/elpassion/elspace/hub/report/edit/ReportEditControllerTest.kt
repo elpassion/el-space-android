@@ -161,7 +161,7 @@ class ReportEditControllerTest {
         createController().onCreate()
         onEditReportClick()
         editReportSubject.onError(RuntimeException())
-        verify(view).showError()
+        verify(view).showError(any())
     }
 
     @Test

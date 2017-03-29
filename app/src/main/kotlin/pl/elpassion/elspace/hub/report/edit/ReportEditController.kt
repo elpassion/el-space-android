@@ -47,7 +47,7 @@ class ReportEditController(private val report: Report,
             .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
             .doOnNext { view.close() }
             .onErrorResumeNext {
-                view.showError()
+                view.showError(it)
                 Observable.empty()
             }
 

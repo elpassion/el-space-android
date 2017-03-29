@@ -28,7 +28,7 @@ interface ReportEdit {
         fun close()
         fun showLoader()
         fun hideLoader()
-        fun showError()
+        fun showError(ex: Throwable)
     }
 
     interface Api {

@@ -8,7 +8,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.isBottomNavigationItemChecked
+import pl.elpassion.elspace.common.onToolbarBackArrow
+import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
@@ -178,15 +181,6 @@ class ReportEditActivityTest {
         onId(R.id.reportEditHours).replaceText("7.5")
         onId(R.id.editReport).click()
         onId(R.id.loader).isDisplayed()
-    }
-
-    @Test
-    fun shouldHideLoaderOnReportEditCallCompleted() {
-        stubReportEditApiToImmediatelyComplete()
-        stubReportAndStart(newRegularHourlyReport())
-        onId(R.id.reportEditHours).replaceText("7.5")
-        onId(R.id.editReport).click()
-        onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
     }
 
     @Test

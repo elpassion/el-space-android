@@ -82,17 +82,17 @@ class ReportEditController(private val report: Report,
     }
 
     private val regularReportEditHandler = { model: ReportViewModel ->
-        (model as RegularReport).let {
+        (model as RegularReport).run {
             when {
-                model.project == null -> {
+                project == null -> {
                     view.showEmptyProjectError()
                     Completable.never()
                 }
-                model.description.isBlank() -> {
+                description.isBlank() -> {
                     view.showEmptyDescriptionError()
                     Completable.never()
                 }
-                else -> editRegularReport(model, model.project)
+                else -> editRegularReport(this, project)
             }
         }
     }

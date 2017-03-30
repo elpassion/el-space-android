@@ -8,6 +8,7 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
+import pl.elpassion.elspace.hub.report.*
 import rx.Scheduler
 import rx.schedulers.Schedulers.trampoline
 import rx.schedulers.TestScheduler
@@ -200,6 +201,13 @@ class ReportAddControllerTest {
         stubRepositoryToReturn(newProject(id = 3))
         createController().onCreate()
         verify(view).showSelectedProject(newProject(id = 3))
+    }
+
+    @Test
+    fun shouldShowSelectedProjectOnProjectChange() {
+        val project = newProject()
+        createController().onProjectChanged(project)
+        verify(view).showSelectedProject(project)
     }
 
     @Test

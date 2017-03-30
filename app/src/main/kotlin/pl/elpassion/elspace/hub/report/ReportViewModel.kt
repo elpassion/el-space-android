@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.report.add
+package pl.elpassion.elspace.hub.report
 
 import pl.elpassion.elspace.hub.project.Project
 

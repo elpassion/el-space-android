@@ -6,7 +6,12 @@ import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
+import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
+import pl.elpassion.elspace.hub.report.PaidVacationsReport
+import pl.elpassion.elspace.hub.report.RegularReport
+import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
@@ -30,6 +35,18 @@ class ReportAddController(private val date: String?,
         addReportClicks()
                 .subscribe()
                 .addTo(subscriptions)
+    }
+
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
+    fun onDateChanged(date: String) {
+        view.showDate(date)
+    }
+
+    fun onProjectChanged(project: Project) {
+        view.showSelectedProject(project)
     }
 
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
@@ -104,10 +121,6 @@ class ReportAddController(private val date: String?,
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }
 
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
     private fun showRegularForm() {
         view.showRegularForm()
     }
@@ -122,9 +135,5 @@ class ReportAddController(private val date: String?,
 
     private fun showUnpaidVacationsForm() {
         view.showUnpaidVacationsForm()
-    }
-
-    fun onDateChanged(date: String) {
-        view.showDate(date)
     }
 }

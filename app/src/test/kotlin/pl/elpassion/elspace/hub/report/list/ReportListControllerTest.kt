@@ -8,10 +8,7 @@ import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.commons.stubCurrentTime
-import pl.elpassion.elspace.hub.project.dto.newDailyReport
-import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
-import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
 import rx.Observable
@@ -126,24 +123,10 @@ class ReportListControllerTest {
     }
 
     @Test
-    fun shouldOpenEditRegularReportScreenOnReportIfReportIsRegularReport() {
+    fun shouldOpenEditReportScreenOnReport() {
         val report = newRegularHourlyReport()
         controller.onReport(report)
         verify(view, times(1)).openEditReportScreen(report)
-    }
-
-    @Test
-    fun shouldOpenEditPaidVacationScreenOnReportIfReportIsPaidVacationReport() {
-        val report = newPaidVacationHourlyReport()
-        controller.onReport(report)
-        verify(view, times(1)).openPaidVacationEditReportScreen(report)
-    }
-
-    @Test
-    fun shouldOpenEditDailyScreenOnReportIfReportIsDailyReport() {
-        val report = newDailyReport(reportType = DailyReportType.SICK_LEAVE)
-        controller.onReport(report)
-        verify(view, times(1)).openDailyEditReportScreen(report)
     }
 
     @Test

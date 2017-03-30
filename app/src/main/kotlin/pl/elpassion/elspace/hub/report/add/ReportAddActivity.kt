@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.checkedItemId
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
@@ -24,6 +25,7 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -58,14 +60,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }
 
-    private fun Int.toReportType() = when (this) {
-        R.id.action_regular_report -> ReportType.REGULAR
-        R.id.action_paid_vacations_report -> ReportType.PAID_VACATIONS
-        R.id.action_sick_leave_report -> ReportType.SICK_LEAVE
-        R.id.action_unpaid_vacations_report -> ReportType.UNPAID_VACATIONS
-        else -> throw IllegalArgumentException()
-    }
-
     override fun showDate(date: String) {
         reportAddDate.setText(date)
     }
@@ -82,7 +76,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun addReportClicks(): Observable<ReportViewModel> {
         return toolbar.itemClicks().map {
             val selectedDate = reportAddDate.text.toString()
-            val checkMenuItem = bottomNavigation.menu.items.first { it.isChecked }.itemId
+            val checkMenuItem = bottomNavigation.menu.checkedItemId
             when (checkMenuItem) {
                 R.id.action_regular_report -> RegularReport(selectedDate, selectedProject, reportAddDescription.text.toString(), reportAddHours.text.toString())
                 R.id.action_paid_vacations_report -> PaidVacationsReport(selectedDate, reportAddHours.text.toString())
@@ -165,8 +159,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            showSelectedProject(ProjectChooseActivity.getProject(data!!))
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null) {
+            controller.onProjectChanged(ProjectChooseActivity.getProject(data))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -192,6 +186,3 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         fun intent(context: Context, date: String) = intent(context).apply { putExtra(ADD_DATE_KEY, date) }
     }
 }
-
-private val Menu.items: List<MenuItem>
-    get() = (0 until size()).map { getItem(it) }

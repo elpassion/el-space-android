@@ -106,10 +106,10 @@ class ReportAddController(private val date: String?,
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
-        ReportType.REGULAR -> showRegularForm()
-        ReportType.PAID_VACATIONS -> showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> showSickLeaveForm()
-        ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
+        ReportType.REGULAR -> view.showRegularForm()
+        ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
+        ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
     }
 
     private fun RegularReport.hasNoDescription() = description.isBlank()
@@ -120,20 +120,4 @@ class ReportAddController(private val date: String?,
             .doOnSubscribe { view.showLoader() }
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }
-
-    private fun showRegularForm() {
-        view.showRegularForm()
-    }
-
-    private fun showPaidVacationsForm() {
-        view.showPaidVacationsForm()
-    }
-
-    private fun showSickLeaveForm() {
-        view.showSickLeaveForm()
-    }
-
-    private fun showUnpaidVacationsForm() {
-        view.showUnpaidVacationsForm()
-    }
 }

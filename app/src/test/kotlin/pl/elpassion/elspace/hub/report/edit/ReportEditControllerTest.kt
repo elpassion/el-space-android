@@ -25,7 +25,7 @@ class ReportEditControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.editReport(any(), any(), any(), any(), any(), any())).thenReturn(editReportSubject.toCompletable())
+        whenever(api.editReport(any(), any(), any(), any(), any(), any())).thenReturn(editReportSubject)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.editReportClicks()).thenReturn(editReportClicks)
     }

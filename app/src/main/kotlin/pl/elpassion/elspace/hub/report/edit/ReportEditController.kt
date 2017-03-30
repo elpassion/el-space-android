@@ -5,7 +5,7 @@ import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
-import rx.Completable
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,
@@ -44,7 +44,7 @@ class ReportEditController(private val report: Report,
 
     private fun editReportClicks() = view.editReportClicks()
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
-            .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+            .switchMap { callApi(it) }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }
 
@@ -60,7 +60,7 @@ class ReportEditController(private val report: Report,
         ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
     }
 
-    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) =
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) =
             modelCallPair.second(modelCallPair.first)
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
@@ -86,11 +86,11 @@ class ReportEditController(private val report: Report,
             when {
                 project == null -> {
                     view.showEmptyProjectError()
-                    Completable.never()
+                    Observable.empty()
                 }
                 description.isBlank() -> {
                     view.showEmptyDescriptionError()
-                    Completable.never()
+                    Observable.empty()
                 }
                 else -> editRegularReport(this, project)
             }
@@ -114,7 +114,7 @@ class ReportEditController(private val report: Report,
     private fun editRegularReport(model: RegularReport, project: Project) =
             api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, project.id)
 
-    private fun Completable.addLoader() = this
+    private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }

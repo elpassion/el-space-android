@@ -9,7 +9,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
-import rx.Completable
 import rx.Observable
 
 interface ReportEdit {
@@ -42,10 +41,10 @@ interface ReportEdit {
                        @Query("activity[performed_at]") date: String,
                        @Query("activity[value]") reportedHour: String?,
                        @Query("activity[comment]") description: String?,
-                       @Query("activity[project_id]") projectId: Long?): Completable
+                       @Query("activity[project_id]") projectId: Long?): Observable<Unit>
 
         @DELETE("activities/{id}")
-        fun removeReport(@Path("id") reportId: Long): Completable
+        fun removeReport(@Path("id") reportId: Long): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

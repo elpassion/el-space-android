@@ -8,10 +8,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.isBottomNavigationItemChecked
-import pl.elpassion.elspace.common.onToolbarBackArrow
-import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
@@ -23,7 +20,6 @@ import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
-import rx.Completable
 import rx.Observable
 
 class ReportEditActivityTest {
@@ -194,9 +190,10 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldShowConnectionErrorOnCallError() {
-        stubReportEditApiToCompleteWith(Completable.error(RuntimeException()))
+        stubReportEditApiToCompleteWith(Observable.error(RuntimeException()))
         stubReportAndStart()
         onId(R.id.editReport).click()
+        onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
         onText(R.string.internet_connection_error).isDisplayed()
     }
 
@@ -205,6 +202,7 @@ class ReportEditActivityTest {
         stubReportAndStart(newDailyReport())
         onId(R.id.action_regular_report).click()
         onId(R.id.editReport).click()
+        onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
         onText(R.string.empty_project_error).isDisplayed()
     }
 
@@ -216,6 +214,7 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectName).click()
         onText("Project 1").click()
         onId(R.id.editReport).click()
+        onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
         onText(R.string.empty_description_error).isDisplayed()
     }
 
@@ -231,20 +230,20 @@ class ReportEditActivityTest {
     }
 
     private fun stubReportEditApiToNeverComplete() {
-        stubReportEditApiToCompleteWith(Completable.never())
+        stubReportEditApiToCompleteWith(Observable.never())
     }
 
     private fun stubReportEditApiToImmediatelyComplete() {
-        stubReportEditApiToCompleteWith(Completable.complete())
+        stubReportEditApiToCompleteWith(Observable.just(Unit))
     }
 
-    private fun stubReportEditApiToCompleteWith(completable: Completable) {
+    private fun stubReportEditApiToCompleteWith(observable: Observable<Unit>) {
         ReportEdit.ApiProvider.override = {
             object : ReportEdit.Api {
-                override fun removeReport(reportId: Long): Completable = completable
+                override fun removeReport(reportId: Long) = observable
 
                 override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?,
-                                        description: String?, projectId: Long?): Completable = completable
+                                        description: String?, projectId: Long?) = observable
             }
         }
     }

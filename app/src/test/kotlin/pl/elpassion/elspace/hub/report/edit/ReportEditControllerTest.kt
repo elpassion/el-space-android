@@ -19,7 +19,7 @@ class ReportEditControllerTest {
     private val view = mock<ReportEdit.View>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
     private val editReportClicks = PublishSubject.create<ReportViewModel>()
-    private val removeReportClicks = PublishSubject.create<Long>()
+    private val removeReportClicks = PublishSubject.create<Unit>()
     private val api = mock<ReportEdit.Api>()
     private val editReportSubject = PublishSubject.create<Unit>()
     private val removeReportSubject = PublishSubject.create<Unit>()
@@ -209,7 +209,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldRemoveReportOnRemoveClick() {
         createController(newRegularHourlyReport(id = 123)).onCreate()
-        onRemoveReportClick(reportId = 123)
+        onRemoveReportClick()
         verify(api).removeReport(123)
     }
 
@@ -296,8 +296,8 @@ class ReportEditControllerTest {
         editReportClicks.onNext(model)
     }
 
-    private fun onRemoveReportClick(reportId: Long = 1) {
-        removeReportClicks.onNext(reportId)
+    private fun onRemoveReportClick() {
+        removeReportClicks.onNext(Unit)
     }
 
     private fun completeReportEdit() = editReportSubject.run {

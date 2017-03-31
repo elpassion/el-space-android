@@ -49,7 +49,7 @@ class ReportEditController(private val report: Report,
             .catchOnError { view.showError(it) }
 
     private fun removeReportClicks() = view.removeReportClicks()
-            .switchMap { callApiToRemove(it) }
+            .switchMap { callApiToRemove(report.id) }
             .catchOnError { view.showError(it) }
 
     private fun reportTypeChanges() = view.reportTypeChanges()

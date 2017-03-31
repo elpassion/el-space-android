@@ -12,6 +12,7 @@
     <string name="report_add_add_button">ADD</string>
     <string name="report_add_description_hint">What did you do today? :)</string>
     <string name="report_add_action">Add report</string>
+    <string name="report_add_action_regular_report">Regular Report</string>
     <string name="report_add_action_sick_leave_report">Sick Leave</string>
     <string name="report_add_action_paid_vacations_report">Paid Vacations</string>
     <string name="report_add_action_unpaid_vacations_report">Unpaid Vacations</string>

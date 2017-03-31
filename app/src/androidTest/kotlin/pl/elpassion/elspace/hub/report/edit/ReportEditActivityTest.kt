@@ -226,6 +226,14 @@ class ReportEditActivityTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldCloseScreenOnReportRemoveCallCompleted() {
+        stubReportEditApiToImmediatelyComplete()
+        stubReportAndStart()
+        onId(R.id.removeReport).click()
+        assertTrue(rule.activity.isFinishing)
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

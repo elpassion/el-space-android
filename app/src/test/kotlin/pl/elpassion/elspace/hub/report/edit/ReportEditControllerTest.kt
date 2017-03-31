@@ -219,6 +219,14 @@ class ReportEditControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldShowErrorWhenRemovingReportFails() {
+        createController(newRegularHourlyReport(id = 123)).onCreate()
+        removeReportClicks.onNext(123)
+        removeReportSubject.onError(RuntimeException())
+        verify(view).showError(any())
+    }
+
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 

@@ -32,6 +32,12 @@ class ReportAddActivityTest {
     val intentsRule = InitIntentsRule()
 
     @Test
+    fun shouldDisplayScreenName() {
+        stubRepositoryAndStart()
+        onText("Add new report").isDisplayed()
+    }
+
+    @Test
     fun shouldHaveVisibleBackArrow() {
         stubRepositoryAndStart()
         onToolbarBackArrow().isDisplayed()

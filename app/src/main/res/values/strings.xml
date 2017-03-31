@@ -11,6 +11,7 @@
     <string name="report_add_hours_header">Hours</string>
     <string name="report_add_add_button">ADD</string>
     <string name="report_add_description_hint">What did you do today? :)</string>
+    <string name="report_add">Add new report</string>
     <string name="report_add_action">Add report</string>
     <string name="report_add_action_regular_report">Regular Report</string>
     <string name="report_add_action_sick_leave_report">Sick Leave</string>

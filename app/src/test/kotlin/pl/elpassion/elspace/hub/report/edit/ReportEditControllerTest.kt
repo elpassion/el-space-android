@@ -267,6 +267,16 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldSubscribeToRemoveOnGivenScheduler() {
+        createController(subscribeOnScheduler = subscribeOn).onCreate()
+        onRemoveReportClick()
+        completeReportRemove()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
     private fun createController(report: Report = newRegularHourlyReport(),
                                  subscribeOnScheduler: Scheduler = trampoline(),
                                  observeOnScheduler: Scheduler = trampoline()) =

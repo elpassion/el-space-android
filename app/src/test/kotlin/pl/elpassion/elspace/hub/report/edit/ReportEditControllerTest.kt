@@ -208,7 +208,7 @@ class ReportEditControllerTest {
     @Test
     fun shouldRemoveReportOnRemoveClick() {
         createController(newRegularHourlyReport(id = 123)).onCreate()
-        onRemoveReportClick(123)
+        onRemoveReportClick(reportId = 123)
         verify(api).removeReport(123)
     }
 

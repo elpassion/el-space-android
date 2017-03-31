@@ -1,9 +1,6 @@
 package pl.elpassion.elspace.hub.report.edit
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -12,7 +9,9 @@ import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.*
+import rx.Scheduler
 import rx.schedulers.Schedulers.trampoline
+import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 class ReportEditControllerTest {
@@ -24,6 +23,8 @@ class ReportEditControllerTest {
     private val api = mock<ReportEdit.Api>()
     private val editReportSubject = PublishSubject.create<Unit>()
     private val removeReportSubject = PublishSubject.create<Unit>()
+    private val subscribeOn = TestScheduler()
+    private val observeOn = TestScheduler()
 
     @Before
     fun setUp() {
@@ -246,8 +247,30 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
-    private fun createController(report: Report = newRegularHourlyReport()) =
-            ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
+    @Test
+    fun shouldSubscribeToEditOnGivenScheduler() {
+        createController(subscribeOnScheduler = subscribeOn).onCreate()
+        onEditReportClick()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        completeReportEdit()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldObserveEditOnGivenScheduler() {
+        createController(observeOnScheduler = observeOn).onCreate()
+        onEditReportClick()
+        verify(view, never()).hideLoader()
+        completeReportEdit()
+        observeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    private fun createController(report: Report = newRegularHourlyReport(),
+                                 subscribeOnScheduler: Scheduler = trampoline(),
+                                 observeOnScheduler: Scheduler = trampoline()) =
+            ReportEditController(report, view, api, SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 
     private fun onEditReportClick(model: ReportViewModel = RegularReport("2000-01-01", newProject(), "Desc", "8")) {
         editReportClicks.onNext(model)

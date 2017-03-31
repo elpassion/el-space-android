@@ -227,6 +227,16 @@ class ReportEditControllerTest {
         verify(view).showError(any())
     }
 
+    @Test
+    fun shouldHideLoaderWhenRemovingReportTerminated() {
+        createController().run {
+            onCreate()
+            onRemoveReportClick()
+            onDestroy()
+        }
+        verify(view).hideLoader()
+    }
+
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 

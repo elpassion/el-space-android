@@ -48,7 +48,7 @@ class ReportEditController(private val report: Report,
 
     private fun editReportClicks() = view.editReportClicks()
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
-            .switchMap { callApi(it) }
+            .switchMap { callApiToEdit(it) }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }
 
@@ -64,7 +64,7 @@ class ReportEditController(private val report: Report,
         ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
     }
 
-    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) =
+    private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) =
             modelCallPair.second(modelCallPair.first)
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)

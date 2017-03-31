@@ -208,21 +208,21 @@ class ReportEditControllerTest {
     @Test
     fun shouldRemoveReportOnRemoveClick() {
         createController(newRegularHourlyReport(id = 123)).onCreate()
-        removeReportClicks.onNext(123)
+        onRemoveReportClick(123)
         verify(api).removeReport(123)
     }
 
     @Test
     fun shouldShowLoaderOnRemovingReport() {
-        createController(newRegularHourlyReport(id = 123)).onCreate()
-        removeReportClicks.onNext(123)
+        createController().onCreate()
+        onRemoveReportClick()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldShowErrorWhenRemovingReportFails() {
-        createController(newRegularHourlyReport(id = 123)).onCreate()
-        removeReportClicks.onNext(123)
+        createController().onCreate()
+        onRemoveReportClick()
         removeReportSubject.onError(RuntimeException())
         verify(view).showError(any())
     }
@@ -232,6 +232,10 @@ class ReportEditControllerTest {
 
     private fun onEditReportClick(model: ReportViewModel = RegularReport("2000-01-01", newProject(), "Desc", "8")) {
         editReportClicks.onNext(model)
+    }
+
+    private fun onRemoveReportClick(reportId: Long = 1) {
+        removeReportClicks.onNext(reportId)
     }
 
     private fun completeReportEdit() = editReportSubject.run {

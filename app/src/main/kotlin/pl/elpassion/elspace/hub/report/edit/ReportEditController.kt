@@ -20,6 +20,10 @@ class ReportEditController(private val report: Report,
         editReportClicks()
                 .subscribe()
                 .addTo(subscriptions)
+        view.removeReportClicks()
+                .doOnNext { api.removeReport(it) }
+                .subscribe()
+                .addTo(subscriptions)
     }
 
     fun onDestroy() {

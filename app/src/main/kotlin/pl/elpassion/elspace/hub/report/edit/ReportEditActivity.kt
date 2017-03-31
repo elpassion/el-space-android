@@ -132,6 +132,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
                 getReportViewModel(bottomNavigation.menu.checkedItemId)
             }
 
+    override fun removeReportClicks(): Observable<Long> = Observable.never()
+
     private fun getReportViewModel(checkedMenuItem: Int): ReportViewModel {
         val date = reportEditDate.text.toString()
         val hours = reportEditHours.text.toString()

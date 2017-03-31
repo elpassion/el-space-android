@@ -21,7 +21,7 @@ class ReportEditController(private val report: Report,
                 .subscribe()
                 .addTo(subscriptions)
         view.removeReportClicks()
-                .switchMap { api.removeReport(it).doOnSubscribe { view.showLoader() } }
+                .switchMap { callApiToRemove(it) }
                 .subscribe()
                 .addTo(subscriptions)
     }
@@ -69,6 +69,10 @@ class ReportEditController(private val report: Report,
                     .subscribeOn(schedulers.subscribeOn)
                     .observeOn(schedulers.observeOn)
                     .addLoader()
+
+    private fun callApiToRemove(reportId: Long) =
+            api.removeReport(reportId)
+                    .doOnSubscribe { view.showLoader() }
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)

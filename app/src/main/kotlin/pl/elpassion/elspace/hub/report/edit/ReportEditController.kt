@@ -21,7 +21,7 @@ class ReportEditController(private val report: Report,
                 .subscribe()
                 .addTo(subscriptions)
         view.removeReportClicks()
-                .doOnNext { api.removeReport(it) }
+                .switchMap { api.removeReport(it).doOnSubscribe { view.showLoader() } }
                 .subscribe()
                 .addTo(subscriptions)
     }

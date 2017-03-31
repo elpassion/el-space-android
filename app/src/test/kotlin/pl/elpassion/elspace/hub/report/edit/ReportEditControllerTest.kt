@@ -23,10 +23,12 @@ class ReportEditControllerTest {
     private val removeReportClicks = PublishSubject.create<Long>()
     private val api = mock<ReportEdit.Api>()
     private val editReportSubject = PublishSubject.create<Unit>()
+    private val removeReportSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
         whenever(api.editReport(any(), any(), any(), any(), any(), any())).thenReturn(editReportSubject)
+        whenever(api.removeReport(any())).thenReturn(removeReportSubject)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.editReportClicks()).thenReturn(editReportClicks)
         whenever(view.removeReportClicks()).thenReturn(removeReportClicks)
@@ -208,6 +210,13 @@ class ReportEditControllerTest {
         createController(newRegularHourlyReport(id = 123)).onCreate()
         removeReportClicks.onNext(123)
         verify(api).removeReport(123)
+    }
+
+    @Test
+    fun shouldShowLoaderOnRemovingReport() {
+        createController(newRegularHourlyReport(id = 123)).onCreate()
+        removeReportClicks.onNext(123)
+        verify(view).showLoader()
     }
 
     private fun createController(report: Report = newRegularHourlyReport()) =

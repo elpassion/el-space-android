@@ -65,16 +65,15 @@ class ReportEditController(private val report: Report,
     }
 
     private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) =
-            modelCallPair.second(modelCallPair.first)
-                    .subscribeOn(schedulers.subscribeOn)
-                    .observeOn(schedulers.observeOn)
-                    .addLoader()
+            modelCallPair.second(modelCallPair.first).async()
 
     private fun callApiToRemove(reportId: Long) =
-            api.removeReport(reportId)
-                    .subscribeOn(schedulers.subscribeOn)
-                    .observeOn(schedulers.observeOn)
-                    .addLoader()
+            api.removeReport(reportId).async()
+
+    private fun Observable<Unit>.async() = this
+            .subscribeOn(schedulers.subscribeOn)
+            .observeOn(schedulers.observeOn)
+            .addLoader()
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)

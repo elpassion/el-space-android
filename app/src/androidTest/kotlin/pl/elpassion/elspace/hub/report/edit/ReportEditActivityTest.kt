@@ -32,6 +32,12 @@ class ReportEditActivityTest {
     val intentsRule = InitIntentsRule()
 
     @Test
+    fun shouldDisplayScreenName() {
+        stubReportAndStart()
+        onText("Edit report").isDisplayed()
+    }
+
+    @Test
     fun shouldHaveVisibleBackArrow() {
         stubReportAndStart()
         onToolbarBackArrow().isDisplayed()

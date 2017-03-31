@@ -218,6 +218,14 @@ class ReportEditActivityTest {
         onText(R.string.empty_description_error).isDisplayed()
     }
 
+    @Test
+    fun shouldShowLoaderOnReportRemoveCall() {
+        stubReportEditApiToNeverComplete()
+        stubReportAndStart()
+        onId(R.id.removeReport).click()
+        onId(R.id.loader).isDisplayed()
+    }
+
     private fun stubReportAndStart(report: Report = newRegularHourlyReport()) {
         rule.startActivity(ReportEditActivity.intent(InstrumentationRegistry.getTargetContext(), report))
     }

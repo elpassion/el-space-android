@@ -12,13 +12,10 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import com.jakewharton.rxbinding.support.design.widget.itemSelections
-import com.jakewharton.rxbinding.support.v7.widget.itemClicks
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.checkedItemId
-import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
@@ -38,6 +35,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
                 api = ReportEdit.ApiProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
+    private val toolbarClicks by lazy { toolbar.menuClicks() }
 
     private var selectedProject: Project? = null
 
@@ -128,11 +126,11 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun editReportClicks(): Observable<ReportViewModel> =
-            toolbar.itemClicks().filter { it.itemId == R.id.editReport }.map {
+            toolbarClicks.onMenuItemAction(R.id.editReport).map {
                 getReportViewModel(bottomNavigation.menu.checkedItemId)
             }
 
-    override fun removeReportClicks(): Observable<Unit> = Observable.never()
+    override fun removeReportClicks(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.removeReport)
 
     private fun getReportViewModel(checkedMenuItem: Int): ReportViewModel {
         val date = reportEditDate.text.toString()

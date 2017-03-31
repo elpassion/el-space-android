@@ -72,8 +72,7 @@ class ReportEditController(private val report: Report,
 
     private fun callApiToRemove(reportId: Long) =
             api.removeReport(reportId)
-                    .doOnSubscribe { view.showLoader() }
-                    .doOnUnsubscribe { view.hideLoader() }
+                    .addLoader()
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)

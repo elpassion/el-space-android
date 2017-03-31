@@ -237,6 +237,15 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnReportRemoved() {
+        createController().onCreate()
+        onRemoveReportClick()
+        completeReportRemove()
+        verify(view).showLoader()
+        verify(view).hideLoader()
+    }
+
     private fun createController(report: Report = newRegularHourlyReport()) =
             ReportEditController(report, view, api, SchedulersSupplier(trampoline(), trampoline()))
 
@@ -249,6 +258,11 @@ class ReportEditControllerTest {
     }
 
     private fun completeReportEdit() = editReportSubject.run {
+        onNext(Unit)
+        onCompleted()
+    }
+
+    private fun completeReportRemove() = removeReportSubject.run {
         onNext(Unit)
         onCompleted()
     }

@@ -4,7 +4,7 @@
     <item
         android:id="@+id/editReport"
         android:title="@string/report_edit_action"
-        android:icon="@drawable/ic_done_black_24dp"
+        android:icon="@drawable/ic_save_white_24dp"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/removeReport"

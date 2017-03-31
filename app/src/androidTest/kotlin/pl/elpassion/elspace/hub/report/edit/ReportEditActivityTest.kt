@@ -20,6 +20,7 @@ import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
+import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import rx.Observable
 
 class ReportEditActivityTest {
@@ -256,7 +257,7 @@ class ReportEditActivityTest {
     private fun stubReportEditApiToCompleteWith(observable: Observable<Unit>) {
         ReportEdit.ApiProvider.override = {
             object : ReportEdit.Api {
-                override fun removeReport(reportId: Long) = observable
+                override fun removeReport(reportId: Long) = observable.map { emptyList<ReportFromApi>() }
 
                 override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?,
                                         description: String?, projectId: Long?) = observable

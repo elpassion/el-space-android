@@ -5,6 +5,7 @@ import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
+import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
@@ -45,7 +46,7 @@ interface ReportEdit {
                        @Query("activity[project_id]") projectId: Long?): Observable<Unit>
 
         @DELETE("activities/{id}")
-        fun removeReport(@Path("id") reportId: Long): Observable<Unit>
+        fun removeReport(@Path("id") reportId: Long): Observable<List<ReportFromApi>>
     }
 
     object ApiProvider : Provider<Api>({

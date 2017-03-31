@@ -9,6 +9,7 @@ import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.*
+import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import rx.Scheduler
 import rx.schedulers.Schedulers.trampoline
 import rx.schedulers.TestScheduler
@@ -22,7 +23,7 @@ class ReportEditControllerTest {
     private val removeReportClicks = PublishSubject.create<Unit>()
     private val api = mock<ReportEdit.Api>()
     private val editReportSubject = PublishSubject.create<Unit>()
-    private val removeReportSubject = PublishSubject.create<Unit>()
+    private val removeReportSubject = PublishSubject.create<List<ReportFromApi>>()
     private val subscribeOn = TestScheduler()
     private val observeOn = TestScheduler()
 
@@ -306,7 +307,7 @@ class ReportEditControllerTest {
     }
 
     private fun completeReportRemove() = removeReportSubject.run {
-        onNext(Unit)
+        onNext(emptyList())
         onCompleted()
     }
 }

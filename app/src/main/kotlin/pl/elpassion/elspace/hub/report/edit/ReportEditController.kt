@@ -69,7 +69,7 @@ class ReportEditController(private val report: Report,
             modelCallPair.second(modelCallPair.first).async()
 
     private fun callApiToRemove(reportId: Long) =
-            api.removeReport(reportId).async()
+            api.removeReport(reportId).map { Unit }.async()
 
     private fun Observable<Unit>.async() = this
             .subscribeOn(schedulers.subscribeOn)

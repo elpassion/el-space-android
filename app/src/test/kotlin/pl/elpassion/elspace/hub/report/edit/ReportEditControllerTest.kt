@@ -251,9 +251,9 @@ class ReportEditControllerTest {
     fun shouldSubscribeToEditOnGivenScheduler() {
         createController(subscribeOnScheduler = subscribeOn).onCreate()
         onEditReportClick()
+        completeReportEdit()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
-        completeReportEdit()
         verify(view).hideLoader()
     }
 
@@ -261,8 +261,8 @@ class ReportEditControllerTest {
     fun shouldObserveEditOnGivenScheduler() {
         createController(observeOnScheduler = observeOn).onCreate()
         onEditReportClick()
-        verify(view, never()).hideLoader()
         completeReportEdit()
+        verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }

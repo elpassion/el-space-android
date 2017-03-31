@@ -255,9 +255,9 @@ class ReportAddControllerTest {
     fun shouldSubscribeOnGivenScheduler() {
         createController(subscribeOnScheduler = subscribeOn).onCreate()
         onAddReportClicks.onNext(newRegularReport())
+        completeReportAdd()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
-        completeReportAdd()
         verify(view).hideLoader()
     }
 
@@ -265,8 +265,8 @@ class ReportAddControllerTest {
     fun shouldObserveOnGivenScheduler() {
         createController(observeOnScheduler = observeOn).onCreate()
         onAddReportClicks.onNext(newRegularReport())
-        verify(view, never()).hideLoader()
         completeReportAdd()
+        verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }

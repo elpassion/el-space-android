@@ -17,11 +17,7 @@ class ReportEditController(private val report: Report,
 
     fun onCreate() {
         showReport()
-        editReportClicks()
-                .subscribe()
-                .addTo(subscriptions)
-        view.removeReportClicks()
-                .switchMap { callApiToRemove(it) }
+        Observable.merge(editReportClicks(), removeReportClicks())
                 .subscribe()
                 .addTo(subscriptions)
     }
@@ -51,6 +47,9 @@ class ReportEditController(private val report: Report,
             .switchMap { callApiToEdit(it) }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }
+
+    private fun removeReportClicks() = view.removeReportClicks()
+            .switchMap { callApiToRemove(it) }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .startWith(report.type)

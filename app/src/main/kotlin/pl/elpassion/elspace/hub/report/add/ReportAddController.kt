@@ -8,8 +8,8 @@ import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import pl.elpassion.elspace.hub.report.PaidVacationsReport
-import pl.elpassion.elspace.hub.report.RegularReport
+import pl.elpassion.elspace.hub.report.PaidVacationsViewModel
+import pl.elpassion.elspace.hub.report.RegularViewModel
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
 import rx.Observable
@@ -74,8 +74,8 @@ class ReportAddController(private val date: String?,
             .addLoader()
             .catchOnError { view.showError(it) }
 
-    private val regularReportHandler = { regularReport: ReportViewModel ->
-        (regularReport as RegularReport).run {
+    private val regularReportHandler = { model: ReportViewModel ->
+        (model as RegularViewModel).run {
             when {
                 hasNoProject() -> {
                     view.showEmptyProjectError()
@@ -90,19 +90,19 @@ class ReportAddController(private val date: String?,
         }
     }
 
-    private fun addRegularReportObservable(regularReport: RegularReport) =
-            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
+    private fun addRegularReportObservable(model: RegularViewModel) =
+            api.addRegularReport(model.selectedDate, model.project!!.id, model.hours, model.description)
 
-    private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
-        api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)
+    private val paidVacationReportHandler = { model: ReportViewModel ->
+        api.addPaidVacationsReport(model.selectedDate, (model as PaidVacationsViewModel).hours)
     }
 
-    private val sickLeaveReportHandler = { sickLeaveReport: ReportViewModel ->
-        api.addSickLeaveReport(sickLeaveReport.selectedDate)
+    private val sickLeaveReportHandler = { model: ReportViewModel ->
+        api.addSickLeaveReport(model.selectedDate)
     }
 
-    private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
-        api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
+    private val unpaidVacationReportHandler = { model: ReportViewModel ->
+        api.addUnpaidVacationsReport(model.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
@@ -112,9 +112,9 @@ class ReportAddController(private val date: String?,
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
     }
 
-    private fun RegularReport.hasNoDescription() = description.isBlank()
+    private fun RegularViewModel.hasNoDescription() = description.isBlank()
 
-    private fun RegularReport.hasNoProject() = project == null
+    private fun RegularViewModel.hasNoProject() = project == null
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }

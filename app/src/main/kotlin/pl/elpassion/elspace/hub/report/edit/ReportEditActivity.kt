@@ -137,10 +137,10 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         val hours = reportEditHours.text.toString()
         val description = reportEditDescription.text.toString()
         return when (checkedMenuItem) {
-            R.id.action_regular_report -> RegularReport(date, selectedProject, description, hours)
-            R.id.action_paid_vacations_report -> PaidVacationsReport(date, hours)
-            R.id.action_unpaid_vacations_report -> UnpaidVacationsReport(date)
-            R.id.action_sick_leave_report -> SickLeaveReport(date)
+            R.id.action_regular_report -> RegularViewModel(date, selectedProject, description, hours)
+            R.id.action_paid_vacations_report -> PaidVacationsViewModel(date, hours)
+            R.id.action_unpaid_vacations_report -> UnpaidVacationsViewModel(date)
+            R.id.action_sick_leave_report -> SickLeaveViewModel(date)
             else -> throw IllegalArgumentException()
         }
     }

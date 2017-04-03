@@ -92,7 +92,7 @@ class ReportEditController(private val report: Report,
     }
 
     private val regularReportEditHandler = { model: ReportViewModel ->
-        (model as RegularReport).run {
+        (model as RegularViewModel).run {
             when {
                 project == null -> {
                     view.showEmptyProjectError()
@@ -108,7 +108,7 @@ class ReportEditController(private val report: Report,
     }
 
     private val paidVacationReportEditHandler = { model: ReportViewModel ->
-        (model as PaidVacationsReport).let {
+        (model as PaidVacationsViewModel).let {
             api.editReport(report.id, ReportType.PAID_VACATIONS.id, model.selectedDate, model.hours, null, null)
         }
     }
@@ -121,7 +121,7 @@ class ReportEditController(private val report: Report,
         api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
 
-    private fun editRegularReport(model: RegularReport, project: Project) =
+    private fun editRegularReport(model: RegularViewModel, project: Project) =
             api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, project.id)
 
     private fun Observable<Unit>.addLoader() = this

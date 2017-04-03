@@ -124,28 +124,28 @@ class ReportEditControllerTest {
     fun shouldEditRegularReportWithChangedData() {
         val report = newRegularHourlyReport(id = 7, reportedHours = 8.0, year = 2017, month = 1, day = 1, project = newProject(id = 11))
         createController(report).onCreate()
-        onEditReportClick(model = RegularReport("2017-01-02", newProject(id = 12), "Slack Time", "8"))
+        onEditReportClick(model = RegularViewModel("2017-01-02", newProject(id = 12), "Slack Time", "8"))
         verify(api).editReport(7, 0, "2017-01-02", "8", "Slack Time", 12)
     }
 
     @Test
     fun shouldEditPaidVacationsWithChangedData() {
         createController(newPaidVacationHourlyReport(id = 8, year = 2015, month = 3, day = 3, reportedHours = 2.0)).onCreate()
-        onEditReportClick(model = PaidVacationsReport("2015-03-03", "3"))
+        onEditReportClick(model = PaidVacationsViewModel("2015-03-03", "3"))
         verify(api).editReport(8, 1, "2015-03-03", "3", null, null)
     }
 
     @Test
     fun shouldEditUnpaidVacationsWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS, id = 70, year = 2010, month = 5, day = 15)).onCreate()
-        onEditReportClick(model = UnpaidVacationsReport("2010-05-20"))
+        onEditReportClick(model = UnpaidVacationsViewModel("2010-05-20"))
         verify(api).editReport(70, 2, "2010-05-20", null, null, null)
     }
 
     @Test
     fun shouldEditSickLeaveWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.SICK_LEAVE, id = 3, year = 2000, month = 3, day = 7)).onCreate()
-        onEditReportClick(model = SickLeaveReport("2000-03-08"))
+        onEditReportClick(model = SickLeaveViewModel("2000-03-08"))
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
     }
 
@@ -195,7 +195,7 @@ class ReportEditControllerTest {
     fun shouldShowEmptyProjectErrorWhenNoProjectSelectedInRegularForm() {
         createController(newDailyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.REGULAR)
-        onEditReportClick(model = RegularReport("2000-02-03", null, "Slack Time", "8"))
+        onEditReportClick(model = RegularViewModel("2000-02-03", null, "Slack Time", "8"))
         verify(view).showEmptyProjectError()
     }
 
@@ -203,7 +203,7 @@ class ReportEditControllerTest {
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmptyInRegularForm() {
         createController(newDailyReport()).onCreate()
         reportTypeChanges.onNext(ReportType.REGULAR)
-        onEditReportClick(model = RegularReport("2000-02-03", newProject(), "", "8"))
+        onEditReportClick(model = RegularViewModel("2000-02-03", newProject(), "", "8"))
         verify(view).showEmptyDescriptionError()
     }
 
@@ -293,7 +293,7 @@ class ReportEditControllerTest {
                                  observeOnScheduler: Scheduler = trampoline()) =
             ReportEditController(report, view, api, SchedulersSupplier(subscribeOnScheduler, observeOnScheduler))
 
-    private fun onEditReportClick(model: ReportViewModel = RegularReport("2000-01-01", newProject(), "Desc", "8")) {
+    private fun onEditReportClick(model: ReportViewModel = RegularViewModel("2000-01-01", newProject(), "Desc", "8")) {
         editReportClicks.onNext(model)
     }
 

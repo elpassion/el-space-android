@@ -6,7 +6,10 @@ interface ReportViewModel {
     val selectedDate: String
 }
 
-data class RegularViewModel(override val selectedDate: String, val project: Project?, val description: String, val hours: String) : ReportViewModel
+data class RegularViewModel(override val selectedDate: String,
+                            val project: Project?,
+                            val description: String,
+                            val hours: String) : ReportViewModel
 
 data class PaidVacationsViewModel(override val selectedDate: String, val hours: String) : ReportViewModel
 

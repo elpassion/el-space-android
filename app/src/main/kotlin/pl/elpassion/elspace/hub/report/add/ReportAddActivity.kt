@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -25,8 +26,11 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import pl.elpassion.elspace.hub.report.*
+import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
+import pl.elpassion.elspace.hub.report.getReportViewModel
+import pl.elpassion.elspace.hub.report.toReportType
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -46,6 +50,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NavUtils.navigateUpFromSameTask()
         setContentView(R.layout.report_add_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
@@ -73,17 +78,13 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         Snackbar.make(reportAddCoordinator, R.string.internet_connection_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun addReportClicks(): Observable<ReportViewModel> {
-        return toolbar.itemClicks().map {
-            val selectedDate = reportAddDate.text.toString()
-            val checkMenuItem = bottomNavigation.menu.checkedItemId
-            when (checkMenuItem) {
-                R.id.action_regular_report -> RegularViewModel(selectedDate, selectedProject, reportAddDescription.text.toString(), reportAddHours.text.toString())
-                R.id.action_paid_vacations_report -> PaidVacationsViewModel(selectedDate, reportAddHours.text.toString())
-                R.id.action_unpaid_vacations_report, R.id.action_sick_leave_report -> DailyViewModel(selectedDate)
-                else -> throw IllegalArgumentException(checkMenuItem.toString())
-            }
-        }
+    override fun addReportClicks(): Observable<ReportViewModel> = toolbar.itemClicks().map {
+        getReportViewModel(
+                actionId = bottomNavigation.menu.checkedItemId,
+                project = selectedProject,
+                date = reportAddDate.text.toString(),
+                hours = reportAddHours.text.toString(),
+                description = reportAddDescription.text.toString())
     }
 
     override fun close() {

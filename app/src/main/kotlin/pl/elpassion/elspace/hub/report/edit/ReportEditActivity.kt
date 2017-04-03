@@ -119,24 +119,16 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showDailyForm()
     }
 
-    override fun editReportClicks(): Observable<ReportViewModel> =
-            toolbarClicks.onMenuItemAction(R.id.editReport).map {
-                getReportViewModel(bottomNavigation.menu.checkedItemId)
-            }
+    override fun editReportClicks(): Observable<ReportViewModel> = toolbarClicks.onMenuItemAction(R.id.editReport).map {
+        getReportViewModel(
+                actionId = bottomNavigation.menu.checkedItemId,
+                project = selectedProject,
+                date = reportEditDate.text.toString(),
+                hours = reportEditHours.text.toString(),
+                description = reportEditDescription.text.toString())
+    }
 
     override fun removeReportClicks(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.removeReport)
-
-    private fun getReportViewModel(checkedMenuItem: Int): ReportViewModel {
-        val date = reportEditDate.text.toString()
-        val hours = reportEditHours.text.toString()
-        val description = reportEditDescription.text.toString()
-        return when (checkedMenuItem) {
-            R.id.action_regular_report -> RegularViewModel(date, selectedProject, description, hours)
-            R.id.action_paid_vacations_report -> PaidVacationsViewModel(date, hours)
-            R.id.action_unpaid_vacations_report, R.id.action_sick_leave_report -> DailyViewModel(date)
-            else -> throw IllegalArgumentException()
-        }
-    }
 
     override fun close() {
         setResult(Activity.RESULT_OK)

@@ -73,11 +73,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            return handleClickOnBackArrowItem(item)
-        } else {
-            return false
-        }
+        return handleClickOnBackArrowItem(item)
     }
 
     override fun showReportType(type: ReportType) {

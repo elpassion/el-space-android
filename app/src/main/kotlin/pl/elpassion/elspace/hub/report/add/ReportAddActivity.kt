@@ -35,7 +35,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     private val controller by lazy {
         ReportAddController(
-                date =  intent.getStringExtra(ADD_DATE_KEY),
+                date = intent.getStringExtra(ADD_DATE_KEY),
                 view = this,
                 api = ReportAdd.ApiProvider.get(),
                 repository = LastSelectedProjectRepositoryProvider.get(),
@@ -165,11 +165,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            return handleClickOnBackArrowItem(item)
-        } else {
-            return false
-        }
+        return handleClickOnBackArrowItem(item)
     }
 
     companion object {

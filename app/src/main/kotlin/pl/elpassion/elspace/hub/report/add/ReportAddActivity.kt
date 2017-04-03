@@ -164,9 +164,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return handleClickOnBackArrowItem(item)
-    }
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     companion object {
         private val ADD_DATE_KEY = "dateKey"

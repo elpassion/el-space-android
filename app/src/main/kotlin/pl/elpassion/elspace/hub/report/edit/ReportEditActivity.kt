@@ -72,9 +72,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return handleClickOnBackArrowItem(item)
-    }
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     override fun showReportType(type: ReportType) {
         bottomNavigation.menu.findItem(type.toActionId()).isChecked = true

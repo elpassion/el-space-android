@@ -10,6 +10,4 @@ data class RegularViewModel(override val selectedDate: String, val project: Proj
 
 data class PaidVacationsViewModel(override val selectedDate: String, val hours: String) : ReportViewModel
 
-data class UnpaidVacationsViewModel(override val selectedDate: String) : ReportViewModel
-
-data class SickLeaveViewModel(override val selectedDate: String) : ReportViewModel
+data class DailyViewModel(override val selectedDate: String) : ReportViewModel

@@ -138,14 +138,14 @@ class ReportEditControllerTest {
     @Test
     fun shouldEditUnpaidVacationsWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS, id = 70, year = 2010, month = 5, day = 15)).onCreate()
-        onEditReportClick(model = UnpaidVacationsViewModel("2010-05-20"))
+        onEditReportClick(model = DailyViewModel("2010-05-20"))
         verify(api).editReport(70, 2, "2010-05-20", null, null, null)
     }
 
     @Test
     fun shouldEditSickLeaveWithChangedData() {
         createController(newDailyReport(reportType = DailyReportType.SICK_LEAVE, id = 3, year = 2000, month = 3, day = 7)).onCreate()
-        onEditReportClick(model = SickLeaveViewModel("2000-03-08"))
+        onEditReportClick(model = DailyViewModel("2000-03-08"))
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
     }
 

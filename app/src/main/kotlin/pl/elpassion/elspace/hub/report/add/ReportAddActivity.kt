@@ -80,8 +80,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
             when (checkMenuItem) {
                 R.id.action_regular_report -> RegularViewModel(selectedDate, selectedProject, reportAddDescription.text.toString(), reportAddHours.text.toString())
                 R.id.action_paid_vacations_report -> PaidVacationsViewModel(selectedDate, reportAddHours.text.toString())
-                R.id.action_unpaid_vacations_report -> UnpaidVacationsViewModel(selectedDate)
-                R.id.action_sick_leave_report -> SickLeaveViewModel(selectedDate)
+                R.id.action_unpaid_vacations_report, R.id.action_sick_leave_report -> DailyViewModel(selectedDate)
                 else -> throw IllegalArgumentException(checkMenuItem.toString())
             }
         }

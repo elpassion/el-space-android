@@ -312,12 +312,12 @@ class ReportAddControllerTest {
 
     private fun addUnpaidVacationReport() {
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        onAddReportClicks.onNext(UnpaidVacationsViewModel("2016-01-01"))
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 
     private fun addSickLeaveReport() {
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        onAddReportClicks.onNext(SickLeaveViewModel("2016-01-01"))
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 
     private fun addPaidVacationReport() {

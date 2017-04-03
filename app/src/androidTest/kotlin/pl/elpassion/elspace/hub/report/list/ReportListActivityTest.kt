@@ -71,12 +71,12 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowCorrectTotalHoursInEveryDay() {
-        onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
+        onId(R.id.reportsContainer).hasChildWithText("Total: 8 hours")
     }
 
     @Test
     fun shouldShowRegularHourlyReportOnContainer() {
-        onId(R.id.reportsContainer).hasChildWithText("8.0h - Project")
+        onId(R.id.reportsContainer).hasChildWithText("8h - Project")
         onId(R.id.reportsContainer).hasChildWithText("Description")
     }
 
@@ -112,14 +112,14 @@ class ReportListActivityTest {
     @Test
     fun shouldOpenEditReportScreenOnPaidVacationReportClick() {
         scrollToItemWithText("11 Tue")
-        onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
+        onText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
 
         checkIntent(ReportEditActivity::class.java)
     }
 
     @Test
     fun shouldOpenEditReportScreenOnRegularReportClick() {
-        onText("8.0h - Project").click()
+        onText("8h - Project").click()
 
         checkIntent(ReportEditActivity::class.java)
     }
@@ -212,7 +212,7 @@ class ReportListActivityTest {
     @Test
     fun shouldShowPaidVacationsInformationForPaidVacationReport() {
         scrollToItemWithText("11 Tue")
-        onId(R.id.reportsContainer).hasChildWithText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
+        onId(R.id.reportsContainer).hasChildWithText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {
@@ -220,15 +220,15 @@ class ReportListActivityTest {
     }
 
     private fun verifyIfFifthDayHasNoInformationAboutTotal() {
-        onItemWithText("5 Wed").check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+        onItemWithText("5 Wed").check(matches(not(hasDescendant(withText("Total: 0 hours")))))
     }
 
     private fun verifyIfWeekendDayWithReportHasTotalInformation() {
-        onItemWithText("2 Sun").check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+        onItemWithText("2 Sun").check(matches(hasDescendant(withText("Total: 3 hours"))))
     }
 
     private fun verifyIfDayFromFutureWithReportsHasTotalInformation() {
-        onItemWithText("6 Thu").check(matches(hasDescendant(withText("Total: 4.0 hours"))))
+        onItemWithText("6 Thu").check(matches(hasDescendant(withText("Total: 4 hours"))))
     }
 
     private fun onItemWithText(text: String) = onView(allOf(hasDescendant(withText(text)), withParent(withId(R.id.reportsContainer))))

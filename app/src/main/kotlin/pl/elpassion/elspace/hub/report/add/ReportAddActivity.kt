@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.app.NavUtils
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -50,7 +49,6 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        NavUtils.navigateUpFromSameTask()
         setContentView(R.layout.report_add_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()

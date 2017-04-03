@@ -5,6 +5,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import kotlinx.android.synthetic.main.regular_hourly_report_item.view.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.toStringWithoutZeroes
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.OnReportClickListener
 
@@ -13,7 +14,7 @@ class RegularReportItemAdapter(val report: RegularHourlyReport, val onReportClic
 
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { onReportClickListener.onReport(report) }
-        holder.itemView.reportHeader.text = "${report.reportedHours}h - ${report.project.name}"
+        holder.itemView.reportHeader.text = "${report.reportedHours.toStringWithoutZeroes()}h - ${report.project.name}"
         holder.itemView.reportContent.text = report.description.trim()
     }
 

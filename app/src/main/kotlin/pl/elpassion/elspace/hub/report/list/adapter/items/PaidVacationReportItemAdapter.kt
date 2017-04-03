@@ -5,6 +5,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import kotlinx.android.synthetic.main.regular_hourly_report_item.view.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.toStringWithoutZeroes
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.list.OnReportClickListener
 
@@ -14,7 +15,7 @@ class PaidVacationReportItemAdapter(val report: PaidVacationHourlyReport, val on
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.run {
             setOnClickListener { onReportClickListener.onReport(report) }
-            reportHeader.text = "${report.reportedHours}h - ${context.getString(R.string.report_paid_vacations_title)}"
+            reportHeader.text = "${report.reportedHours.toStringWithoutZeroes()}h - ${context.getString(R.string.report_paid_vacations_title)}"
         }
     }
 

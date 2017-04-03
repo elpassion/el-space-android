@@ -181,8 +181,6 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditAdditionalInfo.show()
     }
 
-    private fun Double.toStringWithoutZeroes() = if (this == Math.floor(this)) "%.0f".format(this) else toString()
-
     companion object {
 
         private val REPORT_KEY = "report_key"

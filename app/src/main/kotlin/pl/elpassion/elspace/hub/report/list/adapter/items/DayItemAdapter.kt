@@ -5,6 +5,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.toStringWithoutZeroes
 import pl.elpassion.elspace.hub.report.list.DayWithHourlyReports
 import pl.elpassion.elspace.hub.report.list.OnDayClickListener
 
@@ -21,7 +22,7 @@ class DayItemAdapter(override val day: DayWithHourlyReports, val listener: OnDay
 
 
     private fun setTotalHoursTextWithIndicator(holder: VH) {
-        holder.itemView.totalHours.text = "Total: ${day.reportedHours} hours"
+        holder.itemView.totalHours.text = "Total: ${day.reportedHours.toStringWithoutZeroes()} hours"
     }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)

@@ -76,7 +76,7 @@ class LoginControllerTest {
     @Test
     fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        stubHubApiToReturnToken()
         controller.onGoogleToken()
 
         verify(shortcutService).creteAppShortcuts()
@@ -98,57 +98,69 @@ class LoginControllerTest {
 
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        stubHubApiToReturnToken()
         controller.onGoogleToken()
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
-        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
+        stubHubApiToReturnError()
         controller.onGoogleToken()
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
-        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
+        stubHubApiToReturnError()
         controller.onGoogleToken()
         verify(view).showError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        stubHubApiToReturnToken()
         controller.onGoogleToken()
         verify(view, never()).showError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
-        whenever(api.loginWithGoogleToken()).thenNever()
+        stubHubApiToNeverReturn()
         controller.onGoogleToken()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        stubHubApiToReturnToken()
         controller.onGoogleToken()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderUntilFetchingTokenFinished() {
-        whenever(api.loginWithGoogleToken()).thenNever()
+        stubHubApiToNeverReturn()
         controller.onGoogleToken()
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        stubHubApiToReturnToken()
         controller.onGoogleToken()
         verify(loginRepository).saveToken("token")
+    }
+
+    private fun stubHubApiToReturnToken() {
+        whenever(api.loginWithGoogleToken()).thenJust("token")
+    }
+
+    private fun stubHubApiToNeverReturn() {
+        whenever(api.loginWithGoogleToken()).thenNever()
+    }
+
+    private fun stubHubApiToReturnError() {
+        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
     }
 }

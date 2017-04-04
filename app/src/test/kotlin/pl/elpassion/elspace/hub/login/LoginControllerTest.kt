@@ -88,5 +88,11 @@ class LoginControllerTest {
         controller.onGoogleToken()
         verify(view, times(1)).openReportListScreen()
     }
+
+    @Test
+    fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
+        controller.onGoogleToken()
+        verify(view, times(1)).showError()
+    }
 }
 

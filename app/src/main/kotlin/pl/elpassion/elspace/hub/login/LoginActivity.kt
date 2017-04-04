@@ -10,7 +10,6 @@ import pl.elpassion.R
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
-
 class LoginActivity : AppCompatActivity(), Login.View {
 
     private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this))
@@ -37,4 +36,5 @@ class LoginActivity : AppCompatActivity(), Login.View {
         startActivity(browserIntent)
     }
 
+    override fun showError() = Unit
 }

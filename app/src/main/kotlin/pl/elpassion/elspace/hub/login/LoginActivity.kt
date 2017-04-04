@@ -10,12 +10,13 @@ import pl.elpassion.R
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
+import rx.schedulers.Schedulers.trampoline
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
     private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this), object : Login.HubTokenApi {
         override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
-    })
+    }, trampoline())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

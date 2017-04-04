@@ -8,6 +8,9 @@ import org.junit.Assert
 import org.junit.Test
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 import rx.Observable
+import rx.Scheduler
+import rx.schedulers.Schedulers.trampoline
+import rx.schedulers.TestScheduler
 
 class LoginControllerTest {
 
@@ -15,62 +18,62 @@ class LoginControllerTest {
     val view = mock<Login.View>()
     val loginRepository = mock<Login.Repository>()
     val shortcutService = mock<ShortcutService>()
-    val controller = LoginController(view, loginRepository, shortcutService, api)
+    val subscribeOnScheduler = TestScheduler()
 
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
         whenever(loginRepository.readToken()).thenReturn("token")
-        controller.onCreate()
+        createController().onCreate()
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenIfUserIsNotLoggedInOnCreate() {
-        controller.onCreate()
+        createController().onCreate()
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldSaveGivenTokenOnLogin() {
         val token = "token"
-        controller.onLogin(token)
+        createController().onLogin(token)
         verify(loginRepository).saveToken(token)
     }
 
     @Test
     fun shouldNotSaveGivenTokenOnLoginWhenTokenIsEmpty() {
-        controller.onLogin("")
+        createController().onLogin("")
         verify(loginRepository, never()).saveToken(any())
     }
 
     @Test
     fun shouldShowErrorAboutEmptyTokenWhenTokenIsEmpty() {
-        controller.onLogin("")
+        createController().onLogin("")
         verify(view).showEmptyLoginError()
     }
 
     @Test
     fun shouldNotShowErrorAboutEmptyTokenWhenTokenIsNotEmpty() {
-        controller.onLogin("login")
+        createController().onLogin("login")
         verify(view, never()).showEmptyLoginError()
     }
 
     @Test
     fun shouldOpenReportListScreenIfTokenIsNotEmptyOnLogin() {
-        controller.onLogin("login")
+        createController().onLogin("login")
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenIfTokenIsEmptyOnLogin() {
-        controller.onLogin("")
+        createController().onLogin("")
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldCreateAppShortcutsWhenSupported() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
-        controller.onLogin("login")
+        createController().onLogin("login")
 
         verify(shortcutService).creteAppShortcuts()
     }
@@ -79,7 +82,7 @@ class LoginControllerTest {
     fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
         stubHubApiToReturnToken()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
 
         verify(shortcutService).creteAppShortcuts()
     }
@@ -87,70 +90,70 @@ class LoginControllerTest {
     @Test
     fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
-        controller.onLogin("login")
+        createController().onLogin("login")
 
         verify(shortcutService, never()).creteAppShortcuts()
     }
 
     @Test
     fun shouldOpenHubWebsiteOnHub() {
-        controller.onHub()
+        createController().onHub()
         verify(view).openHubWebsite()
     }
 
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
         stubHubApiToReturnToken()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view).showError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view, never()).showError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
         stubHubApiToNeverReturn()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
         stubHubApiToReturnToken()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderUntilFetchingTokenFinished() {
         stubHubApiToNeverReturn()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        controller.onGoogleToken()
+        createController().onGoogleToken()
         verify(loginRepository).saveToken("token")
     }
 
@@ -159,10 +162,24 @@ class LoginControllerTest {
         var unsubscribed = false
         val observable = Observable.never<String>().doOnUnsubscribe { unsubscribed = true }
         whenever(api.loginWithGoogleToken()).thenReturn(observable)
-        controller.onGoogleToken()
-        controller.onDestroy()
+        createController().run {
+            onGoogleToken()
+            onDestroy()
+        }
         Assert.assertTrue(unsubscribed)
     }
+
+    @Test
+    fun shouldSubscribeOnGivenScheduler() {
+        stubHubApiToReturnToken()
+        createController(subscribeOnScheduler = subscribeOnScheduler).onGoogleToken()
+        verify(view, never()).openReportListScreen()
+        subscribeOnScheduler.triggerActions()
+        verify(view).openReportListScreen()
+    }
+
+    fun createController(subscribeOnScheduler: Scheduler = trampoline()) =
+            LoginController(view, loginRepository, shortcutService, api, subscribeOnScheduler)
 
     private fun stubHubApiToReturnToken() {
         whenever(api.loginWithGoogleToken()).thenJust("token")

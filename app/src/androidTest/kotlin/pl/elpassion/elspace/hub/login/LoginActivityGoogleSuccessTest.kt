@@ -7,7 +7,9 @@ import com.elpassion.android.commons.espresso.InitIntentsRule
 import com.elpassion.android.commons.espresso.checkIntent
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.rxjavatest.thenJust
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.stubbing.Answer
@@ -26,7 +28,7 @@ class LoginActivityGoogleSuccessTest {
     val rule = rule<LoginActivity> {
         LoginRepositoryProvider.override = { mock<Login.Repository>() }
         GoogleSingInControllerProvider.override =  { GoogleSuccessSingInTestController() }
-        LoginHubTokenApiProvider.override = { rxMockJust("token") }
+        LoginHubTokenApiProvider.override = { mock<Login.HubTokenApi>().apply { whenever(loginWithGoogleToken("google token")).thenJust("token") } }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
 

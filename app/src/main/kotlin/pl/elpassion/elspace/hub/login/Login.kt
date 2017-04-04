@@ -18,6 +18,6 @@ interface Login {
     }
 
     interface HubTokenApi {
-        fun loginWithGoogleToken(): Observable<String>
+        fun loginWithGoogleToken(googleToken: String): Observable<String>
     }
 }

@@ -84,7 +84,7 @@ class LoginControllerTest {
     fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
         stubHubApiToReturnToken()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
 
         verify(shortcutService).creteAppShortcuts()
     }
@@ -106,56 +106,56 @@ class LoginControllerTest {
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view).showError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view, never()).showError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
         stubHubApiToNeverReturn()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderUntilFetchingTokenFinished() {
         stubHubApiToNeverReturn()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken()
+        createController().onGoogleToken("google token")
         verify(loginRepository).saveToken("token")
     }
 
@@ -163,9 +163,9 @@ class LoginControllerTest {
     fun shouldUnsubscribeOnDestroy() {
         var unsubscribed = false
         val observable = Observable.never<String>().doOnUnsubscribe { unsubscribed = true }
-        whenever(api.loginWithGoogleToken()).thenReturn(observable)
+        whenever(api.loginWithGoogleToken("google token")).thenReturn(observable)
         createController().run {
-            onGoogleToken()
+            onGoogleToken("google token")
             onDestroy()
         }
         Assert.assertTrue(unsubscribed)
@@ -174,7 +174,7 @@ class LoginControllerTest {
     @Test
     fun shouldSubscribeOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(subscribeOn = subscribeOnScheduler).onGoogleToken()
+        createController(subscribeOn = subscribeOnScheduler).onGoogleToken("google token")
         verify(view, never()).openReportListScreen()
         subscribeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -183,7 +183,7 @@ class LoginControllerTest {
     @Test
     fun shouldObserveOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(observeOn = observeOnScheduler).onGoogleToken()
+        createController(observeOn = observeOnScheduler).onGoogleToken("google token")
         verify(view, never()).openReportListScreen()
         observeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -193,14 +193,14 @@ class LoginControllerTest {
             LoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 
     private fun stubHubApiToReturnToken() {
-        whenever(api.loginWithGoogleToken()).thenJust("token")
+        whenever(api.loginWithGoogleToken(any())).thenJust("token")
     }
 
     private fun stubHubApiToNeverReturn() {
-        whenever(api.loginWithGoogleToken()).thenNever()
+        whenever(api.loginWithGoogleToken(any())).thenNever()
     }
 
     private fun stubHubApiToReturnError() {
-        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
+        whenever(api.loginWithGoogleToken(any())).thenError(RuntimeException())
     }
 }

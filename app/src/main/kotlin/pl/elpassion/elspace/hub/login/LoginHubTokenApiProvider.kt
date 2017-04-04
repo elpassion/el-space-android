@@ -5,6 +5,6 @@ import rx.Observable
 
 object LoginHubTokenApiProvider : Provider<Login.HubTokenApi>({
     object : Login.HubTokenApi {
-        override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
+        override fun loginWithGoogleToken(googleToken: String): Observable<String> = Observable.empty()
     }
 })

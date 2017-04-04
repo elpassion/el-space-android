@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
         googleSignInContainer.addView(GoogleSingInControllerProvider.get().initializeGoogleSingInButton(this, {
-            controller.onGoogleToken()
+            controller.onGoogleToken(it)
         }, {}))
     }
 

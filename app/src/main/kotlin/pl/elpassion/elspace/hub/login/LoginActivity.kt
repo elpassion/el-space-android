@@ -10,7 +10,6 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.Observable
 import rx.schedulers.Schedulers.trampoline
 
 class LoginActivity : AppCompatActivity(), Login.View {
@@ -19,9 +18,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
             view = this,
             loginRepository = LoginRepositoryProvider.get(),
             shortcutService = ShortcutServiceImpl(this),
-            api = object : Login.HubTokenApi {
-                override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
-            },
+            api = LoginHubTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(trampoline(), trampoline()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +27,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
+        googleSignInContainer.addView(GoogleSingInControllerProvider.get().initializeGoogleSingInButton(this, {
+            controller.onGoogleToken()
+        }, {}))
     }
 
     override fun showEmptyLoginError() {

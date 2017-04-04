@@ -75,8 +75,8 @@ class LoginControllerTest {
 
     @Test
     fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
-        controller.onLogin("login")
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
+        controller.onLogin("login")
 
         verify(shortcutService, never()).creteAppShortcuts()
     }

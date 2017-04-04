@@ -22,6 +22,7 @@
     <string name="report_edit">Edit report</string>
     <string name="report_edit_action">Save changes</string>
     <string name="report_remove_action">Remove report</string>
+    <string name="select_project">Select project</string>
     <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
     <string name="token_hint">Provide your access token from hub website.</string>

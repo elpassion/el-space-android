@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity" />
+        <activity
+            android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".elspace.hub.report.add.ReportAddActivity"
             android:theme="@style/AppThemeWithoutActionBar" />

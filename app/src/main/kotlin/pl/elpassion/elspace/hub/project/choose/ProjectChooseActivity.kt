@@ -36,6 +36,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_choose_activity)
+        setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         initRecyclerView()
     }

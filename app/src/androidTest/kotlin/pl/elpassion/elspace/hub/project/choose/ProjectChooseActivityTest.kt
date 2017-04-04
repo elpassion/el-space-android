@@ -24,6 +24,13 @@ class ProjectChooseActivityTest {
     val rule = rule<ProjectChooseActivity>(autoStart = false)
 
     @Test
+    fun shouldDisplayScreenName() {
+        stubRepositoryToReturn(emptyList())
+        rule.startActivity()
+        onText(R.string.select_project).isDisplayed()
+    }
+
+    @Test
     fun shouldHaveVisibleBackArrow() {
         stubRepositoryToReturn(emptyList())
         rule.startActivity()

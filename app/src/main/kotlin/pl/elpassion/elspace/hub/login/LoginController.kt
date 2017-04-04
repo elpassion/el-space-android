@@ -9,8 +9,8 @@ class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,
                       private val shortcutService: ShortcutService,
                       private val api: Login.HubTokenApi,
-                      val subscribeOnScheduler: Scheduler,
-                      val observeOnScheduler: Scheduler) {
+                      private val subscribeOnScheduler: Scheduler,
+                      private val observeOnScheduler: Scheduler) {
 
     private val subscriptions = CompositeSubscription()
 

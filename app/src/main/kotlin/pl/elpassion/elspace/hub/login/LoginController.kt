@@ -35,8 +35,9 @@ class LoginController(private val view: Login.View,
     }
 
     fun onGoogleToken() {
-        view.openReportListScreen()
-        if (!api.loginWithGoogleToken()) {
+        if (api.loginWithGoogleToken()) {
+            view.openReportListScreen()
+        } else {
             view.showError()
         }
     }

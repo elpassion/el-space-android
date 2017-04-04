@@ -92,6 +92,12 @@ class LoginControllerTest {
     }
 
     @Test
+    fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
+        controller.onGoogleToken()
+        verify(view, never()).openReportListScreen()
+    }
+
+    @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         controller.onGoogleToken()
         verify(view).showError()

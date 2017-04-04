@@ -11,7 +11,7 @@ class LoginControllerTest {
 
     val api = mock<Login.HubTokenApi>()
     val view = mock<Login.View>()
-    val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
+    val loginRepository = mock<Login.Repository>()
     val shortcutService = mock<ShortcutService>()
     val controller = LoginController(view, loginRepository, shortcutService, api)
 

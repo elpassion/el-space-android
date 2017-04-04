@@ -6,6 +6,7 @@ interface Login {
         fun showEmptyLoginError()
         fun openHubWebsite()
         fun showError()
+        fun showLoader()
     }
 
     interface Repository {

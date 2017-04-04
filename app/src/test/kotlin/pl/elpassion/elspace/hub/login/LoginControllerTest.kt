@@ -109,4 +109,10 @@ class LoginControllerTest {
         controller.onGoogleToken()
         verify(view, never()).showError()
     }
+
+    @Test
+    fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
+        controller.onGoogleToken()
+        verify(view).showLoader()
+    }
 }

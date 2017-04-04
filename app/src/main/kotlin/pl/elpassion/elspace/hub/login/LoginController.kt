@@ -41,6 +41,6 @@ class LoginController(private val view: Login.View,
         } else {
             view.showError()
         }
+        view.hideLoader()
     }
-
 }

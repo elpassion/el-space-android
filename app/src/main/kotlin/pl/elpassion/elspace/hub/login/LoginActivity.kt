@@ -41,4 +41,6 @@ class LoginActivity : AppCompatActivity(), Login.View {
     override fun showError() = Unit
 
     override fun showLoader() = Unit
+
+    override fun hideLoader() = Unit
 }

@@ -115,4 +115,10 @@ class LoginControllerTest {
         controller.onGoogleToken()
         verify(view).showLoader()
     }
+
+    @Test
+    fun shouldHideLoaderAfterFetchingToken() {
+        controller.onGoogleToken()
+        verify(view).hideLoader()
+    }
 }

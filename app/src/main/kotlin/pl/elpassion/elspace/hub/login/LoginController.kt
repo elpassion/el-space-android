@@ -33,4 +33,8 @@ class LoginController(private val view: Login.View,
         view.openHubWebsite()
     }
 
+    fun onGoogleToken() {
+        view.openReportListScreen()
+    }
+
 }

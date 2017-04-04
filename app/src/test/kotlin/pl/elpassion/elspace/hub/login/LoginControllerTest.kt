@@ -83,5 +83,10 @@ class LoginControllerTest {
         verify(view).openHubWebsite()
     }
 
+    @Test
+    fun shouldAuthorizeInHubApiWithGoogleToken() {
+        controller.onGoogleToken()
+        verify(view, times(1)).openReportListScreen()
+    }
 }
 

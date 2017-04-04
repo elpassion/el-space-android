@@ -15,7 +15,7 @@ class LoginControllerTest {
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
         whenever(loginRepository.readToken()).thenReturn("token")
         controller.onCreate()
-        verify(view, times(1)).openReportListScreen()
+        verify(view).openReportListScreen()
     }
 
     @Test
@@ -28,7 +28,7 @@ class LoginControllerTest {
     fun shouldSaveGivenTokenOnLogin() {
         val token = "token"
         controller.onLogin(token)
-        verify(loginRepository, times(1)).saveToken(token)
+        verify(loginRepository).saveToken(token)
     }
 
     @Test
@@ -40,7 +40,7 @@ class LoginControllerTest {
     @Test
     fun shouldShowErrorAboutEmptyTokenWhenTokenIsEmpty() {
         controller.onLogin("")
-        verify(view, times(1)).showEmptyLoginError()
+        verify(view).showEmptyLoginError()
     }
 
     @Test
@@ -52,7 +52,7 @@ class LoginControllerTest {
     @Test
     fun shouldOpenReportListScreenIfTokenIsNotEmptyOnLogin() {
         controller.onLogin("login")
-        verify(view, times(1)).openReportListScreen()
+        verify(view).openReportListScreen()
     }
 
     @Test
@@ -86,13 +86,13 @@ class LoginControllerTest {
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
         controller.onGoogleToken()
-        verify(view, times(1)).openReportListScreen()
+        verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         controller.onGoogleToken()
-        verify(view, times(1)).showError()
+        verify(view).showError()
     }
 }
 

@@ -6,6 +6,7 @@ import com.elpassion.android.commons.rxjavatest.thenNever
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Assert
 import org.junit.Test
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 import rx.Observable
 import rx.Scheduler
@@ -173,7 +174,7 @@ class LoginControllerTest {
     @Test
     fun shouldSubscribeOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(subscribeOnScheduler = subscribeOnScheduler).onGoogleToken()
+        createController(subscribeOn = subscribeOnScheduler).onGoogleToken()
         verify(view, never()).openReportListScreen()
         subscribeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -182,14 +183,14 @@ class LoginControllerTest {
     @Test
     fun shouldObserveOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(observeOnScheduler = observeOnScheduler).onGoogleToken()
+        createController(observeOn = observeOnScheduler).onGoogleToken()
         verify(view, never()).openReportListScreen()
         observeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
     }
 
-    fun createController(subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
-            LoginController(view, loginRepository, shortcutService, api, subscribeOnScheduler, observeOnScheduler)
+    fun createController(subscribeOn: Scheduler = trampoline(), observeOn: Scheduler = trampoline()) =
+            LoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 
     private fun stubHubApiToReturnToken() {
         whenever(api.loginWithGoogleToken()).thenJust("token")

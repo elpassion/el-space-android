@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
@@ -21,8 +22,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
             api = object : Login.HubTokenApi {
                 override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
             },
-            subscribeOnScheduler = trampoline(),
-            observeOnScheduler = trampoline())
+            schedulersSupplier = SchedulersSupplier(trampoline(), trampoline()))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

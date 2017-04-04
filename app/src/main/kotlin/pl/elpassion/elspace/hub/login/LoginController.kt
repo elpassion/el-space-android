@@ -1,16 +1,15 @@
 package pl.elpassion.elspace.hub.login
 
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
-import rx.Scheduler
 import rx.subscriptions.CompositeSubscription
 
 class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,
                       private val shortcutService: ShortcutService,
                       private val api: Login.HubTokenApi,
-                      private val subscribeOnScheduler: Scheduler,
-                      private val observeOnScheduler: Scheduler) {
+                      private val schedulersSupplier: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
 
@@ -24,8 +23,8 @@ class LoginController(private val view: Login.View,
     fun onGoogleToken() {
         view.showLoader()
         api.loginWithGoogleToken()
-                .subscribeOn(subscribeOnScheduler)
-                .observeOn(observeOnScheduler)
+                .subscribeOn(schedulersSupplier.subscribeOn)
+                .observeOn(schedulersSupplier.observeOn)
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     onCorrectHubToken(it)

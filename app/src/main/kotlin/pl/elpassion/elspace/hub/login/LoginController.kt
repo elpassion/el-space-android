@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.login
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class LoginController(private val view: Login.View,
@@ -23,8 +24,7 @@ class LoginController(private val view: Login.View,
     fun onGoogleToken() {
         view.showLoader()
         api.loginWithGoogleToken()
-                .subscribeOn(schedulersSupplier.subscribeOn)
-                .observeOn(schedulersSupplier.observeOn)
+                .supplySchedulers()
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
                     onCorrectHubToken(it)
@@ -53,6 +53,10 @@ class LoginController(private val view: Login.View,
             shortcutService.creteAppShortcuts()
         }
     }
+
+    private fun Observable<String>.supplySchedulers() = this
+            .subscribeOn(schedulersSupplier.subscribeOn)
+            .observeOn(schedulersSupplier.observeOn)
 
     fun onHub() {
         view.openHubWebsite()

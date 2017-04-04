@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.elpassion.elspace">
+
+    <application>
+        <activity android:name="pl.elpassion.elspace.hub.login.LoginActivityGoogleSuccessTest$GoogleSuccessSingInTestController$GoogleSignInActivity" />
+    </application>
+</manifest>

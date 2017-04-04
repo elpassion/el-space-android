@@ -1,5 +1,8 @@
 package pl.elpassion.elspace.hub.login
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.TextView
@@ -39,10 +42,29 @@ class LoginActivityGoogleSuccessTest {
     }
 
     class GoogleSuccessSingInTestController : GoogleSingInController {
+
+        private var onSuccess: ((String) -> Unit)? = null
+
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
+            this.onSuccess = onSuccess
             return TextView(activity).apply {
                 text = "Sign in"
-                setOnClickListener { onSuccess("google token") }
+                setOnClickListener { activity.startActivityForResult(getSignInIntent(activity), 1111) }
+            }
+        }
+
+        private fun getSignInIntent(activity: FragmentActivity): Intent {
+            return Intent(activity, GoogleSignInActivity::class.java)
+        }
+
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+            onSuccess?.invoke("google token")
+        }
+
+        class GoogleSignInActivity : Activity(){
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                finish()
             }
         }
     }

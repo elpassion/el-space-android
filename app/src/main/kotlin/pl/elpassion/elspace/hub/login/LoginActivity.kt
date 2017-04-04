@@ -9,11 +9,12 @@ import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
+import rx.Observable
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
     private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this), object : Login.HubTokenApi {
-        override fun loginWithGoogleToken() = false
+        override fun loginWithGoogleToken() = Observable.just(Unit)
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {

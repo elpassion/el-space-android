@@ -1,5 +1,8 @@
 package pl.elpassion.elspace.hub.login
 
+import com.elpassion.android.commons.rxjavatest.thenError
+import com.elpassion.android.commons.rxjavatest.thenJust
+import com.elpassion.android.commons.rxjavatest.thenNever
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
@@ -86,39 +89,50 @@ class LoginControllerTest {
 
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
-        whenever(api.loginWithGoogleToken()).thenReturn(true)
+        whenever(api.loginWithGoogleToken()).thenJust(Unit)
         controller.onGoogleToken()
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
+        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
         controller.onGoogleToken()
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
+        whenever(api.loginWithGoogleToken()).thenError(RuntimeException())
         controller.onGoogleToken()
         verify(view).showError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
-        whenever(api.loginWithGoogleToken()).thenReturn(true)
+        whenever(api.loginWithGoogleToken()).thenJust(Unit)
         controller.onGoogleToken()
         verify(view, never()).showError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
+        whenever(api.loginWithGoogleToken()).thenNever()
         controller.onGoogleToken()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
+        whenever(api.loginWithGoogleToken()).thenJust(Unit)
         controller.onGoogleToken()
         verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldNotHideLoaderUntilFetchingTokenFinished() {
+        whenever(api.loginWithGoogleToken()).thenNever()
+        controller.onGoogleToken()
+        verify(view, never()).hideLoader()
     }
 }

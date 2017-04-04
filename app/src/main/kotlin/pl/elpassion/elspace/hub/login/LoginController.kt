@@ -36,11 +36,13 @@ class LoginController(private val view: Login.View,
 
     fun onGoogleToken() {
         view.showLoader()
-        if (api.loginWithGoogleToken()) {
-            view.openReportListScreen()
-        } else {
-            view.showError()
-        }
-        view.hideLoader()
+        api.loginWithGoogleToken()
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    view.openReportListScreen()
+                },{
+                    view.showError()
+                })
     }
+
 }

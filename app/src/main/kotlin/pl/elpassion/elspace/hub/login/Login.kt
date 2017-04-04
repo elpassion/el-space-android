@@ -1,5 +1,7 @@
 package pl.elpassion.elspace.hub.login
 
+import rx.Observable
+
 interface Login {
     interface View {
         fun openReportListScreen()
@@ -16,6 +18,6 @@ interface Login {
     }
 
     interface HubTokenApi {
-        fun loginWithGoogleToken(): Boolean
+        fun loginWithGoogleToken(): Observable<Unit>
     }
 }

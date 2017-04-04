@@ -14,9 +14,14 @@ import rx.schedulers.Schedulers.trampoline
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this), object : Login.HubTokenApi {
-        override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
-    }, trampoline())
+    private val controller = LoginController(
+            view = this,
+            loginRepository = LoginRepositoryProvider.get(),
+            shortcutService = ShortcutServiceImpl(this),
+            api = object : Login.HubTokenApi {
+                override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
+            },
+            subscribeOnScheduler = trampoline())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

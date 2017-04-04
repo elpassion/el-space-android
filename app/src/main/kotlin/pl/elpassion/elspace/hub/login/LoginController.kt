@@ -14,14 +14,29 @@ class LoginController(private val view: Login.View,
         }
     }
 
+    fun onGoogleToken() {
+        view.showLoader()
+        api.loginWithGoogleToken()
+                .doOnUnsubscribe { view.hideLoader() }
+                .subscribe({
+                    onCorrectHubToken(it)
+                },{
+                    view.showError()
+                })
+    }
+
     fun onLogin(token: String) {
         if (token.isNotEmpty()) {
-            loginRepository.saveToken(token)
-            view.openReportListScreen()
-            addShortcutsIfSupported()
+            onCorrectHubToken(token)
         } else {
             view.showEmptyLoginError()
         }
+    }
+
+    private fun onCorrectHubToken(token: String) {
+        loginRepository.saveToken(token)
+        view.openReportListScreen()
+        addShortcutsIfSupported()
     }
 
     private fun addShortcutsIfSupported() {
@@ -32,18 +47,6 @@ class LoginController(private val view: Login.View,
 
     fun onHub() {
         view.openHubWebsite()
-    }
-
-    fun onGoogleToken() {
-        view.showLoader()
-        api.loginWithGoogleToken()
-                .doOnUnsubscribe { view.hideLoader() }
-                .subscribe({
-                    loginRepository.saveToken(it)
-                    view.openReportListScreen()
-                },{
-                    view.showError()
-                })
     }
 
 }

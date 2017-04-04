@@ -74,6 +74,15 @@ class LoginControllerTest {
     }
 
     @Test
+    fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
+        whenever(api.loginWithGoogleToken()).thenJust("token")
+        controller.onGoogleToken()
+
+        verify(shortcutService).creteAppShortcuts()
+    }
+
+    @Test
     fun shouldNotCreateAppShortcutsWhenDeviceNotSupported() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
         controller.onLogin("login")

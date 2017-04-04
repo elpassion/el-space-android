@@ -34,12 +34,20 @@ class LoginController(private val view: Login.View,
                 .addTo(subscriptions)
     }
 
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
     fun onLogin(token: String) {
         if (token.isNotEmpty()) {
             onCorrectHubToken(token)
         } else {
             view.showEmptyLoginError()
         }
+    }
+
+    fun onHub() {
+        view.openHubWebsite()
     }
 
     private fun onCorrectHubToken(token: String) {
@@ -57,13 +65,4 @@ class LoginController(private val view: Login.View,
     private fun Observable<String>.supplySchedulers() = this
             .subscribeOn(schedulersSupplier.subscribeOn)
             .observeOn(schedulersSupplier.observeOn)
-
-    fun onHub() {
-        view.openHubWebsite()
-    }
-
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
 }

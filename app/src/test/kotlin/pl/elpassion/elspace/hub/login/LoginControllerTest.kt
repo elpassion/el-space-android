@@ -19,6 +19,7 @@ class LoginControllerTest {
     val loginRepository = mock<Login.Repository>()
     val shortcutService = mock<ShortcutService>()
     val subscribeOnScheduler = TestScheduler()
+    val observeOnScheduler = TestScheduler()
 
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
@@ -178,8 +179,17 @@ class LoginControllerTest {
         verify(view).openReportListScreen()
     }
 
-    fun createController(subscribeOnScheduler: Scheduler = trampoline()) =
-            LoginController(view, loginRepository, shortcutService, api, subscribeOnScheduler)
+    @Test
+    fun shouldObserveOnGivenScheduler() {
+        stubHubApiToReturnToken()
+        createController(observeOnScheduler = observeOnScheduler).onGoogleToken()
+        verify(view, never()).openReportListScreen()
+        observeOnScheduler.triggerActions()
+        verify(view).openReportListScreen()
+    }
+
+    fun createController(subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
+            LoginController(view, loginRepository, shortcutService, api, subscribeOnScheduler, observeOnScheduler)
 
     private fun stubHubApiToReturnToken() {
         whenever(api.loginWithGoogleToken()).thenJust("token")

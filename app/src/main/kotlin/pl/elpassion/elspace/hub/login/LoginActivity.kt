@@ -21,7 +21,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
             api = object : Login.HubTokenApi {
                 override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
             },
-            subscribeOnScheduler = trampoline())
+            subscribeOnScheduler = trampoline(),
+            observeOnScheduler = trampoline())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

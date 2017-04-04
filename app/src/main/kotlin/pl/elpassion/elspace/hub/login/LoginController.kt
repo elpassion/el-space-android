@@ -39,6 +39,7 @@ class LoginController(private val view: Login.View,
         api.loginWithGoogleToken()
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
+                    loginRepository.saveToken(it)
                     view.openReportListScreen()
                 },{
                     view.showError()

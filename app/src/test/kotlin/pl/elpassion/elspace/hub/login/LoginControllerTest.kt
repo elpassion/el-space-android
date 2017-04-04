@@ -89,7 +89,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
-        whenever(api.loginWithGoogleToken()).thenJust(Unit)
+        whenever(api.loginWithGoogleToken()).thenJust("token")
         controller.onGoogleToken()
         verify(view).openReportListScreen()
     }
@@ -110,7 +110,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
-        whenever(api.loginWithGoogleToken()).thenJust(Unit)
+        whenever(api.loginWithGoogleToken()).thenJust("token")
         controller.onGoogleToken()
         verify(view, never()).showError()
     }
@@ -124,7 +124,7 @@ class LoginControllerTest {
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
-        whenever(api.loginWithGoogleToken()).thenJust(Unit)
+        whenever(api.loginWithGoogleToken()).thenJust("token")
         controller.onGoogleToken()
         verify(view).hideLoader()
     }
@@ -134,5 +134,12 @@ class LoginControllerTest {
         whenever(api.loginWithGoogleToken()).thenNever()
         controller.onGoogleToken()
         verify(view, never()).hideLoader()
+    }
+
+    @Test
+    fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
+        whenever(api.loginWithGoogleToken()).thenJust("token")
+        controller.onGoogleToken()
+        verify(loginRepository).saveToken("token")
     }
 }

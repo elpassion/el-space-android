@@ -14,7 +14,7 @@ import rx.Observable
 class LoginActivity : AppCompatActivity(), Login.View {
 
     private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this), object : Login.HubTokenApi {
-        override fun loginWithGoogleToken() = Observable.just(Unit)
+        override fun loginWithGoogleToken(): Observable<String> = Observable.empty()
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {

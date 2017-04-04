@@ -4,8 +4,10 @@ import com.elpassion.android.commons.rxjavatest.thenError
 import com.elpassion.android.commons.rxjavatest.thenJust
 import com.elpassion.android.commons.rxjavatest.thenNever
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Assert
 import org.junit.Test
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
+import rx.Observable
 
 class LoginControllerTest {
 
@@ -150,6 +152,16 @@ class LoginControllerTest {
         stubHubApiToReturnToken()
         controller.onGoogleToken()
         verify(loginRepository).saveToken("token")
+    }
+
+    @Test
+    fun shouldUnsubscribeOnDestroy() {
+        var unsubscribed = false
+        val observable = Observable.never<String>().doOnUnsubscribe { unsubscribed = true }
+        whenever(api.loginWithGoogleToken()).thenReturn(observable)
+        controller.onGoogleToken()
+        controller.onDestroy()
+        Assert.assertTrue(unsubscribed)
     }
 
     private fun stubHubApiToReturnToken() {

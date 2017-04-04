@@ -1,11 +1,15 @@
 package pl.elpassion.elspace.hub.login
 
+import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
+import rx.subscriptions.CompositeSubscription
 
 class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,
                       private val shortcutService: ShortcutService,
                       private val api: Login.HubTokenApi) {
+
+    private val subscriptions = CompositeSubscription()
 
     fun onCreate() {
         if (loginRepository.readToken() != null) {
@@ -23,6 +27,7 @@ class LoginController(private val view: Login.View,
                 },{
                     view.showError()
                 })
+                .addTo(subscriptions)
     }
 
     fun onLogin(token: String) {
@@ -47,6 +52,10 @@ class LoginController(private val view: Login.View,
 
     fun onHub() {
         view.openHubWebsite()
+    }
+
+    fun onDestroy() {
+        subscriptions.clear()
     }
 
 }

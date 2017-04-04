@@ -12,4 +12,8 @@ interface Login {
         fun readToken(): String?
         fun saveToken(token: String)
     }
+
+    interface HubTokenApi {
+        fun loginWithGoogleToken(): Boolean
+    }
 }

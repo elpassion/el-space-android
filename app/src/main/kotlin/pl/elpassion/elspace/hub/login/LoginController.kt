@@ -4,7 +4,8 @@ import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,
-                      private val shortcutService: ShortcutService) {
+                      private val shortcutService: ShortcutService,
+                      private val api: Login.HubTokenApi) {
 
     fun onCreate() {
         if (loginRepository.readToken() != null) {
@@ -35,7 +36,9 @@ class LoginController(private val view: Login.View,
 
     fun onGoogleToken() {
         view.openReportListScreen()
-        view.showError()
+        if (!api.loginWithGoogleToken()) {
+            view.showError()
+        }
     }
 
 }

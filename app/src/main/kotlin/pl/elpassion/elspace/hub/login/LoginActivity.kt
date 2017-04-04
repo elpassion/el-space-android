@@ -12,7 +12,9 @@ import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this))
+    private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this), object : Login.HubTokenApi {
+        override fun loginWithGoogleToken() = false
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

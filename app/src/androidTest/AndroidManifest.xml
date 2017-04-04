@@ -3,6 +3,6 @@
     package="pl.elpassion.elspace">
 
     <application>
-        <activity android:name="pl.elpassion.elspace.hub.login.LoginActivityGoogleSuccessTest$GoogleSuccessSingInTestController$GoogleSignInActivity" />
+        <activity android:name=".hub.login.GoogleSignInActivity" />
     </application>
 </manifest>

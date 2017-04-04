@@ -1,8 +1,6 @@
 package pl.elpassion.elspace.hub.login
 
-import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.TextView
@@ -59,13 +57,6 @@ class LoginActivityGoogleSuccessTest {
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
             onSuccess?.invoke("google token")
-        }
-
-        class GoogleSignInActivity : Activity(){
-            override fun onCreate(savedInstanceState: Bundle?) {
-                super.onCreate(savedInstanceState)
-                finish()
-            }
         }
     }
 }

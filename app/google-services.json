@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "316067820217",
+    "project_id": "hub-api-160912"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316067820217:android:f979d07ff59d6988",
+        "android_client_info": {
+          "package_name": "pl.elpassion.elspace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316067820217-j4jggfj9an8gflkbgv9db7vr6mk3ooih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.elpassion.elspace",
+            "certificate_hash": "374b1e032ac0be07c428d55866f5ca010844c097"
+          }
+        },
+        {
+          "client_id": "316067820217-kadp0snrsu95e81ner03vtb0hkgm7a69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgzxPZiQSzBecqw9mZLFQvNIGGMddTWH0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

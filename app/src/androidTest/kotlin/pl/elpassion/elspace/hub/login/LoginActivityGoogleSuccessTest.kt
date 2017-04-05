@@ -1,10 +1,7 @@
 package pl.elpassion.elspace.hub.login
 
 import android.app.Activity
-import android.app.Instrumentation
 import android.content.Intent
-import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.TextView
@@ -17,12 +14,13 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.stubbing.Answer
+import pl.elpassion.elspace.common.getAutoFinishingIntent
+import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.rxMockJust
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.Observable
 
 class LoginActivityGoogleSuccessTest {
 
@@ -69,16 +67,4 @@ class LoginActivityGoogleSuccessTest {
         private val SIGN_IN_TEXT = "Sign in"
         private val GOOGLE_TOKEN = "google token"
     }
-}
-
-private inline fun <reified T : Any> rxMockJust(value: Any?): T {
-    return mock(defaultAnswer = Answer<Any> { Observable.just(value) })
-}
-
-private val autoFinishingIntentActionName = "com.elpassion.android.commons.espresso.AutoFinishingIntent"
-
-private fun prepareAutoFinishingIntent() = Intents.intending(IntentMatchers.hasAction(autoFinishingIntentActionName)).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
-
-private fun getAutoFinishingIntent(): Intent {
-    return Intent(autoFinishingIntentActionName)
 }

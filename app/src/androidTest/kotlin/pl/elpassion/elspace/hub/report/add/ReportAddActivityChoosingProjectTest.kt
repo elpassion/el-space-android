@@ -15,6 +15,7 @@ import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project
+import pl.elpassion.elspace.hub.project.choose.ProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
 
 class ReportAddActivityChoosingProjectTest {
@@ -36,6 +37,8 @@ class ReportAddActivityChoosingProjectTest {
         whenever(repository.getPossibleProjects()).thenReturn(listOf)
         whenever(repository.hasProjects()).thenReturn(true)
         CachedProjectRepositoryProvider.override = { repository }
+        //TODO: Make tests independent
+        ProjectRepositoryProvider.override = null
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), "2016-01-01"))
     }
 }

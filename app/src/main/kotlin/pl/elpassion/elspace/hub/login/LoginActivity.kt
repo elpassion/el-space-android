@@ -20,6 +20,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
             shortcutService = ShortcutServiceImpl(this),
             api = LoginHubTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(trampoline(), trampoline()))
+    private val googleSingInController = GoogleSingInControllerProvider.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +28,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        googleSignInContainer.addView(GoogleSingInControllerProvider.get().initializeGoogleSingInButton(this, {
+        googleSignInContainer.addView(googleSingInController.initializeGoogleSingInButton(this, {
             controller.onGoogleToken(it)
         }, {}))
     }
@@ -51,4 +52,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
     override fun showLoader() = Unit
 
     override fun hideLoader() = Unit
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        googleSingInController.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }

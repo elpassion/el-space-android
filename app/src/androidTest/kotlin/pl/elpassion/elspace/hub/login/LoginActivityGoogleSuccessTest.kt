@@ -46,7 +46,7 @@ class LoginActivityGoogleSuccessTest {
 
     class GoogleSuccessSingInTestController : GoogleSingInController {
 
-        private var onSuccess: ((String) -> Unit)? = null
+        private lateinit var onSuccess: ((String) -> Unit)
 
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
             this.onSuccess = onSuccess
@@ -61,7 +61,7 @@ class LoginActivityGoogleSuccessTest {
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            onSuccess?.invoke("google token")
+            onSuccess("google token")
         }
     }
 }

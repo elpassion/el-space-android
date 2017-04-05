@@ -1,5 +1,7 @@
 package pl.elpassion.elspace.hub.login
 
+import retrofit2.http.POST
+import retrofit2.http.Query
 import rx.Observable
 
 interface Login {
@@ -18,6 +20,7 @@ interface Login {
     }
 
     interface HubTokenApi {
-        fun loginWithGoogleToken(googleToken: String): Observable<String>
+        @POST("api_keys")
+        fun loginWithGoogleToken(@Query("id_token") googleToken: String): Observable<HubTokenFromApi>
     }
 }

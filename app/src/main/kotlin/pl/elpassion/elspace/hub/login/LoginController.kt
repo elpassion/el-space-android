@@ -27,7 +27,7 @@ class LoginController(private val view: Login.View,
                 .supplySchedulers()
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({
-                    onCorrectHubToken(it)
+                    onCorrectHubToken(it.accessToken)
                 }, {
                     view.showError()
                 })
@@ -62,7 +62,7 @@ class LoginController(private val view: Login.View,
         }
     }
 
-    private fun Observable<String>.supplySchedulers() = this
+    private fun <T> Observable<T>.supplySchedulers() = this
             .subscribeOn(schedulersSupplier.subscribeOn)
             .observeOn(schedulersSupplier.observeOn)
 }

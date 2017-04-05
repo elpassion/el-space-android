@@ -31,7 +31,7 @@ class LoginActivityGoogleSuccessTest {
     val rule = rule<LoginActivity> {
         LoginRepositoryProvider.override = { mock<Login.Repository>() }
         GoogleSingInControllerProvider.override = { GoogleSuccessSingInTestController() }
-        LoginHubTokenApiProvider.override = { mock<Login.HubTokenApi>().apply { whenever(loginWithGoogleToken(GOOGLE_TOKEN)).thenJust("token") } }
+        LoginHubTokenApiProvider.override = { mock<Login.HubTokenApi>().apply { whenever(loginWithGoogleToken(GOOGLE_TOKEN)).thenJust(HubTokenFromApi("token")) } }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
 

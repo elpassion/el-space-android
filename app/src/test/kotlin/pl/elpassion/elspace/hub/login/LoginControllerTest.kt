@@ -162,7 +162,7 @@ class LoginControllerTest {
     @Test
     fun shouldUnsubscribeOnDestroy() {
         var unsubscribed = false
-        val observable = Observable.never<String>().doOnUnsubscribe { unsubscribed = true }
+        val observable = Observable.never<HubTokenFromApi>().doOnUnsubscribe { unsubscribed = true }
         whenever(api.loginWithGoogleToken("google token")).thenReturn(observable)
         createController().run {
             onGoogleToken("google token")
@@ -193,7 +193,7 @@ class LoginControllerTest {
             LoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 
     private fun stubHubApiToReturnToken() {
-        whenever(api.loginWithGoogleToken(any())).thenJust("token")
+        whenever(api.loginWithGoogleToken(any())).thenJust(HubTokenFromApi("token"))
     }
 
     private fun stubHubApiToNeverReturn() {

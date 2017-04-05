@@ -33,25 +33,25 @@ class LoginActivityGoogleSuccessTest {
     val rule = rule<LoginActivity> {
         LoginRepositoryProvider.override = { mock<Login.Repository>() }
         GoogleSingInControllerProvider.override = { GoogleSuccessSingInTestController() }
-        LoginHubTokenApiProvider.override = { mock<Login.HubTokenApi>().apply { whenever(loginWithGoogleToken("google token")).thenJust("token") } }
+        LoginHubTokenApiProvider.override = { mock<Login.HubTokenApi>().apply { whenever(loginWithGoogleToken(GOOGLE_TOKEN)).thenJust("token") } }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
 
     @Test
     fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
         prepareAutoFinishingIntent()
-        onText("Sign in").click()
+        onText(SIGN_IN_TEXT).click()
         checkIntent(ReportListActivity::class.java)
     }
 
     class GoogleSuccessSingInTestController : GoogleSingInController {
 
-        private lateinit var onSuccess: ((String) -> Unit)
+        private lateinit var onSuccess: (String) -> Unit
 
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
             this.onSuccess = onSuccess
             return TextView(activity).apply {
-                text = "Sign in"
+                text = SIGN_IN_TEXT
                 setOnClickListener { simulateGoogleSingInActivity(activity) }
             }
         }
@@ -61,8 +61,13 @@ class LoginActivityGoogleSuccessTest {
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            onSuccess("google token")
+            onSuccess(GOOGLE_TOKEN)
         }
+    }
+
+    companion object {
+        private val SIGN_IN_TEXT = "Sign in"
+        private val GOOGLE_TOKEN = "google token"
     }
 }
 

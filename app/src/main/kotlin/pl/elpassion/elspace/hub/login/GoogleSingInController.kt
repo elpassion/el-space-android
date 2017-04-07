@@ -28,7 +28,7 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
             this.onSuccess = onSuccess
             this.onFailure = onFailure
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestServerAuthCode(activity.getString(R.string.server_client_id), false)
+                    .requestIdToken(activity.getString(R.string.server_client_id))
                     .requestEmail()
                     .build()
             val googleApiClient = GoogleApiClient.Builder(activity)
@@ -55,7 +55,7 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
 
         private fun handleSignInResult(result: GoogleSignInResult) {
             if (result.isSuccess) {
-                val googleToken = result.signInAccount?.serverAuthCode
+                val googleToken = result.signInAccount?.idToken
                 if (googleToken != null) {
                     onSuccess(googleToken)
                 } else {

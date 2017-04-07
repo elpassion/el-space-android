@@ -11,17 +11,25 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
+object UnauthenticatedRetrofitProvider : Provider<Retrofit>({
+    createRetrofit(defaultOkHttpClient().build())
+})
 
 object RetrofitProvider : Provider<Retrofit>({
-    Retrofit.Builder()
+    createRetrofit(defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build())
+})
+
+private fun createRetrofit(okHttpClient: OkHttpClient?): Retrofit {
+    return Retrofit.Builder()
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
             .baseUrl("https://hub.elpassion.com/api/v1/")
-            .client(OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)).addInterceptor(xTokenInterceptor()).build())
+            .client(okHttpClient)
             .build()
-})
+}
 
+private fun defaultOkHttpClient() = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
 
 fun xTokenInterceptor() = Interceptor { chain ->
     val request = chain.request().newBuilder()

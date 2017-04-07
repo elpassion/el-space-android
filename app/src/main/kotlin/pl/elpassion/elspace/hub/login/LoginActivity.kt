@@ -10,7 +10,8 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.schedulers.Schedulers.trampoline
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
@@ -19,7 +20,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
             loginRepository = LoginRepositoryProvider.get(),
             shortcutService = ShortcutServiceImpl(this),
             api = LoginHubTokenApiProvider.get(),
-            schedulersSupplier = SchedulersSupplier(trampoline(), trampoline()))
+            schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     private val googleSingInController = GoogleSingInControllerProvider.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {

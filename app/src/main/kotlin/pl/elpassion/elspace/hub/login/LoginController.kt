@@ -23,7 +23,7 @@ class LoginController(private val view: Login.View,
 
     fun onGoogleToken(googleToken: String) {
         view.showLoader()
-        api.loginWithGoogleToken(googleToken)
+        api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
                 .supplySchedulers()
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({

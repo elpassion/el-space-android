@@ -4,6 +4,6 @@
     <item
         android:id="@+id/addReport"
         android:title="@string/report_add_action"
-        android:icon="@drawable/ic_done_black_24dp"
+        android:icon="@drawable/ic_save_white_24dp"
         app:showAsAction="ifRoom" />
 </menu>

@@ -3,9 +3,10 @@ package pl.elpassion.elspace.hub.report.add
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
+import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
 import retrofit2.http.POST
 import retrofit2.http.Query
-import rx.Completable
 import rx.Observable
 
 interface ReportAdd {
@@ -16,21 +17,16 @@ interface ReportAdd {
         fun showLoader()
         fun hideLoader()
         fun addReportClicks(): Observable<ReportViewModel>
-        fun showHoursInput()
-        fun showProjectChooser()
-        fun showDescriptionInput()
-        fun hideDescriptionInput()
-        fun hideProjectChooser()
-        fun hideHoursInput()
         fun reportTypeChanges(): Observable<ReportType>
-        fun showUnpaidVacationsInfo()
-        fun showSickLeaveInfo()
-        fun hideAdditionalInfo()
         fun showSelectedProject(project: Project)
         fun openProjectChooser()
         fun showEmptyDescriptionError()
         fun showEmptyProjectError()
         fun projectClickEvents(): Observable<Unit>
+        fun showRegularForm()
+        fun showPaidVacationsForm()
+        fun showSickLeaveForm()
+        fun showUnpaidVacationsForm()
     }
 
     interface Api {
@@ -40,18 +36,18 @@ interface ReportAdd {
                 @Query("activity[performed_at]") date: String,
                 @Query("activity[project_id]") projectId: Long,
                 @Query("activity[value]") hours: String,
-                @Query("activity[comment]") description: String): Completable
+                @Query("activity[comment]") description: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=1")
         fun addPaidVacationsReport(
                 @Query("activity[performed_at]") date: String,
-                @Query("activity[value]") hours: String): Completable
+                @Query("activity[value]") hours: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=2&activity[value]=0")
-        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Completable
+        fun addUnpaidVacationsReport(@Query("activity[performed_at]") date: String): Observable<Unit>
 
         @POST("activities?activity[report_type]=3&activity[value]=0")
-        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Completable
+        fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

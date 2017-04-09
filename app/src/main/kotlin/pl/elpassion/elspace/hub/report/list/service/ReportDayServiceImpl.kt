@@ -11,8 +11,10 @@ import java.util.*
 class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {
 
     override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>> =
-            Observable.combineLatest(dateChangeObservable,
-                    reportListService.getReports(), { t1, t2 -> Pair(t1, t2) })
+            dateChangeObservable
+                    .flatMap { yearMonth ->
+                        reportListService.getReports(yearMonth).map { yearMonth to it }
+                    }
                     .map { createDaysWithReports(it.first, it.second) }
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
@@ -36,7 +38,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
     }
 
     private fun createDayWithDailyReports(uuid: Long, reports: List<Report>, hasPassed: Boolean, date: String, dayName: String): DayWithDailyReport {
-        return DayWithDailyReport(uuid= uuid,
+        return DayWithDailyReport(uuid = uuid,
                 report = reports.filterIsInstance<DailyReport>().first(),
                 hasPassed = hasPassed,
                 name = dayName,
@@ -44,7 +46,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
     }
 
     private fun createDayWithHourlyReports(uuid: Long, reports: List<Report>, hasPassed: Boolean, date: String, dayName: String): DayWithHourlyReports {
-        return DayWithHourlyReports(uuid= uuid,
+        return DayWithHourlyReports(uuid = uuid,
                 reports = reports.filterIsInstance<HourlyReport>(),
                 hasPassed = hasPassed,
                 name = dayName,
@@ -52,7 +54,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
     }
 
     private fun createDayWithoutReports(uuid: Long, calendarForDay: Calendar, hasPassed: Boolean, date: String, dayName: String): DayWithoutReports {
-        return DayWithoutReports(uuid= uuid,
+        return DayWithoutReports(uuid = uuid,
                 name = dayName,
                 hasPassed = hasPassed,
                 date = date,

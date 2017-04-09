@@ -17,22 +17,26 @@ import com.elpassion.android.commons.recycler.components.stable.StableItemAdapte
 import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
-    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get()) }
+    private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread())) }
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
     private val adapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.project_choose_activity)
+        setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         initRecyclerView()
     }
@@ -42,7 +46,7 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
         projectsContainer.adapter = adapter
     }
 
-    override fun showPossibleProjects(projects: List<Project>) {
+    override fun showProjects(projects: List<Project>) {
         updateAdapterList(projects)
     }
 

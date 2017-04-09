@@ -7,13 +7,21 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class LoginActivity : AppCompatActivity(), Login.View {
 
-    private val controller = LoginController(this, LoginRepositoryProvider.get(), ShortcutServiceImpl(this))
+    private val controller = LoginController(
+            view = this,
+            loginRepository = LoginRepositoryProvider.get(),
+            shortcutService = ShortcutServiceImpl(this),
+            api = LoginHubTokenApiProvider.get(),
+            schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+    private val googleSingInController = GoogleSingInControllerProvider.get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +29,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
+        googleSignInContainer.addView(googleSingInController.initializeGoogleSingInButton(this, {
+            controller.onGoogleToken(it)
+        }, {}))
     }
 
     override fun showEmptyLoginError() {
@@ -37,4 +48,14 @@ class LoginActivity : AppCompatActivity(), Login.View {
         startActivity(browserIntent)
     }
 
+    override fun showError() = Unit
+
+    override fun showLoader() = Unit
+
+    override fun hideLoader() = Unit
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        googleSingInController.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 }

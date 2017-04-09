@@ -2,115 +2,112 @@ package pl.elpassion.elspace.hub.report.add
 
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.elspace.commons.RxSchedulersRule
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import rx.Completable
+import pl.elpassion.elspace.hub.report.*
+import rx.Scheduler
+import rx.schedulers.Schedulers.trampoline
+import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
 
-    private val addReportClicks = PublishSubject.create<ReportViewModel>()
+    private val onAddReportClicks = PublishSubject.create<ReportViewModel>()
     private val reportTypeChanges = PublishSubject.create<ReportType>()
     private val projectClickEvents = PublishSubject.create<Unit>()
-
-    val view = mock<ReportAdd.View>()
-    val api = mock<ReportAdd.Api>()
-    val repository = mock<LastSelectedProjectRepository>()
-
-    @JvmField @Rule
-    val rxSchedulersRule = RxSchedulersRule()
+    private val view = mock<ReportAdd.View>()
+    private val api = mock<ReportAdd.Api>()
+    private val repository = mock<LastSelectedProjectRepository>()
+    private val subscribeOn = TestScheduler()
+    private val observeOn = TestScheduler()
+    private val addReportApi = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
-        stubApiToReturn(Completable.complete())
+        stubApiToReturnSubject()
         stubRepositoryToReturn()
-        whenever(view.addReportClicks()).thenReturn(addReportClicks)
+        whenever(view.addReportClicks()).thenReturn(onAddReportClicks)
         whenever(view.reportTypeChanges()).thenReturn(reportTypeChanges)
         whenever(view.projectClickEvents()).thenReturn(projectClickEvents)
+    }
+
+    private fun stubApiToReturnSubject() {
+        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(addReportApi)
+        whenever(api.addSickLeaveReport(any())).thenReturn(addReportApi)
+        whenever(api.addUnpaidVacationsReport(any())).thenReturn(addReportApi)
+        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(addReportApi)
     }
 
     @Test
     fun shouldCloseAfterAddingNewReport() {
         createController().onCreate()
         addUnpaidVacationReport()
-
+        completeReportAdd()
         verify(view).close()
     }
 
     @Test
     fun shouldShowLoaderOnAddingNewReport() {
-        stubApiToReturn(Completable.never())
         createController().onCreate()
         addUnpaidVacationReport()
-
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportFinish() {
-        stubApiToReturn(Completable.complete())
         createController().onCreate()
         addUnpaidVacationReport()
-
+        completeReportAdd()
         verify(view).showLoader()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenAddingNewReportCanceledByOnDestroy() {
-        stubApiToReturn(Completable.never())
         val controller = createController()
         controller.onCreate()
         addUnpaidVacationReport()
         controller.onDestroy()
-
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldShowInitialDateOnCreate() {
         createController("2016-05-04").onCreate()
-
         verify(view).showDate("2016-05-04")
     }
 
     @Test
     fun shouldAddReportWithChangedDate() {
         createController("2016-01-04").onCreate()
-        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
-
+        onAddReportClicks.onNext(newRegularViewModel(selectedDate = "2016-05-04"))
         verify(api).addRegularReport(eq("2016-05-04"), any(), any(), any())
     }
 
     @Test
     fun shouldShowErrorWhenAddingReportFails() {
-        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(Completable.error(RuntimeException()))
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport("2016-05-04", newProject(), "desc", "8"))
+        onAddReportClicks.onNext(newRegularViewModel())
+        addReportApi.onError(RuntimeException())
         verify(view).showError(any())
     }
 
     @Test
     fun shouldShowDate() {
         createController("2016-09-23").onCreate()
-
         verify(view).showDate("2016-09-23")
     }
 
     @Test
     fun shouldShowErrorWhenApiFails() {
         val exception = RuntimeException()
-        val project = Project(1, "Slack")
-        whenever(api.addRegularReport("2016-09-23", project.id, "8", "description")).thenReturn(Completable.error(exception))
         createController("2016-09-23").onCreate()
-
-        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
+        onAddReportClicks.onNext(newRegularViewModel())
+        addReportApi.onError(exception)
         verify(view).showError(exception)
     }
 
@@ -118,136 +115,35 @@ class ReportAddControllerTest {
     fun shouldShowCurrentDateWhenNotDateNotSelected() {
         stubCurrentTime(2016, 2, 1)
         createController(null).onCreate()
-
         verify(view).showDate("2016-02-01")
     }
 
     @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToRegularReport() {
+    fun shouldShowRegularFormAfterReportTypeChangedToRegularReport() {
         createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showHoursInput()
+        verify(view).showRegularForm()
     }
 
     @Test
-    fun shouldShowDescriptionInputAfterReportTypeChangedToRegularReport() {
+    fun shouldShowPaidVacationsFormAfterReportTypeChangedToPaidVacations() {
         createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowProjectChooserAfterReportTypeChangedToRegularReport() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).showProjectChooser()
-    }
-
-    @Test
-    fun shouldHideAdditionalInfoAfterReportTypeChangedToRegularReport() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.REGULAR)
-        verify(view).hideAdditionalInfo()
-    }
-
-    @Test
-    fun shouldShowHoursInputAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).showHoursInput()
+        verify(view).showPaidVacationsForm()
     }
 
     @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToPaidVacations() {
+    fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
         createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideAdditionalInfoAfterReportTypeChangedToPaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        verify(view).hideAdditionalInfo()
-    }
-
-    @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideHoursInput()
+        verify(view).showSickLeaveForm()
     }
 
     @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToSickLeave() {
+    fun shouldShowUnpaidVacationFormAfterReportTypeChangeToUnpaidVacation() {
         createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowSickLeaveInfoAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).showSickLeaveInfo()
-    }
-
-    @Test
-    fun shouldHideHoursInputAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideHoursInput()
-    }
-
-    @Test
-    fun shouldHideProjectChooserAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideProjectChooser()
-    }
-
-    @Test
-    fun shouldHideDescriptionInputAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).hideDescriptionInput()
-    }
-
-    @Test
-    fun shouldShowUnpaidVacationsInfoAfterReportTypeChangedToUnpaidVacations() {
-        createController().onCreate()
-
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).showUnpaidVacationsInfo()
+        verify(view).showUnpaidVacationsForm()
     }
 
     @Test
@@ -267,7 +163,6 @@ class ReportAddControllerTest {
     @Test
     fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
         createController("2016-09-23").onCreate()
-
         addPaidVacationReport()
         verify(api).addPaidVacationsReport("2016-09-23", "8")
     }
@@ -275,8 +170,7 @@ class ReportAddControllerTest {
     @Test
     fun shouldShouldUseRegularReportApiToAddRegularReport() {
         createController("2016-09-23").onCreate()
-
-        addReportClicks.onNext(RegularReport("2016-09-23", newProject(id = 1), "description", "8"))
+        onAddReportClicks.onNext(newRegularViewModel(selectedDate = "2016-09-23", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("2016-09-23", 1, "8", "description")
     }
 
@@ -285,7 +179,6 @@ class ReportAddControllerTest {
         val project = newProject()
         stubRepositoryToReturn(project)
         createController().onCreate()
-
         verify(view).showSelectedProject(project)
     }
 
@@ -293,7 +186,6 @@ class ReportAddControllerTest {
     fun shouldNotShowPossibleProjectWhenRepositoryReturnNull() {
         stubRepositoryToReturn(null)
         createController().onCreate()
-
         verify(view, never()).showSelectedProject(any())
     }
 
@@ -312,78 +204,124 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldShowSelectedProjectOnProjectChange() {
+        val project = newProject()
+        createController().onProjectChanged(project)
+        verify(view).showSelectedProject(project)
+    }
+
+    @Test
     fun shouldCallSenderAfterOnReportAdded() {
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport("date", project = newProject(id = 1), hours = "8", description = "description"))
+        onAddReportClicks.onNext(newRegularViewModel(selectedDate = "date", project = newProject(id = 1), hours = "8", description = "description"))
         verify(api).addRegularReport("date", projectId = 1, hours = "8", description = "description")
     }
 
     @Test
     fun shouldReallyCallSenderAfterOnReportAdded() {
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
+        onAddReportClicks.onNext(newRegularViewModel(selectedDate = "date", project = newProject(id = 2), hours = "9", description = "description2"))
         verify(api).addRegularReport(date = "date", hours = "9", projectId = 2, description = "description2")
     }
 
     @Test
     fun shouldShowEmptyDescriptionErrorWhenDescriptionIsEmpty() {
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(id = 2), hours = "9", description = ""))
+        onAddReportClicks.onNext(newRegularViewModel(description = ""))
         verify(view).showEmptyDescriptionError()
     }
 
     @Test
     fun shouldShowEmptyProjectErrorWhenProjectWasNotSelected() {
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = null, hours = "9", description = "description2"))
+        onAddReportClicks.onNext(newRegularViewModel(project = null))
         verify(view).showEmptyProjectError()
     }
 
     @Test
     fun shouldNotCloseScreenWhenDescriptionIsEmpty() {
         createController().onCreate()
-
-        addReportClicks.onNext(RegularReport(selectedDate = "date", project = newProject(), hours = "9", description = ""))
+        onAddReportClicks.onNext(newRegularViewModel(description = ""))
         verify(view, never()).close()
     }
 
     @Test
     fun shouldChangeDate() {
         createController().onDateChanged("2016-01-01")
-
         verify(view).showDate("2016-01-01")
     }
 
-    private fun createController(date: String? = "2016-01-01") = ReportAddController(date, view, api, repository)
+    @Test
+    fun shouldSubscribeOnGivenScheduler() {
+        createController(subscribeOnScheduler = subscribeOn).onCreate()
+        onAddReportClicks.onNext(newRegularViewModel())
+        completeReportAdd()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldObserveOnGivenScheduler() {
+        createController(observeOnScheduler = observeOn).onCreate()
+        onAddReportClicks.onNext(newRegularViewModel())
+        completeReportAdd()
+        verify(view, never()).hideLoader()
+        observeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenDescriptionIsEmptyOnAddingRegularReport() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularViewModel(description = ""))
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenProjectIsEmptyOnAddingRegularReport() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularViewModel(project = null))
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldNotEndMainEventsStreamOnApiCallFail() {
+        createController().onCreate()
+        onAddReportClicks.onNext(newRegularViewModel())
+        addReportApi.onError(RuntimeException())
+        verify(view).showLoader()
+        onAddReportClicks.onNext(newRegularViewModel())
+        verify(view, times(2)).showLoader()
+    }
+
+    private fun newRegularViewModel(selectedDate: String = "date", project: Project? = newProject(id = 1), hours: String = "8", description: String = "description")
+            = RegularViewModel(selectedDate = selectedDate, project = project, hours = hours, description = description)
+
+    private fun createController(date: String? = "2016-01-01", subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
+            ReportAddController(date, view, api, repository, SchedulersSupplier(subscribeOn = subscribeOnScheduler, observeOn = observeOnScheduler))
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)
     }
 
-    private fun stubApiToReturn(completable: Completable) {
-        whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(completable)
-        whenever(api.addSickLeaveReport(any())).thenReturn(completable)
-        whenever(api.addUnpaidVacationsReport(any())).thenReturn(completable)
-        whenever(api.addPaidVacationsReport(any(), any())).thenReturn(completable)
+    private fun completeReportAdd() {
+        addReportApi.onNext(Unit)
+        addReportApi.onCompleted()
     }
 
     private fun addUnpaidVacationReport() {
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        addReportClicks.onNext(UnpaidVacationsReport("2016-01-01"))
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 
     private fun addSickLeaveReport() {
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        addReportClicks.onNext(SickLeaveReport("2016-01-01"))
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 
     private fun addPaidVacationReport() {
         reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        addReportClicks.onNext(PaidVacationsReport("2016-09-23", "8"))
+        onAddReportClicks.onNext(PaidVacationsViewModel("2016-09-23", "8"))
     }
 }
-

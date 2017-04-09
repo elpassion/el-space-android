@@ -11,8 +11,12 @@ android:
     - extra-android-m2repository
 
 before_install:
+  - ./gradlew build -x test
   - sh scripts/emulator.sh
   - openssl aes-256-cbc -d -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
+
+script:
+  - travis_wait ./gradlew connectedCheck
 
 after_script:
   - adb logcat -d

@@ -1,19 +1,25 @@
 package pl.elpassion.elspace.hub.report.add
 
-import pl.elpassion.elspace.api.applySchedulers
 import pl.elpassion.elspace.common.CurrentTimeProvider
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.common.extensions.getTimeFrom
+import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
-import rx.Completable
+import pl.elpassion.elspace.hub.report.PaidVacationsViewModel
+import pl.elpassion.elspace.hub.report.RegularViewModel
+import pl.elpassion.elspace.hub.report.ReportType
+import pl.elpassion.elspace.hub.report.ReportViewModel
+import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
                           private val api: ReportAdd.Api,
-                          private val repository: LastSelectedProjectRepository) {
+                          private val repository: LastSelectedProjectRepository,
+                          private val schedulers: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
 
@@ -31,13 +37,24 @@ class ReportAddController(private val date: String?,
                 .addTo(subscriptions)
     }
 
+    fun onDestroy() {
+        subscriptions.clear()
+    }
+
+    fun onDateChanged(date: String) {
+        view.showDate(date)
+    }
+
+    fun onProjectChanged(project: Project) {
+        view.showSelectedProject(project)
+    }
+
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
     private fun addReportClicks() = view.addReportClicks()
             .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
-            .switchMap { callApi(it).toSingleDefault(Unit).toObservable() }
+            .switchMap { callApi(it) }
             .doOnNext { view.close() }
-            .catchOnError { view.showError(it) }
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .doOnNext { onReportTypeChanged(it) }
@@ -51,90 +68,56 @@ class ReportAddController(private val date: String?,
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
     }
 
-    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) = modelCallPair.second(modelCallPair.first)
-            .applySchedulers()
+    private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
+            .subscribeOn(schedulers.subscribeOn)
+            .observeOn(schedulers.observeOn)
             .addLoader()
+            .catchOnError { view.showError(it) }
 
-    private val regularReportHandler = { regularReport: ReportViewModel ->
-        (regularReport as RegularReport).let {
+    private val regularReportHandler = { model: ReportViewModel ->
+        (model as RegularViewModel).run {
             when {
-                !regularReport.hasProject() -> {
+                hasNoProject() -> {
                     view.showEmptyProjectError()
-                    Completable.never()
+                    Observable.empty()
                 }
-                !regularReport.hasDescription() -> {
+                hasNoDescription() -> {
                     view.showEmptyDescriptionError()
-                    Completable.never()
+                    Observable.empty()
                 }
-                else -> addRegularReportObservable(it)
+                else -> addRegularReportObservable(this)
             }
         }
     }
 
-    private fun addRegularReportObservable(regularReport: RegularReport) =
-            api.addRegularReport(regularReport.selectedDate, regularReport.project!!.id, regularReport.hours, regularReport.description)
+    private fun addRegularReportObservable(model: RegularViewModel) =
+            api.addRegularReport(model.selectedDate, model.project!!.id, model.hours, model.description)
 
-    private val paidVacationReportHandler = { paidVacationsReport: ReportViewModel ->
-        api.addPaidVacationsReport(paidVacationsReport.selectedDate, (paidVacationsReport as PaidVacationsReport).hours)
+    private val paidVacationReportHandler = { model: ReportViewModel ->
+        api.addPaidVacationsReport(model.selectedDate, (model as PaidVacationsViewModel).hours)
     }
 
-    private val sickLeaveReportHandler = { sickLeaveReport: ReportViewModel ->
-        api.addSickLeaveReport(sickLeaveReport.selectedDate)
+    private val sickLeaveReportHandler = { model: ReportViewModel ->
+        api.addSickLeaveReport(model.selectedDate)
     }
 
-    private val unpaidVacationReportHandler = { unpaidVacationsReport: ReportViewModel ->
-        api.addUnpaidVacationsReport(unpaidVacationsReport.selectedDate)
+    private val unpaidVacationReportHandler = { model: ReportViewModel ->
+        api.addUnpaidVacationsReport(model.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
-        ReportType.REGULAR -> showRegularForm()
-        ReportType.PAID_VACATIONS -> showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> showSickLeaveForm()
-        ReportType.UNPAID_VACATIONS -> showUnpaidVacationsForm()
+        ReportType.REGULAR -> view.showRegularForm()
+        ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
+        ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
     }
 
-    private fun RegularReport.hasDescription() = description.isNotBlank()
+    private fun RegularViewModel.hasNoDescription() = description.isBlank()
 
-    private fun RegularReport.hasProject() = project != null
+    private fun RegularViewModel.hasNoProject() = project == null
 
-    private fun Completable.addLoader() = this
+    private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
             .doOnUnsubscribe { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }
-
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
-    private fun showRegularForm() {
-        view.showDescriptionInput()
-        view.showProjectChooser()
-        view.showHoursInput()
-        view.hideAdditionalInfo()
-    }
-
-    private fun showPaidVacationsForm() {
-        view.showHoursInput()
-        view.hideProjectChooser()
-        view.hideDescriptionInput()
-        view.hideAdditionalInfo()
-    }
-
-    private fun showSickLeaveForm() {
-        view.hideHoursInput()
-        view.hideDescriptionInput()
-        view.hideProjectChooser()
-        view.showSickLeaveInfo()
-    }
-
-    private fun showUnpaidVacationsForm() {
-        view.hideHoursInput()
-        view.hideDescriptionInput()
-        view.hideProjectChooser()
-        view.showUnpaidVacationsInfo()
-    }
-
-    fun onDateChanged(date: String) {
-        view.showDate(date)
-    }
 }

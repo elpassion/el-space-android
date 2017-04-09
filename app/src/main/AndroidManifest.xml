@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity" />
+        <activity
+            android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity
             android:name=".elspace.hub.report.add.ReportAddActivity"
             android:theme="@style/AppThemeWithoutActionBar" />
@@ -28,10 +30,10 @@
             android:name=".elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppThemeWithoutActionBar" />
-        <activity android:name=".elspace.hub.report.edit.regular.ReportEditRegularActivity" />
+        <activity
+            android:name=".elspace.hub.report.edit.ReportEditActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity" />
-        <activity android:name=".elspace.hub.report.edit.paidvacation.ReportEditPaidVacationActivity" />
-        <activity android:name=".elspace.hub.report.edit.daily.ReportEditDailyActivity" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -1,21 +1,20 @@
 package pl.elpassion.elspace.hub.report.list
 
-import pl.elpassion.elspace.api.applySchedulers
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
-import pl.elpassion.elspace.hub.report.DailyReport
-import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
-import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
 import rx.Observable
+import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
 
 class ReportListController(private val reportDayService: ReportDayService,
                            private val dayFilter: DayFilter,
                            private val actions: ReportList.Actions,
-                           private val view: ReportList.View) : OnDayClickListener, OnReportClickListener {
+                           private val view: ReportList.View,
+                           private val schedulers: SchedulersSupplier) : OnDayClickListener, OnReportClickListener {
 
     private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar()) }
@@ -80,8 +79,9 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {
-                reportDayService.createDays(dateChangeObserver.observe())
-                        .applySchedulers()
+                reportDayService.createDays(dateChangeObserver.observe().observeOn(Schedulers.io()))
+                        .subscribeOn(schedulers.subscribeOn)
+                        .observeOn(schedulers.observeOn)
                         .doOnSubscribe {
                             if (!view.isDuringPullToRefresh()) {
                                 view.showLoader()
@@ -105,11 +105,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     override fun onReport(report: Report) {
-        when (report) {
-            is RegularHourlyReport -> view.openEditReportScreen(report)
-            is PaidVacationHourlyReport -> view.openPaidVacationEditReportScreen(report)
-            is DailyReport -> view.openDailyEditReportScreen(report)
-        }
+        view.openEditReportScreen(report)
     }
 
     private fun isCurrentYearAndMonth() = dateChangeObserver.lastDate.let {

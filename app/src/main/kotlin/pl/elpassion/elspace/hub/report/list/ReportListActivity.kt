@@ -18,29 +18,32 @@ import com.jakewharton.rxbinding.support.v4.widget.refreshes
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.menuClicks
 import pl.elpassion.elspace.common.extensions.onMenuItemAction
 import pl.elpassion.elspace.common.extensions.onMenuItemClicks
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.hub.report.DailyReport
-import pl.elpassion.elspace.hub.report.HourlyReport
-import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
-import pl.elpassion.elspace.hub.report.RegularHourlyReport
+import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
-import pl.elpassion.elspace.hub.report.edit.daily.ReportEditDailyActivity
-import pl.elpassion.elspace.hub.report.edit.paidvacation.ReportEditPaidVacationActivity
-import pl.elpassion.elspace.hub.report.edit.regular.ReportEditRegularActivity
+import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.items.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import rx.Observable
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 import rx.subjects.PublishSubject
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
     private val controller by lazy {
-        ReportListController(ReportDayServiceImpl(ReportList.ServiceProvider.get()), DayFilterImpl(), this, this)
+        ReportListController(
+                reportDayService = ReportDayServiceImpl(ReportList.ServiceProvider.get()),
+                dayFilter = DayFilterImpl(),
+                actions = this,
+                view = this,
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
@@ -99,18 +102,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
             .map { it.isChecked }
             .startWith(false)
 
-    override fun openEditReportScreen(report: RegularHourlyReport) {
-        ReportEditRegularActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
-    override fun openPaidVacationEditReportScreen(report: PaidVacationHourlyReport) {
-        ReportEditPaidVacationActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
-    override fun openDailyEditReportScreen(report: DailyReport) {
-        ReportEditDailyActivity.startForResult(this, report, REPORT_SCREEN_CHANGES_REQUEST_CODE)
-    }
-
     override fun scrollToPosition(position: Int) {
         appBarLayout.setExpanded(false, true)
         reportsContainer.smoothScrollToPosition(position)
@@ -122,6 +113,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun openAddReportScreen(date: String) {
         ReportAddActivity.startForResult(this, date, REPORT_SCREEN_CHANGES_REQUEST_CODE)
+    }
+
+    override fun openEditReportScreen(report: Report) {
+        ReportEditActivity.startForResult(this, REPORT_SCREEN_CHANGES_REQUEST_CODE, report)
     }
 
     override fun hideLoader() {

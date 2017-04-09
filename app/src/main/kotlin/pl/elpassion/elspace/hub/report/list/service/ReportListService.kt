@@ -3,14 +3,17 @@ package pl.elpassion.elspace.hub.report.list.service
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.list.ReportList
+import pl.elpassion.elspace.hub.report.list.YearMonth
+import pl.elpassion.elspace.hub.report.list.toMonthDateRange
 import rx.Observable
 
 class ReportListService(private val reportApi: ReportList.ReportApi,
                         private val projectApi: ProjectListService) : ReportList.Service {
 
-    override fun getReports(): Observable<List<Report>> = projectApi.getProjects()
+    override fun getReports(yearMonth: YearMonth): Observable<List<Report>> = projectApi.getProjects()
             .flatMap { projects ->
-                reportApi.getReports().map { reportList ->
+                val (startOfMonth, endOfMonth) = yearMonth.toMonthDateRange()
+                reportApi.getReports(startOfMonth, endOfMonth).map { reportList ->
                     reportList.map { reportFromApi -> reportFromApi.toReport(projects) }
                 }
             }

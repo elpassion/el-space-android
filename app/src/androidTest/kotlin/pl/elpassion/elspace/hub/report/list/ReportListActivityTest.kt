@@ -9,6 +9,7 @@ import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.Matchers.instanceOf
@@ -17,7 +18,6 @@ import org.hamcrest.core.IsNot.not
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.hasChildWithText
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
@@ -29,9 +29,7 @@ import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
-import pl.elpassion.elspace.hub.report.edit.daily.ReportEditDailyActivity
-import pl.elpassion.elspace.hub.report.edit.paidvacation.ReportEditPaidVacationActivity
-import pl.elpassion.elspace.hub.report.edit.regular.ReportEditRegularActivity
+import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import rx.Observable
 
 class ReportListActivityTest {
@@ -42,7 +40,7 @@ class ReportListActivityTest {
     val rule = rule<ReportListActivity> {
         CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
-        whenever(service.getReports()).thenReturn(Observable.just(listOf<Report>(
+        whenever(service.getReports(any())).thenReturn(Observable.just(listOf<Report>(
                 newRegularHourlyReport(year = 2016, month = 10, day = 3, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),
@@ -73,12 +71,12 @@ class ReportListActivityTest {
 
     @Test
     fun shouldShowCorrectTotalHoursInEveryDay() {
-        onId(R.id.reportsContainer).hasChildWithText("Total: 8.0 hours")
+        onId(R.id.reportsContainer).hasChildWithText("Total: 8 hours")
     }
 
     @Test
     fun shouldShowRegularHourlyReportOnContainer() {
-        onId(R.id.reportsContainer).hasChildWithText("8.0h - Project")
+        onId(R.id.reportsContainer).hasChildWithText("8h - Project")
         onId(R.id.reportsContainer).hasChildWithText("Description")
     }
 
@@ -104,11 +102,26 @@ class ReportListActivityTest {
     }
 
     @Test
-    fun shouldOpenEditDailyReportScreenOnDailyReportClick() {
+    fun shouldOpenEditReportScreenOnDailyReportClick() {
         scrollToItemWithText("8 Sat")
         onText("7 Fri").click()
 
-        checkIntent(ReportEditDailyActivity::class.java)
+        checkIntent(ReportEditActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenEditReportScreenOnPaidVacationReportClick() {
+        scrollToItemWithText("11 Tue")
+        onText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
+
+        checkIntent(ReportEditActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenEditReportScreenOnRegularReportClick() {
+        onText("8h - Project").click()
+
+        checkIntent(ReportEditActivity::class.java)
     }
 
     @Test
@@ -199,22 +212,7 @@ class ReportListActivityTest {
     @Test
     fun shouldShowPaidVacationsInformationForPaidVacationReport() {
         scrollToItemWithText("11 Tue")
-        onId(R.id.reportsContainer).hasChildWithText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
-    }
-
-    @Test
-    fun shouldOpenPaidVacationReportEditActivityAfterClickOnPaidVacationReport() {
-        scrollToItemWithText("11 Tue")
-        onText("3.0h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
-
-        checkIntent(ReportEditPaidVacationActivity::class.java)
-    }
-
-    @Test
-    fun shouldOpenRegularReportEditActivityAfterClickOnRegularReport() {
-        onText("8.0h - Project").click()
-
-        checkIntent(ReportEditRegularActivity::class.java)
+        onId(R.id.reportsContainer).hasChildWithText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {
@@ -222,15 +220,15 @@ class ReportListActivityTest {
     }
 
     private fun verifyIfFifthDayHasNoInformationAboutTotal() {
-        onItemWithText("5 Wed").check(matches(not(hasDescendant(withText("Total: 0.0 hours")))))
+        onItemWithText("5 Wed").check(matches(not(hasDescendant(withText("Total: 0 hours")))))
     }
 
     private fun verifyIfWeekendDayWithReportHasTotalInformation() {
-        onItemWithText("2 Sun").check(matches(hasDescendant(withText("Total: 3.0 hours"))))
+        onItemWithText("2 Sun").check(matches(hasDescendant(withText("Total: 3 hours"))))
     }
 
     private fun verifyIfDayFromFutureWithReportsHasTotalInformation() {
-        onItemWithText("6 Thu").check(matches(hasDescendant(withText("Total: 4.0 hours"))))
+        onItemWithText("6 Thu").check(matches(hasDescendant(withText("Total: 4 hours"))))
     }
 
     private fun onItemWithText(text: String) = onView(allOf(hasDescendant(withText(text)), withParent(withId(R.id.reportsContainer))))

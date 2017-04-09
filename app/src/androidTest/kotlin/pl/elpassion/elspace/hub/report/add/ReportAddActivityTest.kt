@@ -19,7 +19,7 @@ import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import rx.Completable
+import rx.Observable
 
 class ReportAddActivityTest {
 
@@ -30,6 +30,12 @@ class ReportAddActivityTest {
 
     @JvmField @Rule
     val intentsRule = InitIntentsRule()
+
+    @Test
+    fun shouldDisplayScreenName() {
+        stubRepositoryAndStart()
+        onText("Add new report").isDisplayed()
+    }
 
     @Test
     fun shouldHaveVisibleBackArrow() {
@@ -160,7 +166,7 @@ class ReportAddActivityTest {
 
     @Test
     fun shouldShowLoaderOnReportAddCall() {
-        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Completable.never()) } }
+        ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Observable.never()) } }
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).perform(ViewActions.replaceText("description"))
         onId(R.id.addReport).click()
@@ -174,6 +180,46 @@ class ReportAddActivityTest {
         onId(R.id.reportAddDate).click()
         onText("OK").click()
         onId(R.id.reportAddDate).hasText("2017-01-28")
+    }
+
+    @Test
+    fun shouldShowOnlyRegularFormOnRegularReport() {
+        stubRepositoryAndStart()
+        onId(R.id.action_regular_report).click()
+        onId(R.id.reportAddDescriptionLayout).isDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isDisplayed()
+        onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
+        stubRepositoryAndStart()
+        onId(R.id.action_paid_vacations_report).click()
+        onId(R.id.reportAddHoursLayout).isDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddAdditionalInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
+        stubRepositoryAndStart()
+        onId(R.id.action_sick_leave_report).click()
+        onText(R.string.report_add_sick_leave_info).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
+        stubRepositoryAndStart()
+        onId(R.id.action_unpaid_vacations_report).click()
+        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
     }
 
     private fun stubRepositoryAndStart(projects: Project? = newProject(), date: String = "2016-01-01") {

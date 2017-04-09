@@ -1,11 +1,14 @@
 package pl.elpassion.elspace.hub.report.list
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import pl.elpassion.elspace.common.CurrentTimeProvider
+import pl.elpassion.elspace.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
@@ -13,6 +16,7 @@ import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import rx.Observable
+import rx.Observable.just
 import java.util.*
 
 class ReportDayServiceTest {
@@ -108,7 +112,27 @@ class ReportDayServiceTest {
         getFirstDay()
     }
 
-    private fun getDays() = service.createDays(createYearMonthFromTimeProvider()).toBlocking().first()
+    @Test
+    fun shouldCallServiceWithCorrectYearMonth() {
+        val yearMonth = getCurrentTimeCalendar().toYearMonth()
+        stubServiceToReturn(emptyList())
+
+        getDays(just(yearMonth))
+        verify(serviceApi).getReports(yearMonth)
+    }
+
+    @Test
+    fun shouldReallyCallServiceWithCorrectYearMonth() {
+        val yearMonth = getCurrentTimeCalendar().toYearMonth().copy(year = 2015)
+        stubServiceToReturn(emptyList())
+
+        getDays(just(yearMonth))
+        verify(serviceApi).getReports(yearMonth)
+    }
+
+    private fun getDays(dateChangeObservable: Observable<YearMonth> = createYearMonthFromTimeProvider()): List<Day> {
+        return service.createDays(dateChangeObservable).toBlocking().first()
+    }
 
     private fun getFirstDay() = getDays().first()
 
@@ -116,7 +140,7 @@ class ReportDayServiceTest {
             Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
 
     private fun stubServiceToReturn(list: List<Report>) {
-        whenever(serviceApi.getReports()).thenReturn(Observable.just(list))
+        whenever(serviceApi.getReports(any())).thenReturn(Observable.just(list))
     }
 
     private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {

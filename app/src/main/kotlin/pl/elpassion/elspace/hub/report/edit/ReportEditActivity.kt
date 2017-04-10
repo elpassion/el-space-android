@@ -53,6 +53,9 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         reportEditProjectName.setOnClickListener {
             ProjectChooseActivity.startForResult(this, CHOOSE_PROJECT_REQUEST_CODE)
         }
+        reportEditDescription.setOnClickListener {
+            reportEditDescriptionLayout.error = null
+        }
     }
 
     override fun onDestroy() {
@@ -93,6 +96,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showDescription(description: String) {
+        reportEditDescriptionLayout.error = null
         reportEditDescription.setText(description)
     }
 
@@ -150,7 +154,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showEmptyDescriptionError() {
-        Snackbar.make(reportEditCoordinator, R.string.empty_description_error, Snackbar.LENGTH_INDEFINITE).show()
+        reportEditDescriptionLayout.error = getString(R.string.empty_description_error)
     }
 
     private fun showHourlyForm() {

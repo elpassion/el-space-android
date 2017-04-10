@@ -14,6 +14,10 @@ before_install:
   - ./gradlew build -x test
   - sh scripts/emulator.sh
   - openssl aes-256-cbc -d -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
+  - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-server-client-id.xml.enc -out app/src/release/res/values/google-server-client-id.xml
+  - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-services-release.json.enc -out app/google-services.json
+  - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-signing-credentials.gradle.enc -out app/src/release/google-signing-credentials.gradle
+  - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/release-keystore.jks.enc -out app/src/release/release-keystore.jks
 
 script:
   - travis_wait ./gradlew connectedCheck

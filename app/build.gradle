@@ -3,7 +3,7 @@ buildscript {
     ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.1.0'
-    ext.support_version = '25.1.0'
+    ext.support_version = '25.3.1'
     ext.rxJava = '1.1.9'
     ext.elCommon = '0.0.12'
     ext.rxBinding = '1.0.0'
@@ -31,7 +31,7 @@ apply from: 'src/release/google-signing-credentials.gradle'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "pl.elpassion.elspace"
         minSdkVersion 19
@@ -89,6 +89,7 @@ dependencies {
     compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:$rxBinding"
     compile "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxBinding"
     compile "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxBinding"
+    compile "com.android.support:gridlayout-v7:$support_version"
     compile "com.android.support:cardview-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"
     compile "com.android.support:design:$support_version"
@@ -99,9 +100,10 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.4@aar') {
         transitive = true;
     }
-    compile('com.philliphsu:bottomsheetpickers:2.1.1') {
+    compile('com.philliphsu:bottomsheetpickers:2.3.1') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'gridlayout-v7'
     }
     compile 'com.google.android.gms:play-services-auth:10.2.1'
 

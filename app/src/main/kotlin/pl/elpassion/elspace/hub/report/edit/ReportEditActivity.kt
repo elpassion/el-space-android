@@ -88,6 +88,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
     override fun showProject(project: Project) {
         selectedProject = project
+        reportEditProjectNameLayout.error = null
         reportEditProjectName.setText(project.name)
     }
 
@@ -145,7 +146,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showEmptyProjectError() {
-        Snackbar.make(reportEditCoordinator, R.string.empty_project_error, Snackbar.LENGTH_INDEFINITE).show()
+        reportEditProjectNameLayout.error = getString(R.string.empty_project_error)
     }
 
     override fun showEmptyDescriptionError() {

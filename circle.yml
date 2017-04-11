@@ -9,14 +9,11 @@ machine:
 dependencies:
     override:
         - echo y | android update sdk --no-ui --all --filter tools,platform-tools
-        - echo y | android update sdk --no-ui --all --filter sysimg-19
-        - echo y | android update sdk --no-ui --all --filter android-19
+        - echo y | android update sdk --no-ui --all --filter android-22
         - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
         - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
         - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
         - echo y | android update sdk --no-ui --all --filter extra-android-support
-        - android list avd
-        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 compile:
   pre:
@@ -27,15 +24,14 @@ compile:
 
 test:
   pre:
-    - echo no | android create avd -n test -f -t android-19 --abi default/armeabi-v7a &&
-    - emulator -avd test -no-audio -no-window:
-        background: true
-        parallel: true
+    - emulator -avd circleci-android22 -no-skin -no-audio -no-window -no-boot-anim:
+           background: true
+           parallel: true
+
+  override:
     - circle-android wait-for-boot
     - adb shell settings put global window_animation_scale 0 &
     - adb shell settings put global transition_animation_scale 0 &
     - adb shell settings put global animator_duration_scale 0 &
-
-  override:
     - (./gradlew connectedCheck):
           timeout: 360

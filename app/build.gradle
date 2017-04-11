@@ -1,6 +1,5 @@
 buildscript {
     ext.kotlin_version = '1.1.1'
-    ext.dexMakerVersion = '1.4'
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.2.0'
     ext.support_version = '25.3.1'

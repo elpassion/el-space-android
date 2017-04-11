@@ -27,21 +27,7 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
             this.onSuccess = onSuccess
             this.onFailure = onFailure
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(activity.getString(R.string.server_client_id))
-                    .requestEmail()
-                    .build()
-            val googleApiClient = GoogleApiClient.Builder(activity)
-                    .enableAutoManage(activity, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build()
-            return SignInButton(activity).apply {
-                setSize(SignInButton.SIZE_STANDARD)
-                setOnClickListener {
-                    val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-                    activity.startActivityForResult(signInIntent, RC_SIGN_IN)
-                }
-            }
+            return createSignInButton(activity)
         }
 
         override fun onConnectionFailed(p0: ConnectionResult) = onFailure()
@@ -52,6 +38,28 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
                 handleSignInResult(result)
             }
         }
+
+        private fun createSignInButton(activity: FragmentActivity) = SignInButton(activity).apply {
+            setSize(SignInButton.SIZE_STANDARD)
+            setOnClickListener {
+                val googleApiClient = getGoogleApiClient(activity)
+                val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
+                activity.startActivityForResult(signInIntent, RC_SIGN_IN)
+            }
+        }
+
+        private fun getGoogleApiClient(activity: FragmentActivity) =
+                GoogleApiClient.Builder(activity)
+                        .enableAutoManage(activity, this)
+                        .addApi(Auth.GOOGLE_SIGN_IN_API, getGoogleSignInOptions(activity))
+                        .build()
+
+        private fun getGoogleSignInOptions(activity: FragmentActivity) =
+                GoogleSignInOptions
+                        .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(activity.getString(R.string.server_client_id))
+                        .requestEmail()
+                        .build()
 
         private fun handleSignInResult(result: GoogleSignInResult) {
             if (result.isSuccess) {

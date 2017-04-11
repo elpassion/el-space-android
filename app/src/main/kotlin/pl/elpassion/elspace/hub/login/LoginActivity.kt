@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         startActivity(browserIntent)
     }
 
-    override fun showError() = Unit
+    override fun showGoogleTokenError() = Unit
 
     override fun showLoader() = Unit
 

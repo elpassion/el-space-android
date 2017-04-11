@@ -29,7 +29,7 @@ class LoginController(private val view: Login.View,
                 .subscribe({
                     onCorrectHubToken(it.accessToken)
                 }, {
-                    view.showError()
+                    view.showGoogleTokenError()
                 })
                 .addTo(subscriptions)
     }

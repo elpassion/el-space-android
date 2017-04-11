@@ -9,7 +9,7 @@ interface Login {
         fun openReportListScreen()
         fun showEmptyLoginError()
         fun openHubWebsite()
-        fun showError()
+        fun showGoogleTokenError()
         fun showLoader()
         fun hideLoader()
     }

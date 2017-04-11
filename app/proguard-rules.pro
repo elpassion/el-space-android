@@ -75,3 +75,5 @@
 #Api Models
 -keep class pl.elpassion.elspace.hub.report.list.service.ReportFromApi { *; }
 -keep class pl.elpassion.elspace.hub.project.Project { *; }
+-keep pl.elpassion.elspace.hub.login.HubTokenFromApi { *; }
+-keep pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi { *; }

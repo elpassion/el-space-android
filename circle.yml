@@ -25,7 +25,7 @@ compile:
 
 test:
   pre:
-    - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a --skin 480x800
+    - echo no | android create avd -n test -t android-19 --abi default/x86 --skin 480x800
     - emulator -avd test -no-audio -no-window:
         background: true
         parallel: true

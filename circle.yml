@@ -25,7 +25,7 @@ compile:
 
 test:
   pre:
-    - echo no | android create avd -n test -t android-19 --abi default/armeabi-v7a &&
+    - echo no | android create avd -n test -t android-19 --abi default/armeabi-v7a
     - emulator -avd test -no-audio -no-window:
         background: true
         parallel: true

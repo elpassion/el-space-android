@@ -121,14 +121,14 @@ class LoginControllerTest {
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
         createController().onGoogleToken("google token")
-        verify(view).showError()
+        verify(view).showGoogleTokenError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
         createController().onGoogleToken("google token")
-        verify(view, never()).showError()
+        verify(view, never()).showGoogleTokenError()
     }
 
     @Test

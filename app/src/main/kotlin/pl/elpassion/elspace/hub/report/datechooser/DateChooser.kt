@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report.datechooser
 
 import android.support.v4.app.FragmentManager
-import com.philliphsu.bottomsheetpickers.date.BottomSheetDatePickerDialog
+import com.philliphsu.bottomsheetpickers.date.DatePickerDialog
 import pl.elpassion.elspace.common.extensions.getCurrentTimeCalendar
 import pl.elpassion.elspace.common.extensions.getDateString
 import java.util.*
@@ -18,7 +18,7 @@ fun showDateDialog(fragmentManager: FragmentManager, dateListener: DateListener)
 
 private fun createDateDialog(calendar: Calendar, dateListener: DateListener) =
         with(calendar) {
-            BottomSheetDatePickerDialog.newInstance(
+            DatePickerDialog.newInstance(
                     { _, year, monthOfYear, dayOfMonth ->
                         dateListener(getDateString(year, monthOfYear + 1, dayOfMonth))
                     },

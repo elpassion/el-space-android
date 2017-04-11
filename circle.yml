@@ -9,6 +9,7 @@ machine:
 dependencies:
     override:
         - echo y | android update sdk --no-ui --all --filter tools,platform-tools
+        - echo y | android update sdk --no-ui --all --filter sysimg-19
         - echo y | android update sdk --no-ui --all --filter android-19
         - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
         - echo y | android update sdk --no-ui --all --filter extra-android-m2repository

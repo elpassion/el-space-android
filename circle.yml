@@ -38,3 +38,4 @@ test:
       background: true
     - (./gradlew connectedCheck):
           timeout: 720
+          parallel: true

@@ -31,9 +31,7 @@ class LoginActivity : AppCompatActivity(), Login.View {
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         loginHubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        googleSignInContainer.addView(googleSingInController.initializeGoogleSingInButton(this, {
-            controller.onGoogleToken(it)
-        }, {}))
+        googleSignInContainer.addView(getSignInButton())
     }
 
     override fun showEmptyLoginError() {
@@ -60,4 +58,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
         googleSingInController.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    private fun getSignInButton() = googleSingInController.initializeGoogleSingInButton(
+            activity = this,
+            onSuccess = { controller.onGoogleToken(it) },
+            onFailure = {})
 }

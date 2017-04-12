@@ -135,43 +135,43 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         errorSnackBar.show()
     }
 
-    override fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) {
-        val contentItemAdapters = createContentItemsAdapters(days, onDayClickListener, onReportClickListener)
+    override fun showDays(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick) {
+        val contentItemAdapters = createContentItemsAdapters(days, onDayClick, onReportClick)
         val adapterList = listOf<StableItemAdapter<*>>(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
         itemsStrategy.set(adapterList)
         reportsAdapter.notifyDataSetChanged()
         controller.updateLastPassedDayPosition(adapterList.indexOfLast { it is DayItem && it.day.hasPassed })
     }
 
-    private fun createContentItemsAdapters(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
+    private fun createContentItemsAdapters(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick) =
             days.flatMap {
-                createDayAdapter(it, onDayClickListener, onReportClickListener)
+                createDayAdapter(it, onDayClick, onReportClick)
             }
 
-    private fun createDayAdapter(day: Day, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
+    private fun createDayAdapter(day: Day, onDayClick: OnDayClick, onReportClick: OnReportClick) =
             when (day) {
-                is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClickListener)
-                is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClickListener, onReportClickListener)
-                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day, onReportClickListener)
+                is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClick)
+                is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClick, onReportClick)
+                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day, onReportClick)
             }
 
-    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport, onReportClickListener: OnReportClickListener) = listOf(DayWithDailyReportsItemAdapter(day, onReportClickListener))
+    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport, onReportClick: OnReportClick) = listOf(DayWithDailyReportsItemAdapter(day, onReportClick))
 
-    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClickListener: OnDayClickListener): List<StableItemAdapter<out RecyclerView.ViewHolder>> =
+    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClick: OnDayClick): List<StableItemAdapter<out RecyclerView.ViewHolder>> =
             if (day.isWeekend) {
-                listOf(WeekendDayItem(day, onDayClickListener))
+                listOf(WeekendDayItem(day, onDayClick))
             } else {
-                listOf(DayNotFilledInItemAdapter(day, onDayClickListener))
+                listOf(DayNotFilledInItemAdapter(day, onDayClick))
             }
 
-    private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener) =
-            listOf(DayItemAdapter(it, onDayClickListener)) + it.reports.map { createReportItemAdapter(it, onReportClickListener) }
+    private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClick: OnDayClick, onReportClick: OnReportClick) =
+            listOf(DayItemAdapter(it, onDayClick)) + it.reports.map { createReportItemAdapter(it, onReportClick) }
 
-    private fun createReportItemAdapter(report: HourlyReport, onReportClickListener: OnReportClickListener): StableItemAdapter<out RecyclerView.ViewHolder> =
+    private fun createReportItemAdapter(report: HourlyReport, onReportClick: OnReportClick): StableItemAdapter<out RecyclerView.ViewHolder> =
             if (report is RegularHourlyReport) {
-                RegularReportItemAdapter(report, onReportClickListener)
+                RegularReportItemAdapter(report, onReportClick)
             } else {
-                PaidVacationReportItemAdapter(report as PaidVacationHourlyReport, onReportClickListener)
+                PaidVacationReportItemAdapter(report as PaidVacationHourlyReport, onReportClick)
             }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

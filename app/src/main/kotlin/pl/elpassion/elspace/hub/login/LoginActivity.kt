@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.hideLoader
-import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.android.schedulers.AndroidSchedulers
@@ -50,9 +48,9 @@ class LoginActivity : AppCompatActivity(), Login.View {
 
     override fun showGoogleTokenError() = Unit
 
-    override fun showLoader() = showLoader(loginCoordinator)
+    override fun showLoader() = Unit
 
-    override fun hideLoader() = hideLoader(loginCoordinator)
+    override fun hideLoader() = Unit
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         googleSingInController.onActivityResult(requestCode, resultCode, data)

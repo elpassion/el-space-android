@@ -2,6 +2,7 @@ package pl.elpassion.elspace.hub.login
 
 import android.app.Activity
 import android.content.Intent
+import android.support.test.espresso.Espresso
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.TextView
@@ -38,6 +39,7 @@ class LoginActivityGoogleSuccessTest {
     @Test
     fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
         prepareAutoFinishingIntent()
+        Espresso.closeSoftKeyboard()
         onText(SIGN_IN_TEXT).click()
         checkIntent(ReportListActivity::class.java)
     }

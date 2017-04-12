@@ -23,6 +23,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
@@ -248,10 +249,6 @@ class ReportListActivityTest {
 
     private fun scrollToItemWithText(s: String) {
         onView(withId(R.id.reportsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(s))))
-    }
-
-    private fun stubAllIntents() {
-        Intents.intending(IntentMatchers.anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null))
     }
 
 }

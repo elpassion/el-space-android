@@ -23,7 +23,7 @@ import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
 
-class LoginActivityGoogleSuccessTest {
+class LoginActivityGoogleTest {
 
     private val loginHubTokenApi = mock<Login.HubTokenApi>()
 
@@ -34,7 +34,7 @@ class LoginActivityGoogleSuccessTest {
     val rule = rule<LoginActivity> {
         wheneverLoginWithGoogleToken().thenJust(HubTokenFromApi("token"))
         LoginRepositoryProvider.override = { mock<Login.Repository>() }
-        GoogleSingInControllerProvider.override = { GoogleSuccessSingInTestController() }
+        GoogleSingInControllerProvider.override = { GoogleSingInTestController() }
         LoginHubTokenApiProvider.override = { loginHubTokenApi }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
@@ -64,40 +64,31 @@ class LoginActivityGoogleSuccessTest {
         onId(R.id.loader).doesNotExist()
     }
 
+    @Test
+    fun shouldShowErrorWhenGoogleAccessTokenFailed() {
+        wheneverLoginWithGoogleToken().thenReturn(Observable.error(RuntimeException()))
+        onText(SIGN_IN_TEXT).click()
+        onText(R.string.google_token_error).isDisplayed()
+    }
+
     private fun wheneverLoginWithGoogleToken() = whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
-    inner class GoogleSuccessSingInTestController : GoogleSingInController {
+    class GoogleSingInTestController : GoogleSingInController {
 
         private lateinit var onSuccess: (String) -> Unit
 
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
             this.onSuccess = onSuccess
-            return createTextView(activity)
+            return TextView(activity).apply {
+                text = SIGN_IN_TEXT
+                setOnClickListener { simulateGoogleSingInActivity(activity) }
+            }
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = onSuccess(GOOGLE_TOKEN)
+
+        private fun simulateGoogleSingInActivity(activity: Activity) = activity.startActivityForResult(getAutoFinishingIntent(), 1111)
     }
-
-    inner class GoogleFailingSingInTestController : GoogleSingInController {
-
-        private lateinit var onFailure: () -> Unit
-
-        override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
-            this.onFailure = onFailure
-            return createTextView(activity)
-        }
-
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            onFailure
-        }
-    }
-
-    private fun createTextView(activity: FragmentActivity) = TextView(activity).apply {
-        text = SIGN_IN_TEXT
-        setOnClickListener { simulateGoogleSingInActivity(activity) }
-    }
-
-    private fun simulateGoogleSingInActivity(activity: Activity) = activity.startActivityForResult(getAutoFinishingIntent(), 1111)
 
     companion object {
         private val SIGN_IN_TEXT = "Sign in"

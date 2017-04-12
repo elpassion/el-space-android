@@ -17,13 +17,16 @@ import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
+import pl.elpassion.elspace.hub.report.list.ReportList
 
 class ReportAddActivityChoosingProjectTest {
 
     val repository = mock<CachedProjectRepository>()
 
     @JvmField @Rule
-    val rule = rule<ReportAddActivity>(autoStart = false)
+    val rule = rule<ReportAddActivity>(autoStart = false) {
+        ReportList.ProjectApiProvider.override = { mock() }
+    }
 
     @Test
     fun shouldChangeSelectedProject() {

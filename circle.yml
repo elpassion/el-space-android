@@ -24,7 +24,9 @@ compile:
 
 test:
   pre:
-    - emulator -avd circleci-android22 --skin 480x800 -no-audio -no-window -no-boot-anim:
+    - echo no | android create avd --force -n test -t android-22 --abi default/armeabi-v7a --skin 480x800:
+        parallel: true
+    - emulator -avd test -no-audio -no-window:
            background: true
            parallel: true
 

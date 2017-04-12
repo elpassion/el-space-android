@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.mock
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.api.UnauthenticatedRetrofitProvider
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.add.ReportAdd
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
@@ -16,6 +17,7 @@ inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline befor
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {
         override fun apply(base: Statement?, description: Description?): Statement {
             RetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }
+            UnauthenticatedRetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }
             Animations.disable()
             stubReportAddApi()
             stubProjectRepository()

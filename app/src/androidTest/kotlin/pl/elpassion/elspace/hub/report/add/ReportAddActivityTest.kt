@@ -13,6 +13,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
@@ -58,6 +59,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldStartProjectChooserOnProjectClicked() {
         stubRepositoryAndStart()
+        stubAllIntents()
         onText("name").click()
         checkIntent(ProjectChooseActivity::class.java)
     }

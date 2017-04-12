@@ -1,10 +1,14 @@
 package pl.elpassion.elspace.hub.report.list
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
@@ -82,6 +86,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenAddReportScreenOnWeekendDayClick() {
+        stubAllIntents()
         onText("1 Sat").click()
 
         checkIntent(ReportAddActivity::class.java)
@@ -89,6 +94,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenAddReportScreenOnNotFilledInDayClick() {
+        stubAllIntents()
         onText("4 Tue").click()
 
         checkIntent(ReportAddActivity::class.java)
@@ -96,6 +102,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenAddReportScreenOnNormalDayClick() {
+        stubAllIntents()
         onText("3 Mon").click()
 
         checkIntent(ReportAddActivity::class.java)
@@ -103,6 +110,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenEditReportScreenOnDailyReportClick() {
+        stubAllIntents()
         scrollToItemWithText("8 Sat")
         onText("7 Fri").click()
 
@@ -111,6 +119,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenEditReportScreenOnPaidVacationReportClick() {
+        stubAllIntents()
         scrollToItemWithText("11 Tue")
         onText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}").click()
 
@@ -119,6 +128,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenEditReportScreenOnRegularReportClick() {
+        stubAllIntents()
         onText("8h - Project").click()
 
         checkIntent(ReportEditActivity::class.java)
@@ -177,6 +187,7 @@ class ReportListActivityTest {
 
     @Test
     fun shouldOpenAddReportOnClickOnFAB() {
+        stubAllIntents()
         onId(R.id.fabAddReport).click()
 
         checkIntent(ReportAddActivity::class.java)
@@ -238,5 +249,10 @@ class ReportListActivityTest {
     private fun scrollToItemWithText(s: String) {
         onView(withId(R.id.reportsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(s))))
     }
+
+    private fun stubAllIntents() {
+        Intents.intending(IntentMatchers.anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null))
+    }
+
 }
 

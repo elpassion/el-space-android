@@ -10,6 +10,7 @@ import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.rxjavatest.thenJust
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -38,11 +39,14 @@ class LoginActivityGoogleSuccessTest {
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
 
-    @Test
-    fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
-        wheneverLoginWithGoogleToken().thenJust(HubTokenFromApi("token"))
+    @Before
+    fun setupTests() {
         prepareAutoFinishingIntent()
         Espresso.closeSoftKeyboard()
+    }
+
+    @Test
+    fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
         onText(SIGN_IN_TEXT).click()
         checkIntent(ReportListActivity::class.java)
     }
@@ -50,16 +54,12 @@ class LoginActivityGoogleSuccessTest {
     @Test
     fun shouldShowLoaderWhileSigningInWithGoogle() {
         wheneverLoginWithGoogleToken().thenReturn(Observable.never())
-        prepareAutoFinishingIntent()
-        Espresso.closeSoftKeyboard()
         onText(SIGN_IN_TEXT).click()
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSigningInWithGoogleFinished() {
-        prepareAutoFinishingIntent()
-        Espresso.closeSoftKeyboard()
         onText(SIGN_IN_TEXT).click()
         onId(R.id.loader).doesNotExist()
     }

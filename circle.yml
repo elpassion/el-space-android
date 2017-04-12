@@ -28,7 +28,6 @@ test:
         parallel: true
     - emulator -avd test -no-audio -no-window:
            background: true
-           parallel: true
 
   override:
     - circle-android wait-for-boot
@@ -40,4 +39,3 @@ test:
       background: true
     - (./gradlew connectedCheck):
           timeout: 720
-          parallel: true

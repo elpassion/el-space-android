@@ -41,8 +41,8 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
 
         private fun createSignInButton(activity: FragmentActivity) = SignInButton(activity).apply {
             setSize(SignInButton.SIZE_STANDARD)
+            val googleApiClient = getGoogleApiClient(activity)
             setOnClickListener {
-                val googleApiClient = getGoogleApiClient(activity)
                 val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
                 activity.startActivityForResult(signInIntent, RC_SIGN_IN)
             }

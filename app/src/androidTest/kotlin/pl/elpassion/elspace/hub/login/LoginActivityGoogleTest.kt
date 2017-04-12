@@ -71,7 +71,8 @@ class LoginActivityGoogleTest {
         onText(R.string.google_token_error).isDisplayed()
     }
 
-    private fun wheneverLoginWithGoogleToken() = whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
+    private fun wheneverLoginWithGoogleToken() =
+            whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
     class GoogleSingInTestController : GoogleSingInController {
 

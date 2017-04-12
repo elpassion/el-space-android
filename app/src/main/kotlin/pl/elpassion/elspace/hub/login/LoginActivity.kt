@@ -34,9 +34,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
         googleSignInContainer.addView(getSignInButton())
     }
 
-    override fun showEmptyLoginError() {
-        Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
-    }
+    override fun showEmptyLoginError() =
+            Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
 
     override fun openReportListScreen() {
         ReportListActivity.start(this)
@@ -48,7 +47,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
         startActivity(browserIntent)
     }
 
-    override fun showGoogleTokenError() = Unit
+    override fun showGoogleTokenError() =
+            Snackbar.make(loginCoordinator, R.string.google_token_error, Snackbar.LENGTH_INDEFINITE).show()
 
     override fun showLoader() = showLoader(loginCoordinator)
 

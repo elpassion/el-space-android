@@ -23,7 +23,7 @@ import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
 
-class LoginActivityGoogleTest {
+class LoginActivityGoogleSuccessTest {
 
     private val loginHubTokenApi = mock<Login.HubTokenApi>()
 
@@ -34,7 +34,7 @@ class LoginActivityGoogleTest {
     val rule = rule<LoginActivity> {
         wheneverLoginWithGoogleToken().thenJust(HubTokenFromApi("token"))
         LoginRepositoryProvider.override = { mock<Login.Repository>() }
-        GoogleSingInControllerProvider.override = { GoogleSingInTestController() }
+        GoogleSingInControllerProvider.override = { GoogleSingInSuccessTestController() }
         LoginHubTokenApiProvider.override = { loginHubTokenApi }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
@@ -74,7 +74,7 @@ class LoginActivityGoogleTest {
     private fun wheneverLoginWithGoogleToken() =
             whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
-    class GoogleSingInTestController : GoogleSingInController {
+    class GoogleSingInSuccessTestController : GoogleSingInController {
 
         private lateinit var onSuccess: (String) -> Unit
 

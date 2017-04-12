@@ -24,7 +24,7 @@ compile:
 
 test:
   pre:
-    - emulator -avd circleci-android22 -no-skin -no-audio -no-window -no-boot-anim:
+    - emulator -avd circleci-android22 --skin 480x800 -no-audio -no-window -no-boot-anim:
            background: true
            parallel: true
 

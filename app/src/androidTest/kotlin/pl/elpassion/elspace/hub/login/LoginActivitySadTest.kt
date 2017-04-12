@@ -20,7 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.hub.report.list.ReportList
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
 
@@ -33,7 +33,11 @@ class LoginActivitySadTest {
 
     @JvmField @Rule
     val rule = rule<LoginActivity> {
-        ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports(any())).thenReturn(Observable.just(emptyList())) } }
+        LoginHubTokenApiProvider.override = {
+            mock<Login.HubTokenApi>().apply {
+                whenever(loginWithGoogleToken(any())).thenReturn(Observable.never())
+            }
+        }
         LoginRepositoryProvider.override = { loginRepository }
     }
 
@@ -49,6 +53,7 @@ class LoginActivitySadTest {
 
     @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
+        stubAllIntents()
         val token = "token"
         login(token)
         verify(loginRepository, times(1)).saveToken(token)
@@ -56,6 +61,7 @@ class LoginActivitySadTest {
 
     @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
+        stubAllIntents()
         login("token")
         checkIntent(ReportListActivity::class.java)
     }

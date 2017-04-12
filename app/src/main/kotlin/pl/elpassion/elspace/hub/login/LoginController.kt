@@ -3,8 +3,8 @@ package pl.elpassion.elspace.hub.login
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
-import rx.Observable
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 
 class LoginController(private val view: Login.View,
                       private val loginRepository: Login.Repository,
@@ -12,7 +12,7 @@ class LoginController(private val view: Login.View,
                       private val api: Login.HubTokenApi,
                       private val schedulersSupplier: SchedulersSupplier) {
 
-    private val subscriptions = CompositeSubscription()
+    private val subscriptions = CompositeDisposable()
 
     fun onCreate() {
         if (loginRepository.readToken() != null) {
@@ -25,7 +25,7 @@ class LoginController(private val view: Login.View,
         view.showLoader()
         api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
                 .supplySchedulers()
-                .doOnUnsubscribe { view.hideLoader() }
+                .doOnDispose { view.hideLoader() }
                 .subscribe({
                     onCorrectHubToken(it.accessToken)
                 }, {

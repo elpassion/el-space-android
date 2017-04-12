@@ -10,7 +10,6 @@ import com.elpassion.android.commons.espresso.InitIntentsRule
 import com.elpassion.android.commons.espresso.checkIntent
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.onText
-import com.elpassion.android.commons.rxjavatest.thenJust
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
@@ -19,6 +18,7 @@ import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.rxMockJust
+import pl.elpassion.elspace.commons.thenJust
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity

@@ -22,7 +22,7 @@ import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.add.ReportAdd
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportListActivityAddReportTest {
 

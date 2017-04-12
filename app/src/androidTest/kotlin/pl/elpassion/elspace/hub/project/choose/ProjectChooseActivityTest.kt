@@ -14,7 +14,7 @@ import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.dto.newProject
-import rx.Observable
+import io.reactivex.Observable
 
 class ProjectChooseActivityTest {
 

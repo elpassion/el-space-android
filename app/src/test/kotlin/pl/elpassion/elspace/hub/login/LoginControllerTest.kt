@@ -1,17 +1,17 @@
 package pl.elpassion.elspace.hub.login
 
-import com.elpassion.android.commons.rxjavatest.thenError
-import com.elpassion.android.commons.rxjavatest.thenJust
-import com.elpassion.android.commons.rxjavatest.thenNever
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Assert
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.commons.thenError
+import pl.elpassion.elspace.commons.thenJust
+import pl.elpassion.elspace.commons.thenNever
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
-import rx.Observable
-import rx.Scheduler
-import rx.schedulers.Schedulers.trampoline
-import rx.schedulers.TestScheduler
 
 class LoginControllerTest {
 
@@ -162,7 +162,7 @@ class LoginControllerTest {
     @Test
     fun shouldUnsubscribeOnDestroy() {
         var unsubscribed = false
-        val observable = Observable.never<HubTokenFromApi>().doOnUnsubscribe { unsubscribed = true }
+        val observable = Observable.never<HubTokenFromApi>().doOnDispose { unsubscribed = true }
         whenever(api.loginWithGoogleToken(GoogleTokenForHubTokenApi("google token"))).thenReturn(observable)
         createController().run {
             onGoogleToken("google token")

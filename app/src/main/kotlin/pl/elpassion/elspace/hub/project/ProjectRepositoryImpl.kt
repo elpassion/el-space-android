@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.project
 
 import pl.elpassion.elspace.hub.report.list.service.ProjectListService
-import rx.Observable
+import io.reactivex.Observable
 
 
 class ProjectRepositoryImpl(private val projectListService: ProjectListService,

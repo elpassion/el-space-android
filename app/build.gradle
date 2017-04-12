@@ -3,9 +3,9 @@ buildscript {
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.2.0'
     ext.support_version = '25.3.1'
-    ext.rxJava = '1.1.9'
+    ext.rxJava = '2.0.8'
     ext.elCommon = '0.0.12'
-    ext.rxBinding = '1.0.1'
+    ext.rxBinding = '2.0.0'
 
     repositories {
         jcenter()
@@ -75,6 +75,9 @@ android {
         javaMaxHeapSize DEX_MAX_HEAP_SIZE
         preDexLibraries = System.env.CI != "true"
     }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
@@ -82,12 +85,12 @@ dependencies {
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile "io.reactivex:rxjava:$rxJava"
+    compile "io.reactivex.rxjava2:rxjava:$rxJava"
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile "com.jakewharton.rxbinding:rxbinding-kotlin:$rxBinding"
-    compile "com.jakewharton.rxbinding:rxbinding-appcompat-v7-kotlin:$rxBinding"
-    compile "com.jakewharton.rxbinding:rxbinding-support-v4-kotlin:$rxBinding"
-    compile "com.jakewharton.rxbinding:rxbinding-design-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBinding"
+    compile "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxBinding"
     compile "com.android.support:gridlayout-v7:$support_version"
     compile "com.android.support:cardview-v7:$support_version"
     compile "com.android.support:appcompat-v7:$support_version"

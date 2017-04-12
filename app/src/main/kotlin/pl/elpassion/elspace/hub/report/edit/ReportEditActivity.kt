@@ -11,7 +11,7 @@ import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
-import com.jakewharton.rxbinding.support.design.widget.itemSelections
+import com.jakewharton.rxbinding2.support.design.widget.itemSelections
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -22,9 +22,9 @@ import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 

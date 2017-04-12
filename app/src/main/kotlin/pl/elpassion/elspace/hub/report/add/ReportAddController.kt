@@ -1,19 +1,16 @@
 package pl.elpassion.elspace.hub.report.add
 
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.addTo
-import pl.elpassion.elspace.common.extensions.catchOnError
-import pl.elpassion.elspace.common.extensions.getDateString
-import pl.elpassion.elspace.common.extensions.getTimeFrom
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.report.PaidVacationsViewModel
 import pl.elpassion.elspace.hub.report.RegularViewModel
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
-import rx.Observable
-import rx.subscriptions.CompositeSubscription
 
 class ReportAddController(private val date: String?,
                           private val view: ReportAdd.View,
@@ -21,7 +18,7 @@ class ReportAddController(private val date: String?,
                           private val repository: LastSelectedProjectRepository,
                           private val schedulers: SchedulersSupplier) {
 
-    private val subscriptions = CompositeSubscription()
+    private val subscriptions = CompositeDisposable()
 
     fun onCreate() {
         repository.getLastProject()?.let {
@@ -52,7 +49,7 @@ class ReportAddController(private val date: String?,
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
     private fun addReportClicks() = view.addReportClicks()
-            .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
+            .withLatestFrom(reportTypeChanges()) { model, handler -> model to handler }
             .switchMap { callApi(it) }
             .doOnNext { view.close() }
 
@@ -118,6 +115,6 @@ class ReportAddController(private val date: String?,
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
-            .doOnUnsubscribe { view.hideLoader() }
+            .doOnDispose { view.hideLoader() }
             .doOnTerminate { view.hideLoader() }
 }

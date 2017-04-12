@@ -9,7 +9,7 @@ import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.add.ReportAdd
 import pl.elpassion.elspace.hub.report.edit.ReportEdit
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
-import rx.Observable
+import io.reactivex.Observable
 
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {

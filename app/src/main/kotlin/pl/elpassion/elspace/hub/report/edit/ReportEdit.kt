@@ -10,7 +10,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
-import rx.Observable
+import io.reactivex.Observable
 
 interface ReportEdit {
 

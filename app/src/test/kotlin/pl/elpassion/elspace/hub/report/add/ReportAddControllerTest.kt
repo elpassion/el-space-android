@@ -1,6 +1,10 @@
 package pl.elpassion.elspace.hub.report.add
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -9,10 +13,6 @@ import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.report.*
-import rx.Scheduler
-import rx.schedulers.Schedulers.trampoline
-import rx.schedulers.TestScheduler
-import rx.subjects.PublishSubject
 
 class ReportAddControllerTest {
 
@@ -307,7 +307,7 @@ class ReportAddControllerTest {
 
     private fun completeReportAdd() {
         addReportApi.onNext(Unit)
-        addReportApi.onCompleted()
+        addReportApi.onComplete()
     }
 
     private fun addUnpaidVacationReport() {

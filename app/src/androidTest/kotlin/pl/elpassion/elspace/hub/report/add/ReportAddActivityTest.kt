@@ -20,7 +20,7 @@ import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportAddActivityTest {
 

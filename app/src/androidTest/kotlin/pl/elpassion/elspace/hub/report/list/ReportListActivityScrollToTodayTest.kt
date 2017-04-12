@@ -18,7 +18,7 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportListActivityScrollToTodayTest {
 

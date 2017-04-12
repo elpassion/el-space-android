@@ -31,6 +31,7 @@ class ReportListActivityScrollToTodayTest {
     fun shouldScrollToTodayOnTodayClickWhenNoReports() {
         stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 31)
         onId(R.id.action_today).click()
+        Thread.sleep(100)
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
@@ -38,6 +39,7 @@ class ReportListActivityScrollToTodayTest {
     fun shouldReallyScrollToTodayOnTodayClickWhenNoReports() {
         stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 1)
         onId(R.id.action_today).click()
+        Thread.sleep(100)
         onId(R.id.reportsContainer).hasChildWithText("1 Sun")
         onId(R.id.reportsContainer).doesNotHaveChildWithText("31 Tue")
     }
@@ -48,6 +50,7 @@ class ReportListActivityScrollToTodayTest {
                 reports = listOf(newRegularHourlyReport(year = 2017, month = 1, day = 1, reportedHours = 3.0)),
                 year = 2017, month = 1, day = 31)
         onId(R.id.action_today).click()
+        Thread.sleep(100)
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 

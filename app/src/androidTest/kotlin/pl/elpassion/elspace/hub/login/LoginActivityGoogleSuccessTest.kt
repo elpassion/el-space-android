@@ -64,29 +64,40 @@ class LoginActivityGoogleSuccessTest {
         onId(R.id.loader).doesNotExist()
     }
 
-    private fun wheneverLoginWithGoogleToken() =
-            whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
+    private fun wheneverLoginWithGoogleToken() = whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
-    class GoogleSuccessSingInTestController : GoogleSingInController {
+    inner class GoogleSuccessSingInTestController : GoogleSingInController {
 
         private lateinit var onSuccess: (String) -> Unit
 
         override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
             this.onSuccess = onSuccess
-            return TextView(activity).apply {
-                text = SIGN_IN_TEXT
-                setOnClickListener { simulateGoogleSingInActivity(activity) }
-            }
+            return createTextView(activity)
         }
 
-        private fun simulateGoogleSingInActivity(activity: Activity) {
-            activity.startActivityForResult(getAutoFinishingIntent(), 1111)
+        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = onSuccess(GOOGLE_TOKEN)
+    }
+
+    inner class GoogleFailingSingInTestController : GoogleSingInController {
+
+        private lateinit var onFailure: () -> Unit
+
+        override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
+            this.onFailure = onFailure
+            return createTextView(activity)
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-            onSuccess(GOOGLE_TOKEN)
+            onFailure
         }
     }
+
+    private fun createTextView(activity: FragmentActivity) = TextView(activity).apply {
+        text = SIGN_IN_TEXT
+        setOnClickListener { simulateGoogleSingInActivity(activity) }
+    }
+
+    private fun simulateGoogleSingInActivity(activity: Activity) = activity.startActivityForResult(getAutoFinishingIntent(), 1111)
 
     companion object {
         private val SIGN_IN_TEXT = "Sign in"

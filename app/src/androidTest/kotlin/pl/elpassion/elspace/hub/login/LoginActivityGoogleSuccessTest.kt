@@ -56,6 +56,14 @@ class LoginActivityGoogleSuccessTest {
         onId(R.id.loader).isDisplayed()
     }
 
+    @Test
+    fun shouldHideLoaderWhenSigningInWithGoogleFinished() {
+        prepareAutoFinishingIntent()
+        Espresso.closeSoftKeyboard()
+        onText(SIGN_IN_TEXT).click()
+        onId(R.id.loader).doesNotExist()
+    }
+
     private fun wheneverLoginWithGoogleToken() =
             whenever(loginHubTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 

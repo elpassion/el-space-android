@@ -48,4 +48,5 @@
     <string name="empty_project_error">Project name cannot be empty</string>
     <string name="login_hub">HUB</string>
     <string name="hub_token_uri">https://hub.elpassion.com/employee/settings/api</string>
+    <string name="debate_code_incorrect">Debate code is incorrect</string>
 </resources>

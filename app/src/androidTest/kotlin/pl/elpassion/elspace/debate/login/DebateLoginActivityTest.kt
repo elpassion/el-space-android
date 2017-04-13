@@ -54,5 +54,11 @@ class DebateLoginActivityTest {
         onId(R.id.loader).doesNotExist()
     }
 
+    @Test
+    fun shouldShowErrorOnLoginButtonClickIfDebateCodeIsIncorrect() {
+        onId(R.id.debateCode).replaceText("12")
+        onId(R.id.loginButton).click()
+        onText(R.string.debate_code_incorrect).isDisplayed()
+    }
 }
 

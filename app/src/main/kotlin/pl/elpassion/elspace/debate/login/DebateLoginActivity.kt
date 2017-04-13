@@ -12,7 +12,9 @@ class DebateLoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
-        loginButton.setOnClickListener { showLoader(debateLoginCoordinator) }
-        Snackbar.make(debateLoginCoordinator, R.string.debate_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
+        loginButton.setOnClickListener {
+            Snackbar.make(debateLoginCoordinator, R.string.debate_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
+            showLoader(debateLoginCoordinator)
+        }
     }
 }

@@ -41,5 +41,12 @@ class DebateLoginActivityTest {
                 .isDisplayed()
                 .isEnabled()
     }
+
+    @Test
+    fun shouldShowLoaderOnApiCall() {
+        onId(R.id.debateCode).replaceText("12345")
+        onId(R.id.loginButton).click()
+        onId(R.id.loader).isDisplayed()
+    }
 }
 

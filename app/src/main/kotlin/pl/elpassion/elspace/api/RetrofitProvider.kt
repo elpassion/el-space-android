@@ -21,7 +21,7 @@ object RetrofitProvider : Provider<Retrofit>({
 
 private fun createRetrofit(okHttpClient: OkHttpClient?): Retrofit {
     return Retrofit.Builder()
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.createAsync())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
             .baseUrl("https://hub.elpassion.com/api/v1/")

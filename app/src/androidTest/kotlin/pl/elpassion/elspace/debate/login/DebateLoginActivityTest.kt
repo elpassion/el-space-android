@@ -48,5 +48,11 @@ class DebateLoginActivityTest {
         onId(R.id.loginButton).click()
         onId(R.id.loader).isDisplayed()
     }
+
+    @Test
+    fun shouldNotShowLoaderOnStart() {
+        onId(R.id.loader).doesNotExist()
+    }
+
 }
 

@@ -5,6 +5,7 @@ import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertTrue
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -23,6 +24,7 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import rx.Observable
 
+@Ignore
 class ReportEditActivityTest {
 
     @JvmField @Rule

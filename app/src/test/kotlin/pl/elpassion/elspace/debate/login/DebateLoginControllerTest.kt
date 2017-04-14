@@ -4,7 +4,9 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.debate.DebateTokenRepository
-import rx.Observable
+import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
+import rx.subjects.PublishSubject
+
 
 class DebateLoginControllerTest {
 
@@ -12,64 +14,64 @@ class DebateLoginControllerTest {
     private val tokenRepo = mock<DebateTokenRepository>()
     private val loginApi = mock<DebateLogin.Api>()
     private val controller = DebateLoginController(view, tokenRepo, loginApi)
+    private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
     fun setUp() {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
+        whenever(loginApi.login(any())).thenReturn(apiSubject)
     }
 
     @Test
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
-        onLoginWithCodeReturnToken(code = "12348", token = "authToken")
         logToDebate(debateCode = "12348")
+        returnTokenFromApi("authToken")
         verify(tokenRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
     }
 
     @Test
     fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
-        onLoginWithCodeReturnToken(code = "12345", token = "realAuthToken")
         logToDebate(debateCode = "12345")
+        returnTokenFromApi("realAuthToken")
         verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
     }
 
     @Test
     fun shouldShowErrorIfLoginFails() {
-        onLoginWithCodeReturnError(code = "error")
         controller.onLogToDebate("error")
+        apiSubject.onError(RuntimeException())
         verify(view).showLoginFailedError()
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
-        onLoginWithCodeReturnToken(code = "12345")
         logToDebate(debateCode = "12345")
+        returnTokenFromApi("authToken")
         verify(view, never()).showLoginFailedError()
     }
 
     @Test
     fun shouldShowLoaderOnLoginStart() {
-        onLoginWithCodeReturnToken(code = "12345")
         logToDebate(debateCode = "12345")
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnLoginEnd() {
-        onLoginWithCodeReturnToken(code = "12345")
         logToDebate(debateCode = "12345")
+        returnTokenFromApi("authToken")
         verify(view).hideLoader()
     }
 
+
     @Test
     fun shouldNotHideLoaderWhenLoginIsStillInProgress() {
-        onLoginWithCodeReturnNever(code = "12345")
         logToDebate(debateCode = "12345")
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderOnDestroyIfCallIsStillInProgress() {
-        onLoginWithCodeReturnNever(code = "12345")
         logToDebate(debateCode = "12345")
         controller.onDestroy()
         verify(view).hideLoader()
@@ -83,15 +85,15 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
-        onLoginWithCodeReturnToken(code = "12345", token = "authToken")
         logToDebate(debateCode = "12345")
+        returnTokenFromApi("authToken")
         verify(view).openDebateScreen("authToken")
     }
 
     @Test
     fun shouldNotOpenDebateScreenOnLoginFailure() {
-        onLoginWithCodeReturnError(code = "123")
         logToDebate(debateCode = "123")
+        apiSubject.onError(RuntimeException())
         verify(view, never()).openDebateScreen(any())
     }
 
@@ -139,20 +141,12 @@ class DebateLoginControllerTest {
         verify(view, never()).showWrongPinError()
     }
 
-    private fun onLoginWithCodeReturnNever(code: String) {
-        whenever(loginApi.login(code)).thenReturn(Observable.never())
+    private fun returnTokenFromApi(token: String) {
+        apiSubject.onNext(LoginResponse(token))
+        apiSubject.onCompleted()
     }
 
     private fun logToDebate(debateCode: String = "12345") {
         controller.onLogToDebate(debateCode)
     }
-
-    private fun onLoginWithCodeReturnError(code: String) {
-        whenever(loginApi.login(code)).thenReturn(Observable.error(RuntimeException()))
-    }
-
-    private fun onLoginWithCodeReturnToken(code: String, token: String = "authToken") {
-        whenever(loginApi.login(code)).thenReturn(Observable.just(DebateLogin.Api.LoginResponse(token)))
-    }
-
 }

@@ -9,7 +9,8 @@ class DebateLoginController(
         private val view: DebateLogin.View,
         private val tokenRepo: DebateTokenRepository,
         private val loginApi: DebateLogin.Api,
-        private val subscribeOn: Scheduler) {
+        private val subscribeOn: Scheduler,
+        private val observeOn: Scheduler) {
 
     private var subscription: Subscription? = null
 
@@ -24,6 +25,7 @@ class DebateLoginController(
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
                 .subscribeOn(subscribeOn)
+                .observeOn(observeOn)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({

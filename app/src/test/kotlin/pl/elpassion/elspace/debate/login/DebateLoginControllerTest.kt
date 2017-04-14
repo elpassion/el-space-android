@@ -15,7 +15,7 @@ class DebateLoginControllerTest {
     private val view = mock<DebateLogin.View>()
     private val tokenRepo = mock<DebateTokenRepository>()
     private val loginApi = mock<DebateLogin.Api>()
-    private val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline())
+    private val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline(), Schedulers.trampoline())
     private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
@@ -142,11 +142,22 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForOnSubscribeInApiCall() {
         val subscribeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, subscribeOn)
+        val controller = DebateLoginController(view, tokenRepo, loginApi, subscribeOn, Schedulers.trampoline())
         controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldUseGivenSchedulerForObserveOnInApiCall() {
+        val observeOn = TestScheduler()
+        val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline(), observeOn)
+        controller.onLogToDebate("12345")
+        returnTokenFromApi("authToken")
+        verify(view, never()).hideLoader()
+        observeOn.triggerActions()
         verify(view).hideLoader()
     }
 

@@ -1,19 +1,37 @@
 package pl.elpassion.elspace.debate.login
 
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.intent.Intents.intended
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.text.InputType.TYPE_CLASS_NUMBER
 import android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
+import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.debate.DebateTokenRepository
+import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
+import pl.elpassion.elspace.debate.details.DebateScreen
 
 class DebateLoginActivityTest {
 
+    private val tokenRepo = mock<DebateTokenRepository>()
+
     @JvmField @Rule
-    val rule = rule<DebateLoginActivity>()
+    val intents = InitIntentsRule()
+
+    @JvmField @Rule
+    val rule = rule<DebateLoginActivity> {
+        whenever(tokenRepo.hasToken(any())).thenReturn(false)
+        DebateTokenRepositoryProvider.override = { tokenRepo }
+    }
 
     @Test
     fun shouldHaveWelcomeString() {
@@ -65,5 +83,15 @@ class DebateLoginActivityTest {
     fun shouldNotShowErrorOnStart() {
         onText(R.string.debate_code_incorrect).doesNotExist()
     }
-}
 
+    @Test
+    fun shouldOpenDebateScreenWithTokenFromRepo() {
+        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        onId(R.id.debateCode).replaceText("12345")
+        onId(R.id.loginButton).click()
+        intended(allOf(
+                hasExtra("debateAuthTokenKey", "tokenFromRepo"),
+                hasComponent(DebateScreen::class.java.name)))
+    }
+}

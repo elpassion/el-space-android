@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.login
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 import rx.schedulers.Schedulers
@@ -15,7 +16,7 @@ class DebateLoginControllerTest {
     private val view = mock<DebateLogin.View>()
     private val tokenRepo = mock<DebateTokenRepository>()
     private val loginApi = mock<DebateLogin.Api>()
-    private val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline(), Schedulers.trampoline())
+    private val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
@@ -142,7 +143,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, subscribeOn, Schedulers.trampoline())
+        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
@@ -153,7 +154,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForObserveOnInApiCall() {
         val observeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline(), observeOn)
+        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()

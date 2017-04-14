@@ -1,16 +1,15 @@
 package pl.elpassion.elspace.debate.login
 
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import rx.Observable
-import rx.Scheduler
 import rx.Subscription
 
 class DebateLoginController(
         private val view: DebateLogin.View,
         private val tokenRepo: DebateTokenRepository,
         private val loginApi: DebateLogin.Api,
-        private val subscribeOn: Scheduler,
-        private val observeOn: Scheduler) {
+        private val schedulers: SchedulersSupplier) {
 
     private var subscription: Subscription? = null
 
@@ -24,8 +23,8 @@ class DebateLoginController(
 
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
-                .subscribeOn(subscribeOn)
-                .observeOn(observeOn)
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .doOnSubscribe { view.showLoader() }
                 .doOnUnsubscribe { view.hideLoader() }
                 .subscribe({

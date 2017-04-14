@@ -10,19 +10,13 @@ import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateScreen
-import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     private val controller by lazy {
-        DebateLoginController(this, DebateTokenRepositoryProvider.get(), object : DebateLogin.Api {
-            override fun login(code: String): Observable<DebateLogin.Api.LoginResponse> {
-                showLoader()
-                return Observable.never()
-            }
-        }, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+        DebateLoginController(this, DebateTokenRepositoryProvider.get(), DebateLogin.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,5 +1,7 @@
 package pl.elpassion.elspace.debate.login
 
+import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.common.Provider
 import rx.Observable
 
 interface DebateLogin {
@@ -15,5 +17,9 @@ interface DebateLogin {
         fun login(code: String): Observable<LoginResponse>
         data class LoginResponse(val authToken: String)
     }
+
+    object ApiProvider: Provider<Api>({
+        RetrofitProvider.get().create(Api::class.java)
+    })
 
 }

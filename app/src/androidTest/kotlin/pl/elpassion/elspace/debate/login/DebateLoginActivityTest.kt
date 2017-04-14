@@ -10,6 +10,7 @@ import android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
@@ -19,10 +20,13 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateScreen
+import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
+import rx.subjects.PublishSubject
 
 class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebateTokenRepository>()
+    private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
 
     @JvmField @Rule
     val intents = InitIntentsRule()
@@ -31,6 +35,7 @@ class DebateLoginActivityTest {
     val rule = rule<DebateLoginActivity> {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
         DebateTokenRepositoryProvider.override = { tokenRepo }
+        DebateLogin.ApiProvider.override = { mock<DebateLogin.Api>().apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
 
     @Test
@@ -92,6 +97,17 @@ class DebateLoginActivityTest {
         onId(R.id.loginButton).click()
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "tokenFromRepo"),
+                hasComponent(DebateScreen::class.java.name)))
+    }
+
+    @Test
+    fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
+        onId(R.id.debateCode).replaceText("12345")
+        onId(R.id.loginButton).click()
+        apiSubject.onNext(LoginResponse("authTokenFromApi"))
+        verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")
+        intended(allOf(
+                hasExtra("debateAuthTokenKey", "authTokenFromApi"),
                 hasComponent(DebateScreen::class.java.name)))
     }
 }

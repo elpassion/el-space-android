@@ -32,7 +32,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showLoginFailedError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Snackbar.make(debateLoginCoordinator, R.string.debate_login_fail, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showLoader() {

@@ -110,4 +110,13 @@ class DebateLoginActivityTest {
                 hasExtra("debateAuthTokenKey", "authTokenFromApi"),
                 hasComponent(DebateScreen::class.java.name)))
     }
+    
+    @Test
+    fun shouldShowErrorWhenLoginFails() {
+        onId(R.id.debateCode).replaceText("12345")
+        onId(R.id.loginButton).click()
+        apiSubject.onError(RuntimeException())
+        Thread.sleep(50)
+        onText(R.string.debate_login_fail).isDisplayed()
+    }
 }

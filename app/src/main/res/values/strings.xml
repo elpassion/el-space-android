@@ -49,4 +49,5 @@
     <string name="login_hub">HUB</string>
     <string name="hub_token_uri">https://hub.elpassion.com/employee/settings/api</string>
     <string name="debate_code_incorrect">Debate code is incorrect</string>
+    <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
 </resources>

@@ -140,7 +140,7 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldUseGivenSchedulerForOnSubscribeInApiCall() {
+    fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
         val controller = DebateLoginController(view, tokenRepo, loginApi, subscribeOn, Schedulers.trampoline())
         controller.onLogToDebate("12345")

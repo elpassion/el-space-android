@@ -99,24 +99,21 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenWithAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        whenever(tokenRepo.hasToken(debateCode = "12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = "12345")).thenReturn("token")
+        forCodeReturnTokenFromRepo(debateCode = "12345", token = "token")
         logToDebate("12345")
         verify(view).openDebateScreen("token")
     }
 
     @Test
     fun shouldOpenDebateScreenWithRealAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        whenever(tokenRepo.hasToken(debateCode = "23456")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = "23456")).thenReturn("authToken")
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = "authToken")
         logToDebate("23456")
         verify(view).openDebateScreen("authToken")
     }
 
     @Test
     fun shouldShowLoaderOnLoggingWithTokenFromRepository() {
-        whenever(tokenRepo.hasToken(debateCode = "23456")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = "23456")).thenReturn("authToken")
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = "authToken")
         logToDebate("23456")
         verify(view).showLoader()
     }
@@ -135,10 +132,14 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotShowWrongPinErrorWhenPinHas5Digits() {
-        whenever(tokenRepo.hasToken(debateCode = "23456")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = "23456")).thenReturn("authToken")
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = "authToken")
         logToDebate("23456")
         verify(view, never()).showWrongPinError()
+    }
+
+    private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
+        whenever(tokenRepo.hasToken(debateCode = debateCode)).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
     }
 
     private fun returnTokenFromApi(token: String) {

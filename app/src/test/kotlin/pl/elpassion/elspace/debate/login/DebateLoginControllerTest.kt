@@ -5,6 +5,8 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
+import rx.schedulers.Schedulers
+import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 
@@ -13,7 +15,7 @@ class DebateLoginControllerTest {
     private val view = mock<DebateLogin.View>()
     private val tokenRepo = mock<DebateTokenRepository>()
     private val loginApi = mock<DebateLogin.Api>()
-    private val controller = DebateLoginController(view, tokenRepo, loginApi)
+    private val controller = DebateLoginController(view, tokenRepo, loginApi, Schedulers.trampoline())
     private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
@@ -135,6 +137,17 @@ class DebateLoginControllerTest {
         forCodeReturnTokenFromRepo(debateCode = "23456", token = "authToken")
         logToDebate("23456")
         verify(view, never()).showWrongPinError()
+    }
+
+    @Test
+    fun shouldUseGivenSchedulerForOnSubscribeInApiCall() {
+        val subscribeOn = TestScheduler()
+        val controller = DebateLoginController(view, tokenRepo, loginApi, subscribeOn)
+        controller.onLogToDebate("12345")
+        returnTokenFromApi("authToken")
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
     }
 
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {

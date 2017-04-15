@@ -17,6 +17,7 @@ import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
+import pl.elpassion.elspace.hub.project.choose.ProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
@@ -27,7 +28,9 @@ class ReportAddActivityTest {
     val repository = mock<LastSelectedProjectRepository>()
 
     @JvmField @Rule
-    val rule = rule<ReportAddActivity>(autoStart = false)
+    val rule = rule<ReportAddActivity>(autoStart = false) {
+        ProjectRepositoryProvider.override = { mock() }
+    }
 
     @JvmField @Rule
     val intentsRule = InitIntentsRule()

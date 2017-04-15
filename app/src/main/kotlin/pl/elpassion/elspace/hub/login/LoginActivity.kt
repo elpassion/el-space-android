@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.hideLoader
+import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -32,9 +34,8 @@ class LoginActivity : AppCompatActivity(), Login.View {
         googleSignInContainer.addView(getSignInButton())
     }
 
-    override fun showEmptyLoginError() {
-        Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
-    }
+    override fun showEmptyLoginError() =
+            Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
 
     override fun openReportListScreen() {
         ReportListActivity.start(this)
@@ -46,11 +47,12 @@ class LoginActivity : AppCompatActivity(), Login.View {
         startActivity(browserIntent)
     }
 
-    override fun showGoogleTokenError() = Unit
+    override fun showGoogleTokenError() =
+            Snackbar.make(loginCoordinator, R.string.google_token_error, Snackbar.LENGTH_INDEFINITE).show()
 
-    override fun showLoader() = Unit
+    override fun showLoader() = showLoader(loginCoordinator)
 
-    override fun hideLoader() = Unit
+    override fun hideLoader() = hideLoader(loginCoordinator)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         googleSingInController.onActivityResult(requestCode, resultCode, data)

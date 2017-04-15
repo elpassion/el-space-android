@@ -20,8 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
-import pl.elpassion.elspace.hub.report.list.ReportList
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import io.reactivex.Observable
 
@@ -33,26 +32,28 @@ class LoginActivitySadTest {
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = rule<LoginActivity>(autoStart = false) {
-        ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports(any())).thenReturn(Observable.just(emptyList())) } }
+    val rule = rule<LoginActivity> {
+        LoginHubTokenApiProvider.override = {
+            mock<Login.HubTokenApi>().apply {
+                whenever(loginWithGoogleToken(any())).thenReturn(Observable.never())
+            }
+        }
         LoginRepositoryProvider.override = { loginRepository }
     }
 
     @Test
     fun shouldHaveLoginButton() {
-        rule.startActivity()
         onId(R.id.loginButton).hasText(R.string.login_button)
     }
 
     @Test
     fun shouldHaveTokenEditText() {
-        rule.startActivity()
         onId(R.id.tokenInput).isDisplayed()
     }
 
     @Test
     fun shouldSaveTokenWhenTokenIsProvidedAndLoginButtonIsPressed() {
-        rule.startActivity()
+        stubAllIntents()
         val token = "token"
         login(token)
         verify(loginRepository, times(1)).saveToken(token)
@@ -60,27 +61,24 @@ class LoginActivitySadTest {
 
     @Test
     fun shouldOpenReportListScreenWhenTokenIsProvidedAndLoginButtonIsClicked() {
-        rule.startActivity()
+        stubAllIntents()
         login("token")
         checkIntent(ReportListActivity::class.java)
     }
 
     @Test
     fun shouldShowErrorWhenProvidedTokenIsEmptyAndLoginButtonIsClicked() {
-        rule.startActivity()
         login("")
         onText(R.string.token_empty_error).isDisplayed()
     }
 
     @Test
     fun shouldNotHaveErrorInfoOnStart() {
-        rule.startActivity()
         onId(R.id.loginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
     }
 
     @Test
     fun shouldOpenHubWebsiteOnHub() {
-        rule.startActivity()
         intending(anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
         val hubTokenUri = getTargetContext().getString(R.string.hub_token_uri)
         onId(R.id.loginHubButton).click()

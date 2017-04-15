@@ -20,7 +20,10 @@ import java.util.*
 class ReportListControllerTest {
 
     private val service = mock<ReportDayService>()
-    private val actions = mock<ReportList.Actions>()
+    private val actions = mock<ReportList.Actions> {
+        on { snackBarRetry() } doReturn Observable.empty()
+        on { resultRefresh() } doReturn Observable.empty()
+    }
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
     private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))

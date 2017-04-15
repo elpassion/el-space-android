@@ -25,7 +25,7 @@ class LoginController(private val view: Login.View,
         view.showLoader()
         api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
                 .supplySchedulers()
-                .doOnDispose { view.hideLoader() }
+                .doFinally { view.hideLoader() }
                 .subscribe({
                     onCorrectHubToken(it.accessToken)
                 }, {

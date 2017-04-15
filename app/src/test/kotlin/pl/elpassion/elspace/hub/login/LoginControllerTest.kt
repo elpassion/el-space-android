@@ -162,7 +162,7 @@ class LoginControllerTest {
     @Test
     fun shouldUnsubscribeOnDestroy() {
         var unsubscribed = false
-        val observable = Observable.never<HubTokenFromApi>().doOnDispose { unsubscribed = true }
+        val observable = Observable.never<HubTokenFromApi>().doFinally { unsubscribed = true }
         whenever(api.loginWithGoogleToken(GoogleTokenForHubTokenApi("google token"))).thenReturn(observable)
         createController().run {
             onGoogleToken("google token")

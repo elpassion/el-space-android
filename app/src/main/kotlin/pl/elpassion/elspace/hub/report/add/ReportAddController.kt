@@ -115,6 +115,5 @@ class ReportAddController(private val date: String?,
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
-            .doOnDispose { view.hideLoader() }
-            .doOnTerminate { view.hideLoader() }
+            .doFinally { view.hideLoader() }
 }

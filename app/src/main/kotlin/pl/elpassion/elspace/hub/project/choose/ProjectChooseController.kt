@@ -37,5 +37,5 @@ class ProjectChooseController(private val view: ProjectChoose.View,
             .observeOn(schedulers.observeOn)
             .map { it.sortedBy { it.name } }
             .doOnSubscribe { view.showLoader() }
-            .doOnDispose { view.hideLoader() }
+            .doFinally { view.hideLoader() }
 }

@@ -3,7 +3,7 @@ buildscript {
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.2.0'
     ext.support_version = '25.3.1'
-    ext.rxJava = '2.0.8'
+    ext.rxjava2_version = '2.0.8'
     ext.elCommon = '0.0.12'
     ext.rxBinding = '2.0.0'
 
@@ -83,9 +83,9 @@ android {
 dependencies {
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofit_version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile "io.reactivex.rxjava2:rxjava:$rxJava"
+    compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"
     compile 'io.reactivex:rxandroid:1.2.1'
     compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
     compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBinding"

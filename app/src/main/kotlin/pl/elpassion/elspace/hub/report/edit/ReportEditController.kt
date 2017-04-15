@@ -127,8 +127,7 @@ class ReportEditController(private val report: Report,
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
-            .doOnDispose { view.hideLoader() }
-            .doOnTerminate { view.hideLoader() }
+            .doFinally { view.hideLoader() }
 }
 
 private val Report.type: ReportType

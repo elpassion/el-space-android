@@ -22,7 +22,7 @@ class DebateLoginController(
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
                 .doOnSubscribe { view.showLoader() }
-                .doOnDispose { view.hideLoader() }
+                .doFinally { view.hideLoader() }
                 .subscribe({
                     view.openDebateScreen(it)
                 }, {

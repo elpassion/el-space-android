@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.TextView
 import com.elpassion.android.commons.espresso.*
-import com.elpassion.android.commons.rxjavatest.thenJust
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,10 +18,10 @@ import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.rxMockJust
+import pl.elpassion.elspace.commons.thenJust
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.Observable
 
 class LoginActivityGoogleSuccessTest {
 

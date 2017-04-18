@@ -39,4 +39,4 @@ test:
     - adb shell settings put global animator_duration_scale 0:
       background: true
     - (./gradlew connectedCheck):
-          timeout: 720
+          timeout: 32000

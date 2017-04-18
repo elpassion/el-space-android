@@ -27,7 +27,6 @@ script:
 
 after_script:
   - adb logcat -d
-  - cat /home/travis/build/elpassion/el-space-android/app/build/reports/androidTests/connected/index.html
 
 after_success:
   - bash scripts/deploy_crashlytics.sh

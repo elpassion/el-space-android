@@ -67,8 +67,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowLoaderOnApiCall() {
-        onId(R.id.debateCode).replaceText("12345")
-        onId(R.id.loginButton).click()
+        loginToDebate("12345")
         onId(R.id.loader).isDisplayed()
     }
 
@@ -79,8 +78,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowErrorOnLoginButtonClickIfDebateCodeIsIncorrect() {
-        onId(R.id.debateCode).replaceText("12")
-        onId(R.id.loginButton).click()
+        loginToDebate("12")
         onText(R.string.debate_code_incorrect).isDisplayed()
     }
 
@@ -93,8 +91,7 @@ class DebateLoginActivityTest {
     fun shouldOpenDebateScreenWithTokenFromRepo() {
         whenever(tokenRepo.hasToken("12345")).thenReturn(true)
         whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
-        onId(R.id.debateCode).replaceText("12345")
-        onId(R.id.loginButton).click()
+        loginToDebate("12345")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "tokenFromRepo"),
                 hasComponent(DebateScreen::class.java.name)))
@@ -102,8 +99,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
-        onId(R.id.debateCode).replaceText("12345")
-        onId(R.id.loginButton).click()
+        loginToDebate("12345")
         apiSubject.onNext(LoginResponse("authTokenFromApi"))
         verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")
         intended(allOf(
@@ -113,10 +109,14 @@ class DebateLoginActivityTest {
     
     @Test
     fun shouldShowErrorWhenLoginFails() {
-        onId(R.id.debateCode).replaceText("12345")
-        onId(R.id.loginButton).click()
+        loginToDebate("12345")
         apiSubject.onError(RuntimeException())
         Thread.sleep(50)
         onText(R.string.debate_login_fail).isDisplayed()
+    }
+
+    private fun loginToDebate(debateCode: String) {
+        onId(R.id.debateCode).replaceText(debateCode)
+        onId(R.id.loginButton).click()
     }
 }

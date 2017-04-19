@@ -13,7 +13,7 @@ class DebateDetailsControllerTest {
 
     private val api = mock<DebateDetails.Api>()
     private val view = mock<DebateDetails.View>()
-    private val controller = DebateDetailsController(api, view, Schedulers.trampoline())
+    private val controller = DebateDetailsController(api, view, Schedulers.trampoline(), Schedulers.trampoline())
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
 
     @Before
@@ -63,11 +63,22 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOn() {
         val subscribeOn = TestScheduler()
-        val controller = DebateDetailsController(api, view, subscribeOn)
+        val controller = DebateDetailsController(api, view, subscribeOn, Schedulers.trampoline())
         controller.onCreate("token")
         returnFromApi(createDebateData())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldUseGivenSchedulerToObserveOn() {
+        val observeOn = TestScheduler()
+        val controller = DebateDetailsController(api, view, Schedulers.trampoline(), observeOn)
+        controller.onCreate("token")
+        returnFromApi(createDebateData())
+        verify(view, never()).hideLoader()
+        observeOn.triggerActions()
         verify(view).hideLoader()
     }
 
@@ -107,10 +118,11 @@ interface DebateDetails {
     }
 }
 
-class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val subscribeOn: Scheduler) {
+class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val subscribeOn: Scheduler, private val observeOn: Scheduler) {
     fun onCreate(token: String) {
         api.getDebateDetails(token)
                 .subscribeOn(subscribeOn)
+                .observeOn(observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails)

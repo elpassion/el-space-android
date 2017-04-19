@@ -42,6 +42,12 @@ class DebateDetailsControllerTest {
         verify(view).showDebateDetails(debateDetails)
     }
 
+    @Test
+    fun shouldShowLoaderOnApiCall() {
+        controller.onCreate("token")
+        verify(view).showLoader()
+    }
+
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
             = DebateData(debateTopic, answers)
 
@@ -68,12 +74,13 @@ interface DebateDetails {
 
     interface View {
         fun showDebateDetails(debateDetails: Any)
-
+        fun showLoader()
     }
 }
 
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View) {
     fun onCreate(token: String) {
+        view.showLoader()
         api.getDebateDetails(token).subscribe(view::showDebateDetails)
     }
 }

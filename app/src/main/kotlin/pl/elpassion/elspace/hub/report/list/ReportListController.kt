@@ -14,7 +14,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                            private val dayFilter: DayFilter,
                            private val actions: ReportList.Actions,
                            private val view: ReportList.View,
-                           private val schedulers: SchedulersSupplier) : OnDayClickListener, OnReportClickListener {
+                           private val schedulers: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
     private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar()) }
@@ -43,6 +43,14 @@ class ReportListController(private val reportDayService: ReportDayService,
         subscriptions.clear()
     }
 
+    val onDayClick = { date: String ->
+        view.openAddReportScreen(date)
+    }
+
+    val onReportClick = { report: Report ->
+        view.openEditReportScreen(report)
+    }
+
     private fun onToday() {
         if (isCurrentYearAndMonth()) {
             scrollToTodayPosition(todayPositionObserver.lastPosition)
@@ -68,7 +76,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                     }
                 })
                 .subscribe({ days ->
-                    view.showDays(days, this, this)
+                    view.showDays(days, onDayClick, onReportClick)
                 }, {
                 })
                 .addTo(subscriptions)
@@ -100,23 +108,11 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .addTo(subscriptions)
     }
 
-    override fun onDayDate(date: String) {
-        view.openAddReportScreen(date)
-    }
-
-    override fun onReport(report: Report) {
-        view.openEditReportScreen(report)
-    }
-
     private fun isCurrentYearAndMonth() = dateChangeObserver.lastDate.let {
         it.year == calendar.year && it.month.index == calendar.month
     }
 }
 
-interface OnDayClickListener {
-    fun onDayDate(date: String)
-}
+typealias OnDayClick = (String) -> Unit
 
-interface OnReportClickListener {
-    fun onReport(report: Report)
-}
+typealias OnReportClick = (Report) -> Unit

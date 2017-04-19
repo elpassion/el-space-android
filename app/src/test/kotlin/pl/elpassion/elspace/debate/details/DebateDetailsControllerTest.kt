@@ -104,6 +104,12 @@ class DebateDetailsControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldCallApiOnDebateDetailsRefresh() {
+        controller.onDebateDetailsRefresh("newToken")
+        verify(api).getDebateDetails("newToken")
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -146,6 +152,14 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     private var debateDetailsSubscription: Subscription? = null
 
     fun onCreate(token: String) {
+        getDebateDetails(token)
+    }
+
+    fun onDebateDetailsRefresh(token: String) {
+        getDebateDetails(token)
+    }
+
+    private fun getDebateDetails(token: String) {
         debateDetailsSubscription = api.getDebateDetails(token)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)

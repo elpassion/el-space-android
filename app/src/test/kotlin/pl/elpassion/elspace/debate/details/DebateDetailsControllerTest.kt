@@ -37,8 +37,7 @@ class DebateDetailsControllerTest {
     fun shouldShowDebateDetailsReturnedFromApiCallOnView() {
         controller.onCreate("token")
         val debateDetails = createDebateData()
-        debateDetailsSubject.onNext(debateDetails)
-        debateDetailsSubject.onCompleted()
+        returnFromApi(debateDetails)
         verify(view).showDebateDetails(debateDetails)
     }
 
@@ -51,8 +50,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldHideLoaderWhenApiCallFinishes() {
         controller.onCreate("token")
-        debateDetailsSubject.onNext(createDebateData())
-        debateDetailsSubject.onCompleted()
+        returnFromApi(createDebateData())
         verify(view).hideLoader()
     }
 
@@ -67,11 +65,15 @@ class DebateDetailsControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateDetailsController(api, view, subscribeOn)
         controller.onCreate("token")
-        debateDetailsSubject.onNext(createDebateData())
-        debateDetailsSubject.onCompleted()
+        returnFromApi(createDebateData())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
+    }
+
+    private fun returnFromApi(debateData: DebateData) {
+        debateDetailsSubject.onNext(debateData)
+        debateDetailsSubject.onCompleted()
     }
 
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())

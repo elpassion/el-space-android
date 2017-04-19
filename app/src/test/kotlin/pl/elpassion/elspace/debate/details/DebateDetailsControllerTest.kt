@@ -3,8 +3,8 @@ package pl.elpassion.elspace.debate.details
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
+import pl.elpassion.elspace.common.SchedulersSupplier
 import rx.Observable
-import rx.Scheduler
 import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
@@ -13,7 +13,7 @@ class DebateDetailsControllerTest {
 
     private val api = mock<DebateDetails.Api>()
     private val view = mock<DebateDetails.View>()
-    private val controller = DebateDetailsController(api, view, Schedulers.trampoline(), Schedulers.trampoline())
+    private val controller = DebateDetailsController(api, view, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
 
     @Before
@@ -63,7 +63,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOn() {
         val subscribeOn = TestScheduler()
-        val controller = DebateDetailsController(api, view, subscribeOn, Schedulers.trampoline())
+        val controller = DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.onCreate("token")
         returnFromApi(createDebateData())
         verify(view, never()).hideLoader()
@@ -74,7 +74,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOn() {
         val observeOn = TestScheduler()
-        val controller = DebateDetailsController(api, view, Schedulers.trampoline(), observeOn)
+        val controller = DebateDetailsController(api, view, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.onCreate("token")
         returnFromApi(createDebateData())
         verify(view, never()).hideLoader()
@@ -118,11 +118,11 @@ interface DebateDetails {
     }
 }
 
-class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val subscribeOn: Scheduler, private val observeOn: Scheduler) {
+class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val schedulers: SchedulersSupplier) {
     fun onCreate(token: String) {
         api.getDebateDetails(token)
-                .subscribeOn(subscribeOn)
-                .observeOn(observeOn)
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails)

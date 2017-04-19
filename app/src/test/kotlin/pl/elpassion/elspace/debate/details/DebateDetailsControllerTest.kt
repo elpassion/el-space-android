@@ -49,7 +49,7 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallFinish() {
+    fun shouldHideLoaderWhenApiCallFinishes() {
         controller.onCreate("token")
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

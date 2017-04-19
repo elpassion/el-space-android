@@ -6,17 +6,18 @@ import org.junit.Test
 
 class DebateDetailsControllerTest {
 
+    private val api = mock<DebateDetails.Api>()
+    private val controller = DebateDetailsController(api)
+
     @Test
     fun shouldCallApiWithGivenTokenOnCreate() {
-        val api = mock<DebateDetails.Api>()
-        DebateDetailsController(api).onCreate(token = "token")
+        controller.onCreate(token = "token")
         verify(api).getDebateDetails(token = "token")
     }
 
     @Test
     fun shouldReallyCallApiWithGivenTokenOnCreate() {
-        val api = mock<DebateDetails.Api>()
-        DebateDetailsController(api).onCreate(token = "otherToken")
+        controller.onCreate(token = "otherToken")
         verify(api).getDebateDetails(token = "otherToken")
     }
 

@@ -24,7 +24,6 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import rx.Observable
 
-@Ignore
 class ReportEditActivityTest {
 
     @JvmField @Rule

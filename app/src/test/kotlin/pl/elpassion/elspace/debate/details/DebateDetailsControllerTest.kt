@@ -5,6 +5,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import rx.Observable
+import rx.Subscription
 import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
@@ -97,6 +98,12 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderOnDestroyIfApiCallWasntTriggered() {
+        controller.onDestroy()
+        verify(view, never()).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -136,8 +143,10 @@ interface DebateDetails {
 
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val schedulers: SchedulersSupplier) {
 
+    private var debateDetailsSubscription: Subscription? = null
+
     fun onCreate(token: String) {
-        api.getDebateDetails(token)
+        debateDetailsSubscription = api.getDebateDetails(token)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
@@ -146,6 +155,6 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     }
 
     fun onDestroy() {
-        view.hideLoader()
+        debateDetailsSubscription?.unsubscribe()
     }
 }

@@ -90,6 +90,13 @@ class DebateDetailsControllerTest {
         verify(view).showError(exception)
     }
 
+    @Test
+    fun shouldHideLoaderOnDestroyIfApiCallIsRunning() {
+        controller.onCreate("token")
+        controller.onDestroy()
+        verify(view).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -128,6 +135,7 @@ interface DebateDetails {
 }
 
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val schedulers: SchedulersSupplier) {
+
     fun onCreate(token: String) {
         api.getDebateDetails(token)
                 .subscribeOn(schedulers.subscribeOn)
@@ -135,5 +143,9 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails, view::showError)
+    }
+
+    fun onDestroy() {
+        view.hideLoader()
     }
 }

@@ -92,8 +92,8 @@ interface DebateDetails {
 
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View) {
     fun onCreate(token: String) {
-        view.showLoader()
         api.getDebateDetails(token)
+                .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails)
     }

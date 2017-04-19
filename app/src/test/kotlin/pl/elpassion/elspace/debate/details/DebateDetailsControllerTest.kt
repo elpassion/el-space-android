@@ -82,6 +82,14 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldShowErrorWhenApiCallFails() {
+        controller.onCreate("token")
+        val exception = RuntimeException()
+        debateDetailsSubject.onError(exception)
+        verify(view).showError(exception)
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -115,6 +123,7 @@ interface DebateDetails {
         fun showDebateDetails(debateDetails: Any)
         fun showLoader()
         fun hideLoader()
+        fun showError(exception: Throwable)
     }
 }
 
@@ -125,6 +134,6 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
-                .subscribe(view::showDebateDetails)
+                .subscribe(view::showDebateDetails, view::showError)
     }
 }

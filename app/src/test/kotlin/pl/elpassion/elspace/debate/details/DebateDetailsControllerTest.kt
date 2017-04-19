@@ -1,9 +1,6 @@
 package pl.elpassion.elspace.debate.details
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import rx.Observable
@@ -56,6 +53,12 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderWhenApiCallIsNotFinished() {
+        controller.onCreate("token")
+        verify(view, never()).hideLoader()
+    }
+
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
             = DebateData(debateTopic, answers)
 
@@ -90,7 +93,8 @@ interface DebateDetails {
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View) {
     fun onCreate(token: String) {
         view.showLoader()
-        api.getDebateDetails(token).subscribe(view::showDebateDetails)
-        view.hideLoader()
+        api.getDebateDetails(token)
+                .doOnUnsubscribe(view::hideLoader)
+                .subscribe(view::showDebateDetails)
     }
 }

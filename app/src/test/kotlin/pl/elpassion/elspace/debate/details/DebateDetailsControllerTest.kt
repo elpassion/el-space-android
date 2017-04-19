@@ -4,13 +4,16 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import rx.Observable
+import rx.Scheduler
+import rx.schedulers.Schedulers
+import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
 
 class DebateDetailsControllerTest {
 
     private val api = mock<DebateDetails.Api>()
     private val view = mock<DebateDetails.View>()
-    private val controller = DebateDetailsController(api, view)
+    private val controller = DebateDetailsController(api, view, Schedulers.trampoline())
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
 
     @Before
@@ -59,6 +62,18 @@ class DebateDetailsControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldUseGivenSchedulerToSubscribeOn() {
+        val subscribeOn = TestScheduler()
+        val controller = DebateDetailsController(api, view, subscribeOn)
+        controller.onCreate("token")
+        debateDetailsSubject.onNext(createDebateData())
+        debateDetailsSubject.onCompleted()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
             = DebateData(debateTopic, answers)
 
@@ -90,9 +105,10 @@ interface DebateDetails {
     }
 }
 
-class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View) {
+class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val subscribeOn: Scheduler) {
     fun onCreate(token: String) {
         api.getDebateDetails(token)
+                .subscribeOn(subscribeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails)

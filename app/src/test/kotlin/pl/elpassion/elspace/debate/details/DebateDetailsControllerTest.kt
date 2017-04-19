@@ -13,6 +13,13 @@ class DebateDetailsControllerTest {
         verify(api).getDebateDetails(token = "token")
     }
 
+    @Test
+    fun shouldReallyCallApiWithGivenTokenOnCreate() {
+        val api = mock<DebateDetails.Api>()
+        DebateDetailsController(api).onCreate(token = "otherToken")
+        verify(api).getDebateDetails(token = "otherToken")
+    }
+
 }
 
 interface DebateDetails {
@@ -23,6 +30,6 @@ interface DebateDetails {
 
 class DebateDetailsController(private val api: DebateDetails.Api) {
     fun onCreate(token: String) {
-        api.getDebateDetails("token")
+        api.getDebateDetails(token)
     }
 }

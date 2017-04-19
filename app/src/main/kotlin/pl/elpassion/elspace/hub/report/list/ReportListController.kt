@@ -43,11 +43,11 @@ class ReportListController(private val reportDayService: ReportDayService,
         subscriptions.clear()
     }
 
-    fun onDayClick(date: String) {
+    val onDayClick = { date: String ->
         view.openAddReportScreen(date)
     }
 
-    fun onReportClick(report: Report) {
+    val onReportClick = { report: Report ->
         view.openEditReportScreen(report)
     }
 
@@ -76,7 +76,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                     }
                 })
                 .subscribe({ days ->
-                    view.showDays(days, { onDayClick(it) }, { onReportClick(it) })
+                    view.showDays(days, onDayClick, onReportClick)
                 }, {
                 })
                 .addTo(subscriptions)

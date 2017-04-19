@@ -110,9 +110,8 @@ class DebateLoginActivityTest {
     
     @Test
     fun shouldShowErrorWhenLoginFails() {
-        loginToDebate("12345")
         apiSubject.onError(RuntimeException())
-        Thread.sleep(125)
+        loginToDebate("12345")
         onText(R.string.debate_login_fail).isDisplayed()
     }
 

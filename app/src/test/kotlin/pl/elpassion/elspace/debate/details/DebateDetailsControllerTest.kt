@@ -1,13 +1,25 @@
 package pl.elpassion.elspace.debate.details
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
 import org.junit.Test
+import rx.Observable
+import rx.subjects.PublishSubject
 
 class DebateDetailsControllerTest {
 
     private val api = mock<DebateDetails.Api>()
-    private val controller = DebateDetailsController(api)
+    private val view = mock<DebateDetails.View>()
+    private val controller = DebateDetailsController(api, view)
+    private val debateDetailsSubject = PublishSubject.create<DebateData>()
+
+    @Before
+    fun setUp() {
+        whenever(api.getDebateDetails(any())).thenReturn(debateDetailsSubject)
+    }
 
     @Test
     fun shouldCallApiWithGivenTokenOnCreate() {
@@ -21,16 +33,47 @@ class DebateDetailsControllerTest {
         verify(api).getDebateDetails(token = "otherToken")
     }
 
+    @Test
+    fun shouldShowDebateDetailsReturnedFromApiCallOnView() {
+        controller.onCreate("token")
+        val debateDetails = createDebateData()
+        debateDetailsSubject.onNext(debateDetails)
+        debateDetailsSubject.onCompleted()
+        verify(view).showDebateDetails(debateDetails)
+    }
+
+    private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
+            = DebateData(debateTopic, answers)
+
+    private fun createAnswers(positiveAnswer: Answer = createAnswer(1, "answerPositive"),
+                              negativeAnswer: Answer = createAnswer(2, "answerNegative"),
+                              neutralAnswer: Answer = createAnswer(3, "answerNeutral"))
+
+            = Answers(positiveAnswer, negativeAnswer, neutralAnswer)
+
+    private fun createAnswer(answerId: Long = 1, answerLabel: String = "answer")
+            = Answer(answerId, answerLabel)
+
 }
+
+data class DebateData(val topic: String, val answers: Answers)
+data class Answers(val positive: Answer, val negative: Answer, val neutral: Answer)
+data class Answer(val id: Long, val value: String)
+
 
 interface DebateDetails {
     interface Api {
-        fun getDebateDetails(token: String)
+        fun getDebateDetails(token: String): Observable<DebateData>
+    }
+
+    interface View {
+        fun showDebateDetails(debateDetails: Any)
+
     }
 }
 
-class DebateDetailsController(private val api: DebateDetails.Api) {
+class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View) {
     fun onCreate(token: String) {
-        api.getDebateDetails(token)
+        api.getDebateDetails(token).subscribe { debateData -> view.showDebateDetails(debateData) }
     }
 }

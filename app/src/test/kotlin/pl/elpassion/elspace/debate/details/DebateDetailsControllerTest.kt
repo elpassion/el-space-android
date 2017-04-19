@@ -48,6 +48,14 @@ class DebateDetailsControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenApiCallFinish() {
+        controller.onCreate("token")
+        debateDetailsSubject.onNext(createDebateData())
+        debateDetailsSubject.onCompleted()
+        verify(view).hideLoader()
+    }
+
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
             = DebateData(debateTopic, answers)
 
@@ -75,6 +83,7 @@ interface DebateDetails {
     interface View {
         fun showDebateDetails(debateDetails: Any)
         fun showLoader()
+        fun hideLoader()
     }
 }
 
@@ -82,5 +91,6 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     fun onCreate(token: String) {
         view.showLoader()
         api.getDebateDetails(token).subscribe(view::showDebateDetails)
+        view.hideLoader()
     }
 }

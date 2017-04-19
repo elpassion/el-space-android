@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.debate.login
 
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
@@ -117,6 +118,7 @@ class DebateLoginActivityTest {
 
     private fun loginToDebate(debateCode: String) {
         onId(R.id.debateCode).replaceText(debateCode)
+        Espresso.closeSoftKeyboard()
         onId(R.id.loginButton).click()
     }
 }

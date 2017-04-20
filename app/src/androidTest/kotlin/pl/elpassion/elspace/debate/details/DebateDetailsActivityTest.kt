@@ -19,7 +19,12 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowPositiveAnswer() {
-        onId(R.id.debateDetailsPositiveAnswer)
+        onId(R.id.debateDetailsPositiveAnswer).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowNeutralAnswer() {
+        onId(R.id.debateDetailsNeutralAnswer).isDisplayed()
     }
 }
 

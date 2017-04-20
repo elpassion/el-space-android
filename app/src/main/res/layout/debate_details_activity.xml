@@ -17,4 +17,10 @@
         android:layout_height="wrap_content"
         tools:text="Positive answer" />
 
+    <TextView
+        android:id="@+id/debateDetailsNeutralAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Neutral answer" />
+
 </LinearLayout>

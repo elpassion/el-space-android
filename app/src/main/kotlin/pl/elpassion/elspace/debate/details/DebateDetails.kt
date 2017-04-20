@@ -5,7 +5,7 @@ import rx.Observable
 interface DebateDetails {
     interface Api {
         fun getDebateDetails(token: String): Observable<DebateData>
-        fun sendAnswer(token: String, answer: Answer): Observable<Unit>
+        fun vote(token: String, answer: Answer): Observable<Unit>
     }
 
     interface View {

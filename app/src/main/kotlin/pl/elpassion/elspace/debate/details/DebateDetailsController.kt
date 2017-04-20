@@ -27,7 +27,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     }
 
     fun onVote(token: String, answer: Answer) {
-        api.sendAnswer(token, answer)
+        api.vote(token, answer)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)

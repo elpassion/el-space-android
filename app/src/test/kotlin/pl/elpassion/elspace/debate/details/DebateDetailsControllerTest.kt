@@ -21,7 +21,7 @@ class DebateDetailsControllerTest {
     @Before
     fun setUp() {
         whenever(api.getDebateDetails(any())).thenReturn(debateDetailsSubject)
-        whenever(api.sendAnswer(any(), any())).thenReturn(sendVoteSubject)
+        whenever(api.vote(any(), any())).thenReturn(sendVoteSubject)
     }
 
     @Test
@@ -115,13 +115,13 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
         controller.onVote("token", Answer(2, "answerNegative"))
-        verify(api).sendAnswer("token", Answer(2, "answerNegative"))
+        verify(api).vote("token", Answer(2, "answerNegative"))
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
         controller.onVote("differentToken", Answer(1, "answer"))
-        verify(api).sendAnswer("differentToken", Answer(1, "answer"))
+        verify(api).vote("differentToken", Answer(1, "answer"))
     }
 
     @Test

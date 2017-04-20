@@ -1,0 +1,17 @@
+package pl.elpassion.elspace.debate.details
+
+import rx.Observable
+
+interface DebateDetails {
+    interface Api {
+        fun getDebateDetails(token: String): Observable<DebateData>
+        fun sendAnswer(token: String, answer: Answer): Observable<Unit>
+    }
+
+    interface View {
+        fun showDebateDetails(debateDetails: Any)
+        fun showLoader()
+        fun hideLoader()
+        fun showError(exception: Throwable)
+    }
+}

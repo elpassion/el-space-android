@@ -110,6 +110,12 @@ class DebateDetailsControllerTest {
         verify(api).getDebateDetails("newToken")
     }
 
+    @Test
+    fun shouldCallApiWithSelectedAnswerOnVote() {
+        controller.onVote("token", Answer(2, "answerNegative"))
+        verify(api).sendAnswer("token", Answer(2, "answerNegative"))
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -121,7 +127,6 @@ class DebateDetailsControllerTest {
     private fun createAnswers(positiveAnswer: Answer = createAnswer(1, "answerPositive"),
                               negativeAnswer: Answer = createAnswer(2, "answerNegative"),
                               neutralAnswer: Answer = createAnswer(3, "answerNeutral"))
-
             = Answers(positiveAnswer, negativeAnswer, neutralAnswer)
 
     private fun createAnswer(answerId: Long = 1, answerLabel: String = "answer")
@@ -137,6 +142,7 @@ data class Answer(val id: Long, val value: String)
 interface DebateDetails {
     interface Api {
         fun getDebateDetails(token: String): Observable<DebateData>
+        fun sendAnswer(token: String, answer: Answer)
     }
 
     interface View {
@@ -166,6 +172,10 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe(view::showDebateDetails, view::showError)
+    }
+
+    fun onVote(token: String, answer: Answer) {
+        api.sendAnswer(token, answer)
     }
 
     fun onDestroy() {

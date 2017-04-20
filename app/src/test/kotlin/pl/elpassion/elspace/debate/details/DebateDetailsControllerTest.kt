@@ -165,6 +165,13 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldHideLoaderOnDestroyIfVoteCallIsStillInProgress() {
+        controller.onVote("", createAnswer())
+        controller.onDestroy()
+        verify(view).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()

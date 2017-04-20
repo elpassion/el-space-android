@@ -6,6 +6,7 @@ import rx.Subscription
 class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val schedulers: SchedulersSupplier) {
 
     private var debateDetailsSubscription: Subscription? = null
+    private var subscription: Subscription? = null
 
     fun onCreate(token: String) {
         getDebateDetails(token)
@@ -25,7 +26,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     }
 
     fun onVote(token: String, answer: Answer) {
-        api.sendAnswer(token, answer)
+        subscription = api.sendAnswer(token, answer)
                 .subscribeOn(schedulers.subscribeOn)
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
@@ -35,5 +36,6 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
 
     fun onDestroy() {
         debateDetailsSubscription?.unsubscribe()
+        subscription?.unsubscribe()
     }
 }

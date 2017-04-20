@@ -11,4 +11,10 @@
         android:layout_height="wrap_content"
         tools:text="Question" />
 
+    <TextView
+        android:id="@+id/debateDetailsPositiveAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Positive answer" />
+
 </LinearLayout>

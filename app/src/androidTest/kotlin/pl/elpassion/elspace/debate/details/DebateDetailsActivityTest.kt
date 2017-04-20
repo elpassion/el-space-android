@@ -16,5 +16,10 @@ class DebateDetailsActivityTest {
     fun shouldShowQuestionView() {
         onId(R.id.debateDetailsQuestion).isDisplayed()
     }
+
+    @Test
+    fun shouldShowPositiveAnswer() {
+        onId(R.id.debateDetailsPositiveAnswer)
+    }
 }
 

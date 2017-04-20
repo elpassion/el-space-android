@@ -120,6 +120,12 @@ class DebateDetailsControllerTest {
     }
 
     @Test
+    fun shouldReallyCallApiWithSelectedAnswerOnVote() {
+        controller.onVote("differentToken", Answer(1, "answer"))
+        verify(api).sendAnswer("differentToken", Answer(1, "answer"))
+    }
+
+    @Test
     fun shouldShowLoaderOnVote() {
         controller.onVote("token", createAnswer())
         verify(view).showLoader()
@@ -192,7 +198,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
 
     fun onVote(token: String, answer: Answer) {
         view.showLoader()
-        api.sendAnswer("token", Answer(2, "answerNegative")).subscribe()
+        api.sendAnswer(token, answer).subscribe()
         view.hideLoader()
     }
 

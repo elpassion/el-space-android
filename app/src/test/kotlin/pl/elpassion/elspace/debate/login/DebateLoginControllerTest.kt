@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.debate.DebateTokenRepository
-import rx.Observable
+import io.reactivex.Observable
 
 class DebateLoginControllerTest {
 

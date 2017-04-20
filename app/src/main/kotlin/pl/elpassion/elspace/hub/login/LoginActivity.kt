@@ -12,8 +12,8 @@ import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class LoginActivity : AppCompatActivity(), Login.View {
 

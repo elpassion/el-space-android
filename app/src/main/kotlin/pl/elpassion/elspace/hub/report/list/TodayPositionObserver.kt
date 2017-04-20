@@ -1,15 +1,15 @@
 package pl.elpassion.elspace.hub.report.list
 
-import rx.Observable
-import rx.subjects.BehaviorSubject
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 class TodayPositionObserver {
 
-    private val positionSubject = BehaviorSubject.create(-1)
+    private val positionSubject = BehaviorSubject.createDefault(-1)
 
-    val lastPosition: Int get() = positionSubject.toBlocking().first()
+    val lastPosition: Int get() = positionSubject.blockingFirst()
 
-    fun observe(): Observable<Int> = positionSubject.asObservable()
+    fun observe(): Observable<Int> = positionSubject
 
     fun updatePosition(position: Int) {
         positionSubject.onNext(position)

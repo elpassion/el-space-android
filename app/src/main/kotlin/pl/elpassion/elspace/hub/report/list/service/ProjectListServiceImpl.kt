@@ -3,7 +3,7 @@ package pl.elpassion.elspace.hub.report.list.service
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.list.ReportList
-import rx.Observable
+import io.reactivex.Observable
 
 class ProjectListServiceImpl(val projectApi: ReportList.ProjectApi,
                              val repository: CachedProjectRepository) : ProjectListService {

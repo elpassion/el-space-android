@@ -1,15 +1,15 @@
 package pl.elpassion.elspace.debate.login
 
 import pl.elpassion.elspace.debate.DebateTokenRepository
-import rx.Observable
-import rx.Subscription
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 
 class DebateLoginController(
         private val view: DebateLogin.View,
         private val tokenRepo: DebateTokenRepository,
         private val loginApi: DebateLogin.Api) {
 
-    private var subscription: Subscription? = null
+    private var subscription: Disposable? = null
 
     fun onLogToDebate(debateCode: String) {
         if (debateCode.length != 5) {
@@ -22,7 +22,7 @@ class DebateLoginController(
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
                 .doOnSubscribe { view.showLoader() }
-                .doOnUnsubscribe { view.hideLoader() }
+                .doFinally { view.hideLoader() }
                 .subscribe({
                     view.openDebateScreen(it)
                 }, {
@@ -40,6 +40,6 @@ class DebateLoginController(
             }
 
     fun onDestroy() {
-        subscription?.unsubscribe()
+        subscription?.dispose()
     }
 }

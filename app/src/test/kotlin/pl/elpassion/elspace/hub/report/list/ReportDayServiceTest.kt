@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
+import io.reactivex.Observable.just
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -15,8 +17,6 @@ import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
-import rx.Observable
-import rx.Observable.just
 import java.util.*
 
 class ReportDayServiceTest {
@@ -131,7 +131,7 @@ class ReportDayServiceTest {
     }
 
     private fun getDays(dateChangeObservable: Observable<YearMonth> = createYearMonthFromTimeProvider()): List<Day> {
-        return service.createDays(dateChangeObservable).toBlocking().first()
+        return service.createDays(dateChangeObservable).blockingFirst()
     }
 
     private fun getFirstDay() = getDays().first()

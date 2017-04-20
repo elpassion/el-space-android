@@ -5,7 +5,7 @@ import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.YearMonth
 import pl.elpassion.elspace.hub.report.list.toMonthDateRange
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportListService(private val reportApi: ReportList.ReportApi,
                         private val projectApi: ProjectListService) : ReportList.Service {

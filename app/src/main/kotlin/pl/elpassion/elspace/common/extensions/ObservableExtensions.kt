@@ -1,14 +1,28 @@
 package pl.elpassion.elspace.common.extensions
 
 
-import rx.Observable
-import rx.Subscription
-import rx.subscriptions.CompositeSubscription
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 
-fun Subscription.addTo(subscription: CompositeSubscription) = subscription.add(this)
+fun Disposable.addTo(subscription: CompositeDisposable) = subscription.add(this)
 
 fun <T> Observable<T>.catchOnError(handleOnError: (throwable: Throwable) -> Unit): Observable<T> = this
-        .onErrorResumeNext {
-            handleOnError(it)
+        .onErrorResumeNext { throwable: Throwable ->
+            handleOnError(throwable)
             Observable.empty()
         }
+
+// note: this can run action more than once
+fun <T> Observable<T>.doFinally(action: () -> Unit): Observable<T> = this
+        .doOnTerminate(action)
+        .doOnDispose(action)
+
+fun <T1, T2, R> combineLatest(source1: ObservableSource<T1>, source2: ObservableSource<T2>, combiner: (T1, T2) -> R)
+        = Observable.combineLatest(source1, source2, BiFunction { t1: T1, t2: T2 -> combiner(t1, t2) })
+
+fun <T1, T2, R> Observable<T1>.withLatestFrom(other: ObservableSource<T2>, combiner: (T1, T2) -> R)
+        = withLatestFrom(other, BiFunction { t1: T1, t2: T2 -> combiner(t1, t2) })
+

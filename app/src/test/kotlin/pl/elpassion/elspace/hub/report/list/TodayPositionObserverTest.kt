@@ -2,7 +2,7 @@ package pl.elpassion.elspace.hub.report.list
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import rx.observers.TestSubscriber
+import io.reactivex.observers.TestObserver
 
 class TodayPositionObserverTest {
 
@@ -10,7 +10,7 @@ class TodayPositionObserverTest {
 
     @Test
     fun shouldEmitNewTodayPositionOnUpdate() {
-        val subscriber = TestSubscriber<Int>()
+        val subscriber = TestObserver<Int>()
         positionObserver.observe()
                 .subscribe(subscriber)
 
@@ -21,7 +21,7 @@ class TodayPositionObserverTest {
 
     @Test
     fun shouldLastPositionReturnLastEmittedValue() {
-        val subscriber = TestSubscriber<Int>()
+        val subscriber = TestObserver<Int>()
         positionObserver.observe()
                 .subscribe(subscriber)
 
@@ -33,7 +33,7 @@ class TodayPositionObserverTest {
 
     @Test
     fun shouldLastPositionReturnMinusOneBeforeFirstEmittedValue() {
-        val subscriber = TestSubscriber<Int>()
+        val subscriber = TestObserver<Int>()
         positionObserver.observe()
                 .subscribe(subscriber)
 

@@ -1,11 +1,11 @@
 package pl.elpassion.elspace.hub.report.list
 
+import io.reactivex.observers.TestObserver
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
-import rx.observers.TestSubscriber
 import java.util.*
 import java.util.Calendar.YEAR
 
@@ -23,7 +23,7 @@ class DateChangeObserverTest {
 
     @Test
     fun shouldNotSkipAnyOfEventWhenIsSubscribed() {
-        val testSub = TestSubscriber<YearMonth>()
+        val testSub = TestObserver<YearMonth>()
         dateController.observe()
                 .subscribe(testSub)
 
@@ -39,6 +39,6 @@ class DateChangeObserverTest {
         assertNotEquals(firstIncomingDate().year, 1000)
     }
 
-    private fun firstIncomingDate() = dateController.observe().toBlocking().first()
+    private fun firstIncomingDate() = dateController.observe().blockingFirst()
 
 }

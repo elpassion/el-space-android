@@ -35,7 +35,7 @@ import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportListActivityTest {
 

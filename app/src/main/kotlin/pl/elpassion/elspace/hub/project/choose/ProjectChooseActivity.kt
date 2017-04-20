@@ -14,7 +14,7 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
-import com.jakewharton.rxbinding.support.v7.widget.queryTextChanges
+import com.jakewharton.rxbinding2.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -23,8 +23,8 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {

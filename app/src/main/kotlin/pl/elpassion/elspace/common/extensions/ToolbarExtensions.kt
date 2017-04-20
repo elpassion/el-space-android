@@ -2,9 +2,9 @@ package pl.elpassion.elspace.common.extensions
 
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.jakewharton.rxbinding.support.v7.widget.itemClicks
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
+import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 
 fun Observable<MenuItem>.onMenuItemClicks(menuId: Int): Observable<Unit> = onMenuItemAction(menuId).map { Unit }
 

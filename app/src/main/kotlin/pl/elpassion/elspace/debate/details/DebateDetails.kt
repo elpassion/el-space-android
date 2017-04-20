@@ -13,5 +13,6 @@ interface DebateDetails {
         fun showLoader()
         fun hideLoader()
         fun showError(exception: Throwable)
+        fun showVoteSuccess()
     }
 }

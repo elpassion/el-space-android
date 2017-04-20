@@ -170,6 +170,15 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldShowSuccessWhenVoteSuccessfully() {
+        controller.onVote("", createAnswer())
+        sendVoteSubject.onNext(Unit)
+        sendVoteSubject.onCompleted()
+        verify(view).showVoteSuccess()
+    }
+
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()

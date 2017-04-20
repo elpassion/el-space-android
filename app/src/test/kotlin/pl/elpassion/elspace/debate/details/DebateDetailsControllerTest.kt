@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.schedulers.Schedulers
@@ -16,10 +17,12 @@ class DebateDetailsControllerTest {
     private val view = mock<DebateDetails.View>()
     private val controller = DebateDetailsController(api, view, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
+    private val sendVoteSubject = PublishSubject.create<Unit>()
 
     @Before
     fun setUp() {
         whenever(api.getDebateDetails(any())).thenReturn(debateDetailsSubject)
+        whenever(api.sendAnswer(any(), any())).thenReturn(sendVoteSubject)
     }
 
     @Test
@@ -122,6 +125,13 @@ class DebateDetailsControllerTest {
         verify(view).showLoader()
     }
 
+    @Test
+    fun shouldHideLoaderWhenVoteApiCallIsFinished() {
+        controller.onVote("token", createAnswer())
+        sendVoteSubject.onCompleted()
+        verify(view).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -148,7 +158,7 @@ data class Answer(val id: Long, val value: String)
 interface DebateDetails {
     interface Api {
         fun getDebateDetails(token: String): Observable<DebateData>
-        fun sendAnswer(token: String, answer: Answer)
+        fun sendAnswer(token: String, answer: Answer): Observable<Unit>
     }
 
     interface View {
@@ -182,7 +192,8 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
 
     fun onVote(token: String, answer: Answer) {
         view.showLoader()
-        api.sendAnswer(token, answer)
+        api.sendAnswer(token, answer).subscribe()
+        view.hideLoader()
     }
 
     fun onDestroy() {

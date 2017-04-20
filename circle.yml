@@ -1,0 +1,53 @@
+machine:
+  java:
+      version: oraclejdk8
+  environment:
+      ANDROID_HOME: /usr/local/android-sdk-linux
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+      _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+
+dependencies:
+    override:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools
+        - echo y | android update sdk --no-ui --all --filter android-22
+        - echo y | android update sdk --no-ui --all --filter extra-google-m2repository
+        - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
+        - echo y | android update sdk --no-ui --all --filter extra-google-google_play_services
+        - echo y | android update sdk --no-ui --all --filter extra-android-support
+        - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
+
+compile:
+  pre:
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-server-client-id.xml.enc -out app/src/release/res/values/google-server-client-id.xml
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-services-release.json.enc -out app/google-services.json
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-signing-credentials.gradle.enc -out app/src/release/google-signing-credentials.gradle
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/release-keystore.jks.enc -out app/src/release/release-keystore.jks
+    - openssl aes-256-cbc -d -a -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
+
+test:
+  pre:
+    - echo no | android create avd --force -n test -t android-22 --abi default/armeabi-v7a --skin 480x800:
+    - emulator -avd test -no-audio -no-window:
+           background: true
+
+  override:
+    - circle-android wait-for-boot
+    - adb shell settings put global window_animation_scale 0:
+      background: true
+    - adb shell settings put global transition_animation_scale 0:
+      background: true
+    - adb shell settings put global animator_duration_scale 0:
+      background: true
+    - (./gradlew connectedCheck):
+          timeout: 32000
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - bash scripts/deploy_crashlytics.sh
+      - bash <(curl -s https://codecov.io/bash)
+  not_master:
+    branch: /(?!master\b)\b\w+/
+    commands:
+      - bash <(curl -s https://codecov.io/bash)

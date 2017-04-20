@@ -121,14 +121,14 @@ class ReportListControllerTest {
 
     @Test
     fun shouldOpenAddReportScreenOnDay() {
-        controller.onDayDate(date = "1999-01-02")
+        controller.onDayClick("1999-01-02")
         verify(view, times(1)).openAddReportScreen("1999-01-02")
     }
 
     @Test
     fun shouldOpenEditReportScreenOnReport() {
         val report = newRegularHourlyReport()
-        controller.onReport(report)
+        controller.onReportClick(report)
         verify(view, times(1)).openEditReportScreen(report)
     }
 

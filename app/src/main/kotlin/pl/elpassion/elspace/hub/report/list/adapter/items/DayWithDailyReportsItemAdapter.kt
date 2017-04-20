@@ -7,9 +7,9 @@ import kotlinx.android.synthetic.main.day_item.view.*
 import pl.elpassion.R
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.list.DayWithDailyReport
-import pl.elpassion.elspace.hub.report.list.OnReportClickListener
+import pl.elpassion.elspace.hub.report.list.OnReportClick
 
-class DayWithDailyReportsItemAdapter(override val day: DayWithDailyReport, val onReportClickListener: OnReportClickListener) :
+class DayWithDailyReportsItemAdapter(override val day: DayWithDailyReport, val onReportClick: OnReportClick) :
         StableItemAdapter<DayWithDailyReportsItemAdapter.VH>(day.uuid, R.layout.day_with_daily_report_item), DayItem {
 
     override fun onCreateViewHolder(itemView: View) = VH(itemView)
@@ -18,7 +18,7 @@ class DayWithDailyReportsItemAdapter(override val day: DayWithDailyReport, val o
         holder.itemView.run {
             dayNumber.text = day.name
             totalHours.setText(createReportDescription())
-            setOnClickListener { onReportClickListener.onReport(day.report) }
+            setOnClickListener { onReportClick(day.report) }
         }
     }
 

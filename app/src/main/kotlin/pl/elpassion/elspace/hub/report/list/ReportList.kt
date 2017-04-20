@@ -20,7 +20,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(days: List<Day>, onDayClickListener: OnDayClickListener, onReportClickListener: OnReportClickListener)
+        fun showDays(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick)
 
         fun showError(ex: Throwable)
 

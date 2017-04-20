@@ -143,6 +143,17 @@ class DebateDetailsControllerTest {
         verify(view, never()).hideLoader()
     }
 
+    @Test
+    fun shouldUseGivenSchedulerToSubscribeOnWhenVote() {
+        val subscribeOn = TestScheduler()
+        val controller = DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        controller.onVote("token", createAnswer())
+        sendVoteSubject.onCompleted()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -204,6 +215,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     fun onVote(token: String, answer: Answer) {
         view.showLoader()
         api.sendAnswer(token, answer)
+                .subscribeOn(schedulers.subscribeOn)
                 .doOnUnsubscribe(view::hideLoader)
                 .subscribe()
     }

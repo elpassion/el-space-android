@@ -20,7 +20,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
-import pl.elpassion.elspace.debate.details.DebateScreen
+import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 import rx.subjects.PublishSubject
 
@@ -95,7 +95,7 @@ class DebateLoginActivityTest {
         loginToDebate("12345")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "tokenFromRepo"),
-                hasComponent(DebateScreen::class.java.name)))
+                hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
     @Test
@@ -105,7 +105,7 @@ class DebateLoginActivityTest {
         verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "authTokenFromApi"),
-                hasComponent(DebateScreen::class.java.name)))
+                hasComponent(DebateDetailsActivity::class.java.name)))
     }
     
     @Test

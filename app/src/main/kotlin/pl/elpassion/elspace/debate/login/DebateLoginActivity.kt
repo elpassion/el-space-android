@@ -9,7 +9,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
-import pl.elpassion.elspace.debate.details.DebateScreen
+import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
@@ -28,7 +28,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun openDebateScreen(authToken: String) {
-        DebateScreen.start(this, authToken)
+        DebateDetailsActivity.start(this, authToken)
     }
 
     override fun showLoginFailedError() {

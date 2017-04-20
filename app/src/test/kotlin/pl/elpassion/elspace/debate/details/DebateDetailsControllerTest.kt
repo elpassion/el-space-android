@@ -116,6 +116,12 @@ class DebateDetailsControllerTest {
         verify(api).sendAnswer("token", Answer(2, "answerNegative"))
     }
 
+    @Test
+    fun shouldShowLoaderOnVote() {
+        controller.onVote("token", createAnswer())
+        verify(view).showLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -175,6 +181,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
     }
 
     fun onVote(token: String, answer: Answer) {
+        view.showLoader()
         api.sendAnswer(token, answer)
     }
 

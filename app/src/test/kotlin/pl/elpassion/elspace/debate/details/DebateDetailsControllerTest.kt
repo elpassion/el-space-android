@@ -4,8 +4,6 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import rx.Observable
-import rx.Subscription
 import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject

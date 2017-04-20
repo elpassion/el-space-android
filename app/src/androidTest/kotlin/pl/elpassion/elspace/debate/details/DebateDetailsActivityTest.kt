@@ -26,5 +26,10 @@ class DebateDetailsActivityTest {
     fun shouldShowNeutralAnswer() {
         onId(R.id.debateDetailsNeutralAnswer).isDisplayed()
     }
+
+    @Test
+    fun shouldShowNegativeAnswer() {
+        onId(R.id.debateDetailsNegativeAnswer).isDisplayed()
+    }
 }
 

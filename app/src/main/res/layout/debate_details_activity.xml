@@ -23,4 +23,10 @@
         android:layout_height="wrap_content"
         tools:text="Neutral answer" />
 
+    <TextView
+        android:id="@+id/debateDetailsNegativeAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Negative answer" />
+
 </LinearLayout>

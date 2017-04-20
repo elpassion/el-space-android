@@ -12,7 +12,8 @@ interface DebateDetails {
         fun showDebateDetails(debateDetails: Any)
         fun showLoader()
         fun hideLoader()
-        fun showError(exception: Throwable)
+        fun showDebateDetailsError(exception: Throwable)
         fun showVoteSuccess()
+        fun showVoteError(exception: Throwable)
     }
 }

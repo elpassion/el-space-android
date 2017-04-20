@@ -88,7 +88,7 @@ class DebateDetailsControllerTest {
         controller.onCreate("token")
         val exception = RuntimeException()
         debateDetailsSubject.onError(exception)
-        verify(view).showError(exception)
+        verify(view).showDebateDetailsError(exception)
     }
 
     @Test
@@ -183,7 +183,7 @@ class DebateDetailsControllerTest {
         controller.onVote("", createAnswer())
         val exception = RuntimeException()
         sendVoteSubject.onError(exception)
-        verify(view).showError(exception)
+        verify(view).showVoteError(exception)
     }
 
     private fun returnFromApi(debateData: DebateData) {

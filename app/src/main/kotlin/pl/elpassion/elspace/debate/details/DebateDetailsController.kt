@@ -22,7 +22,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
-                .subscribe(view::showDebateDetails, view::showError)
+                .subscribe(view::showDebateDetails, view::showDebateDetailsError)
                 .addTo(compositeSubscription)
     }
 
@@ -32,9 +32,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
-                .subscribe(
-                        { view.showVoteSuccess() },
-                        { error -> view.showError(error) })
+                .subscribe({ view.showVoteSuccess() }, view::showVoteError)
                 .addTo(compositeSubscription)
     }
 

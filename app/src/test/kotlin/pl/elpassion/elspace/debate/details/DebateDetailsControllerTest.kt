@@ -178,6 +178,13 @@ class DebateDetailsControllerTest {
         verify(view).showVoteSuccess()
     }
 
+    @Test
+    fun shouldShowErrorWhenVoteFailed() {
+        controller.onVote("", createAnswer())
+        val exception = RuntimeException()
+        sendVoteSubject.onError(exception)
+        verify(view).showError(exception)
+    }
 
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)

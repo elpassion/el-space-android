@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import rx.Completable
 import rx.Observable
 import rx.Subscription
 import rx.schedulers.Schedulers
@@ -138,6 +137,12 @@ class DebateDetailsControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldNotHideLoaderIfVoteCallIsStillInProgress() {
+        controller.onVote("token", createAnswer())
+        verify(view, never()).hideLoader()
+    }
+
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
@@ -198,8 +203,9 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
 
     fun onVote(token: String, answer: Answer) {
         view.showLoader()
-        api.sendAnswer(token, answer).subscribe()
-        view.hideLoader()
+        api.sendAnswer(token, answer)
+                .doOnUnsubscribe(view::hideLoader)
+                .subscribe()
     }
 
     fun onDestroy() {

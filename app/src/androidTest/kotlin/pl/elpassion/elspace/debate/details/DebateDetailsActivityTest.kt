@@ -92,8 +92,7 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnPositiveAnswerAndApiCallFinishedSuccessfully() {
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswer).click()
-        sendVoteSubject.onNext(Unit)
-        sendVoteSubject.onCompleted()
+        voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
@@ -101,8 +100,7 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnNegativeAnswerAndApiCallFinishedSuccessfully() {
         getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswer).click()
-        sendVoteSubject.onNext(Unit)
-        sendVoteSubject.onCompleted()
+        voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
@@ -110,14 +108,18 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnNeutralAnswerAndApiCallFinishedSuccessfully() {
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswer).click()
-        sendVoteSubject.onNext(Unit)
-        sendVoteSubject.onCompleted()
+        voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()
+    }
+
+    private fun voteSuccessfully() {
+        sendVoteSubject.onNext(Unit)
+        sendVoteSubject.onCompleted()
     }
 }
 

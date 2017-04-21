@@ -54,6 +54,12 @@ class DebateDetailsActivityTest {
         onId(R.id.debateDetailsPositiveAnswer).hasText("answerPositive")
     }
 
+    @Test
+    fun shouldShowNegativeAnswerReturnedFromApi() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateDetailsNegativeAnswer).hasText("answerNegative")
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

@@ -36,6 +36,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun showDebateDetails(debateDetails: DebateData) {
         debateDetailsTopic.text = debateDetails.topic
         debateDetailsPositiveAnswer.text = debateDetails.answers.positive.value
+        debateDetailsNegativeAnswer.text = debateDetails.answers.negative.value
     }
 
     override fun showLoader() = Unit

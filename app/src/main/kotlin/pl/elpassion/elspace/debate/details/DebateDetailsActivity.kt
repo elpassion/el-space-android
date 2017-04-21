@@ -34,10 +34,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showDebateDetails(debateDetails: DebateData) {
-        debateDetailsTopic.text = debateDetails.topic
-        debateDetailsPositiveAnswer.text = debateDetails.answers.positive.value
-        debateDetailsNegativeAnswer.text = debateDetails.answers.negative.value
-        debateDetailsNeutralAnswer.text = debateDetails.answers.neutral.value
+        debateTopic.text = debateDetails.topic
+        debatePositiveAnswer.text = debateDetails.answers.positive.value
+        debateNegativeAnswer.text = debateDetails.answers.negative.value
+        debateNeutralAnswer.text = debateDetails.answers.neutral.value
     }
 
     override fun showLoader() = Unit

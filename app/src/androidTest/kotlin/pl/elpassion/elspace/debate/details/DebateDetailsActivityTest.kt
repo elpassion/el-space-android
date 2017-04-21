@@ -24,46 +24,46 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowTopicView() {
-        onId(R.id.debateDetailsTopic).isDisplayed()
+        onId(R.id.debateTopic).isDisplayed()
     }
 
     @Test
     fun shouldShowPositiveAnswer() {
-        onId(R.id.debateDetailsPositiveAnswer).isDisplayed()
+        onId(R.id.debatePositiveAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowNegativeAnswer() {
-        onId(R.id.debateDetailsNegativeAnswer).isDisplayed()
+        onId(R.id.debateNegativeAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowNeutralAnswer() {
-        onId(R.id.debateDetailsNeutralAnswer).isDisplayed()
+        onId(R.id.debateNeutralAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
         getDebateDetailsSuccessfully()
-        onId(R.id.debateDetailsTopic).hasText("topic")
+        onId(R.id.debateTopic).hasText("topic")
     }
 
     @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
         getDebateDetailsSuccessfully()
-        onId(R.id.debateDetailsPositiveAnswer).hasText("answerPositive")
+        onId(R.id.debatePositiveAnswer).hasText("answerPositive")
     }
 
     @Test
     fun shouldShowNegativeAnswerReturnedFromApi() {
         getDebateDetailsSuccessfully()
-        onId(R.id.debateDetailsNegativeAnswer).hasText("answerNegative")
+        onId(R.id.debateNegativeAnswer).hasText("answerNegative")
     }
 
     @Test
     fun shouldShowNeutralAnswerReturnedFromApi() {
         getDebateDetailsSuccessfully()
-        onId(R.id.debateDetailsNeutralAnswer).hasText("answerNeutral")
+        onId(R.id.debateNeutralAnswer).hasText("answerNeutral")
     }
 
     private fun getDebateDetailsSuccessfully() {

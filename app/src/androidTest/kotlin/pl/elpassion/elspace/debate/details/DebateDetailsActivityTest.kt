@@ -44,16 +44,19 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
-        debateDetailsSubject.onNext(createDebateData())
-        debateDetailsSubject.onCompleted()
+        getDebateDetailsSuccessfully()
         onId(R.id.debateDetailsTopic).hasText("topic")
     }
 
     @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateDetailsPositiveAnswer).hasText("answerPositive")
+    }
+
+    private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()
-        onId(R.id.debateDetailsPositiveAnswer).hasText("answerPositive")
     }
 }
 

@@ -5,8 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import kotlinx.android.synthetic.main.debate_details_activity.*
 
-class DebateDetailsActivity : AppCompatActivity() {
+class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
+
+    private val controller by lazy {
+        DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+    }
 
     companion object {
         private val debateAuthTokenCode = "debateAuthTokenKey"
@@ -22,5 +30,20 @@ class DebateDetailsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
+        controller.onCreate(debateAuthTokenCode)
     }
+
+    override fun showDebateDetails(debateDetails: DebateData) {
+        debateDetailsQuestion.text = debateDetails.topic
+    }
+
+    override fun showLoader() = Unit
+
+    override fun hideLoader() = Unit
+
+    override fun showDebateDetailsError(exception: Throwable) = Unit
+
+    override fun showVoteSuccess() = Unit
+
+    override fun showVoteError(exception: Throwable) = Unit
 }

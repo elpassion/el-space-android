@@ -66,6 +66,12 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNeutralAnswer).hasText("answerNeutral")
     }
 
+    @Test
+    fun shouldShowLoaderWhenCallingApi() {
+        debateDetailsSubject.onNext(createDebateData())
+        onId(R.id.loader).isDisplayed()
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

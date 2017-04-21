@@ -9,6 +9,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
+import pl.elpassion.elspace.common.showLoader
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
@@ -40,7 +41,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNeutralAnswer.text = debateDetails.answers.neutral.value
     }
 
-    override fun showLoader() = Unit
+    override fun showLoader() = showLoader(debateDetailsCoordinator)
 
     override fun hideLoader() = Unit
 

@@ -22,8 +22,8 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowQuestionView() {
-        onId(R.id.debateDetailsQuestion).isDisplayed()
+    fun shouldShowTopicView() {
+        onId(R.id.debateDetailsTopic).isDisplayed()
     }
 
     @Test
@@ -32,20 +32,20 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowNeutralAnswer() {
-        onId(R.id.debateDetailsNeutralAnswer).isDisplayed()
+    fun shouldShowNegativeAnswer() {
+        onId(R.id.debateDetailsNegativeAnswer).isDisplayed()
     }
 
     @Test
-    fun shouldShowNegativeAnswer() {
-        onId(R.id.debateDetailsNegativeAnswer).isDisplayed()
+    fun shouldShowNeutralAnswer() {
+        onId(R.id.debateDetailsNeutralAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()
-        onId(R.id.debateDetailsQuestion).hasText("topic")
+        onId(R.id.debateDetailsTopic).hasText("topic")
     }
 
     private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())

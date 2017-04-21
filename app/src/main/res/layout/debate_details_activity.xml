@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/debateDetailsQuestion"
+        android:id="@+id/debateDetailsTopic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Question" />
@@ -18,15 +18,15 @@
         tools:text="Positive answer" />
 
     <TextView
-        android:id="@+id/debateDetailsNeutralAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Neutral answer" />
-
-    <TextView
         android:id="@+id/debateDetailsNegativeAnswer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Negative answer" />
+
+    <TextView
+        android:id="@+id/debateDetailsNeutralAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Neutral answer" />
 
 </LinearLayout>

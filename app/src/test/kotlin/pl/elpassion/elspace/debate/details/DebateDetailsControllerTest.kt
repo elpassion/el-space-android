@@ -4,6 +4,8 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.dabate.details.createAnswer
+import pl.elpassion.elspace.dabate.details.createDebateData
 import rx.schedulers.Schedulers
 import rx.schedulers.TestScheduler
 import rx.subjects.PublishSubject
@@ -190,16 +192,4 @@ class DebateDetailsControllerTest {
         debateDetailsSubject.onNext(debateData)
         debateDetailsSubject.onCompleted()
     }
-
-    private fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers())
-            = DebateData(debateTopic, answers)
-
-    private fun createAnswers(positiveAnswer: Answer = createAnswer(1, "answerPositive"),
-                              negativeAnswer: Answer = createAnswer(2, "answerNegative"),
-                              neutralAnswer: Answer = createAnswer(3, "answerNeutral"))
-            = Answers(positiveAnswer, negativeAnswer, neutralAnswer)
-
-    private fun createAnswer(answerId: Long = 1, answerLabel: String = "answer")
-            = Answer(answerId, answerLabel)
-
 }

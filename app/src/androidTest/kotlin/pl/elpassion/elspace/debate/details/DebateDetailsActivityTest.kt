@@ -120,6 +120,14 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
 
+    @Test
+    fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNeutralAnswer).click()
+        voteSuccessfully()
+        onText(R.string.debate_details_vote_error).doesNotExist()
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

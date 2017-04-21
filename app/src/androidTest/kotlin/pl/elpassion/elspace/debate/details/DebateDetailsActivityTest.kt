@@ -60,6 +60,12 @@ class DebateDetailsActivityTest {
         onId(R.id.debateDetailsNegativeAnswer).hasText("answerNegative")
     }
 
+    @Test
+    fun shouldShowNeutralAnswerReturnedFromApi() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateDetailsNeutralAnswer).hasText("answerNeutral")
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

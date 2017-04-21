@@ -112,6 +112,14 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
+    @Test
+    fun shouldShowVoteErrorWhenApiCallFails() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNeutralAnswer).click()
+        sendVoteSubject.onError(RuntimeException())
+        onText(R.string.debate_details_vote_error).isDisplayed()
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()
@@ -122,4 +130,3 @@ class DebateDetailsActivityTest {
         sendVoteSubject.onCompleted()
     }
 }
-

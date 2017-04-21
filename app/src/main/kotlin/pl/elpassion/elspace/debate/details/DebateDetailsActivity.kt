@@ -13,6 +13,7 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
+
     private val controller by lazy {
         DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
@@ -27,6 +28,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                     putExtra(debateAuthTokenCode, debateToken)
                 }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
@@ -55,5 +57,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateStatus.text = getString(R.string.debate_details_vote_success)
     }
 
-    override fun showVoteError(exception: Throwable) = Unit
+    override fun showVoteError(exception: Throwable) {
+        debateStatus.text = getString(R.string.debate_details_vote_error)
+    }
 }

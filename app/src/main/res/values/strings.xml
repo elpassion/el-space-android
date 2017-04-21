@@ -52,4 +52,5 @@
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
+    <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
 </resources>

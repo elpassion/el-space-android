@@ -38,6 +38,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debatePositiveAnswer.text = debateDetails.answers.positive.value
         debatePositiveAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.positive) }
         debateNegativeAnswer.text = debateDetails.answers.negative.value
+        debateNegativeAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.negative) }
         debateNeutralAnswer.text = debateDetails.answers.neutral.value
     }
 

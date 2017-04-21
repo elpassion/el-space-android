@@ -14,10 +14,16 @@ import rx.subjects.PublishSubject
 class DebateDetailsActivityTest {
 
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
+    private val sendVoteSubject = PublishSubject.create<Unit>()
 
     @JvmField @Rule
     val rule = rule<DebateDetailsActivity> {
-        DebateDetails.ApiProvider.override = { mock<DebateDetails.Api>().apply { whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject) } }
+        DebateDetails.ApiProvider.override = {
+            mock<DebateDetails.Api>().apply {
+                whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
+                whenever(vote(any(), any())).thenReturn(sendVoteSubject)
+            }
+        }
     }
 
     @Test
@@ -80,6 +86,15 @@ class DebateDetailsActivityTest {
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
         debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowVoteSuccessWhenClickOnPositiveAnswerAndApiCallFinishedSuccessfully() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debatePositiveAnswer).click()
+        sendVoteSubject.onNext(Unit)
+        sendVoteSubject.onCompleted()
+        onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
     private fun getDebateDetailsSuccessfully() {

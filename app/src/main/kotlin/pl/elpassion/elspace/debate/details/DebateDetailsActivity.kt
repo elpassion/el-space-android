@@ -13,7 +13,6 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
-
     private val controller by lazy {
         DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
@@ -28,16 +27,16 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                     putExtra(debateAuthTokenCode, debateToken)
                 }
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
         controller.onCreate(debateAuthTokenCode)
     }
 
-    override fun showDebateDetails(debateDetails: DebateData) {
+    override fun showDebateDetails(token: String, debateDetails: DebateData) {
         debateTopic.text = debateDetails.topic
         debatePositiveAnswer.text = debateDetails.answers.positive.value
+        debatePositiveAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.positive) }
         debateNegativeAnswer.text = debateDetails.answers.negative.value
         debateNeutralAnswer.text = debateDetails.answers.neutral.value
     }
@@ -50,7 +49,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateStatus.text = getString(R.string.debate_details_error)
     }
 
-    override fun showVoteSuccess() = Unit
+    override fun showVoteSuccess() {
+        debateStatus.text = getString(R.string.debate_details_vote_success)
+    }
 
     override fun showVoteError(exception: Throwable) = Unit
 }

@@ -21,8 +21,8 @@ fun <T> Observable<T>.doFinally(action: () -> Unit): Observable<T> = this
         .doOnDispose(action)
 
 fun <T1, T2, R> combineLatest(source1: ObservableSource<T1>, source2: ObservableSource<T2>, combiner: (T1, T2) -> R)
-        = Observable.combineLatest(source1, source2, BiFunction { t1: T1, t2: T2 -> combiner(t1, t2) })
+        = Observable.combineLatest(source1, source2, BiFunction(combiner))
 
 fun <T1, T2, R> Observable<T1>.withLatestFrom(other: ObservableSource<T2>, combiner: (T1, T2) -> R)
-        = withLatestFrom(other, BiFunction { t1: T1, t2: T2 -> combiner(t1, t2) })
+        = withLatestFrom(other, BiFunction(combiner))
 

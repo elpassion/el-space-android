@@ -1,8 +1,6 @@
 package pl.elpassion.elspace.debate.details
 
-import com.elpassion.android.commons.espresso.hasText
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -70,6 +68,12 @@ class DebateDetailsActivityTest {
     fun shouldShowLoaderWhenCallingApi() {
         debateDetailsSubject.onNext(createDebateData())
         onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowLoaderWhenApiCallFinished() {
+        debateDetailsSubject.onCompleted()
+        onId(R.id.loader).doesNotExist()
     }
 
     private fun getDebateDetailsSuccessfully() {

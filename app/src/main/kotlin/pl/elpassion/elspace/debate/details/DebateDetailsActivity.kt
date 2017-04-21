@@ -9,6 +9,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
+import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -43,7 +44,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showLoader() = showLoader(debateDetailsCoordinator)
 
-    override fun hideLoader() = Unit
+    override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) = Unit
 

@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.debate_details_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import kotlinx.android.synthetic.main.debate_details_activity.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
@@ -46,7 +46,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
-    override fun showDebateDetailsError(exception: Throwable) = Unit
+    override fun showDebateDetailsError(exception: Throwable) {
+        debateStatus.text = getString(R.string.debate_details_error)
+    }
 
     override fun showVoteSuccess() = Unit
 

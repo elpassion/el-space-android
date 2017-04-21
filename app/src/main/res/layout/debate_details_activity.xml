@@ -6,28 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".elspace.debate.details.DebateDetailsActivity">
 
-    <TextView
-        android:id="@+id/debateTopic"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Topic" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/debatePositiveAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Positive answer" />
+        <TextView
+            android:id="@+id/debateTopic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Topic" />
 
-    <TextView
-        android:id="@+id/debateNegativeAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Negative answer" />
+        <TextView
+            android:id="@+id/debatePositiveAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Positive answer" />
 
-    <TextView
-        android:id="@+id/debateNeutralAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Neutral answer" />
+        <TextView
+            android:id="@+id/debateNegativeAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Negative answer" />
+
+        <TextView
+            android:id="@+id/debateNeutralAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Neutral answer" />
+
+        <TextView
+            android:id="@+id/debateStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Status" />
+
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

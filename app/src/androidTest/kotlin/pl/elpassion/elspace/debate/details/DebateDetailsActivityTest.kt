@@ -76,6 +76,12 @@ class DebateDetailsActivityTest {
         onId(R.id.loader).doesNotExist()
     }
 
+    @Test
+    fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
+        debateDetailsSubject.onError(RuntimeException())
+        onText(R.string.debate_details_error).isDisplayed()
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

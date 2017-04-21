@@ -22,7 +22,9 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe(view::showLoader)
                 .doOnUnsubscribe(view::hideLoader)
-                .subscribe(view::showDebateDetails, view::showDebateDetailsError)
+                .subscribe(
+                        { debateDetails -> view.showDebateDetails(token, debateDetails) },
+                        view::showDebateDetailsError)
                 .addTo(compositeSubscription)
     }
 

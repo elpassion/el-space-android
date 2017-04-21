@@ -106,6 +106,15 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
+    @Test
+    fun shouldShowVoteSuccessWhenClickOnNeutralAnswerAndApiCallFinishedSuccessfully() {
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNeutralAnswer).click()
+        sendVoteSubject.onNext(Unit)
+        sendVoteSubject.onCompleted()
+        onText(R.string.debate_details_vote_success).isDisplayed()
+    }
+
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
         debateDetailsSubject.onCompleted()

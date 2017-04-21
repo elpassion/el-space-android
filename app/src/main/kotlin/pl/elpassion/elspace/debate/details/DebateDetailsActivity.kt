@@ -40,6 +40,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNegativeAnswer.text = debateDetails.answers.negative.value
         debateNegativeAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.negative) }
         debateNeutralAnswer.text = debateDetails.answers.neutral.value
+        debateNeutralAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.neutral) }
     }
 
     override fun showLoader() = showLoader(debateDetailsCoordinator)

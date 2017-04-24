@@ -37,6 +37,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         controller.onCreate(token)
     }
 
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
+    }
+
     override fun showDebateDetails(debateDetails: DebateData) {
         debateTopic.text = debateDetails.topic
         debatePositiveAnswer.text = debateDetails.answers.positive.value

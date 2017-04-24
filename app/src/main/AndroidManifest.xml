@@ -12,14 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="pl.elpassion.elspace.hub.login.LoginActivity"
-            android:windowSoftInputMode="adjustResize">
+            android:name=".elspace.launcher.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".elspace.hub.login.LoginActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
             android:theme="@style/AppThemeWithoutActionBar" />

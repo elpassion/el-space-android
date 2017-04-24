@@ -10,7 +10,6 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
-import rx.Observable.never
 import rx.subjects.PublishSubject
 
 class DebateDetailsActivityTest {
@@ -147,6 +146,16 @@ class DebateDetailsActivityTest {
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswer).click()
         verify(apiMock).vote(eq(token), any())
+    }
+
+    @Test
+    fun shouldUseCorrectAnswerWhenSendingVote() {
+        startActivity()
+        val debateData = createDebateData()
+        debateDetailsSubject.onNext(debateData)
+        debateDetailsSubject.onCompleted()
+        onId(R.id.debateNeutralAnswer).click()
+        verify(apiMock).vote("token", debateData.answers.neutral)
     }
 
     private fun getDebateDetailsSuccessfully() {

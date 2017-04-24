@@ -3,8 +3,6 @@ package pl.elpassion.elspace.launcher
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
-import pl.elpassion.elspace.launcher.Launcher
-import pl.elpassion.elspace.launcher.LauncherController
 
 class LauncherControllerTest {
 

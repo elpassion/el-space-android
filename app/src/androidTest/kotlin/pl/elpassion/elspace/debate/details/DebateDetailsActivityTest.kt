@@ -17,18 +17,19 @@ class DebateDetailsActivityTest {
 
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
     private val sendVoteSubject = PublishSubject.create<Unit>()
+    private val apiMock by lazy {
+        mock<DebateDetails.Api>().apply {
+            whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
+            whenever(vote(any(), any())).thenReturn(sendVoteSubject)
+        }
+    }
 
     @JvmField @Rule
     val rule = rule<DebateDetailsActivity>(autoStart = false)
 
     @Before
     fun setup() {
-        DebateDetails.ApiProvider.override = {
-            mock<DebateDetails.Api>().apply {
-                whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
-                whenever(vote(any(), any())).thenReturn(sendVoteSubject)
-            }
-        }
+        DebateDetails.ApiProvider.override = { apiMock }
     }
 
     @Test
@@ -135,8 +136,6 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldUseTokenPassedWithIntent() {
-        val apiMock = mock<DebateDetails.Api>().apply { whenever(getDebateDetails(any())).thenReturn(never()) }
-        DebateDetails.ApiProvider.override = { apiMock }
         startActivity(token = "newToken")
         verify(apiMock).getDebateDetails("newToken")
     }
@@ -144,11 +143,6 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseTokenPassedWithIntentWhenSendingVote() {
         val token = "newToken"
-        val apiMock = mock<DebateDetails.Api>().apply {
-            whenever(getDebateDetails(token)).thenReturn(debateDetailsSubject)
-            whenever(vote(any(), any())).thenReturn(never())
-        }
-        DebateDetails.ApiProvider.override = { apiMock }
         startActivity(token)
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswer).click()

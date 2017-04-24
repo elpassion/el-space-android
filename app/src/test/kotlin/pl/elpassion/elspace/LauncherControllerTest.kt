@@ -15,15 +15,26 @@ class LauncherControllerTest {
         verify(view).openDebateLoginScreen()
     }
 
+    @Test
+    fun shouldOpenHubLoginScreenOnHub() {
+        controller.onHub()
+        verify(view).openHubLoginScreen()
+    }
+
     interface Launcher {
         interface View {
             fun openDebateLoginScreen()
+            fun openHubLoginScreen()
         }
     }
 
     class LauncherController(private val view: Launcher.View) {
         fun onDebate() {
             view.openDebateLoginScreen()
+        }
+
+        fun onHub() {
+            view.openHubLoginScreen()
         }
     }
 }

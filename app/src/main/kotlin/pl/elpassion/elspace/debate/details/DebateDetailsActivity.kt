@@ -18,16 +18,16 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
-    private val token by lazy { intent.getStringExtra(debateAuthTokenCode) }
+    private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     companion object {
-        private val debateAuthTokenCode = "debateAuthTokenKey"
+        private val debateAuthTokenKey = "debateAuthTokenKey"
 
         fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
 
         fun intent(context: Context, debateToken: String) =
                 Intent(context, DebateDetailsActivity::class.java).apply {
-                    putExtra(debateAuthTokenCode, debateToken)
+                    putExtra(debateAuthTokenKey, debateToken)
                 }
     }
 

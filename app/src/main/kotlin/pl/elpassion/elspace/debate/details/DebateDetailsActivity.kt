@@ -18,6 +18,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
+    private val token by lazy { intent.getStringExtra(debateAuthTokenCode) }
+
     companion object {
         private val debateAuthTokenCode = "debateAuthTokenKey"
 
@@ -32,7 +34,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
-        controller.onCreate(debateAuthTokenCode)
+        controller.onCreate(token)
     }
 
     override fun showDebateDetails(token: String, debateDetails: DebateData) {

@@ -1,14 +1,19 @@
 package pl.elpassion.elspace.debate.details
 
+import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createDebateData
+import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
+import rx.Observable.never
 import rx.subjects.PublishSubject
 
 class DebateDetailsActivityTest {
@@ -17,7 +22,10 @@ class DebateDetailsActivityTest {
     private val sendVoteSubject = PublishSubject.create<Unit>()
 
     @JvmField @Rule
-    val rule = rule<DebateDetailsActivity> {
+    val rule = rule<DebateDetailsActivity>(autoStart = false)
+
+    @Before
+    fun setup() {
         DebateDetails.ApiProvider.override = {
             mock<DebateDetails.Api>().apply {
                 whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
@@ -26,70 +34,83 @@ class DebateDetailsActivityTest {
         }
     }
 
+
     @Test
     fun shouldShowTopicView() {
+        startActivity()
         onId(R.id.debateTopic).isDisplayed()
     }
 
     @Test
     fun shouldShowPositiveAnswer() {
+        startActivity()
         onId(R.id.debatePositiveAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowNegativeAnswer() {
+        startActivity()
         onId(R.id.debateNegativeAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowNeutralAnswer() {
+        startActivity()
         onId(R.id.debateNeutralAnswer).isDisplayed()
     }
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateTopic).hasText("topic")
     }
 
     @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswer).hasText("answerPositive")
     }
 
     @Test
     fun shouldShowNegativeAnswerReturnedFromApi() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswer).hasText("answerNegative")
     }
 
     @Test
     fun shouldShowNeutralAnswerReturnedFromApi() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswer).hasText("answerNeutral")
     }
 
     @Test
     fun shouldShowLoaderWhenCallingApi() {
+        startActivity()
         debateDetailsSubject.onNext(createDebateData())
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldNotShowLoaderWhenApiCallFinished() {
+        startActivity()
         debateDetailsSubject.onCompleted()
         onId(R.id.loader).doesNotExist()
     }
 
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
+        startActivity()
         debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteSuccessWhenClickOnPositiveAnswerAndApiCallFinishedSuccessfully() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswer).click()
         voteSuccessfully()
@@ -98,6 +119,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowVoteSuccessWhenClickOnNegativeAnswerAndApiCallFinishedSuccessfully() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswer).click()
         voteSuccessfully()
@@ -106,6 +128,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowVoteSuccessWhenClickOnNeutralAnswerAndApiCallFinishedSuccessfully() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswer).click()
         voteSuccessfully()
@@ -114,6 +137,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswer).click()
         sendVoteSubject.onError(RuntimeException())
@@ -122,10 +146,19 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
+        startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswer).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_error).doesNotExist()
+    }
+
+    @Test
+    fun shouldUseTokenPassedWithIntent() {
+        val apiMock = mock<DebateDetails.Api>().apply { whenever(getDebateDetails(any())).thenReturn(never()) }
+        DebateDetails.ApiProvider.override = { apiMock }
+        startActivity(token = "newToken")
+        verify(apiMock).getDebateDetails("newToken")
     }
 
     private fun getDebateDetailsSuccessfully() {
@@ -136,5 +169,10 @@ class DebateDetailsActivityTest {
     private fun voteSuccessfully() {
         sendVoteSubject.onNext(Unit)
         sendVoteSubject.onCompleted()
+    }
+
+    private fun startActivity(token: String = "token") {
+        val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
+        rule.launchActivity(intent)
     }
 }

@@ -3,6 +3,8 @@ package pl.elpassion.elspace
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
+import pl.elpassion.elspace.launcher.Launcher
+import pl.elpassion.elspace.launcher.LauncherController
 
 class LauncherControllerTest {
 
@@ -19,22 +21,5 @@ class LauncherControllerTest {
     fun shouldOpenHubLoginScreenOnHub() {
         controller.onHub()
         verify(view).openHubLoginScreen()
-    }
-
-    interface Launcher {
-        interface View {
-            fun openDebateLoginScreen()
-            fun openHubLoginScreen()
-        }
-    }
-
-    class LauncherController(private val view: Launcher.View) {
-        fun onDebate() {
-            view.openDebateLoginScreen()
-        }
-
-        fun onHub() {
-            view.openHubLoginScreen()
-        }
     }
 }

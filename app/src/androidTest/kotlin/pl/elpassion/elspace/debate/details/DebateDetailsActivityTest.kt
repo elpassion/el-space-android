@@ -89,28 +89,10 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowVoteSuccessWhenClickOnPositiveAnswerAndApiCallFinishedSuccessfully() {
-        startActivity()
-        getDebateDetailsSuccessfully()
-        onId(R.id.debatePositiveAnswer).click()
-        voteSuccessfully()
-        onText(R.string.debate_details_vote_success).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowVoteSuccessWhenClickOnNegativeAnswerAndApiCallFinishedSuccessfully() {
+    fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswer).click()
-        voteSuccessfully()
-        onText(R.string.debate_details_vote_success).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowVoteSuccessWhenClickOnNeutralAnswerAndApiCallFinishedSuccessfully() {
-        startActivity()
-        getDebateDetailsSuccessfully()
-        onId(R.id.debateNeutralAnswer).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }

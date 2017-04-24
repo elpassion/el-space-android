@@ -132,32 +132,31 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
-        startActivity()
         val debateData = createDebateData()
-        debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onCompleted()
+        startActivityAndSuccessfullyReturnDebateDetails(debateData)
         onId(R.id.debatePositiveAnswer).click()
         verify(apiMock).vote("token", debateData.answers.positive)
     }
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
-        startActivity()
         val debateData = createDebateData()
-        debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onCompleted()
+        startActivityAndSuccessfullyReturnDebateDetails(debateData)
         onId(R.id.debateNegativeAnswer).click()
         verify(apiMock).vote("token", debateData.answers.negative)
     }
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
-        startActivity()
         val debateData = createDebateData()
-        debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onCompleted()
+        startActivityAndSuccessfullyReturnDebateDetails(debateData)
         onId(R.id.debateNeutralAnswer).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
+    }
+
+    private fun startActivity(token: String = "token") {
+        val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
+        rule.launchActivity(intent)
     }
 
     private fun getDebateDetailsSuccessfully() {
@@ -170,8 +169,9 @@ class DebateDetailsActivityTest {
         sendVoteSubject.onCompleted()
     }
 
-    private fun startActivity(token: String = "token") {
-        val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
-        rule.launchActivity(intent)
+    private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData) {
+        startActivity()
+        debateDetailsSubject.onNext(debateData)
+        debateDetailsSubject.onCompleted()
     }
 }

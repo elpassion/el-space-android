@@ -141,6 +141,16 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
+        startActivity()
+        val debateData = createDebateData()
+        debateDetailsSubject.onNext(debateData)
+        debateDetailsSubject.onCompleted()
+        onId(R.id.debateNegativeAnswer).click()
+        verify(apiMock).vote("token", debateData.answers.negative)
+    }
+
+    @Test
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         startActivity()
         val debateData = createDebateData()

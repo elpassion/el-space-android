@@ -15,11 +15,11 @@ class LauncherActivityTest {
 
     @Test
     fun shouldShowDebateButton() {
-        onText(R.string.open_debate).isDisplayed()
+        onText(R.string.launcher_open_debate).isDisplayed()
     }
 
     @Test
     fun shouldShowHubButton() {
-        onText(R.string.open_hub).isDisplayed()
+        onText(R.string.launcher_open_hub).isDisplayed()
     }
 }

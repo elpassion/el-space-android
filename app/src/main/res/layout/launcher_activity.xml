@@ -15,13 +15,13 @@
             android:id="@+id/launcherDebate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/open_debate" />
+            android:text="@string/launcher_open_debate" />
 
         <Button
             android:id="@+id/launcherHub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/open_hub" />
+            android:text="@string/launcher_open_hub" />
 
     </LinearLayout>
 

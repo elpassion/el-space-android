@@ -2,10 +2,7 @@ package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -142,6 +139,20 @@ class DebateDetailsActivityTest {
         DebateDetails.ApiProvider.override = { apiMock }
         startActivity(token = "newToken")
         verify(apiMock).getDebateDetails("newToken")
+    }
+
+    @Test
+    fun shouldUseTokenPassedWithIntentWhenSendingVote() {
+        val token = "newToken"
+        val apiMock = mock<DebateDetails.Api>().apply {
+            whenever(getDebateDetails(token)).thenReturn(debateDetailsSubject)
+            whenever(vote(any(), any())).thenReturn(never())
+        }
+        DebateDetails.ApiProvider.override = { apiMock }
+        startActivity(token)
+        getDebateDetailsSuccessfully()
+        onId(R.id.debatePositiveAnswer).click()
+        verify(apiMock).vote(eq(token), any())
     }
 
     private fun getDebateDetailsSuccessfully() {

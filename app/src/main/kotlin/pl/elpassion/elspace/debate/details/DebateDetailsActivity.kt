@@ -37,7 +37,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         controller.onCreate(token)
     }
 
-    override fun showDebateDetails(token: String, debateDetails: DebateData) {
+    override fun showDebateDetails(debateDetails: DebateData) {
         debateTopic.text = debateDetails.topic
         debatePositiveAnswer.text = debateDetails.answers.positive.value
         debatePositiveAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.positive) }

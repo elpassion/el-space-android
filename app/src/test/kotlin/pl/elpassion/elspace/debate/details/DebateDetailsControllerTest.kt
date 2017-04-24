@@ -37,12 +37,11 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldPassSameTokenAndShowDebateDetailsReturnedFromApiCallOnView() {
-        val token = "token"
-        controller.onCreate(token)
+    fun shouldShowDebateDetailsReturnedFromApiCallOnView() {
+        controller.onCreate("token")
         val debateDetails = createDebateData()
         returnFromApi(debateDetails)
-        verify(view).showDebateDetails(token, debateDetails)
+        verify(view).showDebateDetails(debateDetails)
     }
 
     @Test

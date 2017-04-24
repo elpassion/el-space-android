@@ -11,7 +11,7 @@ interface DebateDetails {
     }
 
     interface View {
-        fun showDebateDetails(token: String, debateDetails: DebateData)
+        fun showDebateDetails(debateDetails: DebateData)
         fun showLoader()
         fun hideLoader()
         fun showDebateDetailsError(exception: Throwable)

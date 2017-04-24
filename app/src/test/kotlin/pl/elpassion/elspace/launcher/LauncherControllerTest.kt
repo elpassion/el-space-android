@@ -1,4 +1,4 @@
-package pl.elpassion.elspace
+package pl.elpassion.elspace.launcher
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify

@@ -17,4 +17,9 @@ class LauncherActivityTest {
     fun shouldShowDebateButton() {
         onText(R.string.open_debate).isDisplayed()
     }
+
+    @Test
+    fun shouldShowHubButton() {
+        onText(R.string.open_hub).isDisplayed()
+    }
 }

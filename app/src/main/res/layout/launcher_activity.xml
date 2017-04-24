@@ -17,6 +17,12 @@
             android:layout_height="wrap_content"
             android:text="@string/open_debate" />
 
+        <Button
+            android:id="@+id/launcherHub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/open_hub" />
+
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

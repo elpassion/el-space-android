@@ -16,6 +16,7 @@ import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.IsNot.not
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -45,6 +46,12 @@ class HubLoginActivitySadTest {
     @Test
     fun shouldHaveVisibleBackArrow() {
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun shouldExitScreenOnBackArrowClick() {
+        onToolbarBackArrow().click()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     @Test

@@ -6,9 +6,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.hub_login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
@@ -41,6 +43,8 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         controller.onCreate()
         googleSignInContainer.addView(getSignInButton())
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun showEmptyLoginError() =
             Snackbar.make(hubLoginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()

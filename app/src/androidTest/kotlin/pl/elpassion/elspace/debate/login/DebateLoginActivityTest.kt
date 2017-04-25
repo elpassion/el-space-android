@@ -90,6 +90,15 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldShowDebateDetailsOnLoginClick() {
+        stubAllIntents()
+        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        loginToDebate("12345")
+        checkIntent(DebateDetailsActivity::class.java)
+    }
+
+    @Test
     fun shouldOpenDebateScreenWithTokenFromRepo() {
         stubAllIntents()
         whenever(tokenRepo.hasToken("12345")).thenReturn(true)

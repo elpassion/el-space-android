@@ -49,6 +49,13 @@ class HubLoginActivitySadTest {
     }
 
     @Test
+    fun shouldShowToolbarWithCorrectTitle() {
+        onId(R.id.toolbar)
+                .isDisplayed()
+                .hasChildWithText(R.string.hub_login_title)
+    }
+
+    @Test
     fun shouldExitScreenOnBackArrowClick() {
         onToolbarBackArrow().click()
         Assert.assertTrue(rule.activity.isFinishing)

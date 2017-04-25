@@ -9,9 +9,7 @@ import pl.elpassion.elspace.hub.login.LoginActivity
 
 class LauncherActivity : AppCompatActivity(), Launcher.View {
 
-    private val controller by lazy {
-        LauncherController(this)
-    }
+    private val controller by lazy { LauncherController(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,11 +18,7 @@ class LauncherActivity : AppCompatActivity(), Launcher.View {
         launcherHub.setOnClickListener { controller.onHub() }
     }
 
-    override fun openDebateLoginScreen() {
-        DebateLoginActivity.start(this)
-    }
+    override fun openDebateLoginScreen() = DebateLoginActivity.start(this)
 
-    override fun openHubLoginScreen() {
-        LoginActivity.start(this)
-    }
+    override fun openHubLoginScreen() = LoginActivity.start(this)
 }

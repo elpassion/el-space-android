@@ -16,18 +16,18 @@ import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class LoginActivity : AppCompatActivity(), Login.View {
+class HubLoginActivity : AppCompatActivity(), HubLogin.View {
 
-    private val controller = LoginController(
+    private val controller = HubLoginController(
             view = this,
-            loginRepository = LoginRepositoryProvider.get(),
+            loginRepository = HubLoginRepositoryProvider.get(),
             shortcutService = ShortcutServiceImpl(this),
-            api = LoginHubTokenApiProvider.get(),
+            api = HubLoginTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     private val googleSingInController = GoogleSingInControllerProvider.get()
 
     companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, LoginActivity::class.java))
+        fun start(context: Context) = context.startActivity(Intent(context, HubLoginActivity::class.java))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

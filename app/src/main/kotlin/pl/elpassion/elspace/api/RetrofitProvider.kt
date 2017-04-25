@@ -6,7 +6,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.elpassion.elspace.common.Provider
-import pl.elpassion.elspace.hub.login.LoginRepositoryProvider
+import pl.elpassion.elspace.hub.login.HubLoginRepositoryProvider
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -33,7 +33,7 @@ private fun defaultOkHttpClient() = OkHttpClient.Builder().addInterceptor(HttpLo
 
 fun xTokenInterceptor() = Interceptor { chain ->
     val request = chain.request().newBuilder()
-            .addHeader("X-Access-Token", LoginRepositoryProvider.get().readToken())
+            .addHeader("X-Access-Token", HubLoginRepositoryProvider.get().readToken())
             .build()
     chain.proceed(request)
 }

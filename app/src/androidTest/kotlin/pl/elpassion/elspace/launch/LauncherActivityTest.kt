@@ -7,7 +7,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.login.DebateLoginActivity
-import pl.elpassion.elspace.hub.login.LoginActivity
+import pl.elpassion.elspace.hub.login.HubLoginActivity
 import pl.elpassion.elspace.launcher.LauncherActivity
 
 class LauncherActivityTest {
@@ -39,6 +39,6 @@ class LauncherActivityTest {
     fun shouldShowHubLoginScreenOnHubClick() {
         stubAllIntents()
         onId(R.id.launcherHub).click()
-        checkIntent(LoginActivity::class.java)
+        checkIntent(HubLoginActivity::class.java)
     }
 }

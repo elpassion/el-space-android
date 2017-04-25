@@ -6,11 +6,11 @@ import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 import rx.Observable
 import rx.subscriptions.CompositeSubscription
 
-class LoginController(private val view: Login.View,
-                      private val loginRepository: Login.Repository,
-                      private val shortcutService: ShortcutService,
-                      private val api: Login.HubTokenApi,
-                      private val schedulersSupplier: SchedulersSupplier) {
+class HubLoginController(private val view: HubLogin.View,
+                         private val loginRepository: HubLogin.Repository,
+                         private val shortcutService: ShortcutService,
+                         private val api: HubLogin.TokenApi,
+                         private val schedulersSupplier: SchedulersSupplier) {
 
     private val subscriptions = CompositeSubscription()
 

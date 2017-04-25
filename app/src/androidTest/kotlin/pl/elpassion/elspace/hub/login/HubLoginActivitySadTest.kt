@@ -24,21 +24,21 @@ import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
 
-class LoginActivitySadTest {
+class HubLoginActivitySadTest {
 
-    val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
+    val loginRepository = mock<HubLogin.Repository>().apply { whenever(readToken()).thenReturn(null) }
 
     @JvmField @Rule
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = rule<LoginActivity> {
-        LoginHubTokenApiProvider.override = {
-            mock<Login.HubTokenApi>().apply {
+    val rule = rule<HubLoginActivity> {
+        HubLoginTokenApiProvider.override = {
+            mock<HubLogin.TokenApi>().apply {
                 whenever(loginWithGoogleToken(any())).thenReturn(Observable.never())
             }
         }
-        LoginRepositoryProvider.override = { loginRepository }
+        HubLoginRepositoryProvider.override = { loginRepository }
     }
 
     @Test

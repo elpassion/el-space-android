@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".elspace.hub.login.LoginActivity"
+            android:name=".elspace.hub.login.HubLoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"

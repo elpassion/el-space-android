@@ -13,17 +13,17 @@ import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import rx.Observable
 
-class LoginActivityHappyTest {
+class HubLoginActivityHappyTest {
 
-    val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn("token ") }
+    val loginRepository = mock<HubLogin.Repository>().apply { whenever(readToken()).thenReturn("token ") }
 
     @JvmField @Rule
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = rule<LoginActivity>(autoStart = false) {
+    val rule = rule<HubLoginActivity>(autoStart = false) {
         ReportList.ServiceProvider.override = { mock<ReportList.Service>().apply { whenever(getReports(any())).thenReturn(Observable.just(emptyList())) } }
-        LoginRepositoryProvider.override = { loginRepository }
+        HubLoginRepositoryProvider.override = { loginRepository }
     }
 
     @Test

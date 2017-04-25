@@ -1,5 +1,7 @@
 package pl.elpassion.elspace.debate.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +19,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     private val controller by lazy {
         DebateLoginController(this, DebateTokenRepositoryProvider.get(), DebateLogin.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+    }
+
+    companion object {
+        fun start(context: Context) = context.startActivity(Intent(context, DebateLoginActivity::class.java))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

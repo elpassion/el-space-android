@@ -18,6 +18,7 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
@@ -90,6 +91,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldOpenDebateScreenWithTokenFromRepo() {
+        stubAllIntents()
         whenever(tokenRepo.hasToken("12345")).thenReturn(true)
         whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
         loginToDebate("12345")
@@ -100,6 +102,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
+        stubAllIntents()
         loginToDebate("12345")
         apiSubject.onNext(LoginResponse("authTokenFromApi"))
         verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")

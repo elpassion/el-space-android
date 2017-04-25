@@ -19,6 +19,7 @@ import org.hamcrest.core.IsNot.not
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
@@ -39,6 +40,11 @@ class HubLoginActivitySadTest {
             }
         }
         HubLoginRepositoryProvider.override = { loginRepository }
+    }
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        onToolbarBackArrow().isDisplayed()
     }
 
     @Test

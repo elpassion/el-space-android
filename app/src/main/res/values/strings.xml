@@ -55,4 +55,5 @@
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
     <string name="launcher_open_debate">Open debate</string>
     <string name="launcher_open_hub">Open hub</string>
+    <string name="hub_login">Log in to hub</string>
 </resources>

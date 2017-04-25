@@ -17,6 +17,7 @@ import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.DebateTokenRepository
@@ -38,6 +39,11 @@ class DebateLoginActivityTest {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
         DebateTokenRepositoryProvider.override = { tokenRepo }
         DebateLogin.ApiProvider.override = { mock<DebateLogin.Api>().apply { whenever(login(any())).thenReturn(apiSubject) } }
+    }
+
+    @Test
+    fun shouldHaveVisibleBackArrow() {
+        onToolbarBackArrow().isDisplayed()
     }
 
     @Test

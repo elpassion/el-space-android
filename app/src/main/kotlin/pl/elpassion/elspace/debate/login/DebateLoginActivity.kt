@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
@@ -28,6 +29,8 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
+        setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         loginButton.setOnClickListener {
             controller.onLogToDebate(debateCode.text.toString())
         }

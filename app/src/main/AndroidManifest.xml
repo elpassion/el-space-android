@@ -35,7 +35,9 @@
         <activity
             android:name=".elspace.hub.report.edit.ReportEditActivity"
             android:theme="@style/AppThemeWithoutActionBar" />
-        <activity android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity" />
+        <activity
+            android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
+            android:theme="@style/AppThemeWithoutActionBar" />
         <activity android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity" />
 
         <meta-data

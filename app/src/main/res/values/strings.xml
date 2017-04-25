@@ -4,6 +4,7 @@
     <string name="launcher_open_debate">Open debate</string>
     <string name="launcher_open_hub">Open hub</string>
     <string name="debate_code_incorrect">Debate code is incorrect</string>
+    <string name="debate_login_title">Log in to debate</string>
     <string name="debate_login_welcome">Welcome!</string>
     <string name="debate_login_instructions">To vote, insert debates PIN number.</string>
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>

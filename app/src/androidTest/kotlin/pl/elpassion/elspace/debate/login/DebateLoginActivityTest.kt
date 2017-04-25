@@ -47,6 +47,13 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldShowToolbarWithCorrectTitle() {
+        onId(R.id.toolbar)
+                .isDisplayed()
+                .hasChildWithText(R.string.debate_login_title)
+    }
+
+    @Test
     fun shouldHaveWelcomeString() {
         onText(R.string.debate_login_welcome).isDisplayed()
     }

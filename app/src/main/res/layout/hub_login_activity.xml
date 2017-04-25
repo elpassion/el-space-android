@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/loginCoordinator"
+    android:id="@+id/hubLoginCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -20,7 +20,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/hub_login" />
+                app:title="@string/hub_login_title" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -64,11 +64,11 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/loginHubButton"
+                            android:id="@+id/hubButton"
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/login_hub" />
+                            android:text="@string/hub_button" />
 
                         <Button
                             android:id="@+id/loginButton"

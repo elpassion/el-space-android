@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.login_activity.*
+import kotlinx.android.synthetic.main.hub_login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
@@ -33,17 +33,17 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_activity)
+        setContentView(R.layout.hub_login_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
-        loginHubButton.setOnClickListener { controller.onHub() }
+        hubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
         googleSignInContainer.addView(getSignInButton())
     }
 
     override fun showEmptyLoginError() =
-            Snackbar.make(loginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
+            Snackbar.make(hubLoginCoordinator, R.string.token_empty_error, Snackbar.LENGTH_INDEFINITE).show()
 
     override fun openReportListScreen() {
         ReportListActivity.start(this)
@@ -56,11 +56,11 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
     }
 
     override fun showGoogleTokenError() =
-            Snackbar.make(loginCoordinator, R.string.google_token_error, Snackbar.LENGTH_INDEFINITE).show()
+            Snackbar.make(hubLoginCoordinator, R.string.google_token_error, Snackbar.LENGTH_INDEFINITE).show()
 
-    override fun showLoader() = showLoader(loginCoordinator)
+    override fun showLoader() = showLoader(hubLoginCoordinator)
 
-    override fun hideLoader() = hideLoader(loginCoordinator)
+    override fun hideLoader() = hideLoader(hubLoginCoordinator)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         googleSingInController.onActivityResult(requestCode, resultCode, data)

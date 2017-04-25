@@ -80,14 +80,14 @@ class HubLoginActivitySadTest {
 
     @Test
     fun shouldNotHaveErrorInfoOnStart() {
-        onId(R.id.loginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
+        onId(R.id.hubLoginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
     }
 
     @Test
     fun shouldOpenHubWebsiteOnHub() {
         intending(anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
         val hubTokenUri = getTargetContext().getString(R.string.hub_token_uri)
-        onId(R.id.loginHubButton).click()
+        onId(R.id.hubButton).click()
         intended(allOf(hasData(hubTokenUri), hasAction(ACTION_VIEW)))
     }
 

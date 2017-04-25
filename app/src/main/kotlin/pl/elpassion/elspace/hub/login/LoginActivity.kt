@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.login
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,6 +25,10 @@ class LoginActivity : AppCompatActivity(), Login.View {
             api = LoginHubTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     private val googleSingInController = GoogleSingInControllerProvider.get()
+
+    companion object {
+        fun start(context: Context) = context.startActivity(Intent(context, LoginActivity::class.java))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

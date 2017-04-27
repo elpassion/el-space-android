@@ -19,5 +19,7 @@
     <color name="selectedWhite">#42000000</color>
     <color name="defaultTextColor">#5F5A6A</color>
     <color name="textUnderline">#e2e2e2</color>
+    <color name="violetButtonBackground">#AB9BFF</color>
+    <color name="greenButtonBackground">#4CC359</color>
 
 </resources>

@@ -6,23 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".elspace.launcher.LauncherActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:orientation="vertical"
+        android:padding="@dimen/default_padding_value">
 
-        <Button
-            android:id="@+id/launcherDebate"
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/launcher_background" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/launcher_open_debate" />
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/launcherHub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/launcher_open_hub" />
+            <Button
+                android:id="@+id/launcherHub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_padding_value"
+                android:background="@color/violetButtonBackground"
+                android:text="@string/launcher_open_hub"
+                android:textColor="@color/colorWhite" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/launcherDebate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/greenButtonBackground"
+                android:text="@string/launcher_open_debate"
+                android:textColor="@color/colorWhite" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

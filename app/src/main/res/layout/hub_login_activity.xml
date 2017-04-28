@@ -21,7 +21,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccentBlue"
+        android:background="@color/colorPrimaryBlue"
         android:padding="@dimen/default_padding_value"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 

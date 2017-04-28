@@ -67,12 +67,12 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveInstructionsString() {
-        onText(R.string.debate_login_hint_pin).isDisplayed()
+        onId(R.id.debateLoginInputText).isDisplayed()
     }
 
     @Test
     fun shouldHaveCorrectDebateCodeInput() {
-        onId(R.id.debateCode)
+        onId(R.id.debateLoginInputText)
                 .isDisplayed()
                 .replaceText("123456")
                 .hasText("12345")
@@ -81,7 +81,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveLoginButton() {
-        onId(R.id.loginButton)
+        onId(R.id.debateLoginButton)
                 .hasText(R.string.debate_login_button_login)
                 .isDisplayed()
                 .isEnabled()
@@ -148,8 +148,8 @@ class DebateLoginActivityTest {
     }
 
     private fun loginToDebate(debateCode: String) {
-        onId(R.id.debateCode).replaceText(debateCode)
+        onId(R.id.debateLoginInputText).replaceText(debateCode)
         Espresso.closeSoftKeyboard()
-        onId(R.id.loginButton).click()
+        onId(R.id.debateLoginButton).click()
     }
 }

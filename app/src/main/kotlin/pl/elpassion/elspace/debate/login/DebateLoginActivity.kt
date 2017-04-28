@@ -33,8 +33,8 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         setContentView(R.layout.debate_login_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        loginButton.setOnClickListener {
-            controller.onLogToDebate(debateCode.text.toString())
+        debateLoginButton.setOnClickListener {
+            controller.onLogToDebate(debateLoginInputText.text.toString())
         }
     }
 

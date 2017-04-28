@@ -37,8 +37,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_padding_value"
                 android:layout_marginTop="@dimen/default_padding_value"
-                app:hintTextAppearance="@style/Hint"
-                app:theme="@style/Hint">
+                app:hintTextAppearance="@style/HintViolet"
+                app:theme="@style/HintViolet">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/tokenInput"

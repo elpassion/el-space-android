@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">EL Space</string>
     <string name="internet_connection_error">There was a problem. Please, verify your internet connection.</string>
-    <string name="launcher_open_hub">El HUB</string>
-    <string name="launcher_open_debate">El Debate</string>
+    <string name="launcher_button_hub">El HUB</string>
+    <string name="launcher_button_debate">El Debate</string>
     <string name="debate_code_incorrect">Debate code is incorrect</string>
     <string name="debate_login_title">Log in to debate</string>
     <string name="debate_login_welcome">Welcome!</string>

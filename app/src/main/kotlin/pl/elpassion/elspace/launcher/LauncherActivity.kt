@@ -14,8 +14,8 @@ class LauncherActivity : AppCompatActivity(), Launcher.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.launcher_activity)
-        launcherDebate.setOnClickListener { controller.onDebate() }
-        launcherHub.setOnClickListener { controller.onHub() }
+        launcherDebateButton.setOnClickListener { controller.onDebate() }
+        launcherHubButton.setOnClickListener { controller.onHub() }
     }
 
     override fun openDebateLoginScreen() = DebateLoginActivity.start(this)

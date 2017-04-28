@@ -20,25 +20,25 @@ class LauncherActivityTest {
 
     @Test
     fun shouldShowDebateButton() {
-        onText(R.string.launcher_open_debate).isDisplayed()
+        onText(R.string.launcher_button_debate).isDisplayed()
     }
 
     @Test
     fun shouldShowHubButton() {
-        onText(R.string.launcher_open_hub).isDisplayed()
+        onText(R.string.launcher_button_hub).isDisplayed()
     }
 
     @Test
     fun shouldShowDebateLoginScreenOnDebateClick() {
         stubAllIntents()
-        onId(R.id.launcherDebate).click()
+        onId(R.id.launcherDebateButton).click()
         checkIntent(DebateLoginActivity::class.java)
     }
 
     @Test
     fun shouldShowHubLoginScreenOnHubClick() {
         stubAllIntents()
-        onId(R.id.launcherHub).click()
+        onId(R.id.launcherHubButton).click()
         checkIntent(HubLoginActivity::class.java)
     }
 }

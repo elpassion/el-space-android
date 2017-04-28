@@ -20,21 +20,21 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/launcherHub"
+                android:id="@+id/launcherHubButton"
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_padding_value"
                 android:background="@color/colorViolet"
-                android:text="@string/launcher_open_hub" />
+                android:text="@string/launcher_button_hub" />
 
             <Button
-                android:id="@+id/launcherDebate"
+                android:id="@+id/launcherDebateButton"
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/greenButtonBackground"
-                android:text="@string/launcher_open_debate" />
+                android:text="@string/launcher_button_debate" />
 
         </LinearLayout>
 

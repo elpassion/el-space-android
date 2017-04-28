@@ -20,6 +20,6 @@
     <color name="defaultTextColor">#5F5A6A</color>
     <color name="textUnderline">#e2e2e2</color>
     <color name="colorViolet">#AB9BFF</color>
-    <color name="greenButtonBackground">#4CC359</color>
+    <color name="colorGreen">#4CC359</color>
 
 </resources>

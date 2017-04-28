@@ -63,7 +63,7 @@
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/greenButtonBackground"
+                android:background="@color/colorGreen"
                 android:text="@string/hub_login_button_hub_link" />
 
             <FrameLayout

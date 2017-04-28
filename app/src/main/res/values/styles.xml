@@ -63,4 +63,10 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">2dp</item>
     </style>
+
+    <style name="Hint" >
+        <item name="colorAccent">@color/colorViolet</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorViolet</item>
+    </style>
 </resources>

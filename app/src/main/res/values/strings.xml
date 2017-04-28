@@ -12,8 +12,10 @@
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
     <string name="hub_login_title">Log in to hub</string>
-    <string name="hub_button">HUB</string>
-    <string name="hub_token_uri">https://hub.elpassion.com/employee/settings/api</string>
+    <string name="hub_login_token_hint">Provide your access token.</string>
+    <string name="hub_login_button_login_by_token">Log in using hub token</string>
+    <string name="hub_login_button">HUB link</string>
+    <string name="hub_login_hub_uri">https://hub.elpassion.com/employee/settings/api</string>
     <string name="report_missing">Missing</string>
     <string name="report_sick_leave_title">Sick leave :(</string>
     <string name="report_unpaid_vacations_title">Unpaid vacations</string>
@@ -38,7 +40,6 @@
     <string name="select_project">Select project</string>
     <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
-    <string name="token_hint">Provide your access token from hub website.</string>
     <string name="google_token_error">Failed to login with google token.</string>
     <string name="report_edit_date_header">PERFORMED AT</string>
     <string name="report_edit_project_header">PROJECT</string>

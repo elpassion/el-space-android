@@ -63,7 +63,7 @@ class HubLoginActivitySadTest {
 
     @Test
     fun shouldHaveLoginButton() {
-        onId(R.id.loginButton).hasText(R.string.login_button)
+        onId(R.id.tokenLoginButton).hasText(R.string.hub_login_button_login_by_token)
     }
 
     @Test
@@ -100,7 +100,7 @@ class HubLoginActivitySadTest {
     @Test
     fun shouldOpenHubWebsiteOnHub() {
         intending(anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
-        val hubTokenUri = getTargetContext().getString(R.string.hub_token_uri)
+        val hubTokenUri = getTargetContext().getString(R.string.hub_login_hub_uri)
         onId(R.id.hubButton).click()
         intended(allOf(hasData(hubTokenUri), hasAction(ACTION_VIEW)))
     }
@@ -108,7 +108,7 @@ class HubLoginActivitySadTest {
     private fun login(token: String) {
         onId(R.id.tokenInput).replaceText(token)
         closeSoftKeyboard()
-        onId(R.id.loginButton).click()
+        onId(R.id.tokenLoginButton).click()
     }
 }
 

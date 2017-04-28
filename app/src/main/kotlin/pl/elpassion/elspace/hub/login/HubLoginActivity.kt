@@ -38,10 +38,10 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         setContentView(R.layout.hub_login_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        loginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
+        tokenLoginButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        googleSignInContainer.addView(getSignInButton())
+        googleLoginButton.addView(getSignInButton())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -55,7 +55,7 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
     }
 
     override fun openHubWebsite() {
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.hub_token_uri)))
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.hub_login_hub_uri)))
         startActivity(browserIntent)
     }
 

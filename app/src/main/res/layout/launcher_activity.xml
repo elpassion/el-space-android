@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/default_padding_value"
-                android:background="@color/violetButtonBackground"
+                android:background="@color/colorViolet"
                 android:text="@string/launcher_open_hub" />
 
             <Button

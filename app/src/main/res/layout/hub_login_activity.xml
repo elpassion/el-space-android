@@ -21,7 +21,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccentBlue"
         android:padding="@dimen/default_padding_value"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -63,7 +63,7 @@
                 style="@style/Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorGreen"
+                android:background="@color/colorPrimaryGreen"
                 android:text="@string/hub_login_button_hub_link" />
 
             <FrameLayout

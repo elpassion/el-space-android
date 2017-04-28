@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#383676</color>
-    <color name="colorPrimaryDark">#383676</color>
-    <color name="colorAccent">#403E70</color>
+    <color name="colorPrimaryBlue">#383676</color>
+    <color name="colorPrimaryDarkBlue">#383676</color>
+    <color name="colorAccentBlue">#403E70</color>
+    <color name="colorPrimaryGreen">#4CC359</color>
     <color name="black">#000</color>
     <color name="borderColor">#E0E0E0</color>
     <color name="reportMissing">#BA6767</color>
@@ -20,6 +21,5 @@
     <color name="defaultTextColor">#5F5A6A</color>
     <color name="textUnderline">#e2e2e2</color>
     <color name="colorViolet">#AB9BFF</color>
-    <color name="colorGreen">#4CC359</color>
 
 </resources>

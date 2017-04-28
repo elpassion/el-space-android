@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppThemeBlue">
         <activity android:name=".elspace.launcher.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,24 +20,24 @@
         </activity>
         <activity
             android:name=".elspace.hub.login.HubLoginActivity"
-            android:theme="@style/AppThemeWithoutActionBar"
+            android:theme="@style/AppThemeBlueWithoutActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name=".elspace.hub.report.add.ReportAddActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name=".elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name=".elspace.hub.report.edit.ReportEditActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
-            android:theme="@style/AppThemeWithoutActionBar" />
+            android:theme="@style/AppThemeGreenWithoutActionBar" />
         <activity android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity" />
 
         <meta-data

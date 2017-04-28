@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
                 android:gravity="center"
-                android:text="@string/debate_login_instructions"
+                android:text="@string/debate_login_hint_pin"
                 android:textColor="#000"
                 android:textSize="18sp" />
 
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
-                android:text="@string/login_button" />
+                android:text="@string/debate_login_button_login" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

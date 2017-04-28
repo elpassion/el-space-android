@@ -4,9 +4,10 @@
     <string name="launcher_button_hub">El HUB</string>
     <string name="launcher_button_debate">El Debate</string>
     <string name="debate_code_incorrect">Debate code is incorrect</string>
-    <string name="debate_login_title">Log in to debate</string>
-    <string name="debate_login_welcome">Welcome!</string>
-    <string name="debate_login_instructions">To vote, insert debates PIN number.</string>
+    <string name="debate_login_title">EL Debate 2017</string>
+    <string name="debate_login_welcome">Welcome to</string>
+    <string name="debate_login_hint_pin">Enter El Debate PIN</string>
+    <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
@@ -38,7 +39,6 @@
     <string name="report_edit_action">Save changes</string>
     <string name="report_remove_action">Remove report</string>
     <string name="select_project">Select project</string>
-    <string name="login_button">Login</string>
     <string name="token_empty_error">Token must be provided.</string>
     <string name="google_token_error">Failed to login with google token.</string>
     <string name="report_edit_date_header">PERFORMED AT</string>

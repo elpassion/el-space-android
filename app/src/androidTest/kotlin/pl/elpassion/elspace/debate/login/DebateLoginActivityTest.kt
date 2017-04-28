@@ -67,7 +67,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveInstructionsString() {
-        onText(R.string.debate_login_instructions).isDisplayed()
+        onText(R.string.debate_login_hint_pin).isDisplayed()
     }
 
     @Test
@@ -82,7 +82,7 @@ class DebateLoginActivityTest {
     @Test
     fun shouldHaveLoginButton() {
         onId(R.id.loginButton)
-                .hasText(R.string.login_button)
+                .hasText(R.string.debate_login_button_login)
                 .isDisplayed()
                 .isEnabled()
     }

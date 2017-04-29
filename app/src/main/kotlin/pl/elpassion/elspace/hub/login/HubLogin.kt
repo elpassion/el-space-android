@@ -4,7 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import io.reactivex.Observable
 
-interface Login {
+interface HubLogin {
     interface View {
         fun openReportListScreen()
         fun showEmptyLoginError()
@@ -19,7 +19,7 @@ interface Login {
         fun saveToken(token: String)
     }
 
-    interface HubTokenApi {
+    interface TokenApi {
         @POST("api_keys")
         fun loginWithGoogleToken(@Body body: GoogleTokenForHubTokenApi): Observable<HubTokenFromApi>
     }

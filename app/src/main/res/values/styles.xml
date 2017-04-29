@@ -1,15 +1,22 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppThemeBlue" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
     </style>
 
-    <style name="AppThemeWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppThemeBlueWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+        <item name="colorControlNormal">@color/textUnderline</item>
+    </style>
+
+    <style name="AppThemeGreenWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
+        <item name="colorAccent">@color/colorPrimaryGreen</item>
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
@@ -55,12 +62,18 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/colorPrimaryBlue</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="HubIndicator">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">2dp</item>
+    </style>
+
+    <style name="HintViolet" >
+        <item name="colorAccent">@color/colorViolet</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorViolet</item>
     </style>
 </resources>

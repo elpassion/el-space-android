@@ -1,14 +1,10 @@
 package pl.elpassion.elspace.hub.report.list
 
-import android.app.Activity
-import android.app.Instrumentation
 import android.support.test.InstrumentationRegistry.getTargetContext
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.contrib.RecyclerViewActions.scrollToPosition
-import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.intent.matcher.IntentMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView

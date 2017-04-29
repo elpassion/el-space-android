@@ -13,11 +13,11 @@ import pl.elpassion.elspace.commons.thenJust
 import pl.elpassion.elspace.commons.thenNever
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
-class LoginControllerTest {
+class HubLoginControllerTest {
 
-    val api = mock<Login.HubTokenApi>()
-    val view = mock<Login.View>()
-    val loginRepository = mock<Login.Repository>()
+    val api = mock<HubLogin.TokenApi>()
+    val view = mock<HubLogin.View>()
+    val loginRepository = mock<HubLogin.Repository>()
     val shortcutService = mock<ShortcutService>()
     val subscribeOnScheduler = TestScheduler()
     val observeOnScheduler = TestScheduler()
@@ -190,7 +190,7 @@ class LoginControllerTest {
     }
 
     fun createController(subscribeOn: Scheduler = trampoline(), observeOn: Scheduler = trampoline()) =
-            LoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
+            HubLoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 
     private fun stubHubApiToReturnToken() {
         whenever(api.loginWithGoogleToken(any())).thenJust(HubTokenFromApi("token"))

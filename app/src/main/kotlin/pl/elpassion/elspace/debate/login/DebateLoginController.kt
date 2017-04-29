@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.debate.login
 
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
@@ -7,7 +8,8 @@ import io.reactivex.disposables.Disposable
 class DebateLoginController(
         private val view: DebateLogin.View,
         private val tokenRepo: DebateTokenRepository,
-        private val loginApi: DebateLogin.Api) {
+        private val loginApi: DebateLogin.Api,
+        private val schedulers: SchedulersSupplier) {
 
     private var subscription: Disposable? = null
 
@@ -21,6 +23,8 @@ class DebateLoginController(
 
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
+                .subscribeOn(schedulers.subscribeOn)
+                .observeOn(schedulers.observeOn)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally { view.hideLoader() }
                 .subscribe({

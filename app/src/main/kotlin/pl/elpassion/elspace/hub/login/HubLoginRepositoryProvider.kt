@@ -6,8 +6,8 @@ import com.google.gson.Gson
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
 
-object LoginRepositoryProvider : Provider<Login.Repository>({
-    object : Login.Repository {
+object HubLoginRepositoryProvider : Provider<HubLogin.Repository>({
+    object : HubLogin.Repository {
         private val TOKEN_KEY = "tokenKey"
         private val repository = createSharedPrefs<String?>({
             PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())

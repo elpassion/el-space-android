@@ -16,34 +16,49 @@ import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.IsNot.not
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import io.reactivex.Observable
 
-class LoginActivitySadTest {
+class HubLoginActivitySadTest {
 
-    val loginRepository = mock<Login.Repository>().apply { whenever(readToken()).thenReturn(null) }
+    val loginRepository = mock<HubLogin.Repository>().apply { whenever(readToken()).thenReturn(null) }
 
     @JvmField @Rule
     val intents = InitIntentsRule()
 
     @JvmField @Rule
-    val rule = rule<LoginActivity> {
-        LoginHubTokenApiProvider.override = {
-            mock<Login.HubTokenApi>().apply {
+    val rule = rule<HubLoginActivity> {
+        HubLoginTokenApiProvider.override = {
+            mock<HubLogin.TokenApi>().apply {
                 whenever(loginWithGoogleToken(any())).thenReturn(Observable.never())
             }
         }
-        LoginRepositoryProvider.override = { loginRepository }
+        HubLoginRepositoryProvider.override = { loginRepository }
+    }
+
+    @Test
+    fun shouldShowToolbarWithCorrectTitle() {
+        onId(R.id.toolbar)
+                .isDisplayed()
+                .hasChildWithText(R.string.hub_login_title)
+    }
+
+    @Test
+    fun shouldExitScreenOnBackArrowClick() {
+        onToolbarBackArrow().click()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     @Test
     fun shouldHaveLoginButton() {
-        onId(R.id.loginButton).hasText(R.string.login_button)
+        onId(R.id.hubLoginByTokenButton).hasText(R.string.hub_login_button_login_by_token)
     }
 
     @Test
@@ -74,21 +89,21 @@ class LoginActivitySadTest {
 
     @Test
     fun shouldNotHaveErrorInfoOnStart() {
-        onId(R.id.loginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
+        onId(R.id.hubLoginCoordinator).check(matches(not(hasDescendant(withText(R.string.token_empty_error)))))
     }
 
     @Test
     fun shouldOpenHubWebsiteOnHub() {
         intending(anyIntent()).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, Intent()))
-        val hubTokenUri = getTargetContext().getString(R.string.hub_token_uri)
-        onId(R.id.loginHubButton).click()
+        val hubTokenUri = getTargetContext().getString(R.string.hub_login_uri_hub)
+        onId(R.id.hubLoginHubLinkButton).click()
         intended(allOf(hasData(hubTokenUri), hasAction(ACTION_VIEW)))
     }
 
     private fun login(token: String) {
         onId(R.id.tokenInput).replaceText(token)
         closeSoftKeyboard()
-        onId(R.id.loginButton).click()
+        onId(R.id.hubLoginByTokenButton).click()
     }
 }
 

@@ -38,12 +38,6 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldHaveVisibleBackArrow() {
-        stubReportAndStart()
-        onToolbarBackArrow().isDisplayed()
-    }
-
-    @Test
     fun shouldExitScreenOnBackArrowClick() {
         stubReportAndStart()
         onToolbarBackArrow().click()

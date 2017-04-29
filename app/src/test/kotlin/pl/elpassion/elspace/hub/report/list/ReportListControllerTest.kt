@@ -11,16 +11,19 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
-import rx.Observable
-import rx.schedulers.Schedulers.trampoline
-import rx.schedulers.TestScheduler
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 class ReportListControllerTest {
 
     private val service = mock<ReportDayService>()
-    private val actions = mock<ReportList.Actions>()
+    private val actions = mock<ReportList.Actions> {
+        on { snackBarRetry() } doReturn Observable.empty()
+        on { resultRefresh() } doReturn Observable.empty()
+    }
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
     private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))

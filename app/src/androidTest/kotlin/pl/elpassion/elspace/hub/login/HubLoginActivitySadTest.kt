@@ -24,7 +24,7 @@ import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.Observable
+import io.reactivex.Observable
 
 class HubLoginActivitySadTest {
 

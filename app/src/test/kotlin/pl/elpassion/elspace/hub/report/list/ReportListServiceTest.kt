@@ -17,13 +17,13 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ProjectListService
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
-import rx.Observable
-import rx.observers.TestSubscriber
+import io.reactivex.Observable
+import io.reactivex.observers.TestObserver
 import java.util.*
 
 class ReportListServiceTest {
 
-    val subscriber = TestSubscriber<List<Report>>()
+    val subscriber = TestObserver<List<Report>>()
     val reportApi = mock<ReportList.ReportApi>()
     val projectListService = mock<ProjectListService>()
     val service = ReportListService(reportApi, projectListService)

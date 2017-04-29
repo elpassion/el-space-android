@@ -5,7 +5,7 @@ import pl.elpassion.elspace.hub.report.DailyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.*
-import rx.Observable
+import io.reactivex.Observable
 import java.util.*
 
 class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {

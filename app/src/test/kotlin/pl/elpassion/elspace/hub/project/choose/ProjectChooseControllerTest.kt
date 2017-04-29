@@ -1,16 +1,16 @@
 package pl.elpassion.elspace.hub.project.choose
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 import pl.elpassion.elspace.hub.project.dto.newProject
-import rx.Observable
-import rx.schedulers.Schedulers.trampoline
-import rx.schedulers.TestScheduler
-import rx.subjects.PublishSubject
 
 class ProjectChooseControllerTest {
 
@@ -138,7 +138,7 @@ class ProjectChooseControllerTest {
 
     private fun emitProjects(projects: List<Project>) {
         publishSubject.onNext(projects)
-        publishSubject.onCompleted()
+        publishSubject.onComplete()
     }
 }
 

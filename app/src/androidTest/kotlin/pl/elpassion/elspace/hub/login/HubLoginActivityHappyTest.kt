@@ -11,7 +11,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import rx.Observable
+import io.reactivex.Observable
 
 class HubLoginActivityHappyTest {
 

@@ -13,9 +13,9 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
-import com.jakewharton.rxbinding.support.design.widget.dismisses
-import com.jakewharton.rxbinding.support.v4.widget.refreshes
-import com.jakewharton.rxbinding.view.clicks
+import com.jakewharton.rxbinding2.support.design.widget.dismisses
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -30,10 +30,10 @@ import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.items.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
-import rx.Observable
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
-import rx.subjects.PublishSubject
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
@@ -88,7 +88,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     override fun scrollToCurrent(): Observable<Unit> = toolbarClicks.onMenuItemClicks(R.id.action_today)
 
-    override fun resultRefresh(): Observable<Unit> = reportScreenResult.asObservable()
+    override fun resultRefresh(): Observable<Unit> = reportScreenResult
 
     override fun reportsFilter(): Observable<Boolean> = toolbarClicks.onMenuItemAction(R.id.action_filter)
             .doOnNext {

@@ -21,7 +21,7 @@ import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
-import rx.Observable
+import io.reactivex.Observable
 
 class ReportEditActivityTest {
 

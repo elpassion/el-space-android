@@ -8,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.login.HubLoginRepositoryProvider
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 object UnauthenticatedRetrofitProvider : Provider<Retrofit>({
@@ -21,7 +21,7 @@ object RetrofitProvider : Provider<Retrofit>({
 
 private fun createRetrofit(okHttpClient: OkHttpClient?): Retrofit {
     return Retrofit.Builder()
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
                     .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()))
             .baseUrl("https://hub.elpassion.com/api/v1/")

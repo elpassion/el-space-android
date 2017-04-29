@@ -11,7 +11,7 @@ import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
 import retrofit2.http.GET
 import retrofit2.http.Query
-import rx.Observable
+import io.reactivex.Observable
 
 interface ReportList {
 

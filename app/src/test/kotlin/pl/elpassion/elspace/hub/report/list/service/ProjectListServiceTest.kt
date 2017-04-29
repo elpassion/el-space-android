@@ -4,16 +4,16 @@ import com.nhaarman.mockito_kotlin.argThat
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
+import io.reactivex.observers.TestObserver
 import org.junit.Test
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.report.list.ReportList
-import rx.Observable
-import rx.observers.TestSubscriber
 
 class ProjectListServiceTest {
-    val subscriber = TestSubscriber<List<Project>>()
+    val subscriber = TestObserver<List<Project>>()
 
     val projectApi = mock<ReportList.ProjectApi>()
     val repository = mock<CachedProjectRepository>()

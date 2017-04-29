@@ -1,14 +1,14 @@
 package pl.elpassion.elspace.hub.report.list
 
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
-import rx.Observable
-import rx.schedulers.Schedulers
-import rx.subscriptions.CompositeSubscription
 
 class ReportListController(private val reportDayService: ReportDayService,
                            private val dayFilter: DayFilter,
@@ -16,7 +16,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                            private val view: ReportList.View,
                            private val schedulers: SchedulersSupplier) {
 
-    private val subscriptions = CompositeSubscription()
+    private val subscriptions = CompositeDisposable()
     private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar()) }
     private val todayPositionObserver = TodayPositionObserver()
     private val calendar = getCurrentTimeCalendar()
@@ -68,7 +68,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        Observable.combineLatest(fetchDays(), actions.reportsFilter(),
+        combineLatest(fetchDays(), actions.reportsFilter(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)

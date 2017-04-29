@@ -1,19 +1,20 @@
 package pl.elpassion.elspace.hub.report.edit
 
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
+import pl.elpassion.elspace.common.extensions.withLatestFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
-import rx.Observable
-import rx.subscriptions.CompositeSubscription
 
 class ReportEditController(private val report: Report,
                            private val view: ReportEdit.View,
                            private val api: ReportEdit.Api,
                            private val schedulers: SchedulersSupplier) {
 
-    private val subscriptions = CompositeSubscription()
+    private val subscriptions = CompositeDisposable()
 
     fun onCreate() {
         showReport()
@@ -43,7 +44,7 @@ class ReportEditController(private val report: Report,
     }
 
     private fun editReportClicks() = view.editReportClicks()
-            .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
+            .withLatestFrom(reportTypeChanges()) { model, handler -> model to handler }
             .switchMap { callApiToEdit(it) }
             .doOnNext { view.close() }
             .catchOnError { view.showError(it) }
@@ -126,8 +127,7 @@ class ReportEditController(private val report: Report,
 
     private fun Observable<Unit>.addLoader() = this
             .doOnSubscribe { view.showLoader() }
-            .doOnUnsubscribe { view.hideLoader() }
-            .doOnTerminate { view.hideLoader() }
+            .doFinally { view.hideLoader() }
 }
 
 private val Report.type: ReportType

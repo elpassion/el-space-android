@@ -2,7 +2,7 @@ package pl.elpassion.elspace.hub.login
 
 import retrofit2.http.Body
 import retrofit2.http.POST
-import rx.Observable
+import io.reactivex.Observable
 
 interface HubLogin {
     interface View {

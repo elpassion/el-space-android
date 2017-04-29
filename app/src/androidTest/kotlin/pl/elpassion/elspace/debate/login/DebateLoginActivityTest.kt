@@ -43,11 +43,6 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldHaveVisibleBackArrow() {
-        onToolbarBackArrow().isDisplayed()
-    }
-
-    @Test
     fun shouldShowToolbarWithCorrectTitle() {
         onId(R.id.toolbar)
                 .isDisplayed()

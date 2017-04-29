@@ -1,8 +1,8 @@
 package pl.elpassion.elspace.debate.login
 
+import io.reactivex.Observable
 import pl.elpassion.elspace.api.RetrofitProvider
 import pl.elpassion.elspace.common.Provider
-import rx.Observable
 
 interface DebateLogin {
     interface View {

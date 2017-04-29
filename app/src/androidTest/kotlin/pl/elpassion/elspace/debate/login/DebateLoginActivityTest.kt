@@ -13,6 +13,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.subjects.PublishSubject
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
 import org.junit.Rule
@@ -25,7 +26,6 @@ import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
-import rx.subjects.PublishSubject
 
 class DebateLoginActivityTest {
 

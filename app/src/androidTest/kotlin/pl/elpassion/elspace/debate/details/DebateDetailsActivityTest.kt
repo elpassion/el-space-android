@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.details
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -10,7 +11,6 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
-import rx.subjects.PublishSubject
 
 class DebateDetailsActivityTest {
 
@@ -77,7 +77,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldNotShowLoaderWhenApiCallFinished() {
         startActivity()
-        debateDetailsSubject.onCompleted()
+        debateDetailsSubject.onComplete()
         onId(R.id.loader).doesNotExist()
     }
 
@@ -161,17 +161,17 @@ class DebateDetailsActivityTest {
 
     private fun getDebateDetailsSuccessfully() {
         debateDetailsSubject.onNext(createDebateData())
-        debateDetailsSubject.onCompleted()
+        debateDetailsSubject.onComplete()
     }
 
     private fun voteSuccessfully() {
         sendVoteSubject.onNext(Unit)
-        sendVoteSubject.onCompleted()
+        sendVoteSubject.onComplete()
     }
 
     private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData) {
         startActivity()
         debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onCompleted()
+        debateDetailsSubject.onComplete()
     }
 }

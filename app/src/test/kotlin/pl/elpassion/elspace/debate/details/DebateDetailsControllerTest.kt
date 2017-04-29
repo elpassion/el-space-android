@@ -1,14 +1,14 @@
 package pl.elpassion.elspace.debate.details
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.details.createAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
-import rx.schedulers.Schedulers
-import rx.schedulers.TestScheduler
-import rx.subjects.PublishSubject
 
 class DebateDetailsControllerTest {
 
@@ -133,7 +133,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldHideLoaderWhenVoteApiCallIsFinished() {
         controller.onVote("token", createAnswer())
-        sendVoteSubject.onCompleted()
+        sendVoteSubject.onComplete()
         verify(view).hideLoader()
     }
 
@@ -148,7 +148,7 @@ class DebateDetailsControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.onVote("token", createAnswer())
-        sendVoteSubject.onCompleted()
+        sendVoteSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -159,7 +159,7 @@ class DebateDetailsControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateDetailsController(api, view, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.onVote("token", createAnswer())
-        sendVoteSubject.onCompleted()
+        sendVoteSubject.onComplete()
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
@@ -176,7 +176,7 @@ class DebateDetailsControllerTest {
     fun shouldShowSuccessWhenVoteSuccessfully() {
         controller.onVote("", createAnswer())
         sendVoteSubject.onNext(Unit)
-        sendVoteSubject.onCompleted()
+        sendVoteSubject.onComplete()
         verify(view).showVoteSuccess()
     }
 
@@ -190,6 +190,6 @@ class DebateDetailsControllerTest {
 
     private fun returnFromApi(debateData: DebateData) {
         debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onCompleted()
+        debateDetailsSubject.onComplete()
     }
 }

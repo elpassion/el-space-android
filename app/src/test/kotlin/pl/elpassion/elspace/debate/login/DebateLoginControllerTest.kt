@@ -1,15 +1,14 @@
 package pl.elpassion.elspace.debate.login
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
-import rx.schedulers.Schedulers
-import rx.schedulers.TestScheduler
-import rx.subjects.PublishSubject
-
 
 class DebateLoginControllerTest {
 
@@ -169,7 +168,7 @@ class DebateLoginControllerTest {
 
     private fun returnTokenFromApi(token: String) {
         apiSubject.onNext(LoginResponse(token))
-        apiSubject.onCompleted()
+        apiSubject.onComplete()
     }
 
     private fun logToDebate(debateCode: String = "12345") {

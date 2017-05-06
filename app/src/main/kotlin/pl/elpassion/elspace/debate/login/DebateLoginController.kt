@@ -1,9 +1,9 @@
 package pl.elpassion.elspace.debate.login
 
+import io.reactivex.Single
+import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebateTokenRepository
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 
 class DebateLoginController(
         private val view: DebateLogin.View,
@@ -36,11 +36,11 @@ class DebateLoginController(
 
     private fun getAuthTokenObservable(debateCode: String) =
             if (tokenRepo.hasToken(debateCode)) {
-                Observable.just(tokenRepo.getTokenForDebate(debateCode))
+                Single.just(tokenRepo.getTokenForDebate(debateCode))
             } else {
                 loginApi.login(debateCode)
                         .map { it.authToken }
-                        .doOnNext { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
+                        .doOnSuccess { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }
 
     fun onDestroy() {

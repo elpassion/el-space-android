@@ -3,7 +3,7 @@ package pl.elpassion.elspace.debate.login
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -16,7 +16,7 @@ class DebateLoginControllerTest {
     private val tokenRepo = mock<DebateTokenRepository>()
     private val loginApi = mock<DebateLogin.Api>()
     private val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
-    private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
+    private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
     fun setUp() {
@@ -167,8 +167,7 @@ class DebateLoginControllerTest {
     }
 
     private fun returnTokenFromApi(token: String) {
-        apiSubject.onNext(LoginResponse(token))
-        apiSubject.onComplete()
+        apiSubject.onSuccess(LoginResponse(token))
     }
 
     private fun logToDebate(debateCode: String = "12345") {

@@ -13,7 +13,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
 import org.junit.Rule
@@ -30,7 +30,7 @@ import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebateTokenRepository>()
-    private val apiSubject = PublishSubject.create<DebateLogin.Api.LoginResponse>()
+    private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
 
     @JvmField @Rule
     val intents = InitIntentsRule()
@@ -128,7 +128,7 @@ class DebateLoginActivityTest {
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
         loginToDebate("12345")
-        apiSubject.onNext(LoginResponse("authTokenFromApi"))
+        apiSubject.onSuccess(LoginResponse("authTokenFromApi"))
         verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "authTokenFromApi"),

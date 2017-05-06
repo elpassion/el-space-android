@@ -35,6 +35,12 @@ object HubRetrofitProvider : Provider<Retrofit>({
             baseUrl = "https://hub.elpassion.com/api/v1/")
 })
 
+object DebateRetrofitProvider : Provider<Retrofit>({
+    createRetrofit(
+            okHttpClient = defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build(),
+            baseUrl = "http://el-debate.herokuapp.com/api/")
+})
+
 private fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
     return Retrofit.Builder()
             .addCallAdapterFactory(rxJava2CallAdapterFactory)

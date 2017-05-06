@@ -24,18 +24,22 @@ private val httpLoggingInterceptor by lazy {
 }
 
 object UnauthenticatedRetrofitProvider : Provider<Retrofit>({
-    createRetrofit(defaultOkHttpClient().build())
+    createRetrofit(
+            okHttpClient = defaultOkHttpClient().build(),
+            baseUrl = "https://hub.elpassion.com/api/v1/")
 })
 
 object HubRetrofitProvider : Provider<Retrofit>({
-    createRetrofit(defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build())
+    createRetrofit(
+            okHttpClient = defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build(),
+            baseUrl = "https://hub.elpassion.com/api/v1/")
 })
 
-private fun createRetrofit(okHttpClient: OkHttpClient?): Retrofit {
+private fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
     return Retrofit.Builder()
             .addCallAdapterFactory(rxJava2CallAdapterFactory)
             .addConverterFactory(gsonConverter)
-            .baseUrl("https://hub.elpassion.com/api/v1/")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .build()
 }

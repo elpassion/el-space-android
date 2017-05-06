@@ -1,6 +1,6 @@
 package pl.elpassion.elspace.hub.report.edit
 
-import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.api.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
@@ -50,6 +50,6 @@ interface ReportEdit {
     }
 
     object ApiProvider : Provider<Api>({
-        RetrofitProvider.get().create(Api::class.java)
+        HubRetrofitProvider.get().create(Api::class.java)
     })
 }

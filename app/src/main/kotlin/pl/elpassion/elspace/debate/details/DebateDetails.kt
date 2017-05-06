@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.debate.details
 
 import io.reactivex.Observable
-import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.api.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 
 interface DebateDetails {
@@ -20,6 +20,6 @@ interface DebateDetails {
     }
 
     object ApiProvider: Provider<DebateDetails.Api>({
-        RetrofitProvider.get().create(DebateDetails.Api::class.java)
+        HubRetrofitProvider.get().create(DebateDetails.Api::class.java)
     })
 }

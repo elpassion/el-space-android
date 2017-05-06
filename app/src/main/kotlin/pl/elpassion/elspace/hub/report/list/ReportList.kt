@@ -1,6 +1,6 @@
 package pl.elpassion.elspace.hub.report.list
 
-import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.api.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project
@@ -63,7 +63,7 @@ interface ReportList {
     }
 
     object ReportApiProvider : Provider<ReportApi>({
-        RetrofitProvider.get().create(ReportApi::class.java)
+        HubRetrofitProvider.get().create(ReportApi::class.java)
     })
 
     interface ProjectApi {
@@ -72,7 +72,7 @@ interface ReportList {
     }
 
     object ProjectApiProvider : Provider<ProjectApi>({
-        RetrofitProvider.get().create(ProjectApi::class.java)
+        HubRetrofitProvider.get().create(ProjectApi::class.java)
     })
 
     object ProjectListServiceProvider : Provider<ProjectListService>({

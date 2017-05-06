@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.debate.login
 
 import io.reactivex.Observable
-import pl.elpassion.elspace.api.RetrofitProvider
+import pl.elpassion.elspace.api.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 
 interface DebateLogin {
@@ -19,7 +19,7 @@ interface DebateLogin {
     }
 
     object ApiProvider: Provider<Api>({
-        RetrofitProvider.get().create(Api::class.java)
+        HubRetrofitProvider.get().create(Api::class.java)
     })
 
 }

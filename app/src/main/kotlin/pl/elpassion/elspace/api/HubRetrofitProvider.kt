@@ -27,7 +27,7 @@ object UnauthenticatedRetrofitProvider : Provider<Retrofit>({
     createRetrofit(defaultOkHttpClient().build())
 })
 
-object RetrofitProvider : Provider<Retrofit>({
+object HubRetrofitProvider : Provider<Retrofit>({
     createRetrofit(defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build())
 })
 

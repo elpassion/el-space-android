@@ -4,7 +4,7 @@ import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -15,7 +15,7 @@ import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.inten
 
 class DebateDetailsActivityTest {
 
-    private val debateDetailsSubject = PublishSubject.create<DebateData>()
+    private val debateDetailsSubject = SingleSubject.create<DebateData>()
     private val sendVoteSubject = CompletableSubject.create()
     private val apiMock by lazy {
         mock<DebateDetails.Api>().apply {
@@ -71,14 +71,13 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowLoaderWhenCallingApi() {
         startActivity()
-        debateDetailsSubject.onNext(createDebateData())
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldNotShowLoaderWhenApiCallFinished() {
         startActivity()
-        debateDetailsSubject.onComplete()
+        debateDetailsSubject.onSuccess(createDebateData())
         onId(R.id.loader).doesNotExist()
     }
 
@@ -161,8 +160,7 @@ class DebateDetailsActivityTest {
     }
 
     private fun getDebateDetailsSuccessfully() {
-        debateDetailsSubject.onNext(createDebateData())
-        debateDetailsSubject.onComplete()
+        debateDetailsSubject.onSuccess(createDebateData())
     }
 
     private fun voteSuccessfully() {
@@ -171,7 +169,6 @@ class DebateDetailsActivityTest {
 
     private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData) {
         startActivity()
-        debateDetailsSubject.onNext(debateData)
-        debateDetailsSubject.onComplete()
+        debateDetailsSubject.onSuccess(debateData)
     }
 }

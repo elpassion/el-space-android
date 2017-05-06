@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.details
 import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Rule
@@ -15,7 +16,7 @@ import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.inten
 class DebateDetailsActivityTest {
 
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
-    private val sendVoteSubject = PublishSubject.create<Unit>()
+    private val sendVoteSubject = CompletableSubject.create()
     private val apiMock by lazy {
         mock<DebateDetails.Api>().apply {
             whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
@@ -165,7 +166,6 @@ class DebateDetailsActivityTest {
     }
 
     private fun voteSuccessfully() {
-        sendVoteSubject.onNext(Unit)
         sendVoteSubject.onComplete()
     }
 

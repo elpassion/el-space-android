@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.debate.details
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
@@ -13,7 +14,7 @@ interface DebateDetails {
         @GET("debate")
         fun getDebateDetails(@Header("Authorization") token: String): Observable<DebateData>
         @POST("vote")
-        fun vote(@Header("Authorization") token: String, @Body answer: Answer): Observable<Unit>
+        fun vote(@Header("Authorization") token: String, @Body answer: Answer): Completable
     }
 
     interface View {

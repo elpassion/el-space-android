@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.details
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -16,7 +17,7 @@ class DebateDetailsControllerTest {
     private val view = mock<DebateDetails.View>()
     private val controller = DebateDetailsController(api, view, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val debateDetailsSubject = PublishSubject.create<DebateData>()
-    private val sendVoteSubject = PublishSubject.create<Unit>()
+    private val sendVoteSubject = CompletableSubject.create()
 
     @Before
     fun setUp() {
@@ -175,7 +176,6 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldShowSuccessWhenVoteSuccessfully() {
         controller.onVote("", createAnswer())
-        sendVoteSubject.onNext(Unit)
         sendVoteSubject.onComplete()
         verify(view).showVoteSuccess()
     }

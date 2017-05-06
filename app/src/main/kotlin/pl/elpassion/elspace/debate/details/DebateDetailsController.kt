@@ -32,7 +32,7 @@ class DebateDetailsController(private val api: DebateDetails.Api, private val vi
                 .observeOn(schedulers.observeOn)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe({ view.showVoteSuccess() }, view::showVoteError)
+                .subscribe(view::showVoteSuccess, view::showVoteError)
                 .addTo(compositeDisposable)
     }
 

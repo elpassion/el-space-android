@@ -49,6 +49,15 @@
                     tools:text="Topic" />
             </android.support.v7.widget.CardView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_padding_value"
+                android:layout_marginTop="30dp"
+                android:text="@string/debate_details_choose_side"
+                android:textColor="@color/colorGreyLight"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/debatePositiveAnswer"
                 android:layout_width="match_parent"

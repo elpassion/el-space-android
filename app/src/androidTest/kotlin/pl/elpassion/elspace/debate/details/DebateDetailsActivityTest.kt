@@ -59,6 +59,12 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowChooseSideInfo() {
+        startActivity()
+        onText(R.string.debate_details_choose_side).isDisplayed()
+    }
+
+    @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()

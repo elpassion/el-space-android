@@ -59,4 +59,5 @@
     <string name="filter_not_filled">Filter</string>
     <string name="empty_description_error">Description cannot be empty.</string>
     <string name="empty_project_error">Project name cannot be empty</string>
+    <string name="debate_details_choose_side">Choose your side with one of the following:</string>
 </resources>

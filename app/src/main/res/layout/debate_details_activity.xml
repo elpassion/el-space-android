@@ -23,6 +23,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorGreyVeryLight"
         android:padding="@dimen/default_padding_value"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -31,11 +32,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/debateTopic"
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="Topic" />
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardElevation="@dimen/cardview_default_elevation">
+
+                <TextView
+                    android:id="@+id/debateTopic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/default_padding_value"
+                    android:textColor="@color/colorGreyDark"
+                    android:textSize="24sp"
+                    tools:text="Topic" />
+            </android.support.v7.widget.CardView>
 
             <Button
                 android:id="@+id/debatePositiveAnswer"

@@ -22,5 +22,8 @@
     <color name="textUnderline">#e2e2e2</color>
     <color name="colorViolet">#AB9BFF</color>
     <color name="colorGrey">#C0C0C0</color>
+    <color name="colorGreyLight">#B8B8B8</color>
+    <color name="colorGreyVeryLight">#F8FAF8</color>
+    <color name="colorGreyDark">#4A4A4A</color>
 
 </resources>

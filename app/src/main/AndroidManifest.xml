@@ -40,7 +40,9 @@
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />
-        <activity android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity" />
+        <activity
+            android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

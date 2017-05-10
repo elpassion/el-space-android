@@ -33,6 +33,14 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowToolbarWithCorrectTitle() {
+        startActivity()
+        onId(R.id.toolbar)
+                .isDisplayed()
+                .hasChildWithText(R.string.debate_details_title)
+    }
+
+    @Test
     fun shouldShowTopicReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()

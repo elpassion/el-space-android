@@ -9,6 +9,7 @@
     <string name="debate_login_hint_pin">Enter El Debate PIN</string>
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
+    <string name="debate_details_title">EL Debate 2017</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>

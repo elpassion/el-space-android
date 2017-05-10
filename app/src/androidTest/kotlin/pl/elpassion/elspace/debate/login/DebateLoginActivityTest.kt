@@ -107,9 +107,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowDebateDetailsOnLoginClick() {
-        stubAllIntents()
-        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        stubIntentAndRepo()
         loginToDebate("12345")
         checkIntent(DebateDetailsActivity::class.java)
     }
@@ -123,9 +121,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldOpenDebateScreenWithTokenFromRepo() {
-        stubAllIntents()
-        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        stubIntentAndRepo()
         loginToDebate("12345")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "tokenFromRepo"),
@@ -142,12 +138,18 @@ class DebateLoginActivityTest {
                 hasExtra("debateAuthTokenKey", "authTokenFromApi"),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
-    
+
     @Test
     fun shouldShowErrorWhenLoginFails() {
         apiSubject.onError(RuntimeException())
         loginToDebate("12345")
         onText(R.string.debate_login_fail).isDisplayed()
+    }
+
+    private fun stubIntentAndRepo() {
+        stubAllIntents()
+        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
+        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
     }
 
     private fun loginToDebate(debateCode: String) {

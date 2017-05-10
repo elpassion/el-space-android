@@ -37,7 +37,7 @@ object HubRetrofitProvider : Provider<Retrofit>({
 
 object DebateRetrofitProvider : Provider<Retrofit>({
     createRetrofit(
-            okHttpClient = defaultOkHttpClient().addInterceptor(xTokenInterceptor()).build(),
+            okHttpClient = defaultOkHttpClient().build(),
             baseUrl = "http://el-debate.herokuapp.com/api/")
 })
 

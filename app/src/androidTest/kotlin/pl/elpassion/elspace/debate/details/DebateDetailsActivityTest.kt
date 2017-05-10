@@ -5,10 +5,12 @@ import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
@@ -38,6 +40,13 @@ class DebateDetailsActivityTest {
         onId(R.id.toolbar)
                 .isDisplayed()
                 .hasChildWithText(R.string.debate_details_title)
+    }
+
+    @Test
+    fun shouldExitScreenOnBackArrowClick() {
+        startActivity()
+        onToolbarBackArrow().click()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     @Test

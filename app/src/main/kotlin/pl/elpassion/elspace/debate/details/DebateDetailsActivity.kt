@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 
@@ -34,8 +37,12 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
+        setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         controller.onCreate(token)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun onDestroy() {
         controller.onDestroy()

@@ -71,9 +71,15 @@
         <item name="android:layout_width">2dp</item>
     </style>
 
-    <style name="HintViolet" >
+    <style name="HintViolet">
         <item name="colorAccent">@color/colorViolet</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorViolet</item>
+    </style>
+
+    <style name="HintGrey">
+        <item name="colorAccent">@color/colorGrey</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorGrey</item>
     </style>
 </resources>

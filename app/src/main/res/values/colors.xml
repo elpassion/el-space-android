@@ -21,5 +21,6 @@
     <color name="defaultTextColor">#5F5A6A</color>
     <color name="textUnderline">#e2e2e2</color>
     <color name="colorViolet">#AB9BFF</color>
+    <color name="colorGrey">#C0C0C0</color>
 
 </resources>

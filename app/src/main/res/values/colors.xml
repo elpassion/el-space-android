@@ -25,5 +25,6 @@
     <color name="colorGreyLight">#B8B8B8</color>
     <color name="colorGreyVeryLight">#F8FAF8</color>
     <color name="colorGreyDark">#4A4A4A</color>
+    <color name="colorBlue">#0098E3</color>
 
 </resources>

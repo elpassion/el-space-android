@@ -20,70 +20,90 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorGreyVeryLight"
-        android:padding="@dimen/default_padding_value"
+        android:orientation="vertical"
+        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardElevation="@dimen/cardview_default_elevation">
 
-            <android.support.v7.widget.CardView
+            <TextView
+                android:id="@+id/debateTopic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardElevation="@dimen/cardview_default_elevation">
+                android:gravity="center"
+                android:padding="16dp"
+                android:textColor="@color/colorGreyDark"
+                android:textSize="24sp"
+                tools:text="Topic" />
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/debate_details_choose_side"
+            android:textColor="@color/colorGreyLight"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardElevation="@dimen/cardview_default_elevation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/debateTopic"
-                    android:layout_width="match_parent"
+                    android:id="@+id/debatePositiveAnswer"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/default_padding_value"
-                    android:textColor="@color/colorGreyDark"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlue"
                     android:textSize="24sp"
-                    tools:text="Topic" />
-            </android.support.v7.widget.CardView>
+                    tools:text="Positive answer" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_padding_value"
-                android:layout_marginTop="30dp"
-                android:text="@string/debate_details_choose_side"
-                android:textColor="@color/colorGreyLight"
-                android:textSize="12sp" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/hand_grey_light" />
 
-            <Button
-                android:id="@+id/debatePositiveAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Positive answer" />
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/debateNegativeAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Negative answer" />
+        </android.support.v7.widget.CardView>
 
-            <Button
-                android:id="@+id/debateNeutralAnswer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Neutral answer" />
+        <Button
+            android:id="@+id/debateNegativeAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Negative answer" />
 
-            <TextView
-                android:id="@+id/debateStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Status" />
+        <Button
+            android:id="@+id/debateNeutralAnswer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Neutral answer" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/debateStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Status" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

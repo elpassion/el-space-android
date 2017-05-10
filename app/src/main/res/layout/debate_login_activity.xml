@@ -81,7 +81,7 @@
                 android:id="@+id/debateLoginTopText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="16dp"
                 android:gravity="center_horizontal"
                 android:text="@string/debate_login_welcome"
                 android:textColor="@color/black"

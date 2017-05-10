@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_login_activity.*
@@ -35,6 +36,12 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         showBackArrowOnActionBar()
         debateLoginButton.setOnClickListener {
             controller.onLogToDebate(debateLoginInputText.text.toString())
+        }
+        debateLoginInputText.setOnEditorActionListener { inputText, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                controller.onLogToDebate(inputText.text.toString())
+            }
+            false
         }
     }
 

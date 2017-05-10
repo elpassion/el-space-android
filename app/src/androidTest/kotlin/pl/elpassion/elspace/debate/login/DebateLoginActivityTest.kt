@@ -31,6 +31,7 @@ class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebateTokenRepository>()
     private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
+    private val api = mock<DebateLogin.Api>()
 
     @JvmField @Rule
     val intents = InitIntentsRule()
@@ -39,7 +40,7 @@ class DebateLoginActivityTest {
     val rule = rule<DebateLoginActivity> {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
         DebateTokenRepositoryProvider.override = { tokenRepo }
-        DebateLogin.ApiProvider.override = { mock<DebateLogin.Api>().apply { whenever(login(any())).thenReturn(apiSubject) } }
+        DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
 
     @Test
@@ -111,6 +112,13 @@ class DebateLoginActivityTest {
         whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
         loginToDebate("12345")
         checkIntent(DebateDetailsActivity::class.java)
+    }
+
+    @Test
+    fun shouldPerformConfirmActionOnKeyboardConfirmClick() {
+        onId(R.id.debateLoginInputText).replaceText("12345")
+        onId(R.id.debateLoginInputText).pressImeActionButton()
+        verify(api).login(any())
     }
 
     @Test

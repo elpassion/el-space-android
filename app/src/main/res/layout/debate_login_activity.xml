@@ -47,6 +47,7 @@
                     android:drawableStart="@drawable/key"
                     android:gravity="center_horizontal"
                     android:hint="@string/debate_login_hint_pin"
+                    android:imeOptions="actionDone"
                     android:inputType="number"
                     android:maxLength="5" />
             </android.support.design.widget.TextInputLayout>

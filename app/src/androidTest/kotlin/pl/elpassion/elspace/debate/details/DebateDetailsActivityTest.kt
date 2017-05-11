@@ -65,6 +65,12 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowRememberInfo() {
+        startActivity()
+        onText(R.string.debate_details_info_remember).isDisplayed()
+    }
+
+    @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()

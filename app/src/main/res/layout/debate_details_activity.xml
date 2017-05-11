@@ -28,8 +28,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -44,6 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@string/debate_details_info_choose_side"
                 android:textColor="@color/greyLightText"
                 android:textSize="12sp" />
@@ -53,6 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/cardview_default_radius"
                 app:cardElevation="@dimen/cardview_default_elevation">
@@ -87,6 +89,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/cardview_default_radius"
                 app:cardElevation="@dimen/cardview_default_elevation">
@@ -121,6 +125,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/cardview_default_radius"
                 app:cardElevation="@dimen/cardview_default_elevation">
@@ -153,6 +159,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:text="@string/debate_details_info_remember"
                 android:textColor="@color/greyLightText"
                 android:textSize="12sp" />
@@ -169,6 +177,8 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 app:cardCornerRadius="@dimen/cardview_default_radius"
                 app:cardElevation="@dimen/cardview_default_elevation">
 

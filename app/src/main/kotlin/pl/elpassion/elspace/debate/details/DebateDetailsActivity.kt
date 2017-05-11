@@ -51,8 +51,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showDebateDetails(debateDetails: DebateData) {
         debateTopic.text = debateDetails.topic
-        debatePositiveAnswer.text = debateDetails.answers.positive.value
-        debatePositiveAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.positive) }
+        debatePositiveAnswerText.text = debateDetails.answers.positive.value
+        debatePositiveAnswerButton.setOnClickListener { controller.onVote(token, debateDetails.answers.positive) }
         debateNegativeAnswer.text = debateDetails.answers.negative.value
         debateNegativeAnswer.setOnClickListener { controller.onVote(token, debateDetails.answers.negative) }
         debateNeutralAnswer.text = debateDetails.answers.neutral.value

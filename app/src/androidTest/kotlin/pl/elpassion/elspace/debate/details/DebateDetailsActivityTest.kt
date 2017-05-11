@@ -68,7 +68,7 @@ class DebateDetailsActivityTest {
     fun shouldShowPositiveAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debatePositiveAnswer)
+        onId(R.id.debatePositiveAnswerText)
                 .isDisplayed()
                 .hasText("answerPositive")
     }
@@ -149,7 +149,7 @@ class DebateDetailsActivityTest {
         val token = "newToken"
         startActivity(token)
         getDebateDetailsSuccessfully()
-        onId(R.id.debatePositiveAnswer).click()
+        onId(R.id.debatePositiveAnswerButton).click()
         verify(apiMock).vote(eq(token), any())
     }
 
@@ -157,7 +157,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debatePositiveAnswer).click()
+        onId(R.id.debatePositiveAnswerButton).click()
         verify(apiMock).vote("token", debateData.answers.positive)
     }
 

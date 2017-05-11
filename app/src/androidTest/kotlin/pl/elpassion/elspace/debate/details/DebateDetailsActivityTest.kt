@@ -61,7 +61,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowChooseSideInfo() {
         startActivity()
-        onText(R.string.debate_details_choose_side).isDisplayed()
+        onText(R.string.debate_details_info_choose_side).isDisplayed()
     }
 
     @Test

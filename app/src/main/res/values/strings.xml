@@ -10,6 +10,8 @@
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_title">EL Debate 2017</string>
+    <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>
+    <string name="debate_details_info_remember">Remember that you can change your mind before debate ends, thats why we are here!</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
@@ -59,5 +61,4 @@
     <string name="filter_not_filled">Filter</string>
     <string name="empty_description_error">Description cannot be empty.</string>
     <string name="empty_project_error">Project name cannot be empty</string>
-    <string name="debate_details_choose_side">Choose your side with one of the following:</string>
 </resources>

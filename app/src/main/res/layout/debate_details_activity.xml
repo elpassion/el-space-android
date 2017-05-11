@@ -157,11 +157,6 @@
                 android:textColor="@color/greyLightText"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/debateStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Status" />
         </LinearLayout>
 
         <LinearLayout

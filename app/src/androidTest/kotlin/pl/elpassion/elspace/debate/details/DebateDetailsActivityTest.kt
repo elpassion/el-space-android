@@ -112,8 +112,8 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
-        startActivity()
         debateDetailsSubject.onError(RuntimeException())
+        startActivity()
         onText(R.string.debate_details_error).isDisplayed()
     }
 
@@ -121,8 +121,8 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNegativeAnswerButton).click()
         voteSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
@@ -130,8 +130,8 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNeutralAnswerButton).click()
         sendVoteSubject.onError(RuntimeException())
+        onId(R.id.debateNeutralAnswerButton).click()
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
 

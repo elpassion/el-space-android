@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.details
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -64,14 +65,18 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) {
-        debateStatus.text = getString(R.string.debate_details_error)
-    }
-
-    override fun showVoteSuccess() {
-        debateStatus.text = getString(R.string.debate_details_vote_success)
+        showSnackbar(getString(R.string.debate_details_error))
     }
 
     override fun showVoteError(exception: Throwable) {
-        debateStatus.text = getString(R.string.debate_details_vote_error)
+        showSnackbar(getString(R.string.debate_details_vote_error))
+    }
+
+    private fun showSnackbar(text: String) {
+        Snackbar.make(debateDetailsCoordinator, text, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
+    override fun showVoteSuccess() {
+        Snackbar.make(debateDetailsCoordinator, getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT).show()
     }
 }

@@ -21,12 +21,13 @@
     <color name="defaultTextColor">#5F5A6A</color>
     <color name="textUnderline">#e2e2e2</color>
     <color name="colorViolet">#AB9BFF</color>
-    <color name="colorGrey">#C0C0C0</color>
-    <color name="colorGreyLight">#B8B8B8</color>
-    <color name="colorGreyVeryLight">#F8FAF8</color>
-    <color name="colorGreyDark">#4A4A4A</color>
-    <color name="colorBlue">#0098E3</color>
-    <color name="colorRed">#E44043</color>
-    <color name="colorGreyGreen">#8F8F8F</color>
+    <color name="greyHint">#C0C0C0</color>
+    <color name="greyLightText">#B8B8B8</color>
+    <color name="greyDarkText">#4A4A4A</color>
+    <color name="greyActivityBackground">#F8FAF8</color>
+    <color name="greyHandBackground">#EAEAEA</color>
+    <color name="blueDebatePositive">#0098E3</color>
+    <color name="redDebateNegative">#E44043</color>
+    <color name="greyDebateNeutral">#8F8F8F</color>
 
 </resources>

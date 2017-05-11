@@ -78,8 +78,8 @@
     </style>
 
     <style name="HintGrey">
-        <item name="colorAccent">@color/colorGrey</item>
+        <item name="colorAccent">@color/greyHint</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/colorGrey</item>
+        <item name="android:textColor">@color/greyHint</item>
     </style>
 </resources>

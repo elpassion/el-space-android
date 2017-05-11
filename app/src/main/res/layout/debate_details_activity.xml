@@ -23,7 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorGreyVeryLight"
+        android:background="@color/greyActivityBackground"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="16dp"
-                android:textColor="@color/colorGreyDark"
+                android:textColor="@color/greyDarkText"
                 android:textSize="24sp"
                 tools:text="Topic" />
         </android.support.v7.widget.CardView>
@@ -51,7 +51,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginTop="30dp"
             android:text="@string/debate_details_choose_side"
-            android:textColor="@color/colorGreyLight"
+            android:textColor="@color/greyLightText"
             android:textSize="12sp" />
 
         <android.support.v7.widget.CardView
@@ -74,14 +74,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
-                    android:textColor="@color/colorBlue"
+                    android:textColor="@color/blueDebatePositive"
                     android:textSize="24sp"
                     tools:text="Positive answer" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/hand_grey_light" />
+                    android:background="@drawable/hand_background_blue"
+                    android:padding="10dp"
+                    android:src="@drawable/hand" />
 
             </LinearLayout>
 
@@ -107,14 +109,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
-                    android:textColor="@color/colorRed"
+                    android:textColor="@color/redDebateNegative"
                     android:textSize="24sp"
                     tools:text="Negative answer" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/hand_grey_light" />
+                    android:background="@drawable/hand_background_red"
+                    android:padding="10dp"
+                    android:src="@drawable/hand" />
 
             </LinearLayout>
 
@@ -140,14 +144,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
-                    android:textColor="@color/colorGreyGreen"
+                    android:textColor="@color/greyDebateNeutral"
                     android:textSize="24sp"
                     tools:text="Neutral answer" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/hand_grey_light" />
+                    android:background="@drawable/hand_background_grey"
+                    android:padding="10dp"
+                    android:src="@drawable/hand" />
 
             </LinearLayout>
 

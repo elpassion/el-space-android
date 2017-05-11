@@ -77,7 +77,7 @@ class DebateDetailsActivityTest {
     fun shouldShowNegativeAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNegativeAnswer)
+        onId(R.id.debateNegativeAnswerText)
                 .isDisplayed()
                 .hasText("answerNegative")
     }
@@ -86,7 +86,7 @@ class DebateDetailsActivityTest {
     fun shouldShowNeutralAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNeutralAnswer)
+        onId(R.id.debateNeutralAnswerText)
                 .isDisplayed()
                 .hasText("answerNeutral")
     }
@@ -115,7 +115,7 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNegativeAnswer).click()
+        onId(R.id.debateNegativeAnswerButton).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
@@ -124,7 +124,7 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNeutralAnswer).click()
+        onId(R.id.debateNeutralAnswerButton).click()
         sendVoteSubject.onError(RuntimeException())
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
@@ -133,7 +133,7 @@ class DebateDetailsActivityTest {
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
         startActivity()
         getDebateDetailsSuccessfully()
-        onId(R.id.debateNeutralAnswer).click()
+        onId(R.id.debateNeutralAnswerButton).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_error).doesNotExist()
     }
@@ -165,7 +165,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debateNegativeAnswer).click()
+        onId(R.id.debateNegativeAnswerButton).click()
         verify(apiMock).vote("token", debateData.answers.negative)
     }
 
@@ -173,7 +173,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debateNeutralAnswer).click()
+        onId(R.id.debateNeutralAnswerButton).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
     }
 

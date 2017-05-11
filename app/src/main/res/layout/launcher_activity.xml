@@ -35,7 +35,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryGreen"
                 android:text="@string/launcher_button_debate" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -50,9 +49,6 @@
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
                 android:src="@drawable/launcher_background" />
-
         </LinearLayout>
-
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

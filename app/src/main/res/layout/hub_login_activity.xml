@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/hub_login_title" />
-
     </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
@@ -46,7 +45,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hub_login_hint_token"
                     android:textColor="@color/colorViolet" />
-
             </android.support.design.widget.TextInputLayout>
 
             <Button
@@ -71,7 +69,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -86,9 +83,6 @@
                 android:layout_height="wrap_content"
                 android:scaleType="centerInside"
                 android:src="@drawable/launcher_background" />
-
         </LinearLayout>
-
     </RelativeLayout>
-
 </android.support.design.widget.CoordinatorLayout>

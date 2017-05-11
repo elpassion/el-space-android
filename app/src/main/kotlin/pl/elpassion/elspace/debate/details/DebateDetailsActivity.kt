@@ -67,7 +67,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateStatus.text = getString(R.string.debate_details_error)
     }
 
-    override fun showVoteSuccess() {
+    override fun showVoteSuccess(answer: Answer) {
         debateStatus.text = getString(R.string.debate_details_vote_success)
     }
 

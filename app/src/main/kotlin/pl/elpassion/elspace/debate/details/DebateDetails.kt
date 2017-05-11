@@ -22,7 +22,7 @@ interface DebateDetails {
         fun showLoader()
         fun hideLoader()
         fun showDebateDetailsError(exception: Throwable)
-        fun showVoteSuccess()
+        fun showVoteSuccess(answer: Answer)
         fun showVoteError(exception: Throwable)
     }
 

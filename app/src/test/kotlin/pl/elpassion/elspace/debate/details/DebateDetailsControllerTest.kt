@@ -175,9 +175,10 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldShowSuccessWhenVoteSuccessfully() {
-        controller.onVote("", createAnswer())
+        val answer = createAnswer()
+        controller.onVote("", answer)
         sendVoteSubject.onComplete()
-        verify(view).showVoteSuccess()
+        verify(view).showVoteSuccess(answer)
     }
 
     @Test

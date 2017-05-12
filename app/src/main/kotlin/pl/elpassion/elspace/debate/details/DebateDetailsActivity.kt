@@ -9,6 +9,7 @@ import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
+import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem

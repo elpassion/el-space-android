@@ -39,7 +39,7 @@ class DebateDetailsActivityTest {
         startActivity()
         onId(R.id.toolbar)
                 .isDisplayed()
-                .hasChildWithText(R.string.debate_details_title)
+                .hasChildWithText(R.string.debate_title)
     }
 
     @Test

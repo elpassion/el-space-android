@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_login_activity.*
+import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -64,6 +65,6 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showWrongPinError() {
-        Snackbar.make(debateLoginCoordinator, R.string.debate_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 }

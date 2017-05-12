@@ -47,7 +47,7 @@ class DebateLoginActivityTest {
     fun shouldShowToolbarWithCorrectTitle() {
         onId(R.id.toolbar)
                 .isDisplayed()
-                .hasChildWithText(R.string.debate_login_title)
+                .hasChildWithText(R.string.debate_title)
     }
 
     @Test
@@ -97,12 +97,12 @@ class DebateLoginActivityTest {
     @Test
     fun shouldShowErrorOnLoginButtonClickIfDebateCodeIsIncorrect() {
         loginToDebate("12")
-        onText(R.string.debate_code_incorrect).isDisplayed()
+        onText(R.string.debate_login_code_incorrect).isDisplayed()
     }
 
     @Test
     fun shouldNotShowErrorOnStart() {
-        onText(R.string.debate_code_incorrect).doesNotExist()
+        onText(R.string.debate_login_code_incorrect).doesNotExist()
     }
 
     @Test

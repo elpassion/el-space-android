@@ -114,8 +114,9 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldPerformConfirmActionOnKeyboardConfirmClick() {
-        onId(R.id.debateLoginInputText).replaceText("12345")
-        onId(R.id.debateLoginInputText).pressImeActionButton()
+        onId(R.id.debateLoginInputText)
+                .replaceText("12345")
+                .pressImeActionButton()
         verify(api).login(any())
     }
 

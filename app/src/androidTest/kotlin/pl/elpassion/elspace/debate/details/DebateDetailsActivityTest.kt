@@ -50,6 +50,12 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowTopicInfo() {
+        startActivity()
+        onText(R.string.debate_details_info_topic).isDisplayed()
+    }
+
+    @Test
     fun shouldShowTopicReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()

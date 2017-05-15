@@ -9,6 +9,7 @@
     <string name="debate_login_hint_pin">Enter EL Debate PIN</string>
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_fail">Ops, something went wrong. Check your internet connection or inserted debate code.</string>
+    <string name="debate_details_info_topic">Our debate is about:</string>
     <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>
     <string name="debate_details_info_remember">Remember that you can change your mind before debate ends, thats why we are here!</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>

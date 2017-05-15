@@ -29,5 +29,6 @@
     <color name="blueDebatePositive">#0098E3</color>
     <color name="redDebateNegative">#E44043</color>
     <color name="greyDebateNeutral">#8F8F8F</color>
+    <color name="redGoogleButton">#EF5350</color>
 
 </resources>

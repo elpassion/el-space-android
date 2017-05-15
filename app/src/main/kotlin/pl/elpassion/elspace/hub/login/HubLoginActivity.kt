@@ -41,7 +41,11 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         hubLoginByTokenButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubLoginHubLinkButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        hubLoginGoogleLoginButton.addView(getSignInButton())
+        googleSingInController.initializeGoogleSignIn(
+                activity = this,
+                onSuccess = { controller.onGoogleToken(it) },
+                onFailure = {})
+        hubLoginGoogleSignInButton.setOnClickListener { googleSingInController.onGoogleSignInClick() }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -70,9 +74,4 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         googleSingInController.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
-
-    private fun getSignInButton() = googleSingInController.initializeGoogleSingInButton(
-            activity = this,
-            onSuccess = { controller.onGoogleToken(it) },
-            onFailure = {})
 }

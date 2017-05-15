@@ -15,11 +15,6 @@ fun <T> Observable<T>.catchOnError(handleOnError: (throwable: Throwable) -> Unit
             Observable.empty()
         }
 
-// note: this can run action more than once
-fun <T> Observable<T>.doFinally(action: () -> Unit): Observable<T> = this
-        .doOnTerminate(action)
-        .doOnDispose(action)
-
 fun <T1, T2, R> combineLatest(source1: ObservableSource<T1>, source2: ObservableSource<T2>, combiner: (T1, T2) -> R)
         = Observable.combineLatest(source1, source2, BiFunction(combiner))
 

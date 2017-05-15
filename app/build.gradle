@@ -86,7 +86,6 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
     compile "io.reactivex.rxjava2:rxjava:$rxjava2_version"
-    compile 'io.reactivex:rxandroid:1.2.1'
     compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxBinding"
     compile "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxBinding"
     compile "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxBinding"

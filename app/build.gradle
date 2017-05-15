@@ -3,8 +3,8 @@ buildscript {
     ext.espressoVersion = '2.2.2'
     ext.retrofit_version = '2.2.0'
     ext.support_version = '25.3.1'
-    ext.rxjava2_version = '2.0.8'
-    ext.elCommon = '0.0.12'
+    ext.rxjava2_version = '2.1.0'
+    ext.elCommon = '0.0.13'
     ext.rxBinding = '2.0.0'
 
     repositories {
@@ -12,7 +12,7 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.21.6'
+        classpath 'io.fabric.tools:gradle:1.22.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
         classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
@@ -30,7 +30,7 @@ apply from: 'src/release/google-signing-credentials.gradle'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "pl.elpassion.elspace"
         minSdkVersion 19
@@ -107,7 +107,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'gridlayout-v7'
     }
-    compile 'com.google.android.gms:play-services-auth:10.2.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.4'
 
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile 'junit:junit:4.12'

@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.hub_login_activity.*
@@ -19,7 +23,7 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
-class HubLoginActivity : AppCompatActivity(), HubLogin.View {
+class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnConnectionFailedListener {
 
     private val controller = HubLoginController(
             view = this,
@@ -27,12 +31,6 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
             shortcutService = ShortcutServiceImpl(this),
             api = HubLoginTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
-
-    private val googleSingInController = GoogleSingInController()
-
-    companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, HubLoginActivity::class.java))
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +40,20 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         hubLoginByTokenButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubLoginHubLinkButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        googleSingInController.initializeGoogleSignIn(
-                activity = this,
-                onSuccess = { controller.onGoogleToken(it) },
-                onFailure = {})
-        hubLoginGoogleSignInButton.setOnClickListener { googleSingInController.onGoogleSignInClick() }
+        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, getGoogleApiClient(), RC_SIGN_IN) }
     }
+
+    private fun getGoogleApiClient() =
+            GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, getGoogleSignInOptions())
+                    .build()
+
+    private fun getGoogleSignInOptions() =
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.server_client_id))
+                    .requestEmail()
+                    .build()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
@@ -72,7 +78,37 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
     override fun hideLoader() = hideLoader(hubLoginCoordinator)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        googleSingInController.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val result = GoogleSingInDI.getELPGoogleSignInResultFromIntent(data)
+            handleSignInResult(result)
+        }
         super.onActivityResult(requestCode, resultCode, data)
     }
+
+    private fun handleSignInResult(result: ELPGoogleSignInResult) {
+        if (result.isSuccess) {
+            val googleToken = result.idToken
+            if (googleToken != null) {
+                controller.onGoogleToken(googleToken)
+            } else {
+                onFailure()
+            }
+        } else {
+            onFailure()
+        }
+    }
+
+    override fun onConnectionFailed(p0: ConnectionResult) = onFailure()
+
+    private fun onFailure() {
+
+    }
+
+    companion object {
+        private val RC_SIGN_IN = 64927
+        fun start(context: Context) = context.startActivity(Intent(context, HubLoginActivity::class.java))
+    }
+
 }
+
+typealias OnGoogleClick = () -> Unit

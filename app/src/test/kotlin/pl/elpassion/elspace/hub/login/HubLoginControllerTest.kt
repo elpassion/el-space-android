@@ -201,10 +201,16 @@ class HubLoginControllerTest {
         verify(view, never()).showGoogleTokenError()
     }
 
-    private fun createGoogleSingInResult(isSuccess: Boolean): ELPGoogleSignInResult {
+    @Test
+    fun shouldShowGoogleTokenErrorWhenSignInEndsWithSuccessButIdTokenIsNull() {
+        createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true, idToken = null))
+        verify(view).showGoogleTokenError()
+    }
+
+    private fun createGoogleSingInResult(isSuccess: Boolean, idToken: String? = ""): ELPGoogleSignInResult {
         return object : ELPGoogleSignInResult {
             override val isSuccess: Boolean = isSuccess
-            override val idToken: String? = null
+            override val idToken: String? = idToken
         }
     }
 

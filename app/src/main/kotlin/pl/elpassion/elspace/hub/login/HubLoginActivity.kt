@@ -25,6 +25,18 @@ import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnConnectionFailedListener {
 
+    private val googleApiClient :GoogleApiClient by lazy {
+
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .build()
+        GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .build()
+    }
+
     private val controller = HubLoginController(
             view = this,
             loginRepository = HubLoginRepositoryProvider.get(),
@@ -40,20 +52,9 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnC
         hubLoginByTokenButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubLoginHubLinkButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, getGoogleApiClient(), RC_SIGN_IN) }
+        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, googleApiClient, RC_SIGN_IN) }
     }
 
-    private fun getGoogleApiClient() =
-            GoogleApiClient.Builder(this)
-                    .enableAutoManage(this, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, getGoogleSignInOptions())
-                    .build()
-
-    private fun getGoogleSignInOptions() =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.server_client_id))
-                    .requestEmail()
-                    .build()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 

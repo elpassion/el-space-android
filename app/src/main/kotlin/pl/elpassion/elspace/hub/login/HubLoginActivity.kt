@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -23,16 +22,16 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
-class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnConnectionFailedListener {
+class HubLoginActivity : AppCompatActivity(), HubLogin.View {
 
-    private val googleApiClient :GoogleApiClient by lazy {
+    private val googleApiClient: GoogleApiClient by lazy {
 
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build()
         GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
+                .enableAutoManage(this, {})
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
@@ -84,12 +83,6 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnC
             controller.onGoogleSignInResult(result)
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    override fun onConnectionFailed(p0: ConnectionResult) = onFailure()
-
-    private fun onFailure() {
-
     }
 
     companion object {

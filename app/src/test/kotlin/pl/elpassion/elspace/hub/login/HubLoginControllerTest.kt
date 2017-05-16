@@ -196,8 +196,8 @@ class HubLoginControllerTest {
     }
 
     @Test
-    fun shouldNotShowGoogleTokenErrorWhenSignInEndsWithSuccess() {
-        createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true))
+    fun shouldNotShowGoogleTokenErrorWhenSignInEndsWithSuccessAndIdTokenIsNotNull() {
+        createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true, idToken = "idToken"))
         verify(view, never()).showGoogleTokenError()
     }
 

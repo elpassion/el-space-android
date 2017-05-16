@@ -26,7 +26,7 @@ import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import io.reactivex.Observable
 
-class HubLoginActivitySadTest {
+class HubLoginActivityTest {
 
     val loginRepository = mock<HubLogin.Repository>().apply { whenever(readToken()).thenReturn(null) }
 

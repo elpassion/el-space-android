@@ -13,7 +13,7 @@ import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 import io.reactivex.Observable
 
-class HubLoginActivityHappyTest {
+class HubLoginActivityTokenIsProvidedTest {
 
     val loginRepository = mock<HubLogin.Repository>().apply { whenever(readToken()).thenReturn("token ") }
 

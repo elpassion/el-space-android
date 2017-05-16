@@ -1,10 +1,10 @@
 package pl.elpassion.elspace.hub.login
 
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 
 class HubLoginController(private val view: HubLogin.View,
                          private val loginRepository: HubLogin.Repository,
@@ -65,4 +65,8 @@ class HubLoginController(private val view: HubLogin.View,
     private fun <T> Observable<T>.supplySchedulers() = this
             .subscribeOn(schedulersSupplier.subscribeOn)
             .observeOn(schedulersSupplier.observeOn)
+
+    fun onGoogleSignInResult(googleSignInResult: ELPGoogleSignInResult) {
+        view.showGoogleTokenError()
+    }
 }

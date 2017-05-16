@@ -189,6 +189,19 @@ class HubLoginControllerTest {
         verify(view).openReportListScreen()
     }
 
+    @Test
+    fun shouldShowGoogleTokenErrorWhenSignInEndsWithFailure() {
+        createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = false))
+        verify(view).showGoogleTokenError()
+    }
+
+    private fun createGoogleSingInResult(isSuccess: Boolean): ELPGoogleSignInResult {
+        return object : ELPGoogleSignInResult {
+            override val isSuccess: Boolean = isSuccess
+            override val idToken: String? = null
+        }
+    }
+
     fun createController(subscribeOn: Scheduler = trampoline(), observeOn: Scheduler = trampoline()) =
             HubLoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 

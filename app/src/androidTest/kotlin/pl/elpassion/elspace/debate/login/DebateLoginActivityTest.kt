@@ -6,6 +6,7 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
+import android.support.test.InstrumentationRegistry.getTargetContext
 import android.text.InputType.TYPE_CLASS_NUMBER
 import android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
@@ -19,6 +20,7 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.extensions.year
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
@@ -26,6 +28,7 @@ import pl.elpassion.elspace.debate.DebateTokenRepository
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
+import java.util.*
 
 class DebateLoginActivityTest {
 
@@ -47,7 +50,7 @@ class DebateLoginActivityTest {
     fun shouldShowToolbarWithCorrectTitle() {
         onId(R.id.toolbar)
                 .isDisplayed()
-                .hasChildWithText(R.string.debate_title)
+                .hasChildWithText("${getTargetContext().getString(R.string.debate_title)} ${Calendar.getInstance().year}")
     }
 
     @Test

@@ -15,10 +15,12 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.extensions.year
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
+import java.util.*
 
 class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
@@ -34,6 +36,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
         setSupportActionBar(toolbar)
+        toolbar.title = "${getString(R.string.debate_title)} ${Calendar.getInstance().year}"
         showBackArrowOnActionBar()
         debateLoginButton.setOnClickListener {
             controller.onLogToDebate(debateLoginInputText.text.toString())

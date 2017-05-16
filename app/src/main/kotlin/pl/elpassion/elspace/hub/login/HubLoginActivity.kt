@@ -54,7 +54,6 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, googleApiClient, RC_SIGN_IN) }
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun showEmptyLoginError() =
@@ -91,5 +90,3 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
     }
 
 }
-
-typealias OnGoogleClick = () -> Unit

@@ -1,9 +1,6 @@
 package pl.elpassion.elspace.hub.login
 
-import android.app.Activity
-import android.content.Intent
 import android.support.test.espresso.Espresso
-import android.support.v4.app.FragmentActivity
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -23,6 +20,8 @@ import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class HubLoginActivityGoogleSuccessTest {
 
+    private val GOOGLE_TOKEN = "google token"
+
     private val hubLoginTokenApi = mock<HubLogin.TokenApi>()
 
     @JvmField @Rule
@@ -32,15 +31,25 @@ class HubLoginActivityGoogleSuccessTest {
     val rule = rule<HubLoginActivity> {
         wheneverLoginWithGoogleToken().thenJust(HubTokenFromApi("token"))
         HubLoginRepositoryProvider.override = { mock<HubLogin.Repository>() }
-        GoogleSingInControllerProvider.override = { GoogleSingInSuccessTestController() }
         HubLoginTokenApiProvider.override = { hubLoginTokenApi }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }
     }
 
     @Before
     fun setupTests() {
+        stubGoogleSignIn()
         prepareAutoFinishingIntent()
         Espresso.closeSoftKeyboard()
+    }
+
+    private fun stubGoogleSignIn() {
+        GoogleSingInDI.startGoogleSignInActivity = { activity, _, resultCode -> activity.startActivityForResult(getAutoFinishingIntent(), resultCode) }
+        GoogleSingInDI.getELPGoogleSignInResultFromIntent = {
+            object : ELPGoogleSignInResult {
+                override val isSuccess = true
+                override val idToken = GOOGLE_TOKEN
+            }
+        }
     }
 
     @Test
@@ -77,25 +86,4 @@ class HubLoginActivityGoogleSuccessTest {
     private fun wheneverLoginWithGoogleToken() =
             whenever(hubLoginTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
-    class GoogleSingInSuccessTestController : GoogleSingInController {
-        private lateinit var onSuccess: (String) -> Unit
-        private lateinit var onGoogleClick: OnGoogleClick
-
-        override fun initializeGoogleSignIn(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit) {
-            this.onSuccess = onSuccess
-            this.onGoogleClick = { simulateGoogleSingInActivity(activity) }
-        }
-
-        override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = onSuccess(GOOGLE_TOKEN)
-
-        override fun onGoogleSignInClick() {
-            onGoogleClick()
-        }
-
-        private fun simulateGoogleSingInActivity(activity: Activity) = activity.startActivityForResult(getAutoFinishingIntent(), 1111)
-    }
-
-    companion object {
-        private val GOOGLE_TOKEN = "google token"
-    }
 }

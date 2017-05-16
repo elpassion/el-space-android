@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.hub_login_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -16,8 +18,6 @@ import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class HubLoginActivity : AppCompatActivity(), HubLogin.View {
 
@@ -27,7 +27,8 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
             shortcutService = ShortcutServiceImpl(this),
             api = HubLoginTokenApiProvider.get(),
             schedulersSupplier = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
-    private val googleSingInController = GoogleSingInControllerProvider.get()
+
+    private val googleSingInController = GoogleSingInController()
 
     companion object {
         fun start(context: Context) = context.startActivity(Intent(context, HubLoginActivity::class.java))

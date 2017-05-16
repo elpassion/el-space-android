@@ -2,32 +2,40 @@ package pl.elpassion.elspace.hub.login
 
 import android.content.Intent
 import android.support.v4.app.FragmentActivity
-import android.view.View
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
 import pl.elpassion.R
 import pl.elpassion.elspace.common.Provider
 
 interface GoogleSingInController {
-    fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View
+    fun initializeGoogleSignIn(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit)
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+
+    fun onGoogleSignInClick()
 }
 
 object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
     object : GoogleSingInController, GoogleApiClient.OnConnectionFailedListener {
+
+        override fun onGoogleSignInClick() {
+            onGoogleClick()
+        }
+
         private val RC_SIGN_IN = 64927
         private lateinit var onSuccess: (String) -> Unit
         private lateinit var onFailure: () -> Unit
+        private lateinit var onGoogleClick: OnGoogleClick
 
-        override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
+        override fun initializeGoogleSignIn(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit) {
             this.onSuccess = onSuccess
             this.onFailure = onFailure
-            return createSignInButton(activity)
+            val googleApiClient = getGoogleApiClient(activity)
+            val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
+            this.onGoogleClick = { activity.startActivityForResult(signInIntent, RC_SIGN_IN) }
         }
 
         override fun onConnectionFailed(p0: ConnectionResult) = onFailure()
@@ -36,15 +44,6 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
             if (requestCode == RC_SIGN_IN) {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 handleSignInResult(result)
-            }
-        }
-
-        private fun createSignInButton(activity: FragmentActivity) = SignInButton(activity).apply {
-            setSize(SignInButton.SIZE_STANDARD)
-            setOnClickListener {
-                val googleApiClient = getGoogleApiClient(activity)
-                val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
-                activity.startActivityForResult(signInIntent, RC_SIGN_IN)
             }
         }
 
@@ -75,3 +74,5 @@ object GoogleSingInControllerProvider : Provider<GoogleSingInController>({
         }
     }
 })
+
+typealias OnGoogleClick = () -> Unit

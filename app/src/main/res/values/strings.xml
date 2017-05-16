@@ -18,6 +18,7 @@
     <string name="hub_login_title">Log in to hub</string>
     <string name="hub_login_hint_token">Provide your access token.</string>
     <string name="hub_login_button_login_by_token">Log in using hub token</string>
+    <string name="hub_login_button_google_sign_in">Log in with Google</string>
     <string name="hub_login_button_hub_link">HUB link</string>
     <string name="hub_login_uri_hub">https://hub.elpassion.com/employee/settings/api</string>
     <string name="report_missing">Missing</string>

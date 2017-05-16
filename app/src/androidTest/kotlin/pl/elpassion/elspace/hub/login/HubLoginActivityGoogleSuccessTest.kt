@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.support.test.espresso.Espresso
 import android.support.v4.app.FragmentActivity
-import android.view.View
-import android.widget.TextView
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -46,28 +44,33 @@ class HubLoginActivityGoogleSuccessTest {
     }
 
     @Test
+    fun shouldHaveGoogleSignInButton() {
+        onId(R.id.hubLoginGoogleSignInButton).hasText(R.string.hub_login_button_google_sign_in)
+    }
+
+    @Test
     fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
-        onText(SIGN_IN_TEXT).click()
+        onId(R.id.hubLoginGoogleSignInButton).click()
         checkIntent(ReportListActivity::class.java)
     }
 
     @Test
     fun shouldShowLoaderWhileSigningInWithGoogle() {
         wheneverLoginWithGoogleToken().thenReturn(Observable.never())
-        onText(SIGN_IN_TEXT).click()
+        onId(R.id.hubLoginGoogleSignInButton).click()
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSigningInWithGoogleFinished() {
-        onText(SIGN_IN_TEXT).click()
+        onId(R.id.hubLoginGoogleSignInButton).click()
         onId(R.id.loader).doesNotExist()
     }
 
     @Test
     fun shouldShowErrorWhenGoogleAccessTokenFailed() {
         wheneverLoginWithGoogleToken().thenReturn(Observable.error(RuntimeException()))
-        onText(SIGN_IN_TEXT).click()
+        onId(R.id.hubLoginGoogleSignInButton).click()
         onText(R.string.google_token_error).isDisplayed()
     }
 
@@ -75,24 +78,24 @@ class HubLoginActivityGoogleSuccessTest {
             whenever(hubLoginTokenApi.loginWithGoogleToken(GoogleTokenForHubTokenApi(GOOGLE_TOKEN)))
 
     class GoogleSingInSuccessTestController : GoogleSingInController {
-
         private lateinit var onSuccess: (String) -> Unit
+        private lateinit var onGoogleClick: OnGoogleClick
 
-        override fun initializeGoogleSingInButton(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit): View {
+        override fun initializeGoogleSignIn(activity: FragmentActivity, onSuccess: (String) -> Unit, onFailure: () -> Unit) {
             this.onSuccess = onSuccess
-            return TextView(activity).apply {
-                text = SIGN_IN_TEXT
-                setOnClickListener { simulateGoogleSingInActivity(activity) }
-            }
+            this.onGoogleClick = { simulateGoogleSingInActivity(activity) }
         }
 
         override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) = onSuccess(GOOGLE_TOKEN)
+
+        override fun onGoogleSignInClick() {
+            onGoogleClick()
+        }
 
         private fun simulateGoogleSingInActivity(activity: Activity) = activity.startActivityForResult(getAutoFinishingIntent(), 1111)
     }
 
     companion object {
-        private val SIGN_IN_TEXT = "Sign in"
         private val GOOGLE_TOKEN = "google token"
     }
 }

@@ -57,6 +57,15 @@
                 android:text="@string/hub_login_button_login_by_token" />
 
             <Button
+                android:id="@+id/hubLoginGoogleSignInButton"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@color/redGoogleButton"
+                android:text="@string/hub_login_button_google_sign_in" />
+
+            <Button
                 android:id="@+id/hubLoginHubLinkButton"
                 style="@style/Button"
                 android:layout_width="match_parent"
@@ -64,11 +73,6 @@
                 android:background="@color/colorPrimaryGreen"
                 android:text="@string/hub_login_button_hub_link" />
 
-            <FrameLayout
-                android:id="@+id/hubLoginGoogleLoginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
         </LinearLayout>
 
         <LinearLayout

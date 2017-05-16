@@ -21,19 +21,6 @@ class HubLoginController(private val view: HubLogin.View,
         }
     }
 
-    fun onGoogleToken(googleToken: String) {
-        view.showLoader()
-        api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
-                .supplySchedulers()
-                .doFinally { view.hideLoader() }
-                .subscribe({
-                    onCorrectHubToken(it.accessToken)
-                }, {
-                    view.showGoogleTokenError()
-                })
-                .addTo(subscriptions)
-    }
-
     fun onDestroy() {
         subscriptions.clear()
     }
@@ -62,16 +49,28 @@ class HubLoginController(private val view: HubLogin.View,
         }
     }
 
+    fun onGoogleSignInResult(googleSignInResult: ELPGoogleSignInResult) {
+        when {
+            googleSignInResult.isSuccess && googleSignInResult.idToken != null -> onGoogleToken(googleSignInResult.idToken!!)
+            else -> view.showGoogleTokenError()
+        }
+    }
+
+    private fun onGoogleToken(googleToken: String) {
+        view.showLoader()
+        api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
+                .supplySchedulers()
+                .doFinally { view.hideLoader() }
+                .subscribe({
+                    onCorrectHubToken(it.accessToken)
+                }, {
+                    view.showGoogleTokenError()
+                })
+                .addTo(subscriptions)
+    }
+
     private fun <T> Observable<T>.supplySchedulers() = this
             .subscribeOn(schedulersSupplier.subscribeOn)
             .observeOn(schedulersSupplier.observeOn)
 
-    fun onGoogleSignInResult(googleSignInResult: ELPGoogleSignInResult) {
-        if (!googleSignInResult.isSuccess) {
-            view.showGoogleTokenError()
-        } else if (googleSignInResult.idToken == null) {
-            view.showGoogleTokenError()
-        }
-
-    }
 }

@@ -81,22 +81,9 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View, GoogleApiClient.OnC
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
             val result = GoogleSingInDI.getELPGoogleSignInResultFromIntent(data)
-            handleSignInResult(result)
+            controller.onGoogleSignInResult(result)
         }
         super.onActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun handleSignInResult(result: ELPGoogleSignInResult) {
-        if (result.isSuccess) {
-            val googleToken = result.idToken
-            if (googleToken != null) {
-                controller.onGoogleToken(googleToken)
-            } else {
-                onFailure()
-            }
-        } else {
-            onFailure()
-        }
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) = onFailure()

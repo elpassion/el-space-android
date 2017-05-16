@@ -21,6 +21,7 @@ class HubLoginControllerTest {
     val shortcutService = mock<ShortcutService>()
     val subscribeOnScheduler = TestScheduler()
     val observeOnScheduler = TestScheduler()
+    private val correctSignInResult= createGoogleSingInResult(isSuccess = true, idToken = "google token")
 
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
@@ -84,7 +85,7 @@ class HubLoginControllerTest {
     fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
         stubHubApiToReturnToken()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
 
         verify(shortcutService).creteAppShortcuts()
     }
@@ -106,56 +107,56 @@ class HubLoginControllerTest {
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
         stubHubApiToReturnError()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view).showGoogleTokenError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view, never()).showGoogleTokenError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
         stubHubApiToNeverReturn()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderUntilFetchingTokenFinished() {
         stubHubApiToNeverReturn()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
         stubHubApiToReturnToken()
-        createController().onGoogleToken("google token")
+        createController().onGoogleSignInResult(correctSignInResult)
         verify(loginRepository).saveToken("token")
     }
 
@@ -165,7 +166,7 @@ class HubLoginControllerTest {
         val observable = Observable.never<HubTokenFromApi>().doFinally { unsubscribed = true }
         whenever(api.loginWithGoogleToken(GoogleTokenForHubTokenApi("google token"))).thenReturn(observable)
         createController().run {
-            onGoogleToken("google token")
+            onGoogleSignInResult(correctSignInResult)
             onDestroy()
         }
         Assert.assertTrue(unsubscribed)
@@ -174,7 +175,7 @@ class HubLoginControllerTest {
     @Test
     fun shouldSubscribeOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(subscribeOn = subscribeOnScheduler).onGoogleToken("google token")
+        createController(subscribeOn = subscribeOnScheduler).onGoogleSignInResult(correctSignInResult)
         verify(view, never()).openReportListScreen()
         subscribeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -183,7 +184,7 @@ class HubLoginControllerTest {
     @Test
     fun shouldObserveOnGivenScheduler() {
         stubHubApiToReturnToken()
-        createController(observeOn = observeOnScheduler).onGoogleToken("google token")
+        createController(observeOn = observeOnScheduler).onGoogleSignInResult(correctSignInResult)
         verify(view, never()).openReportListScreen()
         observeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -197,6 +198,7 @@ class HubLoginControllerTest {
 
     @Test
     fun shouldNotShowGoogleTokenErrorWhenSignInEndsWithSuccessAndIdTokenIsNotNull() {
+        stubHubApiToNeverReturn()
         createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true, idToken = "idToken"))
         verify(view, never()).showGoogleTokenError()
     }
@@ -207,7 +209,7 @@ class HubLoginControllerTest {
         verify(view).showGoogleTokenError()
     }
 
-    private fun createGoogleSingInResult(isSuccess: Boolean, idToken: String? = ""): ELPGoogleSignInResult {
+    private fun createGoogleSingInResult(isSuccess: Boolean = true, idToken: String? = null): ELPGoogleSignInResult {
         return object : ELPGoogleSignInResult {
             override val isSuccess: Boolean = isSuccess
             override val idToken: String? = idToken

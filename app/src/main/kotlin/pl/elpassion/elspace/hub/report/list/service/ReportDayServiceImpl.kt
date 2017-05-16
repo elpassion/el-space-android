@@ -15,7 +15,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
                     .flatMap { yearMonth ->
                         reportListService.getReports(yearMonth).map { yearMonth to it }
                     }
-                    .map { createDaysWithReports(it.first, it.second) }
+                    .map { (yearMonth, reportList) -> createDaysWithReports(yearMonth, reportList) }
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
             (1..yearMonth.month.daysInMonth).map { dayNumber ->

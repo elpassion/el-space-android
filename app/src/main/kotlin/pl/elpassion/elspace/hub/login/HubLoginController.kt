@@ -21,15 +21,9 @@ class HubLoginController(private val view: HubLogin.View,
         }
     }
 
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
-    fun onLogin(token: String) {
-        if (token.isNotEmpty()) {
-            onCorrectHubToken(token)
-        } else {
-            view.showEmptyLoginError()
+    private fun addShortcutsIfSupported() {
+        if (shortcutService.isSupportingShortcuts()) {
+            shortcutService.creteAppShortcuts()
         }
     }
 
@@ -37,15 +31,11 @@ class HubLoginController(private val view: HubLogin.View,
         view.openHubWebsite()
     }
 
-    private fun onCorrectHubToken(token: String) {
-        loginRepository.saveToken(token)
-        view.openReportListScreen()
-        addShortcutsIfSupported()
-    }
-
-    private fun addShortcutsIfSupported() {
-        if (shortcutService.isSupportingShortcuts()) {
-            shortcutService.creteAppShortcuts()
+    fun onLogin(token: String) {
+        if (token.isNotEmpty()) {
+            onCorrectHubToken(token)
+        } else {
+            view.showEmptyLoginError()
         }
     }
 
@@ -67,6 +57,16 @@ class HubLoginController(private val view: HubLogin.View,
                     view.showGoogleTokenError()
                 })
                 .addTo(subscriptions)
+    }
+
+    private fun onCorrectHubToken(token: String) {
+        loginRepository.saveToken(token)
+        view.openReportListScreen()
+        addShortcutsIfSupported()
+    }
+
+    fun onDestroy() {
+        subscriptions.clear()
     }
 
     private fun <T> Observable<T>.supplySchedulers() = this

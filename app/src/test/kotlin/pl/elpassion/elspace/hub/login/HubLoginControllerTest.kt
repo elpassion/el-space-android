@@ -195,6 +195,12 @@ class HubLoginControllerTest {
         verify(view).showGoogleTokenError()
     }
 
+    @Test
+    fun shouldNotShowGoogleTokenErrorWhenSignInEndsWithSuccess() {
+        createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true))
+        verify(view, never()).showGoogleTokenError()
+    }
+
     private fun createGoogleSingInResult(isSuccess: Boolean): ELPGoogleSignInResult {
         return object : ELPGoogleSignInResult {
             override val isSuccess: Boolean = isSuccess

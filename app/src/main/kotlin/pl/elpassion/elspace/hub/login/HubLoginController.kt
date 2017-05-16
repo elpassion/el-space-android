@@ -67,6 +67,8 @@ class HubLoginController(private val view: HubLogin.View,
             .observeOn(schedulersSupplier.observeOn)
 
     fun onGoogleSignInResult(googleSignInResult: ELPGoogleSignInResult) {
-        view.showGoogleTokenError()
+        if (!googleSignInResult.isSuccess) {
+            view.showGoogleTokenError()
+        }
     }
 }

@@ -5,12 +5,11 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers.trampoline
 import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.commons.thenError
-import pl.elpassion.elspace.commons.thenJust
-import pl.elpassion.elspace.commons.thenNever
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class HubLoginControllerTest {
@@ -22,6 +21,12 @@ class HubLoginControllerTest {
     val subscribeOnScheduler = TestScheduler()
     val observeOnScheduler = TestScheduler()
     private val correctSignInResult= createGoogleSingInResult(isSuccess = true, idToken = "google token")
+    private val apiSubject = PublishSubject.create<HubTokenFromApi>()
+
+    @Before
+    fun setUp() {
+        whenever(api.loginWithGoogleToken(any())).thenReturn(apiSubject)
+    }
 
     @Test
     fun shouldOpenReportListScreenIfUserIsLoggedInOnCreate() {
@@ -84,9 +89,8 @@ class HubLoginControllerTest {
     @Test
     fun shouldCreateAppShortcutsWhenLoggedWithGoogle() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
-        stubHubApiToReturnToken()
         createController().onGoogleSignInResult(correctSignInResult)
-
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(shortcutService).creteAppShortcuts()
     }
 
@@ -106,57 +110,56 @@ class HubLoginControllerTest {
 
     @Test
     fun shouldAuthorizeInHubApiWithGoogleToken() {
-        stubHubApiToReturnToken()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldNotOpenReportListScreenWhenFetchingTokenFromHubApiFailed() {
-        stubHubApiToReturnError()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onError(RuntimeException())
         verify(view, never()).openReportListScreen()
     }
 
     @Test
     fun shouldShowErrorWhenFetchingTokenFromHubApiFailed() {
-        stubHubApiToReturnError()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onError(RuntimeException())
         verify(view).showGoogleTokenError()
     }
 
     @Test
     fun shouldNotShowErrorWhenFetchingTokenFromHubApiSucceeded() {
-        stubHubApiToReturnToken()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(view, never()).showGoogleTokenError()
     }
 
     @Test
     fun shouldShowLoaderWhenFetchingTokenFromHubApi() {
-        stubHubApiToNeverReturn()
         createController().onGoogleSignInResult(correctSignInResult)
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderAfterFetchingToken() {
-        stubHubApiToReturnToken()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onNext(HubTokenFromApi("token"))
+        apiSubject.onComplete()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldNotHideLoaderUntilFetchingTokenFinished() {
-        stubHubApiToNeverReturn()
         createController().onGoogleSignInResult(correctSignInResult)
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldSaveTokenWhenFetchingTokenFromHubApiSucceeded() {
-        stubHubApiToReturnToken()
         createController().onGoogleSignInResult(correctSignInResult)
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(loginRepository).saveToken("token")
     }
 
@@ -174,17 +177,17 @@ class HubLoginControllerTest {
 
     @Test
     fun shouldSubscribeOnGivenScheduler() {
-        stubHubApiToReturnToken()
         createController(subscribeOn = subscribeOnScheduler).onGoogleSignInResult(correctSignInResult)
         verify(view, never()).openReportListScreen()
         subscribeOnScheduler.triggerActions()
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(view).openReportListScreen()
     }
 
     @Test
     fun shouldObserveOnGivenScheduler() {
-        stubHubApiToReturnToken()
         createController(observeOn = observeOnScheduler).onGoogleSignInResult(correctSignInResult)
+        apiSubject.onNext(HubTokenFromApi("token"))
         verify(view, never()).openReportListScreen()
         observeOnScheduler.triggerActions()
         verify(view).openReportListScreen()
@@ -198,7 +201,6 @@ class HubLoginControllerTest {
 
     @Test
     fun shouldNotShowGoogleTokenErrorWhenSignInEndsWithSuccessAndIdTokenIsNotNull() {
-        stubHubApiToNeverReturn()
         createController().onGoogleSignInResult(createGoogleSingInResult(isSuccess = true, idToken = "idToken"))
         verify(view, never()).showGoogleTokenError()
     }
@@ -219,15 +221,4 @@ class HubLoginControllerTest {
     fun createController(subscribeOn: Scheduler = trampoline(), observeOn: Scheduler = trampoline()) =
             HubLoginController(view, loginRepository, shortcutService, api, SchedulersSupplier(subscribeOn, observeOn))
 
-    private fun stubHubApiToReturnToken() {
-        whenever(api.loginWithGoogleToken(any())).thenJust(HubTokenFromApi("token"))
-    }
-
-    private fun stubHubApiToNeverReturn() {
-        whenever(api.loginWithGoogleToken(any())).thenNever()
-    }
-
-    private fun stubHubApiToReturnError() {
-        whenever(api.loginWithGoogleToken(any())).thenError(RuntimeException())
-    }
 }

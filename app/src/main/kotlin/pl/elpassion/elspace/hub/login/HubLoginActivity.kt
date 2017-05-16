@@ -84,6 +84,11 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
+    }
+
     companion object {
         private val RC_SIGN_IN = 64927
         fun start(context: Context) = context.startActivity(Intent(context, HubLoginActivity::class.java))

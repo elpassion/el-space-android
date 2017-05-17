@@ -29,6 +29,10 @@ test:
     - echo no | android create avd --force -n test -t android-22 --abi default/armeabi-v7a --skin 480x800:
     - emulator -avd test -no-audio -no-window:
            background: true
+  post:
+    - mkdir $CIRCLE_ARTIFACTS/tests
+    - adb logcat -d >> $CIRCLE_ARTIFACTS/tests/logcat.txt
+    - cat app/build/outputs/lint-results*.xml >> $CIRCLE_ARTIFACTS/tests/lint-results.xml
 
   override:
     - circle-android wait-for-boot

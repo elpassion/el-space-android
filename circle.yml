@@ -32,7 +32,6 @@ test:
   post:
     - mkdir $CIRCLE_ARTIFACTS/tests
     - adb logcat -d >> $CIRCLE_ARTIFACTS/tests/logcat.txt
-    - cat app/build/outputs/lint-results*.xml >> $CIRCLE_ARTIFACTS/tests/lint-results.xml
 
   override:
     - circle-android wait-for-boot

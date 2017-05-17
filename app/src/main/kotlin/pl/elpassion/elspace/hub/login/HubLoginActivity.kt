@@ -35,7 +35,7 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
                 .build()
     }
 
-    private val createGoogleApiClient: () -> GoogleApiClient = { googleApiClientObject }
+    private val provideGoogleApiClient: () -> GoogleApiClient = { googleApiClientObject }
 
     private val controller = HubLoginController(
             view = this,
@@ -52,7 +52,7 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         hubLoginByTokenButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubLoginHubLinkButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, createGoogleApiClient, RC_SIGN_IN) }
+        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, provideGoogleApiClient, RC_SIGN_IN) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)

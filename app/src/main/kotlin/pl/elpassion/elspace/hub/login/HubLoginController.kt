@@ -1,10 +1,10 @@
 package pl.elpassion.elspace.hub.login
 
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 
 class HubLoginController(private val view: HubLogin.View,
                          private val loginRepository: HubLogin.Repository,
@@ -21,7 +21,32 @@ class HubLoginController(private val view: HubLogin.View,
         }
     }
 
-    fun onGoogleToken(googleToken: String) {
+    private fun addShortcutsIfSupported() {
+        if (shortcutService.isSupportingShortcuts()) {
+            shortcutService.creteAppShortcuts()
+        }
+    }
+
+    fun onHub() {
+        view.openHubWebsite()
+    }
+
+    fun onLogin(token: String) {
+        if (token.isNotEmpty()) {
+            onCorrectHubToken(token)
+        } else {
+            view.showEmptyLoginError()
+        }
+    }
+
+    fun onGoogleSignInResult(googleSignInResult: ELPGoogleSignInResult) {
+        when {
+            googleSignInResult.isSuccess && googleSignInResult.idToken != null -> onGoogleToken(googleSignInResult.idToken!!)
+            else -> view.showGoogleTokenError()
+        }
+    }
+
+    private fun onGoogleToken(googleToken: String) {
         view.showLoader()
         api.loginWithGoogleToken(GoogleTokenForHubTokenApi(googleToken))
                 .supplySchedulers()
@@ -34,35 +59,18 @@ class HubLoginController(private val view: HubLogin.View,
                 .addTo(subscriptions)
     }
 
-    fun onDestroy() {
-        subscriptions.clear()
-    }
-
-    fun onLogin(token: String) {
-        if (token.isNotEmpty()) {
-            onCorrectHubToken(token)
-        } else {
-            view.showEmptyLoginError()
-        }
-    }
-
-    fun onHub() {
-        view.openHubWebsite()
-    }
-
     private fun onCorrectHubToken(token: String) {
         loginRepository.saveToken(token)
         view.openReportListScreen()
         addShortcutsIfSupported()
     }
 
-    private fun addShortcutsIfSupported() {
-        if (shortcutService.isSupportingShortcuts()) {
-            shortcutService.creteAppShortcuts()
-        }
+    fun onDestroy() {
+        subscriptions.clear()
     }
 
     private fun <T> Observable<T>.supplySchedulers() = this
             .subscribeOn(schedulersSupplier.subscribeOn)
             .observeOn(schedulersSupplier.observeOn)
+
 }

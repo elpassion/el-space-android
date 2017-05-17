@@ -24,8 +24,7 @@ import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class HubLoginActivity : AppCompatActivity(), HubLogin.View {
 
-    private val googleApiClient: GoogleApiClient by lazy {
-
+    private val googleApiClientObject: GoogleApiClient by lazy {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
@@ -35,6 +34,8 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
                 .build()
     }
+
+    private val createGoogleApiClient: () -> GoogleApiClient = { googleApiClientObject }
 
     private val controller = HubLoginController(
             view = this,
@@ -51,7 +52,7 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
         hubLoginByTokenButton.setOnClickListener { controller.onLogin(tokenInput.text.toString()) }
         hubLoginHubLinkButton.setOnClickListener { controller.onHub() }
         controller.onCreate()
-        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, googleApiClient, RC_SIGN_IN) }
+        hubLoginGoogleSignInButton.setOnClickListener { GoogleSingInDI.startGoogleSignInActivity(this, createGoogleApiClient, RC_SIGN_IN) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)

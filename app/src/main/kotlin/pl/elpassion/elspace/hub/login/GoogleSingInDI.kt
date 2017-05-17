@@ -6,8 +6,8 @@ import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.common.api.GoogleApiClient
 
 object GoogleSingInDI {
-    var startGoogleSignInActivity: (Activity, GoogleApiClient, Int) -> Unit = { activity, googleApiClient, requestCode ->
-        activity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient), requestCode)
+    var startGoogleSignInActivity: (Activity, () -> GoogleApiClient, Int) -> Unit = { activity, googleApiClient, requestCode ->
+        activity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient()), requestCode)
     }
 
     var getELPGoogleSignInResultFromIntent: (Intent?) -> ELPGoogleSignInResult = {

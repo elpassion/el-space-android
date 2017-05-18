@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -78,7 +79,7 @@ class HubLoginActivity : AppCompatActivity(), HubLogin.View {
     override fun hideLoader() = hideLoader(hubLoginCoordinator)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
             val result = GoogleSingInDI.getELPGoogleSignInResultFromIntent(data)
             controller.onGoogleSignInResult(result)
         }

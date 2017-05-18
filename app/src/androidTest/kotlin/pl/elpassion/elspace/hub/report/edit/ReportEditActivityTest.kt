@@ -55,7 +55,7 @@ class ReportEditActivityTest {
         stubCurrentTime(year = 2016, month = 3, day = 3)
         stubReportAndStart()
         onId(R.id.reportEditDate).click()
-        onText("Mar 3, ").isDisplayed()
+        onText("OK").isDisplayed()
     }
 
     @Test

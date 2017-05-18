@@ -11,7 +11,7 @@ import pl.elpassion.R
 fun showLoader(coordinatorLayout: CoordinatorLayout) {
     if (coordinatorLayout.loader == null) {
         val loaderRoot = inflate(coordinatorLayout, R.layout.loader)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled) {
             startAnimation(loaderRoot)
         }
         coordinatorLayout.addView(loaderRoot)

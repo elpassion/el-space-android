@@ -34,53 +34,12 @@ class HubLoginActivityGoogleLoginTest {
 
     @Before
     fun setupTests() {
+        stubGoogleSignIn()
+        prepareAutoFinishingIntent()
         Espresso.closeSoftKeyboard()
     }
 
-    @Test
-    fun shouldHaveGoogleSignInButton() {
-        onId(R.id.hubLoginGoogleSignInButton).hasText(R.string.hub_login_button_google_sign_in)
-    }
-
-    @Test
-    fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
-        stubGoogleSignInToSuccess()
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        checkIntent(ReportListActivity::class.java)
-    }
-
-    @Test
-    fun shouldShowLoaderWhileSigningInWithGoogle() {
-        stubGoogleSignInToSuccess()
-        wheneverLoginWithGoogleToken().thenReturn(Observable.never())
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        onId(R.id.loader).isDisplayed()
-    }
-
-    @Test
-    fun shouldHideLoaderWhenSigningInWithGoogleFinished() {
-        stubGoogleSignInToSuccess()
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        onId(R.id.loader).doesNotExist()
-    }
-
-    @Test
-    fun shouldShowErrorWhenGoogleAccessTokenFailed() {
-        stubGoogleSignInToSuccess()
-        wheneverLoginWithGoogleToken().thenReturn(Observable.error(RuntimeException()))
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        onText(R.string.google_token_error).isDisplayed()
-    }
-
-    @Test
-    fun shouldNotShowErrorWhenGoogleLoginCanceled() {
-        stubGoogleSignInToCancel()
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        onText(R.string.google_token_error).doesNotExist()
-    }
-
-    private fun stubGoogleSignInToSuccess() {
-        prepareAutoFinishingIntent()
+    private fun stubGoogleSignIn() {
         GoogleSingInDI.startGoogleSignInActivity = { activity, _, resultCode -> activity.startActivityForResult(getAutoFinishingIntent(), resultCode) }
         GoogleSingInDI.getELPGoogleSignInResultFromIntent = {
             object : ELPGoogleSignInResult {
@@ -90,7 +49,39 @@ class HubLoginActivityGoogleLoginTest {
         }
     }
 
-    private fun stubGoogleSignInToCancel() {
+    @Test
+    fun shouldHaveGoogleSignInButton() {
+        onId(R.id.hubLoginGoogleSignInButton).hasText(R.string.hub_login_button_google_sign_in)
+    }
+
+    @Test
+    fun shouldOpenReportListScreenWhenSignedInWithGoogle() {
+        onId(R.id.hubLoginGoogleSignInButton).click()
+        checkIntent(ReportListActivity::class.java)
+    }
+
+    @Test
+    fun shouldShowLoaderWhileSigningInWithGoogle() {
+        wheneverLoginWithGoogleToken().thenReturn(Observable.never())
+        onId(R.id.hubLoginGoogleSignInButton).click()
+        onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenSigningInWithGoogleFinished() {
+        onId(R.id.hubLoginGoogleSignInButton).click()
+        onId(R.id.loader).doesNotExist()
+    }
+
+    @Test
+    fun shouldShowErrorWhenGoogleAccessTokenFailed() {
+        wheneverLoginWithGoogleToken().thenReturn(Observable.error(RuntimeException()))
+        onId(R.id.hubLoginGoogleSignInButton).click()
+        onText(R.string.google_token_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowErrorWhenGoogleLoginCanceled() {
         prepareAutoCancelingIntent()
         GoogleSingInDI.startGoogleSignInActivity = { activity, _, resultCode -> activity.startActivityForResult(getAutoCancelingIntent(), resultCode) }
         GoogleSingInDI.getELPGoogleSignInResultFromIntent = {
@@ -99,6 +90,8 @@ class HubLoginActivityGoogleLoginTest {
                 override val idToken = ""
             }
         }
+        onId(R.id.hubLoginGoogleSignInButton).click()
+        onText(R.string.google_token_error).doesNotExist()
     }
 
     private fun wheneverLoginWithGoogleToken() =

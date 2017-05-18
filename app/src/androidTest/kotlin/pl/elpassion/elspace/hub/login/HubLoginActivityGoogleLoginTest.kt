@@ -83,13 +83,6 @@ class HubLoginActivityGoogleLoginTest {
     @Test
     fun shouldNotShowErrorWhenGoogleLoginCanceled() {
         prepareAutoCancelingIntent()
-        GoogleSingInDI.startGoogleSignInActivity = { activity, _, resultCode -> activity.startActivityForResult(getAutoCancelingIntent(), resultCode) }
-        GoogleSingInDI.getELPGoogleSignInResultFromIntent = {
-            object : ELPGoogleSignInResult {
-                override val isSuccess = false
-                override val idToken = ""
-            }
-        }
         onId(R.id.hubLoginGoogleSignInButton).click()
         onText(R.string.google_token_error).doesNotExist()
     }

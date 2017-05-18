@@ -9,13 +9,16 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.getAutoFinishingIntent
+import pl.elpassion.elspace.common.prepareAutoFinishingIntent
+import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.rxMockJust
 import pl.elpassion.elspace.commons.thenJust
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
-class HubLoginActivityGoogleLoginTest {
+class HubLoginActivityGoogleSuccessTest {
 
     private val GOOGLE_TOKEN = "google token"
 
@@ -78,20 +81,6 @@ class HubLoginActivityGoogleLoginTest {
         wheneverLoginWithGoogleToken().thenReturn(Observable.error(RuntimeException()))
         onId(R.id.hubLoginGoogleSignInButton).click()
         onText(R.string.google_token_error).isDisplayed()
-    }
-
-    @Test
-    fun shouldNotShowErrorWhenGoogleLoginCanceled() {
-        prepareAutoCancelingIntent()
-        GoogleSingInDI.startGoogleSignInActivity = { activity, _, resultCode -> activity.startActivityForResult(getAutoCancelingIntent(), resultCode) }
-        GoogleSingInDI.getELPGoogleSignInResultFromIntent = {
-            object : ELPGoogleSignInResult {
-                override val isSuccess = false
-                override val idToken = ""
-            }
-        }
-        onId(R.id.hubLoginGoogleSignInButton).click()
-        onText(R.string.google_token_error).doesNotExist()
     }
 
     private fun wheneverLoginWithGoogleToken() =

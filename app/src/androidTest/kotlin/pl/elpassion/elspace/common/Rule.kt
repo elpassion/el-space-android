@@ -21,7 +21,7 @@ inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline befor
             GoogleSingInDI.startGoogleSignInActivity = { _, _, _ -> throw RuntimeException("Google api not allowed in tests") }
             HubRetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }
             UnauthenticatedRetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }
-            Animations.disable()
+            Animations.areEnabled = false
             stubReportAddApi()
             stubProjectRepository()
             stubReportEditApi()

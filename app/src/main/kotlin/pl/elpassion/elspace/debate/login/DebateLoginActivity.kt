@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
+import pl.elpassion.BuildConfig
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -46,6 +47,11 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
                 controller.onLogToDebate(inputText.text.toString())
             }
             false
+        }
+        if (BuildConfig.DEBUG) {
+            debateLoginInputText.setOnLongClickListener {
+                controller.onLogToDebate("13160"); false
+            }
         }
     }
 

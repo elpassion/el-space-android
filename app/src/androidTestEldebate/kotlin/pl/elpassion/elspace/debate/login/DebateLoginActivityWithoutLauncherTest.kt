@@ -1,6 +1,6 @@
 package pl.elpassion.elspace.debate.login
 
-import com.elpassion.android.commons.espresso.isNotDisplayed
+import com.elpassion.android.commons.espresso.doesNotExist
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.common.onToolbarBackArrow
@@ -13,6 +13,6 @@ class DebateLoginActivityWithoutLauncherTest {
 
     @Test
     fun shouldShowToolbarWithoutBackArrow() {
-        onToolbarBackArrow().isNotDisplayed()
+        onToolbarBackArrow().doesNotExist()
     }
 }

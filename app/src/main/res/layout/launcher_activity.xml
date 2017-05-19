@@ -4,51 +4,40 @@
     android:id="@+id/launcherCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryBlue"
     tools:context=".elspace.launcher.LauncherActivity">
 
-    <RelativeLayout
+    <LinearLayout
+        android:id="@+id/launcherButtons"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimaryBlue"
-        android:padding="16dp">
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/launcherButtons"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:src="@drawable/launcher_background" />
+
+        <Button
+            android:id="@+id/launcherHubButton"
+            style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorViolet"
+            android:text="@string/launcher_button_hub" />
 
-            <Button
-                android:id="@+id/launcherHubButton"
-                style="@style/Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@color/colorViolet"
-                android:text="@string/launcher_button_hub" />
-
-            <Button
-                android:id="@+id/launcherDebateButton"
-                style="@style/Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryGreen"
-                android:text="@string/launcher_button_debate" />
-        </LinearLayout>
-
-        <LinearLayout
+        <Button
+            android:id="@+id/launcherDebateButton"
+            style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/launcherButtons"
-            android:layout_alignParentTop="true"
-            android:gravity="center_horizontal">
+            android:background="@color/colorPrimaryGreen"
+            android:text="@string/launcher_button_debate" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerInside"
-                android:src="@drawable/launcher_background" />
-        </LinearLayout>
-    </RelativeLayout>
+    </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

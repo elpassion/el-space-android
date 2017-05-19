@@ -41,6 +41,8 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
+    - (./gradlew testElspaceDebugUnitTest):
+          timeout: 32000
     - (./gradlew connectedElspaceDebugAndroidTest):
           timeout: 32000
 

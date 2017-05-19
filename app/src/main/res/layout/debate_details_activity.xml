@@ -96,9 +96,10 @@
                         tools:text="Positive answer" />
 
                     <ImageView
+                        android:id="@+id/debatePositiveAnswerImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/hand_background_blue"
+                        android:background="@drawable/hand_background"
                         android:padding="10dp"
                         android:src="@drawable/hand" />
                 </LinearLayout>
@@ -132,9 +133,10 @@
                         tools:text="Negative answer" />
 
                     <ImageView
+                        android:id="@+id/debateNegativeAnswerImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/hand_background_red"
+                        android:background="@drawable/hand_background"
                         android:padding="10dp"
                         android:src="@drawable/hand" />
                 </LinearLayout>
@@ -168,9 +170,10 @@
                         tools:text="Neutral answer" />
 
                     <ImageView
+                        android:id="@+id/debateNeutralAnswerImage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/hand_background_grey"
+                        android:background="@drawable/hand_background"
                         android:padding="10dp"
                         android:src="@drawable/hand" />
                 </LinearLayout>

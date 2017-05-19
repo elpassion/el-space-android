@@ -4,7 +4,10 @@ import io.reactivex.disposables.CompositeDisposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.addTo
 
-class DebateDetailsController(private val api: DebateDetails.Api, private val view: DebateDetails.View, private val schedulers: SchedulersSupplier) {
+class DebateDetailsController(
+        private val api: DebateDetails.Api,
+        private val view: DebateDetails.View,
+        private val schedulers: SchedulersSupplier) {
 
     private val compositeDisposable = CompositeDisposable()
 

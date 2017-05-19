@@ -54,6 +54,11 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldShowToolbarWithBackArrow() {
+        onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
     fun shouldExitScreenOnBackArrowClick() {
         onToolbarBackArrow().click()
         Assert.assertTrue(rule.activity.isFinishing)

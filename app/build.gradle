@@ -76,6 +76,8 @@ android {
         test.java.srcDirs += 'src/testCommon/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
         androidTest.java.srcDirs += 'src/testCommon/kotlin'
+        androidTestEldebate.java.srcDirs += 'src/androidTestEldebate/kotlin'
+        androidTestEldebate.java.srcDirs += 'src/testCommon/kotlin'
     }
     lintOptions {
         disable 'InvalidPackage'

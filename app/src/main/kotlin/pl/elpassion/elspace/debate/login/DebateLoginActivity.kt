@@ -38,7 +38,9 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         setContentView(R.layout.debate_login_activity)
         setSupportActionBar(toolbar)
         toolbar.title = "${getString(R.string.debate_title)} ${Calendar.getInstance().year}"
-        showBackArrowOnActionBar()
+        if (BuildConfig.FLAVOR != "eldebate") {
+            showBackArrowOnActionBar()
+        }
         debateLoginButton.setOnClickListener {
             controller.onLogToDebate(debateLoginInputText.text.toString())
         }

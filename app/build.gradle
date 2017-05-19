@@ -26,6 +26,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
 apply from: 'src/release/google-signing-credentials.gradle'
+apply from: 'app-version.gradle'
 
 def areGoogleServicesEnabled = true
 
@@ -36,8 +37,6 @@ android {
         applicationId "pl.elpassion.elspace"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

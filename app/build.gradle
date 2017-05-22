@@ -20,7 +20,7 @@ buildscript {
     }
 }
 
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
@@ -34,6 +34,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
+        applicationId "pl.elpassion.elspace"
         minSdkVersion 19
         targetSdkVersion 25
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -61,8 +62,10 @@ android {
     }
     productFlavors {
         elspace {
+            applicationId = "pl.elpassion.elspace"
         }
         eldebate {
+            applicationId = "pl.elpassion.eldebate"
             areGoogleServicesEnabled = false
         }
     }

@@ -8,8 +8,7 @@
         android:name=".elspace.ElSpaceApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:supportsRtl="true"
-        android:theme="@style/AppThemeBlue">
+        android:supportsRtl="true">
         <activity
             android:name=".elspace.launcher.LauncherActivity"
             android:theme="@style/AppThemeBlueWithoutActionBar">

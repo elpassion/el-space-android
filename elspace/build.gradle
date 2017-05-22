@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -13,7 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -31,3 +40,5 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
+
+apply plugin: 'com.google.gms.google-services'

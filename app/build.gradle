@@ -16,7 +16,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
         classpath 'com.trickyandroid:jacoco-everywhere:0.2.1'
-        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 
@@ -27,8 +26,6 @@ apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
 apply from: 'src/release/google-signing-credentials.gradle'
 apply from: 'app-version.gradle'
-
-def areGoogleServicesEnabled = true
 
 android {
     compileSdkVersion 25
@@ -58,13 +55,6 @@ android {
             ext.betaDistributionGroupAliases = 'Elpassion'
             ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
             signingConfig signingConfigs.debug
-        }
-    }
-    productFlavors {
-        elspace {
-        }
-        eldebate {
-            areGoogleServicesEnabled = false
         }
     }
     sourceSets {
@@ -139,8 +129,4 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
     }
     androidTestCompile 'org.mockito:mockito-android:2.7.21'
-}
-
-if(areGoogleServicesEnabled) {
-    apply plugin: 'com.google.gms.google-services'
 }

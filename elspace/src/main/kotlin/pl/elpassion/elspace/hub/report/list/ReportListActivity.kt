@@ -16,6 +16,10 @@ import com.elpassion.android.commons.recycler.components.stable.StableItemAdapte
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -24,16 +28,15 @@ import pl.elpassion.elspace.common.extensions.onMenuItemAction
 import pl.elpassion.elspace.common.extensions.onMenuItemClicks
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.hub.report.*
+import pl.elpassion.elspace.hub.report.HourlyReport
+import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
+import pl.elpassion.elspace.hub.report.RegularHourlyReport
+import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.items.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 

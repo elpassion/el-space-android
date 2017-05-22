@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.*
-import pl.elpassion.elspace.commons.thenJust
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
@@ -26,7 +25,7 @@ class HubLoginActivityGoogleLoginTest {
 
     @JvmField @Rule
     val rule = rule<HubLoginActivity> {
-        wheneverLoginWithGoogleToken().thenJust(HubTokenFromApi("token"))
+        wheneverLoginWithGoogleToken().thenReturn(Observable.just(HubTokenFromApi("token")))
         HubLoginRepositoryProvider.override = { mock<HubLogin.Repository>() }
         HubLoginTokenApiProvider.override = { hubLoginTokenApi }
         ReportList.ServiceProvider.override = { rxMockJust(emptyList<Report>()) }

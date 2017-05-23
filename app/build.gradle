@@ -24,11 +24,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
-apply from: 'app-version.gradle'
+apply from: '../gradle/app-version.gradle'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 25

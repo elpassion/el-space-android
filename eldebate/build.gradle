@@ -1,17 +1,14 @@
 apply plugin: 'com.android.application'
-
+apply from: '../gradle/app-version.gradle'
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
-
     defaultConfig {
         applicationId "pl.elpassion.eldebate"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

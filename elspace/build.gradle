@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply from: '../gradle/app-version.gradle'
 apply from: 'src/release/google-signing-credentials.gradle'
 
@@ -23,10 +25,20 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+    signingConfigs {
+        debug {
+            storeFile file("../debug-keystore.jks")
+            storePassword "android"
+            keyAlias "elspace"
+            keyPassword "android"
+        }
+    }
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        debug {
+            testCoverageEnabled = "true" == System.env.CI
+            ext.betaDistributionGroupAliases = 'Elpassion'
+            ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
+            signingConfig signingConfigs.debug
         }
     }
     sourceSets {
@@ -38,15 +50,14 @@ android {
     }
 }
 
+apply from: '../gradle/android-test-dependencies.gradle'
+
 dependencies {
     compile project(':app')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.google.android.gms:play-services-auth:10.2.4'
 
     testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 }
 
 apply plugin: 'com.google.gms.google-services'

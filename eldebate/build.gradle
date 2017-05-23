@@ -38,10 +38,9 @@ android {
     }
 }
 
-apply from: '../gradle/android-test-dependencies.gradle'
-
 dependencies {
     compile project(":app")
     compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
 }
+apply from: '../gradle/test-dependencies.gradle'
+apply from: '../gradle/android-test-dependencies.gradle'

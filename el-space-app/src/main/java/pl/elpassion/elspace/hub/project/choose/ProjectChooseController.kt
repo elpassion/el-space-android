@@ -2,8 +2,9 @@ package pl.elpassion.elspace.hub.project.choose
 
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.subscribeBy
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.combineLatest
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
 
@@ -14,13 +15,12 @@ class ProjectChooseController(private val view: ProjectChoose.View,
     private var subscription: Disposable? = null
 
     fun onCreate(query: Observable<CharSequence>) {
-        subscription = combineLatest(projectListObservable(), query) { projectList: List<Project>, querySequence: CharSequence ->
+        subscription = Observables.combineLatest(projectListObservable(), query, { projectList, querySequence ->
             projectList.filter { it.name.contains(querySequence, true) }
-        }.subscribe({
-            view.showProjects(it)
-        }, {
-            view.showError(it)
-        })
+        }).subscribeBy(
+                onNext = { view.showProjects(it) },
+                onError = { view.showError(it) }
+        )
     }
 
     fun onDestroy() {

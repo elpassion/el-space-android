@@ -2,6 +2,8 @@ package pl.elpassion.elspace.hub.report.list
 
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
@@ -68,7 +70,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun fetchReports() {
-        combineLatest(fetchDays(), actions.reportsFilter(),
+        Observables.combineLatest(fetchDays(), actions.reportsFilter(),
                 { list: List<Day>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)

@@ -2,10 +2,10 @@ package pl.elpassion.elspace.hub.report.edit
 
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.withLatestFrom
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.common.extensions.catchOnError
-import pl.elpassion.elspace.common.extensions.withLatestFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.*
 

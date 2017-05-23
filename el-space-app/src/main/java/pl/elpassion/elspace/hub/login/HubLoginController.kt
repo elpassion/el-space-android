@@ -2,8 +2,8 @@ package pl.elpassion.elspace.hub.login
 
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.addTo
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class HubLoginController(private val view: HubLogin.View,

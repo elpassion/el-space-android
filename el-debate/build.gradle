@@ -17,6 +17,7 @@ dependencies {
     compile group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: retrofit_version
     compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.8.0'
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
+    compile group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.0.3'
     compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-kotlin', version: rxBinding
     compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-appcompat-v7-kotlin', version: rxBinding
     compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-support-v4-kotlin', version: rxBinding

@@ -2,6 +2,8 @@ package pl.elpassion.elspace.hub.report.add
 
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.withLatestFrom
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
@@ -49,7 +51,7 @@ class ReportAddController(private val date: String?,
     private fun getCurrentDatePerformedAtString() = getTimeFrom(timeInMillis = CurrentTimeProvider.get()).getDateString()
 
     private fun addReportClicks() = view.addReportClicks()
-            .withLatestFrom(reportTypeChanges()) { model, handler -> model to handler }
+            .withLatestFrom(reportTypeChanges(), { model, handler -> model to handler })
             .switchMap { callApi(it) }
             .doOnNext { view.close() }
 

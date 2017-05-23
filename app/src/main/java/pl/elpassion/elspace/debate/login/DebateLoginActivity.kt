@@ -38,7 +38,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         setContentView(R.layout.debate_login_activity)
         setSupportActionBar(toolbar)
         toolbar.title = "${getString(R.string.debate_title)} ${Calendar.getInstance().year}"
-        if (BuildConfig.FLAVOR != "eldebate") {
+        if (BuildConfig.APPLICATION_ID != "pl.elpassion.eldebate") {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {

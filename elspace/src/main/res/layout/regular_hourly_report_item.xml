@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/report_row_edge_margin"
+    android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:layout_marginTop="-3dp"
+    android:background="@drawable/click_indicator_white"
+    android:orientation="horizontal"
+    android:paddingBottom="2dp">
+
+    <View
+        android:id="@+id/hubIndicator"
+        style="@style/HubIndicator"
+        android:background="@color/filledIndicator" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="@dimen/report_item_left_space"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/small_padding"
+        android:paddingTop="@dimen/small_padding">
+
+        <TextView
+            android:id="@+id/reportHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            tools:text="4.0 - El Passion Design" />
+
+        <TextView
+            android:id="@+id/reportContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/unselectedText"
+            android:textSize="12sp"
+            tools:text="El Passion Website Design" />
+
+    </LinearLayout>
+</LinearLayout>

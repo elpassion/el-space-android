@@ -1,11 +1,109 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="AppThemeBlue" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+    </style>
+
+    <style name="AppThemeBlueWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+        <item name="colorControlNormal">@color/textUnderline</item>
+    </style>
+
+    <style name="AppThemeGreenWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryGreen</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
+        <item name="colorAccent">@color/colorPrimaryGreen</item>
+        <item name="colorControlNormal">@color/textUnderline</item>
+    </style>
+
+    <style name="DayName">
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="DayHeader">
+        <item name="android:paddingBottom">@dimen/default_padding_value</item>
+        <item name="android:paddingTop">@dimen/default_padding_value</item>
+        <item name="android:paddingEnd">@dimen/default_padding_value</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <style name="ReportHeader">
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">@dimen/default_padding_value</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/reportHeaderContent</item>
+        <item name="android:background">@color/reportHeaderCell</item>
+    </style>
+
+    <style name="ReportContent">
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ProjectContent">
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Button">
+        <item name="android:padding">@dimen/default_padding_value</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@color/colorPrimaryBlue</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="HubIndicator">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">2dp</item>
+    </style>
+
+    <style name="HintViolet">
+        <item name="colorAccent">@color/colorViolet</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorViolet</item>
+    </style>
+
+    <style name="HintGrey">
+        <item name="colorAccent">@color/greyHint</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/greyHint</item>
+    </style>
+
+    <style name="DebateAnswerText">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="DebateAnswerText.Positive">
+        <item name="android:textColor">@color/blueDebatePositive</item>
+    </style>
+
+    <style name="DebateAnswerText.Negative">
+        <item name="android:textColor">@color/redDebateNegative</item>
+    </style>
+
+    <style name="DebateAnswerText.Neutral">
+        <item name="android:textColor">@color/greyDebateNeutral</item>
+    </style>
+
+    <style name="DebateAnswerImage">
+        <item name="android:background">@drawable/hand_background</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:src">@drawable/hand</item>
     </style>
 
 </resources>

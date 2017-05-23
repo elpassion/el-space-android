@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/report_row_edge_margin"
+    android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:layout_marginTop="-3dp"
+    android:background="@drawable/click_indicator_white"
+    android:orientation="horizontal">
+
+    <View
+        style="@style/HubIndicator"
+        android:background="@color/filledIndicator" />
+
+    <TextView
+        android:id="@+id/dayNumber"
+        style="@style/DayName"
+        android:layout_width="@dimen/report_left_space"
+        android:layout_height="wrap_content"
+        tools:text="10 Thu" />
+
+    <TextView
+        android:id="@+id/totalHours"
+        style="@style/DayHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ico_hub_plus_not_active"
+        tools:text="Total: 8.0 hours" />
+
+</LinearLayout>

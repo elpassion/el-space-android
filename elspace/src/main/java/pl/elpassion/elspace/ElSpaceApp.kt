@@ -4,7 +4,6 @@ import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
-import pl.elpassion.BuildConfig
 import pl.elpassion.elspace.common.ContextProvider
 
 class ElSpaceApp : MultiDexApplication() {

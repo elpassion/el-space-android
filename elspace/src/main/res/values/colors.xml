@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryBlue">#383676</color>
+    <color name="colorPrimaryDarkBlue">#383676</color>
+    <color name="colorAccentBlue">#403E70</color>
+    <color name="colorPrimaryGreen">#4CC359</color>
+    <color name="black">#000</color>
+    <color name="borderColor">#E0E0E0</color>
+    <color name="reportMissing">#BA6767</color>
+    <color name="emptyToken">#FF4040</color>
+    <color name="reportHeaderCell">#F1EFEF</color>
+    <color name="reportContent">#312E39</color>
+    <color name="reportHeaderContent">#312E39</color>
+    <color name="colorWhite">#fff</color>
+    <color name="hubBackground">#F8F8FA</color>
+    <color name="missingIndicator">#CF9796</color>
+    <color name="filledIndicator">#91ECB3</color>
+    <color name="unknownIndicator">#E4E4E4</color>
+    <color name="unselectedText">#B3B3B8</color>
+    <color name="selectedWhite">#42000000</color>
+    <color name="defaultTextColor">#5F5A6A</color>
+    <color name="textUnderline">#e2e2e2</color>
+    <color name="colorViolet">#AB9BFF</color>
+    <color name="greyHint">#C0C0C0</color>
+    <color name="greyLightText">#B8B8B8</color>
+    <color name="greyDarkText">#4A4A4A</color>
+    <color name="greyActivityBackground">#F8FAF8</color>
+    <color name="greyHandBackground">#EAEAEA</color>
+    <color name="blueDebatePositive">#0098E3</color>
+    <color name="redDebateNegative">#E44043</color>
+    <color name="greyDebateNeutral">#8F8F8F</color>
+    <color name="redGoogleButton">#EF5350</color>
+
 </resources>

@@ -28,7 +28,7 @@ object DebateRetrofitProvider : Provider<Retrofit>({
             baseUrl = "http://el-debate.herokuapp.com/api/")
 })
 
-private fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
+fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
     return Retrofit.Builder()
             .addCallAdapterFactory(rxJava2CallAdapterFactory)
             .addConverterFactory(gsonConverter)
@@ -37,5 +37,5 @@ private fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrof
             .build()
 }
 
-private fun defaultOkHttpClient() = OkHttpClient.Builder()
+fun defaultOkHttpClient() = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)

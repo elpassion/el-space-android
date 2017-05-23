@@ -41,10 +41,6 @@ android {
         }
     }
     buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
         debug {
             testCoverageEnabled = "true" == System.env.CI
             ext.betaDistributionGroupAliases = 'Elpassion'

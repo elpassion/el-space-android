@@ -9,7 +9,8 @@
         android:icon="@mipmap/ic_launcher"
         android:supportsRtl="true">
         <activity
-            android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity">
+            android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

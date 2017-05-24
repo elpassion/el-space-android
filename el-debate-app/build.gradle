@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: '../gradle/app-version.gradle'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        applicationId "pl.elpassion.eldebate"
+        minSdkVersion 19
+        targetSdkVersion 25
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
+    }
+    signingConfigs {
+        debug {
+            storeFile file("../debug-keystore.jks")
+            storePassword "android"
+            keyAlias "elspace"
+            keyPassword "android"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile project(':el-debate')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+}
+apply from: '../gradle/test-dependencies.gradle'
+apply from: '../gradle/android-test-dependencies.gradle'

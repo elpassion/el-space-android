@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.elpassion.eldebate">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".ElDebateApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:supportsRtl="true">
+        <activity
+            android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="42505f6356175462de2327f99393bf1fdf054841" />
+    </application>
+
+</manifest>

@@ -42,7 +42,6 @@ android {
     }
     buildTypes {
         debug {
-            testCoverageEnabled = "true" == System.env.CI
             ext.betaDistributionGroupAliases = 'Elpassion'
             ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
             signingConfig signingConfigs.debug

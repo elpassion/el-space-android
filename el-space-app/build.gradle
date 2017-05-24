@@ -2,19 +2,28 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../gradle/app-version.gradle'
+apply from: 'src/release/google-signing-credentials.gradle'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
 
     defaultConfig {
-        applicationId "pl.elpassion.eldebate"
+        applicationId "pl.elpassion.elspace"
         minSdkVersion 19
         targetSdkVersion 25
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
     }
     signingConfigs {
         debug {
@@ -25,13 +34,16 @@ android {
         }
     }
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
         debug {
+            testCoverageEnabled = "true" == System.env.CI
+            ext.betaDistributionGroupAliases = 'Elpassion'
+            ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
             signingConfig signingConfigs.debug
         }
+    }
+    sourceSets {
+        test.java.srcDirs += 'src/testCommon/java'
+        androidTest.java.srcDirs += 'src/testCommon/java'
     }
     lintOptions {
         abortOnError false
@@ -39,8 +51,11 @@ android {
 }
 
 dependencies {
-    compile project(":app")
+    compile project(':el-debate')
     compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.4'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'
+
+apply plugin: 'com.google.gms.google-services'

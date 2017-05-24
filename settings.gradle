@@ -1,1 +1,1 @@
-include ':app', ':eldebate', ':elspace'
+include ':el-debate', ':el-debate-app', ':el-space-app'

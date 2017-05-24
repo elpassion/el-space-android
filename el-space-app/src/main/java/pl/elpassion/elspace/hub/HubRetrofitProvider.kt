@@ -1,6 +1,8 @@
-package pl.elpassion.elspace.api
+package pl.elpassion.elspace.hub
 
 import okhttp3.Interceptor
+import pl.elpassion.elspace.api.createRetrofit
+import pl.elpassion.elspace.api.defaultOkHttpClient
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.login.HubLoginRepositoryProvider
 import retrofit2.Retrofit
@@ -19,7 +21,7 @@ object HubRetrofitProvider : Provider<Retrofit>({
 
 fun xTokenInterceptor() = Interceptor { chain ->
     val request = chain.request().newBuilder()
-            .addHeader("X-Access-Token", HubLoginRepositoryProvider.get().readToken())
+            .addHeader("X-Access-Token", Provider.get().readToken())
             .build()
     chain.proceed(request)
 }

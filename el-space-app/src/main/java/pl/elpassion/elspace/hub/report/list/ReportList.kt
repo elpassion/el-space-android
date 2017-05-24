@@ -1,6 +1,6 @@
 package pl.elpassion.elspace.hub.report.list
 
-import pl.elpassion.elspace.api.HubRetrofitProvider
+import pl.elpassion.elspace.hub.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project

@@ -6,8 +6,8 @@ import com.nhaarman.mockito_kotlin.mock
 import io.reactivex.Observable
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import pl.elpassion.elspace.api.HubRetrofitProvider
-import pl.elpassion.elspace.api.UnauthenticatedRetrofitProvider
+import pl.elpassion.elspace.hub.HubRetrofitProvider
+import pl.elpassion.elspace.hub.UnauthenticatedRetrofitProvider
 import pl.elpassion.elspace.hub.login.GoogleSingInDI
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.report.add.ReportAdd

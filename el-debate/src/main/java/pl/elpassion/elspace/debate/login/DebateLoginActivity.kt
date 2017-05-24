@@ -29,16 +29,12 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         DebateLoginController(this, DebateTokenRepositoryProvider.get(), DebateLogin.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
-    companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, DebateLoginActivity::class.java))
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
         setSupportActionBar(toolbar)
         toolbar.title = "${getString(R.string.debate_title)} ${Calendar.getInstance().year}"
-        if (BuildConfig.APPLICATION_ID != "pl.elpassion.eldebate") {
+        if (showBackArrow) {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
@@ -77,5 +73,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     override fun showWrongPinError() {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
+    companion object {
+        fun start(context: Context) = context.startActivity(Intent(context, DebateLoginActivity::class.java))
+        var showBackArrow = true
     }
 }

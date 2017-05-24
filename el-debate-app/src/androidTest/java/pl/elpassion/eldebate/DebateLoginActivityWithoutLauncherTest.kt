@@ -4,7 +4,6 @@ import android.support.test.espresso.Espresso
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.rule.ActivityTestRule
 import com.elpassion.android.commons.espresso.doesNotExist
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -16,7 +15,6 @@ class DebateLoginActivityWithoutLauncherTest {
     val rule = ActivityTestRule<DebateLoginActivity>(DebateLoginActivity::class.java)
 
     @Test
-    @Ignore
     fun shouldShowToolbarWithoutBackArrow() {
         onToolbarBackArrow().doesNotExist()
     }

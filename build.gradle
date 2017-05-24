@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.2-3'
+    ext.kotlin_version = '1.1.2-4'
     ext.espressoVersion = '2.2.2'
     ext.elCommon = '0.0.13'
     repositories {

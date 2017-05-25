@@ -1,0 +1,41 @@
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 25
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    signingConfigs {
+        debug {
+            storeFile file("../debug-keystore.jks")
+            storePassword "android"
+            keyAlias "elspace"
+            keyPassword "android"
+        }
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled = "true" == System.env.CI
+            signingConfig signingConfigs.debug
+        }
+    }
+    sourceSets {
+        test.java.srcDirs += 'src/testCommon/java'
+        androidTest.java.srcDirs += 'src/testCommon/java'
+    }
+    dexOptions {
+        javaMaxHeapSize DEX_MAX_HEAP_SIZE
+        preDexLibraries = System.env.CI != "true"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+        abortOnError false
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
+}

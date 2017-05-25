@@ -23,10 +23,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    sourceSets {
-        test.java.srcDirs += 'src/testCommon/java'
-        androidTest.java.srcDirs += 'src/testCommon/java'
-    }
     dexOptions {
         javaMaxHeapSize DEX_MAX_HEAP_SIZE
         preDexLibraries = System.env.CI != "true"

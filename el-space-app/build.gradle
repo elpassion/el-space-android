@@ -51,7 +51,7 @@ android {
 }
 
 dependencies {
-    api project(':el-debate')
+    implementation project(':el-debate')
     api 'com.android.support:appcompat-v7:25.3.1'
     api 'com.google.android.gms:play-services-auth:10.2.4'
 }

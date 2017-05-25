@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    api project(':el-debate')
+    implementation project(':el-debate')
     api 'com.android.support:appcompat-v7:25.3.1'
 }
 apply from: '../gradle/test-dependencies.gradle'

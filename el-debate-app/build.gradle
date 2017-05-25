@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    compile project(':el-debate')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    implementation project(':el-debate')
+    implementation 'com.android.support:appcompat-v7:25.3.1'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

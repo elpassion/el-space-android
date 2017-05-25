@@ -51,9 +51,9 @@ android {
 }
 
 dependencies {
-    compile project(':el-debate')
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.google.android.gms:play-services-auth:10.2.4'
+    implementation project(':el-debate')
+    implementation 'com.android.support:appcompat-v7:25.3.1'
+    implementation 'com.google.android.gms:play-services-auth:10.2.4'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

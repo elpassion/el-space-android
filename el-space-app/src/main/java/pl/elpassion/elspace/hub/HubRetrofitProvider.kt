@@ -21,7 +21,7 @@ object HubRetrofitProvider : Provider<Retrofit>({
 
 fun xTokenInterceptor() = Interceptor { chain ->
     val request = chain.request().newBuilder()
-            .addHeader("X-Access-Token", Provider.get().readToken())
+            .addHeader("X-Access-Token", HubLoginRepositoryProvider.get().readToken())
             .build()
     chain.proceed(request)
 }

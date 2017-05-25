@@ -21,7 +21,7 @@ android {
         applicationId "pl.elpassion.elspace"
         minSdkVersion 19
         targetSdkVersion 25
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

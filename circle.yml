@@ -3,7 +3,7 @@ machine:
       version: oraclejdk8
   environment:
       ANDROID_HOME: /usr/local/android-sdk-linux
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=350m -XX:+HeapDumpOnOutOfMemoryError"'
+      GRADLE_OPTS: '-Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=350m -XX:+HeapDumpOnOutOfMemoryError"'
       _JAVA_OPTIONS: "-Xms256m -Xmx1024m -XX:MaxPermSize=350m"
 
 dependencies:
@@ -26,9 +26,9 @@ compile:
 
 test:
   pre:
-    - emulator -avd circleci-android24 -no-window:
-          background: true
-          parallel: true
+    - echo no | android create avd --force -n test -t android-22 --abi default/armeabi-v7a --skin 480x800:
+    - emulator -avd test -no-audio -no-window:
+           background: true
   post:
     - mkdir $CIRCLE_ARTIFACTS/tests
     - adb logcat -d >> $CIRCLE_ARTIFACTS/tests/logcat.txt
@@ -41,9 +41,9 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
-    - (./gradlew testDebugUnitTest -Pkotlin.incremental=false):
+    - (./gradlew testDebugUnitTest):
           timeout: 32000
-    - (./gradlew connectedDebugAndroidTest -Pkotlin.incremental=false):
+    - (./gradlew connectedDebugAndroidTest):
           timeout: 32000
 
 deployment:

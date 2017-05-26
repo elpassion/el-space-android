@@ -3,8 +3,8 @@ machine:
       version: oraclejdk8
   environment:
       ANDROID_HOME: /usr/local/android-sdk-linux
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"'
-      _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=350m -XX:+HeapDumpOnOutOfMemoryError"'
+      _JAVA_OPTIONS: "-Xms256m -Xmx1024m -XX:MaxPermSize=350m"
 
 dependencies:
     override:
@@ -41,9 +41,9 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
-    - (./gradlew testDebugUnitTest):
+    - (./gradlew testDebugUnitTest -Pkotlin.incremental=false):
           timeout: 32000
-    - (./gradlew connectedDebugAndroidTest):
+    - (./gradlew connectedDebugAndroidTest -Pkotlin.incremental=false):
           timeout: 32000
 
 deployment:

@@ -3,7 +3,7 @@ machine:
       version: oraclejdk8
   environment:
       ANDROID_HOME: /usr/local/android-sdk-linux
-      GRADLE_OPTS: '-Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx1024m -XX:MaxPermSize=350m -XX:+HeapDumpOnOutOfMemoryError"'
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Porg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"'
       _JAVA_OPTIONS: "-Xms256m -Xmx1024m -XX:MaxPermSize=350m"
 
 dependencies:
@@ -43,7 +43,7 @@ test:
       background: true
     - (./gradlew testDebugUnitTest):
           timeout: 32000
-    - (./gradlew connectedDebugAndroidTest):
+    - (./gradlew connectedDebugAndroidTest -Pkotlin.incremental=false):
           timeout: 32000
 
 deployment:

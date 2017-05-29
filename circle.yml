@@ -51,8 +51,3 @@ deployment:
     branch: master
     commands:
       - bash scripts/deploy_crashlytics.sh
-      - bash <(curl -s https://codecov.io/bash)
-  not_master:
-    branch: /(?!master\b)\b\w+/
-    commands:
-      - bash <(curl -s https://codecov.io/bash)

@@ -12,11 +12,12 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply from: '../gradle/app-version.gradle'
 apply from: 'src/release/google-signing-credentials.gradle'
-
 apply from: '../gradle/android.gradle'
+
 android {
     defaultConfig {
         applicationId "pl.elpassion.elspace"
+        multiDexEnabled true
     }
     sourceSets {
         test.java.srcDirs += 'src/testCommon/java'

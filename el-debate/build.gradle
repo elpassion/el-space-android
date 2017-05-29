@@ -20,13 +20,6 @@ apply plugin: 'io.fabric'
 apply from: '../gradle/app-version.gradle'
 apply from: '../gradle/android.gradle'
 
-android {
-    sourceSets {
-        test.java.srcDirs += 'src/testCommon/java'
-        androidTest.java.srcDirs += 'src/testCommon/java'
-    }
-}
-
 dependencies {
     api "com.squareup.retrofit2:retrofit:$retrofit_version"
     api "com.squareup.retrofit2:converter-gson:$retrofit_version"

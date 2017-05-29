@@ -31,11 +31,15 @@ test:
     - echo no | android create avd --force -n test -t android-22 --abi default/armeabi-v7a --skin 480x800:
     - emulator -avd test -no-audio -no-window:
            background: true
+           parallel: true
   post:
     - mkdir $CIRCLE_ARTIFACTS/tests
     - adb logcat -d >> $CIRCLE_ARTIFACTS/tests/logcat.txt
 
   override:
+    - (./gradlew testDebugUnitTest):
+          timeout: 32000
+
     - circle-android wait-for-boot
     - adb shell settings put global window_animation_scale 0:
       background: true
@@ -43,8 +47,6 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
-    - (./gradlew testDebugUnitTest):
-          timeout: 32000
     - (./gradlew connectedDebugAndroidTest -Pkotlin.incremental=false):
           timeout: 32000
 

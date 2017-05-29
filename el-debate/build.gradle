@@ -3,20 +3,11 @@ buildscript {
     ext.support_version = '25.3.1'
     ext.rxjava2_version = '2.1.0'
     ext.rxBinding = '2.0.0'
-
-    repositories {
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.22.1'
-    }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'io.fabric'
 apply from: '../gradle/app-version.gradle'
 apply from: '../gradle/android.gradle'
 
@@ -38,9 +29,6 @@ dependencies {
     api "com.elpassion.android.commons:recycler:$elCommon"
     api "com.elpassion.android.commons:shared-preferences:$elCommon"
     api "com.elpassion.android.commons:view:$elCommon"
-    api('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true
-    }
     api('com.philliphsu:bottomsheetpickers:2.3.3') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'

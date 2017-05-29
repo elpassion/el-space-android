@@ -1,15 +1,18 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'io.fabric.tools:gradle:1.22.1'
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.fabric'
 apply from: '../gradle/app-version.gradle'
 apply from: 'src/release/google-signing-credentials.gradle'
 apply from: '../gradle/android.gradle'
@@ -35,6 +38,9 @@ dependencies {
     implementation project(':el-debate')
     api 'com.android.support:appcompat-v7:25.3.1'
     api 'com.google.android.gms:play-services-auth:10.2.4'
+    api('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
+    }
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

@@ -20,7 +20,6 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'jacoco-everywhere'
 apply from: '../gradle/app-version.gradle'
-
 apply from: '../gradle/android.gradle'
 
 android {

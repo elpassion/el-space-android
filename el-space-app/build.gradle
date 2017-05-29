@@ -1,9 +1,3 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply from: '../gradle/app-version.gradle'
-apply from: 'src/release/google-signing-credentials.gradle'
-
 buildscript {
     repositories {
         jcenter()
@@ -13,25 +7,16 @@ buildscript {
     }
 }
 
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: '../gradle/app-version.gradle'
+apply from: 'src/release/google-signing-credentials.gradle'
 
+apply from: '../gradle/android.gradle'
+android {
     defaultConfig {
         applicationId "pl.elpassion.elspace"
-        minSdkVersion 19
-        targetSdkVersion 25
-        vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-    }
-    signingConfigs {
-        debug {
-            storeFile file("../debug-keystore.jks")
-            storePassword "android"
-            keyAlias "elspace"
-            keyPassword "android"
-        }
     }
     sourceSets {
         test.java.srcDirs += 'src/testCommon/java'
@@ -39,18 +24,9 @@ android {
     }
     buildTypes {
         debug {
-            testCoverageEnabled = "true" == System.env.CI
             ext.betaDistributionGroupAliases = 'Elpassion'
             ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
-            signingConfig signingConfigs.debug
         }
-    }
-    sourceSets {
-        test.java.srcDirs += 'src/testCommon/java'
-        androidTest.java.srcDirs += 'src/testCommon/java'
-    }
-    lintOptions {
-        abortOnError false
     }
 }
 

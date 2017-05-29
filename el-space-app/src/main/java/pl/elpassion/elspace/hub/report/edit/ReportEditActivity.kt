@@ -13,7 +13,7 @@ import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import com.jakewharton.rxbinding2.support.design.widget.itemSelections
 import kotlinx.android.synthetic.main.report_edit_activity.*
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader

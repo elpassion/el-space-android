@@ -16,7 +16,7 @@ import com.elpassion.android.commons.recycler.components.base.MutableListItemsSt
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChanges
 import kotlinx.android.synthetic.main.project_choose_activity.*
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
@@ -25,7 +25,6 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 

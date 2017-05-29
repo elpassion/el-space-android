@@ -7,7 +7,7 @@ import com.elpassion.android.commons.recycler.components.stable.StableItemAdapte
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.day_not_filled_in_item.view.*
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.report.list.DayWithoutReports
 import pl.elpassion.elspace.hub.report.list.OnDayClick
 import pl.elpassion.elspace.hub.report.list.shouldHaveReports

@@ -3,8 +3,8 @@ machine:
       version: oraclejdk8
   environment:
       ANDROID_HOME: /usr/local/android-sdk-linux
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
-      _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.parallel=false -Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"'
+      _JAVA_OPTIONS: "-Xms256m -Xmx512m"
 
 dependencies:
     override:
@@ -18,11 +18,11 @@ dependencies:
 
 compile:
   pre:
-    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-server-client-id.xml.enc -out app/src/release/res/values/google-server-client-id.xml
-    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-services-release.json.enc -out app/google-services.json
-    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/google-signing-credentials.gradle.enc -out app/src/release/google-signing-credentials.gradle
-    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in app/src/release/release-keystore.jks.enc -out app/src/release/release-keystore.jks
-    - openssl aes-256-cbc -d -a -k "$FABRIC_PASSWORD" -in app/fabric.properties.enc -out app/fabric.properties
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in el-space-app/src/release/google-server-client-id.xml.enc -out el-space-app/src/release/res/values/google-server-client-id.xml
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in el-space-app/src/release/google-services-release.json.enc -out el-space-app/google-services.json
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in el-space-app/src/release/google-signing-credentials.gradle.enc -out el-space-app/src/release/google-signing-credentials.gradle
+    - openssl aes-256-cbc -d -k "$FABRIC_GOOGLE_PASSWORD" -in el-space-app/src/release/release-keystore.jks.enc -out el-space-app/src/release/release-keystore.jks
+    - openssl aes-256-cbc -d -a -k "$FABRIC_PASSWORD" -in el-debate/fabric.properties.enc -out el-debate/fabric.properties
 
 test:
   pre:
@@ -41,9 +41,9 @@ test:
       background: true
     - adb shell settings put global animator_duration_scale 0:
       background: true
-    - (./gradlew testElspaceDebugUnitTest):
+    - (./gradlew testDebugUnitTest):
           timeout: 32000
-    - (./gradlew connectedElspaceDebugAndroidTest):
+    - (./gradlew connectedDebugAndroidTest -Pkotlin.incremental=false):
           timeout: 32000
 
 deployment:
@@ -51,8 +51,3 @@ deployment:
     branch: master
     commands:
       - bash scripts/deploy_crashlytics.sh
-      - bash <(curl -s https://codecov.io/bash)
-  not_master:
-    branch: /(?!master\b)\b\w+/
-    commands:
-      - bash <(curl -s https://codecov.io/bash)

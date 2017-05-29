@@ -1,6 +1,6 @@
 package pl.elpassion.elspace.hub.report
 
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.report.ReportType.*
 
 enum class ReportType(val id: Int) {

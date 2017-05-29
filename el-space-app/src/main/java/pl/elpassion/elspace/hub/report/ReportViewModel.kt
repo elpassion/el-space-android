@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report
 
 import android.support.annotation.IdRes
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.project.Project
 
 interface ReportViewModel {

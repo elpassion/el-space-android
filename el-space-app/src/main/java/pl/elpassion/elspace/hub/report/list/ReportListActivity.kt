@@ -21,7 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.report_list_activity.*
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.menuClicks
 import pl.elpassion.elspace.common.extensions.onMenuItemAction

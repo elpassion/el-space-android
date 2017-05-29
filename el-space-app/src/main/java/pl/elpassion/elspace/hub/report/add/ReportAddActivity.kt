@@ -15,7 +15,7 @@ import com.jakewharton.rxbinding2.support.design.widget.itemSelections
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.RxView
 import kotlinx.android.synthetic.main.report_add_activity.*
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.checkedItemId
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem

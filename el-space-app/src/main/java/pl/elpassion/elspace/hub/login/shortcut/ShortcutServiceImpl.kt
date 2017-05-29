@@ -7,7 +7,7 @@ import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
 import android.graphics.drawable.Icon
 import android.os.Build
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 
 class ShortcutServiceImpl(val context: Context) : ShortcutService {

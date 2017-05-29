@@ -1,0 +1,17 @@
+dependencies {
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation("com.android.support.test.espresso:espresso-intents:$espressoVersion") {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation("com.elpassion.android.commons:espresso:$elCommon") {
+        exclude group: 'com.android.support'
+        exclude group: 'org.jetbrains.kotlin'
+    }
+    androidTestImplementation("com.nhaarman:mockito-kotlin:1.4.0") {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
+    androidTestImplementation 'org.mockito:mockito-android:2.7.21'
+}

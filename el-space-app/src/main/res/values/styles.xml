@@ -1,0 +1,64 @@
+<resources>
+
+    <style name="AppThemeBlue" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+    </style>
+
+    <style name="AppThemeBlueWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+        <item name="colorControlNormal">@color/textUnderline</item>
+    </style>
+
+    <style name="DayName">
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:gravity">start</item>
+    </style>
+
+    <style name="DayHeader">
+        <item name="android:paddingBottom">@dimen/default_padding_value</item>
+        <item name="android:paddingTop">@dimen/default_padding_value</item>
+        <item name="android:paddingEnd">@dimen/default_padding_value</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <style name="ReportHeader">
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingStart">@dimen/default_padding_value</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/reportHeaderContent</item>
+        <item name="android:background">@color/reportHeaderCell</item>
+    </style>
+
+    <style name="ReportContent">
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ProjectContent">
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="HubIndicator">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">2dp</item>
+    </style>
+
+    <style name="HintViolet">
+        <item name="colorAccent">@color/colorViolet</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/colorViolet</item>
+    </style>
+
+</resources>

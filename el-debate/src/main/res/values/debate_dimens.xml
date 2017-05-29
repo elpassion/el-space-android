@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="default_padding_value">16dp</dimen>
+</resources>

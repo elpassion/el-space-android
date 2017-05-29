@@ -26,8 +26,8 @@ fun String.toCalendarDate(): Calendar {
     return calendar
 }
 val Calendar.dayOfMonth: Int
-    get() = this.get(java.util.Calendar.DAY_OF_MONTH)
+    get() = this.get(Calendar.DAY_OF_MONTH)
 val Calendar.month: Int
-    get() = this.get(java.util.Calendar.MONTH)
+    get() = this.get(Calendar.MONTH)
 val Calendar.year: Int
-    get() = this.get(java.util.Calendar.YEAR)
+    get() = this.get(Calendar.YEAR)

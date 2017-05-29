@@ -1,13 +1,8 @@
 package pl.elpassion.elspace.common.extensions
 
-
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
-
-fun Disposable.addTo(subscription: CompositeDisposable) = subscription.add(this)
 
 fun <T> Observable<T>.catchOnError(handleOnError: (throwable: Throwable) -> Unit): Observable<T> = this
         .onErrorResumeNext { throwable: Throwable ->

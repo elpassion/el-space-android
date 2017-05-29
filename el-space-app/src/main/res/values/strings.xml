@@ -14,6 +14,10 @@
     <string name="report_unpaid_vacations_title">Unpaid vacations</string>
     <string name="report_paid_vacations_title">Paid vacations</string>
     <string name="report_hours_default_value" translatable="false">8</string>
+    <plurals name="report_list_total_hours">
+        <item quantity="one">Total: %1$s hour</item>
+        <item quantity="other">Total: %1$s hours</item>
+    </plurals>
     <string name="report_add_date_header">Performed at</string>
     <string name="report_add_project_header">Project</string>
     <string name="report_add_hours_header">Hours</string>

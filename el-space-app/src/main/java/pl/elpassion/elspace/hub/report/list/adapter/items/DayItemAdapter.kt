@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.report.list.adapter.items
 
+import android.content.res.Resources
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
@@ -22,8 +23,13 @@ class DayItemAdapter(override val day: DayWithHourlyReports, val onDayClick: OnD
 
 
     private fun setTotalHoursTextWithIndicator(holder: VH) {
-        holder.itemView.totalHours.text = "Total: ${day.reportedHours.toStringWithoutZeroes()} hours"
+        holder.itemView.totalHours.text = getTotalHoursText(holder.itemView.resources)
     }
+
+    private fun getTotalHoursText(resources: Resources) = resources.getQuantityString(
+            R.plurals.report_list_total_hours,
+            day.reportedHours.toInt(),
+            day.reportedHours.toStringWithoutZeroes())
 
     class VH(view: View) : RecyclerView.ViewHolder(view)
 }

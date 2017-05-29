@@ -9,7 +9,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.CachedProjectRepository

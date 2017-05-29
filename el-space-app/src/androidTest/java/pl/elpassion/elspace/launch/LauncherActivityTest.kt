@@ -3,7 +3,7 @@ package pl.elpassion.elspace.launch
 import com.elpassion.android.commons.espresso.*
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.login.DebateLoginActivity

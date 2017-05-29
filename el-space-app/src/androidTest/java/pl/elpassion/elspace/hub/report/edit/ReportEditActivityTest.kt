@@ -7,7 +7,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project

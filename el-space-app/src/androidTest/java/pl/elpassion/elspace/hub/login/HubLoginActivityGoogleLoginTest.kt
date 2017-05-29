@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import pl.elpassion.R
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.ReportList

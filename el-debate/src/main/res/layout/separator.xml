@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<View
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:background="@color/borderColor"
-    tools:showIn="@layout/day_item"/>

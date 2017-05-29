@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<View xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/hubIndicator"
-    android:layout_width="3dp"
-    android:layout_height="match_parent"
-    tools:showIn="@layout/day_item" />

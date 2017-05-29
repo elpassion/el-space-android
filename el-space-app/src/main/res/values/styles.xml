@@ -13,13 +13,6 @@
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
-    <style name="AppThemeGreenWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryGreen</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
-        <item name="colorAccent">@color/colorPrimaryGreen</item>
-        <item name="colorControlNormal">@color/textUnderline</item>
-    </style>
-
     <style name="DayName">
         <item name="android:layout_marginStart">10dp</item>
         <item name="android:textSize">18sp</item>
@@ -57,15 +50,6 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="Button">
-        <item name="android:padding">@dimen/default_padding_value</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorWhite</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@color/colorPrimaryBlue</item>
-        <item name="android:foreground">?android:attr/selectableItemBackground</item>
-    </style>
-
     <style name="HubIndicator">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">2dp</item>
@@ -75,35 +59,6 @@
         <item name="colorAccent">@color/colorViolet</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/colorViolet</item>
-    </style>
-
-    <style name="HintGrey">
-        <item name="colorAccent">@color/greyHint</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/greyHint</item>
-    </style>
-
-    <style name="DebateAnswerText">
-        <item name="android:layout_gravity">bottom</item>
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="DebateAnswerText.Positive">
-        <item name="android:textColor">@color/blueDebatePositive</item>
-    </style>
-
-    <style name="DebateAnswerText.Negative">
-        <item name="android:textColor">@color/redDebateNegative</item>
-    </style>
-
-    <style name="DebateAnswerText.Neutral">
-        <item name="android:textColor">@color/greyDebateNeutral</item>
-    </style>
-
-    <style name="DebateAnswerImage">
-        <item name="android:background">@drawable/hand_background</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:src">@drawable/hand</item>
     </style>
 
 </resources>

@@ -1,8 +1,0 @@
-<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
-    android:duration="2450"
-    android:interpolator="@android:anim/linear_interpolator"
-    android:propertyName="trimPathEnd"
-    android:repeatCount="-1"
-    android:repeatMode="reverse"
-    android:valueFrom="0.2"
-    android:valueTo="0.85" />

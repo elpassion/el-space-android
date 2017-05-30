@@ -26,10 +26,12 @@ class DayItemAdapter(override val day: DayWithHourlyReports, val onDayClick: OnD
         holder.itemView.totalHours.text = getTotalHoursText(holder.itemView.resources)
     }
 
-    private fun getTotalHoursText(resources: Resources) = resources.getQuantityString(
-            R.plurals.report_list_total_hours,
-            day.reportedHours.toInt(),
-            day.reportedHours.toStringWithoutZeroes())
+    private fun getTotalHoursText(resources: Resources): String? {
+        return resources.getQuantityString(
+                R.plurals.report_list_total_hours,
+                day.reportedHours.toInt(),
+                day.reportedHours.toStringWithoutZeroes())
+    }
 
     class VH(view: View) : RecyclerView.ViewHolder(view)
 }

@@ -77,6 +77,15 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowCommentButton() {
+        startActivity()
+        onId(R.id.debateCommentButton)
+                .hasText(R.string.debate_details_button_comment)
+                .isDisplayed()
+                .isEnabled()
+    }
+
+    @Test
     fun shouldShowPositiveAnswerReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()

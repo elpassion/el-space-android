@@ -14,7 +14,7 @@ class RegularReportItemAdapter(val report: RegularHourlyReport, val onReportClic
 
     override fun onBindViewHolder(holder: VH) {
         holder.itemView.setOnClickListener { onReportClick(report) }
-        holder.itemView.reportHeader.text = "${report.reportedHours.toStringWithoutZeroes()}h - ${report.project.name}"
+        holder.itemView.reportHeader.text = report.reportedHours.toStringWithoutZeroes() + "h - " + report.project.name
         holder.itemView.reportContent.text = report.description.trim()
     }
 

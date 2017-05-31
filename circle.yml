@@ -54,4 +54,5 @@ deployment:
   production:
     branch: master
     commands:
+      - ./gradlew :el-space-app:publishApkRelease
       - bash scripts/deploy_crashlytics.sh

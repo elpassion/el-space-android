@@ -41,7 +41,7 @@ class ReportListActivityTest {
     val rule = rule<ReportListActivity> {
         CachedProjectRepositoryProvider.override = { mock<CachedProjectRepository>().apply { whenever(getPossibleProjects()).thenReturn(listOf(newProject())) } }
         stubCurrentTime(year = 2016, month = 10, day = 4)
-        whenever(service.getReports(any())).thenReturn(Observable.just(listOf<Report>(
+        whenever(service.getReports(any())).thenReturn(Observable.just(listOf(
                 newRegularHourlyReport(year = 2016, month = 10, day = 3, project = newProject(name = "Project"), description = "Description", reportedHours = 8.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 2, reportedHours = 3.0),
                 newRegularHourlyReport(year = 2016, month = 10, day = 6, reportedHours = 4.0),

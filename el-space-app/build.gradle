@@ -35,9 +35,9 @@ android {
 }
 
 dependencies {
-    implementation project(':el-debate')
-    api group: 'com.google.android.gms', name: 'play-services-auth', version: '10.2.4'
-    api('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    compile project(':el-debate')
+    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.2.4'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
 }

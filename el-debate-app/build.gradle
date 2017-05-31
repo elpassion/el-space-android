@@ -18,7 +18,7 @@ android {
 }
 
 dependencies {
-    implementation project(':el-debate')
+    compile project(':el-debate')
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

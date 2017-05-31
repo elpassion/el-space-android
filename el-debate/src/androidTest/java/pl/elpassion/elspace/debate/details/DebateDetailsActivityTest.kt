@@ -11,6 +11,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createDebateData
+import pl.elpassion.elspace.debate.comment.CommentActivity
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
 
 class DebateDetailsActivityTest {
@@ -194,6 +195,13 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
+    }
+
+    @Test
+    fun shouldStartCommentActivityWhenCommentButtonClicked() {
+        startActivity()
+        onId(R.id.debateCommentButton).click()
+        checkIntent(CommentActivity::class.java)
     }
 
     private fun startActivity(token: String = "token") {

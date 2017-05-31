@@ -22,6 +22,9 @@
         <activity
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />
+        <activity
+            android:name="pl.elpassion.elspace.debate.comment.CommentActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

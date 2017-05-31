@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">EL Space</string>
+    <string name="internet_connection_error">There was a problem. Please, verify your internet connection.</string>
+    <string name="launcher_button_hub">EL HUB</string>
+    <string name="launcher_button_debate">EL Debate</string>
+    <string name="hub_login_title">Log in to hub</string>
+    <string name="hub_login_hint_token">Provide your access token.</string>
+    <string name="hub_login_button_login_by_token">Log in using hub token</string>
+    <string name="hub_login_button_google_sign_in">Log in with Google</string>
+    <string name="hub_login_button_hub_link">HUB link</string>
+    <string name="hub_login_uri_hub">https://hub.elpassion.com/employee/settings/api</string>
+    <string name="report_missing">Missing</string>
+    <string name="report_sick_leave_title">Sick leave :(</string>
+    <string name="report_unpaid_vacations_title">Unpaid vacations</string>
+    <string name="report_paid_vacations_title">Paid vacations</string>
+    <string name="report_hours_default_value" translatable="false">8</string>
+    <plurals name="report_list_total_hours">
+        <item quantity="one">Total: %1$s hour</item>
+        <item quantity="other">Total: %1$s hours</item>
+    </plurals>
+    <string name="report_add_date_header">Performed at</string>
+    <string name="report_add_project_header">Project</string>
+    <string name="report_add_hours_header">Hours</string>
+    <string name="report_add_add_button">ADD</string>
+    <string name="report_add_description_hint">What did you do today? :)</string>
+    <string name="report_add">Add new report</string>
+    <string name="report_add_action">Add report</string>
+    <string name="report_add_action_regular_report">Regular Report</string>
+    <string name="report_add_action_sick_leave_report">Sick Leave</string>
+    <string name="report_add_action_paid_vacations_report">Paid Vacations</string>
+    <string name="report_add_action_unpaid_vacations_report">Unpaid Vacations</string>
+    <string name="report_add_sick_leave_info">Sick leave :(</string>
+    <string name="report_add_unpaid_vacations_info">Unpaid vacations</string>
+    <string name="report_edit">Edit report</string>
+    <string name="report_edit_action">Save changes</string>
+    <string name="report_remove_action">Remove report</string>
+    <string name="select_project">Select project</string>
+    <string name="token_empty_error">Token must be provided.</string>
+    <string name="google_token_error">Failed to login with google token.</string>
+    <string name="report_edit_date_header">PERFORMED AT</string>
+    <string name="report_edit_project_header">PROJECT</string>
+    <string name="report_edit_hours_header">HOURS</string>
+    <string name="report_edit_comment_header">COMMENT</string>
+    <string name="report_weekend">Weekend!</string>
+    <string name="report_edit_save_button">Save</string>
+    <string name="action_remove_report">Remove report</string>
+    <string name="refresh_action">Refresh</string>
+    <string name="action_search">Search</string>
+    <string name="shortcut_report_hub_short">Zaraportuj godziny</string>
+    <string name="shortcut_report_hub_long">Dodaj raport godzinowy</string>
+    <string name="today">Today</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="filter_not_filled">Filter</string>
+    <string name="empty_description_error">Description cannot be empty.</string>
+    <string name="empty_project_error">Project name cannot be empty</string>
+</resources>

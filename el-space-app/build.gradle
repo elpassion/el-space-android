@@ -1,0 +1,49 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'io.fabric.tools:gradle:1.22.1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.triplet.play'
+apply plugin: 'io.fabric'
+apply from: '../gradle/app-version.gradle'
+apply from: 'src/release/google-signing-credentials.gradle'
+apply from: '../gradle/android.gradle'
+
+android {
+    defaultConfig {
+        applicationId "pl.elpassion.elspace"
+        multiDexEnabled true
+    }
+    sourceSets {
+        test.java.srcDirs += 'src/testCommon/java'
+        androidTest.java.srcDirs += 'src/testCommon/java'
+    }
+    buildTypes {
+        debug {
+            ext.betaDistributionGroupAliases = 'Elpassion'
+            ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
+        }
+    }
+}
+
+dependencies {
+    compile project(':el-debate')
+    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.2.4'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
+    }
+}
+apply from: '../gradle/test-dependencies.gradle'
+apply from: '../gradle/android-test-dependencies.gradle'
+
+apply plugin: 'com.google.gms.google-services'

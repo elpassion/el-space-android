@@ -1,0 +1,7 @@
+dependencies {
+    testCompile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile(group: 'com.nhaarman', name: 'mockito-kotlin', version: '1.4.0') {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-reflect'
+    }
+}

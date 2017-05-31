@@ -188,6 +188,13 @@ class DebateDetailsControllerTest {
         verify(view).showVoteError(exception)
     }
 
+    @Test
+    fun shouldOpenCommentScreenOnComment() {
+        val controller = createController()
+        controller.onComment()
+        verify(view).openCommentScreen()
+    }
+
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),
                                  observeOn: Scheduler = Schedulers.trampoline()) =
             DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, observeOn))

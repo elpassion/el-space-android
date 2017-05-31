@@ -90,6 +90,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         Snackbar.make(debateDetailsCoordinator, getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT).show()
     }
 
+    override fun openCommentScreen() {
+
+    }
+
     private fun highlightPositiveAnswer() {
         debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background_blue_pressed)
         debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background)

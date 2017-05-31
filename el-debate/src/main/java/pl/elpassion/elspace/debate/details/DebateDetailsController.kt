@@ -39,6 +39,10 @@ class DebateDetailsController(
                 .addTo(compositeDisposable)
     }
 
+    fun onComment() {
+        view.openCommentScreen()
+    }
+
     fun onDestroy() {
         compositeDisposable.dispose()
     }

@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import pl.elpassion.R
 
-class CommentActivity : AppCompatActivity() {
+class DebateCommentActivity : AppCompatActivity() {
 
     companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, CommentActivity::class.java))
+        fun start(context: Context) = context.startActivity(Intent(context, DebateCommentActivity::class.java))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

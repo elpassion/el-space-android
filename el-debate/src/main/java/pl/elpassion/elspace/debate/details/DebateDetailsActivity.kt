@@ -16,7 +16,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.debate.comment.CommentActivity
+import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
@@ -93,7 +93,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun openCommentScreen() {
-        CommentActivity.start(this)
+        DebateCommentActivity.start(this)
     }
 
     private fun highlightPositiveAnswer() {

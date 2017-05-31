@@ -1,0 +1,15 @@
+<resources>
+    <string name="debate_title">EL Debate\u0020</string>
+    <string name="debate_login_code_incorrect">Debate code is incorrect</string>
+    <string name="debate_login_welcome">Welcome to</string>
+    <string name="debate_login_hint_pin">Enter EL Debate PIN</string>
+    <string name="debate_login_button_login">Log in</string>
+    <string name="debate_login_fail">Oops, something went wrong. Check your internet connection or inserted debate code.</string>
+    <string name="debate_details_info_topic">Our debate is about:</string>
+    <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>
+    <string name="debate_details_info_remember">Remember that you can change your mind before debate ends, thats why we are here!</string>
+    <string name="debate_details_button_comment">Chat</string>
+    <string name="debate_details_error">Couldn\'t load debate details</string>
+    <string name="debate_details_vote_success">You have successfully voted!</string>
+    <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
+</resources>

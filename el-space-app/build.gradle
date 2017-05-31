@@ -6,12 +6,14 @@ buildscript {
     dependencies {
         classpath 'com.google.gms:google-services:3.0.0'
         classpath 'io.fabric.tools:gradle:1.22.1'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
     }
 }
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.triplet.play'
 apply plugin: 'io.fabric'
 apply from: '../gradle/app-version.gradle'
 apply from: 'src/release/google-signing-credentials.gradle'

@@ -288,6 +288,19 @@ class ReportEditControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldShowErrorTwiceOnApiCallFailures() {
+        val runtimeException = RuntimeException()
+        createController().onCreate()
+        onRemoveReportClick()
+        verify(view, never()).showError(any())
+        removeReportSubject.onError(runtimeException)
+        verify(view).showError(runtimeException)
+        onRemoveReportClick()
+        removeReportSubject.onError(runtimeException)
+        verify(view, times(2)).showError(runtimeException)
+    }
+
     private fun createController(report: Report = newRegularHourlyReport(),
                                  subscribeOnScheduler: Scheduler = trampoline(),
                                  observeOnScheduler: Scheduler = trampoline()) =

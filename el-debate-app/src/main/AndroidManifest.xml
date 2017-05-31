@@ -23,7 +23,7 @@
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />
         <activity
-            android:name="pl.elpassion.elspace.debate.comment.CommentActivity"
+            android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />
 
         <meta-data

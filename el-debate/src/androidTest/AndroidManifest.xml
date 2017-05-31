@@ -9,5 +9,8 @@
         <activity
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />
+        <activity
+            android:name=".elspace.debate.comment.CommentActivity"
+            android:theme="@style/AppThemeGreenWithoutActionBar" />
     </application>
 </manifest>

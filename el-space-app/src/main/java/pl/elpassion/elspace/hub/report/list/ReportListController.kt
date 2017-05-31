@@ -90,8 +90,8 @@ class ReportListController(private val reportDayService: ReportDayService,
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {
                 reportDayService.createDays(dateChangeObserver.observe().observeOn(Schedulers.io()))
-                        .subscribeOn(schedulers.subscribeOn)
-                        .observeOn(schedulers.observeOn)
+                        .subscribeOn(schedulers.backgroundScheduler)
+                        .observeOn(schedulers.uiScheduler)
                         .doOnSubscribe {
                             if (!view.isDuringPullToRefresh()) {
                                 view.showLoader()

@@ -23,8 +23,8 @@ class DebateLoginController(
 
     private fun makeSubscription(debateCode: String) {
         subscription = getAuthTokenObservable(debateCode)
-                .subscribeOn(schedulers.subscribeOn)
-                .observeOn(schedulers.observeOn)
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally { view.hideLoader() }
                 .subscribe({

@@ -70,7 +70,7 @@ class HubLoginController(private val view: HubLogin.View,
     }
 
     private fun <T> Observable<T>.supplySchedulers() = this
-            .subscribeOn(schedulersSupplier.subscribeOn)
-            .observeOn(schedulersSupplier.observeOn)
+            .subscribeOn(schedulersSupplier.backgroundScheduler)
+            .observeOn(schedulersSupplier.uiScheduler)
 
 }

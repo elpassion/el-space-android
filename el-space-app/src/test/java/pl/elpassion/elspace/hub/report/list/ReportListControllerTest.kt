@@ -26,7 +26,7 @@ class ReportListControllerTest {
     }
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
-    private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline()))
+    private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(backgroundScheduler = trampoline(), uiScheduler = trampoline()))
     private val daysSubject = PublishSubject.create<List<Day>>()
     private val filterSubject = PublishSubject.create<Boolean>()
 
@@ -136,7 +136,7 @@ class ReportListControllerTest {
     fun shouldOpenAddReportScreen() {
         stubCurrentTime(year = 2017, month = 1, day = 30)
         whenever(actions.reportAdd()).thenReturn(Observable.just(Unit))
-        ReportListController(service, filter, actions, view, SchedulersSupplier(subscribeOn = trampoline(), observeOn = trampoline())).onCreate()
+        ReportListController(service, filter, actions, view, SchedulersSupplier(backgroundScheduler = trampoline(), uiScheduler = trampoline())).onCreate()
         verify(view).openAddReportScreen("2017-01-30")
     }
 

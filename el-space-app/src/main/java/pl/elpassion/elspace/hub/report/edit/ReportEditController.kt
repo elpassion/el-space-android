@@ -73,8 +73,8 @@ class ReportEditController(private val report: Report,
             api.removeReport(reportId).map { Unit }.async()
 
     private fun Observable<Unit>.async() = this
-            .subscribeOn(schedulers.subscribeOn)
-            .observeOn(schedulers.observeOn)
+            .subscribeOn(schedulers.backgroundScheduler)
+            .observeOn(schedulers.uiScheduler)
             .addLoader()
 
     private fun showHourlyReport(report: HourlyReport) {

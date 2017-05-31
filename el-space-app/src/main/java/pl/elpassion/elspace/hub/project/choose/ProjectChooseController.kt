@@ -33,8 +33,8 @@ class ProjectChooseController(private val view: ProjectChoose.View,
 
     private fun projectListObservable(): Observable<List<Project>>
             = repository.getProjects()
-            .subscribeOn(schedulers.subscribeOn)
-            .observeOn(schedulers.observeOn)
+            .subscribeOn(schedulers.backgroundScheduler)
+            .observeOn(schedulers.uiScheduler)
             .map { it.sortedBy { it.name } }
             .doOnSubscribe { view.showLoader() }
             .doFinally { view.hideLoader() }

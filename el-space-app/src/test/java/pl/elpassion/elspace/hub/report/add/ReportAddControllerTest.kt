@@ -299,7 +299,7 @@ class ReportAddControllerTest {
             = RegularViewModel(selectedDate = selectedDate, project = project, hours = hours, description = description)
 
     private fun createController(date: String? = "2016-01-01", subscribeOnScheduler: Scheduler = trampoline(), observeOnScheduler: Scheduler = trampoline()) =
-            ReportAddController(date, view, api, repository, SchedulersSupplier(subscribeOn = subscribeOnScheduler, observeOn = observeOnScheduler))
+            ReportAddController(date, view, api, repository, SchedulersSupplier(backgroundScheduler = subscribeOnScheduler, uiScheduler = observeOnScheduler))
 
     private fun stubRepositoryToReturn(project: Project? = newProject()) {
         whenever(repository.getLastProject()).thenReturn(project)

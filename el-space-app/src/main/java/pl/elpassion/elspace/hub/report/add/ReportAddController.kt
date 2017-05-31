@@ -68,8 +68,8 @@ class ReportAddController(private val date: String?,
     }
 
     private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
-            .subscribeOn(schedulers.subscribeOn)
-            .observeOn(schedulers.observeOn)
+            .subscribeOn(schedulers.backgroundScheduler)
+            .observeOn(schedulers.uiScheduler)
             .addLoader()
             .catchOnError { view.showError(it) }
 

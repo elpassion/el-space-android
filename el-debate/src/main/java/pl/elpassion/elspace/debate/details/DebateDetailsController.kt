@@ -21,8 +21,8 @@ class DebateDetailsController(
 
     private fun getDebateDetails(token: String) {
         api.getDebateDetails(token)
-                .subscribeOn(schedulers.subscribeOn)
-                .observeOn(schedulers.observeOn)
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe(view::showDebateDetails, view::showDebateDetailsError)
@@ -31,8 +31,8 @@ class DebateDetailsController(
 
     fun onVote(token: String, answer: Answer) {
         api.vote(token, answer)
-                .subscribeOn(schedulers.subscribeOn)
-                .observeOn(schedulers.observeOn)
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe(view::showVoteSuccess, view::showVoteError)

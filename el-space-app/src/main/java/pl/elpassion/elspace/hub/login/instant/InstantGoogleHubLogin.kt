@@ -1,6 +1,5 @@
 package pl.elpassion.elspace.hub.login.instant
 
-import io.reactivex.Observable
 import io.reactivex.Single
 import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
 import pl.elpassion.elspace.hub.login.HubTokenFromApi

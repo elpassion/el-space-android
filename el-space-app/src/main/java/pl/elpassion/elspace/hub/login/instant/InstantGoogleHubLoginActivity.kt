@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
+import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 
 class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin.View {
 
@@ -28,10 +29,7 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
     }
 
     private val controller by lazy {
-        InstantGoogleHubLoginController(this, provideRepository(), provideApi(), object : ShortcutService {
-            override fun isSupportingShortcuts() = false
-            override fun creteAppShortcuts() = Unit
-        }, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+        InstantGoogleHubLoginController(this, provideRepository(), provideApi(), ShortcutServiceImpl(this), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

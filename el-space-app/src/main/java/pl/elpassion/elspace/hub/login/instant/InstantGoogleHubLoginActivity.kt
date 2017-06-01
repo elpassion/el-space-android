@@ -53,15 +53,12 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
     }
 
     override fun showGoogleLoginError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showApiLoginError() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun logoutFromGoogle() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {

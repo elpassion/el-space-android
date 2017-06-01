@@ -88,10 +88,11 @@
 
                     <TextView
                         android:id="@+id/debatePositiveAnswerText"
-                        style="@style/DebateAnswerText.Positive"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/blueDebatePositive"
                         tools:text="Positive answer" />
 
                     <ImageView
@@ -123,10 +124,11 @@
 
                     <TextView
                         android:id="@+id/debateNegativeAnswerText"
-                        style="@style/DebateAnswerText.Negative"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/redDebateNegative"
                         tools:text="Negative answer" />
 
                     <ImageView
@@ -158,10 +160,11 @@
 
                     <TextView
                         android:id="@+id/debateNeutralAnswerText"
-                        style="@style/DebateAnswerText.Neutral"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/greyDebateNeutral"
                         tools:text="Neutral answer" />
 
                     <ImageView

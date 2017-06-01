@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.login.instant
+package pl.elpassion.elspace.hub.login
 
 import android.app.Activity
 import android.content.Context

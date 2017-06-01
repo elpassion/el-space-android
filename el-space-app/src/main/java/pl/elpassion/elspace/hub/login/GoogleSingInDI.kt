@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.common.api.GoogleApiClient
-import pl.elpassion.elspace.hub.login.instant.GoogleHubLogin
 
 object GoogleSingInDI {
     var startGoogleSignInActivity: (Activity, () -> GoogleApiClient, Int) -> Unit = { activity, googleApiClient, requestCode ->

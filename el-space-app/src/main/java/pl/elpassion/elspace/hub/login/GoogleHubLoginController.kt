@@ -1,7 +1,6 @@
-package pl.elpassion.elspace.hub.login.instant
+package pl.elpassion.elspace.hub.login
 
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class GoogleHubLoginController(

@@ -7,7 +7,7 @@ import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.login.DebateLoginActivity
-import pl.elpassion.elspace.hub.login.instant.GoogleHubLoginActivity
+import pl.elpassion.elspace.hub.login.GoogleHubLoginActivity
 import pl.elpassion.elspace.launcher.LauncherActivity
 
 class LauncherActivityTest {

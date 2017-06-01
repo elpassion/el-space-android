@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.login.instant
+package pl.elpassion.elspace.hub.login
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
@@ -9,7 +9,6 @@ import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.mockito.stubbing.OngoingStubbing
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.hub.login.HubTokenFromApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class GoogleHubLoginControllerTest {

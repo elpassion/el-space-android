@@ -1,8 +1,6 @@
-package pl.elpassion.elspace.hub.login.instant
+package pl.elpassion.elspace.hub.login
 
 import io.reactivex.Single
-import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
-import pl.elpassion.elspace.hub.login.HubTokenFromApi
 import retrofit2.http.Body
 import retrofit2.http.POST
 

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.launcher_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.debate.login.DebateLoginActivity
-import pl.elpassion.elspace.hub.login.instant.GoogleHubLoginActivity
+import pl.elpassion.elspace.hub.login.GoogleHubLoginActivity
 
 class LauncherActivity : AppCompatActivity(), Launcher.View {
 

@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.login.instant
+package pl.elpassion.elspace.hub.login
 
 import android.app.Activity
 import android.content.Context
@@ -15,8 +15,6 @@ import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
-import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
-import pl.elpassion.elspace.hub.login.HubTokenFromApi
 
 class GoogleHubLoginActivityTest {
 

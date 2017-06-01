@@ -7,6 +7,8 @@ class InstantGoogleHubLoginController(
     fun onCreate() {
         if (repository.readToken() != null) {
             view.openOnLoggedInScreen()
+        } else {
+            view.startGoogleLoginIntent()
         }
     }
 }

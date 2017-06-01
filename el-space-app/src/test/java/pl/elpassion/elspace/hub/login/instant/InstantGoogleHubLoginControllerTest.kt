@@ -26,6 +26,13 @@ class InstantGoogleHubLoginControllerTest {
         verify(view, never()).openOnLoggedInScreen()
     }
 
+    @Test
+    fun shouldStartGoogleLoginIntentOnCreate() {
+        stubRepositoryToReturn(null)
+        controller.onCreate()
+        verify(view).startGoogleLoginIntent()
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }

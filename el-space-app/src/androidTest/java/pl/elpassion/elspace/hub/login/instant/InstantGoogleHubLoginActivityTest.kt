@@ -2,13 +2,15 @@ package pl.elpassion.elspace.hub.login.instant
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import com.elpassion.android.commons.espresso.InitIntentsRule
 import com.google.android.gms.common.api.GoogleApiClient
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import pl.elpassion.elspace.common.getAutoFinishingIntent
+import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
 
@@ -17,12 +19,25 @@ class InstantGoogleHubLoginActivityTest {
     val repository = mock<InstantGoogleHubLogin.Repository>()
     val openOnLoggedInScreen = mock<(Context) -> Unit>()
     val startGoogleSignInActivity = mock<(Activity, () -> GoogleApiClient, Int) -> Unit>()
+    val getHubGoogleSignInResult = mock<(Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult>()
+
+    @JvmField @Rule
+    val intents = InitIntentsRule()
 
     @Rule @JvmField
     val rule = rule<InstantGoogleHubLoginActivity>(autoStart = false) {
         InstantGoogleHubLoginActivity.provideRepository = { repository }
         InstantGoogleHubLoginActivity.openOnLoggedInScreen = openOnLoggedInScreen
         InstantGoogleHubLoginActivity.startGoogleSignInActivity = startGoogleSignInActivity
+        InstantGoogleHubLoginActivity.getHubGoogleSignInResult = getHubGoogleSignInResult
+    }
+
+    @Before
+    fun setUp() {
+        prepareAutoFinishingIntent()
+        whenever(startGoogleSignInActivity.invoke(any(), any(), any())).thenAnswer {
+            it.getArgument<Activity>(0).startActivityForResult(getAutoFinishingIntent(), it.getArgument<Int>(2))
+        }
     }
 
     @Test
@@ -37,5 +52,12 @@ class InstantGoogleHubLoginActivityTest {
         whenever(repository.readToken()).thenReturn(null)
         rule.startActivity()
         verify(startGoogleSignInActivity).invoke(any(), any(), any())
+    }
+
+    @Test
+    fun shouldGetHubGoogleSignInResultFromIntentOnActivityResult() {
+        whenever(repository.readToken()).thenReturn(null)
+        rule.startActivity()
+        verify(getHubGoogleSignInResult).invoke(anyOrNull())
     }
 }

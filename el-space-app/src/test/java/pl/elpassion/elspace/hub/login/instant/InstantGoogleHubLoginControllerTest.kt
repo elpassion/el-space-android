@@ -16,28 +16,28 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldOpenOnLoggedInScreenIfUserIsLoggedInOnCreate() {
-        stubRepositoryToReturn("token")
+        stubRepository().thenReturn("token")
         controller.onCreate()
         verify(view).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldNotOpenOnLoggedInScreenIfUserIsNotLoggedInOnCreate() {
-        stubRepositoryToReturn(null)
+        stubRepository().thenReturn(null)
         controller.onCreate()
         verify(view, never()).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldStartGoogleLoginIntentOnCreate() {
-        stubRepositoryToReturn(null)
+        stubRepository().thenReturn(null)
         controller.onCreate()
         verify(view).startGoogleLoginIntent()
     }
 
     @Test
     fun shouldOpenOnLoggedInScreenWhenGoogleLoginSucceed() {
-        whenever(api.loginWithGoogle(any())).thenJust("token")
+        stubApi().thenJust("token")
         controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
         verify(view).openOnLoggedInScreen()
     }
@@ -56,28 +56,28 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldNotOpenOnLoggedInScreenWhenGoogleLoginSucceedButApiCallFails() {
-        whenever(api.loginWithGoogle(any())).thenError()
+        stubApi().thenError()
         controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
         verify(view, never()).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldShowApiLoginErrorWhenGoogleLoginSucceedButApiCallFails() {
-        whenever(api.loginWithGoogle(any())).thenError()
+        stubApi().thenError()
         controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
         verify(view).showApiLoginError()
     }
 
     @Test
     fun shouldPersistTokenInRepository() {
-        whenever(api.loginWithGoogle(any())).thenJust("token")
+        stubApi().thenJust("token")
         controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
         verify(repository).saveToken("token")
     }
 
-    private fun stubRepositoryToReturn(token: String?) {
-        whenever(repository.readToken()).thenReturn(token)
-    }
+    private fun stubApi() = whenever(api.loginWithGoogle(any()))
+
+    private fun stubRepository() = whenever(repository.readToken())
 }
 
 private fun <T> OngoingStubbing<Single<T>>.thenError() {

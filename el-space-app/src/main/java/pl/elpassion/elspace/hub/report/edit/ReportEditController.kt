@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.report.edit
 
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -46,15 +47,20 @@ class ReportEditController(private val report: Report,
     private fun editReportClicks() = view.editReportClicks()
             .withLatestFrom(reportTypeChanges()) { model, handler -> model to handler }
             .switchMap {
-                callApiToEdit(it).catchOnError { view.showError(it) }
+                callApiToEdit(it)
+                        .doOnComplete { view.close() }
+                        .catchOnError { view.showError(it) }
+                        .toObservable<Unit>()
             }
-            .doOnNext { view.close() }
+
 
     private fun removeReportClicks() = view.removeReportClicks()
             .switchMap {
-                callApiToRemove(report.id).catchOnError { view.showError(it) }
+                callApiToRemove(report.id)
+                        .doOnComplete { view.close() }
+                        .catchOnError { view.showError(it) }
+                        .toObservable<Unit>()
             }
-            .doOnNext { view.close() }
 
 
     private fun reportTypeChanges() = view.reportTypeChanges()
@@ -69,16 +75,17 @@ class ReportEditController(private val report: Report,
         ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
     }
 
-    private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) =
-            modelCallPair.second(modelCallPair.first).async()
+    private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) =
+            modelCallPair.second(modelCallPair.first)
+                    .subscribeOn(schedulers.backgroundScheduler)
+                    .observeOn(schedulers.uiScheduler)
+                    .addLoader()
 
     private fun callApiToRemove(reportId: Long) =
-            api.removeReport(reportId).map { Unit }.async()
-
-    private fun Observable<Unit>.async() = this
-            .subscribeOn(schedulers.backgroundScheduler)
-            .observeOn(schedulers.uiScheduler)
-            .addLoader()
+            api.removeReport(reportId)
+                    .subscribeOn(schedulers.backgroundScheduler)
+                    .observeOn(schedulers.uiScheduler)
+                    .addLoader()
 
     private fun showHourlyReport(report: HourlyReport) {
         view.showReportedHours(report.reportedHours)
@@ -100,11 +107,11 @@ class ReportEditController(private val report: Report,
             when {
                 project == null -> {
                     view.showEmptyProjectError()
-                    Observable.empty()
+                    Completable.complete()
                 }
                 description.isBlank() -> {
                     view.showEmptyDescriptionError()
-                    Observable.empty()
+                    Completable.complete()
                 }
                 else -> editRegularReport(this, project)
             }
@@ -128,7 +135,7 @@ class ReportEditController(private val report: Report,
     private fun editRegularReport(model: RegularViewModel, project: Project) =
             api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, project.id)
 
-    private fun Observable<Unit>.addLoader() = this
+    private fun Completable.addLoader() = this
             .doOnSubscribe { view.showLoader() }
             .doFinally { view.hideLoader() }
 }

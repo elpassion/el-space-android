@@ -10,8 +10,12 @@ object GoogleSingInDI {
         activity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient()), requestCode)
     }
 
-    var getELPGoogleSignInResultFromIntent: (Intent?) -> ELPGoogleSignInResult = {
-        ELPGoogleSignInResultImpl(Auth.GoogleSignInApi.getSignInResultFromIntent(it))
+    var getHubGoogleSignInResult: (Intent?) -> GoogleHubLogin.HubGoogleSignInResult = {
+        val result = Auth.GoogleSignInApi.getSignInResultFromIntent(it)
+        GoogleHubLogin.HubGoogleSignInResult(result.isSuccess, result.signInAccount?.idToken)
     }
 
+    var logoutFromGoogle: (() -> GoogleApiClient) -> Unit = {
+        Auth.GoogleSignInApi.signOut(it())
+    }
 }

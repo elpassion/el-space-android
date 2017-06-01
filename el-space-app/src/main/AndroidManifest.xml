@@ -20,9 +20,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.elpassion.elspace.hub.login.HubLoginActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:name="pl.elpassion.elspace.hub.login.GoogleHubLoginActivity"
+            android:theme="@style/Theme.Transparent" />
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
             android:theme="@style/AppThemeBlueWithoutActionBar" />

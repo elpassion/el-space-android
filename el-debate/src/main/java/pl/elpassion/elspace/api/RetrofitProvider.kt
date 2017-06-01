@@ -25,7 +25,7 @@ private val httpLoggingInterceptor by lazy {
 object DebateRetrofitProvider : Provider<Retrofit>({
     createRetrofit(
             okHttpClient = defaultOkHttpClient().build(),
-            baseUrl = "http://el-debate.herokuapp.com/api/")
+            baseUrl = "https://el-debate.herokuapp.com/api/")
 })
 
 fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {

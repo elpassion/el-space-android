@@ -7,6 +7,7 @@ class DebateCommentController(
     fun sendComment(message: String) {
         api.comment(message)
                 .doOnSubscribe { view.showLoader() }
+                .doFinally(view::hideLoader)
                 .subscribe()
     }
 }

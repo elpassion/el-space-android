@@ -39,10 +39,4 @@
         <item name="android:textColor">@color/greyDebateNeutral</item>
     </style>
 
-    <style name="DebateAnswerImage">
-        <item name="android:background">@drawable/hand_background</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:src">@drawable/hand</item>
-    </style>
-
 </resources>

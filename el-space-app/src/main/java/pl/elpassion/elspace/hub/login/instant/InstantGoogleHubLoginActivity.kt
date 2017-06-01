@@ -57,6 +57,7 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
     }
 
     override fun logoutFromGoogle() {
+        logoutFromGoogle({ googleApiClientObject })
     }
 
     companion object {
@@ -68,5 +69,6 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
         lateinit var openOnLoggedInScreen: (Context) -> Unit
         lateinit var startGoogleSignInActivity: (Activity, () -> GoogleApiClient, Int) -> Unit
         lateinit var getHubGoogleSignInResult: (Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult
+        lateinit var logoutFromGoogle: (() -> GoogleApiClient) -> Unit
     }
 }

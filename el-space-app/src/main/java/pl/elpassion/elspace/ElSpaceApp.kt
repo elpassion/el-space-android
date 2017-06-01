@@ -29,5 +29,6 @@ class ElSpaceApp : MultiDexApplication() {
         InstantGoogleHubLoginActivity.openOnLoggedInScreen = { ReportListActivity.start(it) }
         InstantGoogleHubLoginActivity.startGoogleSignInActivity = GoogleSingInDI.startGoogleSignInActivity
         InstantGoogleHubLoginActivity.getHubGoogleSignInResult = GoogleSingInDI.getHubGoogleSignInResult
+        InstantGoogleHubLoginActivity.logoutFromGoogle = GoogleSingInDI.logoutFromGoogle
     }
 }

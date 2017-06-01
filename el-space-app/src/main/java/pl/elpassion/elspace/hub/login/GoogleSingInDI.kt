@@ -15,4 +15,8 @@ object GoogleSingInDI {
         val result = Auth.GoogleSignInApi.getSignInResultFromIntent(it)
         InstantGoogleHubLogin.HubGoogleSignInResult(result.isSuccess, result.signInAccount?.idToken)
     }
+
+    var logoutFromGoogle: (() -> GoogleApiClient) -> Unit = {
+        Auth.GoogleSignInApi.signOut(it())
+    }
 }

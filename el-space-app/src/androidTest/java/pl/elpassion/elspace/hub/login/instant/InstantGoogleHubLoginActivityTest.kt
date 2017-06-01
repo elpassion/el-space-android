@@ -25,6 +25,7 @@ class InstantGoogleHubLoginActivityTest {
     val openOnLoggedInScreen = mock<(Context) -> Unit>()
     val startGoogleSignInActivity = mock<(Activity, () -> GoogleApiClient, Int) -> Unit>()
     val getHubGoogleSignInResult = mock<(Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult>()
+    val logoutFromGoogle = mock<(() -> GoogleApiClient) -> Unit>()
 
     @JvmField @Rule
     val intents = InitIntentsRule()
@@ -36,6 +37,7 @@ class InstantGoogleHubLoginActivityTest {
         InstantGoogleHubLoginActivity.openOnLoggedInScreen = openOnLoggedInScreen
         InstantGoogleHubLoginActivity.startGoogleSignInActivity = startGoogleSignInActivity
         InstantGoogleHubLoginActivity.getHubGoogleSignInResult = getHubGoogleSignInResult
+        InstantGoogleHubLoginActivity.logoutFromGoogle = logoutFromGoogle
     }
 
     @Before
@@ -78,11 +80,24 @@ class InstantGoogleHubLoginActivityTest {
         verify(api).loginWithGoogle(GoogleTokenForHubTokenApi("googleToken"))
     }
 
+    @Test
+    fun shouldLogoutFromGoogleWhenApiCallFail() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenError()
+        rule.startActivity()
+        verify(logoutFromGoogle).invoke(any())
+    }
+
     private fun stubGetHubGoogleSignInResult() {
         whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
     }
 
     private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {
         thenReturn(Single.just(value))
+    }
+
+    private fun <T> OngoingStubbing<Single<T>>.thenError() {
+        thenReturn(Single.error(RuntimeException()))
     }
 }

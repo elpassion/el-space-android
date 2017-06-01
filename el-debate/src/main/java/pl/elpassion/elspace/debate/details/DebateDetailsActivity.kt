@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -57,6 +58,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateTopic.text = debateDetails.topic
         debatePositiveAnswerText.text = debateDetails.answers.positive.value
         debatePositiveAnswerButton.setOnClickListener {
+            highlightPositiveAnswer()
             controller.onVote(token, debateDetails.answers.positive)
         }
         debateNegativeAnswerText.text = debateDetails.answers.negative.value
@@ -94,7 +96,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private fun highlightPositiveAnswer() {
-
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_active))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
     private fun highlightNegativeAnswer() {

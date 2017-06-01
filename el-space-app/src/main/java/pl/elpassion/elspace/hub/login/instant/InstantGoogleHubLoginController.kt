@@ -19,7 +19,7 @@ class InstantGoogleHubLoginController(
                     .subscribe({
                         view.openOnLoggedInScreen()
                     }, {
-
+                        view.showApiLoginError()
                     })
         } else {
             view.showGoogleLoginError()

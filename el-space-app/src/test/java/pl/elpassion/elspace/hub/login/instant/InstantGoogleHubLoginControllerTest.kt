@@ -61,6 +61,13 @@ class InstantGoogleHubLoginControllerTest {
         verify(view, never()).openOnLoggedInScreen()
     }
 
+    @Test
+    fun shouldShowApiLoginErrorWhenGoogleLoginSucceedButApiCallFails() {
+        whenever(api.loginWithGoogle(any())).thenError()
+        controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        verify(view).showApiLoginError()
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }

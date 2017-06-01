@@ -68,6 +68,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         }
         debateNeutralAnswerText.text = debateDetails.answers.neutral.value
         debateNeutralAnswerButton.setOnClickListener {
+            highlightNeutralAnswer()
             controller.onVote(token, debateDetails.answers.neutral)
         }
     }
@@ -109,6 +110,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private fun highlightNeutralAnswer() {
-
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))
     }
 }

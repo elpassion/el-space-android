@@ -17,6 +17,7 @@ class InstantGoogleHubLoginController(
         if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
             api.loginWithGoogle(hubGoogleSignInResult.googleToken)
                     .subscribe({
+                        repository.saveToken(it)
                         view.openOnLoggedInScreen()
                     }, {
                         view.showApiLoginError()

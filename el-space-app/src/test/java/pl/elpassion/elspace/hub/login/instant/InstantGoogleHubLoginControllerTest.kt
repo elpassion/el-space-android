@@ -68,6 +68,13 @@ class InstantGoogleHubLoginControllerTest {
         verify(view).showApiLoginError()
     }
 
+    @Test
+    fun shouldPersistTokenInRepository() {
+        whenever(api.loginWithGoogle(any())).thenJust("token")
+        controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        verify(repository).saveToken("token")
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }

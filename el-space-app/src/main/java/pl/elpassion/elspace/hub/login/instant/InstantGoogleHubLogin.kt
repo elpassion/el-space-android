@@ -12,6 +12,7 @@ interface InstantGoogleHubLogin {
 
     interface Repository {
         fun readToken(): String?
+        fun saveToken(token: String)
     }
 
     data class HubGoogleSignInResult(

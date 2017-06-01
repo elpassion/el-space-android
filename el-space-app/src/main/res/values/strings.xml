@@ -37,7 +37,7 @@
     <string name="select_project">Select project</string>
     <string name="token_empty_error">Token must be provided.</string>
     <string name="google_login_error">Failed to login with Google.</string>
-    <string name="google_token_error">Failed to login with Google token.</string>
+    <string name="google_token_error">Failed to login with Google token. Only accounts in El Passion domain are allowed.</string>
     <string name="report_edit_date_header">PERFORMED AT</string>
     <string name="report_edit_project_header">PROJECT</string>
     <string name="report_edit_hours_header">HOURS</string>

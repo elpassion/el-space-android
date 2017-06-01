@@ -19,4 +19,20 @@
             android:layout_height="wrap_content"
             android:text="@string/google_login_error" />
     </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/googleTokenError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_padding_value"
+        android:padding="@dimen/default_padding_value"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/google_token_error" />
+    </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>

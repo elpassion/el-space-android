@@ -61,6 +61,8 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
     }
 
     override fun showApiLoginError() {
+        hideLoader(hubLoginCoordinator)
+        googleTokenError.show()
     }
 
     override fun logoutFromGoogle() {

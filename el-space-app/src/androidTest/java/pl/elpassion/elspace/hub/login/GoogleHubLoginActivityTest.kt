@@ -107,6 +107,16 @@ class GoogleHubLoginActivityTest {
         onText(R.string.google_login_error).isDisplayed()
     }
 
+    @Test
+    fun shouldShowTokenLoginError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenError()
+        rule.startActivity()
+        onId(R.id.loader).doesNotExist()
+        onText(R.string.google_token_error).isDisplayed()
+    }
+
     private fun stubGetHubGoogleSignInResult(isSuccess: Boolean = true) {
         whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = isSuccess, googleToken = "googleToken"))
     }

@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.hub.report.edit
 
+import io.reactivex.Completable
 import pl.elpassion.elspace.hub.HubRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.hub.project.Project
@@ -43,10 +44,10 @@ interface ReportEdit {
                        @Query("activity[performed_at]") date: String,
                        @Query("activity[value]") reportedHour: String?,
                        @Query("activity[comment]") description: String?,
-                       @Query("activity[project_id]") projectId: Long?): Observable<Unit>
+                       @Query("activity[project_id]") projectId: Long?): Completable
 
         @DELETE("activities/{id}")
-        fun removeReport(@Path("id") reportId: Long): Observable<List<ReportFromApi>>
+        fun removeReport(@Path("id") reportId: Long): Completable
     }
 
     object ApiProvider : Provider<Api>({

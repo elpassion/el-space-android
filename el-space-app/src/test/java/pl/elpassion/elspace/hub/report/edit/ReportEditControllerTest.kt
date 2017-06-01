@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers.trampoline
 import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
@@ -13,7 +14,6 @@ import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.*
-import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 
 class ReportEditControllerTest {
 
@@ -22,8 +22,8 @@ class ReportEditControllerTest {
     private val editReportClicks = PublishSubject.create<ReportViewModel>()
     private val removeReportClicks = PublishSubject.create<Unit>()
     private val api = mock<ReportEdit.Api>()
-    private val editReportSubject = PublishSubject.create<Unit>()
-    private val removeReportSubject = PublishSubject.create<List<ReportFromApi>>()
+    private val editReportSubject = CompletableSubject.create()
+    private val removeReportSubject = CompletableSubject.create()
     private val subscribeOn = TestScheduler()
     private val observeOn = TestScheduler()
 
@@ -327,13 +327,8 @@ class ReportEditControllerTest {
         removeReportClicks.onNext(Unit)
     }
 
-    private fun completeReportEdit() = editReportSubject.run {
-        onNext(Unit)
-        onComplete()
-    }
+    private fun completeReportEdit() = editReportSubject.onComplete()
 
-    private fun completeReportRemove() = removeReportSubject.run {
-        onNext(emptyList())
-        onComplete()
-    }
+    private fun completeReportRemove() = removeReportSubject.onComplete()
+
 }

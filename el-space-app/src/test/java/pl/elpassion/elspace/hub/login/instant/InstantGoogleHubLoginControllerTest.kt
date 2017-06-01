@@ -1,16 +1,18 @@
 package pl.elpassion.elspace.hub.login.instant
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.never
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Single
+import io.reactivex.Single.error
+import io.reactivex.Single.just
 import org.junit.Test
+import org.mockito.stubbing.OngoingStubbing
 
 class InstantGoogleHubLoginControllerTest {
 
     val view = mock<InstantGoogleHubLogin.View>()
     val repository = mock<InstantGoogleHubLogin.Repository>()
-    val controller = InstantGoogleHubLoginController(view, repository)
+    val api = mock<InstantGoogleHubLogin.Api>()
+    val controller = InstantGoogleHubLoginController(view, repository, api)
 
     @Test
     fun shouldOpenOnLoggedInScreenIfUserIsLoggedInOnCreate() {
@@ -35,6 +37,7 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldOpenOnLoggedInScreenWhenGoogleLoginSucceed() {
+        whenever(api.loginWithGoogle(any())).thenJust("token")
         controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
         verify(view).openOnLoggedInScreen()
     }
@@ -51,7 +54,22 @@ class InstantGoogleHubLoginControllerTest {
         verify(view).showGoogleLoginError()
     }
 
+    @Test
+    fun shouldNotOpenOnLoggedInScreenWhenGoogleLoginSucceedButApiCallFails() {
+        whenever(api.loginWithGoogle(any())).thenError()
+        controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        verify(view, never()).openOnLoggedInScreen()
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }
+}
+
+private fun <T> OngoingStubbing<Single<T>>.thenError() {
+    thenReturn(error(RuntimeException()))
+}
+
+private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {
+    thenReturn(just(value))
 }

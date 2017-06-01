@@ -2,7 +2,8 @@ package pl.elpassion.elspace.hub.login.instant
 
 class InstantGoogleHubLoginController(
         val view: InstantGoogleHubLogin.View,
-        val repository: InstantGoogleHubLogin.Repository) {
+        val repository: InstantGoogleHubLogin.Repository,
+        val api: InstantGoogleHubLogin.Api) {
 
     fun onCreate() {
         if (repository.readToken() != null) {
@@ -13,9 +14,14 @@ class InstantGoogleHubLoginController(
     }
 
     fun onGoogleSignInResult(hubGoogleSignInResult: InstantGoogleHubLogin.HubGoogleSignInResult) {
-        if (hubGoogleSignInResult.isSuccess) {
-            view.openOnLoggedInScreen()
-        }else{
+        if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
+            api.loginWithGoogle(hubGoogleSignInResult.googleToken)
+                    .subscribe({
+                        view.openOnLoggedInScreen()
+                    }, {
+
+                    })
+        } else {
             view.showGoogleLoginError()
         }
     }

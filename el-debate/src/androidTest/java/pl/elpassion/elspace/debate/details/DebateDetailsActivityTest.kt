@@ -143,8 +143,8 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivity()
         getDebateDetailsSuccessfully()
-        voteSuccessfully()
         onId(R.id.debateNegativeAnswerButton).click()
+        voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
@@ -210,6 +210,15 @@ class DebateDetailsActivityTest {
         startActivity()
         onId(R.id.debateCommentButton).click()
         checkIntent(DebateCommentActivity::class.java)
+    }
+
+    @Test
+    fun shouldChangeHandsColorsWhenClickedOnPositive() {
+        startActivity()
+        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
+        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
+        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
 
     private fun startActivity(token: String = "token") {

@@ -103,11 +103,19 @@ class InstantGoogleHubLoginControllerTest {
     }
 
     @Test
-    fun createShortcutAfterFirstSuccessfulLogin() {
+    fun shouldCreateShortcutAfterFirstSuccessfulLogin() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
         stubApi().thenJust("token")
         controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(shortcutService).creteAppShortcuts()
+    }
+
+    @Test
+    fun shouldNotCreateShortcutAfterFirstSuccessfulLoginIfNotSupported() {
+        whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
+        stubApi().thenJust("token")
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        verify(shortcutService, never()).creteAppShortcuts()
     }
 
     private fun InstantGoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))

@@ -24,7 +24,9 @@ class InstantGoogleHubLoginController(
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe({
-                        shortcutService.creteAppShortcuts()
+                        if (shortcutService.isSupportingShortcuts()) {
+                            shortcutService.creteAppShortcuts()
+                        }
                         repository.saveToken(it)
                         view.openOnLoggedInScreen()
                     }, {

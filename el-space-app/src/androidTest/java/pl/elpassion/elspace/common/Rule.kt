@@ -17,7 +17,7 @@ import pl.elpassion.elspace.hub.report.edit.ReportEdit
 inline fun <reified T : Activity> rule(autoStart: Boolean = true, noinline beforeActivity: () -> Unit = { Unit }): ActivityTestRule<T> {
     return object : ActivityTestRule<T>(T::class.java, false, autoStart) {
         override fun apply(base: Statement?, description: Description?): Statement {
-            GoogleSingInDI.getELPGoogleSignInResultFromIntent = { throw RuntimeException("Google api not allowed in tests") }
+            GoogleSingInDI.getHubGoogleSignInResult = { throw RuntimeException("Google api not allowed in tests") }
             GoogleSingInDI.startGoogleSignInActivity = { _, _, _ -> throw RuntimeException("Google api not allowed in tests") }
             HubRetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }
             UnauthenticatedRetrofitProvider.override = { throw RuntimeException("Internet in tests not allowed!") }

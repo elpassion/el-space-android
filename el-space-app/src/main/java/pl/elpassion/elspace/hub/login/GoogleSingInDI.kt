@@ -11,11 +11,7 @@ object GoogleSingInDI {
         activity.startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient()), requestCode)
     }
 
-    var getELPGoogleSignInResultFromIntent: (Intent?) -> ELPGoogleSignInResult = {
-        ELPGoogleSignInResultImpl(Auth.GoogleSignInApi.getSignInResultFromIntent(it))
-    }
-
-    val getHubGoogleSignInResult: (Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult = {
+    var getHubGoogleSignInResult: (Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult = {
         val result = Auth.GoogleSignInApi.getSignInResultFromIntent(it)
         InstantGoogleHubLogin.HubGoogleSignInResult(result.isSuccess, result.signInAccount?.idToken)
     }

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.launcher_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.debate.login.DebateLoginActivity
-import pl.elpassion.elspace.hub.login.HubLoginActivity
+import pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLoginActivity
 
 class LauncherActivity : AppCompatActivity(), Launcher.View {
 
@@ -20,5 +20,5 @@ class LauncherActivity : AppCompatActivity(), Launcher.View {
 
     override fun openDebateLoginScreen() = DebateLoginActivity.start(this)
 
-    override fun openHubLoginScreen() = HubLoginActivity.start(this)
+    override fun openHubLoginScreen() = InstantGoogleHubLoginActivity.start(this)
 }

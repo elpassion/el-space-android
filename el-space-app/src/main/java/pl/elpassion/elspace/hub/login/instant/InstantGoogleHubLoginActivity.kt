@@ -63,6 +63,8 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
 
     companion object {
         private val RC_SIGN_IN = 64927
+        fun start(context: Context) = context.startActivity(Intent(context, InstantGoogleHubLoginActivity::class.java))
+
         lateinit var provideApi: () -> InstantGoogleHubLogin.Api
         lateinit var provideRepository: () -> InstantGoogleHubLogin.Repository
         lateinit var openOnLoggedInScreen: (Context) -> Unit

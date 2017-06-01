@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.login
 import retrofit2.http.Body
 import retrofit2.http.POST
 import io.reactivex.Observable
+import pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLogin
 
 interface HubLogin {
     interface View {

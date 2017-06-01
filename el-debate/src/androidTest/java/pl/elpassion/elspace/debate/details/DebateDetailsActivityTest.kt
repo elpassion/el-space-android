@@ -215,7 +215,9 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldChangeHandsColorsWhenClickedOnPositive() {
         startActivity()
+        getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswerButton).click()
+        voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)

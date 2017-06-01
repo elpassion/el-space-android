@@ -6,9 +6,11 @@ import android.content.Intent
 import com.elpassion.android.commons.espresso.InitIntentsRule
 import com.google.android.gms.common.api.GoogleApiClient
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Single
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.stubbing.OngoingStubbing
 import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
@@ -16,6 +18,7 @@ import pl.elpassion.elspace.common.startActivity
 
 class InstantGoogleHubLoginActivityTest {
 
+    val api = mock<InstantGoogleHubLogin.Api>()
     val repository = mock<InstantGoogleHubLogin.Repository>()
     val openOnLoggedInScreen = mock<(Context) -> Unit>()
     val startGoogleSignInActivity = mock<(Activity, () -> GoogleApiClient, Int) -> Unit>()
@@ -26,6 +29,7 @@ class InstantGoogleHubLoginActivityTest {
 
     @Rule @JvmField
     val rule = rule<InstantGoogleHubLoginActivity>(autoStart = false) {
+        InstantGoogleHubLoginActivity.provideApi = { api }
         InstantGoogleHubLoginActivity.provideRepository = { repository }
         InstantGoogleHubLoginActivity.openOnLoggedInScreen = openOnLoggedInScreen
         InstantGoogleHubLoginActivity.startGoogleSignInActivity = startGoogleSignInActivity
@@ -38,6 +42,7 @@ class InstantGoogleHubLoginActivityTest {
         whenever(startGoogleSignInActivity.invoke(any(), any(), any())).thenAnswer {
             it.getArgument<Activity>(0).startActivityForResult(getAutoFinishingIntent(), it.getArgument<Int>(2))
         }
+        whenever(api.loginWithGoogle(any())).thenJust("token")
     }
 
     @Test
@@ -50,6 +55,7 @@ class InstantGoogleHubLoginActivityTest {
     @Test
     fun shouldStartGoogleLoginIntentOnCreate() {
         whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
         rule.startActivity()
         verify(startGoogleSignInActivity).invoke(any(), any(), any())
     }
@@ -57,7 +63,24 @@ class InstantGoogleHubLoginActivityTest {
     @Test
     fun shouldGetHubGoogleSignInResultFromIntentOnActivityResult() {
         whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
         rule.startActivity()
         verify(getHubGoogleSignInResult).invoke(anyOrNull())
+    }
+
+    @Test
+    fun shouldCallApiWithGoogleTokenFromGetHubGoogleSignInResult() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        rule.startActivity()
+        verify(api).loginWithGoogle("googleToken")
+    }
+
+    private fun stubGetHubGoogleSignInResult() {
+        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+    }
+
+    private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {
+        thenReturn(Single.just(value))
     }
 }

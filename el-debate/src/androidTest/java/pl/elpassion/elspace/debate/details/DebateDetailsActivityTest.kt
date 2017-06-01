@@ -88,7 +88,7 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowHands() {
+    fun shouldShowInactiveImagesInButtons() {
         startActivity()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
@@ -218,7 +218,7 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldChangeHandsColorsWhenClickedOnPositive() {
+    fun shouldChangeImagesInButtonsWhenClickedOnPositive() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswerButton).click()
@@ -229,7 +229,7 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldChangeHandsColorsWhenClickedOnNegative() {
+    fun shouldChangeImagesInButtonsWhenClickedOnNegative() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswerButton).click()
@@ -240,7 +240,7 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldChangeHandsColorsWhenClickedOnNeutral() {
+    fun shouldChangeImagesInButtonsWhenClickedOnNeutral() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswerButton).click()
@@ -251,7 +251,7 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldResetButtonsWhenApiCallFailed() {
+    fun shouldResetImagesInButtonsWhenApiCallFailed() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswerButton).click()

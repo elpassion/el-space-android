@@ -192,7 +192,7 @@ class DebateDetailsControllerTest {
     fun shouldResetButtonsWhenVoteFailed() {
         createController().onVote("", createAnswer())
         sendVoteSubject.onError(RuntimeException())
-        verify(view).resetButtons()
+        verify(view).resetImagesInButtons()
     }
 
     @Test

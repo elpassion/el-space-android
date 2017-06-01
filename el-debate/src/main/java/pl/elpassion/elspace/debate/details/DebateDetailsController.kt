@@ -39,7 +39,7 @@ class DebateDetailsController(
                         view::showVoteSuccess,
                         { error ->
                             view.showVoteError(error)
-                            view.resetButtons()
+                            view.resetImagesInButtons()
                         })
                 .addTo(compositeDisposable)
     }

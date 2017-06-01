@@ -12,5 +12,5 @@ interface InstantGoogleHubLogin {
 
     data class HubGoogleSignInResult(
             val isSuccess: Boolean,
-            val googleToken: String)
+            val googleToken: String?)
 }

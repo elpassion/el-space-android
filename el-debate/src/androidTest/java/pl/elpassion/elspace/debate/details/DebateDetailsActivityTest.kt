@@ -26,6 +26,9 @@ class DebateDetailsActivityTest {
     }
 
     @JvmField @Rule
+    val intents = InitIntentsRule()
+
+    @JvmField @Rule
     val rule = rule<DebateDetailsActivity>(autoStart = false)
 
     @Before
@@ -152,8 +155,8 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivity()
         getDebateDetailsSuccessfully()
-        sendVoteSubject.onError(RuntimeException())
         onId(R.id.debateNeutralAnswerButton).click()
+        sendVoteSubject.onError(RuntimeException())
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
 

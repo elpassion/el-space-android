@@ -96,9 +96,10 @@
 
                     <ImageView
                         android:id="@+id/debatePositiveAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_positive_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -130,9 +131,10 @@
 
                     <ImageView
                         android:id="@+id/debateNegativeAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_negative_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -164,9 +166,10 @@
 
                     <ImageView
                         android:id="@+id/debateNeutralAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_neutral_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

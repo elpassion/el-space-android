@@ -58,17 +58,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debatePositiveAnswerText.text = debateDetails.answers.positive.value
         debatePositiveAnswerButton.setOnClickListener {
             controller.onVote(token, debateDetails.answers.positive)
-            highlightPositiveAnswer()
         }
         debateNegativeAnswerText.text = debateDetails.answers.negative.value
         debateNegativeAnswerButton.setOnClickListener {
             controller.onVote(token, debateDetails.answers.negative)
-            highlightNegativeAnswer()
         }
         debateNeutralAnswerText.text = debateDetails.answers.neutral.value
         debateNeutralAnswerButton.setOnClickListener {
             controller.onVote(token, debateDetails.answers.neutral)
-            highlightNeutralAnswer()
         }
     }
 
@@ -97,20 +94,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private fun highlightPositiveAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background_blue_pressed)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background)
+
     }
 
     private fun highlightNegativeAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background_red_pressed)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background)
+
     }
 
     private fun highlightNeutralAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background_grey_pressed)
+
     }
 }

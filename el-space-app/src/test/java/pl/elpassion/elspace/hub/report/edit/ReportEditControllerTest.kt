@@ -289,7 +289,7 @@ class ReportEditControllerTest {
     }
 
     @Test
-    fun shouldShowErrorTwiceOnApiCallFailures() {
+    fun shouldShowErrorTwiceOnRemoveReportCallFailures() {
         val runtimeException = RuntimeException()
         createController().onCreate()
         onRemoveReportClick()
@@ -298,6 +298,19 @@ class ReportEditControllerTest {
         verify(view).showError(runtimeException)
         onRemoveReportClick()
         removeReportSubject.onError(runtimeException)
+        verify(view, times(2)).showError(runtimeException)
+    }
+
+    @Test
+    fun shouldShowErrorTwiceOnEditReportCallFailures() {
+        val runtimeException = RuntimeException()
+        createController().onCreate()
+        onEditReportClick()
+        verify(view, never()).showError(any())
+        editReportSubject.onError(runtimeException)
+        verify(view).showError(runtimeException)
+        onEditReportClick()
+        editReportSubject.onError(runtimeException)
         verify(view, times(2)).showError(runtimeException)
     }
 

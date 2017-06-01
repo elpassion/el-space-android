@@ -46,8 +46,8 @@
     <string name="action_remove_report">Remove report</string>
     <string name="refresh_action">Refresh</string>
     <string name="action_search">Search</string>
-    <string name="shortcut_report_hub_short">Zaraportuj godziny</string>
-    <string name="shortcut_report_hub_long">Dodaj raport godzinowy</string>
+    <string name="shortcut_report_hub_short">Report hours</string>
+    <string name="shortcut_report_hub_long">Add new hourly report</string>
     <string name="today">Today</string>
     <string name="previous_month">Previous month</string>
     <string name="next_month">Next month</string>

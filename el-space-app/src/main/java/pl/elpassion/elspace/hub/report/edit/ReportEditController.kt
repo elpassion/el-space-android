@@ -45,14 +45,14 @@ class ReportEditController(private val report: Report,
 
     private fun editReportClicks() = view.editReportClicks()
             .withLatestFrom(reportTypeChanges()) { model, handler -> model to handler }
-            .switchMap { callApiToEdit(it) }
+            .switchMap {
+                callApiToEdit(it).catchOnError { view.showError(it) }
+            }
             .doOnNext { view.close() }
-            .catchOnError { view.showError(it) }
 
     private fun removeReportClicks() = view.removeReportClicks()
             .switchMap {
-                callApiToRemove(report.id)
-                        .catchOnError { view.showError(it) }
+                callApiToRemove(report.id).catchOnError { view.showError(it) }
             }
             .doOnNext { view.close() }
 

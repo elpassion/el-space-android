@@ -31,4 +31,11 @@ class DebateCommentControllerTest {
         controller.sendComment("message")
         verify(view).showLoader()
     }
+
+    @Test
+    fun shouldHideLoaderWhenApiCallFinished() {
+        controller.sendComment("message")
+        commentSubject.onComplete()
+        verify(view).hideLoader()
+    }
 }

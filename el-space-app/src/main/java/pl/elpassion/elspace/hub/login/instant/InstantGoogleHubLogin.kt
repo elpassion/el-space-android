@@ -1,6 +1,11 @@
 package pl.elpassion.elspace.hub.login.instant
 
+import io.reactivex.Observable
 import io.reactivex.Single
+import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
+import pl.elpassion.elspace.hub.login.HubTokenFromApi
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface InstantGoogleHubLogin {
     interface View {
@@ -21,6 +26,7 @@ interface InstantGoogleHubLogin {
             val googleToken: String?)
 
     interface Api {
-        fun loginWithGoogle(googleToken: String): Single<String>
+        @POST("api_keys")
+        fun loginWithGoogle(@Body body: GoogleTokenForHubTokenApi): Single<HubTokenFromApi>
     }
 }

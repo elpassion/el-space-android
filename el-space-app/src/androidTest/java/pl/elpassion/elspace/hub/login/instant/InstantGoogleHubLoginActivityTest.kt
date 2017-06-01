@@ -15,6 +15,8 @@ import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
+import pl.elpassion.elspace.hub.login.HubTokenFromApi
 
 class InstantGoogleHubLoginActivityTest {
 
@@ -42,7 +44,7 @@ class InstantGoogleHubLoginActivityTest {
         whenever(startGoogleSignInActivity.invoke(any(), any(), any())).thenAnswer {
             it.getArgument<Activity>(0).startActivityForResult(getAutoFinishingIntent(), it.getArgument<Int>(2))
         }
-        whenever(api.loginWithGoogle(any())).thenJust("token")
+        whenever(api.loginWithGoogle(any())).thenJust(HubTokenFromApi("token"))
     }
 
     @Test
@@ -73,7 +75,7 @@ class InstantGoogleHubLoginActivityTest {
         whenever(repository.readToken()).thenReturn(null)
         stubGetHubGoogleSignInResult()
         rule.startActivity()
-        verify(api).loginWithGoogle("googleToken")
+        verify(api).loginWithGoogle(GoogleTokenForHubTokenApi("googleToken"))
     }
 
     private fun stubGetHubGoogleSignInResult() {

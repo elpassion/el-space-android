@@ -9,6 +9,7 @@ import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.mockito.stubbing.OngoingStubbing
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.hub.login.HubTokenFromApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class InstantGoogleHubLoginControllerTest {
@@ -42,7 +43,7 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldOpenOnLoggedInScreenWhenGoogleLoginSucceed() {
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(view).openOnLoggedInScreen()
     }
@@ -75,7 +76,7 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldPersistTokenInRepository() {
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository).saveToken("token")
     }
@@ -84,7 +85,7 @@ class InstantGoogleHubLoginControllerTest {
     fun shouldMakeCallOnBackgroundScheduler() {
         val backgroundScheduler = TestScheduler()
         val schedulers = SchedulersSupplier(backgroundScheduler, Schedulers.trampoline())
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         InstantGoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository, never()).saveToken("token")
         backgroundScheduler.triggerActions()
@@ -95,7 +96,7 @@ class InstantGoogleHubLoginControllerTest {
     fun shouldObserveCallOnUiScheduler() {
         val uiScheduler = TestScheduler()
         val schedulers = SchedulersSupplier(Schedulers.trampoline(), uiScheduler)
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         InstantGoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository, never()).saveToken("token")
         uiScheduler.triggerActions()
@@ -105,7 +106,7 @@ class InstantGoogleHubLoginControllerTest {
     @Test
     fun shouldCreateShortcutAfterFirstSuccessfulLogin() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(true)
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(shortcutService).creteAppShortcuts()
     }
@@ -113,7 +114,7 @@ class InstantGoogleHubLoginControllerTest {
     @Test
     fun shouldNotCreateShortcutAfterFirstSuccessfulLoginIfNotSupported() {
         whenever(shortcutService.isSupportingShortcuts()).thenReturn(false)
-        stubApi().thenJust("token")
+        stubApi().thenJustToken("token")
         controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(shortcutService, never()).creteAppShortcuts()
     }
@@ -136,6 +137,6 @@ private fun <T> OngoingStubbing<Single<T>>.thenError() {
     thenReturn(error(RuntimeException()))
 }
 
-private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {
-    thenReturn(just(value))
+private fun OngoingStubbing<Single<HubTokenFromApi>>.thenJustToken(token: String) {
+    thenReturn(just(HubTokenFromApi(token)))
 }

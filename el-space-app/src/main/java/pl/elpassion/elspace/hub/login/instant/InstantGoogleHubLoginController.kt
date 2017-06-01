@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.hub.login.instant
 
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class InstantGoogleHubLoginController(
@@ -20,7 +21,8 @@ class InstantGoogleHubLoginController(
 
     fun onGoogleSignInResult(hubGoogleSignInResult: InstantGoogleHubLogin.HubGoogleSignInResult) {
         if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
-            api.loginWithGoogle(hubGoogleSignInResult.googleToken)
+            api.loginWithGoogle(GoogleTokenForHubTokenApi(hubGoogleSignInResult.googleToken))
+                    .map { it.accessToken }
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe(this::onSuccess, this::onError)

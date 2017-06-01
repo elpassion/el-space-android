@@ -89,6 +89,17 @@ class InstantGoogleHubLoginControllerTest {
         verify(repository).saveToken("token")
     }
 
+    @Test
+    fun shouldObserveCallOnUiScheduler() {
+        val uiScheduler = TestScheduler()
+        val schedulers = SchedulersSupplier(Schedulers.trampoline(), uiScheduler)
+        stubApi().thenJust("token")
+        InstantGoogleHubLoginController(view, repository, api, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        verify(repository, never()).saveToken("token")
+        uiScheduler.triggerActions()
+        verify(repository).saveToken("token")
+    }
+
     private fun InstantGoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
 
     private fun stubApi() = whenever(api.loginWithGoogle(any()))

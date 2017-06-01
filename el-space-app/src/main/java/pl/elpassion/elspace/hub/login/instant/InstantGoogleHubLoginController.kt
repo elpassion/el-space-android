@@ -20,6 +20,7 @@ class InstantGoogleHubLoginController(
         if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
             api.loginWithGoogle(hubGoogleSignInResult.googleToken)
                     .subscribeOn(schedulers.backgroundScheduler)
+                    .observeOn(schedulers.uiScheduler)
                     .subscribe({
                         repository.saveToken(it)
                         view.openOnLoggedInScreen()

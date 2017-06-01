@@ -12,13 +12,13 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.HubTokenFromApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
-class InstantGoogleHubLoginControllerTest {
+class GoogleHubLoginControllerTest {
 
-    val view = mock<InstantGoogleHubLogin.View>()
-    val repository = mock<InstantGoogleHubLogin.Repository>()
-    val api = mock<InstantGoogleHubLogin.Api>()
+    val view = mock<GoogleHubLogin.View>()
+    val repository = mock<GoogleHubLogin.Repository>()
+    val api = mock<GoogleHubLogin.Api>()
     val shortcutService = mock<ShortcutService>()
-    val controller = InstantGoogleHubLoginController(view, repository, api, shortcutService, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    val controller = GoogleHubLoginController(view, repository, api, shortcutService, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
     @Test
     fun shouldOpenOnLoggedInScreenIfUserIsLoggedInOnCreate() {
@@ -86,7 +86,7 @@ class InstantGoogleHubLoginControllerTest {
         val backgroundScheduler = TestScheduler()
         val schedulers = SchedulersSupplier(backgroundScheduler, Schedulers.trampoline())
         stubApi().thenJustToken("token")
-        InstantGoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        GoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository, never()).saveToken("token")
         backgroundScheduler.triggerActions()
         verify(repository).saveToken("token")
@@ -97,7 +97,7 @@ class InstantGoogleHubLoginControllerTest {
         val uiScheduler = TestScheduler()
         val schedulers = SchedulersSupplier(Schedulers.trampoline(), uiScheduler)
         stubApi().thenJustToken("token")
-        InstantGoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        GoogleHubLoginController(view, repository, api, shortcutService, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository, never()).saveToken("token")
         uiScheduler.triggerActions()
         verify(repository).saveToken("token")
@@ -126,7 +126,7 @@ class InstantGoogleHubLoginControllerTest {
         verify(view).logoutFromGoogle()
     }
 
-    private fun InstantGoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
+    private fun GoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(GoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
 
     private fun stubApi() = whenever(api.loginWithGoogle(any()))
 

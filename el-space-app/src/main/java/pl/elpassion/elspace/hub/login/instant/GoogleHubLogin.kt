@@ -6,7 +6,7 @@ import pl.elpassion.elspace.hub.login.HubTokenFromApi
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface InstantGoogleHubLogin {
+interface GoogleHubLogin {
     interface View {
         fun openOnLoggedInScreen()
         fun startGoogleLoginIntent()

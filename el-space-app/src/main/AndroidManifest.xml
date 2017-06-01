@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLoginActivity"
+            android:name="pl.elpassion.elspace.hub.login.instant.GoogleHubLoginActivity"
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"

@@ -5,10 +5,10 @@ import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.google.gson.Gson
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
-import pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLogin
+import pl.elpassion.elspace.hub.login.instant.GoogleHubLogin
 
-object InstantGoogleHubLoginRepositoryProvider : Provider<InstantGoogleHubLogin.Repository>({
-    object : InstantGoogleHubLogin.Repository {
+object GoogleHubLoginRepositoryProvider : Provider<GoogleHubLogin.Repository>({
+    object : GoogleHubLogin.Repository {
         private val TOKEN_KEY = "tokenKey"
         private val repository = createSharedPrefs<String?>({
             PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())

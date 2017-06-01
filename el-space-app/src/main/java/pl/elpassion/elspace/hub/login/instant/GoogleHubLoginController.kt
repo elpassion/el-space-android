@@ -4,10 +4,10 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
-class InstantGoogleHubLoginController(
-        val view: InstantGoogleHubLogin.View,
-        val repository: InstantGoogleHubLogin.Repository,
-        val api: InstantGoogleHubLogin.Api,
+class GoogleHubLoginController(
+        val view: GoogleHubLogin.View,
+        val repository: GoogleHubLogin.Repository,
+        val api: GoogleHubLogin.Api,
         val shortcutService: ShortcutService,
         val schedulers: SchedulersSupplier) {
 
@@ -19,7 +19,7 @@ class InstantGoogleHubLoginController(
         }
     }
 
-    fun onGoogleSignInResult(hubGoogleSignInResult: InstantGoogleHubLogin.HubGoogleSignInResult) {
+    fun onGoogleSignInResult(hubGoogleSignInResult: GoogleHubLogin.HubGoogleSignInResult) {
         if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
             api.loginWithGoogle(GoogleTokenForHubTokenApi(hubGoogleSignInResult.googleToken))
                     .map { it.accessToken }

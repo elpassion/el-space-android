@@ -7,9 +7,9 @@ import io.fabric.sdk.android.Fabric
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.hub.UnauthenticatedRetrofitProvider
 import pl.elpassion.elspace.hub.login.GoogleSingInDI
-import pl.elpassion.elspace.hub.login.InstantGoogleHubLoginRepositoryProvider
-import pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLogin
-import pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLoginActivity
+import pl.elpassion.elspace.hub.login.GoogleHubLoginRepositoryProvider
+import pl.elpassion.elspace.hub.login.instant.GoogleHubLogin
+import pl.elpassion.elspace.hub.login.instant.GoogleHubLoginActivity
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class ElSpaceApp : MultiDexApplication() {
@@ -24,11 +24,11 @@ class ElSpaceApp : MultiDexApplication() {
     private fun createCrashlyticsCore() = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
 
     private fun setupHubLoginActivity() {
-        InstantGoogleHubLoginActivity.provideApi = { UnauthenticatedRetrofitProvider.get().create(InstantGoogleHubLogin.Api::class.java) }
-        InstantGoogleHubLoginActivity.provideRepository = { InstantGoogleHubLoginRepositoryProvider.get() }
-        InstantGoogleHubLoginActivity.openOnLoggedInScreen = { ReportListActivity.start(it) }
-        InstantGoogleHubLoginActivity.startGoogleSignInActivity = GoogleSingInDI.startGoogleSignInActivity
-        InstantGoogleHubLoginActivity.getHubGoogleSignInResult = GoogleSingInDI.getHubGoogleSignInResult
-        InstantGoogleHubLoginActivity.logoutFromGoogle = GoogleSingInDI.logoutFromGoogle
+        GoogleHubLoginActivity.provideApi = { UnauthenticatedRetrofitProvider.get().create(GoogleHubLogin.Api::class.java) }
+        GoogleHubLoginActivity.provideRepository = { GoogleHubLoginRepositoryProvider.get() }
+        GoogleHubLoginActivity.openOnLoggedInScreen = { ReportListActivity.start(it) }
+        GoogleHubLoginActivity.startGoogleSignInActivity = GoogleSingInDI.startGoogleSignInActivity
+        GoogleHubLoginActivity.getHubGoogleSignInResult = GoogleSingInDI.getHubGoogleSignInResult
+        GoogleHubLoginActivity.logoutFromGoogle = GoogleSingInDI.logoutFromGoogle
     }
 }

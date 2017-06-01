@@ -12,10 +12,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 
-class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin.View {
+class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
 
     private val googleApiClientObject: GoogleApiClient by lazy {
         val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -29,7 +28,7 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
     }
 
     private val controller by lazy {
-        InstantGoogleHubLoginController(this, provideRepository(), provideApi(), ShortcutServiceImpl(this), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+        GoogleHubLoginController(this, provideRepository(), provideApi(), ShortcutServiceImpl(this), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,13 +61,13 @@ class InstantGoogleHubLoginActivity : AppCompatActivity(), InstantGoogleHubLogin
 
     companion object {
         private val RC_SIGN_IN = 64927
-        fun start(context: Context) = context.startActivity(Intent(context, InstantGoogleHubLoginActivity::class.java))
+        fun start(context: Context) = context.startActivity(Intent(context, GoogleHubLoginActivity::class.java))
 
-        lateinit var provideApi: () -> InstantGoogleHubLogin.Api
-        lateinit var provideRepository: () -> InstantGoogleHubLogin.Repository
+        lateinit var provideApi: () -> GoogleHubLogin.Api
+        lateinit var provideRepository: () -> GoogleHubLogin.Repository
         lateinit var openOnLoggedInScreen: (Context) -> Unit
         lateinit var startGoogleSignInActivity: (Activity, () -> GoogleApiClient, Int) -> Unit
-        lateinit var getHubGoogleSignInResult: (Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult
+        lateinit var getHubGoogleSignInResult: (Intent?) -> GoogleHubLogin.HubGoogleSignInResult
         lateinit var logoutFromGoogle: (() -> GoogleApiClient) -> Unit
     }
 }

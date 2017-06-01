@@ -18,26 +18,26 @@ import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.login.GoogleTokenForHubTokenApi
 import pl.elpassion.elspace.hub.login.HubTokenFromApi
 
-class InstantGoogleHubLoginActivityTest {
+class GoogleHubLoginActivityTest {
 
-    val api = mock<InstantGoogleHubLogin.Api>()
-    val repository = mock<InstantGoogleHubLogin.Repository>()
+    val api = mock<GoogleHubLogin.Api>()
+    val repository = mock<GoogleHubLogin.Repository>()
     val openOnLoggedInScreen = mock<(Context) -> Unit>()
     val startGoogleSignInActivity = mock<(Activity, () -> GoogleApiClient, Int) -> Unit>()
-    val getHubGoogleSignInResult = mock<(Intent?) -> InstantGoogleHubLogin.HubGoogleSignInResult>()
+    val getHubGoogleSignInResult = mock<(Intent?) -> GoogleHubLogin.HubGoogleSignInResult>()
     val logoutFromGoogle = mock<(() -> GoogleApiClient) -> Unit>()
 
     @JvmField @Rule
     val intents = InitIntentsRule()
 
     @Rule @JvmField
-    val rule = rule<InstantGoogleHubLoginActivity>(autoStart = false) {
-        InstantGoogleHubLoginActivity.provideApi = { api }
-        InstantGoogleHubLoginActivity.provideRepository = { repository }
-        InstantGoogleHubLoginActivity.openOnLoggedInScreen = openOnLoggedInScreen
-        InstantGoogleHubLoginActivity.startGoogleSignInActivity = startGoogleSignInActivity
-        InstantGoogleHubLoginActivity.getHubGoogleSignInResult = getHubGoogleSignInResult
-        InstantGoogleHubLoginActivity.logoutFromGoogle = logoutFromGoogle
+    val rule = rule<GoogleHubLoginActivity>(autoStart = false) {
+        GoogleHubLoginActivity.provideApi = { api }
+        GoogleHubLoginActivity.provideRepository = { repository }
+        GoogleHubLoginActivity.openOnLoggedInScreen = openOnLoggedInScreen
+        GoogleHubLoginActivity.startGoogleSignInActivity = startGoogleSignInActivity
+        GoogleHubLoginActivity.getHubGoogleSignInResult = getHubGoogleSignInResult
+        GoogleHubLoginActivity.logoutFromGoogle = logoutFromGoogle
     }
 
     @Before
@@ -90,7 +90,7 @@ class InstantGoogleHubLoginActivityTest {
     }
 
     private fun stubGetHubGoogleSignInResult() {
-        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(GoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
     }
 
     private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {

@@ -9,4 +9,8 @@ interface InstantGoogleHubLogin {
     interface Repository {
         fun  readToken(): String?
     }
+
+    data class HubGoogleSignInResult(
+            val isSuccess: Boolean,
+            val googleToken: String)
 }

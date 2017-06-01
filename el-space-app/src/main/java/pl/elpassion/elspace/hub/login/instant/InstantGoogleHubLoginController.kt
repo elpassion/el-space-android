@@ -11,4 +11,8 @@ class InstantGoogleHubLoginController(
             view.startGoogleLoginIntent()
         }
     }
+
+    fun onGoogleSignInResult(hubGoogleSignInResult: InstantGoogleHubLogin.HubGoogleSignInResult) {
+        view.openOnLoggedInScreen()
+    }
 }

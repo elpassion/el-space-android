@@ -33,6 +33,12 @@ class InstantGoogleHubLoginControllerTest {
         verify(view).startGoogleLoginIntent()
     }
 
+    @Test
+    fun shouldOpenOnLoggedInScreenWhenGoogleLoginSucceed() {
+        controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        verify(view).openOnLoggedInScreen()
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }

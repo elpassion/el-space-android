@@ -4,15 +4,18 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
 import io.reactivex.Single.error
 import io.reactivex.Single.just
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.mockito.stubbing.OngoingStubbing
+import pl.elpassion.elspace.common.SchedulersSupplier
 
 class InstantGoogleHubLoginControllerTest {
 
     val view = mock<InstantGoogleHubLogin.View>()
     val repository = mock<InstantGoogleHubLogin.Repository>()
     val api = mock<InstantGoogleHubLogin.Api>()
-    val controller = InstantGoogleHubLoginController(view, repository, api)
+    val controller = InstantGoogleHubLoginController(view, repository, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
     @Test
     fun shouldOpenOnLoggedInScreenIfUserIsLoggedInOnCreate() {
@@ -38,44 +41,55 @@ class InstantGoogleHubLoginControllerTest {
     @Test
     fun shouldOpenOnLoggedInScreenWhenGoogleLoginSucceed() {
         stubApi().thenJust("token")
-        onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(view).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldNotOpenOnLoggedInScreenWhenGoogleLoginFailed() {
-        onGoogleSignIn(isSuccess = false, googleToken = null)
+        controller.onGoogleSignIn(isSuccess = false, googleToken = null)
         verify(view, never()).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldShowGoogleLoginErrorWhenGoogleLoginFailed() {
-        onGoogleSignIn(isSuccess = false, googleToken = null)
+        controller.onGoogleSignIn(isSuccess = false, googleToken = null)
         verify(view).showGoogleLoginError()
     }
 
     @Test
     fun shouldNotOpenOnLoggedInScreenWhenGoogleLoginSucceedButApiCallFails() {
         stubApi().thenError()
-        onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(view, never()).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldShowApiLoginErrorWhenGoogleLoginSucceedButApiCallFails() {
         stubApi().thenError()
-        onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(view).showApiLoginError()
     }
 
     @Test
     fun shouldPersistTokenInRepository() {
         stubApi().thenJust("token")
-        onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
         verify(repository).saveToken("token")
     }
 
-    private fun onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
+    @Test
+    fun shouldMakeCallOnBackgroundScheduler() {
+        val backgroundScheduler = TestScheduler()
+        val schedulers = SchedulersSupplier(backgroundScheduler, Schedulers.trampoline())
+        stubApi().thenJust("token")
+        InstantGoogleHubLoginController(view, repository, api, schedulers).onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        verify(repository, never()).saveToken("token")
+        backgroundScheduler.triggerActions()
+        verify(repository).saveToken("token")
+    }
+
+    private fun InstantGoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
 
     private fun stubApi() = whenever(api.loginWithGoogle(any()))
 

@@ -1,25 +1,34 @@
 package pl.elpassion.elspace.debate.comment
 
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
-import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.dabate.details.createAnswer
-import pl.elpassion.elspace.dabate.details.createDebateData
 
 class DebateCommentControllerTest {
 
+    private val view = mock<DebateComment.View>()
     private val api = mock<DebateComment.Api>()
+    private val commentSubject = CompletableSubject.create()
+    private val controller = DebateCommentController(view, api)
+
+    @Before
+    fun setUp() {
+        whenever(api.comment(any())).thenReturn(commentSubject)
+    }
 
     @Test
     fun shouldCallApiWithMessageOnSendComment() {
-        val controller = DebateCommentController(api)
         controller.sendComment("message")
         verify(api).comment("message")
+    }
+
+    @Test
+    fun shouldShowLoaderOnSendComment() {
+        controller.sendComment("message")
+        verify(view).showLoader()
     }
 }

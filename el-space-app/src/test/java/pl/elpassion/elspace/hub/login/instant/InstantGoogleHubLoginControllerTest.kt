@@ -14,15 +14,19 @@ class InstantGoogleHubLoginControllerTest {
 
     @Test
     fun shouldOpenOnLoggedInScreenIfUserIsLoggedInOnCreate() {
-        whenever(repository.readToken()).thenReturn("token")
+        stubRepositoryToReturn("token")
         controller.onCreate()
         verify(view).openOnLoggedInScreen()
     }
 
     @Test
     fun shouldNotOpenOnLoggedInScreenIfUserIsNotLoggedInOnCreate() {
-        whenever(repository.readToken()).thenReturn(null)
+        stubRepositoryToReturn(null)
         controller.onCreate()
         verify(view, never()).openOnLoggedInScreen()
+    }
+
+    private fun stubRepositoryToReturn(token: String?) {
+        whenever(repository.readToken()).thenReturn(token)
     }
 }

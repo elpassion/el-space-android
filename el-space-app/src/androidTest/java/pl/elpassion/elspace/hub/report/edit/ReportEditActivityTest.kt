@@ -4,6 +4,8 @@ import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Completable
+import io.reactivex.Observable
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -20,8 +22,6 @@ import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
-import io.reactivex.Observable
 
 class ReportEditActivityTest {
 
@@ -192,7 +192,7 @@ class ReportEditActivityTest {
 
     @Test
     fun shouldShowConnectionErrorOnCallError() {
-        stubReportEditApiToCompleteWith(Observable.error(RuntimeException()))
+        stubReportEditApiToCompleteWith(Completable.error(RuntimeException()))
         stubReportAndStart()
         onId(R.id.editReport).click()
         onId(R.id.reportEditCoordinator).hasNoChildWithId(R.id.loader)
@@ -248,17 +248,17 @@ class ReportEditActivityTest {
     }
 
     private fun stubReportEditApiToNeverComplete() {
-        stubReportEditApiToCompleteWith(Observable.never())
+        stubReportEditApiToCompleteWith(Completable.never())
     }
 
     private fun stubReportEditApiToImmediatelyComplete() {
-        stubReportEditApiToCompleteWith(Observable.just(Unit))
+        stubReportEditApiToCompleteWith(Completable.complete())
     }
 
-    private fun stubReportEditApiToCompleteWith(observable: Observable<Unit>) {
+    private fun stubReportEditApiToCompleteWith(observable: Completable) {
         ReportEdit.ApiProvider.override = {
             object : ReportEdit.Api {
-                override fun removeReport(reportId: Long) = observable.map { emptyList<ReportFromApi>() }
+                override fun removeReport(reportId: Long) = observable
 
                 override fun editReport(id: Long, reportType: Int, date: String, reportedHour: String?,
                                         description: String?, projectId: Long?) = observable

@@ -4,6 +4,7 @@ interface InstantGoogleHubLogin {
     interface View {
         fun openOnLoggedInScreen()
         fun startGoogleLoginIntent()
+        fun showGoogleLoginError()
     }
 
     interface Repository {

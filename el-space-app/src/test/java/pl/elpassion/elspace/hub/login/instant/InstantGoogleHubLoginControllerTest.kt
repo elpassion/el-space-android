@@ -45,6 +45,12 @@ class InstantGoogleHubLoginControllerTest {
         verify(view, never()).openOnLoggedInScreen()
     }
 
+    @Test
+    fun shouldShowGoogleLoginErrorWhenGoogleLoginFailed() {
+        controller.onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess = false, googleToken = null))
+        verify(view).showGoogleLoginError()
+    }
+
     private fun stubRepositoryToReturn(token: String?) {
         whenever(repository.readToken()).thenReturn(token)
     }

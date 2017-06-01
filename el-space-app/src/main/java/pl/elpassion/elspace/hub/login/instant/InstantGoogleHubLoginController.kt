@@ -15,6 +15,8 @@ class InstantGoogleHubLoginController(
     fun onGoogleSignInResult(hubGoogleSignInResult: InstantGoogleHubLogin.HubGoogleSignInResult) {
         if (hubGoogleSignInResult.isSuccess) {
             view.openOnLoggedInScreen()
+        }else{
+            view.showGoogleLoginError()
         }
     }
 }

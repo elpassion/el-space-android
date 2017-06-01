@@ -85,6 +85,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_vote_error))
     }
 
+    override fun resetButtons() {
+
+    }
+
     private fun showSnackbar(text: String) {
         Snackbar.make(debateDetailsCoordinator, text, Snackbar.LENGTH_INDEFINITE).show()
     }

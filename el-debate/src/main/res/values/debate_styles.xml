@@ -27,16 +27,4 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="DebateAnswerText.Positive">
-        <item name="android:textColor">@color/blueDebatePositive</item>
-    </style>
-
-    <style name="DebateAnswerText.Negative">
-        <item name="android:textColor">@color/redDebateNegative</item>
-    </style>
-
-    <style name="DebateAnswerText.Neutral">
-        <item name="android:textColor">@color/greyDebateNeutral</item>
-    </style>
-
 </resources>

@@ -228,6 +228,17 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
 
+    @Test
+    fun shouldChangeHandsColorsWhenClickedOnNegative() {
+        startActivity()
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
+        voteSuccessfully()
+        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
+        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
+        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+    }
+
     private fun startActivity(token: String = "token") {
         val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
         rule.launchActivity(intent)

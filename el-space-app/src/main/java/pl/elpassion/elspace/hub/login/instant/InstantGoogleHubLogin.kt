@@ -8,6 +8,7 @@ interface InstantGoogleHubLogin {
         fun startGoogleLoginIntent()
         fun showGoogleLoginError()
         fun showApiLoginError()
+        fun logoutFromGoogle()
     }
 
     interface Repository {

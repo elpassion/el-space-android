@@ -118,6 +118,13 @@ class InstantGoogleHubLoginControllerTest {
         verify(shortcutService, never()).creteAppShortcuts()
     }
 
+    @Test
+    fun shouldLogoutFromGoogleWhenApiCallFails() {
+        stubApi().thenError()
+        controller.onGoogleSignIn(isSuccess = true, googleToken = "googleToken")
+        verify(view).logoutFromGoogle()
+    }
+
     private fun InstantGoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(InstantGoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
 
     private fun stubApi() = whenever(api.loginWithGoogle(any()))

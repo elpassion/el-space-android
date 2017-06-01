@@ -23,19 +23,22 @@ class InstantGoogleHubLoginController(
             api.loginWithGoogle(hubGoogleSignInResult.googleToken)
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
-                    .subscribe(this::onSuccess, {
-                        view.showApiLoginError()
-                    })
+                    .subscribe(this::onSuccess, this::onError)
         } else {
             view.showGoogleLoginError()
         }
     }
 
-    private fun onSuccess(it: String) {
+    private fun onSuccess(token: String) {
         if (shortcutService.isSupportingShortcuts()) {
             shortcutService.creteAppShortcuts()
         }
-        repository.saveToken(it)
+        repository.saveToken(token)
         view.openOnLoggedInScreen()
+    }
+
+    private fun onError(error: Throwable) {
+        view.logoutFromGoogle()
+        view.showApiLoginError()
     }
 }

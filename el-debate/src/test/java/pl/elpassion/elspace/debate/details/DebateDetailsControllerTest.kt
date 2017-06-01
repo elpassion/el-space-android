@@ -189,6 +189,13 @@ class DebateDetailsControllerTest {
     }
 
     @Test
+    fun shouldResetButtonsWhenVoteFailed() {
+        createController().onVote("", createAnswer())
+        sendVoteSubject.onError(RuntimeException())
+        verify(view).resetButtons()
+    }
+
+    @Test
     fun shouldOpenCommentScreenOnComment() {
         val controller = createController()
         controller.onComment()

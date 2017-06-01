@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.elpassion.android.view.show
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
@@ -13,6 +14,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.hub_login_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 
@@ -54,6 +56,8 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
     }
 
     override fun showGoogleLoginError() {
+        hideLoader(hubLoginCoordinator)
+        googleLoginError.show()
     }
 
     override fun showApiLoginError() {

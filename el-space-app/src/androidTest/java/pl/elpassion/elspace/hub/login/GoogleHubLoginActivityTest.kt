@@ -3,9 +3,7 @@ package pl.elpassion.elspace.hub.login
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.elpassion.android.commons.espresso.InitIntentsRule
-import com.elpassion.android.commons.espresso.isDisplayed
-import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.*
 import com.google.android.gms.common.api.GoogleApiClient
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
@@ -100,8 +98,17 @@ class GoogleHubLoginActivityTest {
         verify(logoutFromGoogle).invoke(any())
     }
 
-    private fun stubGetHubGoogleSignInResult() {
-        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+    @Test
+    fun shouldShowGoogleLoginError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult(isSuccess = false)
+        rule.startActivity()
+        onId(R.id.loader).doesNotExist()
+        onText(R.string.google_login_error).isDisplayed()
+    }
+
+    private fun stubGetHubGoogleSignInResult(isSuccess: Boolean = true) {
+        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = isSuccess, googleToken = "googleToken"))
     }
 
     private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {

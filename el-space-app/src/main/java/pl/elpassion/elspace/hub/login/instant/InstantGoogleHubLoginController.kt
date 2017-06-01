@@ -1,11 +1,13 @@
 package pl.elpassion.elspace.hub.login.instant
 
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class InstantGoogleHubLoginController(
         val view: InstantGoogleHubLogin.View,
         val repository: InstantGoogleHubLogin.Repository,
         val api: InstantGoogleHubLogin.Api,
+        val shortcutService: ShortcutService,
         val schedulers: SchedulersSupplier) {
 
     fun onCreate() {
@@ -22,6 +24,7 @@ class InstantGoogleHubLoginController(
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe({
+                        shortcutService.creteAppShortcuts()
                         repository.saveToken(it)
                         view.openOnLoggedInScreen()
                     }, {

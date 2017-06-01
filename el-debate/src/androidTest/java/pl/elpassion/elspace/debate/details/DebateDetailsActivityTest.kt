@@ -142,6 +142,7 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_error).isDisplayed()
     }
 
+    @Ignore
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivity()
@@ -151,6 +152,7 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
+    @Ignore
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivity()

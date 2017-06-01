@@ -24,6 +24,9 @@
             android:theme="@style/AppThemeBlueWithoutActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name="pl.elpassion.elspace.hub.login.instant.InstantGoogleHubLoginActivity"
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
+        <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity

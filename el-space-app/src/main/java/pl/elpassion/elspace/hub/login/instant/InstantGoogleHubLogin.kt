@@ -4,4 +4,8 @@ interface InstantGoogleHubLogin {
     interface View {
         fun openOnLoggedInScreen()
     }
+
+    interface Repository {
+        fun  readToken(): String?
+    }
 }

@@ -1,8 +1,12 @@
 package pl.elpassion.elspace.hub.login.instant
 
-class InstantGoogleHubLoginController(val view: InstantGoogleHubLogin.View) {
+class InstantGoogleHubLoginController(
+        val view: InstantGoogleHubLogin.View,
+        val repository: InstantGoogleHubLogin.Repository) {
 
     fun onCreate() {
-        view.openOnLoggedInScreen()
+        if (repository.readToken() != null) {
+            view.openOnLoggedInScreen()
+        }
     }
 }

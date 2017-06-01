@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import com.elpassion.android.commons.espresso.InitIntentsRule
+import com.elpassion.android.commons.espresso.isDisplayed
+import com.elpassion.android.commons.espresso.onId
 import com.google.android.gms.common.api.GoogleApiClient
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
@@ -11,6 +13,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.stubbing.OngoingStubbing
+import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
@@ -46,6 +49,15 @@ class GoogleHubLoginActivityTest {
             it.getArgument<Activity>(0).startActivityForResult(getAutoFinishingIntent(), it.getArgument<Int>(2))
         }
         whenever(api.loginWithGoogle(any())).thenJust(HubTokenFromApi("token"))
+    }
+
+    @Test
+    fun shouldShowLoaderWhileApiCall() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenNever()
+        rule.startActivity()
+        onId(R.id.loader).isDisplayed()
     }
 
     @Test
@@ -98,5 +110,9 @@ class GoogleHubLoginActivityTest {
 
     private fun <T> OngoingStubbing<Single<T>>.thenError() {
         thenReturn(Single.error(RuntimeException()))
+    }
+
+    private fun <T> OngoingStubbing<Single<T>>.thenNever() {
+        thenReturn(Single.never())
     }
 }

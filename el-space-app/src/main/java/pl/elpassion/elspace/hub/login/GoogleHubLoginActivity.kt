@@ -10,8 +10,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.hub_login_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutServiceImpl
 
 class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
@@ -33,6 +35,8 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.hub_login_activity)
+        showLoader(hubLoginCoordinator)
         controller.onCreate()
     }
 

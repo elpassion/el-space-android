@@ -1,10 +1,14 @@
 package pl.elpassion.elspace.debate.comment
 
+import io.reactivex.Completable
+
 interface DebateComment {
 
     interface Api {
-        fun comment(comment: String) {
+        fun comment(comment: String): Completable
+    }
 
-        }
+    interface View {
+        fun showLoader()
     }
 }

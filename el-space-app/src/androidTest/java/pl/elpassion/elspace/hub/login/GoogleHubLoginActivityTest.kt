@@ -15,14 +15,15 @@ import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
+import pl.elpassion.elspace.hub.login.GoogleHubLogin.*
 
 class GoogleHubLoginActivityTest {
 
-    val api = mock<GoogleHubLogin.Api>()
-    val repository = mock<GoogleHubLogin.Repository>()
+    val api = mock<Api>()
+    val repository = mock<Repository>()
     val openOnLoggedInScreen = mock<(Context) -> Unit>()
     val startGoogleSignInActivity = mock<(Activity, () -> GoogleApiClient, Int) -> Unit>()
-    val getHubGoogleSignInResult = mock<(Intent?) -> GoogleHubLogin.HubGoogleSignInResult>()
+    val getHubGoogleSignInResult = mock<(Intent?) -> HubGoogleSignInResult>()
     val logoutFromGoogle = mock<(() -> GoogleApiClient) -> Unit>()
 
     @JvmField @Rule
@@ -88,7 +89,7 @@ class GoogleHubLoginActivityTest {
     }
 
     private fun stubGetHubGoogleSignInResult() {
-        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(GoogleHubLogin.HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
+        whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = true, googleToken = "googleToken"))
     }
 
     private fun <T> OngoingStubbing<Single<T>>.thenJust(value: T) {

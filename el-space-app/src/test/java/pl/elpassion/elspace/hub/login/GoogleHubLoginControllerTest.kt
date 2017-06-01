@@ -9,13 +9,14 @@ import io.reactivex.schedulers.TestScheduler
 import org.junit.Test
 import org.mockito.stubbing.OngoingStubbing
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.hub.login.GoogleHubLogin.*
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class GoogleHubLoginControllerTest {
 
-    val view = mock<GoogleHubLogin.View>()
-    val repository = mock<GoogleHubLogin.Repository>()
-    val api = mock<GoogleHubLogin.Api>()
+    val view = mock<View>()
+    val repository = mock<Repository>()
+    val api = mock<Api>()
     val shortcutService = mock<ShortcutService>()
     val controller = GoogleHubLoginController(view, repository, api, shortcutService, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
@@ -125,7 +126,7 @@ class GoogleHubLoginControllerTest {
         verify(view).logoutFromGoogle()
     }
 
-    private fun GoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(GoogleHubLogin.HubGoogleSignInResult(isSuccess, googleToken))
+    private fun GoogleHubLoginController.onGoogleSignIn(isSuccess: Boolean, googleToken: String?) = onGoogleSignInResult(HubGoogleSignInResult(isSuccess, googleToken))
 
     private fun stubApi() = whenever(api.loginWithGoogle(any()))
 

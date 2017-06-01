@@ -1,12 +1,13 @@
 package pl.elpassion.elspace.hub.login
 
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.hub.login.GoogleHubLogin.*
 import pl.elpassion.elspace.hub.login.shortcut.ShortcutService
 
 class GoogleHubLoginController(
-        val view: GoogleHubLogin.View,
-        val repository: GoogleHubLogin.Repository,
-        val api: GoogleHubLogin.Api,
+        val view: View,
+        val repository: Repository,
+        val api: Api,
         val shortcutService: ShortcutService,
         val schedulers: SchedulersSupplier) {
 
@@ -18,7 +19,7 @@ class GoogleHubLoginController(
         }
     }
 
-    fun onGoogleSignInResult(hubGoogleSignInResult: GoogleHubLogin.HubGoogleSignInResult) {
+    fun onGoogleSignInResult(hubGoogleSignInResult: HubGoogleSignInResult) {
         if (hubGoogleSignInResult.isSuccess && hubGoogleSignInResult.googleToken != null) {
             api.loginWithGoogle(GoogleTokenForHubTokenApi(hubGoogleSignInResult.googleToken))
                     .map { it.accessToken }

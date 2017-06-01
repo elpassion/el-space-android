@@ -18,12 +18,16 @@ interface GoogleHubLogin {
         fun saveToken(token: String)
     }
 
-    data class HubGoogleSignInResult(
-            val isSuccess: Boolean,
-            val googleToken: String?)
-
     interface Api {
         @POST("api_keys")
         fun loginWithGoogle(@Body body: GoogleTokenForHubTokenApi): Single<HubTokenFromApi>
     }
+
+    data class HubGoogleSignInResult(
+            val isSuccess: Boolean,
+            val googleToken: String?)
+
+    data class HubTokenFromApi(val accessToken: String)
+
+    data class GoogleTokenForHubTokenApi(val idToken: String)
 }

@@ -17,43 +17,37 @@ class DebateCommentControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.comment(any())).thenReturn(commentSubject)
+        whenever(api.comment(any(), any())).thenReturn(commentSubject)
     }
 
     @Test
-    fun shouldCallApiWithGivenMessageOnSendComment() {
-        controller.sendComment("message")
-        verify(api).comment("message")
-    }
-
-    @Test
-    fun shouldReallyCallApiWithGivenMessageOnSendComment() {
-        controller.sendComment("someOtherMessage")
-        verify(api).comment("someOtherMessage")
+    fun shouldCallApiWithGivenTokenAndMessageOnSendComment() {
+        controller.sendComment("token", "message")
+        verify(api).comment("token", "message")
     }
 
     @Test
     fun shouldShowLoaderOnSendComment() {
-        controller.sendComment("message")
+        controller.sendComment("token", "mess")
         verify(view).showLoader()
     }
 
     @Test
     fun shouldNotHideLoaderIfSendCommentIsStillInProgress() {
-        controller.sendComment("message")
+        controller.sendComment("token", "mess")
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
-        controller.sendComment("message")
+        controller.sendComment("token", "mess")
         commentSubject.onComplete()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
-        controller.sendComment("mess")
+        controller.sendComment("token", "mess")
         commentSubject.onError(RuntimeException())
         verify(view).hideLoader()
     }
@@ -61,7 +55,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldHideLoaderOnDestroyIfSendCommentIsStillInProgress() {
         controller.run {
-            sendComment("mess")
+            controller.sendComment("token", "mess")
             onDestroy()
         }
         verify(view).hideLoader()
@@ -77,7 +71,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.sendComment("message")
+        controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -88,7 +82,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.sendComment("mess")
+        controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -97,14 +91,14 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldShowSuccessWhenSendCommentSucceeded() {
-        controller.sendComment("mess")
+        controller.sendComment("token", "mess")
         commentSubject.onComplete()
         verify(view).showSendCommentSuccess()
     }
 
     @Test
     fun shouldShowErrorWhenSendCommentFailed() {
-        controller.sendComment("mess")
+        controller.sendComment("token", "mess")
         val exception = RuntimeException()
         commentSubject.onError(exception)
         verify(view).showSendCommentError(exception)

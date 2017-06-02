@@ -5,7 +5,7 @@ import io.reactivex.Completable
 interface DebateComment {
 
     interface Api {
-        fun comment(comment: String): Completable
+        fun comment(token: String, message: String): Completable
     }
 
     interface View {

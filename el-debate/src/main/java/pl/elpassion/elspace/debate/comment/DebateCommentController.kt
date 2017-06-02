@@ -15,4 +15,8 @@ class DebateCommentController(
                 .doFinally(view::hideLoader)
                 .subscribe(view::showSendCommentSuccess, view::showSendCommentError)
     }
+
+    fun onDestroy() {
+        view.hideLoader()
+    }
 }

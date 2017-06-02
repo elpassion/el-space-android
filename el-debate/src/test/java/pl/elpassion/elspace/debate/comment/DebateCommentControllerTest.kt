@@ -15,6 +15,8 @@ class DebateCommentControllerTest {
     private val commentSubject = CompletableSubject.create()
     private val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
+    private fun sendComment() = controller.sendComment(token = "token", message = "message")
+
     @Before
     fun setUp() {
         whenever(api.comment(any(), any())).thenReturn(commentSubject)
@@ -22,7 +24,7 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldCallApiWithGivenTokenAndMessageOnSendComment() {
-        controller.sendComment("token", "message")
+        sendComment()
         verify(api).comment("token", "message")
     }
 
@@ -34,26 +36,26 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldShowLoaderOnSendComment() {
-        controller.sendComment("token", "mess")
+        sendComment()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldNotHideLoaderIfSendCommentIsStillInProgress() {
-        controller.sendComment("token", "mess")
+        sendComment()
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
-        controller.sendComment("token", "mess")
+        sendComment()
         commentSubject.onComplete()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
-        controller.sendComment("token", "mess")
+        sendComment()
         commentSubject.onError(RuntimeException())
         verify(view).hideLoader()
     }
@@ -61,7 +63,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldHideLoaderOnDestroyIfSendCommentIsStillInProgress() {
         controller.run {
-            controller.sendComment("token", "mess")
+            sendComment()
             onDestroy()
         }
         verify(view).hideLoader()
@@ -97,14 +99,14 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldShowSuccessWhenSendCommentSucceeded() {
-        controller.sendComment("token", "mess")
+        sendComment()
         commentSubject.onComplete()
         verify(view).showSendCommentSuccess()
     }
 
     @Test
     fun shouldShowErrorWhenSendCommentFailed() {
-        controller.sendComment("token", "mess")
+        sendComment()
         val exception = RuntimeException()
         commentSubject.onError(exception)
         verify(view).showSendCommentError(exception)

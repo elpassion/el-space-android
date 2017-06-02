@@ -50,6 +50,14 @@ class DebateCommentActivityTest {
         verify(api).comment(any(), any())
     }
 
+    @Test
+    fun shouldUseCorrectTokenOnKeyboardConfirmClick() {
+        startActivity(debateToken = "someToken")
+        onId(R.id.debateCommentInputText)
+                .pressImeActionButton()
+        verify(api).comment("someToken", "")
+    }
+
     private fun startActivity(debateToken: String = "debateToken") {
         rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }

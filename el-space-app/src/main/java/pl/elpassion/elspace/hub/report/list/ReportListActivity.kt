@@ -26,6 +26,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.menuClicks
 import pl.elpassion.elspace.common.extensions.onMenuItemAction
 import pl.elpassion.elspace.common.extensions.onMenuItemClicks
+import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.report.HourlyReport
@@ -62,6 +63,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_list_activity)
         setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         reportsContainer.layoutManager = ReportsLinearLayoutManager(this)
         reportsContainer.adapter = reportsAdapter
         controller.onCreate()

@@ -18,7 +18,7 @@ import pl.elpassion.elspace.common.rule
 class DebateCommentActivityTest {
 
     private val api = mock<DebateComment.Api>().apply {
-        whenever(this.comment(any(), any())).thenReturn(Completable.never())
+        whenever(comment(any(), any())).thenReturn(Completable.never())
     }
 
     @JvmField @Rule
@@ -56,6 +56,15 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .pressImeActionButton()
         verify(api).comment("someToken", "")
+    }
+
+    @Test
+    fun shouldUseCorrectMessageOnKeyboardConfirmClick() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
+        verify(api).comment("debateToken", "message")
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

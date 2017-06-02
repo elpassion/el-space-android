@@ -35,7 +35,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         setContentView(R.layout.debate_comment_activity)
         debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.sendComment(token, "")
+                controller.sendComment(token, inputText.text.toString())
             }
             false
         }

@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.comment
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions
 import android.support.test.espresso.matcher.ViewMatchers
 import android.text.InputType
@@ -64,6 +65,16 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .typeText("message")
                 .pressImeActionButton()
+        verify(api).comment("someToken", "message")
+    }
+
+    @Test
+    fun shouldUseCorrectTokenAndMessageOnSendClick() {
+        startActivity(debateToken = "someToken")
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+        Espresso.closeSoftKeyboard()
+        onId(R.id.debateCommentSendButton).click()
         verify(api).comment("someToken", "message")
     }
 

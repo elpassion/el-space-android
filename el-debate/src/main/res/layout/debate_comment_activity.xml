@@ -36,13 +36,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <Button
                 android:id="@+id/debateCommentCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/debate_comment_button_cancel" />
 
-            <TextView
+            <Button
                 android:id="@+id/debateCommentSendButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -24,6 +24,8 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                 }
     }
 
+    private val token by lazy { intent.getStringExtra(DebateCommentActivity.debateAuthTokenKey) }
+
     private val controller by lazy {
         DebateCommentController(this, DebateComment.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
@@ -33,7 +35,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         setContentView(R.layout.debate_comment_activity)
         debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.sendComment("","")
+                controller.sendComment(token, "")
             }
             false
         }

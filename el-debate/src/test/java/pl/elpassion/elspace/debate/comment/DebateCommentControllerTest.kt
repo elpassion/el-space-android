@@ -40,6 +40,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldHideLoaderWhenApiCallFailed() {
+        controller.sendComment("mess")
+        commentSubject.onError(RuntimeException())
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldNotHideLoaderIfSendCommentCallIsStillInProgress() {
         controller.sendComment("message")
         verify(view, never()).hideLoader()

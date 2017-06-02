@@ -35,6 +35,14 @@ class DebateCommentActivityTest {
     }
 
     @Test
+    fun shouldHaveSendButton() {
+        startActivity()
+        onId(R.id.debateCommentSendButton)
+                .isDisplayed()
+                .hasText(R.string.debate_comment_button_send)
+    }
+
+    @Test
     fun shouldHaveCorrectCommentInput() {
         startActivity()
         onId(R.id.debateCommentInputText)

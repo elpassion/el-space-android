@@ -27,6 +27,14 @@ class DebateCommentActivityTest {
     }
 
     @Test
+    fun shouldHaveCancelButton() {
+        startActivity()
+        onId(R.id.debateCommentCancelButton)
+                .isDisplayed()
+                .hasText(R.string.debate_comment_button_cancel)
+    }
+
+    @Test
     fun shouldHaveCorrectCommentInput() {
         startActivity()
         onId(R.id.debateCommentInputText)

@@ -66,7 +66,7 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
     }
 
     override fun logoutFromGoogle() {
-        logoutFromGoogle({ googleApiClientObject })
+        logoutFromGoogle { googleApiClientObject }
     }
 
     companion object {

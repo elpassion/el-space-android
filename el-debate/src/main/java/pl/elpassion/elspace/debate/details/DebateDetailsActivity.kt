@@ -100,7 +100,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun openCommentScreen() {
-        DebateCommentActivity.start(this)
+        DebateCommentActivity.start(this, token)
     }
 
     private fun changeImagesInButtonsOnPositiveAnswer() {

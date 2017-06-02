@@ -27,6 +27,12 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldReallyCallApiWithMessageOnSendComment() {
+        controller.sendComment("someOtherMessage")
+        verify(api).comment("someOtherMessage")
+    }
+
+    @Test
     fun shouldShowLoaderOnSendComment() {
         controller.sendComment("message")
         verify(view).showLoader()

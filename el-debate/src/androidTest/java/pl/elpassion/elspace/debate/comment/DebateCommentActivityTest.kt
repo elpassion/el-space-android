@@ -43,28 +43,12 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldPerformConfirmActionOnKeyboardConfirmClick() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .pressImeActionButton()
-        verify(api).comment(any(), any())
-    }
-
-    @Test
-    fun shouldUseCorrectTokenOnKeyboardConfirmClick() {
+    fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
-        onId(R.id.debateCommentInputText)
-                .pressImeActionButton()
-        verify(api).comment("someToken", "")
-    }
-
-    @Test
-    fun shouldUseCorrectMessageOnKeyboardConfirmClick() {
-        startActivity()
         onId(R.id.debateCommentInputText)
                 .typeText("message")
                 .pressImeActionButton()
-        verify(api).comment("debateToken", "message")
+        verify(api).comment("someToken", "message")
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

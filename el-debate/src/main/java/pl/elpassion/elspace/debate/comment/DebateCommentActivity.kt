@@ -4,9 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.inputmethod.EditorInfo
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.debate_comment_activity.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.SchedulersSupplier
 
-class DebateCommentActivity : AppCompatActivity() {
+class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     companion object {
 
@@ -19,8 +24,34 @@ class DebateCommentActivity : AppCompatActivity() {
                 }
     }
 
+    private val controller by lazy {
+        DebateCommentController(this, DebateComment.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_comment_activity)
+        debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                controller.sendComment("","")
+            }
+            false
+        }
+    }
+
+    override fun showLoader() {
+
+    }
+
+    override fun hideLoader() {
+
+    }
+
+    override fun showSendCommentSuccess() {
+
+    }
+
+    override fun showSendCommentError(exception: Throwable) {
+
     }
 }

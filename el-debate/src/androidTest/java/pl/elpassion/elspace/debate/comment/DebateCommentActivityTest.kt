@@ -27,7 +27,13 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldHaveCancelButton() {
+    fun shouldShowHintInInputField() {
+        startActivity()
+        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
+    }
+
+    @Test
+    fun shouldShowCancelButton() {
         startActivity()
         onId(R.id.debateCommentCancelButton)
                 .isDisplayed()
@@ -35,7 +41,7 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldHaveSendButton() {
+    fun shouldShowSendButton() {
         startActivity()
         onId(R.id.debateCommentSendButton)
                 .isDisplayed()
@@ -50,12 +56,6 @@ class DebateCommentActivityTest {
                 .replaceText("mess")
                 .hasText("mess")
                 .check(ViewAssertions.matches(ViewMatchers.withInputType(InputType.TYPE_CLASS_TEXT)))
-    }
-
-    @Test
-    fun shouldShowHintInInputField() {
-        startActivity()
-        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
     }
 
     @Test

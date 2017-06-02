@@ -10,8 +10,8 @@ class DebateCommentController(
 
     private var subscription: Disposable? = null
 
-    fun sendComment(message: String) {
-        subscription = api.comment(message)
+    fun sendComment(token: String, message: String) {
+        subscription = api.comment(token, message)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

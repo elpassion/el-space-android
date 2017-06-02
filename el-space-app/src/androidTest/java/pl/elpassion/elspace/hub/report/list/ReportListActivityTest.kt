@@ -32,6 +32,7 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import io.reactivex.Observable
+import org.junit.Assert.assertTrue
 import pl.elpassion.elspace.common.onToolbarBackArrow
 
 class ReportListActivityTest {
@@ -227,6 +228,12 @@ class ReportListActivityTest {
     @Test
     fun shouldHaveVisibleBackArrow() {
         onToolbarBackArrow().isDisplayed()
+    }
+
+    @Test
+    fun shouldCloseActivityOnBackClicked() {
+        onToolbarBackArrow().click()
+        assertTrue(rule.activity.isFinishing)
     }
 
     private fun verifyIfDayNumberOneHasNotMissingText() {

@@ -27,6 +27,12 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldReallyCallApiWithGivenTokenAndMessageOnSendComment() {
+        controller.sendComment(token = "someOtherToken", message = "someOtherMessage")
+        verify(api).comment("someOtherToken", "someOtherMessage")
+    }
+
+    @Test
     fun shouldShowLoaderOnSendComment() {
         controller.sendComment("token", "mess")
         verify(view).showLoader()

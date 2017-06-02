@@ -21,13 +21,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldCallApiWithMessageOnSendComment() {
+    fun shouldCallApiWithGivenMessageOnSendComment() {
         controller.sendComment("message")
         verify(api).comment("message")
     }
 
     @Test
-    fun shouldReallyCallApiWithMessageOnSendComment() {
+    fun shouldReallyCallApiWithGivenMessageOnSendComment() {
         controller.sendComment("someOtherMessage")
         verify(api).comment("someOtherMessage")
     }

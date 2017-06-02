@@ -1,7 +1,6 @@
 package pl.elpassion.elspace.debate.comment
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.internal.schedulers.TrampolineScheduler
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
@@ -66,5 +65,12 @@ class DebateCommentControllerTest {
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldShowSuccessWhenSendCommentSuccessfully() {
+        controller.sendComment("mess")
+        commentSubject.onComplete()
+        verify(view).showSendCommentSuccess()
     }
 }

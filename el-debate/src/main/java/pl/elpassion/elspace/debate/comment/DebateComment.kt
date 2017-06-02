@@ -11,5 +11,6 @@ interface DebateComment {
     interface View {
         fun showLoader()
         fun hideLoader()
+        fun showSendCommentSuccess()
     }
 }

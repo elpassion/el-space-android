@@ -49,6 +49,7 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
 
     override fun openOnLoggedInScreen() {
         openOnLoggedInScreen(this)
+        finish()
     }
 
     override fun startGoogleLoginIntent() {
@@ -66,7 +67,7 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
     }
 
     override fun logoutFromGoogle() {
-        logoutFromGoogle({ googleApiClientObject })
+        logoutFromGoogle { googleApiClientObject }
     }
 
     companion object {

@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
+import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
 import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
@@ -23,9 +24,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.menuClicks
-import pl.elpassion.elspace.common.extensions.onMenuItemAction
-import pl.elpassion.elspace.common.extensions.onMenuItemClicks
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.report.HourlyReport
@@ -62,6 +61,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_list_activity)
         setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         reportsContainer.layoutManager = ReportsLinearLayoutManager(this)
         reportsContainer.adapter = reportsAdapter
         controller.onCreate()
@@ -71,6 +71,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         menuInflater.inflate(R.menu.report_list_menu, menu)
         return true
     }
+
+    override fun onOptionsItemSelected(item: MenuItem) = handleClickOnBackArrowItem(item)
 
     override fun onDestroy() {
         super.onDestroy()

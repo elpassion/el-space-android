@@ -7,6 +7,7 @@ import com.elpassion.android.commons.espresso.*
 import com.google.android.gms.common.api.GoogleApiClient
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -63,6 +64,13 @@ class GoogleHubLoginActivityTest {
         whenever(repository.readToken()).thenReturn("token")
         rule.startActivity()
         verify(openOnLoggedInScreen).invoke(any())
+    }
+
+    @Test
+    fun shouldCloseLoginActivityIfUserIsLoggedInOnCreate() {
+        whenever(repository.readToken()).thenReturn("token")
+        rule.startActivity()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     @Test

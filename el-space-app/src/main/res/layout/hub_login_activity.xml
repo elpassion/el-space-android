@@ -36,8 +36,11 @@
 
     <Button
         android:id="@+id/googleDismissErrorButton"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@android:string/ok"
+        android:layout_gravity="end"
         android:visibility="gone"
         tools:visibility="visible" />
 

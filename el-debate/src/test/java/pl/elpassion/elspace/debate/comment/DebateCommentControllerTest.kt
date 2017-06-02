@@ -39,6 +39,12 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldNotHideLoaderIfSendCommentIsStillInProgress() {
+        controller.sendComment("message")
+        verify(view, never()).hideLoader()
+    }
+
+    @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         controller.sendComment("message")
         commentSubject.onComplete()
@@ -53,9 +59,12 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldNotHideLoaderIfSendCommentIsStillInProgress() {
-        controller.sendComment("message")
-        verify(view, never()).hideLoader()
+    fun shouldHideLoaderOnDestroyIfSendCommentIsStillInProgress() {
+        controller.run {
+            sendComment("mess")
+            onDestroy()
+        }
+        verify(view).hideLoader()
     }
 
     @Test

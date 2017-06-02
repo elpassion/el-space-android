@@ -39,21 +39,21 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallFinished() {
+    fun shouldHideLoaderWhenSendCommentSucceeded() {
         controller.sendComment("message")
         commentSubject.onComplete()
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldHideLoaderWhenApiCallFailed() {
+    fun shouldHideLoaderWhenSendCommentFailed() {
         controller.sendComment("mess")
         commentSubject.onError(RuntimeException())
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldNotHideLoaderIfSendCommentCallIsStillInProgress() {
+    fun shouldNotHideLoaderIfSendCommentIsStillInProgress() {
         controller.sendComment("message")
         verify(view, never()).hideLoader()
     }
@@ -81,7 +81,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldShowSuccessWhenSendCommentSuccessfully() {
+    fun shouldShowSuccessWhenSendCommentSucceeded() {
         controller.sendComment("mess")
         commentSubject.onComplete()
         verify(view).showSendCommentSuccess()

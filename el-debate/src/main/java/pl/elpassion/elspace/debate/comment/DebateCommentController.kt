@@ -13,6 +13,6 @@ class DebateCommentController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(view::showSendCommentSuccess)
+                .subscribe(view::showSendCommentSuccess, view::showSendCommentError)
     }
 }

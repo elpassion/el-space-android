@@ -80,4 +80,12 @@ class DebateCommentControllerTest {
         commentSubject.onComplete()
         verify(view).showSendCommentSuccess()
     }
+
+    @Test
+    fun shouldShowErrorWhenSendCommentFailed() {
+        controller.sendComment("mess")
+        val exception = RuntimeException()
+        commentSubject.onError(exception)
+        verify(view).showSendCommentError(exception)
+    }
 }

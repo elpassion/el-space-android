@@ -12,5 +12,6 @@ interface DebateComment {
         fun showLoader()
         fun hideLoader()
         fun showSendCommentSuccess()
+        fun showSendCommentError(exception: Throwable)
     }
 }

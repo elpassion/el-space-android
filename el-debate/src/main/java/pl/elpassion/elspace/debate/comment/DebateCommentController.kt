@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.debate.comment
 
+import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 
 class DebateCommentController(
@@ -7,8 +8,10 @@ class DebateCommentController(
         private val api: DebateComment.Api,
         private val schedulers: SchedulersSupplier) {
 
+    private var subscription: Disposable? = null
+
     fun sendComment(message: String) {
-        api.comment(message)
+        subscription = api.comment(message)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -17,6 +20,6 @@ class DebateCommentController(
     }
 
     fun onDestroy() {
-        view.hideLoader()
+        subscription?.dispose()
     }
 }

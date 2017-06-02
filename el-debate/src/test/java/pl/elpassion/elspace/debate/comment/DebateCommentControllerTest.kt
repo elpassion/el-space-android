@@ -68,6 +68,12 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldNotHideLoaderOnDestroyIfSendCommentWasntCalled() {
+        controller.onDestroy()
+        verify(view, never()).hideLoader()
+    }
+
+    @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))

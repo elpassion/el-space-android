@@ -15,11 +15,6 @@ class DebateCommentActivityTest {
     val rule = rule<DebateCommentActivity>()
 
     @Test
-    fun shouldShowTitle() {
-        onText(R.string.debate_comment_title).isDisplayed()
-    }
-
-    @Test
     fun shouldHaveCorrectCommentInput() {
         onId(R.id.debateCommentInputText)
                 .isDisplayed()

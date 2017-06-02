@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.comment
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.internal.schedulers.TrampolineScheduler
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
@@ -53,6 +54,17 @@ class DebateCommentControllerTest {
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
+        val observeOn = TestScheduler()
+        val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        controller.sendComment("mess")
+        commentSubject.onComplete()
+        verify(view, never()).hideLoader()
+        observeOn.triggerActions()
         verify(view).hideLoader()
     }
 }

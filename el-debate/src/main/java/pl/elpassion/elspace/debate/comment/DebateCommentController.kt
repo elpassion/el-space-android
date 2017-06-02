@@ -10,6 +10,7 @@ class DebateCommentController(
     fun sendComment(message: String) {
         api.comment(message)
                 .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe()

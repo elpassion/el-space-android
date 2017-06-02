@@ -13,4 +13,5 @@
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
     <string name="debate_comment_title">Add a comment</string>
+    <string name="debate_comment_hint">Input</string>
 </resources>

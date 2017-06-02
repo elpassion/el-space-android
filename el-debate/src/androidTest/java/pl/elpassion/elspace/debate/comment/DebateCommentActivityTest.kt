@@ -27,4 +27,9 @@ class DebateCommentActivityTest {
                 .hasText("mess")
                 .check(ViewAssertions.matches(ViewMatchers.withInputType(InputType.TYPE_CLASS_TEXT)))
     }
+
+    @Test
+    fun shouldShowHintInInputField() {
+        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
+    }
 }

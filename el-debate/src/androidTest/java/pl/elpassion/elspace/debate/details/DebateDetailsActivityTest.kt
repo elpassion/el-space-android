@@ -2,14 +2,18 @@ package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.action.ViewActions.scrollTo
+import android.support.test.espresso.intent.Intents
+import android.support.test.espresso.intent.matcher.IntentMatchers
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
+import org.hamcrest.Matchers
 import org.junit.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
@@ -211,10 +215,21 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldStartCommentActivityWhenCommentButtonClicked() {
+    fun shouldOpenCommentScreenWhenCommentButtonClicked() {
         startActivity()
         onId(R.id.debateCommentButton).click()
         checkIntent(DebateCommentActivity::class.java)
+    }
+
+    @Test
+    fun shouldOpenCommentScreenWithGivenToken() {
+        val token = "someToken"
+        startActivity(token)
+        stubAllIntents()
+        onId(R.id.debateCommentButton).click()
+        Intents.intended(Matchers.allOf(
+                IntentMatchers.hasExtra("debateAuthTokenKey", token),
+                IntentMatchers.hasComponent(DebateCommentActivity::class.java.name)))
     }
 
     @Test

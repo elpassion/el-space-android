@@ -9,7 +9,14 @@ import pl.elpassion.R
 class DebateCommentActivity : AppCompatActivity() {
 
     companion object {
-        fun start(context: Context) = context.startActivity(Intent(context, DebateCommentActivity::class.java))
+
+        private val debateAuthTokenKey = "debateAuthTokenKey"
+        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
+
+        fun intent(context: Context, debateToken: String) =
+                Intent(context, DebateCommentActivity::class.java).apply {
+                    putExtra(debateAuthTokenKey, debateToken)
+                }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

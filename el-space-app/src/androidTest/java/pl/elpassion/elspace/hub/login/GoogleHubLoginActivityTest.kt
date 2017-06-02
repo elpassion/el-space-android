@@ -142,6 +142,15 @@ class GoogleHubLoginActivityTest {
         onId(R.id.googleDismissErrorButton).isDisplayed()
     }
 
+    @Test
+    fun shouldNotShowDismissErrorButtonUntilError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenNever()
+        rule.startActivity()
+        onId(R.id.googleDismissErrorButton).isNotDisplayed()
+    }
+
     private fun stubGetHubGoogleSignInResult(isSuccess: Boolean = true) {
         whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = isSuccess, googleToken = "googleToken"))
     }

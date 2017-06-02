@@ -38,6 +38,7 @@ class GoogleHubLoginActivity : AppCompatActivity(), GoogleHubLogin.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.hub_login_activity)
+        googleDismissErrorButton.setOnClickListener { finish() }
         showLoader(hubLoginCoordinator)
         controller.onCreate()
     }

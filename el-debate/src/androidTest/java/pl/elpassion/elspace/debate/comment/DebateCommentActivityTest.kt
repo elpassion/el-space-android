@@ -10,7 +10,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Completable
+import io.reactivex.subjects.CompletableSubject
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -18,8 +18,9 @@ import pl.elpassion.elspace.common.rule
 
 class DebateCommentActivityTest {
 
+    private val sendCommentSubject = CompletableSubject.create()
     private val api = mock<DebateComment.Api>().apply {
-        whenever(comment(any(), any())).thenReturn(Completable.never())
+        whenever(comment(any(), any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
@@ -83,6 +84,14 @@ class DebateCommentActivityTest {
         startActivity()
         onId(R.id.debateCommentSendButton).click()
         onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenSendingCommentFinished() {
+        startActivity()
+        onId(R.id.debateCommentSendButton).click()
+        sendCommentSubject.onComplete()
+        onId(R.id.loader).doesNotExist()
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

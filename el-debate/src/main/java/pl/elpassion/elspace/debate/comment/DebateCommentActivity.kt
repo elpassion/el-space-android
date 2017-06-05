@@ -54,7 +54,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showSendCommentError(exception: Throwable) {
-
+        Snackbar.make(debateCommentCoordinator, getString(R.string.debate_comment_send_error), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

@@ -55,4 +55,9 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun showSendCommentError(exception: Throwable) {
 
     }
+
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
+    }
 }

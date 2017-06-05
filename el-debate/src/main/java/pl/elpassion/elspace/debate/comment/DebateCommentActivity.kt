@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.comment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -49,7 +50,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun hideLoader() = hideLoader(debateCommentCoordinator)
 
     override fun showSendCommentSuccess() {
-
+        Snackbar.make(debateCommentCoordinator, getString(R.string.debate_comment_send_success), Snackbar.LENGTH_SHORT).show()
     }
 
     override fun showSendCommentError(exception: Throwable) {

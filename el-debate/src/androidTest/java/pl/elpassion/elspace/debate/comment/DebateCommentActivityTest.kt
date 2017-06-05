@@ -131,6 +131,16 @@ class DebateCommentActivityTest {
     }
 
     @Test
+    fun shouldClearInputWhenSendCommentSucceeded() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
+        sendCommentSubject.onComplete()
+        onId(R.id.debateCommentInputText).hasText("")
+    }
+
+    @Test
     fun shouldExitOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()

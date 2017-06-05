@@ -118,4 +118,11 @@ class DebateCommentControllerTest {
         commentSubject.onComplete()
         verify(view).clearInput()
     }
+
+    @Test
+    fun shouldNotClearInputWhenSendCommentFailed() {
+        sendComment()
+        commentSubject.onError(RuntimeException())
+        verify(view, never()).clearInput()
+    }
 }

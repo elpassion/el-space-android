@@ -156,7 +156,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowPaidVacationsFormOnPaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         verifyIsPaidVacationsFormDisplayed()
     }
@@ -164,7 +164,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
         verifyIsSickLeaveFormDisplayed()
     }
@@ -172,7 +172,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         verifyIsUnpaidVacationsFormDisplayed()
     }
@@ -305,5 +305,10 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
+    private fun closeSoftwareKeyboard() {
+        Espresso.closeSoftKeyboard()
+        Thread.sleep(100)
     }
 }

@@ -125,7 +125,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowPaidVacationsDetailsAfterClickOnPaidVacationsReportType() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).click()
 
         onText("name").isNotDisplayed()
@@ -137,7 +137,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowRegularDetailsAfterReturnToRegularReportType() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.action_regular_report).click()
 
@@ -151,7 +151,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowUnpaidVacationsDetailsAfterClickOnUnpaidVacationsReportType() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
 
         onId(R.id.reportAddDescription).isNotDisplayed()
@@ -164,7 +164,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowSickLeaveDetailsAfterClickOnSickLeaveReportType() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
 
         onId(R.id.reportAddDescription).isNotDisplayed()
@@ -195,7 +195,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_regular_report).click()
         onId(R.id.reportAddDescriptionLayout).isDisplayed()
         onId(R.id.reportAddProjectNameLayout).isDisplayed()
@@ -206,7 +206,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.reportAddHoursLayout).isDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
@@ -217,7 +217,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
         onText(R.string.report_add_sick_leave_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
@@ -228,7 +228,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
         stubRepositoryAndStart()
-        Espresso.closeSoftKeyboard()
+        closeSoftwareKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
@@ -240,6 +240,11 @@ class ReportAddActivityTest {
         whenever(repository.getLastProject()).thenReturn(projects)
         LastSelectedProjectRepositoryProvider.override = { repository }
         rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
+    }
+
+    private fun closeSoftwareKeyboard() {
+        Espresso.closeSoftKeyboard()
+        Thread.sleep(100)
     }
 }
 

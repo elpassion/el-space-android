@@ -87,10 +87,18 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenSendingCommentFinished() {
+    fun shouldHideLoaderWhenSendCommentSucceeded() {
         startActivity()
         onId(R.id.debateCommentSendButton).click()
         sendCommentSubject.onComplete()
+        onId(R.id.loader).doesNotExist()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenSendCommentFailed() {
+        startActivity()
+        onId(R.id.debateCommentSendButton).click()
+        sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
 

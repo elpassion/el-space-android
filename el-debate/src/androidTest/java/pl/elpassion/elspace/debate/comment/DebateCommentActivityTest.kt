@@ -141,6 +141,16 @@ class DebateCommentActivityTest {
     }
 
     @Test
+    fun shouldNotClearInputWhenSendCommentFailed() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
+        sendCommentSubject.onError(RuntimeException())
+        onId(R.id.debateCommentInputText).hasText("message")
+    }
+
+    @Test
     fun shouldExitOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()

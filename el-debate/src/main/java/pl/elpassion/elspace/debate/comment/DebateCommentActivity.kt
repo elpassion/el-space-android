@@ -59,7 +59,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun clearInput() {
-
+        debateCommentInputText.text.clear()
     }
 
     override fun onDestroy() {

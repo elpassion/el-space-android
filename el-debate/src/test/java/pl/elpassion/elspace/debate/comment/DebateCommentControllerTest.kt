@@ -111,4 +111,11 @@ class DebateCommentControllerTest {
         commentSubject.onError(exception)
         verify(view).showSendCommentError(exception)
     }
+
+    @Test
+    fun shouldClearInputWhenSendCommentSucceeded() {
+        sendComment()
+        commentSubject.onComplete()
+        verify(view).clearInput()
+    }
 }

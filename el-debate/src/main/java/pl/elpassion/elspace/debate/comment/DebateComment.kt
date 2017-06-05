@@ -21,6 +21,7 @@ interface DebateComment {
         fun hideLoader()
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
+        fun clearInput()
     }
 
     object ApiProvider : Provider<DebateComment.Api>({

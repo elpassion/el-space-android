@@ -58,6 +58,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         Snackbar.make(debateCommentCoordinator, getString(R.string.debate_comment_send_error), Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun clearInput() {
+
+    }
+
     override fun onDestroy() {
         controller.onDestroy()
         super.onDestroy()

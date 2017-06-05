@@ -11,14 +11,18 @@ class DebateCommentController(
     private var subscription: Disposable? = null
 
     fun sendComment(token: String, message: String) {
-        subscription = api.comment(token, message)
-                .subscribeOn(schedulers.backgroundScheduler)
-                .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { view.showLoader() }
-                .doFinally(view::hideLoader)
-                .subscribe(
-                        { view.showSendCommentSuccess(); view.clearInput() },
-                        view::showSendCommentError)
+        if (message.isNotEmpty()) {
+            subscription = api.comment(token, message)
+                    .subscribeOn(schedulers.backgroundScheduler)
+                    .observeOn(schedulers.uiScheduler)
+                    .doOnSubscribe { view.showLoader() }
+                    .doFinally(view::hideLoader)
+                    .subscribe(
+                            { view.showSendCommentSuccess(); view.clearInput() },
+                            view::showSendCommentError)
+        } else {
+
+        }
     }
 
     fun onDestroy() {

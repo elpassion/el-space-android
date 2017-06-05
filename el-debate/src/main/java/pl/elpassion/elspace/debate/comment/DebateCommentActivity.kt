@@ -43,6 +43,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
             false
         }
         debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
+        debateCommentCancelButton.setOnClickListener { finish() }
     }
 
     override fun showLoader() = showLoader(debateCommentCoordinator)

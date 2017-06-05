@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
@@ -178,7 +179,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.positive)
     }
 
@@ -186,7 +187,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.negative)
     }
 
@@ -194,7 +195,7 @@ class DebateDetailsActivityTest {
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData)
-        onId(R.id.debateNeutralAnswerButton).click()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
     }
 

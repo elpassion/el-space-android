@@ -125,4 +125,10 @@ class DebateCommentControllerTest {
         commentSubject.onError(RuntimeException())
         verify(view, never()).clearInput()
     }
+
+    @Test
+    fun shouldCloseScreenOnCancel() {
+        controller.onCancel()
+        verify(view).closeScreen()
+    }
 }

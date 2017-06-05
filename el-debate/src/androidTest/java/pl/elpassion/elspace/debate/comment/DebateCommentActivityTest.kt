@@ -151,7 +151,7 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldExitOnCancelClick() {
+    fun shouldCloseScreenOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()
         Assert.assertTrue(rule.activity.isFinishing)

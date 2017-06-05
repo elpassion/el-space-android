@@ -24,4 +24,8 @@ class DebateCommentController(
     fun onDestroy() {
         subscription?.dispose()
     }
+
+    fun onCancel() {
+        view.closeScreen()
+    }
 }

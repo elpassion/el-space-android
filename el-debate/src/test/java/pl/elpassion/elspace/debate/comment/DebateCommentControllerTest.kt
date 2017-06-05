@@ -131,4 +131,10 @@ class DebateCommentControllerTest {
         controller.onCancel()
         verify(view).closeScreen()
     }
+
+    @Test
+    fun shouldNotCallApiWhenInputIsEmptyOnSendComment() {
+        controller.sendComment(token = "token", message = "")
+        verify(api, never()).comment(any(), any())
+    }
 }

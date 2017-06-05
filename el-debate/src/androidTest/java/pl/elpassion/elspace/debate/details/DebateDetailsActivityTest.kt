@@ -74,7 +74,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowRememberInfo() {
         startActivity()
-        onText(R.string.debate_details_info_remember).isDisplayed()
+        onText(R.string.debate_details_info_remember).perform(scrollTo()).isDisplayed()
     }
 
     @Test

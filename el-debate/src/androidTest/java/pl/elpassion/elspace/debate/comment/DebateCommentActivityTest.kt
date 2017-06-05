@@ -11,6 +11,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
+import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -127,6 +128,13 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentSendButton).click()
         sendCommentSubject.onComplete()
         onText(R.string.debate_comment_send_error).doesNotExist()
+    }
+
+    @Test
+    fun shouldExitOnCancelClick() {
+        startActivity()
+        onId(R.id.debateCommentCancelButton).click()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

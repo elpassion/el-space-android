@@ -10,6 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_comment_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.showLoader
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
@@ -42,9 +43,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
     }
 
-    override fun showLoader() {
-
-    }
+    override fun showLoader() = showLoader(debateCommentCoordinator)
 
     override fun hideLoader() {
 

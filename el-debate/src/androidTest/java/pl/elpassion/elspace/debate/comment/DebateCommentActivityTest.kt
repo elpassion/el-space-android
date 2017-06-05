@@ -78,6 +78,13 @@ class DebateCommentActivityTest {
         verify(api).comment("someToken", "message")
     }
 
+    @Test
+    fun shouldShowLoaderWhenCallingApi() {
+        startActivity()
+        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.loader).isDisplayed()
+    }
+
     private fun startActivity(debateToken: String = "debateToken") {
         rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }

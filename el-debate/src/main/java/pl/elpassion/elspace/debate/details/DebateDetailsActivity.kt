@@ -78,11 +78,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) {
-        showSnackbar(getString(R.string.debate_details_error))
+        showIndefiniteSnackbar(getString(R.string.debate_details_error))
     }
 
     override fun showVoteError(exception: Throwable) {
-        showSnackbar(getString(R.string.debate_details_vote_error))
+        showIndefiniteSnackbar(getString(R.string.debate_details_vote_error))
     }
 
     override fun resetImagesInButtons() {
@@ -91,7 +91,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
-    private fun showSnackbar(text: String) {
+    private fun showIndefiniteSnackbar(text: String) {
         Snackbar.make(debateDetailsCoordinator, text, Snackbar.LENGTH_INDEFINITE).show()
     }
 

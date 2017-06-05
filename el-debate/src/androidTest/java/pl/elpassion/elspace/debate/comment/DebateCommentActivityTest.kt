@@ -79,7 +79,7 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldShowLoaderWhenCallingApi() {
+    fun shouldShowLoaderWhileSendingComment() {
         startActivity()
         onId(R.id.debateCommentSendButton).click()
         onId(R.id.loader).isDisplayed()

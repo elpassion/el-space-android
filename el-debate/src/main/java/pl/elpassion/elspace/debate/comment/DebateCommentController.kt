@@ -11,7 +11,9 @@ class DebateCommentController(
     private var subscription: Disposable? = null
 
     fun sendComment(token: String, message: String) {
-        if (message.isNotEmpty()) {
+        if (message.isEmpty())
+            view.showInvalidInputError()
+        else
             subscription = api.comment(token, message)
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
@@ -20,9 +22,6 @@ class DebateCommentController(
                     .subscribe(
                             { view.showSendCommentSuccess(); view.clearInput() },
                             view::showSendCommentError)
-        } else {
-
-        }
     }
 
     fun onDestroy() {

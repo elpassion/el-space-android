@@ -11,6 +11,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -100,6 +101,15 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentSendButton).click()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
+    }
+
+    @Ignore
+    @Test
+    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
+        startActivity()
+        onId(R.id.debateCommentSendButton).click()
+        sendCommentSubject.onComplete()
+        onText(R.string.debate_comment_send_success).isDisplayed()
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

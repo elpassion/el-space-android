@@ -1,12 +1,14 @@
 package pl.elpassion.elspace.hub.report.add
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.R
@@ -21,7 +23,6 @@ import pl.elpassion.elspace.hub.project.choose.ProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepositoryProvider
-import io.reactivex.Observable
 
 class ReportAddActivityTest {
 
@@ -124,6 +125,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowPaidVacationsDetailsAfterClickOnPaidVacationsReportType() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_paid_vacations_report).click()
 
         onText("name").isNotDisplayed()
@@ -135,6 +137,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowRegularDetailsAfterReturnToRegularReportType() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.action_regular_report).click()
 
@@ -148,6 +151,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowUnpaidVacationsDetailsAfterClickOnUnpaidVacationsReportType() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
 
         onId(R.id.reportAddDescription).isNotDisplayed()
@@ -160,6 +164,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowSickLeaveDetailsAfterClickOnSickLeaveReportType() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_sick_leave_report).click()
 
         onId(R.id.reportAddDescription).isNotDisplayed()
@@ -190,6 +195,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_regular_report).click()
         onId(R.id.reportAddDescriptionLayout).isDisplayed()
         onId(R.id.reportAddProjectNameLayout).isDisplayed()
@@ -200,6 +206,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         onId(R.id.reportAddHoursLayout).isDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
@@ -210,6 +217,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_sick_leave_report).click()
         onText(R.string.report_add_sick_leave_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
@@ -220,6 +228,7 @@ class ReportAddActivityTest {
     @Test
     fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
         stubRepositoryAndStart()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()

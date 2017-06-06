@@ -81,6 +81,16 @@ class DebateCommentActivityTest {
         verify(api).comment("someToken", "message")
     }
 
+    @Ignore
+    @Test
+    fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .typeText("")
+                .pressImeActionButton()
+        onText(R.string.debate_comment_invalid_input_error).isDisplayed()
+    }
+
     @Test
     fun shouldShowAndHideLoaderWhenSendCommentSucceeded() {
         startActivity()

@@ -17,4 +17,5 @@
     <string name="debate_comment_button_send">Send</string>
     <string name="debate_comment_send_success">Your comment has been sent!</string>
     <string name="debate_comment_send_error">Sending Your comment failed, please try again</string>
+    <string name="debate_comment_invalid_input_error">Invalid input!</string>
 </resources>

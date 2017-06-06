@@ -117,7 +117,9 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
         startActivity()
-        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
         sendCommentSubject.onComplete()
         onText(R.string.debate_comment_send_success).isDisplayed()
     }
@@ -126,7 +128,9 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
@@ -134,7 +138,9 @@ class DebateCommentActivityTest {
     @Test
     fun shouldNotShowSendCommentErrorWhenSendCommentSucceeded() {
         startActivity()
-        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
         sendCommentSubject.onComplete()
         onText(R.string.debate_comment_send_error).doesNotExist()
     }

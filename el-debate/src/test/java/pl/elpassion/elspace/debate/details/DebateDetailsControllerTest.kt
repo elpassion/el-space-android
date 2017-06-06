@@ -197,8 +197,7 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldOpenCommentScreenOnComment() {
-        val controller = createController()
-        controller.onComment()
+        createController().onComment()
         verify(view).openCommentScreen()
     }
 

@@ -2,9 +2,10 @@ package pl.elpassion.elspace.debate.comment
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.assertion.ViewAssertions
-import android.support.test.espresso.matcher.ViewMatchers
-import android.text.InputType
+import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.matcher.ViewMatchers.withInputType
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -59,7 +60,7 @@ class DebateCommentActivityTest {
                 .isDisplayed()
                 .replaceText("mess")
                 .hasText("mess")
-                .check(ViewAssertions.matches(ViewMatchers.withInputType(InputType.TYPE_CLASS_TEXT)))
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE)))
     }
 
     @Test

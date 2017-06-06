@@ -68,7 +68,6 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_info_choose_side).isDisplayed()
     }
 
-    @Ignore("Fix me")
     @Test
     fun shouldShowRememberInfo() {
         startActivity()
@@ -140,7 +139,6 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
 
-    @Ignore("Fix me")
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivity()
@@ -150,7 +148,6 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
 
-    @Ignore("Fix me")
     @Test
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
         startActivity()

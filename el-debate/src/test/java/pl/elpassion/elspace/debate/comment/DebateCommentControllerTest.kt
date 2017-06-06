@@ -29,9 +29,17 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageOnSendComment() {
+    fun shouldReallyCallApiWithGivenTokenAndMessageAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
         controller.sendComment(token = "someOtherToken", message = "someOtherMessage")
         verify(api).comment("someOtherToken", "someOtherMessage")
+        verify(view, never()).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
+        controller.sendComment(token = "token", message = "")
+        verify(api, never()).comment(any(), any())
+        verify(view).showInvalidInputError()
     }
 
     @Test
@@ -130,12 +138,5 @@ class DebateCommentControllerTest {
     fun shouldCloseScreenOnCancel() {
         controller.onCancel()
         verify(view).closeScreen()
-    }
-
-    @Test
-    fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
-        controller.sendComment(token = "token", message = "")
-        verify(api, never()).comment(any(), any())
-        verify(view).showInvalidInputError()
     }
 }

@@ -10,6 +10,6 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
-    androidTestCompile(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: '1.5.0')
+    androidTestCompile(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockitoKotlin)
     androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.7.21'
 }

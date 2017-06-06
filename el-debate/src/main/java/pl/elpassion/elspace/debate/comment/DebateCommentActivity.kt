@@ -59,7 +59,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showInvalidInputError() {
-
+        Snackbar.make(debateCommentCoordinator, getString(R.string.debate_comment_invalid_input_error), Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun clearInput() {

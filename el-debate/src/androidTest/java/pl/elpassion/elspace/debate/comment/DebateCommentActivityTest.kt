@@ -82,24 +82,23 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldShowLoaderWhileSendingComment() {
+    fun shouldShowAndHideLoaderWhenSendCommentSucceeded() {
         startActivity()
-        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
         onId(R.id.loader).isDisplayed()
-    }
-
-    @Test
-    fun shouldHideLoaderWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentSendButton).click()
         sendCommentSubject.onComplete()
         onId(R.id.loader).doesNotExist()
     }
 
     @Test
-    fun shouldHideLoaderWhenSendCommentFailed() {
+    fun shouldShowAndHideLoaderWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentSendButton).click()
+        onId(R.id.debateCommentInputText)
+                .typeText("message")
+                .pressImeActionButton()
+        onId(R.id.loader).isDisplayed()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }

@@ -17,7 +17,7 @@ import pl.elpassion.elspace.common.showLoader
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
-    private val token by lazy { intent.getStringExtra(DebateCommentActivity.debateAuthTokenKey) }
+    private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     private val controller by lazy {
         DebateCommentController(

@@ -17,8 +17,8 @@ import pl.elpassion.elspace.common.showLoader
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     companion object {
-
         private val debateAuthTokenKey = "debateAuthTokenKey"
+
         fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
 
         fun intent(context: Context, debateToken: String) =

@@ -78,11 +78,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) {
-        showIndefiniteSnackbar(getString(R.string.debate_details_error))
+        showSnackbar(getString(R.string.debate_details_error))
     }
 
     override fun showVoteError(exception: Throwable) {
-        showIndefiniteSnackbar(getString(R.string.debate_details_vote_error))
+        showSnackbar(getString(R.string.debate_details_vote_error))
     }
 
     override fun resetImagesInButtons() {
@@ -91,12 +91,12 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
-    private fun showIndefiniteSnackbar(text: String) {
-        Snackbar.make(debateDetailsCoordinator, text, Snackbar.LENGTH_INDEFINITE).show()
+    override fun showVoteSuccess() {
+        showSnackbar(getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT)
     }
 
-    override fun showVoteSuccess() {
-        Snackbar.make(debateDetailsCoordinator, getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT).show()
+    private fun showSnackbar(text: String, length: Int = Snackbar.LENGTH_INDEFINITE) {
+        Snackbar.make(debateDetailsCoordinator, text, length).show()
     }
 
     override fun openCommentScreen() {

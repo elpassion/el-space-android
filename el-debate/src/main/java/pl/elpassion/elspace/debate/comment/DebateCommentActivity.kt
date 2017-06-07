@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -42,7 +43,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
             }
             false
         }
-        debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
+        debateCommentSendButton.setOnClickListener { debateCommentInputText.simulateImeClick() }
         debateCommentCancelButton.setOnClickListener { controller.onCancel() }
     }
 
@@ -78,4 +79,8 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         controller.onDestroy()
         super.onDestroy()
     }
+}
+
+private fun TextInputEditText.simulateImeClick() {
+    onEditorAction(EditorInfo.IME_ACTION_DONE)
 }

@@ -68,10 +68,8 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldHideLoaderOnDestroyIfSendCommentIsStillInProgress() {
-        controller.run {
-            sendComment()
-            onDestroy()
-        }
+        sendComment()
+        controller.onDestroy()
         verify(view).hideLoader()
     }
 

@@ -52,19 +52,19 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun hideLoader() = hideLoader(debateCommentCoordinator)
 
     override fun showSendCommentSuccess() {
-        showSnackbar(getString(R.string.debate_comment_send_success), Snackbar.LENGTH_SHORT)
+        showSnackbar(R.string.debate_comment_send_success, Snackbar.LENGTH_SHORT)
     }
 
     override fun showSendCommentError(exception: Throwable) {
-        showSnackbar(getString(R.string.debate_comment_send_error))
+        showSnackbar(R.string.debate_comment_send_error)
     }
 
     override fun showInvalidInputError() {
-        showSnackbar(getString(R.string.debate_comment_invalid_input_error))
+        showSnackbar(R.string.debate_comment_invalid_input_error)
     }
 
-    private fun showSnackbar(text: String, length: Int = Snackbar.LENGTH_INDEFINITE) {
-        Snackbar.make(debateCommentCoordinator, text, length).show()
+    private fun showSnackbar(textRes: Int, length: Int = Snackbar.LENGTH_INDEFINITE) {
+        Snackbar.make(debateCommentCoordinator, textRes, length).show()
     }
 
     override fun clearInput() {

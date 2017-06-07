@@ -51,7 +51,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         }
     }
 
-    override fun fillDebateCode() {
+    override fun fillDebateCode(debateCode: String) {
 
     }
 

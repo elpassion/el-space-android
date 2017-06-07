@@ -171,7 +171,14 @@ class DebateLoginControllerTest {
     fun shouldNotFillLatestDebateCodeWhenNotSaved() {
         whenever(tokenRepo.getLatestDebateCode()).thenReturn(null)
         controller.onCreate()
-        verify(view, never()).fillDebateCode()
+        verify(view, never()).fillDebateCode(any())
+    }
+
+    @Test
+    fun shouldFillLatestDebateCodeWhenSaved() {
+        whenever(tokenRepo.getLatestDebateCode()).thenReturn("12345")
+        controller.onCreate()
+        verify(view).fillDebateCode("12345")
     }
 
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {

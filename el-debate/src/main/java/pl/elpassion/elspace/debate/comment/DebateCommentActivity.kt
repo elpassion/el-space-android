@@ -17,17 +17,6 @@ import pl.elpassion.elspace.common.showLoader
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
-    companion object {
-        private val debateAuthTokenKey = "debateAuthTokenKey"
-
-        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
-
-        fun intent(context: Context, debateToken: String) =
-                Intent(context, DebateCommentActivity::class.java).apply {
-                    putExtra(debateAuthTokenKey, debateToken)
-                }
-    }
-
     private val token by lazy { intent.getStringExtra(DebateCommentActivity.debateAuthTokenKey) }
 
     private val controller by lazy {
@@ -78,6 +67,17 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun onDestroy() {
         controller.onDestroy()
         super.onDestroy()
+    }
+
+    companion object {
+        private val debateAuthTokenKey = "debateAuthTokenKey"
+
+        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
+
+        fun intent(context: Context, debateToken: String) =
+                Intent(context, DebateCommentActivity::class.java).apply {
+                    putExtra(debateAuthTokenKey, debateToken)
+                }
     }
 }
 

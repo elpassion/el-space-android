@@ -26,6 +26,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_comment_activity)
+        setupUI()
+    }
+
+    private fun setupUI() {
         debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.sendComment(token, inputText.text.toString())

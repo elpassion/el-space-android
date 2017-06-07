@@ -49,10 +49,11 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
                 controller.onLogToDebate("13160"); false
             }
         }
+        controller.onCreate()
     }
 
     override fun fillDebateCode(debateCode: String) {
-
+        debateLoginInputText.setText(debateCode)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)

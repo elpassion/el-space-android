@@ -15,8 +15,6 @@ class DebateCommentControllerTest {
     private val commentSubject = CompletableSubject.create()
     private val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
-    private fun sendComment() = controller.sendComment(token = "token", message = "message")
-
     @Before
     fun setUp() {
         whenever(api.comment(any(), any())).thenReturn(commentSubject)
@@ -30,14 +28,14 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldReallyCallApiWithGivenTokenAndMessageAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
-        controller.sendComment(token = "someOtherToken", message = "someOtherMessage")
+        sendComment(token = "someOtherToken", message = "someOtherMessage")
         verify(api).comment("someOtherToken", "someOtherMessage")
         verify(view, never()).showInvalidInputError()
     }
 
     @Test
     fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
-        controller.sendComment(token = "token", message = "")
+        sendComment(token = "token", message = "")
         verify(api, never()).comment(any(), any())
         verify(view).showInvalidInputError()
     }
@@ -139,4 +137,6 @@ class DebateCommentControllerTest {
         controller.onCancel()
         verify(view).closeScreen()
     }
+
+    private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

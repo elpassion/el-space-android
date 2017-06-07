@@ -20,7 +20,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     private val token by lazy { intent.getStringExtra(DebateCommentActivity.debateAuthTokenKey) }
 
     private val controller by lazy {
-        DebateCommentController(this, DebateComment.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+        DebateCommentController(
+                view = this,
+                api = DebateComment.ApiProvider.get(),
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -17,6 +17,7 @@ interface DebateTokenRepository {
 object DebateTokenRepositoryProvider : Provider<DebateTokenRepository>({
     object : DebateTokenRepository {
 
+        private val latestDebateCode = "LATEST_DEBATE_CODE"
         private val repository = createSharedPrefs<String?>({
             PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())
         }, { Gson() })
@@ -27,8 +28,8 @@ object DebateTokenRepositoryProvider : Provider<DebateTokenRepository>({
 
         override fun getTokenForDebate(debateCode: String) = repository.read(debateCode)!!
 
-        override fun saveLatestDebateCode(debateCode: String) = Unit
+        override fun saveLatestDebateCode(debateCode: String) = repository.write(latestDebateCode, debateCode)
 
-        override fun getLatestDebateCode() = null
+        override fun getLatestDebateCode() = repository.read(latestDebateCode)
     }
 })

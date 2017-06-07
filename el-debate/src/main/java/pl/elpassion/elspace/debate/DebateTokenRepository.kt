@@ -10,6 +10,7 @@ interface DebateTokenRepository {
     fun hasToken(debateCode: String): Boolean
     fun saveDebateToken(debateCode: String, authToken: String)
     fun getTokenForDebate(debateCode: String): String
+    fun saveLatestDebateCode(debateCode: String)
 }
 
 object DebateTokenRepositoryProvider : Provider<DebateTokenRepository>({
@@ -24,5 +25,7 @@ object DebateTokenRepositoryProvider : Provider<DebateTokenRepository>({
         override fun saveDebateToken(debateCode: String, authToken: String) = repository.write(debateCode, authToken)
 
         override fun getTokenForDebate(debateCode: String) = repository.read(debateCode)!!
+
+        override fun saveLatestDebateCode(debateCode: String) = Unit
     }
 })

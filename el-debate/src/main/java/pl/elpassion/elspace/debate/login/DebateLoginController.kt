@@ -22,6 +22,7 @@ class DebateLoginController(
     }
 
     private fun makeSubscription(debateCode: String) {
+        tokenRepo.saveLatestDebateCode(debateCode)
         subscription = getAuthTokenObservable(debateCode)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)

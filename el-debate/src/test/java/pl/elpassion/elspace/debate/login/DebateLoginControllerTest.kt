@@ -161,6 +161,12 @@ class DebateLoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldSaveDebateCode() {
+        controller.onLogToDebate("12345")
+        verify(tokenRepo).saveLatestDebateCode("12345")
+    }
+
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
         whenever(tokenRepo.hasToken(debateCode = debateCode)).thenReturn(true)
         whenever(tokenRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)

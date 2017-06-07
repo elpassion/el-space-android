@@ -67,7 +67,7 @@ class DebateCommentActivityTest {
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         verify(api).comment("someToken", "message")
     }
@@ -76,7 +76,7 @@ class DebateCommentActivityTest {
     fun shouldUseCorrectTokenAndMessageOnSendClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
         verify(api).comment("someToken", "message")
@@ -87,7 +87,7 @@ class DebateCommentActivityTest {
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("")
+                .replaceText("")
                 .pressImeActionButton()
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
     }
@@ -96,7 +96,7 @@ class DebateCommentActivityTest {
     fun shouldShowLoaderOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         onId(R.id.loader).isDisplayed()
     }
@@ -105,7 +105,7 @@ class DebateCommentActivityTest {
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
         onId(R.id.loader).doesNotExist()
@@ -115,7 +115,7 @@ class DebateCommentActivityTest {
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
@@ -126,7 +126,7 @@ class DebateCommentActivityTest {
     fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
         onText(R.string.debate_comment_send_success).isDisplayed()
@@ -137,7 +137,7 @@ class DebateCommentActivityTest {
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onText(R.string.debate_comment_send_error).isDisplayed()
@@ -147,7 +147,7 @@ class DebateCommentActivityTest {
     fun shouldNotShowSendCommentErrorWhenSendCommentSucceeded() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
         onText(R.string.debate_comment_send_error).doesNotExist()
@@ -157,7 +157,7 @@ class DebateCommentActivityTest {
     fun shouldClearInputWhenSendCommentSucceeded() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
         onId(R.id.debateCommentInputText).hasText("")
@@ -167,7 +167,7 @@ class DebateCommentActivityTest {
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.debateCommentInputText).hasText("message")

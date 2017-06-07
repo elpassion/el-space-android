@@ -51,6 +51,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         }
     }
 
+    override fun fillDebateCode() {
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun onDestroy() {

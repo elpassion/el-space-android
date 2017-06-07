@@ -68,13 +68,13 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp">
 
-                    <pl.elpassion.elspace.common.FixedTextInputEditText
+                    <android.support.design.widget.TextInputEditText
                         android:id="@+id/reportAddHours"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/report_add_hours_header"
                         android:inputType="number"
-                        app:text="@string/report_hours_default_value" />
+                        android:text="@string/report_hours_default_value" />
 
                 </android.support.design.widget.TextInputLayout>
 

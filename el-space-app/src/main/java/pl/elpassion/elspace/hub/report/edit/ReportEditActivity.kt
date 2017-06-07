@@ -12,6 +12,9 @@ import com.crashlytics.android.Crashlytics
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import com.jakewharton.rxbinding2.support.design.widget.itemSelections
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.report_edit_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -22,9 +25,6 @@ import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity
 import pl.elpassion.elspace.hub.report.*
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
 
@@ -42,6 +42,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_edit_activity)
+        reportEditDescriptionLayout.requestFocus()
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()
@@ -98,6 +99,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     override fun showDescription(description: String) {
         reportEditDescriptionLayout.error = null
         reportEditDescription.setText(description)
+        reportEditDescription.setSelection(description.length)
     }
 
     override fun reportTypeChanges(): Observable<ReportType> = bottomNavigation.itemSelections().map { it.itemId.toReportType() }

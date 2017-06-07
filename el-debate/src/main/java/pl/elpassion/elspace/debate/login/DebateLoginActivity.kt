@@ -49,9 +49,19 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
                 controller.onLogToDebate("13160"); false
             }
         }
+        controller.onCreate()
+    }
+
+    override fun fillDebateCode(debateCode: String) {
+        debateLoginInputText.setText(debateCode)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
+
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
+    }
 
     override fun openDebateScreen(authToken: String) {
         DebateDetailsActivity.start(this, authToken)

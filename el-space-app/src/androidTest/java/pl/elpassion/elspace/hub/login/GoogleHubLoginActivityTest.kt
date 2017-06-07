@@ -125,6 +125,41 @@ class GoogleHubLoginActivityTest {
         onText(R.string.google_token_error).isDisplayed()
     }
 
+    @Test
+    fun shouldShowDismissErrorButtonOnGoogleLoginError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult(isSuccess = false)
+        rule.startActivity()
+        onId(R.id.googleDismissErrorButton).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowDismissErrorButtonOnTokenLoginError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenError()
+        rule.startActivity()
+        onId(R.id.googleDismissErrorButton).isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowDismissErrorButtonUntilError() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult()
+        whenever(api.loginWithGoogle(any())).thenNever()
+        rule.startActivity()
+        onId(R.id.googleDismissErrorButton).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldCloseLoginActivityOnDismissErrorButtonClick() {
+        whenever(repository.readToken()).thenReturn(null)
+        stubGetHubGoogleSignInResult(isSuccess = false)
+        rule.startActivity()
+        onId(R.id.googleDismissErrorButton).click()
+        Assert.assertTrue(rule.activity.isFinishing)
+    }
+
     private fun stubGetHubGoogleSignInResult(isSuccess: Boolean = true) {
         whenever(getHubGoogleSignInResult.invoke(anyOrNull())).thenReturn(HubGoogleSignInResult(isSuccess = isSuccess, googleToken = "googleToken"))
     }

@@ -161,6 +161,26 @@ class DebateLoginControllerTest {
         verify(view).hideLoader()
     }
 
+    @Test
+    fun shouldSaveDebateCode() {
+        controller.onLogToDebate("12345")
+        verify(tokenRepo).saveLatestDebateCode("12345")
+    }
+
+    @Test
+    fun shouldNotFillLatestDebateCodeWhenNotSaved() {
+        whenever(tokenRepo.getLatestDebateCode()).thenReturn(null)
+        controller.onCreate()
+        verify(view, never()).fillDebateCode(any())
+    }
+
+    @Test
+    fun shouldFillLatestDebateCodeWhenSaved() {
+        whenever(tokenRepo.getLatestDebateCode()).thenReturn("12345")
+        controller.onCreate()
+        verify(view).fillDebateCode("12345")
+    }
+
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
         whenever(tokenRepo.hasToken(debateCode = debateCode)).thenReturn(true)
         whenever(tokenRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)

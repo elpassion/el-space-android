@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,6 +17,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
+import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
@@ -41,6 +43,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         setContentView(R.layout.debate_details_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
+        debateCommentButton.setOnClickListener { controller.onComment() }
         controller.onCreate(token)
     }
 
@@ -55,18 +58,18 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateTopic.text = debateDetails.topic
         debatePositiveAnswerText.text = debateDetails.answers.positive.value
         debatePositiveAnswerButton.setOnClickListener {
+            changeImagesInButtonsOnPositiveAnswer()
             controller.onVote(token, debateDetails.answers.positive)
-            highlightPositiveAnswer()
         }
         debateNegativeAnswerText.text = debateDetails.answers.negative.value
         debateNegativeAnswerButton.setOnClickListener {
+            changeImagesInButtonsOnNegativeAnswer()
             controller.onVote(token, debateDetails.answers.negative)
-            highlightNegativeAnswer()
         }
         debateNeutralAnswerText.text = debateDetails.answers.neutral.value
         debateNeutralAnswerButton.setOnClickListener {
+            changeImagesInButtonsOnNeutralAnswer()
             controller.onVote(token, debateDetails.answers.neutral)
-            highlightNeutralAnswer()
         }
     }
 
@@ -82,29 +85,39 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_vote_error))
     }
 
-    private fun showSnackbar(text: String) {
-        Snackbar.make(debateDetailsCoordinator, text, Snackbar.LENGTH_INDEFINITE).show()
+    override fun resetImagesInButtons() {
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
     override fun showVoteSuccess() {
-        Snackbar.make(debateDetailsCoordinator, getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT).show()
+        showSnackbar(getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT)
     }
 
-    private fun highlightPositiveAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background_blue_pressed)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background)
+    private fun showSnackbar(text: String, length: Int = Snackbar.LENGTH_INDEFINITE) {
+        Snackbar.make(debateDetailsCoordinator, text, length).show()
     }
 
-    private fun highlightNegativeAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background_red_pressed)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background)
+    override fun openCommentScreen() {
+        DebateCommentActivity.start(this, token)
     }
 
-    private fun highlightNeutralAnswer() {
-        debatePositiveAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNegativeAnswerImage.setBackgroundResource(R.drawable.hand_background)
-        debateNeutralAnswerImage.setBackgroundResource(R.drawable.hand_background_grey_pressed)
+    private fun changeImagesInButtonsOnPositiveAnswer() {
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_active))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
+    }
+
+    private fun changeImagesInButtonsOnNegativeAnswer() {
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_active))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
+    }
+
+    private fun changeImagesInButtonsOnNeutralAnswer() {
+        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
+        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
+        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))
     }
 }

@@ -188,6 +188,19 @@ class DebateDetailsControllerTest {
         verify(view).showVoteError(exception)
     }
 
+    @Test
+    fun shouldResetButtonsWhenVoteFailed() {
+        createController().onVote("", createAnswer())
+        sendVoteSubject.onError(RuntimeException())
+        verify(view).resetImagesInButtons()
+    }
+
+    @Test
+    fun shouldOpenCommentScreenOnComment() {
+        createController().onComment()
+        verify(view).openCommentScreen()
+    }
+
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),
                                  observeOn: Scheduler = Schedulers.trampoline()) =
             DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, observeOn))

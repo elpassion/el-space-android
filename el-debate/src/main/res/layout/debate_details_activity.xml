@@ -88,17 +88,19 @@
 
                     <TextView
                         android:id="@+id/debatePositiveAnswerText"
-                        style="@style/DebateAnswerText.Positive"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/blueDebatePositive"
                         tools:text="Positive answer" />
 
                     <ImageView
                         android:id="@+id/debatePositiveAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_positive_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -122,17 +124,19 @@
 
                     <TextView
                         android:id="@+id/debateNegativeAnswerText"
-                        style="@style/DebateAnswerText.Negative"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/redDebateNegative"
                         tools:text="Negative answer" />
 
                     <ImageView
                         android:id="@+id/debateNegativeAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_negative_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -156,17 +160,19 @@
 
                     <TextView
                         android:id="@+id/debateNeutralAnswerText"
-                        style="@style/DebateAnswerText.Neutral"
+                        style="@style/DebateAnswerText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/greyDebateNeutral"
                         tools:text="Neutral answer" />
 
                     <ImageView
                         android:id="@+id/debateNeutralAnswerImage"
-                        style="@style/DebateAnswerImage"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/hand_neutral_inactive" />
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

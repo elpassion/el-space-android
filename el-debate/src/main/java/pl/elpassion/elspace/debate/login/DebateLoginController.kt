@@ -13,6 +13,12 @@ class DebateLoginController(
 
     private var subscription: Disposable? = null
 
+    fun onCreate() {
+        tokenRepo.getLatestDebateCode()?.let {
+            view.fillDebateCode(it)
+        }
+    }
+
     fun onLogToDebate(debateCode: String) {
         if (debateCode.length != 5) {
             view.showWrongPinError()
@@ -22,6 +28,7 @@ class DebateLoginController(
     }
 
     private fun makeSubscription(debateCode: String) {
+        tokenRepo.saveLatestDebateCode(debateCode)
         subscription = getAuthTokenObservable(debateCode)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)

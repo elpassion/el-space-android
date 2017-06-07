@@ -38,3 +38,12 @@ android {
         androidTest.java.srcDirs += 'src/testCommon/java'
     }
 }
+
+afterEvaluate {
+    project.android.unitTestVariants.each { variant ->
+        def scope = variant.variantData.scope
+        project.tasks.getByName("test${variant.name.capitalize()}") { testTask ->
+            testTask.testClassesDirs = files(scope.javaOutputDir)
+        }
+    }
+}

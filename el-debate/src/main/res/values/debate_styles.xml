@@ -7,6 +7,14 @@
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
+    <style name="Theme.AppCompat.Translucent" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
     <style name="Button">
         <item name="android:padding">@dimen/default_padding_value</item>
         <item name="android:textSize">18sp</item>
@@ -22,27 +30,15 @@
         <item name="android:textColor">@color/greyHint</item>
     </style>
 
+    <style name="HintBlue">
+        <item name="colorAccent">@color/blueDebatePositive</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/greyHint</item>
+    </style>
+
     <style name="DebateAnswerText">
         <item name="android:layout_gravity">bottom</item>
         <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="DebateAnswerText.Positive">
-        <item name="android:textColor">@color/blueDebatePositive</item>
-    </style>
-
-    <style name="DebateAnswerText.Negative">
-        <item name="android:textColor">@color/redDebateNegative</item>
-    </style>
-
-    <style name="DebateAnswerText.Neutral">
-        <item name="android:textColor">@color/greyDebateNeutral</item>
-    </style>
-
-    <style name="DebateAnswerImage">
-        <item name="android:background">@drawable/hand_background</item>
-        <item name="android:padding">10dp</item>
-        <item name="android:src">@drawable/hand</item>
     </style>
 
 </resources>

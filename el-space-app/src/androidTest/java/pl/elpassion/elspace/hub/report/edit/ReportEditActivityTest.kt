@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -155,6 +156,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowPaidVacationsFormOnPaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         verifyIsPaidVacationsFormDisplayed()
     }
@@ -162,6 +164,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
+        closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
         verifyIsSickLeaveFormDisplayed()
     }
@@ -169,6 +172,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
+        closeSoftwareKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         verifyIsUnpaidVacationsFormDisplayed()
     }
@@ -301,5 +305,10 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
+    private fun closeSoftwareKeyboard() {
+        Espresso.closeSoftKeyboard()
+        Thread.sleep(100)
     }
 }

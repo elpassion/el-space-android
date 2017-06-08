@@ -88,7 +88,7 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .replaceText("")
                 .pressImeActionButton()
-        sleep(50)
+        sleep(100)
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
     }
 
@@ -128,7 +128,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
-        sleep(50)
+        sleep(100)
         onText(R.string.debate_comment_send_success).isDisplayed()
     }
 
@@ -139,7 +139,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
-        sleep(50)
+        sleep(100)
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
 

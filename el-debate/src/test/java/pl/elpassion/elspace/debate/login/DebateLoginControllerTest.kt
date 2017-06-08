@@ -7,13 +7,13 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.debate.DebateTokenRepository
+import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
 class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
-    private val tokenRepo = mock<DebateTokenRepository>()
+    private val tokenRepo = mock<DebatesRepository>()
     private val loginApi = mock<DebateLogin.Api>()
     private val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()

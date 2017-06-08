@@ -22,14 +22,14 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
-import pl.elpassion.elspace.debate.DebateTokenRepository
-import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
+import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
 class DebateLoginActivityTest {
 
-    private val tokenRepo = mock<DebateTokenRepository>()
+    private val tokenRepo = mock<DebatesRepository>()
     private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
     private val api = mock<DebateLogin.Api>()
 
@@ -39,7 +39,7 @@ class DebateLoginActivityTest {
     @JvmField @Rule
     val rule = rule<DebateLoginActivity> {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
-        DebateTokenRepositoryProvider.override = { tokenRepo }
+        DebatesRepositoryProvider.override = { tokenRepo }
         DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
 

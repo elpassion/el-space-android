@@ -34,7 +34,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowHintInInputField() {
         startActivity()
-        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
+        onText(R.string.debate_comment_hint).isDisplayed()
     }
 
     @Test
@@ -102,16 +102,6 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldHideLoaderWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onId(R.id.loader).doesNotExist()
-    }
-
-    @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
@@ -119,17 +109,6 @@ class DebateCommentActivityTest {
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
-    }
-
-    @Test
-    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        sleep(100)
-        onText(R.string.debate_comment_send_success).isDisplayed()
     }
 
     @Test
@@ -143,25 +122,6 @@ class DebateCommentActivityTest {
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
 
-    @Test
-    fun shouldNotShowSendCommentErrorWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onText(R.string.debate_comment_send_error).doesNotExist()
-    }
-
-    @Test
-    fun shouldClearInputWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onId(R.id.debateCommentInputText).hasText("")
-    }
 
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {

@@ -19,9 +19,7 @@ interface DebateComment {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
-        fun clearInput()
         fun closeScreen()
         fun showInvalidInputError()
     }

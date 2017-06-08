@@ -102,10 +102,10 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldShowSuccessWhenSendCommentSucceeded() {
+    fun shouldCloseSuccessWhenSendCommentSucceeded() {
         sendComment()
         commentSubject.onComplete()
-        verify(view).showSendCommentSuccess()
+        verify(view).closeScreen()
     }
 
     @Test
@@ -114,20 +114,6 @@ class DebateCommentControllerTest {
         val exception = RuntimeException()
         commentSubject.onError(exception)
         verify(view).showSendCommentError(exception)
-    }
-
-    @Test
-    fun shouldClearInputWhenSendCommentSucceeded() {
-        sendComment()
-        commentSubject.onComplete()
-        verify(view).clearInput()
-    }
-
-    @Test
-    fun shouldNotClearInputWhenSendCommentFailed() {
-        sendComment()
-        commentSubject.onError(RuntimeException())
-        verify(view, never()).clearInput()
     }
 
     @Test

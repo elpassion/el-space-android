@@ -12,10 +12,9 @@
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
-    <string name="debate_comment_hint">Add a comment</string>
+    <string name="debate_comment_hint">Add comment</string>
     <string name="debate_comment_button_cancel">Cancel</string>
     <string name="debate_comment_button_send">Send</string>
-    <string name="debate_comment_send_success">Your comment has been sent!</string>
     <string name="debate_comment_send_error">Sending your comment failed, please try again</string>
     <string name="debate_comment_invalid_input_error">Invalid input!</string>
 </resources>

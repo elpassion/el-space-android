@@ -11,6 +11,6 @@
             android:theme="@style/AppThemeGreenWithoutActionBar" />
         <activity
             android:name=".elspace.debate.comment.DebateCommentActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:theme="@style/EL_Dialog" />
     </application>
 </manifest>

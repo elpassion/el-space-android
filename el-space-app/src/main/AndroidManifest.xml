@@ -54,7 +54,8 @@
             android:theme="@style/AppThemeGreenWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:excludeFromRecents="true"
+            android:theme="@style/EL_Dialog" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

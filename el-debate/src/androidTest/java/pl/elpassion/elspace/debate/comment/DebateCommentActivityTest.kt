@@ -140,6 +140,17 @@ class DebateCommentActivityTest {
         Assert.assertTrue(rule.activity.isFinishing)
     }
 
+    @Test
+    fun shouldCloseScreenOnSuccessfullySentComment() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .replaceText("message")
+                .pressImeActionButton()
+        sendCommentSubject.onComplete()
+        sleep(50)
+        Assert.assertTrue(rule.activity.isFinishing)
+    }
+
     private fun startActivity(debateToken: String = "debateToken") {
         rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }

@@ -147,7 +147,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
-        sleep(50)
+        sleep(100)
         Assert.assertTrue(rule.activity.isFinishing)
     }
 

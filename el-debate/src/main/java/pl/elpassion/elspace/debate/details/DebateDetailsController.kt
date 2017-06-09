@@ -35,13 +35,13 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(
-                        view::showVoteSuccess,
-                        { error ->
-                            view.showVoteError(error)
-                            view.resetImagesInButtons()
-                        })
+                .subscribe(view::showVoteSuccess, onVoteError)
                 .addTo(compositeDisposable)
+    }
+
+    private val onVoteError: (Throwable) -> Unit = { error ->
+        view.showVoteError(error)
+        view.resetImagesInButtons()
     }
 
     fun onComment() {

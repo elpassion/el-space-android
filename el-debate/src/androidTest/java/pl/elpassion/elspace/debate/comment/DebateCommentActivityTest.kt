@@ -5,7 +5,7 @@ import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.text.InputType.TYPE_CLASS_TEXT
-import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -13,11 +13,11 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import java.lang.Thread.sleep
 
 class DebateCommentActivityTest {
 
@@ -34,7 +34,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowHintInInputField() {
         startActivity()
-        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
+        onText(R.string.debate_comment_hint).isDisplayed()
     }
 
     @Test
@@ -60,14 +60,14 @@ class DebateCommentActivityTest {
                 .isDisplayed()
                 .replaceText("mess")
                 .hasText("mess")
-                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE)))
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
     @Test
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         verify(api).comment("someToken", "message")
     }
@@ -76,19 +76,19 @@ class DebateCommentActivityTest {
     fun shouldUseCorrectTokenAndMessageOnSendClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
         verify(api).comment("someToken", "message")
     }
 
-    @Ignore
     @Test
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("")
+                .replaceText("")
                 .pressImeActionButton()
+        sleep(100)
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
     }
 
@@ -96,78 +96,38 @@ class DebateCommentActivityTest {
     fun shouldShowLoaderOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         onId(R.id.loader).isDisplayed()
-    }
-
-    @Test
-    fun shouldHideLoaderWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .typeText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onId(R.id.loader).doesNotExist()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
 
-    @Ignore
-    @Test
-    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .typeText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onText(R.string.debate_comment_send_success).isDisplayed()
-    }
-
-    @Ignore
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
+        sleep(100)
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
 
-    @Test
-    fun shouldNotShowSendCommentErrorWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .typeText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onText(R.string.debate_comment_send_error).doesNotExist()
-    }
-
-    @Test
-    fun shouldClearInputWhenSendCommentSucceeded() {
-        startActivity()
-        onId(R.id.debateCommentInputText)
-                .typeText("message")
-                .pressImeActionButton()
-        sendCommentSubject.onComplete()
-        onId(R.id.debateCommentInputText).hasText("")
-    }
 
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .typeText("message")
+                .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.debateCommentInputText).hasText("message")
@@ -177,6 +137,17 @@ class DebateCommentActivityTest {
     fun shouldCloseScreenOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()
+        Assert.assertTrue(rule.activity.isFinishing)
+    }
+
+    @Test
+    fun shouldCloseScreenOnSuccessfullySentComment() {
+        startActivity()
+        onId(R.id.debateCommentInputText)
+                .replaceText("message")
+                .pressImeActionButton()
+        sendCommentSubject.onComplete()
+        sleep(100)
         Assert.assertTrue(rule.activity.isFinishing)
     }
 

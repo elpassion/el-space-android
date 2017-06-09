@@ -3,11 +3,11 @@ package pl.elpassion.elspace.debate.login
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.debate.DebateTokenRepository
+import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateLoginController(
         private val view: DebateLogin.View,
-        private val tokenRepo: DebateTokenRepository,
+        private val tokenRepo: DebatesRepository,
         private val loginApi: DebateLogin.Api,
         private val schedulers: SchedulersSupplier) {
 

@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
 
-interface DebateTokenRepository {
+interface DebatesRepository {
     fun hasToken(debateCode: String): Boolean
     fun saveDebateToken(debateCode: String, authToken: String)
     fun getTokenForDebate(debateCode: String): String
@@ -14,8 +14,8 @@ interface DebateTokenRepository {
     fun getLatestDebateCode(): String?
 }
 
-object DebateTokenRepositoryProvider : Provider<DebateTokenRepository>({
-    object : DebateTokenRepository {
+object DebatesRepositoryProvider : Provider<DebatesRepository>({
+    object : DebatesRepository {
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
         private val repository = createSharedPrefs<String?>({

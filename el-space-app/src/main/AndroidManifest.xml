@@ -21,7 +21,18 @@
         </activity>
         <activity
             android:name="pl.elpassion.elspace.hub.login.GoogleHubLoginActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:theme="@style/Theme.Transparent">
+            <intent-filter android:label="@string/app_name">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="hub.elpassion.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
             android:theme="@style/AppThemeBlueWithoutActionBar" />
@@ -43,7 +54,9 @@
             android:theme="@style/AppThemeGreenWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:excludeFromRecents="true"
+            android:theme="@style/EL_Dialog"
+            android:windowSoftInputMode="stateVisible" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

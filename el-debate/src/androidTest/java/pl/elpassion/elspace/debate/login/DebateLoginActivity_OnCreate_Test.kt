@@ -9,16 +9,16 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.startActivity
-import pl.elpassion.elspace.debate.DebateTokenRepository
-import pl.elpassion.elspace.debate.DebateTokenRepositoryProvider
+import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateLoginActivity_OnCreate_Test {
 
-    private val tokenRepo = mock<DebateTokenRepository>()
+    private val tokenRepo = mock<DebatesRepository>()
 
     @JvmField @Rule
     val rule = rule<DebateLoginActivity>(autoStart = false) {
-        DebateTokenRepositoryProvider.override = { tokenRepo }
+        DebatesRepositoryProvider.override = { tokenRepo }
         DebateLogin.ApiProvider.override = { mock() }
     }
 

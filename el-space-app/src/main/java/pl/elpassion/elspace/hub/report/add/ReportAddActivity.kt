@@ -14,6 +14,9 @@ import com.elpassion.android.view.show
 import com.jakewharton.rxbinding2.support.design.widget.itemSelections
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.report_add_activity.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -30,9 +33,6 @@ import pl.elpassion.elspace.hub.report.ReportViewModel
 import pl.elpassion.elspace.hub.report.datechooser.showDateDialog
 import pl.elpassion.elspace.hub.report.getReportViewModel
 import pl.elpassion.elspace.hub.report.toReportType
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
 
@@ -50,6 +50,7 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.report_add_activity)
+        reportAddDescriptionLayout.requestFocus()
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         controller.onCreate()

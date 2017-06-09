@@ -3,7 +3,6 @@ package pl.elpassion.elspace.debate.comment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,7 +39,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
             }
             false
         }
-        debateCommentSendButton.setOnClickListener { debateCommentInputText.simulateImeClick() }
+        debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
         debateCommentCancelButton.setOnClickListener { controller.onCancel() }
     }
 
@@ -79,8 +78,4 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                     putExtra(debateAuthTokenKey, debateToken)
                 }
     }
-}
-
-private fun TextInputEditText.simulateImeClick() {
-    onEditorAction(EditorInfo.IME_ACTION_DONE)
 }

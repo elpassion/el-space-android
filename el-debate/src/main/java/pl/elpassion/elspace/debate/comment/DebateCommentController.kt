@@ -20,7 +20,7 @@ class DebateCommentController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe({ view.closeScreen() }, view::showSendCommentError)
+                .subscribe(view::closeScreen, view::showSendCommentError)
     }
 
     fun onDestroy() {

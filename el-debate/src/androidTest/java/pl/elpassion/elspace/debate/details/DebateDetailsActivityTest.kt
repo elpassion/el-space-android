@@ -15,6 +15,7 @@ import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
 
@@ -217,6 +218,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldOpenCommentScreenWhenCommentButtonClicked() {
         startActivity()
+        stubAllIntents()
         onId(R.id.debateCommentButton).click()
         checkIntent(DebateCommentActivity::class.java)
     }
@@ -274,6 +276,27 @@ class DebateDetailsActivityTest {
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+    }
+    
+    @Test
+    fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
+        startActivity()
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_title).isDisplayed()
+        onText(R.string.debate_vote_slow_down_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldCloseSlowDownInformationOnButtonClick() {
+        startActivity()
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_OK_button).click()
+        onText(R.string.debate_vote_slow_down_title).doesNotExist()
+        onText(R.string.debate_vote_slow_down_info).doesNotExist()
     }
 
     private fun startActivity(token: String = "token") {

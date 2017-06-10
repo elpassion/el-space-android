@@ -214,6 +214,14 @@ class DebateDetailsControllerTest {
         sendVoteSubject.onError(exception)
         verify(view).showSlowDownInformation()
     }
+    
+    @Test
+    fun shouldNotShowVoteErrorOn429ErrorFromApi() {
+        createController().onVote("", createAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view, never()).showVoteError(any())
+    }
 
     private fun createHttpException(errorCode: Int): HttpException {
         val response: okhttp3.Response = okhttp3.Response.Builder()

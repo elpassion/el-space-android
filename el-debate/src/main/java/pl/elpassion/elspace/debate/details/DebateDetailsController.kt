@@ -43,8 +43,9 @@ class DebateDetailsController(
     private val onVoteError: (Throwable) -> Unit = { error ->
         if (error is HttpException && error.code() == 429) {
             view.showSlowDownInformation()
+        } else {
+            view.showVoteError(error)
         }
-        view.showVoteError(error)
         view.resetImagesInButtons()
     }
 

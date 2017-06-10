@@ -26,6 +26,7 @@ interface DebateDetails {
         fun showVoteError(exception: Throwable)
         fun resetImagesInButtons()
         fun openCommentScreen()
+        fun showSlowDownInformation()
     }
 
     object ApiProvider: Provider<DebateDetails.Api>({

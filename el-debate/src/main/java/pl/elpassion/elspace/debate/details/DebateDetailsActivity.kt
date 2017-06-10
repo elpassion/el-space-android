@@ -103,6 +103,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         DebateCommentActivity.start(this, token)
     }
 
+    override fun showSlowDownInformation() {
+
+    }
+
     private fun changeImagesInButtonsOnPositiveAnswer() {
         debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_active))
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))

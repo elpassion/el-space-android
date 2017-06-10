@@ -6,11 +6,17 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
+import okhttp3.MediaType
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.ResponseBody
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.details.createAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
+import retrofit2.HttpException
+import retrofit2.Response
 
 class DebateDetailsControllerTest {
 
@@ -199,6 +205,26 @@ class DebateDetailsControllerTest {
     fun shouldOpenCommentScreenOnComment() {
         createController().onComment()
         verify(view).openCommentScreen()
+    }
+
+    @Test
+    fun shouldShowInformationToSlowDownWithVotingOn429CodeErrorFromApi() {
+        createController().onVote("", createAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view).showSlowDownInformation()
+    }
+
+    private fun createHttpException(errorCode: Int): HttpException {
+        val response: okhttp3.Response = okhttp3.Response.Builder()
+                .code(errorCode)
+                .protocol(Protocol.HTTP_1_1)
+                .message("error")
+                .request(Request.Builder().url("http://localhost/").build())
+                .build()
+        val responseBody = ResponseBody.create(MediaType.parse("text/html"), "")
+        val exception = HttpException(Response.error<Unit>(responseBody, response))
+        return exception
     }
 
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),

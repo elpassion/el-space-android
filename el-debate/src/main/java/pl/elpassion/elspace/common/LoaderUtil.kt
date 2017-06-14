@@ -5,6 +5,7 @@ import android.graphics.drawable.Animatable
 import android.os.Build
 import android.support.design.widget.CoordinatorLayout
 import android.view.View
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.loader.view.*
 import pl.elpassion.R
 
@@ -35,4 +36,16 @@ fun hideLoader(coordinatorLayout: CoordinatorLayout) {
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 private fun stopAnimation(loaderRoot: View) {
     (loaderRoot.loaderImage.drawable as? Animatable)?.stop()
+}
+
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+fun showVoteLoader(loaderRoot: ImageView) {
+    loaderRoot.visibility = View.VISIBLE
+    (loaderRoot.drawable as? Animatable)?.start()
+}
+
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+fun hideVoteLoader(loaderRoot: ImageView) {
+    (loaderRoot.drawable as? Animatable)?.stop()
+    loaderRoot.visibility = View.GONE
 }

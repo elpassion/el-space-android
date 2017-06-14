@@ -101,6 +101,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_error))
     }
 
+    override fun showVoteLoader() {}
+
     override fun showVoteError(exception: Throwable) {
         showSnackbar(getString(R.string.debate_details_vote_error))
     }

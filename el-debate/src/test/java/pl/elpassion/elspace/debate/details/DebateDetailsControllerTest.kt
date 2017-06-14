@@ -129,7 +129,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldShowLoaderOnVote() {
         createController().onVote("token", createAnswer())
-        verify(view).showLoader()
+        verify(view).showVoteLoader()
     }
 
     @Test

@@ -22,6 +22,7 @@ interface DebateDetails {
         fun showLoader()
         fun hideLoader()
         fun showDebateDetailsError(exception: Throwable)
+        fun showVoteLoader()
         fun showVoteSuccess()
         fun showVoteError(exception: Throwable)
         fun resetImagesInButtons()

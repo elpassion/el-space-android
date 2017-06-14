@@ -117,34 +117,31 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
-        val answer = createPositiveAnswer()
-        createController().onVote("token", answer)
-        verify(api).vote("token", answer)
+        createController().onVote("token", Negative(2, "answerNegative"))
+        verify(api).vote("token", Negative(2, "answerNegative"))
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
-        val answer = createNegativeAnswer()
-        createController().onVote("differentToken", answer)
-        verify(api).vote("differentToken", answer)
+        createController().onVote("differentToken", Positive(1, "answer"))
+        verify(api).vote("differentToken", Positive(1, "answer"))
     }
 
     @Test
-    fun shouldShowVoteLoaderAndPassCorrectAnswerOnVote() {
-        val answer = createPositiveAnswer()
-        createController().onVote("token", answer)
-        verify(view).showVoteLoader(answer)
+    fun shouldShowLoaderOnVote() {
+        createController().onVote("token", createPositiveAnswer())
+        verify(view).showVoteLoader()
     }
 
     @Test
-    fun shouldHideVoteLoaderWhenVoteApiCallIsFinished() {
+    fun shouldHideLoaderWhenVoteApiCallIsFinished() {
         createController().onVote("token", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view).hideVoteLoader()
     }
 
     @Test
-    fun shouldNotHideVoteLoaderIfVoteCallIsStillInProgress() {
+    fun shouldNotHideLoaderIfVoteCallIsStillInProgress() {
         createController().onVote("token", createPositiveAnswer())
         verify(view, never()).hideVoteLoader()
     }
@@ -213,7 +210,7 @@ class DebateDetailsControllerTest {
         sendVoteSubject.onError(exception)
         verify(view).showSlowDownInformation()
     }
-
+    
     @Test
     fun shouldNotShowVoteErrorOn429ErrorFromApi() {
         createController().onVote("", createPositiveAnswer())

@@ -9,7 +9,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.dabate.details.createAnswer
+import pl.elpassion.elspace.dabate.details.createPositiveAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 
@@ -116,39 +116,39 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("token", Answer(2, "answerNegative"))
-        verify(api).vote("token", Answer(2, "answerNegative"))
+        createController().onVote("token", Negative(2, "answerNegative"))
+        verify(api).vote("token", Negative(2, "answerNegative"))
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("differentToken", Answer(1, "answer"))
-        verify(api).vote("differentToken", Answer(1, "answer"))
+        createController().onVote("differentToken", Positive(1, "answer"))
+        verify(api).vote("differentToken", Positive(1, "answer"))
     }
 
     @Test
     fun shouldShowLoaderOnVote() {
-        createController().onVote("token", createAnswer())
+        createController().onVote("token", createPositiveAnswer())
         verify(view).showVoteLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenVoteApiCallIsFinished() {
-        createController().onVote("token", createAnswer())
+        createController().onVote("token", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view).hideVoteLoader()
     }
 
     @Test
     fun shouldNotHideLoaderIfVoteCallIsStillInProgress() {
-        createController().onVote("token", createAnswer())
+        createController().onVote("token", createPositiveAnswer())
         verify(view, never()).hideVoteLoader()
     }
 
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenVote() {
         val subscribeOn = TestScheduler()
-        createController(subscribeOn = subscribeOn).onVote("token", createAnswer())
+        createController(subscribeOn = subscribeOn).onVote("token", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view, never()).hideVoteLoader()
         subscribeOn.triggerActions()
@@ -158,7 +158,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenVote() {
         val observeOn = TestScheduler()
-        createController(observeOn = observeOn).onVote("token", createAnswer())
+        createController(observeOn = observeOn).onVote("token", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view, never()).hideVoteLoader()
         observeOn.triggerActions()
@@ -168,7 +168,7 @@ class DebateDetailsControllerTest {
     @Test
     fun shouldHideLoaderOnDestroyIfVoteCallIsStillInProgress() {
         createController().run {
-            onVote("", createAnswer())
+            onVote("", createPositiveAnswer())
             onDestroy()
         }
         verify(view).hideVoteLoader()
@@ -176,14 +176,14 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldShowSuccessWhenVoteSuccessfully() {
-        createController().onVote("", createAnswer())
+        createController().onVote("", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view).showVoteSuccess()
     }
 
     @Test
     fun shouldShowErrorWhenVoteFailed() {
-        createController().onVote("", createAnswer())
+        createController().onVote("", createPositiveAnswer())
         val exception = RuntimeException()
         sendVoteSubject.onError(exception)
         verify(view).showVoteError(exception)
@@ -191,7 +191,7 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldResetButtonsWhenVoteFailed() {
-        createController().onVote("", createAnswer())
+        createController().onVote("", createPositiveAnswer())
         sendVoteSubject.onError(RuntimeException())
         verify(view).resetImagesInButtons()
     }
@@ -204,7 +204,7 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldShowInformationToSlowDownWithVotingOn429CodeErrorFromApi() {
-        createController().onVote("", createAnswer())
+        createController().onVote("", createPositiveAnswer())
         val exception = createHttpException(429)
         sendVoteSubject.onError(exception)
         verify(view).showSlowDownInformation()
@@ -212,7 +212,7 @@ class DebateDetailsControllerTest {
     
     @Test
     fun shouldNotShowVoteErrorOn429ErrorFromApi() {
-        createController().onVote("", createAnswer())
+        createController().onVote("", createPositiveAnswer())
         val exception = createHttpException(429)
         sendVoteSubject.onError(exception)
         verify(view, never()).showVoteError(any())

@@ -136,13 +136,13 @@ class DebateDetailsControllerTest {
     fun shouldHideLoaderWhenVoteApiCallIsFinished() {
         createController().onVote("token", createAnswer())
         sendVoteSubject.onComplete()
-        verify(view).hideLoader()
+        verify(view).hideVoteLoader()
     }
 
     @Test
     fun shouldNotHideLoaderIfVoteCallIsStillInProgress() {
         createController().onVote("token", createAnswer())
-        verify(view, never()).hideLoader()
+        verify(view, never()).hideVoteLoader()
     }
 
     @Test
@@ -150,9 +150,9 @@ class DebateDetailsControllerTest {
         val subscribeOn = TestScheduler()
         createController(subscribeOn = subscribeOn).onVote("token", createAnswer())
         sendVoteSubject.onComplete()
-        verify(view, never()).hideLoader()
+        verify(view, never()).hideVoteLoader()
         subscribeOn.triggerActions()
-        verify(view).hideLoader()
+        verify(view).hideVoteLoader()
     }
 
     @Test
@@ -160,9 +160,9 @@ class DebateDetailsControllerTest {
         val observeOn = TestScheduler()
         createController(observeOn = observeOn).onVote("token", createAnswer())
         sendVoteSubject.onComplete()
-        verify(view, never()).hideLoader()
+        verify(view, never()).hideVoteLoader()
         observeOn.triggerActions()
-        verify(view).hideLoader()
+        verify(view).hideVoteLoader()
     }
 
     @Test
@@ -171,7 +171,7 @@ class DebateDetailsControllerTest {
             onVote("", createAnswer())
             onDestroy()
         }
-        verify(view).hideLoader()
+        verify(view).hideVoteLoader()
     }
 
     @Test

@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.details
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
+import retrofit2.HttpException
 
 class DebateDetailsController(
         private val api: DebateDetails.Api,
@@ -40,7 +41,11 @@ class DebateDetailsController(
     }
 
     private val onVoteError: (Throwable) -> Unit = { error ->
-        view.showVoteError(error)
+        if (error is HttpException && error.code() == 429) {
+            view.showSlowDownInformation()
+        } else {
+            view.showVoteError(error)
+        }
         view.resetImagesInButtons()
     }
 

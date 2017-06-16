@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -101,6 +102,15 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun openCommentScreen() {
         DebateCommentActivity.start(this, token)
+    }
+
+    override fun showSlowDownInformation() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.debate_vote_slow_down_title)
+                .setMessage(R.string.debate_vote_slow_down_info)
+                .setPositiveButton(R.string.debate_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
+                .create()
+                .show()
     }
 
     private fun changeImagesInButtonsOnPositiveAnswer() {

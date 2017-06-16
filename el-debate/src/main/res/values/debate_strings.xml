@@ -17,4 +17,7 @@
     <string name="debate_comment_button_send">Send</string>
     <string name="debate_comment_send_error">Sending your comment failed, please try again</string>
     <string name="debate_comment_invalid_input_error">Invalid input!</string>
+    <string name="debate_vote_slow_down_title">Slow down!</string>
+    <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait 5 sec between your votes. Try again in a five seconds! :)</string>
+    <string name="debate_vote_slow_down_OK_button">OK</string>
 </resources>

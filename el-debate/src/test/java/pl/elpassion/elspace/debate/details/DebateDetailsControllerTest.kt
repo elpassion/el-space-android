@@ -11,6 +11,7 @@ import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.details.createAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
+import pl.elpassion.elspace.dabate.details.createHttpException
 
 class DebateDetailsControllerTest {
 
@@ -199,6 +200,22 @@ class DebateDetailsControllerTest {
     fun shouldOpenCommentScreenOnComment() {
         createController().onComment()
         verify(view).openCommentScreen()
+    }
+
+    @Test
+    fun shouldShowInformationToSlowDownWithVotingOn429CodeErrorFromApi() {
+        createController().onVote("", createAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view).showSlowDownInformation()
+    }
+    
+    @Test
+    fun shouldNotShowVoteErrorOn429ErrorFromApi() {
+        createController().onVote("", createAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view, never()).showVoteError(any())
     }
 
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),

@@ -38,7 +38,9 @@
                     android:hint="@string/debate_login_hint_pin"
                     android:imeOptions="actionDone"
                     android:inputType="number"
-                    android:maxLength="5" />
+                    android:maxLength="5"
+                    android:paddingEnd="30dp" />
+
             </android.support.design.widget.TextInputLayout>
 
             <ImageView

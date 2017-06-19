@@ -130,21 +130,21 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderAndPassCorrectAnswerOnVote() {
+    fun shouldShowVoteLoaderAndPassCorrectAnswerOnVote() {
         val answer = createPositiveAnswer()
         createController().onVote("token", answer)
         verify(view).showVoteLoader(answer)
     }
 
     @Test
-    fun shouldHideLoaderWhenVoteApiCallIsFinished() {
+    fun shouldHideVoteLoaderWhenVoteApiCallIsFinished() {
         createController().onVote("token", createPositiveAnswer())
         sendVoteSubject.onComplete()
         verify(view).hideVoteLoader()
     }
 
     @Test
-    fun shouldNotHideLoaderIfVoteCallIsStillInProgress() {
+    fun shouldNotHideVoteLoaderIfVoteCallIsStillInProgress() {
         createController().onVote("token", createPositiveAnswer())
         verify(view, never()).hideVoteLoader()
     }

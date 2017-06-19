@@ -23,6 +23,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
+import pl.elpassion.elspace.common.showVoteLoader
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -101,7 +102,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_error))
     }
 
-    override fun showVoteLoader(answer: Answer) {}
+    override fun showVoteLoader(answer: Answer) {
+        val loaderRoot: ImageView = when (answer) {
+            is Positive -> debatePositiveAnswerLoader
+            is Negative -> debatePositiveAnswerLoader
+            is Neutral -> debatePositiveAnswerLoader
+        }
+        showVoteLoader(loaderRoot)
+    }
 
     override fun hideVoteLoader() {}
 

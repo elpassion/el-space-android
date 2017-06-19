@@ -12,6 +12,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.details.createPositiveAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
+import pl.elpassion.elspace.dabate.details.createNegativeAnswer
 
 class DebateDetailsControllerTest {
 
@@ -116,14 +117,14 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
-        val answer = Negative(2, "answerNegative")
+        val answer = createPositiveAnswer()
         createController().onVote("token", answer)
         verify(api).vote("token", answer)
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
-        val answer = Positive(1, "answer")
+        val answer = createNegativeAnswer()
         createController().onVote("differentToken", answer)
         verify(api).vote("differentToken", answer)
     }

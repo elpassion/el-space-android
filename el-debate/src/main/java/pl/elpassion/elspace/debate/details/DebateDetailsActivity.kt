@@ -18,12 +18,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
-import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.elspace.common.hideLoader
-import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.common.showVoteLoader
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -103,15 +100,17 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        /*val loaderRoot: ImageView = when (answer) {
+        val loaderRoot: ImageView = when (answer) {
             is Positive -> debatePositiveAnswerLoader
             is Negative -> debateNegativeAnswerLoader
             is Neutral -> debateNeutralAnswerLoader
         }
-        showVoteLoader(loaderRoot)*/
+        showVoteLoader(loaderRoot)
     }
 
-    override fun hideVoteLoader() {}
+    override fun hideVoteLoader() {
+        hideVoteLoader(debatePositiveAnswerLoader)
+    }
 
     override fun showVoteError(exception: Throwable) {
         showSnackbar(getString(R.string.debate_details_vote_error))

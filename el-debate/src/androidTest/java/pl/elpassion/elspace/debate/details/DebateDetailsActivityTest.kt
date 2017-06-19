@@ -64,8 +64,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateTopic)
                 .isDisplayed()
                 .hasText("topic")
@@ -159,8 +158,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldNotShowLoaderWhenApiCallFinished() {
-        startActivity()
-        debateDetailsSubject.onSuccess(createDebateData())
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.loader).doesNotExist()
     }
 
@@ -173,24 +171,21 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).click()
         onId(R.id.debatePositiveAnswerLoader).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         onId(R.id.debateNegativeAnswerLoader).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).click()
         onId(R.id.debateNeutralAnswerLoader).isDisplayed()
     }
@@ -198,8 +193,7 @@ class DebateDetailsActivityTest {
     @Ignore
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
@@ -208,8 +202,7 @@ class DebateDetailsActivityTest {
     @Ignore
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).click()
         sendVoteSubject.onError(RuntimeException())
         onText(R.string.debate_details_vote_error).isDisplayed()
@@ -217,8 +210,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_error).doesNotExist()
@@ -234,7 +226,7 @@ class DebateDetailsActivityTest {
     fun shouldUseTokenPassedWithIntentWhenSendingVote() {
         val token = "newToken"
         startActivity(token)
-        getDebateDetailsSuccessfully()
+        debateDetailsSubject.onSuccess(createDebateData())
         onId(R.id.debatePositiveAnswerButton).click()
         verify(apiMock).vote(eq(token), any())
     }
@@ -284,8 +276,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnPositive() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
@@ -295,8 +286,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNegative() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
@@ -306,8 +296,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNeutral() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
@@ -317,8 +306,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldResetImagesInButtonsWhenApiCallFailed() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).click()
         sendVoteSubject.onError(RuntimeException())
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
@@ -328,8 +316,7 @@ class DebateDetailsActivityTest {
     
     @Test
     fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
         onText(R.string.debate_vote_slow_down_title).isDisplayed()
@@ -338,8 +325,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldCloseSlowDownInformationOnButtonClick() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
         onText(R.string.debate_vote_slow_down_OK_button).click()
@@ -352,15 +338,11 @@ class DebateDetailsActivityTest {
         rule.launchActivity(intent)
     }
 
-    private fun getDebateDetailsSuccessfully() {
-        debateDetailsSubject.onSuccess(createDebateData())
-    }
-
     private fun voteSuccessfully() {
         sendVoteSubject.onComplete()
     }
 
-    private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData) {
+    private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData = createDebateData()) {
         startActivity()
         debateDetailsSubject.onSuccess(debateData)
     }

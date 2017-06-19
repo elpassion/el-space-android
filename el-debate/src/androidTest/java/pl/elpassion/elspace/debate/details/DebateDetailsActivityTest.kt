@@ -179,6 +179,14 @@ class DebateDetailsActivityTest {
         onId(R.id.debatePositiveAnswerLoader).isDisplayed()
     }
 
+    @Test
+    fun shouldShowVoteLoaderWhenClickedOnNegative() {
+        startActivity()
+        getDebateDetailsSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debateNegativeAnswerLoader).isDisplayed()
+    }
+
     @Ignore
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {

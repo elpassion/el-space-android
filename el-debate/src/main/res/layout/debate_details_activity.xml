@@ -150,6 +150,17 @@
                         android:src="@drawable/hand_negative_inactive" />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/debateNegativeAnswerLoader"
+                    android:layout_width="match_parent"
+                    android:layout_height="5dp"
+                    android:layout_gravity="bottom"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/line_vector_animated"
+                    android:tint="@color/redDebateNegative"
+                    android:visibility="gone" />
+
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView

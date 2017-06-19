@@ -194,9 +194,17 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldNotShowPositiveVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerLoader).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowNegativeVoteLoaderWhenApiCallFinished() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
+        voteSuccessfully()
+        onId(R.id.debateNegativeAnswerLoader).isNotDisplayed()
     }
 
     @Ignore

@@ -110,6 +110,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun hideVoteLoader() {
         hideVoteLoader(debatePositiveAnswerLoader)
+        hideVoteLoader(debateNegativeAnswerLoader)
     }
 
     override fun showVoteError(exception: Throwable) {

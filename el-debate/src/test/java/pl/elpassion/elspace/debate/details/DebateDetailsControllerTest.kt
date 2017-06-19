@@ -116,14 +116,16 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("token", Negative(2, "answerNegative"))
-        verify(api).vote("token", Negative(2, "answerNegative"))
+        val answer = Negative(2, "answerNegative")
+        createController().onVote("token", answer)
+        verify(api).vote("token", answer)
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("differentToken", Positive(1, "answer"))
-        verify(api).vote("differentToken", Positive(1, "answer"))
+        val answer = Positive(1, "answer")
+        createController().onVote("differentToken", answer)
+        verify(api).vote("differentToken", answer)
     }
 
     @Test
@@ -209,7 +211,7 @@ class DebateDetailsControllerTest {
         sendVoteSubject.onError(exception)
         verify(view).showSlowDownInformation()
     }
-    
+
     @Test
     fun shouldNotShowVoteErrorOn429ErrorFromApi() {
         createController().onVote("", createPositiveAnswer())

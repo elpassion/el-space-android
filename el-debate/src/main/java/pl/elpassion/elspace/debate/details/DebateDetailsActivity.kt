@@ -12,15 +12,16 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.ImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.hideLoader
+import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -100,18 +101,30 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        val loaderRoot: ImageView = when (answer) {
-            is Positive -> debatePositiveAnswerLoader
-            is Negative -> debateNegativeAnswerLoader
-            is Neutral -> debateNeutralAnswerLoader
+        val loaderRoot = when (answer) {
+            is Positive -> {
+                debatePositiveAnswerLoader.apply {
+                    setLoaderColor(R.color.blueDebatePositive)
+                }
+            }
+            is Negative -> {
+                debateNegativeAnswerLoader.apply {
+                    setLoaderColor(R.color.redDebateNegative)
+                }
+            }
+            is Neutral -> {
+                debateNeutralAnswerLoader.apply {
+                    setLoaderColor(R.color.greyDebateNeutral)
+                }
+            }
         }
-        showVoteLoader(loaderRoot)
+        loaderRoot.showLoader()
     }
 
     override fun hideVoteLoader() {
-        hideVoteLoader(debatePositiveAnswerLoader)
-        hideVoteLoader(debateNegativeAnswerLoader)
-        hideVoteLoader(debateNeutralAnswerLoader)
+        debatePositiveAnswerLoader.hideLoader()
+        debateNegativeAnswerLoader.hideLoader()
+        debateNeutralAnswerLoader.hideLoader()
     }
 
     override fun showVoteError(exception: Throwable) {

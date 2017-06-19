@@ -37,19 +37,3 @@ fun hideLoader(coordinatorLayout: CoordinatorLayout) {
 private fun stopAnimation(loaderRoot: View) {
     (loaderRoot.loaderImage.drawable as? Animatable)?.stop()
 }
-
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-fun showVoteLoader(loaderRoot: ImageView) {
-    loaderRoot.visibility = View.VISIBLE
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled) {
-        (loaderRoot.drawable as? Animatable)?.start()
-    }
-}
-
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-fun hideVoteLoader(loaderRoot: ImageView) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled) {
-        (loaderRoot.drawable as? Animatable)?.stop()
-    }
-    loaderRoot.visibility = View.GONE
-}

@@ -58,7 +58,6 @@
                     tools:text="Topic" />
             </android.support.v7.widget.CardView>
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,15 +103,15 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
                     android:id="@+id/debatePositiveAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_gravity="bottom"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/line_vector_animated"
-                    android:tint="@color/blueDebatePositive"
-                    android:visibility="gone" />
+                    android:layout_gravity="bottom">
+
+                    <include layout="@layout/vote_loader" />
+
+                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
             </android.support.v7.widget.CardView>
 
@@ -151,15 +150,15 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
                     android:id="@+id/debateNegativeAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_gravity="bottom"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/line_vector_animated"
-                    android:tint="@color/redDebateNegative"
-                    android:visibility="gone" />
+                    android:layout_gravity="bottom">
+
+                    <include layout="@layout/vote_loader" />
+
+                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
             </android.support.v7.widget.CardView>
 
@@ -198,15 +197,15 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
                     android:id="@+id/debateNeutralAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
-                    android:layout_gravity="bottom"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/line_vector_animated"
-                    android:tint="@color/greyDebateNeutral"
-                    android:visibility="gone" />
+                    android:layout_gravity="bottom">
+
+                    <include layout="@layout/vote_loader" />
+
+                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
             </android.support.v7.widget.CardView>
 

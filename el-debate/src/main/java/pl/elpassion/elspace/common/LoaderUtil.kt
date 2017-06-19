@@ -41,11 +41,15 @@ private fun stopAnimation(loaderRoot: View) {
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 fun showVoteLoader(loaderRoot: ImageView) {
     loaderRoot.visibility = View.VISIBLE
-    (loaderRoot.drawable as? Animatable)?.start()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled) {
+        (loaderRoot.drawable as? Animatable)?.start()
+    }
 }
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 fun hideVoteLoader(loaderRoot: ImageView) {
-    (loaderRoot.drawable as? Animatable)?.stop()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Animations.areEnabled) {
+        (loaderRoot.drawable as? Animatable)?.stop()
+    }
     loaderRoot.visibility = View.GONE
 }

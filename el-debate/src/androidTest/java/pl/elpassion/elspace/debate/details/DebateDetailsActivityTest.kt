@@ -173,21 +173,21 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         onId(R.id.debatePositiveAnswerLoader).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         onId(R.id.debateNegativeAnswerLoader).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).click()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         onId(R.id.debateNeutralAnswerLoader).isDisplayed()
     }
 
@@ -195,7 +195,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayed()
     }
@@ -204,7 +204,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).click()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         sendVoteSubject.onError(RuntimeException())
         onText(R.string.debate_details_vote_error).isDisplayed()
     }
@@ -212,7 +212,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).click()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_error).doesNotExist()
     }
@@ -228,7 +228,7 @@ class DebateDetailsActivityTest {
         val token = "newToken"
         startActivity(token)
         debateDetailsSubject.onSuccess(createDebateData())
-        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote(eq(token), any())
     }
 
@@ -278,7 +278,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
@@ -288,7 +288,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
@@ -298,7 +298,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).click()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
@@ -314,7 +314,7 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
-    
+
     @Test
     fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()

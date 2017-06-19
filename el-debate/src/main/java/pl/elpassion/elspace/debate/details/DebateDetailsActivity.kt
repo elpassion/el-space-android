@@ -103,12 +103,12 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        val loaderRoot: ImageView = when (answer) {
+        /*val loaderRoot: ImageView = when (answer) {
             is Positive -> debatePositiveAnswerLoader
             is Negative -> debateNegativeAnswerLoader
             is Neutral -> debateNeutralAnswerLoader
         }
-        showVoteLoader(loaderRoot)
+        showVoteLoader(loaderRoot)*/
     }
 
     override fun hideVoteLoader() {}

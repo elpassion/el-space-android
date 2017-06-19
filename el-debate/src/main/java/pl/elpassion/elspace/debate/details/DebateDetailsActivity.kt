@@ -106,7 +106,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         val loaderRoot: ImageView = when (answer) {
             is Positive -> debatePositiveAnswerLoader
             is Negative -> debateNegativeAnswerLoader
-            is Neutral -> debatePositiveAnswerLoader
+            is Neutral -> debateNeutralAnswerLoader
         }
         showVoteLoader(loaderRoot)
     }

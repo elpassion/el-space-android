@@ -101,7 +101,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_error))
     }
 
-    override fun showVoteLoader() {}
+    override fun showVoteLoader(answer: Answer) {}
 
     override fun hideVoteLoader() {}
 

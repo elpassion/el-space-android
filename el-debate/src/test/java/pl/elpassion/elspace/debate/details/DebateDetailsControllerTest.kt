@@ -130,9 +130,10 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderOnVote() {
-        createController().onVote("token", createPositiveAnswer())
-        verify(view).showVoteLoader()
+    fun shouldShowLoaderAndPassCorrectAnswerOnVote() {
+        val answer = createPositiveAnswer()
+        createController().onVote("token", answer)
+        verify(view).showVoteLoader(answer)
     }
 
     @Test

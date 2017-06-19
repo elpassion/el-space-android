@@ -34,7 +34,7 @@ class DebateDetailsController(
         api.vote(token, answer)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { view.showVoteLoader() }
+                .doOnSubscribe { view.showVoteLoader(answer) }
                 .doFinally(view::hideVoteLoader)
                 .subscribe(view::showVoteSuccess, onVoteError)
                 .addTo(compositeDisposable)

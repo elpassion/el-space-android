@@ -7,14 +7,14 @@ import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateLoginController(
         private val view: DebateLogin.View,
-        private val tokenRepo: DebatesRepository,
+        private val debateRepo: DebatesRepository,
         private val loginApi: DebateLogin.Api,
         private val schedulers: SchedulersSupplier) {
 
     private var subscription: Disposable? = null
 
     fun onCreate() {
-        tokenRepo.getLatestDebateCode()?.let {
+        debateRepo.getLatestDebateCode()?.let {
             view.fillDebateCode(it)
         }
     }
@@ -28,7 +28,7 @@ class DebateLoginController(
     }
 
     private fun makeSubscription(debateCode: String) {
-        tokenRepo.saveLatestDebateCode(debateCode)
+        debateRepo.saveLatestDebateCode(debateCode)
         subscription = getAuthTokenObservable(debateCode)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
@@ -42,12 +42,12 @@ class DebateLoginController(
     }
 
     private fun getAuthTokenObservable(debateCode: String) =
-            if (tokenRepo.hasToken(debateCode)) {
-                Single.just(tokenRepo.getTokenForDebate(debateCode))
+            if (debateRepo.hasToken(debateCode)) {
+                Single.just(debateRepo.getTokenForDebate(debateCode))
             } else {
                 loginApi.login(debateCode)
                         .map { it.authToken }
-                        .doOnSuccess { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
+                        .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }
 
     fun onDestroy() {

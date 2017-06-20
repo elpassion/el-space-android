@@ -13,14 +13,14 @@ import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
-    private val tokenRepo = mock<DebatesRepository>()
+    private val debateRepo = mock<DebatesRepository>()
     private val loginApi = mock<DebateLogin.Api>()
-    private val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
     fun setUp() {
-        whenever(tokenRepo.hasToken(any())).thenReturn(false)
+        whenever(debateRepo.hasToken(any())).thenReturn(false)
         whenever(loginApi.login(any())).thenReturn(apiSubject)
     }
 
@@ -28,14 +28,14 @@ class DebateLoginControllerTest {
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12348")
         returnTokenFromApi("authToken")
-        verify(tokenRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
+        verify(debateRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
     }
 
     @Test
     fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12345")
         returnTokenFromApi("realAuthToken")
-        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
+        verify(debateRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
     }
 
     @Test
@@ -142,7 +142,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
@@ -153,7 +153,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForObserveOnInApiCall() {
         val observeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
@@ -164,26 +164,26 @@ class DebateLoginControllerTest {
     @Test
     fun shouldSaveDebateCode() {
         controller.onLogToDebate("12345")
-        verify(tokenRepo).saveLatestDebateCode("12345")
+        verify(debateRepo).saveLatestDebateCode("12345")
     }
 
     @Test
     fun shouldNotFillLatestDebateCodeWhenNotSaved() {
-        whenever(tokenRepo.getLatestDebateCode()).thenReturn(null)
+        whenever(debateRepo.getLatestDebateCode()).thenReturn(null)
         controller.onCreate()
         verify(view, never()).fillDebateCode(any())
     }
 
     @Test
     fun shouldFillLatestDebateCodeWhenSaved() {
-        whenever(tokenRepo.getLatestDebateCode()).thenReturn("12345")
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         controller.onCreate()
         verify(view).fillDebateCode("12345")
     }
 
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
-        whenever(tokenRepo.hasToken(debateCode = debateCode)).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
+        whenever(debateRepo.hasToken(debateCode = debateCode)).thenReturn(true)
+        whenever(debateRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
     }
 
     private fun returnTokenFromApi(token: String) {

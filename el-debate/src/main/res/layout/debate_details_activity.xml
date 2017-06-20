@@ -109,7 +109,7 @@
                     android:layout_height="5dp"
                     android:layout_gravity="bottom">
 
-                    <include layout="@layout/vote_loader" />
+                    <include layout="@layout/answer_loader" />
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -156,7 +156,7 @@
                     android:layout_height="5dp"
                     android:layout_gravity="bottom">
 
-                    <include layout="@layout/vote_loader" />
+                    <include layout="@layout/answer_loader" />
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -203,7 +203,7 @@
                     android:layout_height="5dp"
                     android:layout_gravity="bottom">
 
-                    <include layout="@layout/vote_loader" />
+                    <include layout="@layout/answer_loader" />
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 

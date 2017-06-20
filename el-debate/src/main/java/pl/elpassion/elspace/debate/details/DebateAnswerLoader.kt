@@ -9,7 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
-import kotlinx.android.synthetic.main.vote_loader.view.*
+import kotlinx.android.synthetic.main.answer_loader.view.*
 import pl.elpassion.elspace.common.Animations
 
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)

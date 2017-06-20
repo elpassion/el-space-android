@@ -117,20 +117,23 @@ class DebateDetailsControllerTest {
 
     @Test
     fun shouldCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("token", Negative(2, "answerNegative"))
-        verify(api).vote("token", Negative(2, "answerNegative"))
+        val negativeAnswer = Negative(2, "answerNegative")
+        createController().onVote("token", negativeAnswer)
+        verify(api).vote("token", negativeAnswer)
     }
 
     @Test
     fun shouldReallyCallApiWithSelectedAnswerOnVote() {
-        createController().onVote("differentToken", Positive(1, "answer"))
-        verify(api).vote("differentToken", Positive(1, "answer"))
+        val positiveAnswer = Positive(1, "answer")
+        createController().onVote("differentToken", positiveAnswer)
+        verify(api).vote("differentToken", positiveAnswer)
     }
 
     @Test
     fun shouldShowLoaderOnVote() {
-        createController().onVote("token", createPositiveAnswer())
-        verify(view).showVoteLoader()
+        val positiveAnswer = createPositiveAnswer()
+        createController().onVote("token", positiveAnswer)
+        verify(view).showVoteLoader(positiveAnswer)
     }
 
     @Test

@@ -101,27 +101,15 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowPositiveAnswerReturnedFromApi() {
+    fun shouldShowCorrectAnswersReturnedFromApi() {
         startActivity()
         getDebateDetailsSuccessfully()
         onId(R.id.debatePositiveAnswerText)
                 .isDisplayed()
                 .hasText("answerPositive")
-    }
-
-    @Test
-    fun shouldShowNegativeAnswerReturnedFromApi() {
-        startActivity()
-        getDebateDetailsSuccessfully()
         onId(R.id.debateNegativeAnswerText)
                 .isDisplayed()
                 .hasText("answerNegative")
-    }
-
-    @Test
-    fun shouldShowNeutralAnswerReturnedFromApi() {
-        startActivity()
-        getDebateDetailsSuccessfully()
         onId(R.id.debateNeutralAnswerText)
                 .isDisplayed()
                 .hasText("answerNeutral")

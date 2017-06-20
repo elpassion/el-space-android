@@ -12,10 +12,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.elpassion.android.view.isVisible
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
+import kotlinx.android.synthetic.main.vote_loader.view.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -122,9 +124,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun hideVoteLoader() {
-        debatePositiveAnswerLoader.hideLoader()
-        debateNegativeAnswerLoader.hideLoader()
-        debateNeutralAnswerLoader.hideLoader()
+        if (debatePositiveAnswerLoader.answerLoader.isVisible()) {
+            debatePositiveAnswerLoader.hideLoader()
+        } else if (debateNegativeAnswerLoader.answerLoader.isVisible()) {
+            debateNegativeAnswerLoader.hideLoader()
+        } else if (debateNeutralAnswerLoader.answerLoader.isVisible()) {
+            debateNeutralAnswerLoader.hideLoader()
+        }
     }
 
     override fun showVoteError(exception: Throwable) {

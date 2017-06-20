@@ -125,6 +125,15 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldHighlightNegativeAnswerWhenLastAnswerWasNegative() {
+        startActivity()
+        debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
+        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
+        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
+        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+    }
+
+    @Test
     fun shouldShowLoaderWhenCallingApi() {
         startActivity()
         onId(R.id.loader).isDisplayed()

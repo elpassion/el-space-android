@@ -56,6 +56,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showDebateDetails(debateDetails: DebateData) {
+        debateDetails.run {
+            when (lastAnswerId) {
+                answers.positive.id -> changeImagesInButtonsOnPositiveAnswer()
+            }
+        }
         debateTopic.text = debateDetails.topic
         debatePositiveAnswerText.text = debateDetails.answers.positive.value
         debatePositiveAnswerButton.setOnClickListener {

@@ -36,7 +36,7 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showVoteLoader(answer) }
                 .doFinally(view::hideVoteLoader)
-                .subscribe(view::showVoteSuccess, onVoteError)
+                .subscribe({ view.showVoteSuccess(answer) }, onVoteError)
                 .addTo(compositeDisposable)
     }
 
@@ -46,7 +46,6 @@ class DebateDetailsController(
         } else {
             view.showVoteError(error)
         }
-        view.resetImagesInButtons()
     }
 
     fun onComment() {

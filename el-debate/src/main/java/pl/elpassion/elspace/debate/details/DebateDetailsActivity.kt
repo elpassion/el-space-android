@@ -81,15 +81,12 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                 answers.neutral.id -> changeImagesInButtonsOnAnswer { setNeutralActive() }
             }
             debatePositiveAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnAnswer { setPositiveActive() }
                 controller.onVote(token, answers.positive)
             }
             debateNegativeAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnAnswer { setNegativeActive() }
                 controller.onVote(token, answers.negative)
             }
             debateNeutralAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnAnswer { setNeutralActive() }
                 controller.onVote(token, answers.neutral)
             }
         }
@@ -138,14 +135,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showSnackbar(getString(R.string.debate_details_vote_error))
     }
 
-    override fun resetImagesInButtons() {
-        debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
-        debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
-        debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
-    }
-
-    override fun showVoteSuccess() {
+    override fun showVoteSuccess(answer: Answer) {
         showSnackbar(getString(R.string.debate_details_vote_success), Snackbar.LENGTH_SHORT)
+        when (answer) {
+            is Positive -> changeImagesInButtonsOnAnswer { setPositiveActive() }
+            is Negative -> changeImagesInButtonsOnAnswer { setNegativeActive() }
+            is Neutral -> changeImagesInButtonsOnAnswer { setNeutralActive() }
+        }
     }
 
     private fun showSnackbar(text: String, length: Int = Snackbar.LENGTH_INDEFINITE) {

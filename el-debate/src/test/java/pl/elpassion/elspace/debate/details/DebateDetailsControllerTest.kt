@@ -9,10 +9,9 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.dabate.details.createPositiveAnswer
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.dabate.details.createNegativeAnswer
+import pl.elpassion.elspace.dabate.details.createPositiveAnswer
 
 class DebateDetailsControllerTest {
 
@@ -179,10 +178,11 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowSuccessWhenVoteSuccessfully() {
-        createController().onVote("", createPositiveAnswer())
+    fun shouldShowSuccessAndPassAnswerWhenVoteSuccessfully() {
+        val positiveAnswer = createPositiveAnswer()
+        createController().onVote("", positiveAnswer)
         sendVoteSubject.onComplete()
-        verify(view).showVoteSuccess()
+        verify(view).showVoteSuccess(positiveAnswer)
     }
 
     @Test
@@ -191,13 +191,6 @@ class DebateDetailsControllerTest {
         val exception = RuntimeException()
         sendVoteSubject.onError(exception)
         verify(view).showVoteError(exception)
-    }
-
-    @Test
-    fun shouldResetButtonsWhenVoteFailed() {
-        createController().onVote("", createPositiveAnswer())
-        sendVoteSubject.onError(RuntimeException())
-        verify(view).resetImagesInButtons()
     }
 
     @Test
@@ -213,7 +206,7 @@ class DebateDetailsControllerTest {
         sendVoteSubject.onError(exception)
         verify(view).showSlowDownInformation()
     }
-    
+
     @Test
     fun shouldNotShowVoteErrorOn429ErrorFromApi() {
         createController().onVote("", createPositiveAnswer())

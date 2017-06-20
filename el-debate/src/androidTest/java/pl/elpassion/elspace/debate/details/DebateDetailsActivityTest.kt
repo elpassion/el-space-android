@@ -332,16 +332,6 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldResetImagesInButtonsWhenApiCallFailed() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).click()
-        sendVoteSubject.onError(RuntimeException())
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
-    }
-
-    @Test
     fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()

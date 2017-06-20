@@ -25,9 +25,8 @@ interface DebateDetails {
         fun showDebateDetailsError(exception: Throwable)
         fun showVoteLoader(answer: Answer)
         fun hideVoteLoader()
-        fun showVoteSuccess()
+        fun showVoteSuccess(answer: Answer)
         fun showVoteError(exception: Throwable)
-        fun resetImagesInButtons()
         fun openCommentScreen()
         fun showSlowDownInformation()
     }

@@ -57,27 +57,27 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showDebateDetails(debateDetails: DebateData) {
         debateDetails.run {
+            debateTopic.text = topic
+            debatePositiveAnswerText.text = answers.positive.value
+            debateNegativeAnswerText.text = answers.negative.value
+            debateNeutralAnswerText.text = answers.neutral.value
             when (lastAnswerId) {
                 answers.positive.id -> changeImagesInButtonsOnPositiveAnswer()
                 answers.negative.id -> changeImagesInButtonsOnNegativeAnswer()
                 answers.neutral.id -> changeImagesInButtonsOnNeutralAnswer()
             }
-        }
-        debateTopic.text = debateDetails.topic
-        debatePositiveAnswerText.text = debateDetails.answers.positive.value
-        debatePositiveAnswerButton.setOnClickListener {
-            changeImagesInButtonsOnPositiveAnswer()
-            controller.onVote(token, debateDetails.answers.positive)
-        }
-        debateNegativeAnswerText.text = debateDetails.answers.negative.value
-        debateNegativeAnswerButton.setOnClickListener {
-            changeImagesInButtonsOnNegativeAnswer()
-            controller.onVote(token, debateDetails.answers.negative)
-        }
-        debateNeutralAnswerText.text = debateDetails.answers.neutral.value
-        debateNeutralAnswerButton.setOnClickListener {
-            changeImagesInButtonsOnNeutralAnswer()
-            controller.onVote(token, debateDetails.answers.neutral)
+            debatePositiveAnswerButton.setOnClickListener {
+                changeImagesInButtonsOnPositiveAnswer()
+                controller.onVote(token, answers.positive)
+            }
+            debateNegativeAnswerButton.setOnClickListener {
+                changeImagesInButtonsOnNegativeAnswer()
+                controller.onVote(token, answers.negative)
+            }
+            debateNeutralAnswerButton.setOnClickListener {
+                changeImagesInButtonsOnNeutralAnswer()
+                controller.onVote(token, answers.neutral)
+            }
         }
     }
 

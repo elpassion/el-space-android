@@ -16,7 +16,6 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     : FrameLayout(context, attrs, defStyleAttr) {
 
     val lineViewAnimation by lazy { AnimatorSet() }
-    val fadeOutAnimation by lazy { AnimatorSet() }
 
     fun setLoaderColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -47,16 +46,21 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    fun hideLoader() = fadeOutAnimation.apply {
-        ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
-            duration = 1000
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    super.onAnimationEnd(animation)
-                    stopAnimation()
-                }
-            })
-        }.start()
+    fun hideLoader() {
+        when {
+            !Animations.areEnabled -> return
+            else -> {
+                ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
+                    duration = 500
+                    addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            stopAnimation()
+                        }
+                    })
+                }.start()
+            }
+        }
     }
 
     private fun stopAnimation() {

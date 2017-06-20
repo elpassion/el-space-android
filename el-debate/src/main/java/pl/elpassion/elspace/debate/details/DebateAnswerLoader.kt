@@ -15,33 +15,42 @@ import pl.elpassion.elspace.common.Animations
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-    val lineViewAnimation by lazy { AnimatorSet() }
+    val lineViewAnimation by lazy {
+        AnimatorSet().apply {
+            playTogether(objectAnimatorTranslationX, objectAnimatorScaleX)
+            duration = 1000
+        }
+    }
+
+    val objectAnimatorTranslationX by lazy {
+        ObjectAnimator.ofFloat(answerLoader, "translationX", -width.toFloat(), width.toFloat()).apply {
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+    }
+
+    val objectAnimatorScaleX by lazy {
+        ObjectAnimator.ofFloat(answerLoader, "scaleX", 1f, 0f).apply {
+            repeatCount = ValueAnimator.INFINITE
+        }
+    }
 
     fun setLoaderColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            this.answerLoader.drawable.setTint(ContextCompat.getColor(this.context, color))
+            answerLoader.drawable.setTint(ContextCompat.getColor(this.context, color))
         } else {
-            answerLoader.setBackgroundColor(color)
+            answerLoader.setBackgroundColor(ContextCompat.getColor(this.context, color))
         }
     }
 
     fun showLoader() {
         answerLoader.visibility = View.VISIBLE
+        answerLoader.alpha = 1f
         when {
             !Animations.areEnabled -> return
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.start()
             else -> {
-                val objectAnimatorTranslationX = ObjectAnimator.ofFloat(answerLoader, "translationX", -width.toFloat(), width.toFloat()).apply {
-                    repeatCount = ValueAnimator.INFINITE
-                    interpolator = AccelerateDecelerateInterpolator()
-                }
-                val objectAnimatorScaleX = ObjectAnimator.ofFloat(answerLoader, "scaleX", 1f, 0f).apply {
-                    repeatCount = ValueAnimator.INFINITE
-                }
-                lineViewAnimation.apply {
-                    playTogether(objectAnimatorTranslationX, objectAnimatorScaleX)
-                    duration = 1000
-                }.start()
+                if (!lineViewAnimation.isRunning) lineViewAnimation.start()
             }
         }
     }

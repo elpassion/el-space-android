@@ -102,8 +102,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowCorrectAnswersReturnedFromApi() {
-        startActivity()
-        getDebateDetailsSuccessfully()
+        startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerText)
                 .isDisplayed()
                 .hasText("answerPositive")

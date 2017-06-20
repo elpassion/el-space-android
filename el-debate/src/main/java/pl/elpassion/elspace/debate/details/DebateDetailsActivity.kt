@@ -60,6 +60,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
             when (lastAnswerId) {
                 answers.positive.id -> changeImagesInButtonsOnPositiveAnswer()
                 answers.negative.id -> changeImagesInButtonsOnNegativeAnswer()
+                answers.neutral.id -> changeImagesInButtonsOnNeutralAnswer()
             }
         }
         debateTopic.text = debateDetails.topic

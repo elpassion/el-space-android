@@ -4,7 +4,7 @@ import pl.elpassion.elspace.debate.details.Answer
 import pl.elpassion.elspace.debate.details.Answers
 import pl.elpassion.elspace.debate.details.DebateData
 
-fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers(), lastAnswerId: Long = -1)
+fun createDebateData(debateTopic: String = "topic", answers: Answers = createAnswers(), lastAnswerId: Long? = -1)
         = DebateData(debateTopic, answers, lastAnswerId)
 
 fun createAnswers(positiveAnswer: Answer = createAnswer(1, "answerPositive"),

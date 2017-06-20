@@ -6,8 +6,7 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
-import android.text.InputType.TYPE_CLASS_NUMBER
-import android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL
+import android.text.InputType.*
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -78,6 +77,15 @@ class DebateLoginActivityTest {
                 .replaceText("123456")
                 .hasText("12345")
                 .check(matches(withInputType(TYPE_CLASS_NUMBER or TYPE_NUMBER_VARIATION_NORMAL)))
+    }
+
+    @Test
+    fun shouldHaveCorrectNicknameInput() {
+        onId(R.id.debateLoginNicknameInputText)
+                .isDisplayed()
+                .replaceText("Alojzy666")
+                .hasText("Alojzy666")
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
     @Test

@@ -12,7 +12,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -43,21 +45,48 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="-15dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/debate_background" />
-
-            <Button
-                android:id="@+id/debateLoginButton"
-                style="@style/Button"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimaryGreen"
-                android:text="@string/debate_login_button_login" />
+                android:layout_marginBottom="16dp"
+                app:hintTextAppearance="@style/HintGrey"
+                app:theme="@style/HintGrey">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/debateLoginNicknameInputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/nick"
+                    android:gravity="center_horizontal"
+                    android:inputType="text"
+                    android:paddingEnd="30dp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="-20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/debate_background" />
+
+                <Button
+                    android:id="@+id/debateLoginButton"
+                    style="@style/Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/colorPrimaryGreen"
+                    android:text="@string/debate_login_button_login" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
         <RelativeLayout

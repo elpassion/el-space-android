@@ -1,5 +1,9 @@
 package pl.elpassion.elspace.debate.details
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import android.widget.ImageView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
@@ -27,6 +32,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
+
+    private val animatorSet by lazy {
+        AnimatorSet().apply {
+            duration = 500
+            playTogether(createObjectAnimator(debatePositiveAnswerImage), createObjectAnimator(debateNegativeAnswerImage), createObjectAnimator(debateNeutralAnswerImage))
+        }
+    }
 
     companion object {
         private val debateAuthTokenKey = "debateAuthTokenKey"
@@ -62,20 +74,20 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
             debateNegativeAnswerText.text = answers.negative.value
             debateNeutralAnswerText.text = answers.neutral.value
             when (lastAnswerId) {
-                answers.positive.id -> changeImagesInButtonsOnPositiveAnswer()
-                answers.negative.id -> changeImagesInButtonsOnNegativeAnswer()
-                answers.neutral.id -> changeImagesInButtonsOnNeutralAnswer()
+                answers.positive.id -> changeImagesInButtonsOnAnswer { setPositiveActive() }
+                answers.negative.id -> changeImagesInButtonsOnAnswer { setNegativeActive() }
+                answers.neutral.id -> changeImagesInButtonsOnAnswer { setNeutralActive() }
             }
             debatePositiveAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnPositiveAnswer()
+                changeImagesInButtonsOnAnswer { setPositiveActive() }
                 controller.onVote(token, answers.positive)
             }
             debateNegativeAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnNegativeAnswer()
+                changeImagesInButtonsOnAnswer { setNegativeActive() }
                 controller.onVote(token, answers.negative)
             }
             debateNeutralAnswerButton.setOnClickListener {
-                changeImagesInButtonsOnNeutralAnswer()
+                changeImagesInButtonsOnAnswer { setNeutralActive() }
                 controller.onVote(token, answers.neutral)
             }
         }
@@ -120,19 +132,33 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                 .show()
     }
 
-    private fun changeImagesInButtonsOnPositiveAnswer() {
+    private fun createObjectAnimator(target: ImageView): ObjectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0.5f, 1f)
+
+    private fun changeImagesInButtonsOnAnswer(setActiveAnswer: () -> Unit) {
+        animatorSet.apply {
+            removeAllListeners()
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) {
+                    super.onAnimationStart(animation)
+                    setActiveAnswer()
+                }
+            })
+        }.start()
+    }
+
+    private fun setPositiveActive() {
         debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_active))
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
-    private fun changeImagesInButtonsOnNegativeAnswer() {
+    private fun setNegativeActive() {
         debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_active))
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_inactive))
     }
 
-    private fun changeImagesInButtonsOnNeutralAnswer() {
+    private fun setNeutralActive() {
         debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))

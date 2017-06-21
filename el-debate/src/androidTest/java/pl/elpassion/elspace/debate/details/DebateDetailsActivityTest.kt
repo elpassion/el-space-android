@@ -350,6 +350,15 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_vote_slow_down_info).doesNotExist()
     }
 
+    @Test
+    fun shouldHaveDisabledButtonsOnVoteCall() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).isDisabled()
+        onId(R.id.debateNegativeAnswerButton).isDisabled()
+        onId(R.id.debateNeutralAnswerButton).isDisabled()
+    }
+
     private fun startActivity(token: String = "token") {
         val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
         rule.launchActivity(intent)

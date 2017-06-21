@@ -45,9 +45,11 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     fun show() {
         answerLoader.visibility = View.VISIBLE
         answerLoader.alpha = 1f
-        if (!Animations.areEnabled) return
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.start()
-        else if (!preLollipopAnimation.isRunning) preLollipopAnimation.start()
+        when {
+            !Animations.areEnabled -> return
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.start()
+            !preLollipopAnimation.isRunning -> preLollipopAnimation.start()
+        }
     }
 
     fun hide() {

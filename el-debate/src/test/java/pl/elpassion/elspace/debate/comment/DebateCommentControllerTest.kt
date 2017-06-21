@@ -11,11 +11,11 @@ import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateCommentControllerTest {
 
-    private val debateRepo = mock<DebatesRepository>()
     private val view = mock<DebateComment.View>()
+    private val debateRepo = mock<DebatesRepository>()
     private val api = mock<DebateComment.Api>()
     private val commentSubject = CompletableSubject.create()
-    private val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
     @Before
     fun setUp() {
@@ -31,9 +31,17 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
         sendComment(token = "someOtherToken", message = "someOtherMessage")
         verify(api).comment("someOtherToken", "someOtherMessage", "mrNick")
         verify(view, never()).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldReallyUseNicknameFromRepo() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
+        sendComment()
+        verify(api).comment("token", "message", "Wieslaw")
     }
 
     @Test
@@ -85,7 +93,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
-        val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -96,7 +104,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
-        val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()

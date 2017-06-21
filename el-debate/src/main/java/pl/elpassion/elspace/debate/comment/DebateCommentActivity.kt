@@ -12,7 +12,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-
+import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
@@ -21,6 +21,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     private val controller by lazy {
         DebateCommentController(
                 view = this,
+                debateRepo = DebatesRepositoryProvider.get(),
                 api = DebateComment.ApiProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }

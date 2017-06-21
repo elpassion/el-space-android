@@ -35,14 +35,14 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    fun setLoaderColor(color: Int) {
+    fun setColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
         } else answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
 
     }
 
-    fun showLoader() {
+    fun show() {
         answerLoader.visibility = View.VISIBLE
         answerLoader.alpha = 1f
         if (!Animations.areEnabled) return
@@ -50,7 +50,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         else if (!preLollipopAnimation.isRunning) preLollipopAnimation.start()
     }
 
-    fun hideLoader() {
+    fun hide() {
         if (!Animations.areEnabled) return
         else {
             ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {

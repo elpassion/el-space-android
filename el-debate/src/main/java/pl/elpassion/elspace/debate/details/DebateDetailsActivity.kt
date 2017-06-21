@@ -101,33 +101,33 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        val loaderRoot = when (answer) {
+        val answerLoader = when (answer) {
             is Positive -> {
                 debatePositiveAnswerLoader.apply {
-                    setLoaderColor(R.color.blueDebatePositive)
+                    setColor(R.color.blueDebatePositive)
                 }
             }
             is Negative -> {
                 debateNegativeAnswerLoader.apply {
-                    setLoaderColor(R.color.redDebateNegative)
+                    setColor(R.color.redDebateNegative)
                 }
             }
             is Neutral -> {
                 debateNeutralAnswerLoader.apply {
-                    setLoaderColor(R.color.greyDebateNeutral)
+                    setColor(R.color.greyDebateNeutral)
                 }
             }
         }
-        loaderRoot.showLoader()
+        answerLoader.show()
     }
 
     override fun hideVoteLoader() {
         if (debatePositiveAnswerLoader.answerLoader.isVisible()) {
-            debatePositiveAnswerLoader.hideLoader()
+            debatePositiveAnswerLoader.hide()
         } else if (debateNegativeAnswerLoader.answerLoader.isVisible()) {
-            debateNegativeAnswerLoader.hideLoader()
+            debateNegativeAnswerLoader.hide()
         } else if (debateNeutralAnswerLoader.answerLoader.isVisible()) {
-            debateNeutralAnswerLoader.hideLoader()
+            debateNeutralAnswerLoader.hide()
         }
     }
 

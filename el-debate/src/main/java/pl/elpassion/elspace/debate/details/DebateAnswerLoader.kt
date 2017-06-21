@@ -38,7 +38,9 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     fun setColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
-        } else answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
+        } else {
+            answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
+        }
 
     }
 

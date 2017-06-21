@@ -45,6 +45,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
+        sendComment()
+        verify(api).comment("token", "message", DEFAULT_NICKNAME)
+    }
+
+    @Test
     fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         sendComment(token = "token", message = "")
         verify(api, never()).comment(any(), any(), any())

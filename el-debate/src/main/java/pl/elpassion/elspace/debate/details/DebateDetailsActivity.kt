@@ -58,11 +58,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
-    override fun onDestroy() {
-        controller.onDestroy()
-        super.onDestroy()
-    }
-
     override fun showDebateDetails(debateDetails: DebateData) {
         debateDetails.run {
             debateTopic.text = topic
@@ -172,6 +167,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_positive_inactive))
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))
+    }
+
+    override fun onDestroy() {
+        controller.onDestroy()
+        super.onDestroy()
     }
 
     companion object {

@@ -13,7 +13,7 @@ interface DebateComment {
     interface Api {
         @FormUrlEncoded
         @POST("comment")
-        fun comment(@Header("Authorization") token: String, @Field("text") message: String): Completable
+        fun comment(@Header("Authorization") token: String, @Field("text") message: String, @Field("username") nickname: String): Completable
     }
 
     interface View {

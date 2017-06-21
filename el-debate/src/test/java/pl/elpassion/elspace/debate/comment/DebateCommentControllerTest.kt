@@ -7,36 +7,54 @@ import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateCommentControllerTest {
 
     private val view = mock<DebateComment.View>()
+    private val debateRepo = mock<DebatesRepository>()
     private val api = mock<DebateComment.Api>()
     private val commentSubject = CompletableSubject.create()
-    private val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
 
     @Before
     fun setUp() {
-        whenever(api.comment(any(), any())).thenReturn(commentSubject)
+        whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
     }
 
     @Test
-    fun shouldCallApiWithGivenTokenAndMessageOnSendComment() {
+    fun shouldCallApiWithGivenTokenAndMessageAndNicknameOnSendComment() {
         sendComment()
-        verify(api).comment("token", "message")
+        verify(api).comment("token", "message", "mrNick")
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
+    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage")
+        verify(api).comment("someOtherToken", "someOtherMessage", "mrNick")
         verify(view, never()).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldReallyUseNicknameFromRepo() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
+        sendComment()
+        verify(api).comment("token", "message", "Wieslaw")
+    }
+
+    @Test
+    fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
+        sendComment()
+        verify(api).comment("token", "message", DEFAULT_NICKNAME)
     }
 
     @Test
     fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         sendComment(token = "token", message = "")
-        verify(api, never()).comment(any(), any())
+        verify(api, never()).comment(any(), any(), any())
         verify(view).showInvalidInputError()
     }
 
@@ -82,7 +100,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
-        val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -93,7 +111,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
-        val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()

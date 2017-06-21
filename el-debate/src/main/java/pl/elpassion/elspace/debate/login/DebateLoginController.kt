@@ -7,29 +7,37 @@ import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateLoginController(
         private val view: DebateLogin.View,
-        private val tokenRepo: DebatesRepository,
+        private val debateRepo: DebatesRepository,
         private val loginApi: DebateLogin.Api,
         private val schedulers: SchedulersSupplier) {
 
     private var subscription: Disposable? = null
 
     fun onCreate() {
-        tokenRepo.getLatestDebateCode()?.let {
-            view.fillDebateCode(it)
+        debateRepo.run {
+            getLatestDebateCode()?.let {
+                view.fillDebateCode(it)
+            }
+            getLatestDebateNickname()?.let {
+                view.fillDebateNickname(it)
+            }
         }
     }
 
-    fun onLogToDebate(debateCode: String) {
-        if (debateCode.length != 5) {
-            view.showWrongPinError()
-        } else {
-            makeSubscription(debateCode)
+    fun onLogToDebate(debateCode: String, nickname: String) {
+        when {
+            debateCode.length != 5 -> view.showWrongPinError()
+            nickname.isEmpty() -> view.showWrongNicknameError()
+            else -> makeSubscription(debateCode, nickname)
         }
     }
 
-    private fun makeSubscription(debateCode: String) {
-        tokenRepo.saveLatestDebateCode(debateCode)
-        subscription = getAuthTokenObservable(debateCode)
+    private fun makeSubscription(debateCode: String, nickname: String) {
+        debateRepo.run {
+            saveLatestDebateCode(debateCode)
+            saveLatestDebateNickname(nickname)
+        }
+        subscription = getAuthTokenObservable(debateCode, nickname)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -41,13 +49,13 @@ class DebateLoginController(
                 })
     }
 
-    private fun getAuthTokenObservable(debateCode: String) =
-            if (tokenRepo.hasToken(debateCode)) {
-                Single.just(tokenRepo.getTokenForDebate(debateCode))
+    private fun getAuthTokenObservable(debateCode: String, nickname: String) =
+            if (debateRepo.hasToken(debateCode)) {
+                Single.just(debateRepo.getTokenForDebate(debateCode))
             } else {
-                loginApi.login(debateCode)
+                loginApi.login(debateCode, nickname)
                         .map { it.authToken }
-                        .doOnSuccess { tokenRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
+                        .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }
 
     fun onDestroy() {

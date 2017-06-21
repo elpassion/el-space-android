@@ -72,8 +72,11 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     private fun stopAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.stop()
-        else preLollipopAnimation.end()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            (answerLoader.drawable as? Animatable)?.stop()
+        } else {
+            preLollipopAnimation.end()
+        }
         answerLoader.visibility = GONE
     }
 }

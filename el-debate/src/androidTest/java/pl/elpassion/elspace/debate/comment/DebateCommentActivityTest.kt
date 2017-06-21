@@ -69,7 +69,7 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .replaceText("message")
                 .pressImeActionButton()
-        verify(api).comment("someToken", "message", "nickname")
+        verify(api).comment("someToken", "message", "mrNick")
     }
 
     @Test
@@ -79,7 +79,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(api).comment("someToken", "message", "nickname")
+        verify(api).comment("someToken", "message", "mrNick")
     }
 
     @Test

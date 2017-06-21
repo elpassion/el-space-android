@@ -7,9 +7,11 @@ import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateCommentControllerTest {
 
+    private val debateRepo = mock<DebatesRepository>()
     private val view = mock<DebateComment.View>()
     private val api = mock<DebateComment.Api>()
     private val commentSubject = CompletableSubject.create()
@@ -18,6 +20,7 @@ class DebateCommentControllerTest {
     @Before
     fun setUp() {
         whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
     }
 
     @Test
@@ -28,8 +31,8 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
-        sendComment(token = "someOtherToken", message = "someOtherMessage", nickname = "someOtherName")
-        verify(api).comment("someOtherToken", "someOtherMessage", "someOtherName")
+        sendComment(token = "someOtherToken", message = "someOtherMessage")
+        verify(api).comment("someOtherToken", "someOtherMessage", "mrNick")
         verify(view, never()).showInvalidInputError()
     }
 
@@ -83,7 +86,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.sendComment(token = "token", message = "message", nickname = "Nick")
+        controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -94,7 +97,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.sendComment(token = "token", message = "message", nickname = "Nick")
+        controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -122,5 +125,5 @@ class DebateCommentControllerTest {
         verify(view).closeScreen()
     }
 
-    private fun sendComment(token: String = "token", message: String = "message", nickname: String = "mrNick") = controller.sendComment(token, message, nickname)
+    private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

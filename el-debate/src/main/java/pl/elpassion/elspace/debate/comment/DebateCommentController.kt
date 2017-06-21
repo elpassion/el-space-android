@@ -10,12 +10,12 @@ class DebateCommentController(
 
     private var subscription: Disposable? = null
 
-    fun sendComment(token: String, message: String, nickname: String) {
-        if (message.isEmpty()) view.showInvalidInputError() else callApi(token, message, nickname)
+    fun sendComment(token: String, message: String) {
+        if (message.isEmpty()) view.showInvalidInputError() else callApi(token, message)
     }
 
-    private fun callApi(token: String, message: String, nickname: String) {
-        subscription = api.comment(token, message, nickname)
+    private fun callApi(token: String, message: String) {
+        subscription = api.comment(token, message, "mrNick")
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

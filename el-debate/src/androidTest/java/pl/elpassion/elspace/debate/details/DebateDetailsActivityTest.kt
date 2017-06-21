@@ -359,6 +359,16 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNeutralAnswerButton).isDisabled()
     }
 
+    @Test
+    fun shouldHaveEnabledButtonsOnVoteCallEnd() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        voteSuccessfully()
+        onId(R.id.debateNegativeAnswerButton).click()
+        onId(R.id.debatePositiveAnswerButton).isEnabled()
+        onId(R.id.debateNegativeAnswerButton).isEnabled()
+        onId(R.id.debateNeutralAnswerButton).isEnabled()
+    }
+
     private fun startActivity(token: String = "token") {
         val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
         rule.launchActivity(intent)

@@ -176,7 +176,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun enableVoteButtons() {
-
+        debateNegativeAnswerButton.isEnabled = true
+        debateNeutralAnswerButton.isEnabled = true
+        debatePositiveAnswerButton.isEnabled = true
     }
 
     override fun onDestroy() {

@@ -5,6 +5,7 @@ import android.graphics.drawable.Animatable
 import android.os.Build
 import android.support.design.widget.CoordinatorLayout
 import android.view.View
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.loader.view.*
 import pl.elpassion.R
 

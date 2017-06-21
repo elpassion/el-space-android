@@ -34,9 +34,11 @@ class DebateDetailsController(
         api.vote(token, answer)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { view.showLoader() }
-                .doFinally(view::hideLoader)
-                .subscribe(view::showVoteSuccess, onVoteError)
+                .doOnSubscribe { view.showVoteLoader(answer) }
+                .doOnSubscribe { view.disableVoteButtons() }
+                .doFinally(view::hideVoteLoader)
+                .doFinally(view::enableVoteButtons)
+                .subscribe({ view.showVoteSuccess(answer) }, onVoteError)
                 .addTo(compositeDisposable)
     }
 
@@ -46,7 +48,6 @@ class DebateDetailsController(
         } else {
             view.showVoteError(error)
         }
-        view.resetImagesInButtons()
     }
 
     fun onComment() {

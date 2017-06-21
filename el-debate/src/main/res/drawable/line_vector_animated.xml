@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/line_vector"
+    tools:targetApi="lollipop">
+
+    <target
+        android:name="line"
+        android:animation="@animator/line_vector_animator" />
+</animated-vector>

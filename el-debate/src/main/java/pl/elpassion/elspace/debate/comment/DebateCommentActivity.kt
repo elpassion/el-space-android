@@ -35,11 +35,11 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         setTitle(R.string.debate_comment_hint)
         debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.sendComment(token, inputText.text.toString(), "Nickna")
+                controller.sendComment(token, inputText.text.toString(), "nickname")
             }
             false
         }
-        debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString(), "Nic") }
+        debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString(), "nickname") }
         debateCommentCancelButton.setOnClickListener { controller.onCancel() }
     }
 

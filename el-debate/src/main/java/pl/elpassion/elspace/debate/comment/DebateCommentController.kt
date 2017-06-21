@@ -19,8 +19,8 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        val nick = debateRepo.getLatestDebateNickname() ?: DEFAULT_NICKNAME
-        subscription = api.comment(token, message, nick)
+        val nickname = debateRepo.getLatestDebateNickname() ?: DEFAULT_NICKNAME
+        subscription = api.comment(token, message, nickname)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

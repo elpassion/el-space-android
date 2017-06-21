@@ -14,18 +14,25 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateLoginActivity_OnCreate_Test {
 
-    private val tokenRepo = mock<DebatesRepository>()
+    private val debateRepo = mock<DebatesRepository>()
 
     @JvmField @Rule
     val rule = rule<DebateLoginActivity>(autoStart = false) {
-        DebatesRepositoryProvider.override = { tokenRepo }
+        DebatesRepositoryProvider.override = { debateRepo }
         DebateLogin.ApiProvider.override = { mock() }
     }
 
     @Test
     fun shouldFillDebateCodeWhenSaved() {
-        whenever(tokenRepo.getLatestDebateCode()).thenReturn("12345")
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         rule.startActivity()
         onId(R.id.debateLoginInputText).hasText("12345")
+    }
+
+    @Test
+    fun shouldFillDebateNicknameWhenSaved() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Mieczyslaw")
+        rule.startActivity()
+        onId(R.id.debateLoginNicknameInputText).hasText("Mieczyslaw")
     }
 }

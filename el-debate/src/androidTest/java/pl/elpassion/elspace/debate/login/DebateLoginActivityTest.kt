@@ -40,7 +40,7 @@ class DebateLoginActivityTest {
     val rule = rule<DebateLoginActivity> {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
         DebatesRepositoryProvider.override = { tokenRepo }
-        DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
+        DebateLogin.ApiProvider.override = { api.apply { whenever(login(any(), any())).thenReturn(apiSubject) } }
     }
 
     @Test
@@ -137,7 +137,7 @@ class DebateLoginActivityTest {
         onId(R.id.debateLoginInputText)
                 .replaceText("12345")
                 .pressImeActionButton()
-        verify(api).login(any())
+        verify(api).login(any(), any())
     }
 
     @Test

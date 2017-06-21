@@ -14,8 +14,13 @@ class DebateLoginController(
     private var subscription: Disposable? = null
 
     fun onCreate() {
-        debateRepo.getLatestDebateCode()?.let {
-            view.fillDebateCode(it)
+        debateRepo.run {
+            getLatestDebateCode()?.let {
+                view.fillDebateCode(it)
+            }
+            getLatestDebateNickname()?.let {
+                view.fillDebateNickname(it)
+            }
         }
     }
 

@@ -37,6 +37,6 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
 
         override fun saveLatestDebateNickname(nickname: String) = repository.write(latestDebateNickname, nickname)
 
-        override fun getLatestDebateNickname(): String? = repository.read(latestDebateNickname)
+        override fun getLatestDebateNickname() = repository.read(latestDebateNickname)
     }
 })

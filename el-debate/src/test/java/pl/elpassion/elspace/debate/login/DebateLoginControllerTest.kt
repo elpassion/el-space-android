@@ -189,6 +189,13 @@ class DebateLoginControllerTest {
         verify(view).fillDebateCode("12345")
     }
 
+    @Test
+    fun shouldFillLatestDebateNicknameWhenSaved() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
+        controller.onCreate()
+        verify(view).fillDebateNickname("Wieslaw")
+    }
+
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
         whenever(debateRepo.hasToken(debateCode = debateCode)).thenReturn(true)
         whenever(debateRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)

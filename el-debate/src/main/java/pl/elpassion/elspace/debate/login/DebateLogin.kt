@@ -21,7 +21,7 @@ interface DebateLogin {
     interface Api {
         @FormUrlEncoded
         @POST("login")
-        fun login(@Field("code") code: String): Single<LoginResponse>
+        fun login(@Field("code") code: String, @Field("username") nickname: String): Single<LoginResponse>
         data class LoginResponse(val authToken: String)
     }
 

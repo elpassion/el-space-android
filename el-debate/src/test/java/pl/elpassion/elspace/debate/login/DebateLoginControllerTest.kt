@@ -21,7 +21,7 @@ class DebateLoginControllerTest {
     @Before
     fun setUp() {
         whenever(debateRepo.hasToken(any())).thenReturn(false)
-        whenever(loginApi.login(any())).thenReturn(apiSubject)
+        whenever(loginApi.login(any(), any())).thenReturn(apiSubject)
     }
 
     @Test
@@ -194,6 +194,13 @@ class DebateLoginControllerTest {
         whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
         controller.onCreate()
         verify(view).fillDebateNickname("Wieslaw")
+    }
+
+    @Test
+    fun shouldUseCorrectNicknameWhenCallingApi() {
+        controller.onCreate()
+        controller.onLogToDebate("12345", "Wieslaw")
+        verify(loginApi).login("12345", "Wieslaw")
     }
 
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {

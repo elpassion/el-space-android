@@ -35,7 +35,7 @@ class DebateLoginController(
     private fun makeSubscription(debateCode: String, nickname: String) {
         debateRepo.saveLatestDebateCode(debateCode)
         debateRepo.saveLatestDebateNickname(nickname)
-        subscription = getAuthTokenObservable(debateCode)
+        subscription = getAuthTokenObservable(debateCode, nickname)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -47,11 +47,11 @@ class DebateLoginController(
                 })
     }
 
-    private fun getAuthTokenObservable(debateCode: String) =
+    private fun getAuthTokenObservable(debateCode: String, nickname: String) =
             if (debateRepo.hasToken(debateCode)) {
                 Single.just(debateRepo.getTokenForDebate(debateCode))
             } else {
-                loginApi.login(debateCode)
+                loginApi.login(debateCode, nickname)
                         .map { it.authToken }
                         .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }

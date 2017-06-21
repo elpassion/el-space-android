@@ -15,12 +15,12 @@ import pl.elpassion.R
 class AnswersAnimators(private val view: View, private val context: Context) {
 
     companion object{
-        private val ANSWER_ANMIATION_DURATION: Long = 1000
+        private val ANSWER_ANIMATION_DURATION: Long = 1000
     }
 
     private val positiveAnswerAnimator by lazy {
         AnimatorSet().apply {
-            duration = ANSWER_ANMIATION_DURATION
+            duration = ANSWER_ANIMATION_DURATION
             play(createObjectAnimator(view.debatePositiveAnswerImage))
             addListener(getAnimatorListenerAdapter { setPositiveActive() })
         }
@@ -28,7 +28,7 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     private val neutralAnswerAnimator by lazy {
         AnimatorSet().apply {
-            duration = ANSWER_ANMIATION_DURATION
+            duration = ANSWER_ANIMATION_DURATION
             play(createObjectAnimator(view.debateNeutralAnswerImage))
             addListener(getAnimatorListenerAdapter { setNeutralActive() })
         }
@@ -36,7 +36,7 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     private val negativeAnswerAnimator by lazy {
         AnimatorSet().apply {
-            duration = ANSWER_ANMIATION_DURATION
+            duration = ANSWER_ANIMATION_DURATION
             play(createObjectAnimator(view.debateNegativeAnswerImage))
             addListener(getAnimatorListenerAdapter { setNegativeActive() })
         }

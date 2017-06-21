@@ -15,6 +15,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -86,6 +87,12 @@ class DebateLoginActivityTest {
                 .replaceText("Alojzy666")
                 .hasText("Alojzy666")
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
+    }
+
+    @Ignore
+    @Test
+    fun shouldShowHintInNicknameInputField() {
+        onText(R.string.debate_login_hint_nickname).isDisplayed()
     }
 
     @Test

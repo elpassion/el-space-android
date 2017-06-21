@@ -2,7 +2,8 @@
     <string name="debate_title">EL Debate\u0020</string>
     <string name="debate_login_code_incorrect">Debate code is incorrect</string>
     <string name="debate_login_welcome">Welcome to</string>
-    <string name="debate_login_hint_pin">Enter EL Debate PIN</string>
+    <string name="debate_login_hint_pin">EL Debate PIN</string>
+    <string name="debate_login_hint_nickname">Nickname</string>
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_fail">Oops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_info_topic">Our debate is about:</string>

@@ -176,6 +176,13 @@ class DebateLoginControllerTest {
     }
 
     @Test
+    fun shouldNotFillLatestDebateNicknameWhenNotSaved() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
+        controller.onCreate()
+        verify(view, never()).fillDebateNickname(any())
+    }
+
+    @Test
     fun shouldFillLatestDebateCodeWhenSaved() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         controller.onCreate()

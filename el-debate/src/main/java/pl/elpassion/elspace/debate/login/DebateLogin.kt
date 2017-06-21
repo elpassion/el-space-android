@@ -10,6 +10,7 @@ import retrofit2.http.POST
 interface DebateLogin {
     interface View {
         fun fillDebateCode(debateCode: String)
+        fun fillDebateNickname(nickname: String)
         fun openDebateScreen(authToken: String)
         fun showLoginFailedError()
         fun showLoader()

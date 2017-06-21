@@ -56,6 +56,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         debateLoginInputText.setText(debateCode)
     }
 
+    override fun fillDebateNickname(nickname: String) {
+
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun onDestroy() {

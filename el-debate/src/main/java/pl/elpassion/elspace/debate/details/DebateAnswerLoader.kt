@@ -54,14 +54,16 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         if (Animations.areEnabled) {
             ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
                 duration = 500
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        super.onAnimationEnd(animation)
-                        stopAnimation()
-                    }
-                })
+                addListener(animatorListenerAdapter)
                 start()
             }
+        }
+    }
+
+    private val animatorListenerAdapter: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+            super.onAnimationEnd(animation)
+            stopAnimation()
         }
     }
 

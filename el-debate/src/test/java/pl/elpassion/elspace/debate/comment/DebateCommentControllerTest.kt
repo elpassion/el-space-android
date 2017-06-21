@@ -23,13 +23,13 @@ class DebateCommentControllerTest {
     @Test
     fun shouldCallApiWithGivenTokenAndMessageAndNicknameOnSendComment() {
         sendComment()
-        verify(api).comment("token", "message", "mrnick")
+        verify(api).comment("token", "message", "mrNick")
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
-        sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "mrnick")
+    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
+        sendComment(token = "someOtherToken", message = "someOtherMessage", nickname = "someOtherName")
+        verify(api).comment("someOtherToken", "someOtherMessage", "someOtherName")
         verify(view, never()).showInvalidInputError()
     }
 
@@ -83,7 +83,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.sendComment(token = "token", message = "message")
+        controller.sendComment(token = "token", message = "message", nickname = "Nick")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -94,7 +94,7 @@ class DebateCommentControllerTest {
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
         val controller = DebateCommentController(view, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.sendComment(token = "token", message = "message")
+        controller.sendComment(token = "token", message = "message", nickname = "Nick")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -122,5 +122,5 @@ class DebateCommentControllerTest {
         verify(view).closeScreen()
     }
 
-    private fun sendComment(token: String = "token", message: String = "message", nickname: String = "mrNick") = controller.sendComment(token, message)
+    private fun sendComment(token: String = "token", message: String = "message", nickname: String = "mrNick") = controller.sendComment(token, message, nickname)
 }

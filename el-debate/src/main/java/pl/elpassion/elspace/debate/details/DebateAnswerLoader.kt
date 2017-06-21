@@ -52,7 +52,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     fun hide() {
         if (Animations.areEnabled) {
-            ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
+            ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
                 duration = 500
                 addListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator?) {
@@ -60,7 +60,8 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
                         stopAnimation()
                     }
                 })
-            }.start()
+                start()
+            }
         }
     }
 

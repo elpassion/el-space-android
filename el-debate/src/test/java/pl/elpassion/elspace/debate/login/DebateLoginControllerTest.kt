@@ -47,20 +47,20 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view, never()).showLoginFailedError()
     }
 
     @Test
     fun shouldShowLoaderOnLoginStart() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnLoginEnd() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view).hideLoader()
     }
@@ -68,13 +68,13 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotHideLoaderWhenLoginIsStillInProgress() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderOnDestroyIfCallIsStillInProgress() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         controller.onDestroy()
         verify(view).hideLoader()
     }
@@ -87,7 +87,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view).openDebateScreen("authToken")
     }

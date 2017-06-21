@@ -38,8 +38,7 @@
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.add.ReportAddActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"

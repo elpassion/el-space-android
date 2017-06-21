@@ -15,7 +15,7 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        subscription = api.comment(token, message)
+        subscription = api.comment(token, message, "mrnick")
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

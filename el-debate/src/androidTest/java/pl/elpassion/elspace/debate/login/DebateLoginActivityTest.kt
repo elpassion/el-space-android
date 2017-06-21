@@ -140,7 +140,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowLoaderOnApiCall() {
-        loginToDebate("12345")
+        loginToDebate()
         onId(R.id.loader).isDisplayed()
     }
 
@@ -151,7 +151,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowErrorOnLoginButtonClickIfDebateCodeIsIncorrect() {
-        loginToDebate("12")
+        loginToDebate(debateCode = "12", nickname = "Aaa")
         onText(R.string.debate_login_code_incorrect).isDisplayed()
     }
 
@@ -163,14 +163,14 @@ class DebateLoginActivityTest {
     @Test
     fun shouldShowDebateDetailsOnLoginClick() {
         stubIntentAndRepo()
-        loginToDebate("12345")
+        loginToDebate()
         checkIntent(DebateDetailsActivity::class.java)
     }
 
     @Test
     fun shouldOpenDebateScreenWithTokenFromRepo() {
         stubIntentAndRepo()
-        loginToDebate("12345")
+        loginToDebate()
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "tokenFromRepo"),
                 hasComponent(DebateDetailsActivity::class.java.name)))
@@ -179,9 +179,9 @@ class DebateLoginActivityTest {
     @Test
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
-        loginToDebate("12345")
+        loginToDebate(debateCode = "12345")
         apiSubject.onSuccess(LoginResponse("authTokenFromApi"))
-        verify(tokenRepo).saveDebateToken("12345", "authTokenFromApi")
+        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "authTokenFromApi")
         intended(allOf(
                 hasExtra("debateAuthTokenKey", "authTokenFromApi"),
                 hasComponent(DebateDetailsActivity::class.java.name)))
@@ -190,7 +190,7 @@ class DebateLoginActivityTest {
     @Test
     fun shouldShowErrorWhenLoginFails() {
         apiSubject.onError(RuntimeException())
-        loginToDebate("12345")
+        loginToDebate()
         onText(R.string.debate_login_fail).isDisplayed()
     }
 
@@ -200,8 +200,9 @@ class DebateLoginActivityTest {
         whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
     }
 
-    private fun loginToDebate(debateCode: String) {
+    private fun loginToDebate(debateCode: String = "12345", nickname: String = "SomeName") {
         onId(R.id.debateLoginInputText).replaceText(debateCode)
+        onId(R.id.debateLoginNicknameInputText).replaceText(nickname)
         Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginButton).click()
     }

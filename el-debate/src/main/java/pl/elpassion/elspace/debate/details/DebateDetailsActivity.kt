@@ -169,6 +169,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))
     }
 
+    override fun disableVoteButtons() {
+
+    }
+
     override fun onDestroy() {
         controller.onDestroy()
         super.onDestroy()

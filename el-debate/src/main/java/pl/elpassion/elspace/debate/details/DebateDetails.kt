@@ -29,6 +29,7 @@ interface DebateDetails {
         fun showVoteError(exception: Throwable)
         fun openCommentScreen()
         fun showSlowDownInformation()
+        fun disableVoteButtons()
     }
 
     object ApiProvider : Provider<DebateDetails.Api>({

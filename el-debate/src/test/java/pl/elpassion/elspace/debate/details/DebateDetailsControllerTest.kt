@@ -215,6 +215,12 @@ class DebateDetailsControllerTest {
         verify(view, never()).showVoteError(any())
     }
 
+    @Test
+    fun shouldDisableVoteButtonsOnVoteCallStart() {
+        createController().onVote("", createPositiveAnswer())
+        verify(view).disableVoteButtons()
+    }
+
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),
                                  observeOn: Scheduler = Schedulers.trampoline()) =
             DebateDetailsController(api, view, SchedulersSupplier(subscribeOn, observeOn))

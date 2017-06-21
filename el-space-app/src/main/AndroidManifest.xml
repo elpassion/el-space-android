@@ -46,7 +46,8 @@
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.edit.ReportEditActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />

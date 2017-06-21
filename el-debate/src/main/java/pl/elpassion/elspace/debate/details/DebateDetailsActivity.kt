@@ -40,17 +40,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         }
     }
 
-    companion object {
-        private val debateAuthTokenKey = "debateAuthTokenKey"
-
-        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
-
-        fun intent(context: Context, debateToken: String) =
-                Intent(context, DebateDetailsActivity::class.java).apply {
-                    putExtra(debateAuthTokenKey, debateToken)
-                }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_details_activity)
@@ -185,4 +174,16 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_negative_inactive))
         debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.hand_neutral_active))
     }
+
+    companion object {
+        private val debateAuthTokenKey = "debateAuthTokenKey"
+
+        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
+
+        fun intent(context: Context, debateToken: String) =
+                Intent(context, DebateDetailsActivity::class.java).apply {
+                    putExtra(debateAuthTokenKey, debateToken)
+                }
+    }
+
 }

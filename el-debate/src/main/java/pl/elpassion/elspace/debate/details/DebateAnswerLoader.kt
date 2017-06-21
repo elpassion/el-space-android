@@ -15,21 +15,21 @@ import pl.elpassion.elspace.common.Animations
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-    val lineViewAnimation by lazy {
+    val preLollipopAnimation by lazy {
         AnimatorSet().apply {
-            playTogether(objectAnimatorTranslationX, objectAnimatorScaleX)
+            playTogether(translationX, scaleX)
             duration = 1000
         }
     }
 
-    val objectAnimatorTranslationX by lazy {
+    val translationX: ObjectAnimator by lazy {
         ObjectAnimator.ofFloat(answerLoader, "translationX", -width.toFloat(), width.toFloat()).apply {
             repeatCount = ValueAnimator.INFINITE
             interpolator = AccelerateDecelerateInterpolator()
         }
     }
 
-    val objectAnimatorScaleX by lazy {
+    val scaleX: ObjectAnimator by lazy {
         ObjectAnimator.ofFloat(answerLoader, "scaleX", 1f, 0f).apply {
             repeatCount = ValueAnimator.INFINITE
         }
@@ -47,7 +47,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         answerLoader.alpha = 1f
         if (!Animations.areEnabled) return
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.start()
-        else if (!lineViewAnimation.isRunning) lineViewAnimation.start()
+        else if (!preLollipopAnimation.isRunning) preLollipopAnimation.start()
     }
 
     fun hideLoader() {
@@ -67,7 +67,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun stopAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.stop()
-        else lineViewAnimation.end()
+        else preLollipopAnimation.end()
         answerLoader.visibility = GONE
     }
 }

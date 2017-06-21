@@ -60,6 +60,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showBackArrowOnActionBar()
         debateCommentButton.setOnClickListener { controller.onComment() }
         controller.onCreate(token)
+        setupLoaderColors()
+    }
+
+    private fun setupLoaderColors() {
+        debatePositiveAnswerLoader.setColor(R.color.blueDebatePositive)
+        debateNegativeAnswerLoader.setColor(R.color.redDebateNegative)
+        debateNeutralAnswerLoader.setColor(R.color.greyDebateNeutral)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -101,23 +108,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        when (answer) {
-            is Positive -> {
-                debatePositiveAnswerLoader.apply {
-                    setColor(R.color.blueDebatePositive)
-                }
-            }
-            is Negative -> {
-                debateNegativeAnswerLoader.apply {
-                    setColor(R.color.redDebateNegative)
-                }
-            }
-            is Neutral -> {
-                debateNeutralAnswerLoader.apply {
-                    setColor(R.color.greyDebateNeutral)
-                }
-            }
-        }.show()
+        getLoaderForAnswer(answer).show()
+    }
+
+    private fun getLoaderForAnswer(answer: Answer) = when (answer) {
+        is Positive -> debatePositiveAnswerLoader
+        is Negative -> debateNegativeAnswerLoader
+        is Neutral -> debateNeutralAnswerLoader
     }
 
     override fun hideVoteLoader() {

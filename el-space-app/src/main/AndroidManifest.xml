@@ -38,14 +38,16 @@
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.add.ReportAddActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppThemeBlueWithoutActionBar" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.edit.ReportEditActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar" />
+            android:theme="@style/AppThemeBlueWithoutActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
             android:theme="@style/AppThemeGreenWithoutActionBar" />

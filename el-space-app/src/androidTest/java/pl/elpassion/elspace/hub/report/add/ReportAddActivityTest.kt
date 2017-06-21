@@ -4,6 +4,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
+import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -89,7 +90,10 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveDateHeader() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddDate).textInputEditTextHasHint(R.string.report_add_date_header).isDisplayed()
+        onId(R.id.reportAddDate)
+                .perform(scrollTo())
+                .textInputEditTextHasHint(R.string.report_add_date_header)
+                .isDisplayed()
     }
 
     @Test
@@ -187,7 +191,7 @@ class ReportAddActivityTest {
     fun shouldShowPickedDateOnScreen() {
         stubCurrentTime(2017, 1, 28)
         stubRepositoryAndStart(date = "2017-01-27")
-        onId(R.id.reportAddDate).click()
+        onId(R.id.reportAddDate).perform(scrollTo()).click()
         onText("OK").click()
         onId(R.id.reportAddDate).hasText("2017-01-28")
     }

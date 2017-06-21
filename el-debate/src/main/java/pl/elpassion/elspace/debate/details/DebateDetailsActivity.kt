@@ -152,7 +152,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     private fun getAnimatorListenerAdapter(setActiveAnswer: () -> Unit) = object : AnimatorListenerAdapter() {
         override fun onAnimationStart(animation: Animator?) {
-            super.onAnimationStart(animation)
             setActiveAnswer()
         }
     }

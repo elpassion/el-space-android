@@ -41,7 +41,6 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         } else {
             answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
         }
-
     }
 
     fun show() {

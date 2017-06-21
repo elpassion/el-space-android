@@ -88,7 +88,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showWrongNicknameError() {
-
+        Snackbar.make(debateLoginCoordinator, R.string.debate_login_nickname_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

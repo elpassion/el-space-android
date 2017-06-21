@@ -156,6 +156,12 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldShowErrorOnLoginButtonClickIfDebateNicknameIsIncorrect() {
+        loginToDebate(debateCode = "12345", nickname = "")
+        onText(R.string.debate_login_nickname_incorrect).isDisplayed()
+    }
+
+    @Test
     fun shouldNotShowErrorOnStart() {
         onText(R.string.debate_login_code_incorrect).doesNotExist()
     }

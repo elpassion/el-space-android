@@ -1,6 +1,7 @@
 <resources>
     <string name="debate_title">EL Debate\u0020</string>
     <string name="debate_login_code_incorrect">Debate code is incorrect</string>
+    <string name="debate_login_nickname_incorrect">Debate nickname is incorrect</string>
     <string name="debate_login_welcome">Welcome to</string>
     <string name="debate_login_hint_pin">EL Debate PIN</string>
     <string name="debate_login_hint_nickname">Nickname</string>

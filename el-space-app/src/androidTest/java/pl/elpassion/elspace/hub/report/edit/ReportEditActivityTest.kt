@@ -2,7 +2,6 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -57,7 +56,7 @@ class ReportEditActivityTest {
     fun shouldShowDatePickerOnDateClick() {
         stubCurrentTime(year = 2016, month = 3, day = 3)
         stubReportAndStart()
-        onId(R.id.reportEditDate).perform(scrollTo()).click()
+        onId(R.id.reportEditDate).click()
         onText("OK").isDisplayed()
     }
 

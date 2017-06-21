@@ -164,6 +164,7 @@ class DebateLoginActivityTest {
     @Test
     fun shouldNotShowErrorOnStart() {
         onText(R.string.debate_login_code_incorrect).doesNotExist()
+        onText(R.string.debate_login_nickname_incorrect).doesNotExist()
     }
 
     @Test

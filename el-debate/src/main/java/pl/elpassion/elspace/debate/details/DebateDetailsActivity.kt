@@ -160,15 +160,18 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     private fun createObjectAnimator(target: ImageView): ObjectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0.5f, 1f)
 
     private fun changeImagesInButtonsOnAnswer(setActiveAnswer: () -> Unit) {
-        animatorSet.apply {
+        animatorSet.run {
             removeAllListeners()
-            addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationStart(animation: Animator?) {
-                    super.onAnimationStart(animation)
-                    setActiveAnswer()
-                }
-            })
-        }.start()
+            addListener(getAnimatorListenerAdapter(setActiveAnswer))
+            start()
+        }
+    }
+
+    private fun getAnimatorListenerAdapter(setActiveAnswer: () -> Unit) = object : AnimatorListenerAdapter() {
+        override fun onAnimationStart(animation: Animator?) {
+            super.onAnimationStart(animation)
+            setActiveAnswer()
+        }
     }
 
     private fun setPositiveActive() {

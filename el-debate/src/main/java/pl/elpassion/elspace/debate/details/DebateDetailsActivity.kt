@@ -13,10 +13,8 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.ImageView
-import com.elpassion.android.view.isVisible
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.answer_loader.view.*
 import kotlinx.android.synthetic.main.debate_details_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
@@ -118,13 +116,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun hideVoteLoader() {
-        if (debatePositiveAnswerLoader.answerLoader.isVisible()) {
-            debatePositiveAnswerLoader.hide()
-        } else if (debateNegativeAnswerLoader.answerLoader.isVisible()) {
-            debateNegativeAnswerLoader.hide()
-        } else if (debateNeutralAnswerLoader.answerLoader.isVisible()) {
-            debateNeutralAnswerLoader.hide()
-        }
+        debatePositiveAnswerLoader.hide()
+        debateNeutralAnswerLoader.hide()
+        debateNegativeAnswerLoader.hide()
     }
 
     override fun showVoteError(exception: Throwable) {

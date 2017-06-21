@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
+import com.elpassion.android.view.isVisible
 import kotlinx.android.synthetic.main.answer_loader.view.*
 import pl.elpassion.elspace.common.Animations
 
@@ -54,7 +55,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     fun hide() {
-        if (Animations.areEnabled) {
+        if (Animations.areEnabled && answerLoader.isVisible()) {
             ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
                 duration = 500
                 addListener(animatorListenerAdapter)

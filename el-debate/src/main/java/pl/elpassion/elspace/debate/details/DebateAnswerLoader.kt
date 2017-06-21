@@ -37,46 +37,37 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     fun setLoaderColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            answerLoader.drawable.setTint(ContextCompat.getColor(this.context, color))
-        } else {
-            answerLoader.setBackgroundColor(ContextCompat.getColor(this.context, color))
-        }
+            answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
+        } else answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
+
     }
 
     fun showLoader() {
         answerLoader.visibility = View.VISIBLE
         answerLoader.alpha = 1f
-        when {
-            !Animations.areEnabled -> return
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.start()
-            else -> {
-                if (!lineViewAnimation.isRunning) lineViewAnimation.start()
-            }
-        }
+        if (!Animations.areEnabled) return
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.start()
+        else if (!lineViewAnimation.isRunning) lineViewAnimation.start()
     }
 
     fun hideLoader() {
-        when {
-            !Animations.areEnabled -> return
-            else -> {
-                ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
-                    duration = 500
-                    addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationEnd(animation: Animator?) {
-                            super.onAnimationEnd(animation)
-                            stopAnimation()
-                        }
-                    })
-                }.start()
-            }
+        if (!Animations.areEnabled) return
+        else {
+            ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
+                duration = 500
+                addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        super.onAnimationEnd(animation)
+                        stopAnimation()
+                    }
+                })
+            }.start()
         }
     }
 
     private fun stopAnimation() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.stop()
-            else -> lineViewAnimation.end()
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) (answerLoader.drawable as? Animatable)?.stop()
+        else lineViewAnimation.end()
         answerLoader.visibility = GONE
     }
 }

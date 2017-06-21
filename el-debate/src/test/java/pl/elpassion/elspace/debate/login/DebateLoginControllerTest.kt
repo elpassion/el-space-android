@@ -40,7 +40,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldShowErrorIfLoginFails() {
-        controller.onLogToDebate("error")
+        controller.onLogToDebate("error", "Gustaw333")
         apiSubject.onError(RuntimeException())
         verify(view).showLoginFailedError()
     }
@@ -143,7 +143,7 @@ class DebateLoginControllerTest {
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.onLogToDebate("12345")
+        controller.onLogToDebate("12345", "Gustaw333")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -154,7 +154,7 @@ class DebateLoginControllerTest {
     fun shouldUseGivenSchedulerForObserveOnInApiCall() {
         val observeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.onLogToDebate("12345")
+        controller.onLogToDebate("12345", "Gustaw333")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -162,9 +162,10 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveDebateCode() {
-        controller.onLogToDebate("12345")
+    fun shouldSaveDebateCodeAndNickname() {
+        controller.onLogToDebate("12345", "Wieslaw")
         verify(debateRepo).saveLatestDebateCode("12345")
+        verify(debateRepo).saveLatestDebateNickname("Wieslaw")
     }
 
     @Test
@@ -190,7 +191,7 @@ class DebateLoginControllerTest {
         apiSubject.onSuccess(LoginResponse(token))
     }
 
-    private fun logToDebate(debateCode: String = "12345") {
-        controller.onLogToDebate(debateCode)
+    private fun logToDebate(debateCode: String = "12345", nickname: String = "Gustaw333") {
+        controller.onLogToDebate(debateCode, nickname)
     }
 }

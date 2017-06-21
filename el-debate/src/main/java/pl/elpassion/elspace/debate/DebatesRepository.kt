@@ -12,12 +12,15 @@ interface DebatesRepository {
     fun getTokenForDebate(debateCode: String): String
     fun saveLatestDebateCode(debateCode: String)
     fun getLatestDebateCode(): String?
+    fun saveLatestDebateNickname(nickname: String)
+    fun getLatestDebateNickname(): String?
 }
 
 object DebatesRepositoryProvider : Provider<DebatesRepository>({
     object : DebatesRepository {
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
+        private val latestDebateNickname = "LATEST_DEBATE_NICKNAME"
         private val repository = createSharedPrefs<String?>({
             PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())
         }, { Gson() })
@@ -31,5 +34,9 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
         override fun saveLatestDebateCode(debateCode: String) = repository.write(latestDebateCode, debateCode)
 
         override fun getLatestDebateCode() = repository.read(latestDebateCode)
+
+        override fun saveLatestDebateNickname(nickname: String) = repository.write(latestDebateNickname, nickname)
+
+        override fun getLatestDebateNickname(): String? = repository.read(latestDebateNickname)
     }
 })

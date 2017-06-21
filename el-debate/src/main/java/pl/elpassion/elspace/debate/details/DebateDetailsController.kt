@@ -37,6 +37,7 @@ class DebateDetailsController(
                 .doOnSubscribe { view.showVoteLoader(answer) }
                 .doOnSubscribe { view.disableVoteButtons() }
                 .doFinally(view::hideVoteLoader)
+                .doFinally(view::enableVoteButtons)
                 .subscribe({ view.showVoteSuccess(answer) }, onVoteError)
                 .addTo(compositeDisposable)
     }

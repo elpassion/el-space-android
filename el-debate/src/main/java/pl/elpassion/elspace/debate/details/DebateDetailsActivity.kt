@@ -173,6 +173,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     }
 
+    override fun enableVoteButtons() {
+
+    }
+
     override fun onDestroy() {
         controller.onDestroy()
         super.onDestroy()

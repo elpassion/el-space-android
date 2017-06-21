@@ -30,6 +30,7 @@ interface DebateDetails {
         fun openCommentScreen()
         fun showSlowDownInformation()
         fun disableVoteButtons()
+        fun enableVoteButtons()
     }
 
     object ApiProvider : Provider<DebateDetails.Api>({

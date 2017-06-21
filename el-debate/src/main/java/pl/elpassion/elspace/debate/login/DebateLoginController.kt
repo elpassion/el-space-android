@@ -25,18 +25,18 @@ class DebateLoginController(
     }
 
     fun onLogToDebate(debateCode: String, nickname: String) {
-        if (debateCode.length != 5) {
-            view.showWrongPinError()
-        } else if (nickname.isEmpty()) {
-            view.showWrongNicknameError()
-        } else {
-            makeSubscription(debateCode, nickname)
+        when {
+            debateCode.length != 5 -> view.showWrongPinError()
+            nickname.isEmpty() -> view.showWrongNicknameError()
+            else -> makeSubscription(debateCode, nickname)
         }
     }
 
     private fun makeSubscription(debateCode: String, nickname: String) {
-        debateRepo.saveLatestDebateCode(debateCode)
-        debateRepo.saveLatestDebateNickname(nickname)
+        debateRepo.run {
+            saveLatestDebateCode(debateCode)
+            saveLatestDebateNickname(nickname)
+        }
         subscription = getAuthTokenObservable(debateCode, nickname)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)

@@ -66,7 +66,6 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private val animatorListenerAdapter: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator?) {
-            super.onAnimationEnd(animation)
             stopAnimation()
         }
     }

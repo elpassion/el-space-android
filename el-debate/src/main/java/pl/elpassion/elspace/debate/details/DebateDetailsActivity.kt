@@ -101,7 +101,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
-        val answerLoader = when (answer) {
+        when (answer) {
             is Positive -> {
                 debatePositiveAnswerLoader.apply {
                     setColor(R.color.blueDebatePositive)
@@ -117,8 +117,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                     setColor(R.color.greyDebateNeutral)
                 }
             }
-        }
-        answerLoader.show()
+        }.show()
     }
 
     override fun hideVoteLoader() {

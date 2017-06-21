@@ -27,6 +27,8 @@ class DebateLoginController(
     fun onLogToDebate(debateCode: String, nickname: String) {
         if (debateCode.length != 5) {
             view.showWrongPinError()
+        } else if (nickname.isEmpty()) {
+            view.showWrongNicknameError()
         } else {
             makeSubscription(debateCode, nickname)
         }

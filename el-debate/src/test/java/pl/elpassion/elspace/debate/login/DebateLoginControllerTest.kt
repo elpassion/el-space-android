@@ -140,6 +140,12 @@ class DebateLoginControllerTest {
     }
 
     @Test
+    fun shouldShowWrongNicknameErrorWhenNicknameIsEmpty() {
+        logToDebate("12345", "")
+        verify(view).showWrongNicknameError()
+    }
+
+    @Test
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
@@ -197,7 +203,7 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldUseCorrectNicknameWhenCallingApi() {
+    fun shouldUseCorrectDebateCodeAndNicknameWhenCallingApi() {
         controller.onCreate()
         controller.onLogToDebate("12345", "Wieslaw")
         verify(loginApi).login("12345", "Wieslaw")

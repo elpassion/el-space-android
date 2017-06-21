@@ -87,6 +87,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 
+    override fun showWrongNicknameError() {
+
+    }
+
     companion object {
         fun start(context: Context) = context.startActivity(Intent(context, DebateLoginActivity::class.java))
         var showBackArrow = true

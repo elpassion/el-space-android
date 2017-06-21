@@ -15,21 +15,21 @@ import pl.elpassion.elspace.common.Animations
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-    val preLollipopAnimation by lazy {
+    private val preLollipopAnimation by lazy {
         AnimatorSet().apply {
             playTogether(translationX, scaleX)
             duration = 1000
         }
     }
 
-    val translationX: ObjectAnimator by lazy {
+    private val translationX: ObjectAnimator by lazy {
         ObjectAnimator.ofFloat(answerLoader, "translationX", -width.toFloat(), width.toFloat()).apply {
             repeatCount = ValueAnimator.INFINITE
             interpolator = AccelerateDecelerateInterpolator()
         }
     }
 
-    val scaleX: ObjectAnimator by lazy {
+    private val scaleX: ObjectAnimator by lazy {
         ObjectAnimator.ofFloat(answerLoader, "scaleX", 1f, 0f).apply {
             repeatCount = ValueAnimator.INFINITE
         }

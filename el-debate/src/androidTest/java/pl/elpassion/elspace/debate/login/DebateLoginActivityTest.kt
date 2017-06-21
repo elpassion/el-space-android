@@ -96,6 +96,19 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldUseCorrectDebateCodeAndNicknameOnLogin() {
+        onId(R.id.debateLoginInputText)
+                .click()
+                .replaceText("12345")
+                .pressImeActionButton()
+        onId(R.id.debateLoginNicknameInputText)
+                .replaceText("Wieslaw")
+        Espresso.closeSoftKeyboard()
+        onId(R.id.debateLoginButton).click()
+        verify(api).login("12345", "Wieslaw")
+    }
+
+    @Test
     fun shouldHaveLoginButton() {
         onId(R.id.debateLoginButton)
                 .hasText(R.string.debate_login_button_login)
@@ -130,14 +143,6 @@ class DebateLoginActivityTest {
         stubIntentAndRepo()
         loginToDebate("12345")
         checkIntent(DebateDetailsActivity::class.java)
-    }
-
-    @Test
-    fun shouldPerformConfirmActionOnKeyboardConfirmClick() {
-        onId(R.id.debateLoginInputText)
-                .replaceText("12345")
-                .pressImeActionButton()
-        verify(api).login(any(), any())
     }
 
     @Test

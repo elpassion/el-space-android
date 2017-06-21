@@ -36,13 +36,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
-            controller.onLogToDebate(debateLoginInputText.text.toString(), "Aaaa")
-        }
-        debateLoginInputText.setOnEditorActionListener { inputText, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate(inputText.text.toString(), "aaaa")
-            }
-            false
+            controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
         }
         if (BuildConfig.DEBUG) {
             debateLoginInputText.setOnLongClickListener {

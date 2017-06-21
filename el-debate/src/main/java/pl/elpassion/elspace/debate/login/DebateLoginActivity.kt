@@ -40,7 +40,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         }
         debateLoginNicknameInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate("12345", "Wieslaw")
+                controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
             }
             false
         }

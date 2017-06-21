@@ -120,6 +120,17 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldCallApiWithRealDataWhenNicknameKeyboardConfirmClick() {
+        onId(R.id.debateLoginInputText)
+                .replaceText("11111")
+        onId(R.id.debateLoginNicknameInputText)
+                .click()
+                .replaceText("aaaaa")
+                .pressImeActionButton()
+        verify(api).login("11111", "aaaaa")
+    }
+
+    @Test
     fun shouldHaveLoginButton() {
         onId(R.id.debateLoginButton)
                 .hasText(R.string.debate_login_button_login)

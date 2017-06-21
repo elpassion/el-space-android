@@ -38,6 +38,12 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         debateLoginButton.setOnClickListener {
             controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
         }
+        debateLoginNicknameInputText.setOnEditorActionListener { inputText, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                controller.onLogToDebate("12345", "Wieslaw")
+            }
+            false
+        }
         if (BuildConfig.DEBUG) {
             debateLoginInputText.setOnLongClickListener {
                 controller.onLogToDebate("13160", "DebugUser"); false

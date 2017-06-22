@@ -16,7 +16,7 @@ import pl.elpassion.elspace.common.Animations
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val lollipopAnimation by lazy { answerLoader.drawable as? Animatable }
+    private val lollipopAnimation by lazy { answerLoader.drawable as Animatable }
 
     private val preLollipopAnimation by lazy {
         AnimatorSet().apply {
@@ -64,7 +64,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         answerLoader.alpha = 1f
         when {
             !Animations.areEnabled -> return
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> lollipopAnimation?.start()
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> lollipopAnimation.start()
             !preLollipopAnimation.isRunning -> preLollipopAnimation.start()
         }
     }
@@ -77,7 +77,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun stopAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            lollipopAnimation?.stop()
+            lollipopAnimation.stop()
         } else {
             preLollipopAnimation.end()
         }

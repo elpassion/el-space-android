@@ -57,7 +57,8 @@ class ReportEditActivityTest {
     fun shouldShowDatePickerOnDateClick() {
         stubCurrentTime(year = 2016, month = 3, day = 3)
         stubReportAndStart()
-        onId(R.id.reportEditDate).perform(scrollTo()).click()
+        closeSoftwareKeyboard()
+        onId(R.id.reportEditDate).click()
         onText("OK").isDisplayed()
     }
 

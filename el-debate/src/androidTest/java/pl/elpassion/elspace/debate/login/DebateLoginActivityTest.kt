@@ -125,12 +125,12 @@ class DebateLoginActivityTest {
     @Test
     fun shouldCallApiWithRealDataWhenNicknameKeyboardConfirmClick() {
         onId(R.id.debateLoginPinInputText)
-                .replaceText("11111")
+                .replaceText("56789")
         onId(R.id.debateLoginNicknameInputText)
                 .click()
-                .replaceText("aaaaa")
+                .replaceText("Wieslaw666")
                 .pressImeActionButton()
-        verify(api).login("11111", "aaaaa")
+        verify(api).login("56789", "Wieslaw666")
     }
 
     @Test

@@ -154,13 +154,13 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowErrorOnLoginButtonClickIfDebateCodeIsIncorrect() {
-        loginToDebate(debateCode = "12", nickname = "Aaa")
+        loginToDebate(debateCode = "12")
         onText(R.string.debate_login_code_incorrect).isDisplayed()
     }
 
     @Test
     fun shouldShowErrorOnLoginButtonClickIfDebateNicknameIsIncorrect() {
-        loginToDebate(debateCode = "12345", nickname = "")
+        loginToDebate(nickname = "")
         onText(R.string.debate_login_nickname_incorrect).isDisplayed()
     }
 

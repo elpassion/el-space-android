@@ -89,10 +89,9 @@ class DebateLoginActivityTest {
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
-    @Ignore
     @Test
     fun shouldShowHintInNicknameInputField() {
-        onText(R.string.debate_login_hint_nickname).isDisplayed()
+        onId(R.id.debateLoginNicknameInputText).textInputEditTextHasHint(R.string.debate_login_hint_nickname)
     }
 
     @Test

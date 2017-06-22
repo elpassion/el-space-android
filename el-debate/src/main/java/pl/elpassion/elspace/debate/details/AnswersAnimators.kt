@@ -67,6 +67,6 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     fun startNeutralAnswerAnimation() = neutralAnswerAnimator.start()
 
-    private fun createObjectAnimator(target: ImageView): ObjectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f)
+    private fun createObjectAnimator(target: ImageView) = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f)
 
 }

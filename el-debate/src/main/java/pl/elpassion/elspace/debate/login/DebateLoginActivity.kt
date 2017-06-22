@@ -38,7 +38,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         debateLoginButton.setOnClickListener {
             controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
         }
-        debateLoginNicknameInputText.setOnEditorActionListener { inputText, actionId, _ ->
+        debateLoginNicknameInputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
             }

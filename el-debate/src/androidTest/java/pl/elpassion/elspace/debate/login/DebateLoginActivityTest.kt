@@ -15,7 +15,6 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -68,12 +67,12 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveInstructionsString() {
-        onId(R.id.debateLoginInputText).isDisplayed()
+        onId(R.id.debateLoginPinInputText).isDisplayed()
     }
 
     @Test
     fun shouldHaveCorrectDebateCodeInput() {
-        onId(R.id.debateLoginInputText)
+        onId(R.id.debateLoginPinInputText)
                 .isDisplayed()
                 .replaceText("123456")
                 .hasText("12345")
@@ -96,7 +95,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldUseCorrectDebateCodeAndNicknameOnLogin() {
-        onId(R.id.debateLoginInputText)
+        onId(R.id.debateLoginPinInputText)
                 .click()
                 .replaceText("12345")
                 .pressImeActionButton()
@@ -109,7 +108,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldCallApiWhenNicknameKeyboardConfirmClick() {
-        onId(R.id.debateLoginInputText)
+        onId(R.id.debateLoginPinInputText)
                 .replaceText("12345")
         onId(R.id.debateLoginNicknameInputText)
                 .click()
@@ -120,7 +119,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldCallApiWithRealDataWhenNicknameKeyboardConfirmClick() {
-        onId(R.id.debateLoginInputText)
+        onId(R.id.debateLoginPinInputText)
                 .replaceText("11111")
         onId(R.id.debateLoginNicknameInputText)
                 .click()
@@ -207,7 +206,7 @@ class DebateLoginActivityTest {
     }
 
     private fun loginToDebate(debateCode: String = "12345", nickname: String = "SomeName") {
-        onId(R.id.debateLoginInputText).replaceText(debateCode)
+        onId(R.id.debateLoginPinInputText).replaceText(debateCode)
         onId(R.id.debateLoginNicknameInputText).replaceText(nickname)
         Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginButton).click()

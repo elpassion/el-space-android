@@ -16,6 +16,8 @@ import pl.elpassion.elspace.common.Animations
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
+    private val lollipopAnimation by lazy { answerLoader.drawable as? Animatable }
+
     private val preLollipopAnimation by lazy {
         AnimatorSet().apply {
             playTogether(translationX, scaleX)
@@ -36,6 +38,13 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    private val fadeOffAnimation by lazy {
+        ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
+            duration = 1000
+            addListener(fadeOffListener)
+        }
+    }
+
     fun setColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
@@ -49,22 +58,18 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         answerLoader.alpha = 1f
         when {
             !Animations.areEnabled -> return
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.start()
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> lollipopAnimation?.start()
             !preLollipopAnimation.isRunning -> preLollipopAnimation.start()
         }
     }
 
     fun hide() {
         if (Animations.areEnabled && answerLoader.isVisible()) {
-            ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
-                duration = 1000
-                addListener(animatorListenerAdapter)
-                start()
-            }
+            fadeOffAnimation.start()
         }
     }
 
-    private val animatorListenerAdapter: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
+    private val fadeOffListener = object : AnimatorListenerAdapter() {
         override fun onAnimationEnd(animation: Animator?) {
             stopAnimation()
         }
@@ -72,7 +77,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun stopAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (answerLoader.drawable as? Animatable)?.stop()
+            lollipopAnimation?.stop()
         } else {
             preLollipopAnimation.end()
         }

@@ -57,7 +57,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     fun hide() {
         if (Animations.areEnabled && answerLoader.isVisible()) {
             ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
-                duration = 500
+                duration = 1000
                 addListener(animatorListenerAdapter)
                 start()
             }

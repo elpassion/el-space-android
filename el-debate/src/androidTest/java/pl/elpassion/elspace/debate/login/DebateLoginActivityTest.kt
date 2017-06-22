@@ -89,6 +89,11 @@ class DebateLoginActivityTest {
     }
 
     @Test
+    fun shouldShowHintInLoginPinInputField() {
+        onId(R.id.debateLoginPinInputText).textInputEditTextHasHint(R.string.debate_login_hint_pin)
+    }
+
+    @Test
     fun shouldShowHintInNicknameInputField() {
         onId(R.id.debateLoginNicknameInputText).textInputEditTextHasHint(R.string.debate_login_hint_nickname)
     }

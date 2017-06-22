@@ -2,7 +2,6 @@ package pl.elpassion.elspace.debate.details
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.support.v4.content.ContextCompat
@@ -11,33 +10,29 @@ import android.widget.ImageView
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
 
-
 class AnswersAnimators(private val view: View, private val context: Context) {
 
-    companion object{
+    companion object {
         private val ANSWER_ANIMATION_DURATION: Long = 1000
     }
 
     private val positiveAnswerAnimator by lazy {
-        AnimatorSet().apply {
+        createObjectAnimator(view.debatePositiveAnswerImage).apply {
             duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debatePositiveAnswerImage))
             addListener(getAnimatorListenerAdapter { setPositiveActive() })
         }
     }
 
     private val neutralAnswerAnimator by lazy {
-        AnimatorSet().apply {
+        createObjectAnimator(view.debateNeutralAnswerImage).apply {
             duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debateNeutralAnswerImage))
             addListener(getAnimatorListenerAdapter { setNeutralActive() })
         }
     }
 
     private val negativeAnswerAnimator by lazy {
-        AnimatorSet().apply {
+        createObjectAnimator(view.debateNegativeAnswerImage).apply {
             duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debateNegativeAnswerImage))
             addListener(getAnimatorListenerAdapter { setNegativeActive() })
         }
     }

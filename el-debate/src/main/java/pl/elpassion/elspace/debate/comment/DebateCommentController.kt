@@ -2,9 +2,13 @@ package pl.elpassion.elspace.debate.comment
 
 import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.debate.DebatesRepository
+
+const val DEFAULT_NICKNAME = "DefaultUser"
 
 class DebateCommentController(
         private val view: DebateComment.View,
+        private val debateRepo: DebatesRepository,
         private val api: DebateComment.Api,
         private val schedulers: SchedulersSupplier) {
 
@@ -15,7 +19,8 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        subscription = api.comment(token, message)
+        val nickname = debateRepo.getLatestDebateNickname() ?: DEFAULT_NICKNAME
+        subscription = api.comment(token, message, nickname)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

@@ -13,54 +13,54 @@ import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 class DebateLoginControllerTest {
 
     private val view = mock<DebateLogin.View>()
-    private val tokenRepo = mock<DebatesRepository>()
+    private val debateRepo = mock<DebatesRepository>()
     private val loginApi = mock<DebateLogin.Api>()
-    private val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
     private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
 
     @Before
     fun setUp() {
-        whenever(tokenRepo.hasToken(any())).thenReturn(false)
-        whenever(loginApi.login(any())).thenReturn(apiSubject)
+        whenever(debateRepo.hasToken(any())).thenReturn(false)
+        whenever(loginApi.login(any(), any())).thenReturn(apiSubject)
     }
 
     @Test
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12348")
         returnTokenFromApi("authToken")
-        verify(tokenRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
+        verify(debateRepo).saveDebateToken(debateCode = "12348", authToken = "authToken")
     }
 
     @Test
     fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12345")
         returnTokenFromApi("realAuthToken")
-        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
+        verify(debateRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
     }
 
     @Test
     fun shouldShowErrorIfLoginFails() {
-        controller.onLogToDebate("error")
+        controller.onLogToDebate("error", "Gustaw333")
         apiSubject.onError(RuntimeException())
         verify(view).showLoginFailedError()
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view, never()).showLoginFailedError()
     }
 
     @Test
     fun shouldShowLoaderOnLoginStart() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderOnLoginEnd() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view).hideLoader()
     }
@@ -68,13 +68,13 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotHideLoaderWhenLoginIsStillInProgress() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         verify(view, never()).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderOnDestroyIfCallIsStillInProgress() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         controller.onDestroy()
         verify(view).hideLoader()
     }
@@ -87,7 +87,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
-        logToDebate(debateCode = "12345")
+        logToDebate()
         returnTokenFromApi("authToken")
         verify(view).openDebateScreen("authToken")
     }
@@ -140,10 +140,22 @@ class DebateLoginControllerTest {
     }
 
     @Test
+    fun shouldShowWrongNicknameErrorWhenNicknameIsEmpty() {
+        logToDebate("12345", "")
+        verify(view).showWrongNicknameError()
+    }
+
+    @Test
+    fun shouldNotShowWrongNicknameErrorWhenNicknameIsValid() {
+        logToDebate("12345", "A")
+        verify(view, never()).showWrongNicknameError()
+    }
+
+    @Test
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.onLogToDebate("12345")
+        val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        controller.onLogToDebate("12345", "Gustaw333")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -153,8 +165,8 @@ class DebateLoginControllerTest {
     @Test
     fun shouldUseGivenSchedulerForObserveOnInApiCall() {
         val observeOn = TestScheduler()
-        val controller = DebateLoginController(view, tokenRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.onLogToDebate("12345")
+        val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        controller.onLogToDebate("12345", "Gustaw333")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -162,35 +174,57 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveDebateCode() {
-        controller.onLogToDebate("12345")
-        verify(tokenRepo).saveLatestDebateCode("12345")
+    fun shouldSaveDebateCodeAndNickname() {
+        controller.onLogToDebate("12345", "Wieslaw")
+        verify(debateRepo).saveLatestDebateCode("12345")
+        verify(debateRepo).saveLatestDebateNickname("Wieslaw")
     }
 
     @Test
     fun shouldNotFillLatestDebateCodeWhenNotSaved() {
-        whenever(tokenRepo.getLatestDebateCode()).thenReturn(null)
+        whenever(debateRepo.getLatestDebateCode()).thenReturn(null)
         controller.onCreate()
         verify(view, never()).fillDebateCode(any())
     }
 
     @Test
+    fun shouldNotFillLatestDebateNicknameWhenNotSaved() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
+        controller.onCreate()
+        verify(view, never()).fillDebateNickname(any())
+    }
+
+    @Test
     fun shouldFillLatestDebateCodeWhenSaved() {
-        whenever(tokenRepo.getLatestDebateCode()).thenReturn("12345")
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         controller.onCreate()
         verify(view).fillDebateCode("12345")
     }
 
+    @Test
+    fun shouldFillLatestDebateNicknameWhenSaved() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
+        controller.onCreate()
+        verify(view).fillDebateNickname("Wieslaw")
+    }
+
+    @Test
+    fun shouldUseCorrectDebateCodeAndNicknameWhenCallingApi() {
+        controller.onCreate()
+        controller.onLogToDebate("12345", "Wieslaw")
+        verify(loginApi).login("12345", "Wieslaw")
+    }
+
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
-        whenever(tokenRepo.hasToken(debateCode = debateCode)).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
+        whenever(debateRepo.hasToken(debateCode = debateCode)).thenReturn(true)
+        whenever(debateRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
     }
 
     private fun returnTokenFromApi(token: String) {
         apiSubject.onSuccess(LoginResponse(token))
     }
 
-    private fun logToDebate(debateCode: String = "12345") {
-        controller.onLogToDebate(debateCode)
+    private fun logToDebate(debateCode: String = "12345", nickname: String = "Gustaw333") {
+        controller.onLogToDebate(debateCode, nickname)
     }
 }

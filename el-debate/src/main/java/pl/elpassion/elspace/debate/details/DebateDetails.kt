@@ -13,6 +13,7 @@ interface DebateDetails {
     interface Api {
         @GET("debate")
         fun getDebateDetails(@Header("Authorization") token: String): Single<DebateData>
+
         @POST("vote")
         fun vote(@Header("Authorization") token: String, @Body answer: Answer): Completable
     }
@@ -22,14 +23,17 @@ interface DebateDetails {
         fun showLoader()
         fun hideLoader()
         fun showDebateDetailsError(exception: Throwable)
-        fun showVoteSuccess()
+        fun showVoteLoader(answer: Answer)
+        fun hideVoteLoader()
+        fun showVoteSuccess(answer: Answer)
         fun showVoteError(exception: Throwable)
-        fun resetImagesInButtons()
         fun openCommentScreen()
         fun showSlowDownInformation()
+        fun disableVoteButtons()
+        fun enableVoteButtons()
     }
 
-    object ApiProvider: Provider<DebateDetails.Api>({
+    object ApiProvider : Provider<DebateDetails.Api>({
         DebateRetrofitProvider.get().create(DebateDetails.Api::class.java)
     })
 }

@@ -36,17 +36,17 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
-            controller.onLogToDebate(debateLoginInputText.text.toString())
+            controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
         }
-        debateLoginInputText.setOnEditorActionListener { inputText, actionId, _ ->
+        debateLoginNicknameInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate(inputText.text.toString())
+                controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
             }
             false
         }
         if (BuildConfig.DEBUG) {
             debateLoginInputText.setOnLongClickListener {
-                controller.onLogToDebate("13160"); false
+                controller.onLogToDebate("13160", "DebugUser"); false
             }
         }
         controller.onCreate()
@@ -54,6 +54,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     override fun fillDebateCode(debateCode: String) {
         debateLoginInputText.setText(debateCode)
+    }
+
+    override fun fillDebateNickname(nickname: String) {
+        debateLoginNicknameInputText.setText(nickname)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -81,6 +85,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     override fun showWrongPinError() {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
+    }
+
+    override fun showWrongNicknameError() {
+        Snackbar.make(debateLoginCoordinator, R.string.debate_login_nickname_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

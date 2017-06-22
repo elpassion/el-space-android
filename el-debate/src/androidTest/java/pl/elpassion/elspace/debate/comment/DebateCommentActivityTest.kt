@@ -17,17 +17,22 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import java.lang.Thread.sleep
 
 class DebateCommentActivityTest {
 
+    private val debateRepo = mock<DebatesRepository>()
     private val sendCommentSubject = CompletableSubject.create()
     private val api = mock<DebateComment.Api>().apply {
-        whenever(comment(any(), any())).thenReturn(sendCommentSubject)
+        whenever(comment(any(), any(), any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
     val rule = rule<DebateCommentActivity>(false) {
+        DebatesRepositoryProvider.override = { debateRepo }
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
         DebateComment.ApiProvider.override = { api }
     }
 
@@ -69,7 +74,7 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .replaceText("message")
                 .pressImeActionButton()
-        verify(api).comment("someToken", "message")
+        verify(api).comment("someToken", "message", "mrNick")
     }
 
     @Test
@@ -79,7 +84,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(api).comment("someToken", "message")
+        verify(api).comment("someToken", "message", "mrNick")
     }
 
     @Test

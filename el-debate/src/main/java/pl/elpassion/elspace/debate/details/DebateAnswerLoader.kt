@@ -45,6 +45,12 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
+    private val fadeOffListener = object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator?) {
+            stopAnimation()
+        }
+    }
+
     fun setColor(color: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
@@ -66,12 +72,6 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     fun hide() {
         if (Animations.areEnabled && answerLoader.isVisible()) {
             fadeOffAnimation.start()
-        }
-    }
-
-    private val fadeOffListener = object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
-            stopAnimation()
         }
     }
 

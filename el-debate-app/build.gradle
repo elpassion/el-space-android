@@ -7,7 +7,7 @@ buildscript {
     dependencies {
         //TODO: Remove with new version of play publisher https://github.com/Triple-T/gradle-play-publisher/releases
         classpath 'com.github.triplet.gradle:play-publisher:1.2.1'
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha3'
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
         classpath('com.google.apis:google-api-services-androidpublisher:v2-rev44-1.22.0') {
             exclude group: 'com.google.guava', module: 'guava-jdk5'
         }
@@ -34,7 +34,7 @@ android {
 }
 
 dependencies {
-    compile project(':el-debate')
+    implementation project(':el-debate')
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

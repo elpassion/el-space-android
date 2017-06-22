@@ -12,30 +12,30 @@ apply from: '../gradle/app-version.gradle'
 apply from: '../gradle/android.gradle'
 
 dependencies {
-    compile group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofit_version
-    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: retrofit_version
-    compile group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: retrofit_version
-    compile group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.8.0'
-    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
-    compile group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.0.3'
-    compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-kotlin', version: rxBinding
-    compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-appcompat-v7-kotlin', version: rxBinding
-    compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-support-v4-kotlin', version: rxBinding
-    compile group: 'com.jakewharton.rxbinding2', name: 'rxbinding-design-kotlin', version: rxBinding
-    compile group: 'com.android.support', name: 'gridlayout-v7', version: support_version
-    compile group: 'com.android.support', name: 'cardview-v7', version: support_version
-    compile group: 'com.android.support', name: 'appcompat-v7', version: support_version
-    compile group: 'com.android.support', name: 'design', version: support_version
-    compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
-    compile group: 'com.elpassion.android.commons', name: 'recycler', version: elCommon
-    compile group: 'com.elpassion.android.commons', name: 'shared-preferences', version: elCommon
-    compile group: 'com.elpassion.android.commons', name: 'view', version: elCommon
-    compile(group: 'com.philliphsu', name: 'bottomsheetpickers', version: '2.3.3') {
+    api group: 'com.squareup.retrofit2', name: 'retrofit', version: retrofit_version
+    api group: 'com.squareup.retrofit2', name: 'converter-gson', version: retrofit_version
+    api group: 'com.squareup.retrofit2', name: 'adapter-rxjava2', version: retrofit_version
+    api group: 'com.squareup.okhttp3', name: 'logging-interceptor', version: '3.8.0'
+    api group: 'io.reactivex.rxjava2', name: 'rxjava', version: rxjava2_version
+    api group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.0.3'
+    api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-kotlin', version: rxBinding
+    api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-appcompat-v7-kotlin', version: rxBinding
+    api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-support-v4-kotlin', version: rxBinding
+    api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-design-kotlin', version: rxBinding
+    api group: 'com.android.support', name: 'gridlayout-v7', version: support_version
+    api group: 'com.android.support', name: 'cardview-v7', version: support_version
+    api group: 'com.android.support', name: 'appcompat-v7', version: support_version
+    api group: 'com.android.support', name: 'design', version: support_version
+    api group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
+    api group: 'com.elpassion.android.commons', name: 'recycler', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'shared-preferences', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'view', version: elCommon
+    api(group: 'com.philliphsu', name: 'bottomsheetpickers', version: '2.3.3') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'gridlayout-v7'
     }
-    compile group: 'com.android.support', name: 'multidex', version: '1.0.1'
+    api group: 'com.android.support', name: 'multidex', version: '1.0.1'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

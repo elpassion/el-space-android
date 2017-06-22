@@ -45,9 +45,9 @@ android {
 }
 
 dependencies {
-    compile project(':el-debate')
-    compile group: 'com.google.android.gms', name: 'play-services-auth', version: '10.2.6'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation project(':el-debate')
+    implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '11.0.1'
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
 }
@@ -55,3 +55,9 @@ apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'
 
 apply plugin: 'com.google.gms.google-services'
+
+configurations.all {
+    resolutionStrategy {
+        force 'com.android.support:support-v4:25.3.1'
+    }
+}

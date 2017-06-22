@@ -23,17 +23,17 @@ class AnswersAnimators(private val view: View, private val context: Context) {
         }
     }
 
-    private val neutralAnswerAnimator by lazy {
-        createObjectAnimator(view.debateNeutralAnswerImage).apply {
-            duration = ANSWER_ANIMATION_DURATION
-            addListener(getAnimatorListenerAdapter { setNeutralActive() })
-        }
-    }
-
     private val negativeAnswerAnimator by lazy {
         createObjectAnimator(view.debateNegativeAnswerImage).apply {
             duration = ANSWER_ANIMATION_DURATION
             addListener(getAnimatorListenerAdapter { setNegativeActive() })
+        }
+    }
+
+    private val neutralAnswerAnimator by lazy {
+        createObjectAnimator(view.debateNeutralAnswerImage).apply {
+            duration = ANSWER_ANIMATION_DURATION
+            addListener(getAnimatorListenerAdapter { setNeutralActive() })
         }
     }
 
@@ -63,9 +63,9 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     fun startPositiveAnswerAnimation() = positiveAnswerAnimator.start()
 
-    fun startNeutralAnswerAnimation() = neutralAnswerAnimator.start()
-
     fun startNegativeAnswerAnimation() = negativeAnswerAnimator.start()
+
+    fun startNeutralAnswerAnimation() = neutralAnswerAnimator.start()
 
     private fun createObjectAnimator(target: ImageView): ObjectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f)
 

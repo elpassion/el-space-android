@@ -1,17 +1,9 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url 'https://maven.google.com' }
-        flatDir dirs: "../libs"
     }
     dependencies {
-        //TODO: Remove with new version of play publisher https://github.com/Triple-T/gradle-play-publisher/releases
-        classpath 'com.github.triplet.gradle:play-publisher:1.2.1'
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha4'
-        classpath('com.google.apis:google-api-services-androidpublisher:v2-rev44-1.22.0') {
-            exclude group: 'com.google.guava', module: 'guava-jdk5'
-        }
-        classpath 'commons-io:commons-io:2.4'
+        classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
     }
 }
 

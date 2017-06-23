@@ -88,7 +88,6 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectName).hasText("Slack Time")
     }
 
-    //@Ignore
     @Test
     fun shouldStartProjectChooserOnProjectClicked() {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
@@ -98,7 +97,6 @@ class ReportEditActivityTest {
         checkIntent(ProjectChooseActivity::class.java)
     }
 
-    //@Ignore
     @Test
     fun shouldShowUpdatedProjectNameOnProjectChanged() {
         stubProjectsRepository(listOf(newProject(name = "Project 1"), newProject(name = "Project 2")))
@@ -127,7 +125,6 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_unpaid_vacations_info)
     }
 
-    //@Ignore
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())

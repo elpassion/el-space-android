@@ -66,11 +66,6 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldHaveInstructionsString() {
-        onId(R.id.debateLoginPinInputText).isDisplayed()
-    }
-
-    @Test
     fun shouldHaveCorrectDebateCodeInput() {
         onId(R.id.debateLoginPinInputText)
                 .isDisplayed()

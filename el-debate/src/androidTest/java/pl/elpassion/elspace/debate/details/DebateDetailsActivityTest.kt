@@ -177,21 +177,21 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debatePositiveAnswerLoader).isDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debatePositiveAnswerLoader)))).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debateNegativeAnswerLoader).isDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNegativeAnswerLoader)))).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debateNeutralAnswerLoader).isDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNeutralAnswerLoader)))).isDisplayed()
     }
 
     @Test

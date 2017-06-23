@@ -102,6 +102,7 @@ class ReportEditActivityTest {
     fun shouldShowUpdatedProjectNameOnProjectChanged() {
         stubProjectsRepository(listOf(newProject(name = "Project 1"), newProject(name = "Project 2")))
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Project 1")))
+        closeSoftwareKeyboard()
         onText("Project 1").click()
         onText("Project 2").click()
         onId(R.id.reportEditProjectName).hasText("Project 2")

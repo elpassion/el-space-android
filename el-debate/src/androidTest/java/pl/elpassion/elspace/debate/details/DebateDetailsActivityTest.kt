@@ -1,23 +1,17 @@
 package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.scrollTo
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withParent
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.allOf
 import org.junit.*
 import pl.elpassion.R
-import pl.elpassion.elspace.common.onToolbarBackArrow
-import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.stubAllIntents
+import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
@@ -177,21 +171,21 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debatePositiveAnswerLoader)))).isDisplayed()
+        withParentId(R.id.debatePositiveAnswerLoader).isChildDisplayed(R.id.answerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNegativeAnswerLoader)))).isDisplayed()
+        withParentId(R.id.debateNegativeAnswerLoader).isChildDisplayed(R.id.answerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNeutralAnswerLoader)))).isDisplayed()
+        withParentId(R.id.debateNeutralAnswerLoader).isChildDisplayed(R.id.answerLoader)
     }
 
     @Test
@@ -199,8 +193,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debatePositiveAnswerLoader))))
-                .isNotDisplayed()
+        withParentId(R.id.debatePositiveAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
     }
 
     @Test
@@ -208,8 +201,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNegativeAnswerLoader))))
-                .isNotDisplayed()
+        withParentId(R.id.debateNegativeAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
     }
 
     @Test
@@ -217,8 +209,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNeutralAnswerLoader))))
-                .isNotDisplayed()
+        withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
     }
 
     @Ignore

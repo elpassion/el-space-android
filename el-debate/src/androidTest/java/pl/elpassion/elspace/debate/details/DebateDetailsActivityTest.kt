@@ -1,14 +1,18 @@
 package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.scrollTo
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
+import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.withParent
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers
+import org.hamcrest.Matchers.allOf
 import org.junit.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.onToolbarBackArrow
@@ -190,31 +194,31 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNeutralAnswerLoader).isDisplayed()
     }
 
-    @Ignore
     @Test
     fun shouldNotShowPositiveVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerLoader).isNotDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debatePositiveAnswerLoader))))
+                .isNotDisplayed()
     }
 
-    @Ignore
     @Test
     fun shouldNotShowNegativeVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debateNegativeAnswerLoader).isNotDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNegativeAnswerLoader))))
+                .isNotDisplayed()
     }
 
-    @Ignore
     @Test
     fun shouldNotShowNeutralVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debateNeutralAnswerLoader).isNotDisplayed()
+        onView(allOf(withId(R.id.answerLoader), withParent(withId(R.id.debateNeutralAnswerLoader))))
+                .isNotDisplayed()
     }
 
     @Ignore

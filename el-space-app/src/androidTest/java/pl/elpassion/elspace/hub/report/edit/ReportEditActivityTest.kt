@@ -93,6 +93,7 @@ class ReportEditActivityTest {
     fun shouldStartProjectChooserOnProjectClicked() {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
         stubAllIntents()
+        closeSoftwareKeyboard()
         onText("Slack Time").click()
         checkIntent(ProjectChooseActivity::class.java)
     }

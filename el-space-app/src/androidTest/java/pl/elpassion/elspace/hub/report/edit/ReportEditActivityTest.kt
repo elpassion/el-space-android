@@ -56,7 +56,7 @@ class ReportEditActivityTest {
     fun shouldShowDatePickerOnDateClick() {
         stubCurrentTime(year = 2016, month = 3, day = 3)
         stubReportAndStart()
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.reportEditDate).click()
         onText("OK").isDisplayed()
     }
@@ -93,7 +93,7 @@ class ReportEditActivityTest {
     fun shouldStartProjectChooserOnProjectClicked() {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
         stubAllIntents()
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onText("Slack Time").click()
         checkIntent(ProjectChooseActivity::class.java)
     }
@@ -103,7 +103,7 @@ class ReportEditActivityTest {
     fun shouldShowUpdatedProjectNameOnProjectChanged() {
         stubProjectsRepository(listOf(newProject(name = "Project 1"), newProject(name = "Project 2")))
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Project 1")))
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onText("Project 1").click()
         onText("Project 2").click()
         onId(R.id.reportEditProjectName).hasText("Project 2")
@@ -162,7 +162,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowPaidVacationsFormOnPaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_paid_vacations_report).click()
         verifyIsPaidVacationsFormDisplayed()
     }
@@ -170,7 +170,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_sick_leave_report).click()
         verifyIsSickLeaveFormDisplayed()
     }
@@ -178,7 +178,7 @@ class ReportEditActivityTest {
     @Test
     fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         verifyIsUnpaidVacationsFormDisplayed()
     }
@@ -278,7 +278,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsRegularFormDisplayed() {
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_regular_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
@@ -288,7 +288,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsPaidVacationsFormDisplayed() {
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_paid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
@@ -298,7 +298,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsSickLeaveFormDisplayed() {
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
@@ -308,17 +308,12 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsUnpaidVacationsFormDisplayed() {
-        closeSoftwareKeyboard()
+        Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
         onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
-    }
-
-    private fun closeSoftwareKeyboard() {
-        Espresso.closeSoftKeyboard()
-        Thread.sleep(100)
     }
 }

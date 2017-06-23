@@ -15,7 +15,7 @@
         android:layout_gravity="bottom|center"
         android:src="@drawable/debate_details_background" />
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
@@ -220,7 +220,7 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
     <Button
         android:id="@+id/debateCommentButton"

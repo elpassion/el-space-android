@@ -2,7 +2,6 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
-import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -89,6 +88,7 @@ class ReportEditActivityTest {
         onId(R.id.reportEditProjectName).hasText("Slack Time")
     }
 
+    //@Ignore
     @Test
     fun shouldStartProjectChooserOnProjectClicked() {
         stubReportAndStart(newRegularHourlyReport(project = newProject(name = "Slack Time")))
@@ -97,6 +97,7 @@ class ReportEditActivityTest {
         checkIntent(ProjectChooseActivity::class.java)
     }
 
+    //@Ignore
     @Test
     fun shouldShowUpdatedProjectNameOnProjectChanged() {
         stubProjectsRepository(listOf(newProject(name = "Project 1"), newProject(name = "Project 2")))
@@ -124,6 +125,7 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_unpaid_vacations_info)
     }
 
+    //@Ignore
     @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
@@ -274,6 +276,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsRegularFormDisplayed() {
+        closeSoftwareKeyboard()
         onId(R.id.action_regular_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
@@ -283,6 +286,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsPaidVacationsFormDisplayed() {
+        closeSoftwareKeyboard()
         onId(R.id.action_paid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isDisplayed()
@@ -292,6 +296,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsSickLeaveFormDisplayed() {
+        closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
@@ -301,6 +306,7 @@ class ReportEditActivityTest {
     }
 
     private fun verifyIsUnpaidVacationsFormDisplayed() {
+        closeSoftwareKeyboard()
         onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()

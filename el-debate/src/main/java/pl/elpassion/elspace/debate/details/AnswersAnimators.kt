@@ -1,72 +1,54 @@
 package pl.elpassion.elspace.debate.details
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.Animatable
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
 
 class AnswersAnimators(private val view: View, private val context: Context) {
 
-    companion object {
-        private val ANSWER_ANIMATION_DURATION: Long = 1000
-    }
+    private val positiveAnswerAnimator by lazy { view.debatePositiveAnswerImage.drawable as Animatable }
 
-    private val positiveAnswerAnimator by lazy {
-        createObjectAnimator(view.debatePositiveAnswerImage).apply {
-            duration = ANSWER_ANIMATION_DURATION
-            addListener(getAnimatorListenerAdapter { setPositiveActive() })
-        }
-    }
+    private val negativeAnswerAnimator by lazy { view.debateNegativeAnswerImage.drawable as Animatable }
 
-    private val negativeAnswerAnimator by lazy {
-        createObjectAnimator(view.debateNegativeAnswerImage).apply {
-            duration = ANSWER_ANIMATION_DURATION
-            addListener(getAnimatorListenerAdapter { setNegativeActive() })
-        }
-    }
+    private val neutralAnswerAnimator by lazy { view.debateNeutralAnswerImage.drawable as Animatable }
 
-    private val neutralAnswerAnimator by lazy {
-        createObjectAnimator(view.debateNeutralAnswerImage).apply {
-            duration = ANSWER_ANIMATION_DURATION
-            addListener(getAnimatorListenerAdapter { setNeutralActive() })
-        }
-    }
-
+    @SuppressLint("NewApi")
     private fun setPositiveActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_active))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_inactive))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_inactive))
+        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.blueDebatePositive))
+        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
     }
 
+    @SuppressLint("NewApi")
     private fun setNegativeActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_inactive))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_active))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_inactive))
+        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.redDebateNegative))
+        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
     }
 
+    @SuppressLint("NewApi")
     private fun setNeutralActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_inactive))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_inactive))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_active))
+        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateNeutral))
     }
 
-    private fun getAnimatorListenerAdapter(setActiveAnswer: () -> Unit) = object : AnimatorListenerAdapter() {
-        override fun onAnimationStart(animation: Animator?) {
-            setActiveAnswer()
-        }
+    fun startPositiveAnswerAnimation() {
+        setPositiveActive()
+        positiveAnswerAnimator.start()
     }
 
-    fun startPositiveAnswerAnimation() = positiveAnswerAnimator.start()
+    fun startNegativeAnswerAnimation() {
+        setNegativeActive()
+        negativeAnswerAnimator.start()
+    }
 
-    fun startNegativeAnswerAnimation() = negativeAnswerAnimator.start()
-
-    fun startNeutralAnswerAnimation() = neutralAnswerAnimator.start()
-
-    private fun createObjectAnimator(target: ImageView) = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f)
-
+    fun startNeutralAnswerAnimation() {
+        setNeutralActive()
+        neutralAnswerAnimator.start()
+    }
 }

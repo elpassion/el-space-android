@@ -100,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_positive_inactive" />
+                        app:srcCompat="@drawable/hand_positive_animated" />
 
                 </LinearLayout>
 
@@ -147,7 +147,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_negative_inactive" />
+                        app:srcCompat="@drawable/hand_negative_animated" />
 
                 </LinearLayout>
 
@@ -194,7 +194,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_neutral_inactive" />
+                        app:srcCompat="@drawable/hand_neutral_animated" />
 
                 </LinearLayout>
 

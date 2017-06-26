@@ -115,7 +115,7 @@ class DebateDetailsActivityTest {
     fun shouldHighlightPositiveAnswerWhenLastAnswerWasPositive() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 1))
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
+        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
@@ -125,7 +125,7 @@ class DebateDetailsActivityTest {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
+        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
 
@@ -135,7 +135,7 @@ class DebateDetailsActivityTest {
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 3))
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_active)
+        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral)
     }
 
     @Test
@@ -301,7 +301,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
+        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
@@ -312,7 +312,7 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
+        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative)
         onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
     }
 
@@ -323,7 +323,7 @@ class DebateDetailsActivityTest {
         voteSuccessfully()
         onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
         onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_active)
+        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral)
     }
 
     @Test

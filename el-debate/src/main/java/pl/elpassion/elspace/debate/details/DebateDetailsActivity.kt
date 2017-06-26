@@ -37,13 +37,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showBackArrowOnActionBar()
         debateCommentButton.setOnClickListener { controller.onComment() }
         controller.onCreate(token)
-        setupLoaderColors()
-    }
-
-    private fun setupLoaderColors() {
-        debatePositiveAnswerLoader.setColor(R.color.blueDebatePositive)
-        debateNegativeAnswerLoader.setColor(R.color.redDebateNegative)
-        debateNeutralAnswerLoader.setColor(R.color.greyDebateNeutral)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)

@@ -1,13 +1,15 @@
 package pl.elpassion.elspace.debate.details
 
+import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
 
-class AnswersAnimators(private val view: View) {
+class AnswersAnimators(private val view: View, private val context: Context) {
 
     companion object {
         val greyDebateInactive = R.color.greyDebateInactive
@@ -67,7 +69,7 @@ class AnswersAnimators(private val view: View) {
         }
     }
 
-    private fun setDrawableTintColor(drawable: Drawable, color: Int) = DrawableCompat.setTint(drawable, color)
+    private fun setDrawableTintColor(drawable: Drawable, color: Int) = DrawableCompat.setTint(drawable, ContextCompat.getColor(context, color))
 
     fun startPositiveAnswerAnimation() {
         setPositiveActive()

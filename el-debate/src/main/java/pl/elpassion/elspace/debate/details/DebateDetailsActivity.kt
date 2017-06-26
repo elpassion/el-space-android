@@ -28,7 +28,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
-    private val answersAnimators by lazy { AnswersAnimators(debateDetailsCoordinator) }
+    private val answersAnimators by lazy { AnswersAnimators(debateDetailsCoordinator, this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

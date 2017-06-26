@@ -2,6 +2,7 @@ package pl.elpassion.elspace.debate.details
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.PorterDuff
 import android.graphics.drawable.Animatable
 import android.support.v4.content.ContextCompat
 import android.view.View
@@ -18,23 +19,23 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     @SuppressLint("NewApi")
     private fun setPositiveActive() {
-        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.blueDebatePositive))
-        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
-        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.blueDebatePositive), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
+        view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
     }
 
     @SuppressLint("NewApi")
     private fun setNegativeActive() {
-        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
-        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.redDebateNegative))
-        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
+        view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.redDebateNegative), PorterDuff.Mode.SRC_IN)
+        view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
     }
 
     @SuppressLint("NewApi")
     private fun setNeutralActive() {
-        view.debatePositiveAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
-        view.debateNegativeAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateInactive))
-        view.debateNeutralAnswerImage.drawable.setTint(ContextCompat.getColor(context, R.color.greyDebateNeutral))
+        view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateInactive), PorterDuff.Mode.SRC_IN)
+        view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, R.color.greyDebateNeutral), PorterDuff.Mode.SRC_IN)
     }
 
     fun startPositiveAnswerAnimation() {

@@ -1,14 +1,13 @@
 package pl.elpassion.elspace.debate.details
 
-import android.content.Context
-import android.graphics.PorterDuff
 import android.graphics.drawable.Animatable
-import android.support.v4.content.ContextCompat
+import android.graphics.drawable.Drawable
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
 
-class AnswersAnimators(private val view: View, private val context: Context) {
+class AnswersAnimators(private val view: View) {
 
     companion object {
         val greyDebateInactive = R.color.greyDebateInactive
@@ -24,43 +23,51 @@ class AnswersAnimators(private val view: View, private val context: Context) {
     private val neutralAnswerAnimator by lazy { view.debateNeutralAnswerImage.drawable as Animatable }
 
     private fun setPositiveActive() {
-        blueDebatePositive.run {
-            view.debatePositiveAnswerImage.tag = this
-            view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debatePositiveAnswerImage.apply {
+            tag = blueDebatePositive
+            setDrawableTintColor(drawable, blueDebatePositive)
         }
-        greyDebateInactive.run {
-            view.debateNegativeAnswerImage.tag = this
-            view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
-            view.debateNeutralAnswerImage.tag = this
-            view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
         }
     }
 
     private fun setNegativeActive() {
-        redDebateNegative.run {
-            view.debateNegativeAnswerImage.tag = this
-            view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debatePositiveAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
         }
-        greyDebateInactive.run {
-            view.debatePositiveAnswerImage.tag = this
-            view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
-            view.debateNeutralAnswerImage.tag = this
-            view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.apply {
+            tag = redDebateNegative
+            setDrawableTintColor(drawable, redDebateNegative)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
         }
     }
 
     private fun setNeutralActive() {
-        greyDebateNeutral.run {
-            view.debateNeutralAnswerImage.tag = this
-            view.debateNeutralAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debatePositiveAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
         }
-        greyDebateInactive.run {
-            view.debatePositiveAnswerImage.tag = this
-            view.debatePositiveAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
-            view.debateNegativeAnswerImage.tag = this
-            view.debateNegativeAnswerImage.drawable.setColorFilter(ContextCompat.getColor(context, this), PorterDuff.Mode.SRC_IN)
+        view.debateNegativeAnswerImage.apply {
+            tag = greyDebateInactive
+            setDrawableTintColor(drawable, greyDebateInactive)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = greyDebateNeutral
+            setDrawableTintColor(drawable, greyDebateNeutral)
         }
     }
+
+    private fun setDrawableTintColor(drawable: Drawable, color: Int) = DrawableCompat.setTint(drawable, color)
 
     fun startPositiveAnswerAnimation() {
         setPositiveActive()

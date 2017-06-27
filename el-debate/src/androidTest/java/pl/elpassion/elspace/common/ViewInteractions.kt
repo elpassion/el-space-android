@@ -13,7 +13,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import pl.elpassion.R
 
-fun onToolbarBackArrow() = Espresso.onView(ViewMatchers.withContentDescription(R.string.abc_action_bar_up_description))
+fun onToolbarBackArrow(): ViewInteraction = Espresso.onView(ViewMatchers.withContentDescription(R.string.abc_action_bar_up_description))
 
 fun withParentId(@IdRes parentId: Int): Matcher<View> = ViewMatchers.withParent(ViewMatchers.withId(parentId))
 

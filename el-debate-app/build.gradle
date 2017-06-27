@@ -18,7 +18,6 @@ apply from: '../gradle/android.gradle'
 android {
     defaultConfig {
         applicationId "pl.elpassion.eldebate"
-        multiDexEnabled true
     }
     buildTypes {
         debug

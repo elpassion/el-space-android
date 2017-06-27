@@ -13,10 +13,10 @@ import pl.elpassion.elspace.common.Animations
 class AnswersAnimators(private val view: View, private val context: Context) {
 
     companion object {
-        val greyDebateInactive = R.color.greyDebateInactive
-        val blueDebatePositive = R.color.blueDebatePositive
-        val redDebateNegative = R.color.redDebateNegative
-        val greyDebateNeutral = R.color.greyDebateNeutral
+        val GREY_DEBATE_INACTIVE = R.color.greyDebateInactive
+        val BLUE_DEBATE_POSITIVE = R.color.blueDebatePositive
+        val RED_DEBATE_NEGATIVE = R.color.redDebateNegative
+        val GREY_DEBATE_NEUTRAL = R.color.greyDebateNeutral
     }
 
     private val positiveAnswerAnimator by lazy { view.debatePositiveAnswerImage.drawable as Animatable }
@@ -27,46 +27,46 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     private fun setPositiveActive() {
         view.debatePositiveAnswerImage.apply {
-            tag = blueDebatePositive
-            setDrawableTintColor(drawable, blueDebatePositive)
+            tag = BLUE_DEBATE_POSITIVE
+            setDrawableTintColor(drawable, BLUE_DEBATE_POSITIVE)
         }
         view.debateNegativeAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
         view.debateNeutralAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
     }
 
     private fun setNegativeActive() {
         view.debatePositiveAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
         view.debateNegativeAnswerImage.apply {
-            tag = redDebateNegative
-            setDrawableTintColor(drawable, redDebateNegative)
+            tag = RED_DEBATE_NEGATIVE
+            setDrawableTintColor(drawable, RED_DEBATE_NEGATIVE)
         }
         view.debateNeutralAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
     }
 
     private fun setNeutralActive() {
         view.debatePositiveAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
         view.debateNegativeAnswerImage.apply {
-            tag = greyDebateInactive
-            setDrawableTintColor(drawable, greyDebateInactive)
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
         view.debateNeutralAnswerImage.apply {
-            tag = greyDebateNeutral
-            setDrawableTintColor(drawable, greyDebateNeutral)
+            tag = GREY_DEBATE_NEUTRAL
+            setDrawableTintColor(drawable, GREY_DEBATE_NEUTRAL)
         }
     }
 

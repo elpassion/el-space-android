@@ -160,12 +160,11 @@ class DebateDetailsActivityTest {
         onId(R.id.loader).doesNotExist()
     }
 
-    @Ignore
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
         debateDetailsSubject.onError(RuntimeException())
         startActivity()
-        onText(R.string.debate_details_error).isDisplayed()
+        onText(R.string.debate_details_error).isDisplayedEffectively()
     }
 
     @Test
@@ -213,22 +212,20 @@ class DebateDetailsActivityTest {
         withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
-    @Ignore
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onText(R.string.debate_details_vote_success).isDisplayed()
+        onText(R.string.debate_details_vote_success).isDisplayedEffectively()
     }
 
-    @Ignore
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         sendVoteSubject.onError(RuntimeException())
-        onText(R.string.debate_details_vote_error).isDisplayed()
+        onText(R.string.debate_details_vote_error).isDisplayedEffectively()
     }
 
     @Test

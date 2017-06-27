@@ -21,7 +21,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.debate_answer_loader, this, true)
+        LayoutInflater.from(context).inflate(R.layout.answer_loader, this, true)
 
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DebateAnswerLoader)

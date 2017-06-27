@@ -172,21 +172,21 @@ class DebateDetailsActivityTest {
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debatePositiveAnswerLoader).isChildDisplayed(R.id.answerLoader)
+        withParentId(R.id.debatePositiveAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debateNegativeAnswerLoader).isChildDisplayed(R.id.answerLoader)
+        withParentId(R.id.debateNegativeAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debateNeutralAnswerLoader).isChildDisplayed(R.id.answerLoader)
+        withParentId(R.id.debateNeutralAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
@@ -194,7 +194,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debatePositiveAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
+        withParentId(R.id.debatePositiveAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
@@ -202,7 +202,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debateNegativeAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
+        withParentId(R.id.debateNegativeAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
@@ -210,7 +210,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.answerLoader)
+        withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
     @Ignore

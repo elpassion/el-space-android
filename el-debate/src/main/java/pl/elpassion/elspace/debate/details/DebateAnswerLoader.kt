@@ -13,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import com.elpassion.android.view.isVisible
-import kotlinx.android.synthetic.main.answer_loader.view.*
+import kotlinx.android.synthetic.main.debate_answer_loader.view.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.Animations
 
@@ -21,7 +21,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.answer_loader, this, true)
+        LayoutInflater.from(context).inflate(R.layout.debate_answer_loader, this, true)
 
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DebateAnswerLoader)
@@ -42,27 +42,27 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
         }
     }
 
-    private fun applyTintColor(tintColor: Int) = DrawableCompat.setTint(answerLoader.drawable, tintColor)
+    private fun applyTintColor(tintColor: Int) = DrawableCompat.setTint(debateAnswerLoader.drawable, tintColor)
 
-    private val loaderAnimation by lazy { answerLoader.drawable as Animatable }
+    private val loaderAnimation by lazy { debateAnswerLoader.drawable as Animatable }
 
     fun show() {
-        answerLoader.visibility = View.VISIBLE
-        answerLoader.alpha = 1f
+        debateAnswerLoader.visibility = View.VISIBLE
+        debateAnswerLoader.alpha = 1f
         if (Animations.areEnabled) {
             loaderAnimation.start()
         }
     }
 
     fun hide(hidingFinishedListener: () -> Unit) {
-        if (!Animations.areEnabled && !answerLoader.isVisible()) {
+        if (!Animations.areEnabled && !debateAnswerLoader.isVisible()) {
             stopAnimation(hidingFinishedListener)
         } else {
             createFadeOffAnimation(hidingFinishedListener).start()
         }
     }
 
-    private fun createFadeOffAnimation(hidingFinishedListener: () -> Unit) = ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).apply {
+    private fun createFadeOffAnimation(hidingFinishedListener: () -> Unit) = ObjectAnimator.ofFloat(debateAnswerLoader, "alpha", 1f, 0f).apply {
         duration = 1000
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
@@ -73,7 +73,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun stopAnimation(hidingFinishedListener: () -> Unit) {
         loaderAnimation.stop()
-        answerLoader.visibility = GONE
+        debateAnswerLoader.visibility = GONE
         hidingFinishedListener()
     }
 }

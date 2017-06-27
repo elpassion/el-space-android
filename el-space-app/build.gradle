@@ -22,6 +22,7 @@ apply from: '../gradle/android.gradle'
 android {
     defaultConfig {
         applicationId "pl.elpassion.elspace"
+        multiDexEnabled true
     }
     sourceSets {
         test.java.srcDirs += 'src/testCommon/java'

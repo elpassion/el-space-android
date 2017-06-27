@@ -1,6 +1,6 @@
 package pl.elpassion.elspace
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
@@ -12,7 +12,7 @@ import pl.elpassion.elspace.hub.login.GoogleHubLoginRepositoryProvider
 import pl.elpassion.elspace.hub.login.GoogleSingInDI
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
-class ElSpaceApp : Application() {
+class ElSpaceApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

@@ -8,6 +8,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
+import pl.elpassion.elspace.common.Animations
 
 class AnswersAnimators(private val view: View, private val context: Context) {
 
@@ -73,16 +74,22 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     fun startPositiveAnswerAnimation() {
         setPositiveActive()
-        positiveAnswerAnimator.start()
+        if (Animations.areEnabled) {
+            positiveAnswerAnimator.start()
+        }
     }
 
     fun startNegativeAnswerAnimation() {
         setNegativeActive()
-        negativeAnswerAnimator.start()
+        if (Animations.areEnabled) {
+            negativeAnswerAnimator.start()
+        }
     }
 
     fun startNeutralAnswerAnimation() {
         setNeutralActive()
-        neutralAnswerAnimator.start()
+        if (Animations.areEnabled) {
+            neutralAnswerAnimator.start()
+        }
     }
 }

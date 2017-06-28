@@ -1,17 +1,16 @@
 package pl.elpassion.elspace.hub.report.edit
 
 import io.reactivex.Completable
-import pl.elpassion.elspace.hub.HubRetrofitProvider
+import io.reactivex.Observable
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.hub.HubRetrofitProvider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
-import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import retrofit2.http.DELETE
 import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
-import io.reactivex.Observable
 
 interface ReportEdit {
 

@@ -50,9 +50,9 @@ class ReportEditController(private val report: Report,
                 callApiToEdit(it)
                         .doOnComplete { view.close() }
                         .catchOnError {
-                            when (it.message) {
-                                "description.isBlank" -> view.showEmptyDescriptionError()
-                                "project == null" -> view.showEmptyProjectError()
+                            when (it) {
+                                is EmptyProjectError -> view.showEmptyProjectError()
+                                is EmptyDescriptionError -> view.showEmptyDescriptionError()
                                 else -> view.showError(it)
                             }
                         }
@@ -109,12 +109,8 @@ class ReportEditController(private val report: Report,
     private val regularReportEditHandler = { model: ReportViewModel ->
         (model as RegularViewModel).run {
             when {
-                project == null -> {
-                    Completable.error(RuntimeException("project == null"))
-                }
-                description.isBlank() -> {
-                    Completable.error(RuntimeException("description.isBlank"))
-                }
+                project === null -> Completable.error(EmptyProjectError())
+                description.isBlank() -> Completable.error(EmptyDescriptionError())
                 else -> editRegularReport(this, project)
             }
         }
@@ -151,3 +147,6 @@ private val Report.type: ReportType
             DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
         }
     }
+
+class EmptyProjectError : NullPointerException()
+class EmptyDescriptionError : IllegalArgumentException()

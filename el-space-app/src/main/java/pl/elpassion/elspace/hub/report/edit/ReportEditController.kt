@@ -49,10 +49,15 @@ class ReportEditController(private val report: Report,
             .switchMap {
                 callApiToEdit(it)
                         .doOnComplete { view.close() }
-                        .catchOnError { view.showError(it) }
+                        .catchOnError {
+                            when (it) {
+                                is EmptyProjectError -> view.showEmptyProjectError()
+                                is EmptyDescriptionError -> view.showEmptyDescriptionError()
+                                else -> view.showError(it)
+                            }
+                        }
                         .toObservable<Unit>()
             }
-
 
     private fun removeReportClicks() = view.removeReportClicks()
             .switchMap {
@@ -61,7 +66,6 @@ class ReportEditController(private val report: Report,
                         .catchOnError { view.showError(it) }
                         .toObservable<Unit>()
             }
-
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .startWith(report.type)
@@ -105,14 +109,8 @@ class ReportEditController(private val report: Report,
     private val regularReportEditHandler = { model: ReportViewModel ->
         (model as RegularViewModel).run {
             when {
-                project == null -> {
-                    view.showEmptyProjectError()
-                    Completable.complete()
-                }
-                description.isBlank() -> {
-                    view.showEmptyDescriptionError()
-                    Completable.complete()
-                }
+                project === null -> Completable.error(EmptyProjectError())
+                description.isBlank() -> Completable.error(EmptyDescriptionError())
                 else -> editRegularReport(this, project)
             }
         }
@@ -149,3 +147,6 @@ private val Report.type: ReportType
             DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
         }
     }
+
+class EmptyProjectError : NullPointerException()
+class EmptyDescriptionError : IllegalArgumentException()

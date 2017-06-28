@@ -1,10 +1,10 @@
 package pl.elpassion.eldebate
 
-import android.app.Application
+import android.support.multidex.MultiDexApplication
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.debate.login.DebateLoginActivity
 
-class ElDebateApp : Application() {
+class ElDebateApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

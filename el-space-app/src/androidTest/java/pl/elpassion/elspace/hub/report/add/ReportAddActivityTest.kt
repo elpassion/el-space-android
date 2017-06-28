@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report.add
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso
+import android.support.test.espresso.Espresso.closeSoftKeyboard
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
 import com.elpassion.android.commons.espresso.*
@@ -89,7 +89,10 @@ class ReportAddActivityTest {
     @Test
     fun shouldHaveDateHeader() {
         stubRepositoryAndStart()
-        onId(R.id.reportAddDate).textInputEditTextHasHint(R.string.report_add_date_header).isDisplayed()
+        closeSoftKeyboard()
+        onId(R.id.reportAddDate)
+                .textInputEditTextHasHint(R.string.report_add_date_header)
+                .isDisplayed()
     }
 
     @Test
@@ -187,6 +190,7 @@ class ReportAddActivityTest {
     fun shouldShowPickedDateOnScreen() {
         stubCurrentTime(2017, 1, 28)
         stubRepositoryAndStart(date = "2017-01-27")
+        closeSoftwareKeyboard()
         onId(R.id.reportAddDate).click()
         onText("OK").click()
         onId(R.id.reportAddDate).hasText("2017-01-28")
@@ -243,7 +247,7 @@ class ReportAddActivityTest {
     }
 
     private fun closeSoftwareKeyboard() {
-        Espresso.closeSoftKeyboard()
+        closeSoftKeyboard()
         Thread.sleep(100)
     }
 }

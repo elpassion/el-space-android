@@ -26,7 +26,7 @@ class DebateLoginActivity_OnCreate_Test {
     fun shouldFillDebateCodeWhenSaved() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         rule.startActivity()
-        onId(R.id.debateLoginInputText).hasText("12345")
+        onId(R.id.debateLoginPinInputText).hasText("12345")
     }
 
     @Test

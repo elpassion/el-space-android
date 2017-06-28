@@ -37,13 +37,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         showBackArrowOnActionBar()
         debateCommentButton.setOnClickListener { controller.onComment() }
         controller.onCreate(token)
-        setupLoaderColors()
-    }
-
-    private fun setupLoaderColors() {
-        debatePositiveAnswerLoader.setColor(R.color.blueDebatePositive)
-        debateNegativeAnswerLoader.setColor(R.color.redDebateNegative)
-        debateNeutralAnswerLoader.setColor(R.color.greyDebateNeutral)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -80,7 +73,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteLoader(answer: Answer) {
+        disableVoteButtons()
         getLoaderForAnswer(answer).show()
+    }
+
+    private fun disableVoteButtons() {
+        debateNegativeAnswerButton.isEnabled = false
+        debateNeutralAnswerButton.isEnabled = false
+        debatePositiveAnswerButton.isEnabled = false
     }
 
     private fun getLoaderForAnswer(answer: Answer) = when (answer) {
@@ -90,9 +90,15 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun hideVoteLoader() {
-        debatePositiveAnswerLoader.hide()
-        debateNeutralAnswerLoader.hide()
-        debateNegativeAnswerLoader.hide()
+        debatePositiveAnswerLoader.hide { enableVoteButtons() }
+        debateNeutralAnswerLoader.hide { enableVoteButtons() }
+        debateNegativeAnswerLoader.hide { enableVoteButtons() }
+    }
+
+    fun enableVoteButtons() {
+        debateNegativeAnswerButton.isEnabled = true
+        debateNeutralAnswerButton.isEnabled = true
+        debatePositiveAnswerButton.isEnabled = true
     }
 
     override fun showVoteError(exception: Throwable) {
@@ -123,18 +129,6 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                 .setPositiveButton(R.string.debate_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
                 .create()
                 .show()
-    }
-
-    override fun disableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = false
-        debateNeutralAnswerButton.isEnabled = false
-        debatePositiveAnswerButton.isEnabled = false
-    }
-
-    override fun enableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = true
-        debateNeutralAnswerButton.isEnabled = true
-        debatePositiveAnswerButton.isEnabled = true
     }
 
     override fun onDestroy() {

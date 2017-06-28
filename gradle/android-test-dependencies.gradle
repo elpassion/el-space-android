@@ -1,15 +1,15 @@
 dependencies {
-    androidTestCompile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
-    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-core', version: espressoVersion) {
+    androidTestImplementation group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-core', version: espressoVersion) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: espressoVersion) {
+    androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: espressoVersion) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile(group: 'com.elpassion.android.commons', name: 'espresso', version: elCommon) {
+    androidTestImplementation(group: 'com.elpassion.android.commons', name: 'espresso', version: elCommon) {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }
-    androidTestCompile(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockitoKotlin)
-    androidTestCompile group: 'org.mockito', name: 'mockito-android', version: '2.7.21'
+    androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockitoKotlin)
+    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.7.21'
 }

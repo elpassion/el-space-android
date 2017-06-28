@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.hub.report.add
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso
 import com.elpassion.android.commons.espresso.click
 import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.onId
@@ -31,6 +32,7 @@ class ReportAddActivityChoosingProjectTest {
     @Test
     fun shouldChangeSelectedProject() {
         stubRepositoryAndStart(listOf(newProject(), newProject(2, "name2")))
+        Espresso.closeSoftKeyboard()
         onId(R.id.reportAddProjectName).click()
         onText("name2").click()
         onId(R.id.reportAddProjectName).hasText("name2")

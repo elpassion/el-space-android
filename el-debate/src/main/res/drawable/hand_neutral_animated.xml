@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:drawable="@drawable/line_vector"
+    android:drawable="@drawable/hand_neutral"
     tools:ignore="NewApi">
 
     <target
-        android:name="line"
-        android:animation="@animator/line_vector_animator" />
+        android:name="neutral"
+        android:animation="@animator/hand_fade_in" />
 </animated-vector>

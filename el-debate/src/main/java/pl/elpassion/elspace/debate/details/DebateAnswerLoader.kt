@@ -1,81 +1,79 @@
 package pl.elpassion.elspace.debate.details
 
-import android.animation.*
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.drawable.Animatable
-import android.os.Build
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.FrameLayout
 import com.elpassion.android.view.isVisible
-import kotlinx.android.synthetic.main.answer_loader.view.*
+import kotlinx.android.synthetic.main.debate_answer_loader.view.*
+import pl.elpassion.R
 import pl.elpassion.elspace.common.Animations
 
 class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0)
     : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val preLollipopAnimation by lazy {
-        AnimatorSet().apply {
-            playTogether(translationX, scaleX)
-            duration = 1000
-        }
-    }
+    init {
+        LayoutInflater.from(context).inflate(R.layout.debate_answer_loader, this, true)
 
-    private val translationX: ObjectAnimator by lazy {
-        ObjectAnimator.ofFloat(answerLoader, "translationX", -width.toFloat(), width.toFloat()).apply {
-            repeatCount = ValueAnimator.INFINITE
-            interpolator = AccelerateDecelerateInterpolator()
-        }
-    }
-
-    private val scaleX: ObjectAnimator by lazy {
-        ObjectAnimator.ofFloat(answerLoader, "scaleX", 1f, 0f).apply {
-            repeatCount = ValueAnimator.INFINITE
-        }
-    }
-
-    fun setColor(color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            answerLoader.drawable.setTint(ContextCompat.getColor(context, color))
-        } else {
-            answerLoader.setBackgroundColor(ContextCompat.getColor(context, color))
-        }
-    }
-
-    fun show() {
-        answerLoader.visibility = View.VISIBLE
-        answerLoader.alpha = 1f
-        when {
-            !Animations.areEnabled -> return
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> (answerLoader.drawable as? Animatable)?.start()
-            !preLollipopAnimation.isRunning -> preLollipopAnimation.start()
-        }
-    }
-
-    fun hide() {
-        if (Animations.areEnabled && answerLoader.isVisible()) {
-            ObjectAnimator.ofFloat(answerLoader, "alpha", 1f, 0f).run {
-                duration = 1000
-                addListener(animatorListenerAdapter)
-                start()
+        attrs?.let {
+            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DebateAnswerLoader)
+            typedArray?.let {
+                try {
+                    getTintColorFromAttrs(typedArray, context)
+                } finally {
+                    typedArray.recycle()
+                }
             }
         }
     }
 
-    private val animatorListenerAdapter: AnimatorListenerAdapter = object : AnimatorListenerAdapter() {
-        override fun onAnimationEnd(animation: Animator?) {
-            stopAnimation()
+    private fun getTintColorFromAttrs(typedArray: TypedArray, context: Context) {
+        if (typedArray.hasValue(R.styleable.DebateAnswerLoader_tintColor)) {
+            val tintColor = typedArray.getColor(R.styleable.DebateAnswerLoader_tintColor, ContextCompat.getColor(context, R.color.greyDebateInactive))
+            applyTintColor(tintColor)
         }
     }
 
-    private fun stopAnimation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            (answerLoader.drawable as? Animatable)?.stop()
-        } else {
-            preLollipopAnimation.end()
+    private fun applyTintColor(tintColor: Int) = DrawableCompat.setTint(debateAnswerLoader.drawable, tintColor)
+
+    private val loaderAnimation by lazy { debateAnswerLoader.drawable as Animatable }
+
+    fun show() {
+        debateAnswerLoader.visibility = View.VISIBLE
+        debateAnswerLoader.alpha = 1f
+        if (Animations.areEnabled) {
+            loaderAnimation.start()
         }
-        answerLoader.visibility = GONE
+    }
+
+    fun hide(hidingFinishedListener: () -> Unit) {
+        if (!Animations.areEnabled && !debateAnswerLoader.isVisible()) {
+            stopAnimation(hidingFinishedListener)
+        } else {
+            createFadeOffAnimation(hidingFinishedListener).start()
+        }
+    }
+
+    private fun createFadeOffAnimation(hidingFinishedListener: () -> Unit) = ObjectAnimator.ofFloat(debateAnswerLoader, "alpha", 1f, 0f).apply {
+        duration = 1000
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                stopAnimation(hidingFinishedListener)
+            }
+        })
+    }
+
+    private fun stopAnimation(hidingFinishedListener: () -> Unit) {
+        loaderAnimation.stop()
+        debateAnswerLoader.visibility = GONE
+        hidingFinishedListener()
     }
 }

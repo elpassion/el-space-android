@@ -9,11 +9,10 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers
+import org.hamcrest.core.IsEqual.equalTo
 import org.junit.*
 import pl.elpassion.R
-import pl.elpassion.elspace.common.onToolbarBackArrow
-import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.stubAllIntents
+import pl.elpassion.elspace.common.*
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
@@ -94,9 +93,9 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowInactiveImagesInButtons() {
         startActivity()
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(null))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(null))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(null))
     }
 
     @Test
@@ -117,36 +116,36 @@ class DebateDetailsActivityTest {
     fun shouldHighlightPositiveAnswerWhenLastAnswerWasPositive() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 1))
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
     }
 
     @Test
     fun shouldHighlightNegativeAnswerWhenLastAnswerWasNegative() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
     }
 
     @Test
     fun shouldHighlightNeutralAnswerWhenLastAnswerWasNeutral() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 3))
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_active)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
     }
 
     @Test
     fun shouldNotHighlightAnswerWhenLastAnswerWasNull() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = null))
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(null))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(null))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(null))
     }
 
     @Test
@@ -161,78 +160,72 @@ class DebateDetailsActivityTest {
         onId(R.id.loader).doesNotExist()
     }
 
-    @Ignore
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
         debateDetailsSubject.onError(RuntimeException())
         startActivity()
-        onText(R.string.debate_details_error).isDisplayed()
+        onText(R.string.debate_details_error).isDisplayedEffectively()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debatePositiveAnswerLoader).isDisplayed()
+        withParentId(R.id.debatePositiveAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debateNegativeAnswerLoader).isDisplayed()
+        withParentId(R.id.debateNegativeAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        onId(R.id.debateNeutralAnswerLoader).isDisplayed()
+        withParentId(R.id.debateNeutralAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
     }
 
-    @Ignore
     @Test
     fun shouldNotShowPositiveVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerLoader).isNotDisplayed()
+        withParentId(R.id.debatePositiveAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
-    @Ignore
     @Test
     fun shouldNotShowNegativeVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debateNegativeAnswerLoader).isNotDisplayed()
+        withParentId(R.id.debateNegativeAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
-    @Ignore
     @Test
     fun shouldNotShowNeutralVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debateNeutralAnswerLoader).isNotDisplayed()
+        withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
     }
 
-    @Ignore
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onText(R.string.debate_details_vote_success).isDisplayed()
+        onText(R.string.debate_details_vote_success).isDisplayedEffectively()
     }
 
-    @Ignore
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         sendVoteSubject.onError(RuntimeException())
-        onText(R.string.debate_details_vote_error).isDisplayed()
+        onText(R.string.debate_details_vote_error).isDisplayedEffectively()
     }
 
     @Test
@@ -306,9 +299,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_active)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
     }
 
     @Test
@@ -316,9 +309,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_active)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_inactive)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
     }
 
     @Test
@@ -326,9 +319,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasImage(R.drawable.hand_positive_inactive)
-        onId(R.id.debateNegativeAnswerImage).hasImage(R.drawable.hand_negative_inactive)
-        onId(R.id.debateNeutralAnswerImage).hasImage(R.drawable.hand_neutral_active)
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
     }
 
     @Test

@@ -36,16 +36,16 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
-            controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+            controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
         }
-        debateLoginNicknameInputText.setOnEditorActionListener { inputText, actionId, _ ->
+        debateLoginNicknameInputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate(debateLoginInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+                controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
             }
             false
         }
         if (BuildConfig.DEBUG) {
-            debateLoginInputText.setOnLongClickListener {
+            debateLoginPinInputText.setOnLongClickListener {
                 controller.onLogToDebate("13160", "DebugUser"); false
             }
         }
@@ -53,7 +53,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun fillDebateCode(debateCode: String) {
-        debateLoginInputText.setText(debateCode)
+        debateLoginPinInputText.setText(debateCode)
     }
 
     override fun fillDebateNickname(nickname: String) {

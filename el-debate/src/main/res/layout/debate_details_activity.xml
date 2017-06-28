@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -99,7 +100,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_positive_inactive" />
+                        app:srcCompat="@drawable/hand_positive_animated" />
 
                 </LinearLayout>
 
@@ -107,9 +108,8 @@
                     android:id="@+id/debatePositiveAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_gravity="bottom">
-
-                    <include layout="@layout/answer_loader" />
+                    android:layout_gravity="bottom"
+                    app:tintColor="@color/blueDebatePositive">
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -146,7 +146,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_negative_inactive" />
+                        app:srcCompat="@drawable/hand_negative_animated" />
 
                 </LinearLayout>
 
@@ -154,9 +154,8 @@
                     android:id="@+id/debateNegativeAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_gravity="bottom">
-
-                    <include layout="@layout/answer_loader" />
+                    android:layout_gravity="bottom"
+                    app:tintColor="@color/redDebateNegative">
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -193,7 +192,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/hand_neutral_inactive" />
+                        app:srcCompat="@drawable/hand_neutral_animated" />
 
                 </LinearLayout>
 
@@ -201,9 +200,8 @@
                     android:id="@+id/debateNeutralAnswerLoader"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_gravity="bottom">
-
-                    <include layout="@layout/answer_loader" />
+                    android:layout_gravity="bottom"
+                    app:tintColor="@color/greyDebateNeutral">
 
                 </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -212,8 +210,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_margin="16dp"
                 android:text="@string/debate_details_info_remember"
                 android:textColor="@color/greyLightText"
                 android:textSize="12sp" />

@@ -6,10 +6,10 @@ import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.hub.UnauthenticatedRetrofitProvider
-import pl.elpassion.elspace.hub.login.GoogleSingInDI
-import pl.elpassion.elspace.hub.login.GoogleHubLoginRepositoryProvider
 import pl.elpassion.elspace.hub.login.GoogleHubLogin
 import pl.elpassion.elspace.hub.login.GoogleHubLoginActivity
+import pl.elpassion.elspace.hub.login.GoogleHubLoginRepositoryProvider
+import pl.elpassion.elspace.hub.login.GoogleSingInDI
 import pl.elpassion.elspace.hub.report.list.ReportListActivity
 
 class ElSpaceApp : MultiDexApplication() {

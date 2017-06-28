@@ -1,77 +1,95 @@
 package pl.elpassion.elspace.debate.details
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Context
+import android.graphics.drawable.Animatable
+import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.View
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.debate_details_activity.view.*
 import pl.elpassion.R
-
+import pl.elpassion.elspace.common.Animations
 
 class AnswersAnimators(private val view: View, private val context: Context) {
 
-    companion object{
-        private val ANSWER_ANIMATION_DURATION: Long = 1000
+    companion object {
+        val GREY_DEBATE_INACTIVE = R.color.greyDebateInactive
+        val BLUE_DEBATE_POSITIVE = R.color.blueDebatePositive
+        val RED_DEBATE_NEGATIVE = R.color.redDebateNegative
+        val GREY_DEBATE_NEUTRAL = R.color.greyDebateNeutral
     }
 
-    private val positiveAnswerAnimator by lazy {
-        AnimatorSet().apply {
-            duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debatePositiveAnswerImage))
-            addListener(getAnimatorListenerAdapter { setPositiveActive() })
-        }
-    }
+    private val positiveAnswerAnimator by lazy { view.debatePositiveAnswerImage.drawable as Animatable }
 
-    private val neutralAnswerAnimator by lazy {
-        AnimatorSet().apply {
-            duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debateNeutralAnswerImage))
-            addListener(getAnimatorListenerAdapter { setNeutralActive() })
-        }
-    }
+    private val negativeAnswerAnimator by lazy { view.debateNegativeAnswerImage.drawable as Animatable }
 
-    private val negativeAnswerAnimator by lazy {
-        AnimatorSet().apply {
-            duration = ANSWER_ANIMATION_DURATION
-            play(createObjectAnimator(view.debateNegativeAnswerImage))
-            addListener(getAnimatorListenerAdapter { setNegativeActive() })
-        }
-    }
+    private val neutralAnswerAnimator by lazy { view.debateNeutralAnswerImage.drawable as Animatable }
 
     private fun setPositiveActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_active))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_inactive))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_inactive))
+        view.debatePositiveAnswerImage.apply {
+            tag = BLUE_DEBATE_POSITIVE
+            setDrawableTintColor(drawable, BLUE_DEBATE_POSITIVE)
+        }
+        view.debateNegativeAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
+        }
     }
 
     private fun setNegativeActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_inactive))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_active))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_inactive))
-    }
-
-    private fun setNeutralActive() {
-        view.debatePositiveAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_positive_inactive))
-        view.debateNegativeAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_negative_inactive))
-        view.debateNeutralAnswerImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.hand_neutral_active))
-    }
-
-    private fun getAnimatorListenerAdapter(setActiveAnswer: () -> Unit) = object : AnimatorListenerAdapter() {
-        override fun onAnimationStart(animation: Animator?) {
-            setActiveAnswer()
+        view.debatePositiveAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
+        }
+        view.debateNegativeAnswerImage.apply {
+            tag = RED_DEBATE_NEGATIVE
+            setDrawableTintColor(drawable, RED_DEBATE_NEGATIVE)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
         }
     }
 
-    fun startPositiveAnswerAnimation() = positiveAnswerAnimator.start()
+    private fun setNeutralActive() {
+        view.debatePositiveAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
+        }
+        view.debateNegativeAnswerImage.apply {
+            tag = GREY_DEBATE_INACTIVE
+            setDrawableTintColor(drawable, GREY_DEBATE_INACTIVE)
+        }
+        view.debateNeutralAnswerImage.apply {
+            tag = GREY_DEBATE_NEUTRAL
+            setDrawableTintColor(drawable, GREY_DEBATE_NEUTRAL)
+        }
+    }
 
-    fun startNeutralAnswerAnimation() = neutralAnswerAnimator.start()
+    private fun setDrawableTintColor(drawable: Drawable, color: Int) = DrawableCompat.setTint(drawable, ContextCompat.getColor(context, color))
 
-    fun startNegativeAnswerAnimation() = negativeAnswerAnimator.start()
+    fun startPositiveAnswerAnimation() {
+        setPositiveActive()
+        if (Animations.areEnabled) {
+            positiveAnswerAnimator.start()
+        }
+    }
 
-    private fun createObjectAnimator(target: ImageView): ObjectAnimator = ObjectAnimator.ofFloat(target, "alpha", 0f, 1f)
+    fun startNegativeAnswerAnimation() {
+        setNegativeActive()
+        if (Animations.areEnabled) {
+            negativeAnswerAnimator.start()
+        }
+    }
 
+    fun startNeutralAnswerAnimation() {
+        setNeutralActive()
+        if (Animations.areEnabled) {
+            neutralAnswerAnimator.start()
+        }
+    }
 }

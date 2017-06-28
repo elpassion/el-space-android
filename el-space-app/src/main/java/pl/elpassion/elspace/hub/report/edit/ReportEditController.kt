@@ -49,10 +49,15 @@ class ReportEditController(private val report: Report,
             .switchMap {
                 callApiToEdit(it)
                         .doOnComplete { view.close() }
-                        .catchOnError { view.showError(it) }
+                        .catchOnError {
+                            when (it.message) {
+                                "description.isBlank" -> view.showEmptyDescriptionError()
+                                "project == null" -> view.showEmptyProjectError()
+                                else -> view.showError(it)
+                            }
+                        }
                         .toObservable<Unit>()
             }
-
 
     private fun removeReportClicks() = view.removeReportClicks()
             .switchMap {
@@ -61,7 +66,6 @@ class ReportEditController(private val report: Report,
                         .catchOnError { view.showError(it) }
                         .toObservable<Unit>()
             }
-
 
     private fun reportTypeChanges() = view.reportTypeChanges()
             .startWith(report.type)
@@ -106,12 +110,10 @@ class ReportEditController(private val report: Report,
         (model as RegularViewModel).run {
             when {
                 project == null -> {
-                    view.showEmptyProjectError()
-                    Completable.complete()
+                    Completable.error(RuntimeException("project == null"))
                 }
                 description.isBlank() -> {
-                    view.showEmptyDescriptionError()
-                    Completable.complete()
+                    Completable.error(RuntimeException("description.isBlank"))
                 }
                 else -> editRegularReport(this, project)
             }

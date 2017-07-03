@@ -146,6 +146,12 @@ class DebateLoginControllerTest {
     }
 
     @Test
+    fun shouldShowWrongNicknameErrorWhenNicknameIsBlank() {
+        logToDebate("12345", " ")
+        verify(view).showWrongNicknameError()
+    }
+
+    @Test
     fun shouldNotShowWrongNicknameErrorWhenNicknameIsValid() {
         logToDebate("12345", "A")
         verify(view, never()).showWrongNicknameError()

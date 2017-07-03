@@ -69,7 +69,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) {
-        Snackbar.make(debateDetailsCoordinator, R.string.debate_details_error, Snackbar.LENGTH_INDEFINITE)
+        createSnackbar(R.string.debate_details_error)
                 .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(token) })
                 .show()
     }
@@ -104,11 +104,11 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     override fun showVoteError(exception: Throwable) {
-        showSnackbar(R.string.debate_details_vote_error)
+        createSnackbar(R.string.debate_details_vote_error).show()
     }
 
     override fun showVoteSuccess(answer: Answer) {
-        showSnackbar(R.string.debate_details_vote_success, Snackbar.LENGTH_SHORT)
+        createSnackbar(R.string.debate_details_vote_success, Snackbar.LENGTH_SHORT).show()
         when (answer) {
             is Positive -> answersAnimators.startPositiveAnswerAnimation()
             is Negative -> answersAnimators.startNegativeAnswerAnimation()
@@ -116,9 +116,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         }
     }
 
-    private fun showSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) {
-        Snackbar.make(debateDetailsCoordinator, textId, length).show()
-    }
+    private fun createSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) =
+            Snackbar.make(debateDetailsCoordinator, textId, length)
 
     override fun openCommentScreen() {
         DebateCommentActivity.start(this, token)

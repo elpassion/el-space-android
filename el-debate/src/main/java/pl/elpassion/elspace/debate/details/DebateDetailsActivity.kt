@@ -70,7 +70,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showDebateDetailsError(exception: Throwable) {
         Snackbar.make(debateDetailsCoordinator, R.string.debate_details_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.debate_details_error_refresh, {})
+                .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(token) })
                 .show()
     }
 

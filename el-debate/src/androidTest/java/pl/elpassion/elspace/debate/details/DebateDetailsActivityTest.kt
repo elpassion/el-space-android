@@ -175,6 +175,14 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
+        debateDetailsSubject.onError(RuntimeException())
+        startActivity()
+        onText(R.string.debate_details_error_refresh).click()
+        verify(apiMock, times(2)).getDebateDetails(any())
+    }
+
+    @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()

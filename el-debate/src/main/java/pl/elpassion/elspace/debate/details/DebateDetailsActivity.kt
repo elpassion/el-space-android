@@ -69,7 +69,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateDetailsError(exception: Throwable) {
-        showSnackbar(R.string.debate_details_error)
+        Snackbar.make(debateDetailsCoordinator, R.string.debate_details_error, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.debate_details_error_refresh, {})
+                .show()
     }
 
     override fun showVoteLoader(answer: Answer) {

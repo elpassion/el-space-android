@@ -168,6 +168,13 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowRefreshButtonWithDebateDetailsError() {
+        debateDetailsSubject.onError(RuntimeException())
+        startActivity()
+        onText(R.string.debate_details_error_refresh).isDisplayedEffectively()
+    }
+
+    @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()

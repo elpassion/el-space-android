@@ -13,13 +13,11 @@
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
-    <style name="Theme.Transparent" parent="AppThemeBlueWithoutActionBar">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
+    <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/colorPrimaryBlue</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkBlue</item>
+        <item name="colorAccent">@color/colorAccentBlue</item>
+        <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
     <style name="DayName">

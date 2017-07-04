@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.elpassion.android.view.disable
+import com.elpassion.android.view.enable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
@@ -80,9 +82,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private fun disableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = false
-        debateNeutralAnswerButton.isEnabled = false
-        debatePositiveAnswerButton.isEnabled = false
+        debateNegativeAnswerButton.disable()
+        debateNeutralAnswerButton.disable()
+        debatePositiveAnswerButton.disable()
     }
 
     private fun getLoaderForAnswer(answer: Answer) = when (answer) {
@@ -98,9 +100,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     fun enableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = true
-        debateNeutralAnswerButton.isEnabled = true
-        debatePositiveAnswerButton.isEnabled = true
+        debateNegativeAnswerButton.enable()
+        debateNeutralAnswerButton.enable()
+        debatePositiveAnswerButton.enable()
     }
 
     override fun showVoteError(exception: Throwable) {

@@ -67,7 +67,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldNotCallApiAndShowInputOverLimitErrorWhenInputIsBlankOnSendComment() {
+    fun shouldNotCallApiAndShowInputOverLimitErrorWhenInputIsOverLimitOnSendComment() {
         val messageOverLimit = StringBuilder().apply {
             setLength(101)
         }.toString()

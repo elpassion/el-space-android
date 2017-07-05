@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.comment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,15 +54,19 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showSendCommentError(exception: Throwable) {
-        debateCommentInputLayout.error = getString(R.string.debate_comment_send_error)
+        showErrorInInput(R.string.debate_comment_send_error)
     }
 
     override fun showInvalidInputError() {
-        debateCommentInputLayout.error = getString(R.string.debate_comment_invalid_input_error)
+        showErrorInInput(R.string.debate_comment_invalid_input_error)
     }
 
     override fun showInputOverLimitError() {
-        debateCommentInputLayout.error = getString(R.string.debate_comment_input_over_limit_error)
+        showErrorInInput(R.string.debate_comment_input_over_limit_error)
+    }
+
+    private fun showErrorInInput(@StringRes message: Int) {
+        debateCommentInputLayout.error = getString(message)
     }
 
     override fun closeScreen() {

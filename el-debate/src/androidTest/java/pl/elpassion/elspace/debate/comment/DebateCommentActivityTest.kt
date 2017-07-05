@@ -19,6 +19,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import java.lang.StringBuilder
 import java.lang.Thread.sleep
 
 class DebateCommentActivityTest {
@@ -95,6 +96,20 @@ class DebateCommentActivityTest {
                 .pressImeActionButton()
         sleep(100)
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowInputOverLimitErrorWhenInputIsOverLimitOnSendComment() {
+        startActivity()
+        val messageOverLimit = StringBuilder().apply {
+            for (i in 1..101) {
+                append("x")
+            }
+        }.toString()
+        onId(R.id.debateCommentInputText)
+                .replaceText(messageOverLimit)
+                .pressImeActionButton()
+        onText(R.string.debate_comment_input_over_limit_error).isDisplayed()
     }
 
     @Test

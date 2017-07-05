@@ -22,6 +22,7 @@ interface DebateComment {
         fun showSendCommentError(exception: Throwable)
         fun closeScreen()
         fun showInvalidInputError()
+        fun showInputOverLimitError()
     }
 
     object ApiProvider : Provider<DebateComment.Api>({

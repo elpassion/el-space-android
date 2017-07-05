@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
+import java.lang.StringBuilder
 
 class DebateCommentControllerTest {
 
@@ -63,6 +64,16 @@ class DebateCommentControllerTest {
         sendComment(token = "token", message = " ")
         verify(api, never()).comment(any(), any(), any())
         verify(view).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldNotCallApiAndShowInputOverLimitErrorWhenInputIsBlankOnSendComment() {
+        val messageOverLimit = StringBuilder().apply {
+            setLength(101)
+        }.toString()
+        sendComment(token = "token", message = messageOverLimit)
+        verify(api, never()).comment(any(), any(), any())
+        verify(view).showInputOverLimitError()
     }
 
     @Test

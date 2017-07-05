@@ -60,6 +60,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         debateCommentInputLayout.error = getString(R.string.debate_comment_invalid_input_error)
     }
 
+    override fun showInputOverLimitError() {
+
+    }
+
     override fun closeScreen() {
         finish()
     }

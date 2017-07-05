@@ -59,6 +59,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsBlankOnSendComment() {
+        sendComment(token = "token", message = " ")
+        verify(api, never()).comment(any(), any(), any())
+        verify(view).showInvalidInputError()
+    }
+
+    @Test
     fun shouldShowLoaderOnSendComment() {
         sendComment()
         verify(view).showLoader()

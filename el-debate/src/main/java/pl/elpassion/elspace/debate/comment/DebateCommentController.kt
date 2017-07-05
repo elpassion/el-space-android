@@ -15,7 +15,7 @@ class DebateCommentController(
     private var subscription: Disposable? = null
 
     fun sendComment(token: String, message: String) {
-        if (message.isEmpty()) view.showInvalidInputError() else callApi(token, message)
+        if (message.isBlank()) view.showInvalidInputError() else callApi(token, message)
     }
 
     private fun callApi(token: String, message: String) {

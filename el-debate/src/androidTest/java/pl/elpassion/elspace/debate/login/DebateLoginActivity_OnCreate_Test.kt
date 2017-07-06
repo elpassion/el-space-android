@@ -2,13 +2,13 @@ package pl.elpassion.elspace.debate.login
 
 import com.elpassion.android.commons.espresso.hasText
 import com.elpassion.android.commons.espresso.onId
+import com.elpassion.android.commons.espresso.startActivity
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 

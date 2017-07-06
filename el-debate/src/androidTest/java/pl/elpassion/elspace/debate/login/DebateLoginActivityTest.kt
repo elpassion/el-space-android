@@ -18,7 +18,6 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.debate.DebatesRepository

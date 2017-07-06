@@ -12,9 +12,7 @@ import io.reactivex.Observable
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.R
-import pl.elpassion.elspace.common.onToolbarBackArrow
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project

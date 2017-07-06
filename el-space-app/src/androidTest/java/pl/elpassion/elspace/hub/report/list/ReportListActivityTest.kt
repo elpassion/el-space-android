@@ -28,12 +28,10 @@ import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newProject
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.DailyReportType
-import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import io.reactivex.Observable
 import org.junit.Assert.assertTrue
-import pl.elpassion.elspace.common.onToolbarBackArrow
 
 class ReportListActivityTest {
 

@@ -165,22 +165,22 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
-        debateDetailsSubject.onError(RuntimeException())
         startActivity()
+        debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error).isDisplayedEffectively()
     }
 
     @Test
     fun shouldShowRefreshButtonWithDebateDetailsError() {
-        debateDetailsSubject.onError(RuntimeException())
         startActivity()
+        debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error_refresh).isDisplayedEffectively()
     }
 
     @Test
     fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
-        debateDetailsSubject.onError(RuntimeException())
         startActivity()
+        debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error_refresh).click()
         verify(apiMock, times(2)).getDebateDetails(any())
     }

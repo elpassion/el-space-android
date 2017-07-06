@@ -16,7 +16,6 @@ import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.getAutoFinishingIntent
 import pl.elpassion.elspace.common.prepareAutoFinishingIntent
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.login.GoogleHubLogin.*
 
 class GoogleHubLoginActivityTest {

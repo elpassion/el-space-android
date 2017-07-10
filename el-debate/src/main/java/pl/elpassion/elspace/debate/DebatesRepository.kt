@@ -2,7 +2,7 @@ package pl.elpassion.elspace.debate
 
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
-import com.google.gson.Gson
+import com.elpassion.sharedpreferences.gsonadapter.GsonConverterAdapter
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
 
@@ -21,9 +21,8 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
         private val latestDebateNickname = "LATEST_DEBATE_NICKNAME"
-        private val repository = createSharedPrefs<String?>({
-            PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())
-        }, { Gson() })
+        private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
+        private val repository = createSharedPrefs<String?>(defaultSharedPreferences, GsonConverterAdapter())
 
         override fun hasToken(debateCode: String) = repository.read(debateCode) != null
 

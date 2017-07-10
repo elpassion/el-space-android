@@ -6,7 +6,7 @@ dependencies {
     androidTestImplementation(group: 'com.android.support.test.espresso', name: 'espresso-intents', version: espressoVersion) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestImplementation(group: 'com.github.elpassion.android-commons', name: 'espresso', version: elCommon) {
+    androidTestImplementation(group: 'com.elpassion.android.commons', name: 'espresso', version: elCommon) {
         exclude group: 'com.android.support'
         exclude group: 'org.jetbrains.kotlin'
     }

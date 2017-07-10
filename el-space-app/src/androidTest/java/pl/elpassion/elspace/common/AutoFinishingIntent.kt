@@ -6,8 +6,8 @@ import android.content.Intent
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
 
-private val autoFinishingIntentActionName = "com.github.elpassion.android-commons.espresso.AutoFinishingIntent"
-private val autoCancelingIntentActionName = "com.github.elpassion.android-commons.espresso.AutoCancelingIntent"
+private val autoFinishingIntentActionName = "com.elpassion.android.commons.espresso.AutoFinishingIntent"
+private val autoCancelingIntentActionName = "com.elpassion.android.commons.espresso.AutoCancelingIntent"
 
 fun prepareAutoFinishingIntent() = Intents.intending(IntentMatchers.hasAction(autoFinishingIntentActionName)).respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
 

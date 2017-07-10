@@ -27,9 +27,10 @@ dependencies {
     api group: 'com.android.support', name: 'appcompat-v7', version: support_version
     api group: 'com.android.support', name: 'design', version: support_version
     api group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
-    api group: 'com.github.elpassion.android-commons', name: 'recycler', version: elCommon
-    api group: 'com.github.elpassion.android-commons', name: 'shared-preferences', version: elCommon
-    api group: 'com.github.elpassion.android-commons', name: 'view', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'recycler', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'shared-preferences', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'shared-preferences-gson-converter-adapter', version: elCommon
+    api group: 'com.elpassion.android.commons', name: 'view', version: elCommon
     api(group: 'com.philliphsu', name: 'bottomsheetpickers', version: '2.3.3') {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'design'

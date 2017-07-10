@@ -70,14 +70,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
+    override fun showDebateClosedError(exception: Throwable) {
+        createSnackbar(R.string.debate_details_debate_closed_error).show()
+    }
+
     override fun showDebateDetailsError(exception: Throwable) {
         createSnackbar(R.string.debate_details_error)
                 .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(token) })
                 .show()
-    }
-
-    override fun showDebateClosedError(exception: Throwable) {
-
     }
 
     override fun showVoteLoader(answer: Answer) {

@@ -76,6 +76,10 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                 .show()
     }
 
+    override fun showDebateClosedError(exception: Throwable) {
+
+    }
+
     override fun showVoteLoader(answer: Answer) {
         disableVoteButtons()
         getLoaderForAnswer(answer).show()

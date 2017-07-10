@@ -26,8 +26,16 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(view::showDebateDetails, view::showDebateDetailsError)
+                .subscribe({ view.showDebateDetails(it) }, onDebateDetailsError)
                 .addTo(compositeDisposable)
+    }
+
+    private val onDebateDetailsError: (Throwable) -> Unit = { error ->
+        if (error is HttpException && error.code() == 406) {
+            view.showDebateClosedError(error)
+        } else {
+            view.showDebateDetailsError(error)
+        }
     }
 
     fun onVote(token: String, answer: Answer) {

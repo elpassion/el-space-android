@@ -86,7 +86,15 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowErrorWhenApiCallFails() {
+    fun shouldShowDebateClosedErrorOn406CodeErrorFromApi() {
+        createController().onCreate("token")
+        val exception = createHttpException(406)
+        debateDetailsSubject.onError(exception)
+        verify(view).showDebateClosedError(exception)
+    }
+
+    @Test
+    fun shouldShowDebateDetailsErrorWhenApiCallFails() {
         createController().onCreate("token")
         val exception = RuntimeException()
         debateDetailsSubject.onError(exception)

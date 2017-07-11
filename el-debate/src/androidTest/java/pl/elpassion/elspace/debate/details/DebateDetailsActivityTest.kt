@@ -2,10 +2,10 @@ package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.action.ViewActions.scrollTo
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
+import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.matchers.withParentId
 import com.nhaarman.mockito_kotlin.*
@@ -13,13 +13,17 @@ import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers
 import org.hamcrest.core.IsEqual.equalTo
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import pl.elpassion.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.isDisplayedEffectively
+import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
-import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
 import java.lang.Thread.sleep
 
 class DebateDetailsActivityTest {
@@ -390,8 +394,7 @@ class DebateDetailsActivityTest {
     }
 
     private fun startActivity(token: String = "token") {
-        val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
-        rule.launchActivity(intent)
+        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), token))
     }
 
     private fun voteSuccessfully() {

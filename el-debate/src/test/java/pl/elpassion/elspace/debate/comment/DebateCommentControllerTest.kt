@@ -31,10 +31,15 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenMessageIsValidOnSendComment() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
+    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameWhenMessageIsValidOnSendComment() {
+        whenever(debateRepo.getLatestDebateNickname()).thenReturn("someOtherNick")
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "mrNick")
+        verify(api).comment("someOtherToken", "someOtherMessage", "someOtherNick")
+    }
+
+    @Test
+    fun shouldNotShowInvalidInputErrorWhenMessageIsValidOnSendComment() {
+        sendComment()
         verify(view, never()).showInvalidInputError()
     }
 
@@ -53,26 +58,44 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldNotCallApiAndShowInvalidInputErrorWhenMessageIsEmptyOnSendComment() {
+    fun shouldNotCallApiWhenMessageIsEmptyOnSendComment() {
         sendComment(token = "token", message = "")
         verify(api, never()).comment(any(), any(), any())
+    }
+
+    @Test
+    fun shouldShowInvalidInputErrorWhenMessageIsEmptyOnSendComment() {
+        sendComment(token = "token", message = "")
         verify(view).showInvalidInputError()
     }
 
     @Test
-    fun shouldNotCallApiAndShowInvalidInputErrorWhenMessageIsBlankOnSendComment() {
+    fun shouldNotCallApiWhenMessageIsBlankOnSendComment() {
         sendComment(token = "token", message = " ")
         verify(api, never()).comment(any(), any(), any())
+    }
+
+    @Test
+    fun shouldShowInvalidInputErrorWhenMessageIsBlankOnSendComment() {
+        sendComment(token = "token", message = " ")
         verify(view).showInvalidInputError()
     }
 
     @Test
-    fun shouldNotCallApiAndShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
+    fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
         val messageOverLimit = StringBuilder().apply {
             setLength(101)
         }.toString()
         sendComment(token = "token", message = messageOverLimit)
         verify(api, never()).comment(any(), any(), any())
+    }
+
+    @Test
+    fun shouldShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
+        val messageOverLimit = StringBuilder().apply {
+            setLength(101)
+        }.toString()
+        sendComment(token = "token", message = messageOverLimit)
         verify(view).showInputOverLimitError()
     }
 

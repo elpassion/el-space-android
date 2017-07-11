@@ -180,9 +180,14 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveDebateCodeAndNickname() {
-        controller.onLogToDebate("12345", "Wieslaw")
+    fun shouldSaveDebateCode() {
+        logToDebate(debateCode = "12345")
         verify(debateRepo).saveLatestDebateCode("12345")
+    }
+
+    @Test
+    fun shouldSaveDebateNickname() {
+        logToDebate(nickname = "Wieslaw")
         verify(debateRepo).saveLatestDebateNickname("Wieslaw")
     }
 

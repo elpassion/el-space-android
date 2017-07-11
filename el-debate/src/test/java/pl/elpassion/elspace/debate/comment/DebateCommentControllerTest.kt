@@ -25,13 +25,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldCallApiWithGivenTokenAndMessageAndNicknameOnSendComment() {
+    fun shouldCallApiWithGivenDataOnSendComment() {
         sendComment()
         verify(api).comment("token", "message", "mrNick")
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameWhenMessageIsValidOnSendComment() {
+    fun shouldReallyCallApiWithGivenDataWhenMessageIsValidOnSendComment() {
         whenever(debateRepo.getLatestDebateNickname()).thenReturn("someOtherNick")
         sendComment(token = "someOtherToken", message = "someOtherMessage")
         verify(api).comment("someOtherToken", "someOtherMessage", "someOtherNick")

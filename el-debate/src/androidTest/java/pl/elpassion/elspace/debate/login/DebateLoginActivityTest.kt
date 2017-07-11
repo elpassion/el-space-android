@@ -66,6 +66,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveCorrectDebateCodeInput() {
+        Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginPinInputText)
                 .isDisplayed()
                 .replaceText("123456")
@@ -75,6 +76,7 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldHaveCorrectNicknameInput() {
+        Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginNicknameInputText)
                 .isDisplayed()
                 .replaceText("Alojzy666")
@@ -205,9 +207,9 @@ class DebateLoginActivityTest {
     }
 
     private fun loginToDebate(debateCode: String = "12345", nickname: String = "SomeName") {
+        Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginPinInputText).replaceText(debateCode)
         onId(R.id.debateLoginNicknameInputText).replaceText(nickname)
-        Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginButton).click()
     }
 }

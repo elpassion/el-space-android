@@ -59,25 +59,25 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldNotCallApiWhenMessageIsEmptyOnSendComment() {
-        sendComment(token = "token", message = "")
+        sendComment(message = "")
         verify(api, never()).comment(any(), any(), any())
     }
 
     @Test
     fun shouldShowInvalidInputErrorWhenMessageIsEmptyOnSendComment() {
-        sendComment(token = "token", message = "")
+        sendComment(message = "")
         verify(view).showInvalidInputError()
     }
 
     @Test
     fun shouldNotCallApiWhenMessageIsBlankOnSendComment() {
-        sendComment(token = "token", message = " ")
+        sendComment(message = " ")
         verify(api, never()).comment(any(), any(), any())
     }
 
     @Test
     fun shouldShowInvalidInputErrorWhenMessageIsBlankOnSendComment() {
-        sendComment(token = "token", message = " ")
+        sendComment(message = " ")
         verify(view).showInvalidInputError()
     }
 
@@ -86,7 +86,7 @@ class DebateCommentControllerTest {
         val messageOverLimit = StringBuilder().apply {
             setLength(101)
         }.toString()
-        sendComment(token = "token", message = messageOverLimit)
+        sendComment(message = messageOverLimit)
         verify(api, never()).comment(any(), any(), any())
     }
 
@@ -95,7 +95,7 @@ class DebateCommentControllerTest {
         val messageOverLimit = StringBuilder().apply {
             setLength(101)
         }.toString()
-        sendComment(token = "token", message = messageOverLimit)
+        sendComment(message = messageOverLimit)
         verify(view).showInputOverLimitError()
     }
 

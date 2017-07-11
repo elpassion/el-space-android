@@ -12,7 +12,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
-import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -21,7 +21,6 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import java.lang.StringBuilder
-import java.lang.Thread.sleep
 
 class DebateCommentActivityTest {
 
@@ -152,7 +151,7 @@ class DebateCommentActivityTest {
     fun shouldCloseScreenOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()
-        Assert.assertTrue(rule.activity.isFinishing)
+        assertTrue(rule.activity.isFinishing)
     }
 
     @Ignore
@@ -163,12 +162,11 @@ class DebateCommentActivityTest {
                 .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
-        sleep(100)
-        Assert.assertTrue(rule.activity.isFinishing)
+        assertTrue(rule.activity.isFinishing)
     }
 
     private fun startActivity(debateToken: String = "debateToken") {
-        rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+        rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
 
     private val messageOverLimit = StringBuilder().apply {

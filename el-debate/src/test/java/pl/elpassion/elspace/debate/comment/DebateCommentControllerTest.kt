@@ -44,13 +44,6 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldReallyUseNicknameFromRepo() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
-        sendComment()
-        verify(api).comment("token", "message", "Wieslaw")
-    }
-
-    @Test
     fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
         whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
         sendComment()

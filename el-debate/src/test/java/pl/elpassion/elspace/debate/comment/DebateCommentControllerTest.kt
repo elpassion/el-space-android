@@ -76,18 +76,12 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
-        val messageOverLimit = StringBuilder().apply {
-            setLength(101)
-        }.toString()
         sendComment(message = messageOverLimit)
         verify(api, never()).comment(any(), any(), any())
     }
 
     @Test
     fun shouldShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
-        val messageOverLimit = StringBuilder().apply {
-            setLength(101)
-        }.toString()
         sendComment(message = messageOverLimit)
         verify(view).showInputOverLimitError()
     }
@@ -175,4 +169,6 @@ class DebateCommentControllerTest {
     }
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
+
+    private val messageOverLimit = StringBuilder().apply { setLength(101) }.toString()
 }

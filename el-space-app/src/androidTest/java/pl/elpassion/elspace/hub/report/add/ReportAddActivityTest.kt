@@ -4,6 +4,7 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.closeSoftKeyboard
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.action.ViewActions.longClick
+import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -209,7 +210,7 @@ class ReportAddActivityTest {
     fun shouldShowOnlyPaidVacationsFormOnPaidVacations() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
-        onId(R.id.action_paid_vacations_report).click()
+        onId(R.id.action_paid_vacations_report).perform(scrollTo()).click()
         onId(R.id.reportAddHoursLayout).isDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
         onId(R.id.reportAddDescriptionLayout).isNotDisplayed()

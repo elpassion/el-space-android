@@ -102,11 +102,6 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowInputOverLimitErrorWhenInputIsOverLimitOnSendComment() {
         startActivity()
-        val messageOverLimit = StringBuilder().apply {
-            for (i in 1..101) {
-                append("x")
-            }
-        }.toString()
         onId(R.id.debateCommentInputText)
                 .replaceText(messageOverLimit)
                 .pressImeActionButton()
@@ -175,4 +170,10 @@ class DebateCommentActivityTest {
     private fun startActivity(debateToken: String = "debateToken") {
         rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
+
+    private val messageOverLimit = StringBuilder().apply {
+        for (i in 1..101) {
+            append("x")
+        }
+    }.toString()
 }

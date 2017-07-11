@@ -23,6 +23,6 @@
     <string name="debate_comment_invalid_input_error">Invalid input!</string>
     <string name="debate_comment_input_over_limit_error">Too much characters! Input must have maximum 100 characters.</string>
     <string name="debate_vote_slow_down_title">Slow down!</string>
-    <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait a while between your votes. Try again in a moment! :)</string>
+    <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait a few seconds between your votes. Try again in a moment! :)</string>
     <string name="debate_vote_slow_down_OK_button">OK</string>
 </resources>

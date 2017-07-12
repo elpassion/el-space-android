@@ -24,7 +24,8 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                 view = this,
                 debateRepo = DebatesRepositoryProvider.get(),
                 api = DebateComment.ApiProvider.get(),
-                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
+                maxMessageLength = 100)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

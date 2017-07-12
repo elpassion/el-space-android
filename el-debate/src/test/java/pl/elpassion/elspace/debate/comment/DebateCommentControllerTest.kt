@@ -16,7 +16,7 @@ class DebateCommentControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val api = mock<DebateComment.Api>()
     private val commentSubject = CompletableSubject.create()
-    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
@@ -87,6 +87,13 @@ class DebateCommentControllerTest {
     }
 
     @Test
+    fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
+        controller.sendComment("token", createString(31))
+        verify(api, never()).comment(any(), any(), any())
+    }
+
+    @Test
     fun shouldShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
         sendComment(message = createString(101))
         verify(view).showInputOverLimitError()
@@ -134,7 +141,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
-        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -145,7 +152,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
-        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()

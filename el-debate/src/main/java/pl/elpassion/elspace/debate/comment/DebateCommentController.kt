@@ -10,14 +10,15 @@ class DebateCommentController(
         private val view: DebateComment.View,
         private val debateRepo: DebatesRepository,
         private val api: DebateComment.Api,
-        private val schedulers: SchedulersSupplier) {
+        private val schedulers: SchedulersSupplier,
+        private val maxMessageLength: Int) {
 
     private var subscription: Disposable? = null
 
     fun sendComment(token: String, message: String) {
         when {
             message.isBlank() -> view.showInvalidInputError()
-            message.length > 100 -> view.showInputOverLimitError()
+            message.length > maxMessageLength -> view.showInputOverLimitError()
             else -> callApi(token, message)
         }
     }

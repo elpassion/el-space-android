@@ -73,6 +73,12 @@ class DebateCommentControllerTest {
         sendComment(message = " ")
         verify(view).showInvalidInputError()
     }
+    
+    @Test
+    fun shouldCallApiWhenMessageIsUnderLimitOnSendComment() {
+        sendComment(message = createString(100))
+        verify(api).comment(any(), any(), any())
+    }
 
     @Test
     fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {

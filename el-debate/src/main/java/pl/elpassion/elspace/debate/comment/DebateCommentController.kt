@@ -4,7 +4,6 @@ import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
 
-const val MAX_MESSAGE_LENGTH = 100
 const val DEFAULT_NICKNAME = "DefaultUser"
 
 class DebateCommentController(
@@ -18,7 +17,7 @@ class DebateCommentController(
     fun sendComment(token: String, message: String) {
         when {
             message.isBlank() -> view.showInvalidInputError()
-            message.length > MAX_MESSAGE_LENGTH -> view.showInputOverLimitError()
+            message.length > 100 -> view.showInputOverLimitError()
             else -> callApi(token, message)
         }
     }

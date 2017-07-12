@@ -19,13 +19,15 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
+    private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
+
     private val controller by lazy {
         DebateCommentController(
                 view = this,
                 debateRepo = DebatesRepositoryProvider.get(),
                 api = DebateComment.ApiProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
-                maxMessageLength = 100)
+                maxMessageLength = maxMessageLength)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,7 +65,6 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showInputOverLimitError() {
-        val maxMessageLength = 100
         val message = getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
         showErrorInInput(message)
     }

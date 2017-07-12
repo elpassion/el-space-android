@@ -110,6 +110,17 @@ class DebateCommentActivityTest {
     }
 
     @Test
+    fun shouldGetMaxMessageLengthFromResourcesWhenInputIsOverLimitOnSendComment() {
+        startActivity()
+        val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
+        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        onId(R.id.debateCommentInputText)
+                .replaceText(createString(maxMessageLength + 1))
+                .pressImeActionButton()
+        onText(message).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)

@@ -7,8 +7,8 @@ import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
-import java.lang.StringBuilder
 
 class DebateCommentControllerTest {
 
@@ -76,13 +76,13 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
-        sendComment(message = messageOverLimit)
+        sendComment(message = createString(101))
         verify(api, never()).comment(any(), any(), any())
     }
 
     @Test
     fun shouldShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
-        sendComment(message = messageOverLimit)
+        sendComment(message = createString(101))
         verify(view).showInputOverLimitError()
     }
 
@@ -169,6 +169,4 @@ class DebateCommentControllerTest {
     }
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
-
-    private val messageOverLimit = StringBuilder().apply { setLength(101) }.toString()
 }

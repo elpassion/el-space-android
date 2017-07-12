@@ -18,9 +18,9 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
-import java.lang.StringBuilder
 
 class DebateCommentActivityTest {
 
@@ -102,7 +102,7 @@ class DebateCommentActivityTest {
     fun shouldShowInputOverLimitErrorWhenInputIsOverLimitOnSendComment() {
         startActivity()
         onId(R.id.debateCommentInputText)
-                .replaceText(messageOverLimit)
+                .replaceText(createString(101))
                 .pressImeActionButton()
         onText(R.string.debate_comment_input_over_limit_error).isDisplayed()
     }
@@ -168,10 +168,4 @@ class DebateCommentActivityTest {
     private fun startActivity(debateToken: String = "debateToken") {
         rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
-
-    private val messageOverLimit = StringBuilder().apply {
-        for (i in 1..101) {
-            append("x")
-        }
-    }.toString()
 }

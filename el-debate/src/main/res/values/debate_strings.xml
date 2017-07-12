@@ -1,10 +1,8 @@
 <resources>
     <string name="debate_title">EL Debate\u0020</string>
     <string name="debate_login_code_incorrect">Debate code is incorrect</string>
-    <string name="debate_login_nickname_incorrect">Debate nickname is incorrect</string>
     <string name="debate_login_welcome">Welcome to</string>
     <string name="debate_login_hint_pin">EL Debate PIN</string>
-    <string name="debate_login_hint_nickname">Nickname</string>
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_debate_closed_error">This debate is closed.</string>
     <string name="debate_login_debate_closed_error_button_ok">OK</string>

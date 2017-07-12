@@ -6,7 +6,8 @@ import android.support.test.espresso.intent.Intents.intended
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
-import android.text.InputType.*
+import android.text.InputType.TYPE_CLASS_NUMBER
+import android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -40,7 +41,7 @@ class DebateLoginActivityTest {
     val rule = rule<DebateLoginActivity> {
         whenever(tokenRepo.hasToken(any())).thenReturn(false)
         DebatesRepositoryProvider.override = { tokenRepo }
-        DebateLogin.ApiProvider.override = { api.apply { whenever(login(any(), any())).thenReturn(apiSubject) } }
+        DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
 
     @Test
@@ -77,58 +78,36 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldHaveCorrectNicknameInput() {
-        Espresso.closeSoftKeyboard()
-        onId(R.id.debateLoginNicknameInputText)
-                .isDisplayed()
-                .replaceText("Alojzy666")
-                .hasText("Alojzy666")
-                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
-    }
-
-    @Test
     fun shouldShowHintInLoginPinInputField() {
         onId(R.id.debateLoginPinInputText).textInputEditTextHasHint(R.string.debate_login_hint_pin)
     }
 
     @Test
-    fun shouldShowHintInNicknameInputField() {
-        onId(R.id.debateLoginNicknameInputText).textInputEditTextHasHint(R.string.debate_login_hint_nickname)
-    }
-
-    @Test
-    fun shouldUseCorrectDebateCodeAndNicknameOnLogin() {
+    fun shouldUseCorrectDebateCodeOnLogin() {
         onId(R.id.debateLoginPinInputText)
                 .click()
                 .replaceText("12345")
-                .pressImeActionButton()
-        onId(R.id.debateLoginNicknameInputText)
-                .replaceText("Wieslaw")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginButton).click()
-        verify(api).login("12345", "Wieslaw")
+        verify(api).login("12345")
     }
 
     @Test
-    fun shouldCallApiWhenNicknameKeyboardConfirmClick() {
+    fun shouldCallApiWhenCodeKeyboardConfirmClick() {
         onId(R.id.debateLoginPinInputText)
+                .click()
                 .replaceText("12345")
-        onId(R.id.debateLoginNicknameInputText)
-                .click()
-                .replaceText("Wieslaw")
                 .pressImeActionButton()
-        verify(api).login("12345", "Wieslaw")
+        verify(api).login("12345")
     }
 
     @Test
-    fun shouldCallApiWithRealDataWhenNicknameKeyboardConfirmClick() {
+    fun shouldCallApiWithRealDataWhenCodeKeyboardConfirmClick() {
         onId(R.id.debateLoginPinInputText)
-                .replaceText("56789")
-        onId(R.id.debateLoginNicknameInputText)
                 .click()
-                .replaceText("Wieslaw666")
+                .replaceText("56789")
                 .pressImeActionButton()
-        verify(api).login("56789", "Wieslaw666")
+        verify(api).login("56789")
     }
 
     @Test
@@ -157,15 +136,8 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldShowErrorOnLoginButtonClickIfDebateNicknameIsIncorrect() {
-        loginToDebate(nickname = "")
-        onText(R.string.debate_login_nickname_incorrect).isDisplayed()
-    }
-
-    @Test
     fun shouldNotShowErrorOnStart() {
         onText(R.string.debate_login_code_incorrect).doesNotExist()
-        onText(R.string.debate_login_nickname_incorrect).doesNotExist()
     }
 
     @Test
@@ -223,10 +195,9 @@ class DebateLoginActivityTest {
         whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
     }
 
-    private fun loginToDebate(debateCode: String = "12345", nickname: String = "SomeName") {
+    private fun loginToDebate(debateCode: String = "12345") {
         Espresso.closeSoftKeyboard()
         onId(R.id.debateLoginPinInputText).replaceText(debateCode)
-        onId(R.id.debateLoginNicknameInputText).replaceText(nickname)
         onId(R.id.debateLoginButton).click()
     }
 }

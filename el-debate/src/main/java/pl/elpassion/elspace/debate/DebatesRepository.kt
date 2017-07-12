@@ -12,7 +12,6 @@ interface DebatesRepository {
     fun getTokenForDebate(debateCode: String): String
     fun saveLatestDebateCode(debateCode: String)
     fun getLatestDebateCode(): String?
-    fun saveLatestDebateNickname(nickname: String)
     fun getLatestDebateNickname(): String?
 }
 
@@ -33,8 +32,6 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
         override fun saveLatestDebateCode(debateCode: String) = repository.write(latestDebateCode, debateCode)
 
         override fun getLatestDebateCode() = repository.read(latestDebateCode)
-
-        override fun saveLatestDebateNickname(nickname: String) = repository.write(latestDebateNickname, nickname)
 
         override fun getLatestDebateNickname() = repository.read(latestDebateNickname)
     }

@@ -228,4 +228,13 @@
         android:background="@color/colorPrimaryGreen"
         android:text="@string/debate_details_button_comment" />
 
+    <View
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/debate_closed_indicator"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 </android.support.design.widget.CoordinatorLayout>

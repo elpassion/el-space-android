@@ -63,7 +63,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showInputOverLimitError() {
-        val maxMessageLength = resources.getInteger(R.integer.debate_comment_max_message_length)
+        val maxMessageLength = 100
         val message = getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
         showErrorInInput(message)
     }

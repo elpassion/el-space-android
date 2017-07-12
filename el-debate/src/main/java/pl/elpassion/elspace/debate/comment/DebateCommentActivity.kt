@@ -63,11 +63,17 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showInputOverLimitError() {
-        showErrorInInput(R.string.debate_comment_input_over_limit_error)
+        val maxMessageLength = resources.getInteger(R.integer.debate_comment_max_message_length)
+        val message = getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        showErrorInInput(message)
     }
 
     private fun showErrorInInput(@StringRes message: Int) {
         debateCommentInputLayout.error = getString(message)
+    }
+
+    private fun showErrorInInput(message: String) {
+        debateCommentInputLayout.error = message
     }
 
     override fun closeScreen() {

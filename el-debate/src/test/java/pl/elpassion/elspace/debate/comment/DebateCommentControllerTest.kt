@@ -148,7 +148,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldCloseSuccessWhenSendCommentSucceeded() {
+    fun shouldCloseScreenWhenSendCommentSucceeded() {
         sendComment()
         commentSubject.onComplete()
         verify(view).closeScreen()

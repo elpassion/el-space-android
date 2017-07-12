@@ -101,7 +101,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowCorrectInputOverLimitErrorMessageWhenInputIsOverLimitOnSendComment() {
         startActivity()
-        val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
+        val maxMessageLength = 100
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
         onId(R.id.debateCommentInputText)
                 .replaceText(createString(maxMessageLength + 1))

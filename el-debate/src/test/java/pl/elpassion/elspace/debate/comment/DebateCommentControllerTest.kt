@@ -195,41 +195,36 @@ class DebateCommentControllerTest {
 
     @Test
     fun shouldShowFirstNameErrorOnBlankFirstName() {
-        val token = "token"
         val credentials = createCredentials(firstName = " ")
-        controller.onNewCredentials(token, credentials)
+        controller.onNewCredentials("token", credentials)
         verify(view).showFirstNameError()
     }
 
     @Test
     fun shouldNotSaveTokenCredentialsOnBlankFirstName() {
-        val token = "token"
         val credentials = createCredentials(firstName = " ")
-        controller.onNewCredentials(token, credentials)
+        controller.onNewCredentials("token", credentials)
         verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
     @Test
     fun shouldShowLastNameErrorOnBlankFirstName() {
-        val token = "token"
         val credentials = createCredentials(lastName = " ")
-        controller.onNewCredentials(token, credentials)
+        controller.onNewCredentials("token", credentials)
         verify(view).showLastNameError()
     }
 
     @Test
     fun shouldNotSaveTokenCredentialsOnBlankLastName() {
-        val token = "token"
         val credentials = createCredentials(lastName = " ")
-        controller.onNewCredentials(token, credentials)
+        controller.onNewCredentials("token", credentials)
         verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
     @Test
     fun shouldShowBothErrorsOnBlankCredentials() {
-        val token = "token"
         val credentials = createCredentials(firstName = " ", lastName = " ")
-        controller.onNewCredentials(token, credentials)
+        controller.onNewCredentials("token", credentials)
         verify(view).showLastNameError()
         verify(view).showFirstNameError()
     }

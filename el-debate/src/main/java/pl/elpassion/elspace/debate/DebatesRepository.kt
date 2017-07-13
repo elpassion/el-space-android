@@ -5,6 +5,7 @@ import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.elpassion.sharedpreferences.gsonadapter.gsonConverterAdapter
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.debate.comment.TokenCredentials
 
 interface DebatesRepository {
     fun hasToken(debateCode: String): Boolean
@@ -14,6 +15,7 @@ interface DebatesRepository {
     fun getLatestDebateCode(): String?
     fun getLatestDebateNickname(): String?
     fun areCredentialsMissing(token: String): Boolean
+    fun saveTokenCredentials(token: String, credentials: TokenCredentials)
 }
 
 object DebatesRepositoryProvider : Provider<DebatesRepository>({
@@ -37,5 +39,9 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
         override fun getLatestDebateNickname() = repository.read(latestDebateNickname)
 
         override fun areCredentialsMissing(token: String): Boolean = true
+
+        override fun saveTokenCredentials(token: String, credentials: TokenCredentials) {
+
+        }
     }
 })

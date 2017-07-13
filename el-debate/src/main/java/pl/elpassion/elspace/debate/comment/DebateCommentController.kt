@@ -38,4 +38,8 @@ class DebateCommentController(
     fun onCancel() {
         view.closeScreen()
     }
+
+    fun onNewCredentials(token: String, credentials: TokenCredentials) {
+        debateRepo.saveTokenCredentials(token, credentials)
+    }
 }

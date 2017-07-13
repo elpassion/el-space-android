@@ -182,5 +182,15 @@ class DebateCommentControllerTest {
         verify(view).showCredentialDialog()
     }
 
+    @Test
+    fun shouldSaveCredentialsOnNewCredentials() {
+        val token = "token"
+        val credentials = createCredentials()
+        controller.onNewCredentials(token, credentials)
+        verify(debateRepo).saveTokenCredentials(token, credentials)
+    }
+
+    private fun createCredentials(): TokenCredentials = TokenCredentials("name", "surname")
+
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

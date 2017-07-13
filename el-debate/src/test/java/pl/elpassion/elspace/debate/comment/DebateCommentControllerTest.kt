@@ -66,7 +66,7 @@ class DebateCommentControllerTest {
         sendComment(message = " ")
         verify(view).showInvalidInputError()
     }
-    
+
     @Test
     fun shouldCallApiWhenMessageIsUnderLimitOnSendComment() {
         sendComment(message = createString(100))
@@ -178,7 +178,7 @@ class DebateCommentControllerTest {
     fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
         val token = "token"
         whenever(debateRepo.areCredentialsMissing(token)).thenReturn(true)
-        controller.sendComment(token,"message")
+        controller.sendComment(token, "message")
         verify(view).showCredentialDialog()
     }
 
@@ -189,13 +189,21 @@ class DebateCommentControllerTest {
         controller.onNewCredentials(token, credentials)
         verify(debateRepo).saveTokenCredentials(token, credentials)
     }
-    
+
     @Test
     fun shouldShowFirstNameErrorOnBlankFirstName() {
         val token = "token"
         val credentials = createCredentials(firstName = " ")
         controller.onNewCredentials(token, credentials)
         verify(view).showFirstNameError()
+    }
+
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankFirstName() {
+        val token = "token"
+        val credentials = createCredentials(firstName = " ")
+        controller.onNewCredentials(token, credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)

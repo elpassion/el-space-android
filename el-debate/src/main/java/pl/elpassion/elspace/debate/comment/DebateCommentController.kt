@@ -42,7 +42,8 @@ class DebateCommentController(
     fun onNewCredentials(token: String, credentials: TokenCredentials) {
         if (credentials.firstName.isBlank()) {
             view.showFirstNameError()
+        } else {
+            debateRepo.saveTokenCredentials(token, credentials)
         }
-        debateRepo.saveTokenCredentials(token, credentials)
     }
 }

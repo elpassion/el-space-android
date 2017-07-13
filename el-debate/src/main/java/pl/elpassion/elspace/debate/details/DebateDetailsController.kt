@@ -31,8 +31,8 @@ class DebateDetailsController(
     }
 
     private val onDebateDetailsError: (Throwable) -> Unit = { error ->
-        if (error is HttpException && error.code() == 406) {
-            view.showDebateClosedError(error)
+        if (error is HttpException) {
+            onHttpException(error)
         } else {
             view.showDebateDetailsError(error)
         }
@@ -49,12 +49,17 @@ class DebateDetailsController(
     }
 
     private val onVoteError: (Throwable) -> Unit = { error ->
-        if (error is HttpException && error.code() == 406) {
-            view.showDebateClosedError(error)
-        } else if (error is HttpException && error.code() == 429) {
-            view.showSlowDownInformation()
+        if (error is HttpException) {
+            onHttpException(error)
         } else {
             view.showVoteError(error)
+        }
+    }
+
+    private fun onHttpException(error: HttpException) {
+        when {
+            error.code() == 406 -> view.showDebateClosedError(error)
+            error.code() == 429 -> view.showSlowDownInformation()
         }
     }
 

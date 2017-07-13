@@ -20,21 +20,24 @@ class DebateCommentControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
+        whenever(api.comment(any(), any(), any(), any())).thenReturn(commentSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
     }
 
     @Test
     fun shouldCallApiWithGivenDataOnSendComment() {
-        sendComment()
-        verify(api).comment(eq("token"), eq("message"), any())
+        sendComment("token","message")
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
+        verify(api).comment("token", "message", "firstName", "lastName")
     }
 
     @Test
     fun shouldReallyCallApiWithGivenDataWhenMessageIsValidOnSendComment() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("someOtherNick")
+        val token = "someOtherToken"
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName","NewlastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment(eq("someOtherToken"), eq("someOtherMessage"), any())
+        verify(api).comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName")
     }
 
     @Test
@@ -46,7 +49,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldNotCallApiWhenMessageIsEmptyOnSendComment() {
         sendComment(message = "")
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -58,7 +61,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldNotCallApiWhenMessageIsBlankOnSendComment() {
         sendComment(message = " ")
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -70,20 +73,20 @@ class DebateCommentControllerTest {
     @Test
     fun shouldCallApiWhenMessageIsUnderLimitOnSendComment() {
         sendComment(message = createString(100))
-        verify(api).comment(any(), any(), any())
+        verify(api).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
         sendComment(message = createString(101))
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
         val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
         controller.sendComment("token", createString(31))
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test

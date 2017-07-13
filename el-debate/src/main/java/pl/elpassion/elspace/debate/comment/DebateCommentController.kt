@@ -23,7 +23,8 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        subscription = api.comment(token, message, "")
+        val (firstName, lastName) = debateRepo.getTokenCredentials(token)
+        subscription = api.comment(token, message, firstName, lastName)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

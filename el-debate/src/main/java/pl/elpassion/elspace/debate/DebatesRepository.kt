@@ -16,6 +16,7 @@ interface DebatesRepository {
     fun getLatestDebateNickname(): String?
     fun areCredentialsMissing(token: String): Boolean
     fun saveTokenCredentials(token: String, credentials: TokenCredentials)
+    fun getTokenCredentials(token: String): TokenCredentials
 }
 
 object DebatesRepositoryProvider : Provider<DebatesRepository>({
@@ -43,5 +44,8 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
         override fun saveTokenCredentials(token: String, credentials: TokenCredentials) {
 
         }
+
+        override fun getTokenCredentials(token: String) = TokenCredentials("","")
+
     }
 })

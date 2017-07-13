@@ -25,6 +25,7 @@ interface DebateComment {
         fun showInputOverLimitError()
         fun showCredentialDialog()
         fun showFirstNameError()
+        fun showLastNameError()
     }
 
     object ApiProvider : Provider<DebateComment.Api>({

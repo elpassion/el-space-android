@@ -83,6 +83,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     override fun showFirstNameError() {
     }
 
+    override fun showLastNameError() {
+
+    }
+
     override fun closeScreen() {
         finish()
     }

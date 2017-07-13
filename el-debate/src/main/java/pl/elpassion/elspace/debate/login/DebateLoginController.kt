@@ -43,11 +43,15 @@ class DebateLoginController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally { view.hideLoader() }
-                .subscribe({
-                    view.openDebateScreen(it)
-                }, {
-                    if (it is HttpException && it.code() == 406) view.showDebateClosedError() else view.showLoginFailedError()
-                })
+                .subscribe({ view.openDebateScreen(it) }, onLoginError)
+    }
+
+    private val onLoginError: (Throwable) -> Unit = { error ->
+        if (error is HttpException && error.code() == 406) {
+            view.showDebateClosedError()
+        } else {
+            view.showLoginFailedError()
+        }
     }
 
     private fun getAuthTokenObservable(debateCode: String, nickname: String) =

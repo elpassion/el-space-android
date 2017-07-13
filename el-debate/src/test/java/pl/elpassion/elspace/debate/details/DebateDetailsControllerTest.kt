@@ -86,10 +86,18 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOn406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnDebateDetails406CodeErrorFromApi() {
         createController().onCreate("token")
         val exception = createHttpException(406)
         debateDetailsSubject.onError(exception)
+        verify(view).showDebateClosedError(exception)
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        createController().onVote("token", createPositiveAnswer())
+        val exception = createHttpException(406)
+        sendVoteSubject.onError(exception)
         verify(view).showDebateClosedError(exception)
     }
 

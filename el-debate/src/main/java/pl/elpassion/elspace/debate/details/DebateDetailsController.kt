@@ -49,7 +49,9 @@ class DebateDetailsController(
     }
 
     private val onVoteError: (Throwable) -> Unit = { error ->
-        if (error is HttpException && error.code() == 429) {
+        if (error is HttpException && error.code() == 406) {
+            view.showDebateClosedError(error)
+        } else if (error is HttpException && error.code() == 429) {
             view.showSlowDownInformation()
         } else {
             view.showVoteError(error)

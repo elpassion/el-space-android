@@ -222,6 +222,15 @@ class DebateCommentControllerTest {
         verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
+    @Test
+    fun shouldShowBothErrorsOnBlankCredentials() {
+        val token = "token"
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials(token, credentials)
+        verify(view).showLastNameError()
+        verify(view).showFirstNameError()
+    }
+
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)

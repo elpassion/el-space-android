@@ -71,7 +71,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
-    override fun showDebateClosedError(exception: Throwable) {
+    override fun showDebateClosedError() {
         debateClosedView.show()
     }
 

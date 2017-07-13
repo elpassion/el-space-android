@@ -58,7 +58,7 @@ class DebateDetailsController(
 
     private fun onHttpException(error: HttpException) {
         when {
-            error.code() == 406 -> view.showDebateClosedError(error)
+            error.code() == 406 -> view.showDebateClosedError()
             error.code() == 429 -> view.showSlowDownInformation()
         }
     }

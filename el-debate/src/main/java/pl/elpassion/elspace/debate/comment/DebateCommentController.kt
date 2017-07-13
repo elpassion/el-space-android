@@ -15,6 +15,7 @@ class DebateCommentController(
 
     fun sendComment(token: String, message: String) {
         when {
+            debateRepo.areCredentialsMissing(token) -> view.showCredentialDialog()
             message.isBlank() -> view.showInvalidInputError()
             message.length > maxMessageLength -> view.showInputOverLimitError()
             else -> callApi(token, message)

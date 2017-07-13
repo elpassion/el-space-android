@@ -22,6 +22,7 @@ class DebateCommentActivityTest {
 
     private val debateRepo = mock<DebatesRepository>().apply {
         whenever(getLatestDebateNickname()).thenReturn("mrNick")
+        whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
     private val api = mock<DebateComment.Api>().apply {

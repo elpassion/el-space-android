@@ -21,7 +21,7 @@ class DebateCommentControllerTest {
     @Before
     fun setUp() {
         whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
     }
 
     @Test
@@ -172,6 +172,14 @@ class DebateCommentControllerTest {
     fun shouldCloseScreenOnCancel() {
         controller.onCancel()
         verify(view).closeScreen()
+    }
+
+    @Test
+    fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
+        val token = "token"
+        whenever(debateRepo.areCredentialsMissing(token)).thenReturn(true)
+        controller.sendComment(token,"message")
+        verify(view).showCredentialDialog()
     }
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)

@@ -77,6 +77,10 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         debateCommentInputLayout.error = message
     }
 
+    override fun showCredentialDialog() {
+
+    }
+
     override fun closeScreen() {
         finish()
     }

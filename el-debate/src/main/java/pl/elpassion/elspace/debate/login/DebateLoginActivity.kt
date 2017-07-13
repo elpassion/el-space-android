@@ -75,7 +75,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     }
 
-    override fun showLoginFailedError() {
+    override fun showLoginFailedError(error: Throwable) {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_fail, Snackbar.LENGTH_INDEFINITE).show()
     }
 

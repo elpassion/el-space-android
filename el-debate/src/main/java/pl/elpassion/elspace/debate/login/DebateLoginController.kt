@@ -50,7 +50,7 @@ class DebateLoginController(
         if (error is HttpException && error.code() == 406) {
             view.showDebateClosedError()
         } else {
-            view.showLoginFailedError()
+            view.showLoginFailedError(error)
         }
     }
 

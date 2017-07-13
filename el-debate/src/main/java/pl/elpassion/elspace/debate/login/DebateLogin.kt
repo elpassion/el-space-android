@@ -12,7 +12,7 @@ interface DebateLogin {
         fun fillDebateCode(debateCode: String)
         fun fillDebateNickname(nickname: String)
         fun openDebateScreen(authToken: String)
-        fun showLoginFailedError()
+        fun showLoginFailedError(error: Throwable)
         fun showLoader()
         fun hideLoader()
         fun showWrongPinError()

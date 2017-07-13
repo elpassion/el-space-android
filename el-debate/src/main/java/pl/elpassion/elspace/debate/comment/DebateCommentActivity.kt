@@ -16,7 +16,6 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
-
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
@@ -79,6 +78,9 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     override fun showCredentialDialog() {
 
+    }
+
+    override fun showFirstNameError() {
     }
 
     override fun closeScreen() {

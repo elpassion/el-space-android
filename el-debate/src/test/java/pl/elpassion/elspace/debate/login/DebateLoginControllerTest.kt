@@ -7,6 +7,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
@@ -36,6 +37,13 @@ class DebateLoginControllerTest {
         logToDebate(debateCode = "12345")
         returnTokenFromApi("realAuthToken")
         verify(debateRepo).saveDebateToken(debateCode = "12345", authToken = "realAuthToken")
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
+        logToDebate()
+        apiSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
     }
 
     @Test

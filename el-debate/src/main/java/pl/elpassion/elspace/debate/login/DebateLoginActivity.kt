@@ -71,6 +71,10 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         DebateDetailsActivity.start(this, authToken)
     }
 
+    override fun showDebateClosedError() {
+
+    }
+
     override fun showLoginFailedError() {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_fail, Snackbar.LENGTH_INDEFINITE).show()
     }

@@ -17,6 +17,7 @@ interface DebateLogin {
         fun hideLoader()
         fun showWrongPinError()
         fun showWrongNicknameError()
+        fun showDebateClosedError()
     }
 
     interface Api {

@@ -4,6 +4,7 @@ import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
+import retrofit2.HttpException
 
 class DebateLoginController(
         private val view: DebateLogin.View,
@@ -45,7 +46,7 @@ class DebateLoginController(
                 .subscribe({
                     view.openDebateScreen(it)
                 }, {
-                    view.showLoginFailedError()
+                    if (it is HttpException && it.code() == 406) view.showDebateClosedError() else view.showLoginFailedError()
                 })
     }
 

@@ -214,6 +214,14 @@ class DebateCommentControllerTest {
         verify(view).showLastNameError()
     }
 
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankLastName() {
+        val token = "token"
+        val credentials = createCredentials(lastName = " ")
+        controller.onNewCredentials(token, credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
+    }
+
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)

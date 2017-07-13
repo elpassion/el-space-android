@@ -172,7 +172,7 @@ class DebateDetailsActivityTest {
     fun shouldShowDebateClosedErrorOn406CodeErrorFromApi() {
         startActivity()
         debateDetailsSubject.onError(createHttpException(406))
-        onText(R.string.debate_details_debate_closed_error).isDisplayedEffectively()
+        onId(R.id.debateClosedView).isDisplayed()
     }
 
     @Test

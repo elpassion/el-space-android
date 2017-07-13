@@ -11,7 +11,6 @@
     <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>
     <string name="debate_details_info_remember">Remember that you can change your mind before debate ends, thats why we are here!</string>
     <string name="debate_details_button_comment">Chat</string>
-    <string name="debate_details_debate_closed_error">Debate is closed</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
     <string name="debate_details_error_refresh">Refresh</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>

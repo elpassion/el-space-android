@@ -9,232 +9,239 @@
 
     <include layout="@layout/debate_toolbar" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:src="@drawable/debate_details_background" />
-
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80dp"
-        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical">
+            android:layout_gravity="bottom|center"
+            android:src="@drawable/debate_details_background" />
 
-            <TextView
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp"
+            android:fillViewport="true">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/debate_details_info_topic"
-                android:textColor="@color/greyLightText"
-                android:textSize="12sp" />
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardElevation="@dimen/cardview_default_elevation">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/debateTopic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:textColor="@color/greyDarkText"
-                    android:textSize="24sp"
-                    tools:text="Topic" />
-            </android.support.v7.widget.CardView>
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/debate_details_info_topic"
+                    android:textColor="@color/greyLightText"
+                    android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:text="@string/debate_details_info_choose_side"
-                android:textColor="@color/greyLightText"
-                android:textSize="12sp" />
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/debatePositiveAnswerButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardElevation="@dimen/cardview_default_elevation">
-
-                <LinearLayout
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    app:cardElevation="@dimen/cardview_default_elevation">
 
                     <TextView
-                        android:id="@+id/debatePositiveAnswerText"
-                        style="@style/DebateAnswerText"
-                        android:layout_width="0dp"
+                        android:id="@+id/debateTopic"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/blueDebatePositive"
-                        tools:text="Positive answer" />
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:textColor="@color/greyDarkText"
+                        android:textSize="24sp"
+                        tools:text="Topic" />
+                </android.support.v7.widget.CardView>
 
-                    <ImageView
-                        android:id="@+id/debatePositiveAnswerImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/hand_positive_animated" />
-
-                </LinearLayout>
-
-                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
-                    android:id="@+id/debatePositiveAnswerLoader"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    app:tintColor="@color/blueDebatePositive">
-
-                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/debateNegativeAnswerButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardElevation="@dimen/cardview_default_elevation">
-
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/debate_details_info_choose_side"
+                    android:textColor="@color/greyLightText"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/debateNegativeAnswerText"
-                        style="@style/DebateAnswerText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/redDebateNegative"
-                        tools:text="Negative answer" />
-
-                    <ImageView
-                        android:id="@+id/debateNegativeAnswerImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/hand_negative_animated" />
-
-                </LinearLayout>
-
-                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
-                    android:id="@+id/debateNegativeAnswerLoader"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    app:tintColor="@color/redDebateNegative">
-
-                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/debateNeutralAnswerButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardElevation="@dimen/cardview_default_elevation">
-
-                <LinearLayout
+                <android.support.v7.widget.CardView
+                    android:id="@+id/debatePositiveAnswerButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    app:cardElevation="@dimen/cardview_default_elevation">
 
-                    <TextView
-                        android:id="@+id/debateNeutralAnswerText"
-                        style="@style/DebateAnswerText"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@color/greyDebateNeutral"
-                        tools:text="Neutral answer" />
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
-                    <ImageView
-                        android:id="@+id/debateNeutralAnswerImage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/hand_neutral_animated" />
+                        <TextView
+                            android:id="@+id/debatePositiveAnswerText"
+                            style="@style/DebateAnswerText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/blueDebatePositive"
+                            tools:text="Positive answer" />
 
-                </LinearLayout>
+                        <ImageView
+                            android:id="@+id/debatePositiveAnswerImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/hand_positive_animated" />
 
-                <pl.elpassion.elspace.debate.details.DebateAnswerLoader
-                    android:id="@+id/debateNeutralAnswerLoader"
+                    </LinearLayout>
+
+                    <pl.elpassion.elspace.debate.details.DebateAnswerLoader
+                        android:id="@+id/debatePositiveAnswerLoader"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        app:tintColor="@color/blueDebatePositive">
+
+                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/debateNegativeAnswerButton"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    app:tintColor="@color/greyDebateNeutral">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    app:cardElevation="@dimen/cardview_default_elevation">
 
-                </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
 
-            </android.support.v7.widget.CardView>
+                        <TextView
+                            android:id="@+id/debateNegativeAnswerText"
+                            style="@style/DebateAnswerText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/redDebateNegative"
+                            tools:text="Negative answer" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/debate_details_info_remember"
-                android:textColor="@color/greyLightText"
-                android:textSize="12sp" />
+                        <ImageView
+                            android:id="@+id/debateNegativeAnswerImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/hand_negative_animated" />
 
-        </LinearLayout>
+                    </LinearLayout>
 
-    </ScrollView>
+                    <pl.elpassion.elspace.debate.details.DebateAnswerLoader
+                        android:id="@+id/debateNegativeAnswerLoader"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        app:tintColor="@color/redDebateNegative">
 
-    <Button
-        android:id="@+id/debateCommentButton"
-        style="@style/Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="16dp"
-        android:background="@color/colorPrimaryGreen"
-        android:text="@string/debate_details_button_comment" />
+                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/debateNeutralAnswerButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    app:cardElevation="@dimen/cardview_default_elevation">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <TextView
+                            android:id="@+id/debateNeutralAnswerText"
+                            style="@style/DebateAnswerText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@color/greyDebateNeutral"
+                            tools:text="Neutral answer" />
+
+                        <ImageView
+                            android:id="@+id/debateNeutralAnswerImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/hand_neutral_animated" />
+
+                    </LinearLayout>
+
+                    <pl.elpassion.elspace.debate.details.DebateAnswerLoader
+                        android:id="@+id/debateNeutralAnswerLoader"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_gravity="bottom"
+                        app:tintColor="@color/greyDebateNeutral">
+
+                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/debate_details_info_remember"
+                    android:textColor="@color/greyLightText"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/debateCommentButton"
+            style="@style/Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="16dp"
+            android:background="@color/colorPrimaryGreen"
+            android:text="@string/debate_details_button_comment" />
+
+    </FrameLayout>
 
     <View
-        android:visibility="gone"
+        android:id="@+id/debateClosedView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/debate_closed_indicator"
         android:clickable="true"
         android:focusable="true"
+        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

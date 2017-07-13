@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.elpassion.android.view.disable
 import com.elpassion.android.view.enable
+import com.elpassion.android.view.show
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
@@ -71,7 +72,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
     override fun showDebateClosedError(exception: Throwable) {
-        createSnackbar(R.string.debate_details_debate_closed_error).show()
+        debateClosedView.show()
     }
 
     override fun showDebateDetailsError(exception: Throwable) {

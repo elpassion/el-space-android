@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
@@ -72,7 +73,9 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showDebateClosedError() {
-
+        val alertDialog = AlertDialog.Builder(this).create()
+        alertDialog.setTitle(getString(R.string.debate_login_debate_closed_error))
+        alertDialog.show()
     }
 
     override fun showLoginFailedError(error: Throwable) {

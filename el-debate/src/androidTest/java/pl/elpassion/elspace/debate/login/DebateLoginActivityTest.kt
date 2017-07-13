@@ -20,6 +20,7 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
@@ -198,6 +199,13 @@ class DebateLoginActivityTest {
         apiSubject.onError(RuntimeException())
         loginToDebate()
         onText(R.string.debate_login_fail).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
+        loginToDebate()
+        apiSubject.onError(createHttpException(406))
+        onText(R.string.debate_login_debate_closed_error).isDisplayed()
     }
 
     private fun stubIntentAndRepo() {

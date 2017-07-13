@@ -47,18 +47,18 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldShowErrorIfLoginFails() {
+    fun shouldShowErrorOnLoginError() {
         controller.onLogToDebate("error", "Gustaw333")
         val error = RuntimeException()
         apiSubject.onError(error)
-        verify(view).showLoginFailedError(error)
+        verify(view).showLoginError(error)
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
         logToDebate()
         returnTokenFromApi("authToken")
-        verify(view, never()).showLoginFailedError(any())
+        verify(view, never()).showLoginError(any())
     }
 
     @Test

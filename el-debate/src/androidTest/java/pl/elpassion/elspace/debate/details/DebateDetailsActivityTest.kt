@@ -169,9 +169,17 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOn406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnDebateDetails406CodeErrorFromApi() {
         startActivity()
         debateDetailsSubject.onError(createHttpException(406))
+        onId(R.id.debateClosedView).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
+        sendVoteSubject.onError(createHttpException(406))
         onId(R.id.debateClosedView).isDisplayed()
     }
 

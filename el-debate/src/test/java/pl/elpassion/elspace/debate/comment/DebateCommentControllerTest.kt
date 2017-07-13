@@ -27,27 +27,20 @@ class DebateCommentControllerTest {
     @Test
     fun shouldCallApiWithGivenDataOnSendComment() {
         sendComment()
-        verify(api).comment("token", "message", "mrNick")
+        verify(api).comment(eq("token"), eq("message"), any())
     }
 
     @Test
     fun shouldReallyCallApiWithGivenDataWhenMessageIsValidOnSendComment() {
         whenever(debateRepo.getLatestDebateNickname()).thenReturn("someOtherNick")
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "someOtherNick")
+        verify(api).comment(eq("someOtherToken"), eq("someOtherMessage"), any())
     }
 
     @Test
     fun shouldNotShowInvalidInputErrorWhenMessageIsValidOnSendComment() {
         sendComment()
         verify(view, never()).showInvalidInputError()
-    }
-
-    @Test
-    fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
-        sendComment()
-        verify(api).comment("token", "message", DEFAULT_NICKNAME)
     }
 
     @Test

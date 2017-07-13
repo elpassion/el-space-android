@@ -4,8 +4,6 @@ import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
 
-const val DEFAULT_NICKNAME = "DefaultUser"
-
 class DebateCommentController(
         private val view: DebateComment.View,
         private val debateRepo: DebatesRepository,
@@ -24,8 +22,7 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        val nickname = debateRepo.getLatestDebateNickname() ?: DEFAULT_NICKNAME
-        subscription = api.comment(token, message, nickname)
+        subscription = api.comment(token, message, "")
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

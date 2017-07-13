@@ -7,10 +7,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -75,7 +72,7 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .replaceText("message")
                 .pressImeActionButton()
-        verify(api).comment("someToken", "message", "mrNick")
+        verify(api).comment(eq("someToken"), eq("message"), any())
     }
 
     @Test
@@ -85,7 +82,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(api).comment("someToken", "message", "mrNick")
+        verify(api).comment(eq("someToken"), eq("message"), any())
     }
 
     @Test

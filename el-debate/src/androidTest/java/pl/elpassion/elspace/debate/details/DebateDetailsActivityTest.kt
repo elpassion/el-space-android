@@ -285,7 +285,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.positive)
     }
@@ -293,7 +293,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.negative)
     }
@@ -301,14 +301,14 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
     }
 
     @Test
     fun shouldOpenCommentScreenWhenCommentButtonClicked() {
-        startActivity()
+        startActivityAndSuccessfullyReturnDebateDetails()
         stubAllIntents()
         onId(R.id.debateCommentButton).click()
         checkIntent(DebateCommentActivity::class.java)
@@ -317,7 +317,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldOpenCommentScreenWithGivenToken() {
         val token = "someToken"
-        startActivity(token)
+        startActivityAndSuccessfullyReturnDebateDetails(token = token)
         stubAllIntents()
         onId(R.id.debateCommentButton).click()
         Intents.intended(Matchers.allOf(
@@ -401,8 +401,8 @@ class DebateDetailsActivityTest {
         sendVoteSubject.onComplete()
     }
 
-    private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData = createDebateData()) {
-        startActivity()
+    private fun startActivityAndSuccessfullyReturnDebateDetails(token: String = "token", debateData: DebateData = createDebateData()) {
+        startActivity(token)
         debateDetailsSubject.onSuccess(debateData)
     }
 }

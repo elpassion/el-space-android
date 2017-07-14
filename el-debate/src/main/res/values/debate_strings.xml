@@ -7,6 +7,7 @@
     <string name="debate_login_hint_nickname">Nickname</string>
     <string name="debate_login_button_login">Log in</string>
     <string name="debate_login_debate_closed_error">This debate is closed.</string>
+    <string name="debate_login_debate_closed_error_button_ok">OK</string>
     <string name="debate_login_error">Oops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_info_topic">Our debate is about:</string>
     <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>

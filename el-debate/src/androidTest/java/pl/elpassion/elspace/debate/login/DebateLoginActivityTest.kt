@@ -208,6 +208,13 @@ class DebateLoginActivityTest {
         onText(R.string.debate_login_debate_closed_error).isDisplayed()
     }
 
+    @Test
+    fun shouldHaveOkButtonInDebateClosedErrorDialog() {
+        loginToDebate()
+        apiSubject.onError(createHttpException(406))
+        onText(R.string.debate_login_debate_closed_error_button_ok).isDisplayed()
+    }
+
     private fun stubIntentAndRepo() {
         stubAllIntents()
         whenever(tokenRepo.hasToken("12345")).thenReturn(true)

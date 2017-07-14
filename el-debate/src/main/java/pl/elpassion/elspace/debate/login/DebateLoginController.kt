@@ -47,7 +47,7 @@ class DebateLoginController(
     }
 
     private val onLoginError: (Throwable) -> Unit = { error ->
-        if (error is HttpException && error.code() == 406) {
+        if (error is HttpException && error.code() == 404) {
             view.showDebateClosedError()
         } else {
             view.showLoginError(error)

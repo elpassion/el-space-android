@@ -75,7 +75,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     override fun showDebateClosedError() {
         AlertDialog.Builder(this).create().apply {
             setTitle(getString(R.string.debate_login_debate_closed_error))
-            setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.debate_login_debate_closed_error_button_ok)) { _, _ -> }
+            setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.debate_login_debate_closed_error_button_ok)) { dialog, _ -> dialog.dismiss() }
         }.show()
     }
 

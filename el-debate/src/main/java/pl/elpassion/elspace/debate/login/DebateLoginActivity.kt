@@ -73,9 +73,9 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showDebateClosedError() {
-        val alertDialog = AlertDialog.Builder(this).create()
-        alertDialog.setTitle(getString(R.string.debate_login_debate_closed_error))
-        alertDialog.show()
+        AlertDialog.Builder(this).create().apply {
+            setTitle(getString(R.string.debate_login_debate_closed_error))
+        }.show()
     }
 
     override fun showLoginError(error: Throwable) {

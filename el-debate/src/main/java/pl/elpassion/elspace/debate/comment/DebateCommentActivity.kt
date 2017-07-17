@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.credentials_layout.view.*
+import kotlinx.android.synthetic.main.credentials_dialog_layout.view.*
 import kotlinx.android.synthetic.main.debate_comment_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier

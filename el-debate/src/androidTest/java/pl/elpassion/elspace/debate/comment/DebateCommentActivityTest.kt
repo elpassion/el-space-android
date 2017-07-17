@@ -13,7 +13,6 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -167,7 +166,6 @@ class DebateCommentActivityTest {
         assertTrue(rule.activity.isFinishing)
     }
 
-    @Ignore
     @Test
     fun shouldCloseScreenOnSuccessfullySentComment() {
         startActivity()
@@ -175,6 +173,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
                 .pressImeActionButton()
         sendCommentSubject.onComplete()
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertTrue(rule.activity.isFinishing)
     }
 

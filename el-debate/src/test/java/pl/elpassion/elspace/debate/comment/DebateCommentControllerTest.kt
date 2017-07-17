@@ -28,7 +28,6 @@ class DebateCommentControllerTest {
     @Test
     fun shouldCallApiWithGivenDataOnSendComment() {
         sendComment("token","message")
-        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
         verify(api).comment("token", "message", "firstName", "lastName")
     }
 

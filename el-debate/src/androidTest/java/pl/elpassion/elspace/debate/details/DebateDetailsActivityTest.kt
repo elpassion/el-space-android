@@ -21,7 +21,6 @@ import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
-import java.lang.Thread.sleep
 
 class DebateDetailsActivityTest {
 
@@ -184,7 +183,7 @@ class DebateDetailsActivityTest {
     fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
         startActivity()
         debateDetailsSubject.onError(RuntimeException())
-        sleep(100)
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         onText(R.string.debate_details_error_refresh).click()
         verify(apiMock, times(2)).getDebateDetails(any())
     }

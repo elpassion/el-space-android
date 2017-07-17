@@ -4,13 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.credentials_dialog_layout.view.*
 import kotlinx.android.synthetic.main.debate_comment_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -20,21 +17,10 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
-    private val credentialsDialogView by lazy {
-        LayoutInflater.from(this).inflate(R.layout.credentials_dialog_layout, null).apply {
-            debateCommentCredentialsConfirm.setOnClickListener {
-                controller.onNewCredentials(token, TokenCredentials(
-                        firstName = debateCredentialsFirstNameInputText.text.toString(),
-                        lastName = debateCredentialsLastNameInputText.text.toString())
-                )
-            }
-        }
-    }
-
     private val credentialsDialog by lazy {
-        AlertDialog.Builder(this)
-                .setView(credentialsDialogView)
-                .create()
+        DebateCredentialsDialog(this) { credentials ->
+            controller.onNewCredentials(token, credentials)
+        }
     }
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
@@ -106,11 +92,11 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showFirstNameError() {
-        credentialsDialogView.debateCredentialsFirstNameLayout.error = getString(R.string.debate_comment_credentials_first_name_incorrect)
+        credentialsDialog.showFirstNameError()
     }
 
     override fun showLastNameError() {
-        credentialsDialogView.debateCredentialsLastNameLayout.error = getString(R.string.debate_comment_credentials_last_name_incorrect)
+        credentialsDialog.showLastNameError()
     }
 
     override fun closeScreen() {
@@ -132,4 +118,5 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                     putExtra(debateAuthTokenKey, debateToken)
                 }
     }
+
 }

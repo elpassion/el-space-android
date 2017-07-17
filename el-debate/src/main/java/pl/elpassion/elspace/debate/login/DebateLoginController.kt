@@ -42,11 +42,11 @@ class DebateLoginController(
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
-                .doFinally { view.hideLoader() }
-                .subscribe({ view.openDebateScreen(it) }, onLoginError)
+                .doFinally(view::hideLoader)
+                .subscribe(view::openDebateScreen, this::onLoginError)
     }
 
-    private val onLoginError: (Throwable) -> Unit = { error ->
+    private fun onLoginError(error: Throwable) {
         if (error is HttpException && error.code() == 404) {
             view.showDebateClosedError()
         } else {

@@ -69,10 +69,8 @@ class DebateCommentActivityTest {
 
     @Test
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
-        startActivity(debateToken = "someToken")
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+         startActivity(debateToken = "someToken")
+        sendMessage("message")
         verify(api).comment(eq("someToken"), eq("message"), any(), any())
     }
 
@@ -89,9 +87,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("")
-                .pressImeActionButton()
+        sendMessage("")
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
     }
 
@@ -100,9 +96,7 @@ class DebateCommentActivityTest {
         startActivity()
         val maxMessageLength = 100
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
-        onId(R.id.debateCommentInputText)
-                .replaceText(createString(maxMessageLength + 1))
-                .pressImeActionButton()
+        sendMessage(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
 
@@ -111,27 +105,21 @@ class DebateCommentActivityTest {
         startActivity()
         val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
-        onId(R.id.debateCommentInputText)
-                .replaceText(createString(maxMessageLength + 1))
-                .pressImeActionButton()
+        sendMessage(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
 
     @Test
     fun shouldShowLoaderOnSendComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("message")
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("message")
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
@@ -139,9 +127,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("message")
         sendCommentSubject.onError(RuntimeException())
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
@@ -150,9 +136,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("message")
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.debateCommentInputText).hasText("message")
     }
@@ -167,9 +151,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldCloseScreenOnSuccessfullySentComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("message")
         sendCommentSubject.onComplete()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertTrue(rule.activity.isFinishing)
@@ -177,5 +159,11 @@ class DebateCommentActivityTest {
 
     private fun startActivity(debateToken: String = "debateToken") {
         rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+    }
+
+    private fun sendMessage(message: String) {
+        onId(R.id.debateCommentInputText)
+                .replaceText(message)
+                .pressImeActionButton()
     }
 }

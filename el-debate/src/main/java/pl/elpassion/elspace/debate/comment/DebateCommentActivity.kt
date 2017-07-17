@@ -110,7 +110,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showLastNameError() {
-
+        credentialsDialogView.debateCredentialsLastNameLayout.error = getString(R.string.debate_comment_credentials_last_name_incorrect)
     }
 
     override fun closeScreen() {

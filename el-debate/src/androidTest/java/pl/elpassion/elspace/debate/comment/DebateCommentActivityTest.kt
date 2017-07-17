@@ -207,6 +207,15 @@ class DebateCommentActivityTest {
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_comment_credentials_first_name_incorrect)
     }
 
+    @Test
+    fun shouldDisplayErrorOnIncorrectLastName() {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = "DebateToken")
+        sendMessage("message")
+        saveCredentials(firstName = "firstName", lastName = " ")
+        onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_comment_credentials_last_name_incorrect)
+    }
+
     private fun saveCredentials(firstName: String, lastName: String) {
         onId(R.id.debateCredentialsFirstNameInputText)
                 .replaceText(firstName)

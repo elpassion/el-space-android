@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,6 +17,9 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
+
+    private val credentialsDialog by lazy { AlertDialog.Builder(this).setView(R.layout.credentials_layout).create() }
+
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
@@ -77,7 +81,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showCredentialDialog() {
-
+        credentialsDialog.show()
     }
 
     override fun showFirstNameError() {

@@ -284,8 +284,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseTokenPassedWithIntentWhenSendingVote() {
         val token = "newToken"
-        startActivity(token)
-        debateDetailsSubject.onSuccess(createDebateData())
+        startActivityAndSuccessfullyReturnDebateDetails(token, createDebateData())
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote(eq(token), any())
     }

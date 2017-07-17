@@ -161,9 +161,7 @@ class DebateCommentActivityTest {
 
     @Test
     fun shouldShowFirstNameCredentialInputOnMissingCredentials() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity()
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog()
         onId(R.id.debateCredentialsFirstNameInputText)
                 .isDisplayed()
                 .textInputEditTextHasHint(R.string.debate_comment_credentials_first_name_hint)
@@ -172,9 +170,7 @@ class DebateCommentActivityTest {
 
     @Test
     fun shouldShowLastNameCredentialInputOnMissingCredentials() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity()
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog()
         onId(R.id.debateCredentialsLastNameInputText)
                 .isDisplayed()
                 .textInputEditTextHasHint(R.string.debate_comment_credentials_last_name_hint)
@@ -183,45 +179,35 @@ class DebateCommentActivityTest {
 
     @Test
     fun shouldSaveProvidedCredentialsToRepo() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = "DebateToken")
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = "firstName", lastName = "lastName")
         verify(debateRepo).saveTokenCredentials("DebateToken", TokenCredentials("firstName", "lastName"))
     }
 
     @Test
     fun shouldHideCredentialDialogWhenCredentialsWereSaved() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = "DebateToken")
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = "firstName", lastName = "lastName")
         onId(R.id.debateCommentCredentialsDialog).doesNotExist()
     }
 
     @Test
     fun shouldDisplayErrorOnIncorrectFirstName() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = "DebateToken")
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = " ", lastName = "lastName")
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_comment_credentials_first_name_incorrect)
     }
 
     @Test
     fun shouldDisplayErrorOnIncorrectLastName() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = "DebateToken")
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = "firstName", lastName = " ")
         onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_comment_credentials_last_name_incorrect)
     }
 
     @Test
     fun shouldHaveCredentialsDialogInfo() {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = "DebateToken")
-        sendMessage("message")
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         onText(R.string.debate_comment_credentials_info).isDisplayed()
     }
 
@@ -239,5 +225,11 @@ class DebateCommentActivityTest {
         onId(R.id.debateCommentInputText)
                 .replaceText(message)
                 .pressImeActionButton()
+    }
+
+    private fun startActivityAndOpenCredentialsDialog(debateToken: String = "debateToken") {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = debateToken)
+        sendMessage("message")
     }
 }

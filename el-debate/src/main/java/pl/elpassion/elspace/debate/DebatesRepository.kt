@@ -24,6 +24,7 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
         private val latestDebateCode = "LATEST_DEBATE_CODE"
         private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
         private val repository = createSharedPrefs<String?>(defaultSharedPreferences, gsonConverterAdapter())
+        private val credentialsRepository = createSharedPrefs<TokenCredentials>(defaultSharedPreferences, gsonConverterAdapter())
 
         override fun hasToken(debateCode: String) = repository.read(debateCode) != null
 
@@ -35,13 +36,11 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
 
         override fun getLatestDebateCode() = repository.read(latestDebateCode)
 
-        override fun areCredentialsMissing(token: String): Boolean = true
+        override fun areCredentialsMissing(token: String): Boolean = credentialsRepository.read(token) == null
 
-        override fun saveTokenCredentials(token: String, credentials: TokenCredentials) {
+        override fun saveTokenCredentials(token: String, credentials: TokenCredentials) = credentialsRepository.write(token, credentials)
 
-        }
-
-        override fun getTokenCredentials(token: String) = TokenCredentials("","")
+        override fun getTokenCredentials(token: String) = credentialsRepository.read(token)!!
 
     }
 })

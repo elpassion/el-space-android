@@ -235,6 +235,13 @@ class DebateCommentControllerTest {
         verify(view).closeCredentialsDialog()
     }
 
+    @Test
+    fun shouldNotCloseCredentialDialogOnIncorrectCredentials() {
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view, never()).closeCredentialsDialog()
+    }
+
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)

@@ -21,17 +21,16 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     private val credentialsDialog by lazy {
-        val view = LayoutInflater.from(this).run {
-            inflate(R.layout.credentials_layout, null)
+        val view = LayoutInflater.from(this).inflate(R.layout.credentials_layout, null).apply {
+            debateCommentCredentialsConfirm.setOnClickListener {
+                controller.onNewCredentials(token, TokenCredentials(
+                        firstName = debateCredentialsFirstNameInputText.text.toString(),
+                        lastName = debateCredentialsLastNameInputText.text.toString())
+                )
+            }
         }
         AlertDialog.Builder(this)
                 .setView(view)
-                .setPositiveButton(R.string.debate_comment_credentials_confirm) { _, _ ->
-                    controller.onNewCredentials(token, TokenCredentials(
-                            firstName = view.debateCredentialsFirstNameInputText.text.toString(),
-                            lastName = view.debateCredentialsLastNameInputText.text.toString())
-                    )
-                }
                 .create()
     }
 

@@ -180,6 +180,24 @@ class DebateCommentActivityTest {
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
+    @Test
+    fun shouldSaveProvidedCredentialsToRepo() {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = "DebateToken")
+        sendMessage("message")
+        saveCredentials(firstName = "firstName", lastName = "lastName")
+        verify(debateRepo).saveTokenCredentials("DebateToken", TokenCredentials("firstName", "lastName"))
+    }
+
+    private fun saveCredentials(firstName: String, lastName: String) {
+        onId(R.id.debateCredentialsFirstNameInputText)
+                .replaceText(firstName)
+        onId(R.id.debateCredentialsLastNameInputText)
+                .replaceText(lastName)
+        onText(R.string.debate_comment_credentials_confirm)
+                .click()
+    }
+
     private fun startActivity(debateToken: String = "debateToken") {
         rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }

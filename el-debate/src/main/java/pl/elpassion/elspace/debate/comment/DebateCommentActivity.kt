@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.credentials_layout.view.*
 import kotlinx.android.synthetic.main.debate_comment_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -18,7 +20,20 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
-    private val credentialsDialog by lazy { AlertDialog.Builder(this).setView(R.layout.credentials_layout).create() }
+    private val credentialsDialog by lazy {
+        val view = LayoutInflater.from(this).run {
+            inflate(R.layout.credentials_layout, null)
+        }
+        AlertDialog.Builder(this)
+                .setView(view)
+                .setPositiveButton(R.string.debate_comment_credentials_confirm) { _, _ ->
+                    controller.onNewCredentials(token, TokenCredentials(
+                            firstName = view.debateCredentialsFirstNameInputText.text.toString(),
+                            lastName = view.debateCredentialsLastNameInputText.text.toString())
+                    )
+                }
+                .create()
+    }
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 

@@ -21,7 +21,7 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 class DebateCommentActivityTest {
 
     private val debateRepo = mock<DebatesRepository>().apply {
-        whenever(getLatestDebateNickname()).thenReturn("mrNick")
+        whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()

@@ -196,8 +196,8 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowErrorOnLoginError() {
-        apiSubject.onError(RuntimeException())
         loginToDebate()
+        apiSubject.onError(RuntimeException())
         onText(R.string.debate_login_error).isDisplayed()
     }
 

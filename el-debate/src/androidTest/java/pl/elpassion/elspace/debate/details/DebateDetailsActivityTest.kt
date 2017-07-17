@@ -200,7 +200,9 @@ class DebateDetailsActivityTest {
     fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
         startActivity()
         debateDetailsSubject.onError(RuntimeException())
-        onText(R.string.debate_details_error_refresh).click()
+        InstrumentationRegistry.getInstrumentation().runOnMainSync {
+            onText(R.string.debate_details_error_refresh).click()
+        }
         verify(apiMock, times(2)).getDebateDetails(any())
     }
 

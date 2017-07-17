@@ -99,7 +99,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun closeCredentialsDialog() {
-
+        credentialsDialog.hide()
     }
 
     override fun showFirstNameError() {

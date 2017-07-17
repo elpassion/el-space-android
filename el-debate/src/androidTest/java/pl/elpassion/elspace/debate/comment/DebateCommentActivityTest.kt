@@ -189,6 +189,15 @@ class DebateCommentActivityTest {
         verify(debateRepo).saveTokenCredentials("DebateToken", TokenCredentials("firstName", "lastName"))
     }
 
+    @Test
+    fun shouldHideCredentialDialogWhenCredentialsWereSaved() {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = "DebateToken")
+        sendMessage("message")
+        saveCredentials(firstName = "firstName", lastName = "lastName")
+        onId(R.id.debateCommentCredentialsDialog).doesNotExist()
+    }
+
     private fun saveCredentials(firstName: String, lastName: String) {
         onId(R.id.debateCredentialsFirstNameInputText)
                 .replaceText(firstName)

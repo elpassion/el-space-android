@@ -169,6 +169,17 @@ class DebateCommentActivityTest {
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
+    @Test
+    fun shouldShowLastNameCredentialInputOnMissingCredentials() {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity()
+        sendMessage("message")
+        onId(R.id.debateCredentialsLastNameInputText)
+                .isDisplayed()
+                .textInputEditTextHasHint(R.string.debate_comment_credentials_last_name_hint)
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
+    }
+
     private fun startActivity(debateToken: String = "debateToken") {
         rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }

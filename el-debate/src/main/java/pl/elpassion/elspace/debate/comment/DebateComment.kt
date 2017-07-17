@@ -27,7 +27,7 @@ interface DebateComment {
         fun closeScreen()
         fun showInvalidInputError()
         fun showInputOverLimitError()
-        fun showCredentialDialog()
+        fun showCredentialsDialog()
         fun showFirstNameError()
         fun showLastNameError()
         fun closeCredentialsDialog()

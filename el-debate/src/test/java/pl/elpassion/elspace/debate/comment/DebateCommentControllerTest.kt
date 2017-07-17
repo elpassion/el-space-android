@@ -181,7 +181,7 @@ class DebateCommentControllerTest {
     fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
         whenever(debateRepo.areCredentialsMissing("token")).thenReturn(true)
         controller.sendComment("token", "message")
-        verify(view).showCredentialDialog()
+        verify(view).showCredentialsDialog()
     }
 
     @Test
@@ -229,7 +229,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldCloseCredentialDialogOnCorrectCredentials() {
+    fun shouldCloseCredentialsDialogOnCorrectCredentials() {
         val credentials = createCredentials()
         controller.onNewCredentials("token", credentials)
         verify(view).closeCredentialsDialog()

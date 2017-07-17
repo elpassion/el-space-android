@@ -26,11 +26,11 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe({ view.showDebateDetails(it) }, onDebateDetailsError)
+                .subscribe(view::showDebateDetails, this::onDebateDetailsError)
                 .addTo(compositeDisposable)
     }
 
-    private val onDebateDetailsError: (Throwable) -> Unit = { error ->
+    private fun onDebateDetailsError(error: Throwable) {
         if (error is HttpException) {
             onHttpException(error)
         } else {
@@ -44,11 +44,11 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showVoteLoader(answer) }
                 .doFinally(view::hideVoteLoader)
-                .subscribe({ view.showVoteSuccess(answer) }, onVoteError)
+                .subscribe({ view.showVoteSuccess(answer) }, this::onVoteError)
                 .addTo(compositeDisposable)
     }
 
-    private val onVoteError: (Throwable) -> Unit = { error ->
+    private fun onVoteError(error: Throwable) {
         if (error is HttpException) {
             onHttpException(error)
         } else {

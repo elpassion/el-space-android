@@ -41,6 +41,7 @@ class DebateCommentController(
     }
 
     fun onNewCredentials(token: String, credentials: TokenCredentials) {
+        view.closeCredentialsDialog()
         if (credentials.lastName.isBlank()) {
             view.showLastNameError()
         }

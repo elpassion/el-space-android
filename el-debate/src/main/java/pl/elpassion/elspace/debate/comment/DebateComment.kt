@@ -30,6 +30,7 @@ interface DebateComment {
         fun showCredentialDialog()
         fun showFirstNameError()
         fun showLastNameError()
+        fun closeCredentialsDialog()
     }
 
     object ApiProvider : Provider<DebateComment.Api>({

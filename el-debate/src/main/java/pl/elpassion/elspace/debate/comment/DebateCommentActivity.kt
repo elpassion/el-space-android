@@ -21,7 +21,7 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
     private val credentialsDialogView by lazy {
-        LayoutInflater.from(this).inflate(R.layout.credentials_layout, null).apply {
+        LayoutInflater.from(this).inflate(R.layout.credentials_dialog_layout, null).apply {
             debateCommentCredentialsConfirm.setOnClickListener {
                 controller.onNewCredentials(token, TokenCredentials(
                         firstName = debateCredentialsFirstNameInputText.text.toString(),

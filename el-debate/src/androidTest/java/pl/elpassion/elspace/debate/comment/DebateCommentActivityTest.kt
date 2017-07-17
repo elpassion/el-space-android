@@ -214,6 +214,14 @@ class DebateCommentActivityTest {
         onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_comment_credentials_last_name_incorrect)
     }
 
+    @Test
+    fun shouldHaveCredentialsDialogInfo() {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = "DebateToken")
+        sendMessage("message")
+        onText(R.string.debate_comment_credentials_info).isDisplayed()
+    }
+
     private fun saveCredentials(firstName: String, lastName: String) {
         onId(R.id.debateCredentialsFirstNameInputText).replaceText(firstName)
         onId(R.id.debateCredentialsLastNameInputText).replaceText(lastName)

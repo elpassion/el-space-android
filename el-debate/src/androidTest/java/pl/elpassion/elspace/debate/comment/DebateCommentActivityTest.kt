@@ -69,7 +69,7 @@ class DebateCommentActivityTest {
 
     @Test
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
-         startActivity(debateToken = "someToken")
+        startActivity(debateToken = "someToken")
         sendMessage("message")
         verify(api).comment(eq("someToken"), eq("message"), any(), any())
     }
@@ -132,7 +132,6 @@ class DebateCommentActivityTest {
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
 
-
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
@@ -156,7 +155,6 @@ class DebateCommentActivityTest {
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertTrue(rule.activity.isFinishing)
     }
-
 
     @Test
     fun shouldShowFirstNameCredentialInputOnMissingCredentials() {
@@ -217,12 +215,9 @@ class DebateCommentActivityTest {
     }
 
     private fun saveCredentials(firstName: String, lastName: String) {
-        onId(R.id.debateCredentialsFirstNameInputText)
-                .replaceText(firstName)
-        onId(R.id.debateCredentialsLastNameInputText)
-                .replaceText(lastName)
-        onText(R.string.debate_comment_credentials_confirm)
-                .click()
+        onId(R.id.debateCredentialsFirstNameInputText).replaceText(firstName)
+        onId(R.id.debateCredentialsLastNameInputText).replaceText(lastName)
+        onText(R.string.debate_comment_credentials_confirm).click()
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

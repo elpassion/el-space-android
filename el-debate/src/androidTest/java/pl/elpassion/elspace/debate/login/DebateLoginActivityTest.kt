@@ -18,6 +18,7 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createHttpException
@@ -196,9 +197,9 @@ class DebateLoginActivityTest {
 
     @Test
     fun shouldShowErrorOnLoginError() {
-        apiSubject.onError(RuntimeException())
         loginToDebate()
-        onText(R.string.debate_login_error).isDisplayed()
+        apiSubject.onError(RuntimeException())
+        onText(R.string.debate_login_error).isDisplayedEffectively()
     }
 
     @Test

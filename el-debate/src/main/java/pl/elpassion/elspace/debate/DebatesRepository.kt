@@ -22,7 +22,6 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
     object : DebatesRepository {
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
-        private val latestDebateNickname = "LATEST_DEBATE_NICKNAME"
         private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
         private val repository = createSharedPrefs<String?>(defaultSharedPreferences, gsonConverterAdapter())
 

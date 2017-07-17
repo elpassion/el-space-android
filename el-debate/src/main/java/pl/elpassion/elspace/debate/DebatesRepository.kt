@@ -22,8 +22,11 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
     object : DebatesRepository {
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
+
         private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
+
         private val repository = createSharedPrefs<String?>(defaultSharedPreferences, gsonConverterAdapter())
+
         private val credentialsRepository = createSharedPrefs<TokenCredentials>(defaultSharedPreferences, gsonConverterAdapter())
 
         override fun hasToken(debateCode: String) = repository.read(debateCode) != null

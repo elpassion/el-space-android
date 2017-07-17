@@ -20,8 +20,8 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
-    private val credentialsDialog by lazy {
-        val view = LayoutInflater.from(this).inflate(R.layout.credentials_layout, null).apply {
+    private val credentialsDialogView by lazy {
+        LayoutInflater.from(this).inflate(R.layout.credentials_layout, null).apply {
             debateCommentCredentialsConfirm.setOnClickListener {
                 controller.onNewCredentials(token, TokenCredentials(
                         firstName = debateCredentialsFirstNameInputText.text.toString(),
@@ -29,8 +29,11 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                 )
             }
         }
+    }
+
+    private val credentialsDialog by lazy {
         AlertDialog.Builder(this)
-                .setView(view)
+                .setView(credentialsDialogView)
                 .create()
     }
 
@@ -103,6 +106,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showFirstNameError() {
+        credentialsDialogView.debateCredentialsFirstNameLayout.error = getString(R.string.debate_comment_credentials_first_name_incorrect)
     }
 
     override fun showLastNameError() {

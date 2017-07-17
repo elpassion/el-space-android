@@ -25,6 +25,7 @@
     <string name="debate_comment_credentials_first_name_hint">Insert your first name</string>
     <string name="debate_comment_credentials_last_name_hint">Insert your last name</string>
     <string name="debate_comment_credentials_confirm">Save</string>
+    <string name="debate_comment_credentials_first_name_incorrect">First name can\'t be empty</string>
     <string name="debate_vote_slow_down_title">Slow down!</string>
     <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait a few seconds between your votes. Try again in a moment! :)</string>
     <string name="debate_vote_slow_down_OK_button">OK</string>

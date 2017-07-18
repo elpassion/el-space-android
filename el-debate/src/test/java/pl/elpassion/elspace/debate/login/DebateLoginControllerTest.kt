@@ -40,9 +40,9 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnLogin404CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
         logToDebate()
-        apiSubject.onError(createHttpException(404))
+        apiSubject.onError(createHttpException(406))
         verify(view).showDebateClosedError()
     }
 

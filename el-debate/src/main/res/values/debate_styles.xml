@@ -19,7 +19,6 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/colorWhite</item>
         <item name="android:gravity">center</item>
-        <item name="android:background">@color/colorPrimaryBlue</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 

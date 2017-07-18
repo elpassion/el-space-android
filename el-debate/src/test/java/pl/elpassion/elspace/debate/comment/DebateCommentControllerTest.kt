@@ -206,7 +206,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldShowLastNameErrorOnBlankFirstName() {
+    fun shouldShowLastNameErrorOnBlankLastName() {
         val credentials = createCredentials(lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view).showLastNameError()

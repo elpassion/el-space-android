@@ -21,9 +21,10 @@ class DebateLoginController(
     }
 
     fun onLogToDebate(debateCode: String) {
-        when {
-            debateCode.length != 5 -> view.showWrongPinError()
-            else -> makeSubscription(debateCode)
+        if (debateCode.length != 5) {
+            view.showWrongPinError()
+        } else {
+            makeSubscription(debateCode)
         }
     }
 

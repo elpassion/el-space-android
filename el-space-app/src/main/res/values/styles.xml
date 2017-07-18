@@ -48,13 +48,13 @@
     <style name="ReportContent">
         <item name="android:padding">16dp</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/blackText</item>
     </style>
 
     <style name="ProjectContent">
         <item name="android:padding">16dp</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/blackText</item>
     </style>
 
     <style name="HubIndicator">

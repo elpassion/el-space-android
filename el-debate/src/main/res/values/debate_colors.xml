@@ -3,12 +3,12 @@
     <color name="colorPrimaryBlue">#383676</color>
     <color name="colorPrimaryDarkBlue">#383676</color>
     <color name="colorPrimaryGreen">#4CC359</color>
-    <color name="black">#000</color>
-    <color name="colorWhite">#fff</color>
-    <color name="textUnderline">#e2e2e2</color>
-    <color name="greyHint">#C0C0C0</color>
+    <color name="white">#fff</color>
+    <color name="blackText">#000</color>
     <color name="greyLightText">#B8B8B8</color>
     <color name="greyDarkText">#4A4A4A</color>
+    <color name="textUnderline">#e2e2e2</color>
+    <color name="greyHint">#C0C0C0</color>
     <color name="answerPositive">#0098E3</color>
     <color name="answerNegative">#E44043</color>
     <color name="answerNeutral">#8F8F8F</color>

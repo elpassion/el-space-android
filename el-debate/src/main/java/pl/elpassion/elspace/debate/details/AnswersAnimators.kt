@@ -47,22 +47,22 @@ class AnswersAnimators(private val view: View, private val context: Context) {
 
     fun startPositiveAnswerAnimation() {
         setPositiveActive()
-        startAnimation(positiveAnswerAnimator)
+        positiveAnswerAnimator.startAnimation()
     }
 
     fun startNegativeAnswerAnimation() {
         setNegativeActive()
-        startAnimation(negativeAnswerAnimator)
+        negativeAnswerAnimator.startAnimation()
     }
 
     fun startNeutralAnswerAnimation() {
         setNeutralActive()
-        startAnimation(neutralAnswerAnimator)
+        neutralAnswerAnimator.startAnimation()
     }
 
-    private fun startAnimation(animatable: Animatable) {
+    private fun Animatable.startAnimation() {
         if (Animations.areEnabled) {
-            animatable.start()
+            this.start()
         }
     }
 }

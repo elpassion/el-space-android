@@ -73,7 +73,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
-        sendMessage("message")
+        sendMessage()
         verify(api).comment("someToken", "message", "firstName", "lastName")
     }
 
@@ -115,14 +115,14 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowLoaderOnSendComment() {
         startActivity()
-        sendMessage("message")
+        sendMessage()
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
-        sendMessage("message")
+        sendMessage()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
@@ -130,7 +130,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
-        sendMessage("message")
+        sendMessage()
         sendCommentSubject.onError(RuntimeException())
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
@@ -138,9 +138,9 @@ class DebateCommentActivityTest {
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
-        sendMessage("message")
+        sendMessage("New message")
         sendCommentSubject.onError(RuntimeException())
-        onId(R.id.debateCommentInputText).hasText("message")
+        onId(R.id.debateCommentInputText).hasText("New message")
     }
 
     @Test
@@ -153,7 +153,7 @@ class DebateCommentActivityTest {
     @Test
     fun shouldCloseScreenOnSuccessfullySentComment() {
         startActivity()
-        sendMessage("message")
+        sendMessage()
         sendCommentSubject.onComplete()
         InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertTrue(rule.activity.isFinishing)
@@ -221,7 +221,7 @@ class DebateCommentActivityTest {
         rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
 
-    private fun sendMessage(message: String) {
+    private fun sendMessage(message: String = "message") {
         onId(R.id.debateCommentInputText)
                 .replaceText(message)
                 .pressImeActionButton()
@@ -230,6 +230,6 @@ class DebateCommentActivityTest {
     private fun startActivityAndOpenCredentialsDialog(debateToken: String = "debateToken") {
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
         startActivity(debateToken = debateToken)
-        sendMessage("message")
+        sendMessage()
     }
 }

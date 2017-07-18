@@ -124,27 +124,27 @@ class DebateDetailsActivityTest {
     fun shouldHighlightPositiveAnswerWhenLastAnswerWasPositive() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 1))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
     fun shouldHighlightNegativeAnswerWhenLastAnswerWasNegative() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
     fun shouldHighlightNeutralAnswerWhenLastAnswerWasNeutral() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 3))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
     }
 
     @Test
@@ -337,9 +337,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
@@ -347,9 +347,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
@@ -357,9 +357,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
     }
 
     @Test

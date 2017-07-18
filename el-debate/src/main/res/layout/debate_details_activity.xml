@@ -95,7 +95,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textColor="@color/blueDebatePositive"
+                            android:textColor="@color/answerPositive"
                             tools:text="Positive answer" />
 
                         <ImageView
@@ -112,7 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/blueDebatePositive">
+                        app:tintColor="@color/answerPositive">
 
                     </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -141,7 +141,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textColor="@color/redDebateNegative"
+                            android:textColor="@color/answerNegative"
                             tools:text="Negative answer" />
 
                         <ImageView
@@ -158,7 +158,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/redDebateNegative">
+                        app:tintColor="@color/answerNegative">
 
                     </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 
@@ -187,7 +187,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textColor="@color/greyDebateNeutral"
+                            android:textColor="@color/answerNeutral"
                             tools:text="Neutral answer" />
 
                         <ImageView
@@ -204,7 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/greyDebateNeutral">
+                        app:tintColor="@color/answerNeutral">
 
                     </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
 

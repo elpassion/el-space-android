@@ -38,7 +38,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun getTintColorFromAttrs(typedArray: TypedArray, context: Context) {
         if (typedArray.hasValue(R.styleable.DebateAnswerLoader_tintColor)) {
-            val tintColor = typedArray.getColor(R.styleable.DebateAnswerLoader_tintColor, ContextCompat.getColor(context, R.color.greyDebateInactive))
+            val tintColor = typedArray.getColor(R.styleable.DebateAnswerLoader_tintColor, ContextCompat.getColor(context, R.color.answerInactive))
             applyTintColor(tintColor)
         }
     }

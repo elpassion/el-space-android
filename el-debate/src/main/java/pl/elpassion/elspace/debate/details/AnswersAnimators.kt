@@ -21,21 +21,21 @@ class AnswersAnimators(private val view: View, private val context: Context) {
     private val neutralAnswerAnimator by lazy { view.debateNeutralAnswerImage.drawable as Animatable }
 
     private fun setPositiveActive() = view.run {
-        debatePositiveAnswerImage.setTintColor(R.color.blueDebatePositive)
-        debateNegativeAnswerImage.setTintColor(R.color.greyDebateInactive)
-        debateNeutralAnswerImage.setTintColor(R.color.greyDebateInactive)
+        debatePositiveAnswerImage.setTintColor(R.color.answerPositive)
+        debateNegativeAnswerImage.setTintColor(R.color.answerInactive)
+        debateNeutralAnswerImage.setTintColor(R.color.answerInactive)
     }
 
     private fun setNegativeActive() = view.run {
-        debatePositiveAnswerImage.setTintColor(R.color.greyDebateInactive)
-        debateNegativeAnswerImage.setTintColor(R.color.redDebateNegative)
-        debateNeutralAnswerImage.setTintColor(R.color.greyDebateInactive)
+        debatePositiveAnswerImage.setTintColor(R.color.answerInactive)
+        debateNegativeAnswerImage.setTintColor(R.color.answerNegative)
+        debateNeutralAnswerImage.setTintColor(R.color.answerInactive)
     }
 
     private fun setNeutralActive() = view.run {
-        debatePositiveAnswerImage.setTintColor(R.color.greyDebateInactive)
-        debateNegativeAnswerImage.setTintColor(R.color.greyDebateInactive)
-        debateNeutralAnswerImage.setTintColor(R.color.greyDebateNeutral)
+        debatePositiveAnswerImage.setTintColor(R.color.answerInactive)
+        debateNegativeAnswerImage.setTintColor(R.color.answerInactive)
+        debateNeutralAnswerImage.setTintColor(R.color.answerNeutral)
     }
 
     private fun ImageView.setTintColor(@ColorRes tintColor: Int) {

@@ -13,6 +13,5 @@
     <color name="unselectedText">#B3B3B8</color>
     <color name="selectedWhite">#42000000</color>
     <color name="defaultTextColor">#5F5A6A</color>
-    <color name="hint">#AB9BFF</color>
     <color name="violetButton">#AB9BFF</color>
 </resources>

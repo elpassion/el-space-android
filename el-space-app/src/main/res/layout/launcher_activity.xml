@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@color/colorViolet"
+            android:background="@color/violetButton"
             android:text="@string/launcher_button_hub" />
 
         <Button

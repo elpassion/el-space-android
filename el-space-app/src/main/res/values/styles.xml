@@ -1,19 +1,13 @@
 <resources>
 
-    <style name="AppThemeBlue" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimarySpace</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkSpace</item>
-        <item name="colorAccent">@color/colorAccentSpace</item>
-    </style>
-
-    <style name="AppThemeBlueWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppThemeSpace" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimarySpace</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkSpace</item>
         <item name="colorAccent">@color/colorAccentSpace</item>
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
-    <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog">
+    <style name="AppThemeSpace_Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorPrimary">@color/colorPrimarySpace</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkSpace</item>
         <item name="colorAccent">@color/colorAccentSpace</item>

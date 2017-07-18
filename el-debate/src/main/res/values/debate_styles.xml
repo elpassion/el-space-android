@@ -1,16 +1,16 @@
 <resources>
 
     <style name="AppThemeGreenWithoutActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimaryGreen</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
-        <item name="colorAccent">@color/colorPrimaryGreen</item>
+        <item name="colorPrimary">@color/colorPrimaryDebate</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDebate</item>
+        <item name="colorAccent">@color/colorPrimaryDebate</item>
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
     <style name="EL_Dialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/colorPrimaryGreen</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryGreen</item>
-        <item name="colorAccent">@color/colorPrimaryGreen</item>
+        <item name="colorPrimary">@color/colorPrimaryDebate</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDebate</item>
+        <item name="colorAccent">@color/colorPrimaryDebate</item>
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 

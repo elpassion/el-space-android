@@ -93,7 +93,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:background="@color/colorPrimaryGreen"
+        android:background="@color/colorPrimaryDebate"
         android:text="@string/debate_login_button_login" />
 
 </android.support.design.widget.CoordinatorLayout>

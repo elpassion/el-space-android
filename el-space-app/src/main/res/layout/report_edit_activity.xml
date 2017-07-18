@@ -139,7 +139,7 @@
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:itemBackground="@color/colorPrimaryBlue"
+                app:itemBackground="@color/colorPrimarySpace"
                 app:itemIconTint="@color/white"
                 app:itemTextColor="@color/white"
                 app:menu="@menu/add_report_button_menu" />

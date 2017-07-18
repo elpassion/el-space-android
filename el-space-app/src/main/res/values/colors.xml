@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccentBlue">#403E70</color>
+    <color name="colorPrimarySpace">#383676</color>
+    <color name="colorPrimaryDarkSpace">#383676</color>
+    <color name="colorAccentSpace">#403E70</color>
     <color name="borderColor">#E0E0E0</color>
     <color name="reportMissing">#BA6767</color>
     <color name="emptyToken">#FF4040</color>

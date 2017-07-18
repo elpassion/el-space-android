@@ -210,13 +210,6 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldHaveOkButtonInDebateClosedErrorDialog() {
-        loginToDebate()
-        apiSubject.onError(createHttpException(404))
-        onText(R.string.debate_login_debate_closed_error_button_ok).isDisplayed()
-    }
-
-    @Test
     fun shouldCloseDebateClosedErrorDialogOnOkClick() {
         loginToDebate()
         apiSubject.onError(createHttpException(404))

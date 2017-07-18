@@ -28,6 +28,13 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         DebateLoginController(this, DebatesRepositoryProvider.get(), DebateLogin.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
+    private val debateClosedError by lazy {
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.debate_login_debate_closed_error))
+                .setPositiveButton(getString(R.string.debate_login_debate_closed_error_button_ok)) { dialog, _ -> dialog.dismiss() }
+                .create()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
@@ -73,10 +80,7 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
     }
 
     override fun showDebateClosedError() {
-        AlertDialog.Builder(this).create().apply {
-            setTitle(getString(R.string.debate_login_debate_closed_error))
-            setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.debate_login_debate_closed_error_button_ok)) { dialog, _ -> dialog.dismiss() }
-        }.show()
+        debateClosedError.show()
     }
 
     override fun showLoginError(error: Throwable) {

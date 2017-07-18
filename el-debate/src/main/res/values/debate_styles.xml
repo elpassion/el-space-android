@@ -22,10 +22,10 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="HintGrey">
-        <item name="colorAccent">@color/greyHint</item>
+    <style name="HintDebate">
+        <item name="colorAccent">@color/hint</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/greyHint</item>
+        <item name="android:textColor">@color/hint</item>
     </style>
 
     <style name="DebateAnswerText">

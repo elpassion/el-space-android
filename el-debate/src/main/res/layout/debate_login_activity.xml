@@ -49,8 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:hintTextAppearance="@style/HintGrey"
-                app:theme="@style/HintGrey">
+                app:hintTextAppearance="@style/HintDebate"
+                app:theme="@style/HintDebate">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/debateLoginPinInputText"
@@ -68,8 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:hintTextAppearance="@style/HintGrey"
-                app:theme="@style/HintGrey">
+                app:hintTextAppearance="@style/HintDebate"
+                app:theme="@style/HintDebate">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/debateLoginNicknameInputText"

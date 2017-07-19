@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.common;
+package pl.elpassion.elspace.common
 
 typealias Initializer<T> = () -> T
 

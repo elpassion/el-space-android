@@ -112,9 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/answerPositive">
-
-                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+                        app:tintColor="@color/answerPositive" />
 
                 </android.support.v7.widget.CardView>
 
@@ -158,9 +156,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/answerNegative">
-
-                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+                        app:tintColor="@color/answerNegative" />
 
                 </android.support.v7.widget.CardView>
 
@@ -204,9 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:layout_gravity="bottom"
-                        app:tintColor="@color/answerNeutral">
-
-                    </pl.elpassion.elspace.debate.details.DebateAnswerLoader>
+                        app:tintColor="@color/answerNeutral" />
 
                 </android.support.v7.widget.CardView>
 

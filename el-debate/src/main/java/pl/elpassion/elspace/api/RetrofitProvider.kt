@@ -2,6 +2,7 @@ package pl.elpassion.elspace.api
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pl.elpassion.elspace.common.Provider
@@ -21,6 +22,14 @@ private val httpLoggingInterceptor by lazy {
     HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 }
 
+private val apiVersionHeaderInterceptor = Interceptor { chain ->
+    val originalRequest = chain.request()
+    val request = originalRequest.newBuilder()
+            .header("Accept", "edge=1")
+            .method(originalRequest.method(), originalRequest.body())
+            .build()
+    chain.proceed(request)
+}
 
 object DebateRetrofitProvider : Provider<Retrofit>({
     createRetrofit(
@@ -39,3 +48,4 @@ fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
 
 fun defaultOkHttpClient() = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(apiVersionHeaderInterceptor)

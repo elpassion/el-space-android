@@ -10,6 +10,6 @@ fun Observable<MenuItem>.onMenuItemClicks(menuId: Int): Observable<Unit> = onMen
 
 fun Observable<MenuItem>.onMenuItemAction(menuId: Int): Observable<MenuItem> = this.filter { it.itemId == menuId }
 
-fun Toolbar.menuClicks() = itemClicks()
+fun Toolbar.menuClicks(): Observable<MenuItem> = itemClicks()
         .subscribeOn(AndroidSchedulers.mainThread())
         .share()

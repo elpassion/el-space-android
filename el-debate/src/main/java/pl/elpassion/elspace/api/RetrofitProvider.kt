@@ -37,5 +37,5 @@ fun createRetrofit(okHttpClient: OkHttpClient?, baseUrl: String): Retrofit {
             .build()
 }
 
-fun defaultOkHttpClient() = OkHttpClient.Builder()
+fun defaultOkHttpClient(): OkHttpClient.Builder = OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)

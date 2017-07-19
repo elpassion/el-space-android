@@ -26,16 +26,8 @@ class DebateDetailsController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(view::showDebateDetails, this::onDebateDetailsError)
+                .subscribe(view::showDebateDetails, view::showDebateDetailsError)
                 .addTo(compositeDisposable)
-    }
-
-    private fun onDebateDetailsError(error: Throwable) {
-        if (error is HttpException) {
-            onHttpException(error)
-        } else {
-            view.showDebateDetailsError(error)
-        }
     }
 
     fun onVote(token: String, answer: Answer) {
@@ -49,17 +41,10 @@ class DebateDetailsController(
     }
 
     private fun onVoteError(error: Throwable) {
-        if (error is HttpException) {
-            onHttpException(error)
-        } else {
-            view.showVoteError(error)
-        }
-    }
-
-    private fun onHttpException(error: HttpException) {
         when {
-            error.code() == 406 -> view.showDebateClosedError()
-            error.code() == 429 -> view.showSlowDownInformation()
+            error is HttpException && error.code() == 406 -> view.showDebateClosedError()
+            error is HttpException && error.code() == 429 -> view.showSlowDownInformation()
+            else -> view.showVoteError(error)
         }
     }
 

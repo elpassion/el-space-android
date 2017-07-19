@@ -166,21 +166,6 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnDebateDetails406CodeErrorFromApi() {
-        startActivity()
-        debateDetailsSubject.onError(createHttpException(406))
-        onId(R.id.debateClosedView).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        sendVoteSubject.onError(createHttpException(406))
-        onId(R.id.debateClosedView).isDisplayed()
-    }
-
-    @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
         startActivity()
         debateDetailsSubject.onError(RuntimeException())
@@ -255,6 +240,33 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayedEffectively()
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
+        sendVoteSubject.onError(createHttpException(406))
+        onId(R.id.debateClosedView).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_title).isDisplayed()
+        onText(R.string.debate_vote_slow_down_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldCloseSlowDownInformationOnButtonClick() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_OK_button).click()
+        onText(R.string.debate_vote_slow_down_title).doesNotExist()
+        onText(R.string.debate_vote_slow_down_info).doesNotExist()
     }
 
     @Test
@@ -358,25 +370,6 @@ class DebateDetailsActivityTest {
         onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
         onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
         onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
-    }
-
-    @Test
-    fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_title).isDisplayed()
-        onText(R.string.debate_vote_slow_down_info).isDisplayed()
-    }
-
-    @Test
-    fun shouldCloseSlowDownInformationOnButtonClick() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_OK_button).click()
-        onText(R.string.debate_vote_slow_down_title).doesNotExist()
-        onText(R.string.debate_vote_slow_down_info).doesNotExist()
     }
 
     @Test

@@ -36,7 +36,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'design'
         exclude group: 'com.android.support', module: 'gridlayout-v7'
     }
-    api group: 'com.android.support', name: 'multidex', version: '1.0.1'
+    api group: 'com.android.support', name: 'multidex', version: '1.0.2'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

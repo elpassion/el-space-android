@@ -16,8 +16,8 @@ interface DebateComment {
         fun comment(
                 @Header("Authorization") token: String,
                 @Field("text") message: String,
-                @Field("firstName") firstName: String,
-                @Field("lastName") lastName: String): Completable
+                @Field("first_name") firstName: String,
+                @Field("last_name") lastName: String): Completable
     }
 
     interface View {

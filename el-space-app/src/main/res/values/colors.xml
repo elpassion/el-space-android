@@ -5,8 +5,6 @@
     <color name="colorAccentSpace">#403E70</color>
     <color name="borderColor">#E0E0E0</color>
     <color name="reportMissing">#BA6767</color>
-    <color name="reportHeaderCell">#F1EFEF</color>
-    <color name="reportHeaderContent">#312E39</color>
     <color name="hubBackground">#F8F8FA</color>
     <color name="missingIndicator">#CF9796</color>
     <color name="filledIndicator">#91ECB3</color>

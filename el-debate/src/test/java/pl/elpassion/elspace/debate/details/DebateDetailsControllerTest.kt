@@ -86,36 +86,6 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnDebateDetails406CodeErrorFromApi() {
-        createController().onCreate("token")
-        debateDetailsSubject.onError(createHttpException(406))
-        verify(view).showDebateClosedError()
-    }
-
-    @Test
-    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
-        createController().onVote("token", createPositiveAnswer())
-        sendVoteSubject.onError(createHttpException(406))
-        verify(view).showDebateClosedError()
-    }
-
-    @Test
-    fun shouldShowInformationToSlowDownWithVotingOn429CodeErrorFromApi() {
-        createController().onVote("", createPositiveAnswer())
-        val exception = createHttpException(429)
-        sendVoteSubject.onError(exception)
-        verify(view).showSlowDownInformation()
-    }
-
-    @Test
-    fun shouldNotShowVoteErrorOn429ErrorFromApi() {
-        createController().onVote("", createPositiveAnswer())
-        val exception = createHttpException(429)
-        sendVoteSubject.onError(exception)
-        verify(view, never()).showVoteError(any())
-    }
-
-    @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFails() {
         createController().onCreate("token")
         val exception = RuntimeException()
@@ -213,6 +183,29 @@ class DebateDetailsControllerTest {
         createController().onVote("", positiveAnswer)
         sendVoteSubject.onComplete()
         verify(view).showVoteSuccess(positiveAnswer)
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        createController().onVote("token", createPositiveAnswer())
+        sendVoteSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
+    }
+
+    @Test
+    fun shouldShowSlowDownInformationOnVote429CodeErrorFromApi() {
+        createController().onVote("", createPositiveAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view).showSlowDownInformation()
+    }
+
+    @Test
+    fun shouldNotShowVoteErrorOn429ErrorFromApi() {
+        createController().onVote("", createPositiveAnswer())
+        val exception = createHttpException(429)
+        sendVoteSubject.onError(exception)
+        verify(view, never()).showVoteError(any())
     }
 
     @Test

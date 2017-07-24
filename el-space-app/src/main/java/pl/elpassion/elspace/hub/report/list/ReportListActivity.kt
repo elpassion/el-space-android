@@ -159,10 +159,10 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         else -> throw IllegalArgumentException()
     }
 
-    private fun createDaysHolders(item: Day) = when (item) {
+    private fun createDaysHolders(day: Day) = when (day) {
         is DayWithHourlyReports -> DayItemViewHolder(controller)
         is DayWithDailyReport -> DayWithDailyReportsItemViewHolder(controller)
-        is DayWithoutReports -> createDayWithoutReportsHolder(item)
+        is DayWithoutReports -> createDayWithoutReportsHolder(day)
     }
 
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {

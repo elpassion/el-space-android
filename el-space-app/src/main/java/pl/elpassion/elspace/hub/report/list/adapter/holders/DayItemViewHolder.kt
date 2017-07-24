@@ -29,4 +29,9 @@ class DayItemViewHolder(itemView: View, val controller: ReportListController) : 
             R.plurals.report_list_total_hours,
             item.reportedHours.toInt(),
             item.reportedHours.toStringWithoutZeroes())
+
+    companion object {
+        operator fun invoke(controller: ReportListController) =
+                R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, controller) }
+    }
 }

@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
@@ -31,8 +30,6 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.holders.*
-import pl.elpassion.elspace.hub.report.list.adapter.items.PaidVacationReportItemViewHolder
-import pl.elpassion.elspace.hub.report.list.adapter.items.RegularReportItemViewHolder
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 
@@ -157,25 +154,25 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     private fun createHolders(item: AdapterItem) = when (item) {
         is Day -> createDaysHolders(item)
         is HourlyReport -> createReportsHolders(item)
-        is Separator -> R.layout.hub_separator to ::SeparatorItemViewHolder
-        is Empty -> R.layout.empty_adapter_item to ::EmptyItemViewHolder
+        is Separator -> SeparatorItemViewHolder()
+        is Empty -> EmptyItemViewHolder()
         else -> throw IllegalArgumentException()
     }
 
     private fun createDaysHolders(item: Day) = when (item) {
-        is DayWithHourlyReports -> R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, controller) }
-        is DayWithDailyReport -> R.layout.day_with_daily_report_item to { itemView: View -> DayWithDailyReportsItemViewHolder(itemView, controller) }
+        is DayWithHourlyReports -> DayItemViewHolder(controller)
+        is DayWithDailyReport -> DayWithDailyReportsItemViewHolder(controller)
         is DayWithoutReports -> createDayWithoutReportsHolder(item)
     }
 
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> R.layout.weekend_day_item to { itemView: View -> WeekendDayItemViewHolder(itemView, controller) }
-        else -> R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, controller) }
+        day.isWeekend -> WeekendDayItemViewHolder(controller)
+        else -> DayNotFilledInItemViewHolder(controller)
     }
 
     private fun createReportsHolders(report: HourlyReport) = when (report) {
-        is RegularHourlyReport -> R.layout.regular_hourly_report_item to { itemView: View -> RegularReportItemViewHolder(itemView, controller) }
-        else -> R.layout.paid_vacations_report_item to { itemView: View -> PaidVacationReportItemViewHolder(itemView, controller) }
+        is RegularHourlyReport -> RegularReportItemViewHolder(controller)
+        else -> PaidVacationReportItemViewHolder(controller)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

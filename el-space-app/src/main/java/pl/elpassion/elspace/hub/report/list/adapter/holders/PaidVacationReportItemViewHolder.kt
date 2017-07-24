@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.hub.report.list.adapter.items
+package pl.elpassion.elspace.hub.report.list.adapter.holders
 
 import android.view.View
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
@@ -17,5 +17,10 @@ class PaidVacationReportItemViewHolder(itemView: View, val controller: ReportLis
             setOnClickListener { controller.onReportClick(item) }
             reportHeader.text = "${item.reportedHours.toStringWithoutZeroes()}h - ${context.getString(R.string.report_paid_vacations_title)}"
         }
+    }
+
+    companion object {
+        operator fun invoke(controller: ReportListController) =
+                R.layout.paid_vacations_report_item to { itemView: View -> PaidVacationReportItemViewHolder(itemView, controller) }
     }
 }

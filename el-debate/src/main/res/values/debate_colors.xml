@@ -14,4 +14,5 @@
     <color name="answerNegative">#E44043</color>
     <color name="answerNeutral">#8F8F8F</color>
     <color name="answerInactive">#EAEAEA</color>
+    <color name="black">#000</color>
 </resources>

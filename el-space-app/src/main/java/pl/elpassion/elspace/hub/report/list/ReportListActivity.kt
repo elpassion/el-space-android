@@ -31,7 +31,6 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
 import pl.elpassion.elspace.hub.report.list.adapter.holders.*
-import pl.elpassion.elspace.hub.report.list.adapter.items.DayItem
 import pl.elpassion.elspace.hub.report.list.adapter.items.PaidVacationReportItemViewHolder
 import pl.elpassion.elspace.hub.report.list.adapter.items.RegularReportItemViewHolder
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
@@ -152,7 +151,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         }
         adapterItems.add(Empty())
         reportsContainer.adapter.notifyDataSetChanged()
-        controller.updateLastPassedDayPosition(days.indexOfLast { it is DayItem && it.day.hasPassed })
+        controller.updateLastPassedDayPosition(adapterItems.indexOfLast { it is Day && it.hasPassed })
     }
 
     private fun createHolders(item: AdapterItem) = when (item) {

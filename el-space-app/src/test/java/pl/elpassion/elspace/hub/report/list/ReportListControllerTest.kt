@@ -1,6 +1,10 @@
 package pl.elpassion.elspace.hub.report.list
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers.trampoline
+import io.reactivex.schedulers.TestScheduler
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -11,10 +15,6 @@ import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers.trampoline
-import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 class ReportListControllerTest {
@@ -206,7 +206,7 @@ class ReportListControllerTest {
         whenever(actions.reportsFilter()).thenReturn(Observable.never())
         controller.onCreate()
         daysSubject.onNext(emptyList())
-        verify(view, never()).showDays(any(), any(), any())
+        verify(view, never()).showDays(any())
     }
 
     @Test
@@ -223,7 +223,7 @@ class ReportListControllerTest {
         filterSubject.onNext(false)
         daysSubject.onNext(emptyList())
         filterSubject.onNext(true)
-        verify(view, times(2)).showDays(any(), any(), any())
+        verify(view, times(2)).showDays(any())
     }
 
     @Test

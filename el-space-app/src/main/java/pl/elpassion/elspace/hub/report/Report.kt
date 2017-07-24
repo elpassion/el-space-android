@@ -2,6 +2,7 @@ package pl.elpassion.elspace.hub.report
 
 import pl.elpassion.elspace.common.extensions.getDateString
 import pl.elpassion.elspace.hub.project.Project
+import pl.elpassion.elspace.hub.report.list.AdapterItem
 import java.io.Serializable
 
 sealed class Report : Serializable {
@@ -14,7 +15,7 @@ sealed class Report : Serializable {
         get() = getDateString(year, month, day)
 }
 
-sealed class HourlyReport : Report() {
+sealed class HourlyReport : Report(), AdapterItem {
     abstract val reportedHours: Double
 }
 

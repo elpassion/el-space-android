@@ -13,7 +13,11 @@ interface DebateComment {
     interface Api {
         @FormUrlEncoded
         @POST("comment")
-        fun comment(@Header("Authorization") token: String, @Field("text") message: String, @Field("username") nickname: String): Completable
+        fun comment(
+                @Header("Authorization") token: String,
+                @Field("text") message: String,
+                @Field("first_name") firstName: String,
+                @Field("last_name") lastName: String): Completable
     }
 
     interface View {
@@ -23,6 +27,10 @@ interface DebateComment {
         fun closeScreen()
         fun showInvalidInputError()
         fun showInputOverLimitError()
+        fun showCredentialsDialog()
+        fun showFirstNameError()
+        fun showLastNameError()
+        fun closeCredentialsDialog()
     }
 
     object ApiProvider : Provider<DebateComment.Api>({

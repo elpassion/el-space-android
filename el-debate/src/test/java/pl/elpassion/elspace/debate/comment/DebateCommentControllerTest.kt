@@ -20,21 +20,23 @@ class DebateCommentControllerTest {
 
     @Before
     fun setUp() {
-        whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
+        whenever(api.comment(any(), any(), any(), any())).thenReturn(commentSubject)
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
     }
 
     @Test
     fun shouldCallApiWithGivenDataOnSendComment() {
-        sendComment()
-        verify(api).comment("token", "message", "mrNick")
+        sendComment("token","message")
+        verify(api).comment("token", "message", "firstName", "lastName")
     }
 
     @Test
     fun shouldReallyCallApiWithGivenDataWhenMessageIsValidOnSendComment() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("someOtherNick")
+        val token = "someOtherToken"
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName","NewlastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "someOtherNick")
+        verify(api).comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName")
     }
 
     @Test
@@ -44,16 +46,9 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
-        sendComment()
-        verify(api).comment("token", "message", DEFAULT_NICKNAME)
-    }
-
-    @Test
     fun shouldNotCallApiWhenMessageIsEmptyOnSendComment() {
         sendComment(message = "")
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -65,7 +60,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldNotCallApiWhenMessageIsBlankOnSendComment() {
         sendComment(message = " ")
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -73,24 +68,24 @@ class DebateCommentControllerTest {
         sendComment(message = " ")
         verify(view).showInvalidInputError()
     }
-    
+
     @Test
     fun shouldCallApiWhenMessageIsUnderLimitOnSendComment() {
         sendComment(message = createString(100))
-        verify(api).comment(any(), any(), any())
+        verify(api).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
         sendComment(message = createString(101))
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
         val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
         controller.sendComment("token", createString(31))
-        verify(api, never()).comment(any(), any(), any())
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -180,6 +175,73 @@ class DebateCommentControllerTest {
         controller.onCancel()
         verify(view).closeScreen()
     }
+
+    @Test
+    fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
+        whenever(debateRepo.areCredentialsMissing("token")).thenReturn(true)
+        controller.sendComment("token", "message")
+        verify(view).showCredentialsDialog()
+    }
+
+    @Test
+    fun shouldSaveCredentialsOnNewCredentials() {
+        val token = "token"
+        val credentials = createCredentials()
+        controller.onNewCredentials(token, credentials)
+        verify(debateRepo).saveTokenCredentials(token, credentials)
+    }
+
+    @Test
+    fun shouldShowFirstNameErrorOnBlankFirstName() {
+        val credentials = createCredentials(firstName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showFirstNameError()
+    }
+
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankFirstName() {
+        val credentials = createCredentials(firstName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
+    }
+
+    @Test
+    fun shouldShowLastNameErrorOnBlankLastName() {
+        val credentials = createCredentials(lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showLastNameError()
+    }
+
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankLastName() {
+        val credentials = createCredentials(lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
+    }
+
+    @Test
+    fun shouldShowBothErrorsOnBlankCredentials() {
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showLastNameError()
+        verify(view).showFirstNameError()
+    }
+
+    @Test
+    fun shouldCloseCredentialsDialogOnCorrectCredentials() {
+        val credentials = createCredentials()
+        controller.onNewCredentials("token", credentials)
+        verify(view).closeCredentialsDialog()
+    }
+
+    @Test
+    fun shouldNotCloseCredentialDialogOnIncorrectCredentials() {
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view, never()).closeCredentialsDialog()
+    }
+
+    private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

@@ -12,7 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
-import pl.elpassion.BuildConfig
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -44,28 +43,23 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
-            controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+            loginToDebate()
         }
-        debateLoginNicknameInputText.setOnEditorActionListener { _, actionId, _ ->
+        debateLoginPinInputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+                loginToDebate()
             }
             false
-        }
-        if (BuildConfig.DEBUG) {
-            debateLoginPinInputText.setOnLongClickListener {
-                controller.onLogToDebate("13160", "DebugUser"); false
-            }
         }
         controller.onCreate()
     }
 
-    override fun fillDebateCode(debateCode: String) {
-        debateLoginPinInputText.setText(debateCode)
+    private fun loginToDebate() {
+        controller.onLogToDebate(debateLoginPinInputText.text.toString())
     }
 
-    override fun fillDebateNickname(nickname: String) {
-        debateLoginNicknameInputText.setText(nickname)
+    override fun fillDebateCode(debateCode: String) {
+        debateLoginPinInputText.setText(debateCode)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -97,10 +91,6 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     override fun showWrongPinError() {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
-    }
-
-    override fun showWrongNicknameError() {
-        Snackbar.make(debateLoginCoordinator, R.string.debate_login_nickname_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

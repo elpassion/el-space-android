@@ -17,6 +17,12 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
+    private val credentialsDialog by lazy {
+        DebateCredentialsDialog(this) { credentials ->
+            controller.onNewCredentials(token, credentials)
+        }
+    }
+
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
@@ -77,6 +83,22 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         debateCommentInputLayout.error = message
     }
 
+    override fun showCredentialsDialog() {
+        credentialsDialog.show()
+    }
+
+    override fun closeCredentialsDialog() {
+        credentialsDialog.hide()
+    }
+
+    override fun showFirstNameError() {
+        credentialsDialog.showFirstNameError()
+    }
+
+    override fun showLastNameError() {
+        credentialsDialog.showLastNameError()
+    }
+
     override fun closeScreen() {
         finish()
     }
@@ -96,4 +118,5 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                     putExtra(debateAuthTokenKey, debateToken)
                 }
     }
+
 }

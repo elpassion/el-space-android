@@ -15,30 +15,22 @@ class DebateLoginController(
     private var subscription: Disposable? = null
 
     fun onCreate() {
-        debateRepo.run {
-            getLatestDebateCode()?.let {
-                view.fillDebateCode(it)
-            }
-            getLatestDebateNickname()?.let {
-                view.fillDebateNickname(it)
-            }
+        debateRepo.getLatestDebateCode()?.let {
+            view.fillDebateCode(it)
         }
     }
 
-    fun onLogToDebate(debateCode: String, nickname: String) {
-        when {
-            debateCode.length != 5 -> view.showWrongPinError()
-            nickname.isBlank() -> view.showWrongNicknameError()
-            else -> makeSubscription(debateCode, nickname)
+    fun onLogToDebate(debateCode: String) {
+        if (debateCode.length != 5) {
+            view.showWrongPinError()
+        } else {
+            makeSubscription(debateCode)
         }
     }
 
-    private fun makeSubscription(debateCode: String, nickname: String) {
-        debateRepo.run {
-            saveLatestDebateCode(debateCode)
-            saveLatestDebateNickname(nickname)
-        }
-        subscription = getAuthTokenObservable(debateCode, nickname)
+    private fun makeSubscription(debateCode: String) {
+        debateRepo.saveLatestDebateCode(debateCode)
+        subscription = getAuthTokenObservable(debateCode)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -54,11 +46,11 @@ class DebateLoginController(
         }
     }
 
-    private fun getAuthTokenObservable(debateCode: String, nickname: String) =
+    private fun getAuthTokenObservable(debateCode: String) =
             if (debateRepo.hasToken(debateCode)) {
                 Single.just(debateRepo.getTokenForDebate(debateCode))
             } else {
-                loginApi.login(debateCode, nickname)
+                loginApi.login(debateCode)
                         .map { it.authToken }
                         .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }

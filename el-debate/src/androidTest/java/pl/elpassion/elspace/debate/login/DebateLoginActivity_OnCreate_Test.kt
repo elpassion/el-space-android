@@ -28,11 +28,4 @@ class DebateLoginActivity_OnCreate_Test {
         rule.startActivity()
         onId(R.id.debateLoginPinInputText).hasText("12345")
     }
-
-    @Test
-    fun shouldFillDebateNicknameWhenSaved() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Mieczyslaw")
-        rule.startActivity()
-        onId(R.id.debateLoginNicknameInputText).hasText("Mieczyslaw")
-    }
 }

@@ -4,8 +4,6 @@ import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
 
-const val DEFAULT_NICKNAME = "DefaultUser"
-
 class DebateCommentController(
         private val view: DebateComment.View,
         private val debateRepo: DebatesRepository,
@@ -17,6 +15,7 @@ class DebateCommentController(
 
     fun sendComment(token: String, message: String) {
         when {
+            debateRepo.areCredentialsMissing(token) -> view.showCredentialsDialog()
             message.isBlank() -> view.showInvalidInputError()
             message.length > maxMessageLength -> view.showInputOverLimitError()
             else -> callApi(token, message)
@@ -24,8 +23,8 @@ class DebateCommentController(
     }
 
     private fun callApi(token: String, message: String) {
-        val nickname = debateRepo.getLatestDebateNickname() ?: DEFAULT_NICKNAME
-        subscription = api.comment(token, message, nickname)
+        val (firstName, lastName) = debateRepo.getTokenCredentials(token)
+        subscription = api.comment(token, message, firstName, lastName)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -39,5 +38,18 @@ class DebateCommentController(
 
     fun onCancel() {
         view.closeScreen()
+    }
+
+    fun onNewCredentials(token: String, credentials: TokenCredentials) {
+        if (credentials.lastName.isBlank()) {
+            view.showLastNameError()
+        }
+        if (credentials.firstName.isBlank()) {
+            view.showFirstNameError()
+        }
+        if (credentials.lastName.isNotBlank() && credentials.firstName.isNotBlank()){
+            debateRepo.saveTokenCredentials(token, credentials)
+            view.closeCredentialsDialog()
+        }
     }
 }

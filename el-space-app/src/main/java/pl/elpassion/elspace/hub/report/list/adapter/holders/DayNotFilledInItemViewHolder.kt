@@ -9,14 +9,15 @@ import kotlinx.android.synthetic.main.day_not_filled_in_item.view.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.report.list.AdapterItem
 import pl.elpassion.elspace.hub.report.list.DayWithoutReports
+import pl.elpassion.elspace.hub.report.list.ReportListController
 import pl.elpassion.elspace.hub.report.list.shouldHaveReports
 
-class DayNotFilledInItemViewHolder(itemView: View) : ViewHolderBinder<AdapterItem>(itemView) {
+class DayNotFilledInItemViewHolder(itemView: View, val controller: ReportListController) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as DayWithoutReports
         itemView.apply {
-            //setOnClickListener { controller.onDayClick(item.date) }
+            setOnClickListener { controller.onDayClick(item.date) }
             dayNumber.text = item.name
             if (item.shouldHaveReports()) {
                 hubIndicator.show()

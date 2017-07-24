@@ -7,13 +7,14 @@ import pl.elpassion.elspace.R
 import pl.elpassion.elspace.hub.report.DailyReportType
 import pl.elpassion.elspace.hub.report.list.AdapterItem
 import pl.elpassion.elspace.hub.report.list.DayWithDailyReport
+import pl.elpassion.elspace.hub.report.list.ReportListController
 
-class DayWithDailyReportsItemViewHolder(itemView: View) : ViewHolderBinder<AdapterItem>(itemView) {
+class DayWithDailyReportsItemViewHolder(itemView: View, val controller: ReportListController) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as DayWithDailyReport
         itemView.apply {
-            //setOnClickListener { controller.onReportClick(item.report) }
+            setOnClickListener { controller.onReportClick(item.report) }
             dayNumber.text = item.name
             totalHours.setText(createReportDescription(item))
         }

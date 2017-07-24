@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
@@ -163,19 +164,19 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     private fun createDaysHolders(item: Day) = when (item) {
-        is DayWithHourlyReports -> R.layout.day_item to ::DayItemViewHolder
-        is DayWithDailyReport -> R.layout.day_with_daily_report_item to ::DayWithDailyReportsItemViewHolder
+        is DayWithHourlyReports -> R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, controller) }
+        is DayWithDailyReport -> R.layout.day_with_daily_report_item to { itemView: View -> DayWithDailyReportsItemViewHolder(itemView, controller) }
         is DayWithoutReports -> createDayWithoutReportsHolder(item)
     }
 
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> R.layout.weekend_day_item to ::WeekendDayItemViewHolder
-        else -> R.layout.day_not_filled_in_item to ::DayNotFilledInItemViewHolder
+        day.isWeekend -> R.layout.weekend_day_item to { itemView: View -> WeekendDayItemViewHolder(itemView, controller) }
+        else -> R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, controller) }
     }
 
     private fun createReportsHolders(report: HourlyReport) = when (report) {
-        is RegularHourlyReport -> R.layout.regular_hourly_report_item to ::RegularReportItemViewHolder
-        else -> R.layout.paid_vacations_report_item to ::PaidVacationReportItemViewHolder
+        is RegularHourlyReport -> R.layout.regular_hourly_report_item to { itemView: View -> RegularReportItemViewHolder(itemView, controller) }
+        else -> R.layout.paid_vacations_report_item to { itemView: View -> PaidVacationReportItemViewHolder(itemView, controller) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

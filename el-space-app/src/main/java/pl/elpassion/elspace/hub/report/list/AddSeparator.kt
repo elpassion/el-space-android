@@ -7,7 +7,9 @@ import pl.elpassion.elspace.hub.report.RegularHourlyReport
 fun addSeparators(items: List<AdapterItem>) = mutableListOf<AdapterItem>().apply {
     items.forEachIndexed { i, currentItem ->
         val previousItem = items.getOrNull(i - 1)
-        if (previousItem != null
+        if (previousItem != null && (previousItem is DayWithoutReports && previousItem.isWeekend && currentItem is DayWithoutReports && currentItem.isWeekend)) {
+            add(currentItem)
+        } else if (previousItem != null
                 && currentItem !is RegularHourlyReport
                 && currentItem !is PaidVacationHourlyReport
                 && currentItem !is Empty) {

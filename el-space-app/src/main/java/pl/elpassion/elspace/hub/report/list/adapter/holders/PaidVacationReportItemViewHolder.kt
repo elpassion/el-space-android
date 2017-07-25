@@ -18,9 +18,4 @@ class PaidVacationReportItemViewHolder(itemView: View, val controller: ReportLis
             reportHeader.text = "${item.reportedHours.toStringWithoutZeroes()}h - ${context.getString(R.string.report_paid_vacations_title)}"
         }
     }
-
-    companion object {
-        operator fun invoke(controller: ReportListController) =
-                R.layout.paid_vacations_report_item to { itemView: View -> PaidVacationReportItemViewHolder(itemView, controller) }
-    }
 }

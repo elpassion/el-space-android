@@ -30,9 +30,4 @@ class DayNotFilledInItemViewHolder(itemView: View, val controller: ReportListCon
             }
         }
     }
-
-    companion object {
-        operator fun invoke(controller: ReportListController) =
-                R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, controller) }
-    }
 }

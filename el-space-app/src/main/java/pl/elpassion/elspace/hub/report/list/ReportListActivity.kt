@@ -26,7 +26,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.hub.report.HourlyReport
+import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
@@ -60,10 +60,22 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         reportsContainer.layoutManager = ReportsLinearLayoutManager(this)
-        reportsContainer.adapter = basicAdapterWithConstructors(adapterItems) { position ->
-            createHolders(adapterItems[position])
-        }
+        reportsContainer.adapter = basicAdapterWithConstructors(adapterItems, this::createHoldersForItem)
         controller.onCreate()
+    }
+
+    private fun createHoldersForItem (itemPosition: Int) : Pair<Int, (itemView: View) -> ViewHolderBinder<AdapterItem>> {
+        val item = adapterItems[itemPosition]
+        return when (item) {
+            is DayWithHourlyReports -> createDayItemViewHolder(controller)
+            is DayWithDailyReport -> createDayWithDailyReportsItemViewHolder(controller)
+            is DayWithoutReports -> createDayWithoutReportsHolder(item)
+            is RegularHourlyReport -> createRegularReportItemViewHolder(controller)
+            is PaidVacationHourlyReport -> createPaidVacationReportItemViewHolder(controller)
+            is Separator -> createSeparatorItemViewHolder()
+            is Empty -> createEmptyItemViewHolder()
+            else -> throw IllegalArgumentException()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -146,28 +158,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         controller.updateLastPassedDayPosition(adapterItems.indexOfLast { it is Day && it.hasPassed })
     }
 
-    private fun createHolders(item: AdapterItem) = when (item) {
-        is Day -> createDaysHolders(item)
-        is HourlyReport -> createReportsHolders(item)
-        is Separator -> SeparatorItemViewHolder()
-        is Empty -> EmptyItemViewHolder()
-        else -> throw IllegalArgumentException()
-    }
-
-    private fun createDaysHolders(day: Day): Pair<Int, (View) -> ViewHolderBinder<AdapterItem>> = when (day) {
-        is DayWithHourlyReports -> DayItemViewHolder(controller)
-        is DayWithDailyReport -> DayWithDailyReportsItemViewHolder(controller)
-        is DayWithoutReports -> createDayWithoutReportsHolder(day)
-    }
-
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> WeekendDayItemViewHolder(controller)
-        else -> DayNotFilledInItemViewHolder(controller)
-    }
-
-    private fun createReportsHolders(report: HourlyReport) = when (report) {
-        is RegularHourlyReport -> RegularReportItemViewHolder(controller)
-        else -> PaidVacationReportItemViewHolder(controller)
+        day.isWeekend -> createWeekendDayItemViewHolder(controller)
+        else -> createDayNotFilledInItemViewHolder(controller)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

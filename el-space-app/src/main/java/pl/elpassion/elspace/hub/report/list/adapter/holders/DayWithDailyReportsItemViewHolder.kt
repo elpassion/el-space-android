@@ -24,9 +24,4 @@ class DayWithDailyReportsItemViewHolder(itemView: View, val controller: ReportLi
         DailyReportType.SICK_LEAVE -> R.string.report_sick_leave_title
         else -> R.string.report_unpaid_vacations_title
     }
-
-    companion object {
-        operator fun invoke(controller: ReportListController) =
-                R.layout.day_with_daily_report_item to { itemView: View -> DayWithDailyReportsItemViewHolder(itemView, controller) }
-    }
 }

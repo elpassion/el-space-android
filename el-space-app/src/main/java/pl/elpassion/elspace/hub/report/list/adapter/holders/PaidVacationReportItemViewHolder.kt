@@ -7,14 +7,14 @@ import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.extensions.toStringWithoutZeroes
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.list.AdapterItem
-import pl.elpassion.elspace.hub.report.list.ReportListController
+import pl.elpassion.elspace.hub.report.list.OnReportClick
 
-class PaidVacationReportItemViewHolder(itemView: View, val controller: ReportListController) : ViewHolderBinder<AdapterItem>(itemView) {
+class PaidVacationReportItemViewHolder(itemView: View, private val onReportClick: OnReportClick) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as PaidVacationHourlyReport
         itemView.apply {
-            setOnClickListener { controller.onReportClick(item) }
+            setOnClickListener { onReportClick(item) }
             reportHeader.text = "${item.reportedHours.toStringWithoutZeroes()}h - ${context.getString(R.string.report_paid_vacations_title)}"
         }
     }

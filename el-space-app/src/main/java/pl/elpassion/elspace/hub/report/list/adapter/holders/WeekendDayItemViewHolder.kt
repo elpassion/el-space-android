@@ -5,14 +5,14 @@ import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.weekend_day_item.view.*
 import pl.elpassion.elspace.hub.report.list.AdapterItem
 import pl.elpassion.elspace.hub.report.list.DayWithoutReports
-import pl.elpassion.elspace.hub.report.list.ReportListController
+import pl.elpassion.elspace.hub.report.list.OnDayClick
 
-class WeekendDayItemViewHolder(itemView: View, val controller: ReportListController) : ViewHolderBinder<AdapterItem>(itemView) {
+class WeekendDayItemViewHolder(itemView: View, private val onDayClick: OnDayClick) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as DayWithoutReports
         itemView.apply {
-            setOnClickListener { controller.onDayClick(item.date) }
+            setOnClickListener { onDayClick(item.date) }
             dayNumber.text = item.name
         }
     }

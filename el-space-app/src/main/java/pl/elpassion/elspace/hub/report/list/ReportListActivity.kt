@@ -64,14 +64,14 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         controller.onCreate()
     }
 
-    private fun createHoldersForItem (itemPosition: Int) : Pair<Int, (itemView: View) -> ViewHolderBinder<AdapterItem>> {
+    private fun createHoldersForItem(itemPosition: Int): Pair<Int, (itemView: View) -> ViewHolderBinder<AdapterItem>> {
         val item = adapterItems[itemPosition]
         return when (item) {
-            is DayWithHourlyReports -> createDayItemViewHolder(controller)
-            is DayWithDailyReport -> createDayWithDailyReportsItemViewHolder(controller)
+            is DayWithHourlyReports -> createDayItemViewHolder(controller::onDayClick)
+            is DayWithDailyReport -> createDayWithDailyReportsItemViewHolder(controller::onReportClick)
             is DayWithoutReports -> createDayWithoutReportsHolder(item)
-            is RegularHourlyReport -> createRegularReportItemViewHolder(controller)
-            is PaidVacationHourlyReport -> createPaidVacationReportItemViewHolder(controller)
+            is RegularHourlyReport -> createRegularReportItemViewHolder(controller::onReportClick)
+            is PaidVacationHourlyReport -> createPaidVacationReportItemViewHolder(controller::onReportClick)
             is Separator -> createSeparatorItemViewHolder()
             is Empty -> createEmptyItemViewHolder()
             else -> throw IllegalArgumentException()
@@ -159,8 +159,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> createWeekendDayItemViewHolder(controller)
-        else -> createDayNotFilledInItemViewHolder(controller)
+        day.isWeekend -> createWeekendDayItemViewHolder(controller::onDayClick)
+        else -> createDayNotFilledInItemViewHolder(controller::onDayClick)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

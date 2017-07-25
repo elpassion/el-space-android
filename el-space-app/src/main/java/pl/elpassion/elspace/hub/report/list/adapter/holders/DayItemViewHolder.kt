@@ -8,14 +8,14 @@ import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.extensions.toStringWithoutZeroes
 import pl.elpassion.elspace.hub.report.list.AdapterItem
 import pl.elpassion.elspace.hub.report.list.DayWithHourlyReports
-import pl.elpassion.elspace.hub.report.list.ReportListController
+import pl.elpassion.elspace.hub.report.list.OnDayClick
 
-class DayItemViewHolder(itemView: View, val controller: ReportListController) : ViewHolderBinder<AdapterItem>(itemView) {
+class DayItemViewHolder(itemView: View, private val onDayCLick: OnDayClick) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as DayWithHourlyReports
         itemView.apply {
-            setOnClickListener { controller.onDayClick(item.date) }
+            setOnClickListener { onDayCLick(item.date) }
             dayNumber.text = item.name
             setTotalHoursTextWithIndicator(item)
         }

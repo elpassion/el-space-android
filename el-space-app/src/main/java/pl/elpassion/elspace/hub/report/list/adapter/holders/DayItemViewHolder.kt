@@ -10,12 +10,12 @@ import pl.elpassion.elspace.hub.report.list.AdapterItem
 import pl.elpassion.elspace.hub.report.list.DayWithHourlyReports
 import pl.elpassion.elspace.hub.report.list.OnDayClick
 
-class DayItemViewHolder(itemView: View, private val onDayCLick: OnDayClick) : ViewHolderBinder<AdapterItem>(itemView) {
+class DayItemViewHolder(itemView: View, private val onDayClick: OnDayClick) : ViewHolderBinder<AdapterItem>(itemView) {
 
     override fun bind(item: AdapterItem) {
         item as DayWithHourlyReports
         itemView.apply {
-            setOnClickListener { onDayCLick(item.date) }
+            setOnClickListener { onDayClick(item.date) }
             dayNumber.text = item.name
             setTotalHoursTextWithIndicator(item)
         }

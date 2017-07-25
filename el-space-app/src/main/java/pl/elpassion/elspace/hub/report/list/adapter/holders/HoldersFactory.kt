@@ -6,11 +6,11 @@ import pl.elpassion.elspace.hub.report.list.OnDayClick
 import pl.elpassion.elspace.hub.report.list.OnReportClick
 
 
-fun createDayItemViewHolder(onDayCLick: OnDayClick) =
-        R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, onDayCLick) }
+fun createDayItemViewHolder(onDayClick: OnDayClick) =
+        R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, onDayClick) }
 
-fun createDayNotFilledInItemViewHolder(onDayCLick: OnDayClick) =
-        R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, onDayCLick) }
+fun createDayNotFilledInItemViewHolder(onDayClick: OnDayClick) =
+        R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, onDayClick) }
 
 fun createDayWithDailyReportsItemViewHolder(onReportClick: OnReportClick) =
         R.layout.day_with_daily_report_item to { itemView: View -> DayWithDailyReportsItemViewHolder(itemView, onReportClick) }

@@ -76,10 +76,23 @@ class ReportListController(private val reportDayService: ReportDayService,
                     }
                 })
                 .subscribe({ days ->
-                    view.showDays(days)
+                    createAdapterItems(days)
                 }, {
                 })
                 .addTo(subscriptions)
+    }
+
+    private fun createAdapterItems(days: List<Day>) {
+        val adapterItems = mutableListOf<AdapterItem>()
+        adapterItems.add(Empty())
+        days.forEach {
+            adapterItems.add(it)
+            when (it) {
+                is DayWithHourlyReports -> it.reports.forEach { adapterItems.add(it) }
+            }
+        }
+        adapterItems.add(Empty())
+        view.showDays(adapterItems)
     }
 
     private fun refreshingDataObservable() = Observable.merge(Observable.just(Unit),

@@ -9,8 +9,10 @@ import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.crashlytics.android.Crashlytics
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
+import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
@@ -137,16 +139,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         errorSnackBar.show()
     }
 
-    override fun showDays(days: List<Day>) {
+    override fun showDays(items: List<AdapterItem>) {
         adapterItems.clear()
-        adapterItems.add(Empty())
-        days.forEach {
-            adapterItems.add(it)
-            when (it) {
-                is DayWithHourlyReports -> it.reports.forEach { adapterItems.add(it) }
-            }
-        }
-        adapterItems.add(Empty())
+        adapterItems.addAll(items)
         reportsContainer.adapter.notifyDataSetChanged()
         controller.updateLastPassedDayPosition(adapterItems.indexOfLast { it is Day && it.hasPassed })
     }
@@ -159,7 +154,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         else -> throw IllegalArgumentException()
     }
 
-    private fun createDaysHolders(day: Day) = when (day) {
+    private fun createDaysHolders(day: Day): Pair<Int, (View) -> ViewHolderBinder<AdapterItem>> = when (day) {
         is DayWithHourlyReports -> DayItemViewHolder(controller)
         is DayWithDailyReport -> DayWithDailyReportsItemViewHolder(controller)
         is DayWithoutReports -> createDayWithoutReportsHolder(day)

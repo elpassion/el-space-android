@@ -20,7 +20,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(days: List<Day>)
+        fun showDays(items: List<AdapterItem>)
 
         fun showError(ex: Throwable)
 

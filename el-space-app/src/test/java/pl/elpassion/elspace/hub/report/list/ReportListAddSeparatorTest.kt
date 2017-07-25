@@ -69,7 +69,6 @@ class ReportListAddSeparatorTest {
     @Test
     fun shouldNotHaveSeparatorBetweenWeekendAndEmptyItems() {
         val givenItems = addSeparators(listOf(newDayWeekend(), Empty()))
-        print(givenItems)
         assertFalse(givenItems[1] is Separator)
         assertTrue(givenItems.size == 2)
     }
@@ -77,7 +76,6 @@ class ReportListAddSeparatorTest {
     @Test
     fun shouldNotHaveSeparatorBetweenTwoWeekendItems() {
         val givenItems = addSeparators(listOf(newDayWeekend(), newDayWeekend()))
-        print(givenItems)
         assertFalse(givenItems[1] is Separator)
         assertTrue(givenItems.size == 2)
     }

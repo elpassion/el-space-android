@@ -78,6 +78,11 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         }
     }
 
+    private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
+        day.isWeekend -> WeekendDayItemViewHolder.create(controller::onDayClick)
+        else -> DayNotFilledInItemViewHolder.create(controller::onDayClick)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.report_list_menu, menu)
         return true
@@ -156,11 +161,6 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         adapterItems.addAll(items)
         reportsContainer.adapter.notifyDataSetChanged()
         controller.updateLastPassedDayPosition(adapterItems.indexOfLast { it is Day && it.hasPassed })
-    }
-
-    private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> WeekendDayItemViewHolder.create(controller::onDayClick)
-        else -> DayNotFilledInItemViewHolder.create(controller::onDayClick)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

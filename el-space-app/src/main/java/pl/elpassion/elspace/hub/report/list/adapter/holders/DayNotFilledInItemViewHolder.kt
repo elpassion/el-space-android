@@ -30,4 +30,9 @@ class DayNotFilledInItemViewHolder(itemView: View, private val onDayClick: OnDay
             }
         }
     }
+
+    companion object {
+        fun create(onDayClick: OnDayClick) =
+                R.layout.day_not_filled_in_item to { itemView: View -> DayNotFilledInItemViewHolder(itemView, onDayClick) }
+    }
 }

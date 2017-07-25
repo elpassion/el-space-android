@@ -67,13 +67,13 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     private fun createHoldersForItem(itemPosition: Int): Pair<Int, (itemView: View) -> ViewHolderBinder<AdapterItem>> {
         val item = adapterItems[itemPosition]
         return when (item) {
-            is DayWithHourlyReports -> createDayItemViewHolder(controller::onDayClick)
-            is DayWithDailyReport -> createDayWithDailyReportsItemViewHolder(controller::onReportClick)
+            is DayWithHourlyReports -> DayItemViewHolder.create(controller::onDayClick)
+            is DayWithDailyReport -> DayWithDailyReportsItemViewHolder.create(controller::onReportClick)
             is DayWithoutReports -> createDayWithoutReportsHolder(item)
-            is RegularHourlyReport -> createRegularReportItemViewHolder(controller::onReportClick)
-            is PaidVacationHourlyReport -> createPaidVacationReportItemViewHolder(controller::onReportClick)
-            is Separator -> createSeparatorItemViewHolder()
-            is Empty -> createEmptyItemViewHolder()
+            is RegularHourlyReport -> RegularReportItemViewHolder.create(controller::onReportClick)
+            is PaidVacationHourlyReport -> PaidVacationReportItemViewHolder.create(controller::onReportClick)
+            is Separator -> SeparatorItemViewHolder.create()
+            is Empty -> EmptyItemViewHolder.create()
             else -> throw IllegalArgumentException()
         }
     }
@@ -159,8 +159,8 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
     }
 
     private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
-        day.isWeekend -> createWeekendDayItemViewHolder(controller::onDayClick)
-        else -> createDayNotFilledInItemViewHolder(controller::onDayClick)
+        day.isWeekend -> WeekendDayItemViewHolder.create(controller::onDayClick)
+        else -> DayNotFilledInItemViewHolder.create(controller::onDayClick)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

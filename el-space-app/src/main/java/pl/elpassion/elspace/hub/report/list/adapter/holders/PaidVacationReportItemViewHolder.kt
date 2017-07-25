@@ -18,4 +18,9 @@ class PaidVacationReportItemViewHolder(itemView: View, private val onReportClick
             reportHeader.text = "${item.reportedHours.toStringWithoutZeroes()}h - ${context.getString(R.string.report_paid_vacations_title)}"
         }
     }
+
+    companion object {
+        fun create(onReportClick: OnReportClick) =
+                R.layout.paid_vacations_report_item to { itemView: View -> PaidVacationReportItemViewHolder(itemView, onReportClick) }
+    }
 }

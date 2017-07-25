@@ -30,4 +30,8 @@ class DayItemViewHolder(itemView: View, private val onDayClick: OnDayClick) : Vi
             item.reportedHours.toInt(),
             item.reportedHours.toStringWithoutZeroes())
 
+    companion object {
+        fun create(onDayClick: OnDayClick) =
+                R.layout.day_item to { itemView: View -> DayItemViewHolder(itemView, onDayClick) }
+    }
 }

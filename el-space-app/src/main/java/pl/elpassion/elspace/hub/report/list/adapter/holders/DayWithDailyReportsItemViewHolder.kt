@@ -24,4 +24,9 @@ class DayWithDailyReportsItemViewHolder(itemView: View, private val onReportClic
         DailyReportType.SICK_LEAVE -> R.string.report_sick_leave_title
         else -> R.string.report_unpaid_vacations_title
     }
+
+    companion object {
+        fun create(onReportClick: OnReportClick) =
+                R.layout.day_with_daily_report_item to { itemView: View -> DayWithDailyReportsItemViewHolder(itemView, onReportClick) }
+    }
 }

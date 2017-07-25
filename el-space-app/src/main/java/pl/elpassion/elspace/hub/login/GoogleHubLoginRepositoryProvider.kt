@@ -2,16 +2,15 @@ package pl.elpassion.elspace.hub.login
 
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
-import com.google.gson.Gson
+import com.elpassion.sharedpreferences.gsonadapter.gsonConverterAdapter
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
 
 object GoogleHubLoginRepositoryProvider : Provider<GoogleHubLogin.Repository>({
     object : GoogleHubLogin.Repository {
         private val TOKEN_KEY = "tokenKey"
-        private val repository = createSharedPrefs<String?>({
-            PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())
-        }, { Gson() })
+        private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
+        private val repository = createSharedPrefs<String?>(defaultSharedPreferences, gsonConverterAdapter())
 
         override fun saveToken(token: String) = repository.write(TOKEN_KEY, token)
 

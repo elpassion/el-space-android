@@ -1,10 +1,13 @@
 package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.scrollTo
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
+import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.elpassion.android.commons.espresso.*
+import com.elpassion.android.commons.espresso.matchers.withParentId
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
@@ -12,11 +15,13 @@ import org.hamcrest.Matchers
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.*
 import pl.elpassion.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.isDisplayedEffectively
+import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.comment.DebateCommentActivity
-import pl.elpassion.elspace.debate.details.DebateDetailsActivity.Companion.intent
+import java.lang.Thread.sleep
 
 class DebateDetailsActivityTest {
 
@@ -116,27 +121,27 @@ class DebateDetailsActivityTest {
     fun shouldHighlightPositiveAnswerWhenLastAnswerWasPositive() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 1))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
     fun shouldHighlightNegativeAnswerWhenLastAnswerWasNegative() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
     fun shouldHighlightNeutralAnswerWhenLastAnswerWasNeutral() {
         startActivity()
         debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 3))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
     }
 
     @Test
@@ -162,30 +167,47 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
-        debateDetailsSubject.onError(RuntimeException())
         startActivity()
+        debateDetailsSubject.onError(RuntimeException())
         onText(R.string.debate_details_error).isDisplayedEffectively()
+    }
+
+    @Test
+    fun shouldShowRefreshButtonWithDebateDetailsError() {
+        startActivity()
+        debateDetailsSubject.onError(RuntimeException())
+        onText(R.string.debate_details_error_refresh).isDisplayedEffectively()
+    }
+
+    @Ignore
+    @Test
+    fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
+        startActivity()
+        debateDetailsSubject.onError(RuntimeException())
+        sleep(100)
+        onText(R.string.debate_details_error_refresh).click()
+        verify(apiMock, times(2)).getDebateDetails(any())
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debatePositiveAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debatePositiveAnswerLoader)).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debateNegativeAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNegativeAnswerLoader)).isDisplayed()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        withParentId(R.id.debateNeutralAnswerLoader).isChildDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNeutralAnswerLoader)).isDisplayed()
     }
 
     @Test
@@ -193,7 +215,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debatePositiveAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debatePositiveAnswerLoader)).isNotDisplayed()
     }
 
     @Test
@@ -201,7 +223,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debateNegativeAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNegativeAnswerLoader)).isNotDisplayed()
     }
 
     @Test
@@ -209,7 +231,7 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        withParentId(R.id.debateNeutralAnswerLoader).isChildNotDisplayed(R.id.debateAnswerLoader)
+        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNeutralAnswerLoader)).isNotDisplayed()
     }
 
     @Test
@@ -218,6 +240,33 @@ class DebateDetailsActivityTest {
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
         onText(R.string.debate_details_vote_success).isDisplayedEffectively()
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
+        sendVoteSubject.onError(createHttpException(406))
+        onId(R.id.debateClosedView).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_title).isDisplayed()
+        onText(R.string.debate_vote_slow_down_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldCloseSlowDownInformationOnButtonClick() {
+        startActivityAndSuccessfullyReturnDebateDetails()
+        onId(R.id.debateNegativeAnswerButton).click()
+        sendVoteSubject.onError(createHttpException(429))
+        onText(R.string.debate_vote_slow_down_OK_button).click()
+        onText(R.string.debate_vote_slow_down_title).doesNotExist()
+        onText(R.string.debate_vote_slow_down_info).doesNotExist()
     }
 
     @Test
@@ -245,8 +294,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseTokenPassedWithIntentWhenSendingVote() {
         val token = "newToken"
-        startActivity(token)
-        debateDetailsSubject.onSuccess(createDebateData())
+        startActivityAndSuccessfullyReturnDebateDetails(token, createDebateData())
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote(eq(token), any())
     }
@@ -254,7 +302,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.positive)
     }
@@ -262,7 +310,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.negative)
     }
@@ -270,14 +318,14 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         val debateData = createDebateData()
-        startActivityAndSuccessfullyReturnDebateDetails(debateData)
+        startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         verify(apiMock).vote("token", debateData.answers.neutral)
     }
 
     @Test
     fun shouldOpenCommentScreenWhenCommentButtonClicked() {
-        startActivity()
+        startActivityAndSuccessfullyReturnDebateDetails()
         stubAllIntents()
         onId(R.id.debateCommentButton).click()
         checkIntent(DebateCommentActivity::class.java)
@@ -286,7 +334,7 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldOpenCommentScreenWithGivenToken() {
         val token = "someToken"
-        startActivity(token)
+        startActivityAndSuccessfullyReturnDebateDetails(token = token)
         stubAllIntents()
         onId(R.id.debateCommentButton).click()
         Intents.intended(Matchers.allOf(
@@ -299,9 +347,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.blueDebatePositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
@@ -309,9 +357,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.redDebateNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
     }
 
     @Test
@@ -319,28 +367,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
         voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.greyDebateInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.greyDebateNeutral))
-    }
-
-    @Test
-    fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_title).isDisplayed()
-        onText(R.string.debate_vote_slow_down_info).isDisplayed()
-    }
-
-    @Test
-    fun shouldCloseSlowDownInformationOnButtonClick() {
-        startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_OK_button).click()
-        onText(R.string.debate_vote_slow_down_title).doesNotExist()
-        onText(R.string.debate_vote_slow_down_info).doesNotExist()
+        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
     }
 
     @Test
@@ -363,16 +392,15 @@ class DebateDetailsActivityTest {
     }
 
     private fun startActivity(token: String = "token") {
-        val intent = intent(context = InstrumentationRegistry.getTargetContext(), debateToken = token)
-        rule.launchActivity(intent)
+        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), token))
     }
 
     private fun voteSuccessfully() {
         sendVoteSubject.onComplete()
     }
 
-    private fun startActivityAndSuccessfullyReturnDebateDetails(debateData: DebateData = createDebateData()) {
-        startActivity()
+    private fun startActivityAndSuccessfullyReturnDebateDetails(token: String = "token", debateData: DebateData = createDebateData()) {
+        startActivity(token)
         debateDetailsSubject.onSuccess(debateData)
     }
 }

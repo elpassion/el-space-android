@@ -1,17 +1,18 @@
 <resources>
     <string name="debate_title">EL Debate\u0020</string>
     <string name="debate_login_code_incorrect">Debate code is incorrect</string>
-    <string name="debate_login_nickname_incorrect">Debate nickname is incorrect</string>
     <string name="debate_login_welcome">Welcome to</string>
     <string name="debate_login_hint_pin">EL Debate PIN</string>
-    <string name="debate_login_hint_nickname">Nickname</string>
     <string name="debate_login_button_login">Log in</string>
-    <string name="debate_login_fail">Oops, something went wrong. Check your internet connection or inserted debate code.</string>
+    <string name="debate_login_debate_closed_error">This debate is closed.</string>
+    <string name="debate_login_debate_closed_error_button_ok">OK</string>
+    <string name="debate_login_error">Oops, something went wrong. Check your internet connection or inserted debate code.</string>
     <string name="debate_details_info_topic">Our debate is about:</string>
     <string name="debate_details_info_choose_side">Choose your side with one of the following:</string>
     <string name="debate_details_info_remember">Remember that you can change your mind before debate ends, thats why we are here!</string>
     <string name="debate_details_button_comment">Chat</string>
     <string name="debate_details_error">Couldn\'t load debate details</string>
+    <string name="debate_details_error_refresh">Refresh</string>
     <string name="debate_details_vote_success">You have successfully voted!</string>
     <string name="debate_details_vote_error">Sending Your vote failed, please try again</string>
     <string name="debate_comment_hint">Add comment</string>
@@ -19,7 +20,15 @@
     <string name="debate_comment_button_send">Send</string>
     <string name="debate_comment_send_error">Sending your comment failed, please try again</string>
     <string name="debate_comment_invalid_input_error">Invalid input!</string>
+    <integer name="debate_comment_max_message_length">100</integer>
+    <string name="debate_comment_input_over_limit_error">Too many characters! Input must have maximum %d characters.</string>
+    <string name="debate_comment_credentials_first_name_hint">First name</string>
+    <string name="debate_comment_credentials_last_name_hint">Last name</string>
+    <string name="debate_comment_credentials_info">Please, provide your first and last name to be able to comment</string>
+    <string name="debate_comment_credentials_confirm">Save</string>
+    <string name="debate_comment_credentials_first_name_incorrect">First name can\'t be empty</string>
+    <string name="debate_comment_credentials_last_name_incorrect">Last name can\'t be empty</string>
     <string name="debate_vote_slow_down_title">Slow down!</string>
-    <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait a while between your votes. Try again in a moment! :)</string>
+    <string name="debate_vote_slow_down_info">You always can change your vote, but you have to wait a few seconds between your votes. Try again in a moment! :)</string>
     <string name="debate_vote_slow_down_OK_button">OK</string>
 </resources>

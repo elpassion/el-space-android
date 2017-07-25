@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
@@ -11,7 +12,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
-import pl.elpassion.BuildConfig
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -27,6 +27,13 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         DebateLoginController(this, DebatesRepositoryProvider.get(), DebateLogin.ApiProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
+    private val debateClosedError by lazy {
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.debate_login_debate_closed_error))
+                .setPositiveButton(getString(R.string.debate_login_debate_closed_error_button_ok)) { dialog, _ -> dialog.dismiss() }
+                .create()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_login_activity)
@@ -36,28 +43,23 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
             showBackArrowOnActionBar()
         }
         debateLoginButton.setOnClickListener {
-            controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+            loginToDebate()
         }
-        debateLoginNicknameInputText.setOnEditorActionListener { _, actionId, _ ->
+        debateLoginPinInputText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.onLogToDebate(debateLoginPinInputText.text.toString(), debateLoginNicknameInputText.text.toString())
+                loginToDebate()
             }
             false
-        }
-        if (BuildConfig.DEBUG) {
-            debateLoginPinInputText.setOnLongClickListener {
-                controller.onLogToDebate("13160", "DebugUser"); false
-            }
         }
         controller.onCreate()
     }
 
-    override fun fillDebateCode(debateCode: String) {
-        debateLoginPinInputText.setText(debateCode)
+    private fun loginToDebate() {
+        controller.onLogToDebate(debateLoginPinInputText.text.toString())
     }
 
-    override fun fillDebateNickname(nickname: String) {
-        debateLoginNicknameInputText.setText(nickname)
+    override fun fillDebateCode(debateCode: String) {
+        debateLoginPinInputText.setText(debateCode)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -71,8 +73,12 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         DebateDetailsActivity.start(this, authToken)
     }
 
-    override fun showLoginFailedError() {
-        Snackbar.make(debateLoginCoordinator, R.string.debate_login_fail, Snackbar.LENGTH_INDEFINITE).show()
+    override fun showDebateClosedError() {
+        debateClosedError.show()
+    }
+
+    override fun showLoginError(error: Throwable) {
+        Snackbar.make(debateLoginCoordinator, R.string.debate_login_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showLoader() {
@@ -85,10 +91,6 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
 
     override fun showWrongPinError() {
         Snackbar.make(debateLoginCoordinator, R.string.debate_login_code_incorrect, Snackbar.LENGTH_INDEFINITE).show()
-    }
-
-    override fun showWrongNicknameError() {
-        Snackbar.make(debateLoginCoordinator, R.string.debate_login_nickname_incorrect, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     companion object {

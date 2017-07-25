@@ -2,9 +2,10 @@ package pl.elpassion.elspace.debate
 
 import android.preference.PreferenceManager
 import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
-import com.google.gson.Gson
+import com.elpassion.sharedpreferences.gsonadapter.gsonConverterAdapter
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.debate.comment.TokenCredentials
 
 interface DebatesRepository {
     fun hasToken(debateCode: String): Boolean
@@ -12,18 +13,21 @@ interface DebatesRepository {
     fun getTokenForDebate(debateCode: String): String
     fun saveLatestDebateCode(debateCode: String)
     fun getLatestDebateCode(): String?
-    fun saveLatestDebateNickname(nickname: String)
-    fun getLatestDebateNickname(): String?
+    fun areCredentialsMissing(token: String): Boolean
+    fun saveTokenCredentials(token: String, credentials: TokenCredentials)
+    fun getTokenCredentials(token: String): TokenCredentials
 }
 
 object DebatesRepositoryProvider : Provider<DebatesRepository>({
     object : DebatesRepository {
 
         private val latestDebateCode = "LATEST_DEBATE_CODE"
-        private val latestDebateNickname = "LATEST_DEBATE_NICKNAME"
-        private val repository = createSharedPrefs<String?>({
-            PreferenceManager.getDefaultSharedPreferences(ContextProvider.get())
-        }, { Gson() })
+
+        private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
+
+        private val repository = createSharedPrefs<String?>(defaultSharedPreferences, gsonConverterAdapter())
+
+        private val credentialsRepository = createSharedPrefs<TokenCredentials>(defaultSharedPreferences, gsonConverterAdapter())
 
         override fun hasToken(debateCode: String) = repository.read(debateCode) != null
 
@@ -35,8 +39,11 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
 
         override fun getLatestDebateCode() = repository.read(latestDebateCode)
 
-        override fun saveLatestDebateNickname(nickname: String) = repository.write(latestDebateNickname, nickname)
+        override fun areCredentialsMissing(token: String): Boolean = credentialsRepository.read(token) == null
 
-        override fun getLatestDebateNickname() = repository.read(latestDebateNickname)
+        override fun saveTokenCredentials(token: String, credentials: TokenCredentials) = credentialsRepository.write(token, credentials)
+
+        override fun getTokenCredentials(token: String) = credentialsRepository.read(token)!!
+
     }
 })

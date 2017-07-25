@@ -12,27 +12,29 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
-import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
-import java.lang.Thread.sleep
 
 class DebateCommentActivityTest {
 
-    private val debateRepo = mock<DebatesRepository>()
+    private val debateRepo = mock<DebatesRepository>().apply {
+        whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
+        whenever(areCredentialsMissing(any())).thenReturn(false)
+    }
     private val sendCommentSubject = CompletableSubject.create()
     private val api = mock<DebateComment.Api>().apply {
-        whenever(comment(any(), any(), any())).thenReturn(sendCommentSubject)
+        whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
     val rule = rule<DebateCommentActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
         DebateComment.ApiProvider.override = { api }
     }
 
@@ -71,10 +73,8 @@ class DebateCommentActivityTest {
     @Test
     fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
-        verify(api).comment("someToken", "message", "mrNick")
+        sendMessage()
+        verify(api).comment("someToken", "message", "firstName", "lastName")
     }
 
     @Test
@@ -84,34 +84,45 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(api).comment("someToken", "message", "mrNick")
+        verify(api).comment("someToken", "message", "firstName", "lastName")
     }
 
     @Test
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("")
-                .pressImeActionButton()
-        sleep(100)
+        sendMessage("")
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowCorrectInputOverLimitErrorMessageWhenInputIsOverLimitOnSendComment() {
+        startActivity()
+        val maxMessageLength = 100
+        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        sendMessage(createString(maxMessageLength + 1))
+        onText(message).isDisplayed()
+    }
+
+    @Test
+    fun shouldGetMaxMessageLengthFromResourcesWhenInputIsOverLimitOnSendComment() {
+        startActivity()
+        val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
+        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        sendMessage(createString(maxMessageLength + 1))
+        onText(message).isDisplayed()
     }
 
     @Test
     fun shouldShowLoaderOnSendComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage()
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
@@ -119,44 +130,106 @@ class DebateCommentActivityTest {
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage()
         sendCommentSubject.onError(RuntimeException())
-        sleep(100)
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
-
 
     @Test
     fun shouldNotClearInputWhenSendCommentFailed() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage("New message")
         sendCommentSubject.onError(RuntimeException())
-        onId(R.id.debateCommentInputText).hasText("message")
+        onId(R.id.debateCommentInputText).hasText("New message")
     }
 
     @Test
     fun shouldCloseScreenOnCancelClick() {
         startActivity()
         onId(R.id.debateCommentCancelButton).click()
-        Assert.assertTrue(rule.activity.isFinishing)
+        assertTrue(rule.activity.isFinishing)
     }
 
     @Test
     fun shouldCloseScreenOnSuccessfullySentComment() {
         startActivity()
-        onId(R.id.debateCommentInputText)
-                .replaceText("message")
-                .pressImeActionButton()
+        sendMessage()
         sendCommentSubject.onComplete()
-        sleep(100)
-        Assert.assertTrue(rule.activity.isFinishing)
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        assertTrue(rule.activity.isFinishing)
+    }
+
+    @Test
+    fun shouldShowFirstNameCredentialInputOnMissingCredentials() {
+        startActivityAndOpenCredentialsDialog()
+        onId(R.id.debateCredentialsFirstNameInputText)
+                .isDisplayed()
+                .textInputEditTextHasHint(R.string.debate_comment_credentials_first_name_hint)
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
+    }
+
+    @Test
+    fun shouldShowLastNameCredentialInputOnMissingCredentials() {
+        startActivityAndOpenCredentialsDialog()
+        onId(R.id.debateCredentialsLastNameInputText)
+                .isDisplayed()
+                .textInputEditTextHasHint(R.string.debate_comment_credentials_last_name_hint)
+                .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
+    }
+
+    @Test
+    fun shouldSaveProvidedCredentialsToRepo() {
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        saveCredentials(firstName = "firstName", lastName = "lastName")
+        verify(debateRepo).saveTokenCredentials("DebateToken", TokenCredentials("firstName", "lastName"))
+    }
+
+    @Test
+    fun shouldHideCredentialDialogWhenCredentialsWereSaved() {
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        saveCredentials(firstName = "firstName", lastName = "lastName")
+        onId(R.id.debateCommentCredentialsDialog).doesNotExist()
+    }
+
+    @Test
+    fun shouldDisplayErrorOnIncorrectFirstName() {
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        saveCredentials(firstName = " ", lastName = "lastName")
+        onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_comment_credentials_first_name_incorrect)
+    }
+
+    @Test
+    fun shouldDisplayErrorOnIncorrectLastName() {
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        saveCredentials(firstName = "firstName", lastName = " ")
+        onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_comment_credentials_last_name_incorrect)
+    }
+
+    @Test
+    fun shouldHaveCredentialsDialogInfo() {
+        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        onText(R.string.debate_comment_credentials_info).isDisplayed()
+    }
+
+    private fun saveCredentials(firstName: String, lastName: String) {
+        onId(R.id.debateCredentialsFirstNameInputText).replaceText(firstName)
+        onId(R.id.debateCredentialsLastNameInputText).replaceText(lastName)
+        onText(R.string.debate_comment_credentials_confirm).click()
     }
 
     private fun startActivity(debateToken: String = "debateToken") {
-        rule.launchActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+        rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+    }
+
+    private fun sendMessage(message: String = "message") {
+        onId(R.id.debateCommentInputText)
+                .replaceText(message)
+                .pressImeActionButton()
+    }
+
+    private fun startActivityAndOpenCredentialsDialog(debateToken: String = "debateToken") {
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        startActivity(debateToken = debateToken)
+        sendMessage()
     }
 }

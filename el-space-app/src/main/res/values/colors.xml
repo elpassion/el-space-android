@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorAccentBlue">#403E70</color>
+    <color name="colorPrimarySpace">#383676</color>
+    <color name="colorPrimaryDarkSpace">#383676</color>
+    <color name="colorAccentSpace">#403E70</color>
     <color name="borderColor">#E0E0E0</color>
     <color name="reportMissing">#BA6767</color>
-    <color name="emptyToken">#FF4040</color>
-    <color name="reportHeaderCell">#F1EFEF</color>
-    <color name="reportContent">#312E39</color>
-    <color name="reportHeaderContent">#312E39</color>
     <color name="hubBackground">#F8F8FA</color>
     <color name="missingIndicator">#CF9796</color>
     <color name="filledIndicator">#91ECB3</color>
-    <color name="unknownIndicator">#E4E4E4</color>
     <color name="unselectedText">#B3B3B8</color>
     <color name="selectedWhite">#42000000</color>
     <color name="defaultTextColor">#5F5A6A</color>
-    <color name="colorViolet">#AB9BFF</color>
-    <color name="greyActivityBackground">#F8FAF8</color>
-    <color name="redGoogleButton">#EF5350</color>
+    <color name="violetButton">#AB9BFF</color>
 </resources>

@@ -12,7 +12,7 @@
         android:supportsRtl="true">
         <activity
             android:name="pl.elpassion.elspace.launcher.LauncherActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar">
+            android:theme="@style/AppThemeSpace">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
         </activity>
         <activity
             android:name="pl.elpassion.elspace.hub.login.GoogleHubLoginActivity"
-            android:theme="@style/Theme.Transparent">
+            android:theme="@style/AppThemeSpace_Dialog">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -35,29 +35,29 @@
         </activity>
         <activity
             android:name="pl.elpassion.elspace.hub.project.choose.ProjectChooseActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar" />
+            android:theme="@style/AppThemeSpace" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.add.ReportAddActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar"
+            android:theme="@style/AppThemeSpace"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.list.ReportListActivity"
             android:configChanges="orientation|screenSize"
-            android:theme="@style/AppThemeBlueWithoutActionBar" />
+            android:theme="@style/AppThemeSpace" />
         <activity
             android:name="pl.elpassion.elspace.hub.report.edit.ReportEditActivity"
-            android:theme="@style/AppThemeBlueWithoutActionBar"
+            android:theme="@style/AppThemeSpace"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
-            android:theme="@style/AppThemeGreenWithoutActionBar" />
+            android:theme="@style/AppThemeDebate" />
         <activity
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
-            android:theme="@style/AppThemeGreenWithoutActionBar" />
+            android:theme="@style/AppThemeDebate" />
         <activity
             android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
             android:excludeFromRecents="true"
-            android:theme="@style/EL_Dialog"
+            android:theme="@style/AppThemeDebate_Dialog"
             android:windowSoftInputMode="stateVisible" />
 
         <meta-data

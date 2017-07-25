@@ -7,6 +7,7 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
@@ -21,7 +22,7 @@ class DebateLoginControllerTest {
     @Before
     fun setUp() {
         whenever(debateRepo.hasToken(any())).thenReturn(false)
-        whenever(loginApi.login(any(), any())).thenReturn(apiSubject)
+        whenever(loginApi.login(any())).thenReturn(apiSubject)
     }
 
     @Test
@@ -39,17 +40,25 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldShowErrorIfLoginFails() {
-        controller.onLogToDebate("error", "Gustaw333")
-        apiSubject.onError(RuntimeException())
-        verify(view).showLoginFailedError()
+    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
+        logToDebate()
+        apiSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
+    }
+
+    @Test
+    fun shouldShowErrorOnLoginError() {
+        controller.onLogToDebate("error")
+        val error = RuntimeException()
+        apiSubject.onError(error)
+        verify(view).showLoginError(error)
     }
 
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
         logToDebate()
         returnTokenFromApi("authToken")
-        verify(view, never()).showLoginFailedError()
+        verify(view, never()).showLoginError(any())
     }
 
     @Test
@@ -140,22 +149,10 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldShowWrongNicknameErrorWhenNicknameIsEmpty() {
-        logToDebate("12345", "")
-        verify(view).showWrongNicknameError()
-    }
-
-    @Test
-    fun shouldNotShowWrongNicknameErrorWhenNicknameIsValid() {
-        logToDebate("12345", "A")
-        verify(view, never()).showWrongNicknameError()
-    }
-
-    @Test
     fun shouldUseGivenSchedulerForSubscribeOnInApiCall() {
         val subscribeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
-        controller.onLogToDebate("12345", "Gustaw333")
+        controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
@@ -166,7 +163,7 @@ class DebateLoginControllerTest {
     fun shouldUseGivenSchedulerForObserveOnInApiCall() {
         val observeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
-        controller.onLogToDebate("12345", "Gustaw333")
+        controller.onLogToDebate("12345")
         returnTokenFromApi("authToken")
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
@@ -174,10 +171,9 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldSaveDebateCodeAndNickname() {
-        controller.onLogToDebate("12345", "Wieslaw")
+    fun shouldSaveDebateCode() {
+        logToDebate(debateCode = "12345")
         verify(debateRepo).saveLatestDebateCode("12345")
-        verify(debateRepo).saveLatestDebateNickname("Wieslaw")
     }
 
     @Test
@@ -188,13 +184,6 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldNotFillLatestDebateNicknameWhenNotSaved() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
-        controller.onCreate()
-        verify(view, never()).fillDebateNickname(any())
-    }
-
-    @Test
     fun shouldFillLatestDebateCodeWhenSaved() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         controller.onCreate()
@@ -202,17 +191,10 @@ class DebateLoginControllerTest {
     }
 
     @Test
-    fun shouldFillLatestDebateNicknameWhenSaved() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
+    fun shouldUseCorrectDebateCodeWhenCallingApi() {
         controller.onCreate()
-        verify(view).fillDebateNickname("Wieslaw")
-    }
-
-    @Test
-    fun shouldUseCorrectDebateCodeAndNicknameWhenCallingApi() {
-        controller.onCreate()
-        controller.onLogToDebate("12345", "Wieslaw")
-        verify(loginApi).login("12345", "Wieslaw")
+        controller.onLogToDebate("12345")
+        verify(loginApi).login("12345")
     }
 
     private fun forCodeReturnTokenFromRepo(debateCode: String, token: String) {
@@ -224,7 +206,7 @@ class DebateLoginControllerTest {
         apiSubject.onSuccess(LoginResponse(token))
     }
 
-    private fun logToDebate(debateCode: String = "12345", nickname: String = "Gustaw333") {
-        controller.onLogToDebate(debateCode, nickname)
+    private fun logToDebate(debateCode: String = "12345") {
+        controller.onLogToDebate(debateCode)
     }
 }

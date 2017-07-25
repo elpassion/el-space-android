@@ -1,9 +1,11 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
+        classpath 'io.fabric.tools:gradle:1.23.0'
     }
 }
 
@@ -14,6 +16,11 @@ apply plugin: 'com.github.triplet.play'
 apply from: '../gradle/app-version.gradle'
 apply from: 'src/release/google-signing-credentials.gradle'
 apply from: '../gradle/android.gradle'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 android {
     defaultConfig {
@@ -21,12 +28,19 @@ android {
         multiDexEnabled true
     }
     buildTypes {
-        debug
+        debug {
+            ext.betaDistributionGroupAliases = 'Elpassion'
+            ext.betaDistributionReleaseNotesFilePath = "crashlytics_release_notes.txt"
+        }
     }
 }
 
 dependencies {
     implementation project(':el-debate')
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
+    }
 }
+
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

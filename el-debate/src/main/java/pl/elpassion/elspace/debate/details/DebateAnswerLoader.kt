@@ -9,10 +9,11 @@ import android.graphics.drawable.Animatable
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
+import com.elpassion.android.view.hide
+import com.elpassion.android.view.inflate
 import com.elpassion.android.view.isVisible
+import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.debate_answer_loader.view.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.Animations
@@ -21,7 +22,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     : FrameLayout(context, attrs, defStyleAttr) {
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.debate_answer_loader, this, true)
+        this.inflate(R.layout.debate_answer_loader, true)
 
         attrs?.let {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.DebateAnswerLoader)
@@ -37,7 +38,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun getTintColorFromAttrs(typedArray: TypedArray, context: Context) {
         if (typedArray.hasValue(R.styleable.DebateAnswerLoader_tintColor)) {
-            val tintColor = typedArray.getColor(R.styleable.DebateAnswerLoader_tintColor, ContextCompat.getColor(context, R.color.greyDebateInactive))
+            val tintColor = typedArray.getColor(R.styleable.DebateAnswerLoader_tintColor, ContextCompat.getColor(context, R.color.answerInactive))
             applyTintColor(tintColor)
         }
     }
@@ -47,7 +48,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
     private val loaderAnimation by lazy { debateAnswerLoader.drawable as Animatable }
 
     fun show() {
-        debateAnswerLoader.visibility = View.VISIBLE
+        debateAnswerLoader.show()
         debateAnswerLoader.alpha = 1f
         if (Animations.areEnabled) {
             loaderAnimation.start()
@@ -73,7 +74,7 @@ class DebateAnswerLoader @JvmOverloads constructor(context: Context, attrs: Attr
 
     private fun stopAnimation(hidingFinishedListener: () -> Unit) {
         loaderAnimation.stop()
-        debateAnswerLoader.visibility = GONE
+        debateAnswerLoader.hide()
         hidingFinishedListener()
     }
 }

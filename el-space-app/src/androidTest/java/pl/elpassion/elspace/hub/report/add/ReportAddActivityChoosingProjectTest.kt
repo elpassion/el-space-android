@@ -2,17 +2,13 @@ package pl.elpassion.elspace.hub.report.add
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
-import com.elpassion.android.commons.espresso.click
-import com.elpassion.android.commons.espresso.hasText
-import com.elpassion.android.commons.espresso.onId
-import com.elpassion.android.commons.espresso.onText
+import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.rule
-import pl.elpassion.elspace.common.startActivity
 import pl.elpassion.elspace.hub.project.CachedProjectRepository
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project

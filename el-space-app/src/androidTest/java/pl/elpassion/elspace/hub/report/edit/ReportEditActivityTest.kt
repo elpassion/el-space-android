@@ -2,6 +2,7 @@ package pl.elpassion.elspace.hub.report.edit
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
+import android.support.test.espresso.action.ViewActions.scrollTo
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -11,7 +12,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.R
-import pl.elpassion.elspace.common.*
+import pl.elpassion.elspace.common.hasNoChildWithId
+import pl.elpassion.elspace.common.isBottomNavigationItemChecked
+import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.ProjectRepository
@@ -167,7 +171,7 @@ class ReportEditActivityTest {
     fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
         Espresso.closeSoftKeyboard()
-        onId(R.id.action_sick_leave_report).click()
+        onId(R.id.action_sick_leave_report).perform(scrollTo()).click()
         verifyIsSickLeaveFormDisplayed()
     }
 

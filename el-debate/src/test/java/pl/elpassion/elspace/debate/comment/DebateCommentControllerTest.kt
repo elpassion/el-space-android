@@ -7,6 +7,7 @@ import io.reactivex.subjects.CompletableSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateCommentControllerTest {
@@ -15,47 +16,82 @@ class DebateCommentControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val api = mock<DebateComment.Api>()
     private val commentSubject = CompletableSubject.create()
-    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
+    private val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(api.comment(any(), any(), any())).thenReturn(commentSubject)
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
+        whenever(api.comment(any(), any(), any(), any())).thenReturn(commentSubject)
+        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
     }
 
     @Test
-    fun shouldCallApiWithGivenTokenAndMessageAndNicknameOnSendComment() {
-        sendComment()
-        verify(api).comment("token", "message", "mrNick")
+    fun shouldCallApiWithGivenDataOnSendComment() {
+        sendComment("token","message")
+        verify(api).comment("token", "message", "firstName", "lastName")
     }
 
     @Test
-    fun shouldReallyCallApiWithGivenTokenAndMessageAndNicknameAndNotShowInvalidInputErrorWhenInputIsValidOnSendComment() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("mrNick")
+    fun shouldReallyCallApiWithGivenDataWhenMessageIsValidOnSendComment() {
+        val token = "someOtherToken"
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName","NewlastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "mrNick")
+        verify(api).comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName")
+    }
+
+    @Test
+    fun shouldNotShowInvalidInputErrorWhenMessageIsValidOnSendComment() {
+        sendComment()
         verify(view, never()).showInvalidInputError()
     }
 
     @Test
-    fun shouldReallyUseNicknameFromRepo() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn("Wieslaw")
-        sendComment()
-        verify(api).comment("token", "message", "Wieslaw")
+    fun shouldNotCallApiWhenMessageIsEmptyOnSendComment() {
+        sendComment(message = "")
+        verify(api, never()).comment(any(), any(), any(), any())
     }
 
     @Test
-    fun shouldUseDefaultNicknameWhenRepoReturnsNull() {
-        whenever(debateRepo.getLatestDebateNickname()).thenReturn(null)
-        sendComment()
-        verify(api).comment("token", "message", DEFAULT_NICKNAME)
-    }
-
-    @Test
-    fun shouldNotCallApiAndShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
-        sendComment(token = "token", message = "")
-        verify(api, never()).comment(any(), any(), any())
+    fun shouldShowInvalidInputErrorWhenMessageIsEmptyOnSendComment() {
+        sendComment(message = "")
         verify(view).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldNotCallApiWhenMessageIsBlankOnSendComment() {
+        sendComment(message = " ")
+        verify(api, never()).comment(any(), any(), any(), any())
+    }
+
+    @Test
+    fun shouldShowInvalidInputErrorWhenMessageIsBlankOnSendComment() {
+        sendComment(message = " ")
+        verify(view).showInvalidInputError()
+    }
+
+    @Test
+    fun shouldCallApiWhenMessageIsUnderLimitOnSendComment() {
+        sendComment(message = createString(100))
+        verify(api).comment(any(), any(), any(), any())
+    }
+
+    @Test
+    fun shouldNotCallApiWhenMessageIsOverLimitOnSendComment() {
+        sendComment(message = createString(101))
+        verify(api, never()).comment(any(), any(), any(), any())
+    }
+
+    @Test
+    fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
+        controller.sendComment("token", createString(31))
+        verify(api, never()).comment(any(), any(), any(), any())
+    }
+
+    @Test
+    fun shouldShowInputOverLimitErrorWhenMessageIsOverLimitOnSendComment() {
+        sendComment(message = createString(101))
+        verify(view).showInputOverLimitError()
     }
 
     @Test
@@ -100,7 +136,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
-        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -111,7 +147,7 @@ class DebateCommentControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
-        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn))
+        val controller = DebateCommentController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -120,7 +156,7 @@ class DebateCommentControllerTest {
     }
 
     @Test
-    fun shouldCloseSuccessWhenSendCommentSucceeded() {
+    fun shouldCloseScreenWhenSendCommentSucceeded() {
         sendComment()
         commentSubject.onComplete()
         verify(view).closeScreen()
@@ -139,6 +175,73 @@ class DebateCommentControllerTest {
         controller.onCancel()
         verify(view).closeScreen()
     }
+
+    @Test
+    fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
+        whenever(debateRepo.areCredentialsMissing("token")).thenReturn(true)
+        controller.sendComment("token", "message")
+        verify(view).showCredentialsDialog()
+    }
+
+    @Test
+    fun shouldSaveCredentialsOnNewCredentials() {
+        val token = "token"
+        val credentials = createCredentials()
+        controller.onNewCredentials(token, credentials)
+        verify(debateRepo).saveTokenCredentials(token, credentials)
+    }
+
+    @Test
+    fun shouldShowFirstNameErrorOnBlankFirstName() {
+        val credentials = createCredentials(firstName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showFirstNameError()
+    }
+
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankFirstName() {
+        val credentials = createCredentials(firstName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
+    }
+
+    @Test
+    fun shouldShowLastNameErrorOnBlankLastName() {
+        val credentials = createCredentials(lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showLastNameError()
+    }
+
+    @Test
+    fun shouldNotSaveTokenCredentialsOnBlankLastName() {
+        val credentials = createCredentials(lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(debateRepo, never()).saveTokenCredentials(any(), any())
+    }
+
+    @Test
+    fun shouldShowBothErrorsOnBlankCredentials() {
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view).showLastNameError()
+        verify(view).showFirstNameError()
+    }
+
+    @Test
+    fun shouldCloseCredentialsDialogOnCorrectCredentials() {
+        val credentials = createCredentials()
+        controller.onNewCredentials("token", credentials)
+        verify(view).closeCredentialsDialog()
+    }
+
+    @Test
+    fun shouldNotCloseCredentialDialogOnIncorrectCredentials() {
+        val credentials = createCredentials(firstName = " ", lastName = " ")
+        controller.onNewCredentials("token", credentials)
+        verify(view, never()).closeCredentialsDialog()
+    }
+
+    private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

@@ -3,26 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hubLoginCoordinator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".hub.login.GoogleHubLoginActivity">
 
-    <FrameLayout
-        android:layout_width="10000dp"
-        android:layout_height="10000dp"
-        android:background="#a0000000" />
+    <View
+        android:layout_width="1000dp"
+        android:layout_height="0dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/colorWhite"
+        android:animateLayoutChanges="true"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/googleLoginError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/google_login_error"
             android:padding="@dimen/default_padding_value"
+            android:text="@string/google_login_error"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -30,8 +29,8 @@
             android:id="@+id/googleTokenError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/google_token_error"
             android:padding="@dimen/default_padding_value"
+            android:text="@string/google_token_error"
             android:visibility="gone"
             tools:visibility="visible" />
 

@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.comment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,14 +17,23 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
 
+    private val credentialsDialog by lazy {
+        DebateCredentialsDialog(this) { credentials ->
+            controller.onNewCredentials(token, credentials)
+        }
+    }
+
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
+
+    private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
 
     private val controller by lazy {
         DebateCommentController(
                 view = this,
                 debateRepo = DebatesRepositoryProvider.get(),
                 api = DebateComment.ApiProvider.get(),
-                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
+                schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
+                maxMessageLength = maxMessageLength)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +63,40 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showSendCommentError(exception: Throwable) {
-        debateCommentInputLayout.error = getString(R.string.debate_comment_send_error)
+        showErrorInInput(R.string.debate_comment_send_error)
     }
 
     override fun showInvalidInputError() {
-        debateCommentInputLayout.error = getString(R.string.debate_comment_invalid_input_error)
+        showErrorInInput(R.string.debate_comment_invalid_input_error)
+    }
+
+    override fun showInputOverLimitError() {
+        val message = getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        showErrorInInput(message)
+    }
+
+    private fun showErrorInInput(@StringRes message: Int) {
+        debateCommentInputLayout.error = getString(message)
+    }
+
+    private fun showErrorInInput(message: String) {
+        debateCommentInputLayout.error = message
+    }
+
+    override fun showCredentialsDialog() {
+        credentialsDialog.show()
+    }
+
+    override fun closeCredentialsDialog() {
+        credentialsDialog.hide()
+    }
+
+    override fun showFirstNameError() {
+        credentialsDialog.showFirstNameError()
+    }
+
+    override fun showLastNameError() {
+        credentialsDialog.showLastNameError()
     }
 
     override fun closeScreen() {
@@ -79,4 +118,5 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
                     putExtra(debateAuthTokenKey, debateToken)
                 }
     }
+
 }

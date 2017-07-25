@@ -4,7 +4,7 @@
     android:id="@+id/launcherCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryBlue"
+    android:background="@color/colorPrimarySpace"
     tools:context=".launcher.LauncherActivity">
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@color/colorViolet"
+            android:background="@color/violetButton"
             android:text="@string/launcher_button_hub" />
 
         <Button
@@ -38,7 +38,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@color/colorPrimaryGreen"
+            android:background="@color/colorPrimaryDebate"
             android:text="@string/launcher_button_debate" />
 
     </LinearLayout>

@@ -7,6 +7,9 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.elpassion.android.view.disable
+import com.elpassion.android.view.enable
+import com.elpassion.android.view.show
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_details_activity.*
@@ -68,8 +71,14 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun hideLoader() = hideLoader(debateDetailsCoordinator)
 
+    override fun showDebateClosedError() {
+        debateClosedView.show()
+    }
+
     override fun showDebateDetailsError(exception: Throwable) {
-        showSnackbar(R.string.debate_details_error)
+        createSnackbar(R.string.debate_details_error)
+                .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(token) })
+                .show()
     }
 
     override fun showVoteLoader(answer: Answer) {
@@ -78,9 +87,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     private fun disableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = false
-        debateNeutralAnswerButton.isEnabled = false
-        debatePositiveAnswerButton.isEnabled = false
+        debateNegativeAnswerButton.disable()
+        debateNeutralAnswerButton.disable()
+        debatePositiveAnswerButton.disable()
     }
 
     private fun getLoaderForAnswer(answer: Answer) = when (answer) {
@@ -96,17 +105,17 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     }
 
     fun enableVoteButtons() {
-        debateNegativeAnswerButton.isEnabled = true
-        debateNeutralAnswerButton.isEnabled = true
-        debatePositiveAnswerButton.isEnabled = true
+        debateNegativeAnswerButton.enable()
+        debateNeutralAnswerButton.enable()
+        debatePositiveAnswerButton.enable()
     }
 
     override fun showVoteError(exception: Throwable) {
-        showSnackbar(R.string.debate_details_vote_error)
+        createSnackbar(R.string.debate_details_vote_error).show()
     }
 
     override fun showVoteSuccess(answer: Answer) {
-        showSnackbar(R.string.debate_details_vote_success, Snackbar.LENGTH_SHORT)
+        createSnackbar(R.string.debate_details_vote_success, Snackbar.LENGTH_SHORT).show()
         when (answer) {
             is Positive -> answersAnimators.startPositiveAnswerAnimation()
             is Negative -> answersAnimators.startNegativeAnswerAnimation()
@@ -114,9 +123,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         }
     }
 
-    private fun showSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) {
-        Snackbar.make(debateDetailsCoordinator, textId, length).show()
-    }
+    private fun createSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) =
+            Snackbar.make(debateDetailsCoordinator, textId, length)
 
     override fun openCommentScreen() {
         DebateCommentActivity.start(this, token)

@@ -86,7 +86,7 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowErrorWhenApiCallFails() {
+    fun shouldShowDebateDetailsErrorWhenApiCallFails() {
         createController().onCreate("token")
         val exception = RuntimeException()
         debateDetailsSubject.onError(exception)
@@ -186,21 +186,14 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowErrorWhenVoteFailed() {
-        createController().onVote("", createPositiveAnswer())
-        val exception = RuntimeException()
-        sendVoteSubject.onError(exception)
-        verify(view).showVoteError(exception)
+    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+        createController().onVote("token", createPositiveAnswer())
+        sendVoteSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
     }
 
     @Test
-    fun shouldOpenCommentScreenOnComment() {
-        createController().onComment()
-        verify(view).openCommentScreen()
-    }
-
-    @Test
-    fun shouldShowInformationToSlowDownWithVotingOn429CodeErrorFromApi() {
+    fun shouldShowSlowDownInformationOnVote429CodeErrorFromApi() {
         createController().onVote("", createPositiveAnswer())
         val exception = createHttpException(429)
         sendVoteSubject.onError(exception)
@@ -213,6 +206,20 @@ class DebateDetailsControllerTest {
         val exception = createHttpException(429)
         sendVoteSubject.onError(exception)
         verify(view, never()).showVoteError(any())
+    }
+
+    @Test
+    fun shouldShowErrorWhenVoteFailed() {
+        createController().onVote("", createPositiveAnswer())
+        val exception = RuntimeException()
+        sendVoteSubject.onError(exception)
+        verify(view).showVoteError(exception)
+    }
+
+    @Test
+    fun shouldOpenCommentScreenOnComment() {
+        createController().onComment()
+        verify(view).openCommentScreen()
     }
 
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),

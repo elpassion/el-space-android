@@ -35,20 +35,20 @@ class ReportListAddSeparatorTest {
 
     @Test
     fun shouldHaveSeparatorBetweenReportAndNotFilledInDay() {
-        val givenAdapters = addSeparators(listOf(newRegularHourlyReport(), newDayWithoutReports()))
-        assertTrue(givenAdapters[1] is Separator)
+        val givenItems = addSeparators(listOf(newRegularHourlyReport(), newDayWithoutReports()))
+        assertTrue(givenItems[1] is Separator)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenDayWithDailyReportAndNotFilledInDay() {
-        val givenAdapters = addSeparators(listOf(newDayWithDailyReports(), newDayWithoutReports()))
-        assertTrue(givenAdapters[1] is Separator)
+        val givenItems = addSeparators(listOf(newDayWithDailyReports(), newDayWithoutReports()))
+        assertTrue(givenItems[1] is Separator)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenDaysWithoutReports() {
-        val givenAdapters = addSeparators(listOf(newDayWithoutReports(), newDayWithoutReports()))
-        assertTrue(givenAdapters[1] is Separator)
+        val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWithoutReports()))
+        assertTrue(givenItems[1] is Separator)
     }
 
     private fun newDayWithoutReports() = DayWithoutReports(0, "", "", false, false)

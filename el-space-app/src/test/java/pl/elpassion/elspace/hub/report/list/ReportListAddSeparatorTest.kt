@@ -3,6 +3,7 @@ package pl.elpassion.elspace.hub.report.list
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 
 
@@ -38,7 +39,15 @@ class ReportListAddSeparatorTest {
         assertTrue(givenAdapters[1] is Separator)
     }
 
+    @Test
+    fun shouldHaveSeparatorBetweenDayWithDailyReportAndNotFilledInDay() {
+        val givenAdapters = addSeparators(listOf(newDayWithDailyReports(), newDayWithoutReports()))
+        assertTrue(givenAdapters[1] is Separator)
+    }
+
     private fun newDayWithoutReports() = DayWithoutReports(0, "", "", false, false)
 
     private fun newDayWithHourlyReports() = DayWithHourlyReports(0, "", "", listOf(newRegularHourlyReport()), false, 1.0)
+
+    private fun newDayWithDailyReports() = DayWithDailyReport(0, "", "", false, newDailyReport())
 }

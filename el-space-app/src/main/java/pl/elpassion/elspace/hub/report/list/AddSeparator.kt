@@ -9,7 +9,8 @@ fun addSeparators(items: List<AdapterItem>) = mutableListOf<AdapterItem>().apply
         val previousItem = items.getOrNull(i - 1)
         if (previousItem != null
                 && currentItem !is RegularHourlyReport
-                && currentItem !is PaidVacationHourlyReport) {
+                && currentItem !is PaidVacationHourlyReport
+                && currentItem !is Empty) {
             add(Separator())
             add(currentItem)
         } else {

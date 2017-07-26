@@ -84,7 +84,8 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun createAdapterItems(days: List<Day>) {
         val adapterItems = getDaysAndReportsAsAdapterItems(days)
-        view.showDays(addSeparators(adapterItems))
+        val adapterItemsWithSeparators = addSeparators(adapterItems)
+        view.showDays(adapterItemsWithSeparators)
     }
 
     private fun getDaysAndReportsAsAdapterItems(days: List<Day>) = mutableListOf<AdapterItem>().apply {

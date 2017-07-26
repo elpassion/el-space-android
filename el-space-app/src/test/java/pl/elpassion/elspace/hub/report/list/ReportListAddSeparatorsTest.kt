@@ -44,6 +44,11 @@ class ReportListAddSeparatorsTest {
     fun shouldHaveSeparatorBetweenNotFilledInDayAndFilledIn() {
         val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWithHourlyReports()))
         assertTrue(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldHaveCorrectListSizeWithTwoElementsWithSeparator() {
+        val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWithHourlyReports()))
         assertTrue(givenItems.size == 5)
     }
 

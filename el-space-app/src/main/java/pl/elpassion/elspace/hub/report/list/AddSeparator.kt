@@ -20,4 +20,5 @@ fun addSeparators(items: List<AdapterItem>) = mutableListOf<AdapterItem>().apply
             add(currentItem)
         }
     }
+    add(Empty())
 }

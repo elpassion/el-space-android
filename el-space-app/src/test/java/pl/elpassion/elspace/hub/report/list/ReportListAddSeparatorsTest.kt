@@ -14,13 +14,17 @@ class ReportListAddSeparatorsTest {
     fun shouldHaveEmptyOnFirstPosition() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport()))
         assertTrue(givenItems[0] is Empty)
-        assertTrue(givenItems.size == 3)
     }
 
     @Test
     fun shouldHaveEmptyOnLastPosition() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport()))
         assertTrue(givenItems[2] is Empty)
+    }
+
+    @Test
+    fun shouldHaveCorrectListSizeWithOneElement() {
+        val givenItems = addSeparators(listOf(newRegularHourlyReport()))
         assertTrue(givenItems.size == 3)
     }
 

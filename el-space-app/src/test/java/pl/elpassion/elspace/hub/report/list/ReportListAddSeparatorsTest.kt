@@ -56,49 +56,42 @@ class ReportListAddSeparatorsTest {
     fun shouldHaveSeparatorBetweenFilledInDayAndNotFilledIn() {
         val givenItems = addSeparators(listOf(newDayWithHourlyReports(), newDayWithoutReports()))
         assertTrue(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 5)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenReportAndFilledInDay() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport(), newDayWithHourlyReports()))
         assertTrue(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 5)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenReportAndNotFilledInDay() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport(), newDayWithoutReports()))
         assertTrue(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 5)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenDayWithDailyReportAndNotFilledInDay() {
         val givenItems = addSeparators(listOf(newDayWithDailyReports(), newDayWithoutReports()))
         assertTrue(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 5)
     }
 
     @Test
     fun shouldHaveSeparatorBetweenDaysWithoutReports() {
         val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWithoutReports()))
         assertTrue(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 5)
     }
 
     @Test
     fun shouldNotHaveSeparatorBetweenPaidVacationAndRegularHourlyReport() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport(), newPaidVacationHourlyReport()))
         assertFalse(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 4)
     }
 
     @Test
     fun shouldNotHaveSeparatorBetweenWeekendAndEmptyItems() {
         val givenItems = addSeparators(listOf(newDayWeekend(), Empty()))
         assertFalse(givenItems[2] is Separator)
-        assertTrue(givenItems.size == 4)
     }
 
     @Test

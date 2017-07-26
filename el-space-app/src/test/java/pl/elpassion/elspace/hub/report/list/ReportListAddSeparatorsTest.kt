@@ -32,6 +32,11 @@ class ReportListAddSeparatorsTest {
     fun shouldNotHaveSeparatorBetweenTwoReportItemAdapters() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport(), newRegularHourlyReport()))
         assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldHaveCorrectListSizeWithTwoElementsWithoutSeparator() {
+        val givenItems = addSeparators(listOf(newRegularHourlyReport(), newRegularHourlyReport()))
         assertTrue(givenItems.size == 4)
     }
 

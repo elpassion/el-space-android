@@ -1,7 +1,9 @@
-package pl.elpassion.elspace.hub.report.list
+package pl.elpassion.elspace.hub.report.list.adapter
 
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
+import pl.elpassion.elspace.hub.report.list.AdapterItem
+import pl.elpassion.elspace.hub.report.list.DayWithoutReports
 
 
 fun addSeparators(items: List<AdapterItem>) = mutableListOf<AdapterItem>().apply {

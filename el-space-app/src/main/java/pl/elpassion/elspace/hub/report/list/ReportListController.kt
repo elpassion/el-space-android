@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
+import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService

@@ -31,6 +31,8 @@ import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
+import pl.elpassion.elspace.hub.report.list.adapter.Empty
+import pl.elpassion.elspace.hub.report.list.adapter.Separator
 import pl.elpassion.elspace.hub.report.list.adapter.holders.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl

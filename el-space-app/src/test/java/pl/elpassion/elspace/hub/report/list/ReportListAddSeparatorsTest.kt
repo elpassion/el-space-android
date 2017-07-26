@@ -6,6 +6,9 @@ import org.junit.Test
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
+import pl.elpassion.elspace.hub.report.list.adapter.Empty
+import pl.elpassion.elspace.hub.report.list.adapter.Separator
+import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 
 
 class ReportListAddSeparatorsTest {

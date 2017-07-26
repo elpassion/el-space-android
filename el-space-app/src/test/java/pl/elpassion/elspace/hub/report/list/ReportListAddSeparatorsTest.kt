@@ -23,7 +23,7 @@ class ReportListAddSeparatorsTest {
     }
 
     @Test
-    fun shouldHaveCorrectListSizeWithOneElement() {
+    fun shouldHaveCorrectListSizeForOneElement() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport()))
         assertTrue(givenItems.size == 3)
     }
@@ -35,7 +35,7 @@ class ReportListAddSeparatorsTest {
     }
 
     @Test
-    fun shouldHaveCorrectListSizeWithTwoElementsWithoutSeparator() {
+    fun shouldHaveCorrectListSizeForTwoElementsWithoutSeparator() {
         val givenItems = addSeparators(listOf(newRegularHourlyReport(), newRegularHourlyReport()))
         assertTrue(givenItems.size == 4)
     }
@@ -47,7 +47,7 @@ class ReportListAddSeparatorsTest {
     }
 
     @Test
-    fun shouldHaveCorrectListSizeWithTwoElementsWithSeparator() {
+    fun shouldHaveCorrectListSizeForTwoElementsWithSeparator() {
         val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWithHourlyReports()))
         assertTrue(givenItems.size == 5)
     }

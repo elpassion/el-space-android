@@ -1,6 +1,8 @@
 package pl.elpassion.elspace.debate.chat
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Test
 
@@ -22,6 +24,12 @@ class ChatControllerTest {
         controller.sendMessage(message)
         verify(api).sendMessage(message)
     }
+
+    @Test
+    fun shouldNotCallApiWhenMessageIsEmpty() {
+        controller.sendMessage("")
+        verify(api, never()).sendMessage(any())
+    }
 }
 
 interface DebateChat {
@@ -32,6 +40,10 @@ interface DebateChat {
 
 class ChatController(val api: DebateChat.Api) {
     fun sendMessage(message: String) {
+        if (!message.isEmpty()) callApi(message)
+    }
+
+    private fun callApi(message: String) {
         api.sendMessage(message)
     }
 }

@@ -30,6 +30,12 @@ class ChatControllerTest {
         controller.sendMessage("")
         verify(api, never()).sendMessage(any())
     }
+
+    @Test
+    fun shouldNotCallApiWhenMessageIsBlank() {
+        controller.sendMessage(" ")
+        verify(api, never()).sendMessage(any())
+    }
 }
 
 interface DebateChat {
@@ -40,7 +46,7 @@ interface DebateChat {
 
 class ChatController(val api: DebateChat.Api) {
     fun sendMessage(message: String) {
-        if (!message.isEmpty()) callApi(message)
+        if (!message.isBlank()) callApi(message)
     }
 
     private fun callApi(message: String) {

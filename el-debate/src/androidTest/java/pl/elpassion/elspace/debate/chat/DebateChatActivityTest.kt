@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
@@ -20,12 +20,8 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
-import pl.elpassion.elspace.debate.chat.Comment
-import pl.elpassion.elspace.debate.chat.DebateChat
-import pl.elpassion.elspace.debate.chat.DebateChatActivity
-import pl.elpassion.elspace.debate.chat.TokenCredentials
 
-class DebateCommentActivityTest {
+class DebateChatActivityTest {
 
     private val debateRepo = mock<DebatesRepository>().apply {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))

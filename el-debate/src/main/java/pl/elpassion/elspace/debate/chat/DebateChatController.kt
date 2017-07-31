@@ -32,6 +32,10 @@ class DebateChatController(
                 .subscribe(view::closeScreen, view::showSendCommentError)
     }
 
+    fun getComments() {
+        api.getComments()
+    }
+
     fun onDestroy() {
         subscription?.dispose()
     }

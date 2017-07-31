@@ -18,6 +18,8 @@ interface DebateChat {
                 @Field("text") message: String,
                 @Field("first_name") firstName: String,
                 @Field("last_name") lastName: String): Completable
+
+        fun getComments() {}
     }
 
     interface View {

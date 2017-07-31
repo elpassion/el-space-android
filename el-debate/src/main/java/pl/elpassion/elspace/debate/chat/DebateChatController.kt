@@ -13,8 +13,8 @@ class DebateChatController(
 
     private var subscription: Disposable? = null
 
-    fun onCreate() {
-        service.getComments()
+    fun onCreate(token: String) {
+        service.getComments("token")
     }
 
     fun sendComment(token: String, message: String) {

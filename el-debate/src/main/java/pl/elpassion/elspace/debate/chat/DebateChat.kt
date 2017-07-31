@@ -14,7 +14,7 @@ interface DebateChat {
     interface Service {
         fun comment(comment: Comment): Completable
 
-        fun getComments(): Observable<List<String>>
+        fun getComments(token: String): Observable<List<String>>
     }
 
     interface Api {

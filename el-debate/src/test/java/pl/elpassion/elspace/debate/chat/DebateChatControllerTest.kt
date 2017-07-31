@@ -242,9 +242,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldGetCommentsOnCreate() {
-        controller.onCreate()
-        verify(service).getComments()
+    fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
+        controller.onCreate("token")
+        verify(service).getComments("token")
     }
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)

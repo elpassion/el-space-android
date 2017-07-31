@@ -13,6 +13,10 @@ class DebateChatController(
 
     private var subscription: Disposable? = null
 
+    fun onCreate() {
+        service.getComments()
+    }
+
     fun sendComment(token: String, message: String) {
         when {
             debateRepo.areCredentialsMissing(token) -> view.showCredentialsDialog()

@@ -241,6 +241,12 @@ class DebateChatControllerTest {
         verify(view, never()).closeCredentialsDialog()
     }
 
+    @Test
+    fun shouldGetCommentsOnCreate() {
+        controller.onCreate()
+        verify(service).getComments()
+    }
+
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)

@@ -10,7 +10,7 @@
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeDebate" />
         <activity
-            android:name=".elspace.debate.comment.DebateCommentActivity"
+            android:name=".elspace.debate.chat.DebateChatActivity"
             android:theme="@style/AppThemeDebate_Dialog" />
     </application>
 </manifest>

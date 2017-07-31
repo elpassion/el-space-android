@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import android.content.Context
 import android.support.v7.app.AlertDialog

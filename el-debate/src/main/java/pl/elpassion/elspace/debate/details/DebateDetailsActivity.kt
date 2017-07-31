@@ -20,7 +20,7 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.debate.comment.DebateCommentActivity
+import pl.elpassion.elspace.debate.chat.DebateChatActivity
 
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -38,7 +38,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         setContentView(R.layout.debate_details_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateCommentButton.setOnClickListener { controller.onComment() }
+        debateChatButton.setOnClickListener { controller.onChat() }
         controller.onCreate(token)
     }
 
@@ -126,8 +126,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     private fun createSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) =
             Snackbar.make(debateDetailsCoordinator, textId, length)
 
-    override fun openCommentScreen() {
-        DebateCommentActivity.start(this, token)
+    override fun openChatScreen() {
+        DebateChatActivity.start(this, token)
     }
 
     override fun showSlowDownInformation() {

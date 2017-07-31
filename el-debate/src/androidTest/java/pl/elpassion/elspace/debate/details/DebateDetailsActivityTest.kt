@@ -20,7 +20,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.debate.comment.DebateCommentActivity
+import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import java.lang.Thread.sleep
 
 class DebateDetailsActivityTest {
@@ -87,10 +87,10 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowCommentButton() {
+    fun shouldShowChatButton() {
         startActivity()
-        onId(R.id.debateCommentButton)
-                .hasText(R.string.debate_details_button_comment)
+        onId(R.id.debateChatButton)
+                .hasText(R.string.debate_details_button_chat)
                 .isDisplayed()
                 .isEnabled()
     }
@@ -324,22 +324,22 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldOpenCommentScreenWhenCommentButtonClicked() {
+    fun shouldOpenChatScreenWhenChatButtonClicked() {
         startActivityAndSuccessfullyReturnDebateDetails()
         stubAllIntents()
-        onId(R.id.debateCommentButton).click()
-        checkIntent(DebateCommentActivity::class.java)
+        onId(R.id.debateChatButton).click()
+        checkIntent(DebateChatActivity::class.java)
     }
 
     @Test
-    fun shouldOpenCommentScreenWithGivenToken() {
+    fun shouldOpenChatScreenWithGivenToken() {
         val token = "someToken"
         startActivityAndSuccessfullyReturnDebateDetails(token = token)
         stubAllIntents()
-        onId(R.id.debateCommentButton).click()
+        onId(R.id.debateChatButton).click()
         Intents.intended(Matchers.allOf(
                 IntentMatchers.hasExtra("debateAuthTokenKey", token),
-                IntentMatchers.hasComponent(DebateCommentActivity::class.java.name)))
+                IntentMatchers.hasComponent(DebateChatActivity::class.java.name)))
     }
 
     @Test

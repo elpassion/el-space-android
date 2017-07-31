@@ -1,13 +1,13 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
 
-class DebateCommentController(
-        private val view: DebateComment.View,
+class DebateChatController(
+        private val view: DebateChat.View,
         private val debateRepo: DebatesRepository,
-        private val api: DebateComment.Api,
+        private val api: DebateChat.Api,
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
@@ -18,11 +18,11 @@ class DebateCommentController(
             debateRepo.areCredentialsMissing(token) -> view.showCredentialsDialog()
             message.isBlank() -> view.showInvalidInputError()
             message.length > maxMessageLength -> view.showInputOverLimitError()
-            else -> callApi(token, message)
+            else -> callApiComment(token, message)
         }
     }
 
-    private fun callApi(token: String, message: String) {
+    private fun callApiComment(token: String, message: String) {
         val (firstName, lastName) = debateRepo.getTokenCredentials(token)
         subscription = api.comment(token, message, firstName, lastName)
                 .subscribeOn(schedulers.backgroundScheduler)

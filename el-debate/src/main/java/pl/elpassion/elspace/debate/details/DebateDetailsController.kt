@@ -48,8 +48,8 @@ class DebateDetailsController(
         }
     }
 
-    fun onComment() {
-        view.openCommentScreen()
+    fun onChat() {
+        view.openChatScreen()
     }
 
     fun onDestroy() {

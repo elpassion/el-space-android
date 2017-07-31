@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.Completable
 import pl.elpassion.elspace.api.DebateRetrofitProvider
@@ -8,7 +8,7 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-interface DebateComment {
+interface DebateChat {
 
     interface Api {
         @FormUrlEncoded
@@ -33,7 +33,7 @@ interface DebateComment {
         fun closeCredentialsDialog()
     }
 
-    object ApiProvider : Provider<DebateComment.Api>({
-        DebateRetrofitProvider.get().create(DebateComment.Api::class.java)
+    object ApiProvider : Provider<Api>({
+        DebateRetrofitProvider.get().create(Api::class.java)
     })
 }

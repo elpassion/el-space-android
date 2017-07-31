@@ -20,6 +20,9 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.chat.DebateChat
+import pl.elpassion.elspace.debate.chat.DebateChatActivity
+import pl.elpassion.elspace.debate.chat.TokenCredentials
 
 class DebateCommentActivityTest {
 
@@ -28,24 +31,24 @@ class DebateCommentActivityTest {
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
-    private val api = mock<DebateComment.Api>().apply {
+    private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
-    val rule = rule<DebateCommentActivity>(false) {
+    val rule = rule<DebateChatActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
-        DebateComment.ApiProvider.override = { api }
+        DebateChat.ApiProvider.override = { api }
     }
 
     @Test
-    fun shouldShowHintInInputField() {
+    fun shouldShowCommentHintInInputField() {
         startActivity()
         onText(R.string.debate_comment_hint).isDisplayed()
     }
 
     @Test
-    fun shouldShowCancelButton() {
+    fun shouldShowCommentCancelButton() {
         startActivity()
         onId(R.id.debateCommentCancelButton)
                 .isDisplayed()
@@ -53,7 +56,7 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldShowSendButton() {
+    fun shouldShowCommentSendButton() {
         startActivity()
         onId(R.id.debateCommentSendButton)
                 .isDisplayed()
@@ -71,14 +74,14 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldUseCorrectTokenAndMessageOnKeyboardConfirmClick() {
+    fun shouldUseCorrectTokenAndMessageOnCommentKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
         sendMessage()
         verify(api).comment("someToken", "message", "firstName", "lastName")
     }
 
     @Test
-    fun shouldUseCorrectTokenAndMessageOnSendClick() {
+    fun shouldUseCorrectTokenAndMessageOnCommentSendClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateCommentInputText)
                 .replaceText("message")
@@ -136,7 +139,7 @@ class DebateCommentActivityTest {
     }
 
     @Test
-    fun shouldNotClearInputWhenSendCommentFailed() {
+    fun shouldNotClearCommentInputWhenSendCommentFailed() {
         startActivity()
         sendMessage("New message")
         sendCommentSubject.onError(RuntimeException())
@@ -218,7 +221,7 @@ class DebateCommentActivityTest {
     }
 
     private fun startActivity(debateToken: String = "debateToken") {
-        rule.startActivity(DebateCommentActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
 
     private fun sendMessage(message: String = "message") {

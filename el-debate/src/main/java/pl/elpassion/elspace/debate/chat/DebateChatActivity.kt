@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import android.content.Context
 import android.content.Intent
@@ -8,14 +8,14 @@ import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.debate_comment_activity.*
+import kotlinx.android.synthetic.main.debate_chat_activity.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
-class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
+class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private val credentialsDialog by lazy {
         DebateCredentialsDialog(this) { credentials ->
@@ -28,17 +28,17 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
 
     private val controller by lazy {
-        DebateCommentController(
+        DebateChatController(
                 view = this,
                 debateRepo = DebatesRepositoryProvider.get(),
-                api = DebateComment.ApiProvider.get(),
+                api = DebateChat.ApiProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
                 maxMessageLength = maxMessageLength)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.debate_comment_activity)
+        setContentView(R.layout.debate_chat_activity)
         setupUI()
     }
 
@@ -55,11 +55,11 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
     }
 
     override fun showLoader() {
-        showLoader(debateCommentCoordinator)
+        showLoader(debateChatCoordinator)
     }
 
     override fun hideLoader() {
-        hideLoader(debateCommentCoordinator)
+        hideLoader(debateChatCoordinator)
     }
 
     override fun showSendCommentError(exception: Throwable) {
@@ -114,7 +114,7 @@ class DebateCommentActivity : AppCompatActivity(), DebateComment.View {
         fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
 
         fun intent(context: Context, debateToken: String) =
-                Intent(context, DebateCommentActivity::class.java).apply {
+                Intent(context, DebateChatActivity::class.java).apply {
                     putExtra(debateAuthTokenKey, debateToken)
                 }
     }

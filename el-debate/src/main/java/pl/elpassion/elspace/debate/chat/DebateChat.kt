@@ -14,7 +14,7 @@ interface DebateChat {
     interface Service {
         fun comment(comment: Comment): Completable
 
-        fun getComments(token: String): Observable<List<String>>
+        fun getComments(token: String): Observable<List<GetComment>>
     }
 
     interface Api {
@@ -38,6 +38,7 @@ interface DebateChat {
         fun showFirstNameError()
         fun showLastNameError()
         fun closeCredentialsDialog()
+        fun showComments(commentsList: List<GetComment>)
     }
 
     object ServiceProvider : Provider<Service>({

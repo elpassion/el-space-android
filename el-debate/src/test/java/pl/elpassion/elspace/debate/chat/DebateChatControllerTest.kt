@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.chat
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
@@ -16,11 +17,16 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
     private val commentSubject = CompletableSubject.create()
+    private val getCommentsList = listOf(
+            GetComment(firstName = "FirstOne", lastName = "OneLast", initials = "FO", backgroundColor = 333, message = "MessOne"),
+            GetComment(firstName = "FirstTwo", lastName = "TwoLast", initials = "FT", backgroundColor = 666, message = "MessTwo"))
+    private val getCommentsSubject = Observable.just(getCommentsList)
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
         whenever(service.comment(any())).thenReturn(commentSubject)
+        whenever(service.getComments(any())).thenReturn(getCommentsSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
@@ -245,6 +251,19 @@ class DebateChatControllerTest {
     fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
         controller.onCreate("token")
         verify(service).getComments("token")
+    }
+
+    @Test
+    fun shouldCallServiceGetCommentsWithReallyGivenTokenOnCreate() {
+        val token = "someOtherToken"
+        controller.onCreate(token)
+        verify(service).getComments(token)
+    }
+
+    @Test
+    fun shouldShowCommentsReturnedFromService() {
+        controller.onCreate("token")
+        verify(view).showComments(getCommentsList)
     }
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)

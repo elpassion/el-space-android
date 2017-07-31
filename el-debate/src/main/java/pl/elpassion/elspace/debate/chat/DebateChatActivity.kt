@@ -16,7 +16,6 @@ import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
 class DebateChatActivity : AppCompatActivity(), DebateChat.View {
-
     private val credentialsDialog by lazy {
         DebateCredentialsDialog(this) { credentials ->
             controller.onNewCredentials(token, credentials)
@@ -52,6 +51,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
         debateCommentCancelButton.setOnClickListener { controller.onCancel() }
+    }
+
+    override fun showComments(commentsList: List<GetComment>) {
+
     }
 
     override fun showLoader() {

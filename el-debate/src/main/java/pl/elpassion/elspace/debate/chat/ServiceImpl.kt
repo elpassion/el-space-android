@@ -7,7 +7,7 @@ class ServiceImpl(val api: DebateChat.Api) : DebateChat.Service {
 
     override fun comment(comment: Comment) = comment.run { api.comment(token, message, firstName, lastName) }
 
-    override fun getComments(token: String): Observable<List<String>> = Observable.create<List<String>> { emitter: ObservableEmitter<List<String>> ->
+    override fun getComments(token: String) = Observable.create<List<GetComment>> { emitter: ObservableEmitter<List<GetComment>> ->
 
     }
 }

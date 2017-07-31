@@ -20,6 +20,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.DebateChat
 import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import pl.elpassion.elspace.debate.chat.TokenCredentials
@@ -32,7 +33,7 @@ class DebateCommentActivityTest {
     }
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentSubject)
+        whenever(comment(any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
@@ -77,7 +78,7 @@ class DebateCommentActivityTest {
     fun shouldUseCorrectTokenAndMessageOnCommentKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
         sendMessage()
-        verify(service).comment("someToken", "message", "firstName", "lastName")
+        verify(service).comment(Comment("someToken", "message", "firstName", "lastName"))
     }
 
     @Test
@@ -87,7 +88,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(service).comment("someToken", "message", "firstName", "lastName")
+        verify(service).comment(Comment("someToken", "message", "firstName", "lastName"))
     }
 
     @Test

@@ -24,7 +24,8 @@ class DebateChatController(
 
     private fun serviceSendComment(token: String, message: String) {
         val (firstName, lastName) = debateRepo.getTokenCredentials(token)
-        subscription = service.comment(token, message, firstName, lastName)
+        val comment = Comment(token, message, firstName, lastName)
+        subscription = service.comment(comment)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -47,7 +48,7 @@ class DebateChatController(
         if (credentials.firstName.isBlank()) {
             view.showFirstNameError()
         }
-        if (credentials.lastName.isNotBlank() && credentials.firstName.isNotBlank()){
+        if (credentials.lastName.isNotBlank() && credentials.firstName.isNotBlank()) {
             debateRepo.saveTokenCredentials(token, credentials)
             view.closeCredentialsDialog()
         }

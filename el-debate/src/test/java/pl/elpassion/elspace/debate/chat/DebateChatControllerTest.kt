@@ -32,6 +32,25 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
+        onCreate()
+        verify(service).getComments("token")
+    }
+
+    @Test
+    fun shouldCallServiceGetCommentsWithReallyGivenTokenOnCreate() {
+        val token = "someOtherToken"
+        controller.onCreate(token)
+        verify(service).getComments(token)
+    }
+
+    @Test
+    fun shouldShowCommentsReturnedFromService() {
+        onCreate()
+        verify(view).showComments(getCommentsList)
+    }
+
+    @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).comment(Comment("token", "message", "firstName", "lastName"))
@@ -247,24 +266,7 @@ class DebateChatControllerTest {
         verify(view, never()).closeCredentialsDialog()
     }
 
-    @Test
-    fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
-        controller.onCreate("token")
-        verify(service).getComments("token")
-    }
-
-    @Test
-    fun shouldCallServiceGetCommentsWithReallyGivenTokenOnCreate() {
-        val token = "someOtherToken"
-        controller.onCreate(token)
-        verify(service).getComments(token)
-    }
-
-    @Test
-    fun shouldShowCommentsReturnedFromService() {
-        controller.onCreate("token")
-        verify(view).showComments(getCommentsList)
-    }
+    private fun onCreate(token: String = "token") = controller.onCreate(token)
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
 

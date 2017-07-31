@@ -31,14 +31,14 @@ class DebateCommentActivityTest {
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
-    private val api = mock<DebateChat.Api>().apply {
+    private val service = mock<DebateChat.Service>().apply {
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentSubject)
     }
 
     @JvmField @Rule
     val rule = rule<DebateChatActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
-        DebateChat.ApiProvider.override = { api }
+        DebateChat.ServiceProvider.override = { service }
     }
 
     @Test
@@ -77,7 +77,7 @@ class DebateCommentActivityTest {
     fun shouldUseCorrectTokenAndMessageOnCommentKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
         sendMessage()
-        verify(api).comment("someToken", "message", "firstName", "lastName")
+        verify(service).comment("someToken", "message", "firstName", "lastName")
     }
 
     @Test
@@ -87,7 +87,7 @@ class DebateCommentActivityTest {
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateCommentSendButton).click()
-        verify(api).comment("someToken", "message", "firstName", "lastName")
+        verify(service).comment("someToken", "message", "firstName", "lastName")
     }
 
     @Test

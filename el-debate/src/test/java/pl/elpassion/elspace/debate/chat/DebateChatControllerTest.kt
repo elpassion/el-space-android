@@ -12,31 +12,31 @@ import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateChatControllerTest {
 
+    private val service = mock<DebateChat.Service>()
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
-    private val api = mock<DebateChat.Api>()
     private val commentSubject = CompletableSubject.create()
-    private val controller = DebateChatController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
+    private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(api.comment(any(), any(), any(), any())).thenReturn(commentSubject)
+        whenever(service.comment(any(), any(), any(), any())).thenReturn(commentSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
-        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName","lastName"))
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
 
     @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {
-        sendComment("token","message")
-        verify(api).comment("token", "message", "firstName", "lastName")
+        sendComment("token", "message")
+        verify(service).comment("token", "message", "firstName", "lastName")
     }
 
     @Test
     fun shouldReallyCallApiCommentWithGivenDataWhenMessageIsValidOnSendComment() {
         val token = "someOtherToken"
-        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName","NewlastName"))
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName", "NewlastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(api).comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName")
+        verify(service).comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName")
     }
 
     @Test
@@ -48,7 +48,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldNotCallApiCommentWhenMessageIsEmptyOnSendComment() {
         sendComment(message = "")
-        verify(api, never()).comment(any(), any(), any(), any())
+        verify(service, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -60,7 +60,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldNotCallApiCommentWhenMessageIsBlankOnSendComment() {
         sendComment(message = " ")
-        verify(api, never()).comment(any(), any(), any(), any())
+        verify(service, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -72,20 +72,20 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallApiCommentWhenMessageIsUnderLimitOnSendComment() {
         sendComment(message = createString(100))
-        verify(api).comment(any(), any(), any(), any())
+        verify(service).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldNotCallApiCommentWhenMessageIsOverLimitOnSendComment() {
         sendComment(message = createString(101))
-        verify(api, never()).comment(any(), any(), any(), any())
+        verify(service, never()).comment(any(), any(), any(), any())
     }
 
     @Test
     fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
-        val controller = DebateChatController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
         controller.sendComment("token", createString(31))
-        verify(api, never()).comment(any(), any(), any(), any())
+        verify(service, never()).comment(any(), any(), any(), any())
     }
 
     @Test
@@ -136,7 +136,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenSendComment() {
         val subscribeOn = TestScheduler()
-        val controller = DebateChatController(view, debateRepo, api, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -147,7 +147,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenSendComment() {
         val observeOn = TestScheduler()
-        val controller = DebateChatController(view, debateRepo, api, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
         commentSubject.onComplete()
         verify(view, never()).hideLoader()
@@ -239,12 +239,6 @@ class DebateChatControllerTest {
         val credentials = createCredentials(firstName = " ", lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view, never()).closeCredentialsDialog()
-    }
-
-    @Test
-    fun shouldCallApiGetCommentsOnGetComments() {
-        controller.getComments()
-        verify(api).getComments()
     }
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)

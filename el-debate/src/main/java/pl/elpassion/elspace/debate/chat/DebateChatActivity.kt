@@ -31,7 +31,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         DebateChatController(
                 view = this,
                 debateRepo = DebatesRepositoryProvider.get(),
-                api = DebateChat.ApiProvider.get(),
+                service = DebateChat.ServiceProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
                 maxMessageLength = maxMessageLength)
     }

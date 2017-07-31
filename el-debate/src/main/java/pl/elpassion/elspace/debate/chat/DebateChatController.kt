@@ -7,7 +7,7 @@ import pl.elpassion.elspace.debate.DebatesRepository
 class DebateChatController(
         private val view: DebateChat.View,
         private val debateRepo: DebatesRepository,
-        private val api: DebateChat.Api,
+        private val service: DebateChat.Service,
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
@@ -18,22 +18,18 @@ class DebateChatController(
             debateRepo.areCredentialsMissing(token) -> view.showCredentialsDialog()
             message.isBlank() -> view.showInvalidInputError()
             message.length > maxMessageLength -> view.showInputOverLimitError()
-            else -> callApiComment(token, message)
+            else -> serviceSendComment(token, message)
         }
     }
 
-    private fun callApiComment(token: String, message: String) {
+    private fun serviceSendComment(token: String, message: String) {
         val (firstName, lastName) = debateRepo.getTokenCredentials(token)
-        subscription = api.comment(token, message, firstName, lastName)
+        subscription = service.comment(token, message, firstName, lastName)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe(view::closeScreen, view::showSendCommentError)
-    }
-
-    fun getComments() {
-        api.getComments()
     }
 
     fun onDestroy() {

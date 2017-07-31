@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.Completable
+import io.reactivex.Observable
 import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import retrofit2.http.Field
@@ -10,6 +11,12 @@ import retrofit2.http.POST
 
 interface DebateChat {
 
+    interface Service {
+        fun comment(token: String, message: String, firstName: String, lastName: String): Completable
+
+        fun getComments(): Observable<List<String>>
+    }
+
     interface Api {
         @FormUrlEncoded
         @POST("comment")
@@ -18,8 +25,6 @@ interface DebateChat {
                 @Field("text") message: String,
                 @Field("first_name") firstName: String,
                 @Field("last_name") lastName: String): Completable
-
-        fun getComments() {}
     }
 
     interface View {
@@ -34,6 +39,10 @@ interface DebateChat {
         fun showLastNameError()
         fun closeCredentialsDialog()
     }
+
+    object ServiceProvider : Provider<Service>({
+        ServiceImpl(ApiProvider.get())
+    })
 
     object ApiProvider : Provider<Api>({
         DebateRetrofitProvider.get().create(Api::class.java)

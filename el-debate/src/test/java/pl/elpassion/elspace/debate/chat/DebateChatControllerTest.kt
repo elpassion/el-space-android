@@ -58,6 +58,13 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldHideLoaderOnServiceGetCommentsNext() {
+        onCreate()
+        getCommentsSubject.onNext(getCommentsList)
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).comment(Comment("token", "message", "firstName", "lastName"))

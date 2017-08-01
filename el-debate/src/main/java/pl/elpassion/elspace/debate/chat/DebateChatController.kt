@@ -16,6 +16,7 @@ class DebateChatController(
     fun onCreate(token: String) {
         service.getComments(token)
                 .doOnSubscribe { view.showLoader() }
+                .doOnNext { view.hideLoader() }
                 .subscribe(view::showComments)
     }
 

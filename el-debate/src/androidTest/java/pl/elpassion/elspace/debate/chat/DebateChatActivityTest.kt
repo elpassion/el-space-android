@@ -151,12 +151,11 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldCloseScreenOnSuccessfullySentComment() {
+    fun shouldShowSendCommentSuccessOnSuccessfullySentComment() {
         startActivity()
         sendMessage()
         sendCommentSubject.onComplete()
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        assertTrue(rule.activity.isFinishing)
+        onId(R.id.debateCommentInputText).hasText("")
     }
 
     @Test

@@ -18,6 +18,7 @@
     <string name="debate_comment_hint">Add comment</string>
     <string name="debate_comment_button_cancel">Cancel</string>
     <string name="debate_comment_button_send">Send</string>
+    <string name="debate_comment_send_success">Comment sent!</string>
     <string name="debate_comment_send_error">Sending your comment failed, please try again</string>
     <string name="debate_comment_invalid_input_error">Invalid input!</string>
     <integer name="debate_comment_max_message_length">100</integer>

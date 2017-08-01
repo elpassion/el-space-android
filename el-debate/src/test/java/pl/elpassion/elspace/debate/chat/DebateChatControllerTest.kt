@@ -48,7 +48,7 @@ class DebateChatControllerTest {
         getCommentsSubject.onNext(getComment)
         verify(view).showComment(getComment)
     }
-    
+
     @Test
     fun shouldShowLoaderOnServiceGetCommentsCall() {
         onCreate()
@@ -58,7 +58,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderOnServiceGetCommentsNext() {
         onCreate()
-        getCommentsSubject.onComplete()
+        getCommentsSubject.onNext(getComment)
         verify(view).hideLoader()
     }
 
@@ -66,16 +66,6 @@ class DebateChatControllerTest {
     fun shouldNotHideLoaderOnServiceGetCommentsIfCallIsInProgress() {
         onCreate()
         verify(view, never()).hideLoader()
-    }
-
-    @Test
-    fun shouldHideLoaderOnceOnServiceGetCommentsEmissions() {
-        onCreate()
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onComplete()
-        verify(view, times(1)).hideLoader()
     }
 
     @Test
@@ -100,9 +90,10 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getCommentsSubject.onComplete()
+        getCommentsSubject.onNext(getComment)
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
+        getCommentsSubject.onNext(getComment)
         verify(view).hideLoader()
     }
 
@@ -111,7 +102,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getCommentsSubject.onComplete()
+        getCommentsSubject.onNext(getComment)
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()

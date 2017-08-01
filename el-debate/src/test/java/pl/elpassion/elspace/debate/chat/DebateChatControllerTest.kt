@@ -109,6 +109,14 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldShowGetCommentsErrorWhenServiceGetCommentsFails() {
+        onCreate()
+        val exception = RuntimeException()
+        getCommentsSubject.onError(exception)
+        verify(view).showGetCommentsError(exception)
+    }
+
+    @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).comment(Comment("token", "message", "firstName", "lastName"))

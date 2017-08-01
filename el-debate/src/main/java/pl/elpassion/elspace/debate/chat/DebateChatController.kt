@@ -19,9 +19,10 @@ class DebateChatController(
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
-                .doOnNext({ it -> view.showComment(it); view.hideLoader() })
                 .doFinally(view::showCommentsClosed)
-                .subscribe()
+                .subscribe(
+                        { getComment -> view.showComment(getComment); view.hideLoader() },
+                        view::showGetCommentsError)
                 .addTo(subscriptions)
     }
 

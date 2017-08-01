@@ -32,6 +32,7 @@ interface DebateChat {
         fun hideLoader()
         fun showComment(getComment: GetComment)
         fun showCommentsClosed()
+        fun showGetCommentsError(exception: Throwable)
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
         fun closeScreen()

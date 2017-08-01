@@ -7,13 +7,6 @@
         <item name="colorControlNormal">@color/textUnderline</item>
     </style>
 
-    <style name="AppThemeDebate_Dialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/colorPrimaryDebate</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkDebate</item>
-        <item name="colorAccent">@color/colorAccentDebate</item>
-        <item name="colorControlNormal">@color/textUnderline</item>
-    </style>
-
     <style name="Button">
         <item name="android:padding">@dimen/default_padding_value</item>
         <item name="android:textSize">18sp</item>

@@ -11,6 +11,6 @@
             android:theme="@style/AppThemeDebate" />
         <activity
             android:name=".elspace.debate.chat.DebateChatActivity"
-            android:theme="@style/AppThemeDebate_Dialog" />
+            android:theme="@style/AppThemeDebate" />
     </application>
 </manifest>

@@ -6,16 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".elspace.debate.chat.DebateChatActivity">
 
-    <View
-        android:layout_width="1000dp"
-        android:layout_height="0dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:gravity="bottom">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/debateCommentInputLayout"
@@ -31,23 +25,17 @@
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/greyDarkText" />
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end|bottom"
-            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/debateCommentSendButton"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:text="@string/debate_comment_button_send"
                 android:textSize="18sp" />
 
-        </LinearLayout>
+        </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>
 

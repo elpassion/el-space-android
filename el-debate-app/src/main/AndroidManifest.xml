@@ -24,8 +24,7 @@
             android:theme="@style/AppThemeDebate" />
         <activity
             android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppThemeDebate_Dialog"
+            android:theme="@style/AppThemeDebate"
             android:windowSoftInputMode="stateVisible" />
 
         <meta-data

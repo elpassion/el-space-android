@@ -58,7 +58,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderOnServiceGetCommentsNext() {
         onCreate()
-        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onComplete()
         verify(view).hideLoader()
     }
 
@@ -74,7 +74,18 @@ class DebateChatControllerTest {
         getCommentsSubject.onNext(getComment)
         getCommentsSubject.onNext(getComment)
         getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onComplete()
         verify(view, times(1)).hideLoader()
+    }
+
+    @Test
+    fun shouldShowCommentEveryTimeOnServiceGetCommentsEmissions() {
+        onCreate()
+        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onComplete()
+        verify(view, times(3)).showComment(getComment)
     }
 
     @Test

@@ -65,12 +65,19 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallHideLoaderOnceOnServiceGetCommentsEmissions() {
+    fun shouldHideLoaderOnceOnServiceGetCommentsEmissions() {
         onCreate()
         getCommentsSubject.onNext(getCommentsList)
         getCommentsSubject.onNext(getCommentsList)
         getCommentsSubject.onNext(getCommentsList)
         verify(view, times(1)).hideLoader()
+    }
+
+    @Test
+    fun shouldShowCommentsClosedWhenServiceGetCommentsFinished() {
+        onCreate()
+        getCommentsSubject.onComplete()
+        verify(view).showCommentsClosed()
     }
 
     @Test

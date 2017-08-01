@@ -17,6 +17,7 @@ class DebateChatController(
         service.getComments(token)
                 .doOnSubscribe { view.showLoader() }
                 .firstElement().doFinally(view::hideLoader)
+                .doFinally(view::showCommentsClosed)
                 .subscribe(view::showComments)
     }
 

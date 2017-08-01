@@ -39,6 +39,7 @@ interface DebateChat {
         fun showLastNameError()
         fun closeCredentialsDialog()
         fun showComments(commentsList: List<GetComment>)
+        fun showCommentsClosed()
     }
 
     object ServiceProvider : Provider<Service>({

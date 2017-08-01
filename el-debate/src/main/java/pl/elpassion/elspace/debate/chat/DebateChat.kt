@@ -14,7 +14,7 @@ interface DebateChat {
     interface Service {
         fun comment(comment: Comment): Completable
 
-        fun getComments(token: String): Observable<List<GetComment>>
+        fun getComment(token: String): Observable<GetComment>
     }
 
     interface Api {
@@ -30,7 +30,7 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showComments(commentsList: List<GetComment>)
+        fun showComment(getComment: GetComment)
         fun showCommentsClosed()
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)

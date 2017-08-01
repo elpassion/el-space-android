@@ -62,7 +62,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showComments(commentsList: List<GetComment>) {
+    override fun showComment(getComment: GetComment) {
 
     }
 

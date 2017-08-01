@@ -17,16 +17,14 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
     private val commentSubject = CompletableSubject.create()
-    private val getCommentsList = listOf(
-            GetComment(firstName = "FirstOne", lastName = "OneLast", initials = "FO", backgroundColor = 333, message = "MessOne"),
-            GetComment(firstName = "FirstTwo", lastName = "TwoLast", initials = "FT", backgroundColor = 666, message = "MessTwo"))
-    private val getCommentsSubject = PublishSubject.create<List<GetComment>>()
+    private val getComment = GetComment(firstName = "FirstOne", lastName = "OneLast", initials = "FO", backgroundColor = 333, message = "MessOne")
+    private val getCommentsSubject = PublishSubject.create<GetComment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
         whenever(service.comment(any())).thenReturn(commentSubject)
-        whenever(service.getComments(any())).thenReturn(getCommentsSubject)
+        whenever(service.getComment(any())).thenReturn(getCommentsSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
@@ -34,21 +32,21 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
         onCreate()
-        verify(service).getComments("token")
+        verify(service).getComment("token")
     }
 
     @Test
     fun shouldCallServiceGetCommentsWithReallyGivenTokenOnCreate() {
         val token = "someOtherToken"
         controller.onCreate(token)
-        verify(service).getComments(token)
+        verify(service).getComment(token)
     }
 
     @Test
     fun shouldShowCommentsReturnedFromService() {
         onCreate()
-        getCommentsSubject.onNext(getCommentsList)
-        verify(view).showComments(getCommentsList)
+        getCommentsSubject.onNext(getComment)
+        verify(view).showComment(getComment)
     }
     
     @Test
@@ -60,7 +58,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderOnServiceGetCommentsNext() {
         onCreate()
-        getCommentsSubject.onNext(getCommentsList)
+        getCommentsSubject.onNext(getComment)
         verify(view).hideLoader()
     }
 
@@ -73,9 +71,9 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderOnceOnServiceGetCommentsEmissions() {
         onCreate()
-        getCommentsSubject.onNext(getCommentsList)
-        getCommentsSubject.onNext(getCommentsList)
-        getCommentsSubject.onNext(getCommentsList)
+        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onNext(getComment)
+        getCommentsSubject.onNext(getComment)
         verify(view, times(1)).hideLoader()
     }
 

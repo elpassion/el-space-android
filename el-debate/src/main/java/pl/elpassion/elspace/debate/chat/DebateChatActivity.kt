@@ -54,6 +54,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         debateCommentCancelButton.setOnClickListener { controller.onCancel() }
     }
 
+    override fun showLoader() {
+        showLoader(debateChatCoordinator)
+    }
+
+    override fun hideLoader() {
+        hideLoader(debateChatCoordinator)
+    }
+
     override fun showComments(commentsList: List<GetComment>) {
 
     }
@@ -62,12 +70,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     }
 
-    override fun showLoader() {
-        showLoader(debateChatCoordinator)
-    }
+    override fun showSendCommentSuccess() {
 
-    override fun hideLoader() {
-        hideLoader(debateChatCoordinator)
     }
 
     override fun showSendCommentError(exception: Throwable) {

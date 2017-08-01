@@ -38,7 +38,7 @@ class DebateChatController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(view::closeScreen, view::showSendCommentError)
+                .subscribe(view::showSendCommentSuccess, view::showSendCommentError)
     }
 
     fun onDestroy() {

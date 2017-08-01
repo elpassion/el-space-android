@@ -30,6 +30,9 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
+        fun showComments(commentsList: List<GetComment>)
+        fun showCommentsClosed()
+        fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
         fun closeScreen()
         fun showInvalidInputError()
@@ -38,8 +41,6 @@ interface DebateChat {
         fun showFirstNameError()
         fun showLastNameError()
         fun closeCredentialsDialog()
-        fun showComments(commentsList: List<GetComment>)
-        fun showCommentsClosed()
     }
 
     object ServiceProvider : Provider<Service>({

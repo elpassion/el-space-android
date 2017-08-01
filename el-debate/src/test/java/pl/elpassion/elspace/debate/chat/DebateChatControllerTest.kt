@@ -211,10 +211,10 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCloseScreenWhenSendCommentSucceeded() {
+    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
         sendComment()
         commentSubject.onComplete()
-        verify(view).closeScreen()
+        verify(view).showSendCommentSuccess()
     }
 
     @Test

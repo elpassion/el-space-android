@@ -17,6 +17,7 @@ class DebateChatController(
     fun onCreate(token: String) {
         service.getComment(token)
                 .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .firstElement().doFinally(view::hideLoader)
                 .doFinally(view::showCommentsClosed)

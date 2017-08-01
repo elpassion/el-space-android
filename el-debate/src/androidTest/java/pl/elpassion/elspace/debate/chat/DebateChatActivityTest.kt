@@ -12,7 +12,6 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
-import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -42,14 +41,6 @@ class DebateChatActivityTest {
     fun shouldShowCommentHintInInputField() {
         startActivity()
         onText(R.string.debate_comment_hint).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowCommentCancelButton() {
-        startActivity()
-        onId(R.id.debateCommentCancelButton)
-                .isDisplayed()
-                .hasText(R.string.debate_comment_button_cancel)
     }
 
     @Test
@@ -141,13 +132,6 @@ class DebateChatActivityTest {
         sendMessage("New message")
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.debateCommentInputText).hasText("New message")
-    }
-
-    @Test
-    fun shouldCloseScreenOnCancelClick() {
-        startActivity()
-        onId(R.id.debateCommentCancelButton).click()
-        assertTrue(rule.activity.isFinishing)
     }
 
     @Test

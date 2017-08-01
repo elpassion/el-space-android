@@ -51,7 +51,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
             false
         }
         debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
-        debateCommentCancelButton.setOnClickListener { controller.onCancel() }
     }
 
     override fun showLoader() {

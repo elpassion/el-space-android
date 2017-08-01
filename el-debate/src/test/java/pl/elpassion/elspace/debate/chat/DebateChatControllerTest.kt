@@ -65,6 +65,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldNotHideLoaderOnServiceGetCommentsIfCallIsInProgress() {
+        onCreate()
+        verify(view, never()).hideLoader()
+    }
+
+    @Test
     fun shouldHideLoaderOnceOnServiceGetCommentsEmissions() {
         onCreate()
         getCommentsSubject.onNext(getCommentsList)

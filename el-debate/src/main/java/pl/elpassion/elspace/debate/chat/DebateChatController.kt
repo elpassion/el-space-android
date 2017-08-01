@@ -14,7 +14,9 @@ class DebateChatController(
     private var subscription: Disposable? = null
 
     fun onCreate(token: String) {
-        service.getComments(token).subscribe(view::showComments)
+        service.getComments(token)
+                .doOnSubscribe { view.showLoader() }
+                .subscribe(view::showComments)
     }
 
     fun sendComment(token: String, message: String) {

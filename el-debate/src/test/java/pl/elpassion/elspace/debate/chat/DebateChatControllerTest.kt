@@ -49,6 +49,12 @@ class DebateChatControllerTest {
         onCreate()
         verify(view).showComments(getCommentsList)
     }
+    
+    @Test
+    fun shouldShowLoaderWhenLoadingServiceGetComments() {
+        onCreate()
+        verify(view).showLoader()
+    }
 
     @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {

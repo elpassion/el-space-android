@@ -1,10 +1,10 @@
 package pl.elpassion.elspace.debate.chat
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -20,7 +20,7 @@ class DebateChatControllerTest {
     private val getCommentsList = listOf(
             GetComment(firstName = "FirstOne", lastName = "OneLast", initials = "FO", backgroundColor = 333, message = "MessOne"),
             GetComment(firstName = "FirstTwo", lastName = "TwoLast", initials = "FT", backgroundColor = 666, message = "MessTwo"))
-    private val getCommentsSubject = Observable.just(getCommentsList)
+    private val getCommentsSubject = PublishSubject.create<List<GetComment>>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
@@ -47,11 +47,12 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowCommentsReturnedFromService() {
         onCreate()
+        getCommentsSubject.onNext(getCommentsList)
         verify(view).showComments(getCommentsList)
     }
     
     @Test
-    fun shouldShowLoaderWhenLoadingServiceGetComments() {
+    fun shouldShowLoaderOnServiceGetCommentsCall() {
         onCreate()
         verify(view).showLoader()
     }

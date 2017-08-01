@@ -87,6 +87,17 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetComments() {
+        val subscribeOn = TestScheduler()
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
+        controller.onCreate(token = "token")
+        getCommentsSubject.onComplete()
+        verify(view, never()).hideLoader()
+        subscribeOn.triggerActions()
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldCallApiCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).comment(Comment("token", "message", "firstName", "lastName"))

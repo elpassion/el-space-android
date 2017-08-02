@@ -255,8 +255,8 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_title).isDisplayed()
-        onText(R.string.debate_vote_slow_down_info).isDisplayed()
+        onText(R.string.debate_details_vote_slow_down_title).isDisplayed()
+        onText(R.string.debate_details_vote_slow_down_info).isDisplayed()
     }
 
     @Test
@@ -264,9 +264,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_OK_button).click()
-        onText(R.string.debate_vote_slow_down_title).doesNotExist()
-        onText(R.string.debate_vote_slow_down_info).doesNotExist()
+        onText(R.string.debate_details_vote_slow_down_OK_button).click()
+        onText(R.string.debate_details_vote_slow_down_title).doesNotExist()
+        onText(R.string.debate_details_vote_slow_down_info).doesNotExist()
     }
 
     @Test

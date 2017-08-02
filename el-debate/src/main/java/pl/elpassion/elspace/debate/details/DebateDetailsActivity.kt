@@ -132,9 +132,9 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showSlowDownInformation() {
         AlertDialog.Builder(this)
-                .setTitle(R.string.debate_vote_slow_down_title)
-                .setMessage(R.string.debate_vote_slow_down_info)
-                .setPositiveButton(R.string.debate_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
+                .setTitle(R.string.debate_details_vote_slow_down_title)
+                .setMessage(R.string.debate_details_vote_slow_down_info)
+                .setPositiveButton(R.string.debate_details_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
                 .create()
                 .show()
     }

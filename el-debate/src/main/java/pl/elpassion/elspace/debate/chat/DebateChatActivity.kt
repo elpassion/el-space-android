@@ -33,7 +33,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
-    private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
+    private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_chat_send_comment_max_message_length) }
 
     private var comments = mutableListOf<Comment>()
 
@@ -102,15 +102,15 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showSendCommentError(exception: Throwable) {
-        showErrorInInput(R.string.debate_comment_send_error)
+        showErrorInInput(R.string.debate_chat_send_comment_error)
     }
 
     override fun showInvalidInputError() {
-        showErrorInInput(R.string.debate_comment_invalid_input_error)
+        showErrorInInput(R.string.debate_chat_send_comment_invalid_input_error)
     }
 
     override fun showInputOverLimitError() {
-        val message = getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        val message = getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         showErrorInInput(message)
     }
 

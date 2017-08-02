@@ -128,7 +128,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
-        onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
+        onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)
     }
 
     @Test
@@ -136,7 +136,7 @@ class DebateChatActivityTest {
         startActivity()
         onId(R.id.debateChatSendCommentButton)
                 .isDisplayed()
-                .hasText(R.string.debate_comment_button_send)
+                .hasText(R.string.debate_chat_send_comment_button)
     }
 
     @Test
@@ -171,14 +171,14 @@ class DebateChatActivityTest {
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
         sendComment("")
-        onText(R.string.debate_comment_invalid_input_error).isDisplayed()
+        onText(R.string.debate_chat_send_comment_invalid_input_error).isDisplayed()
     }
 
     @Test
     fun shouldShowCorrectInputOverLimitErrorMessageWhenInputIsOverLimitOnSendComment() {
         startActivity()
         val maxMessageLength = 100
-        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         sendComment(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
@@ -186,8 +186,8 @@ class DebateChatActivityTest {
     @Test
     fun shouldGetMaxMessageLengthFromResourcesWhenInputIsOverLimitOnSendComment() {
         startActivity()
-        val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
-        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
+        val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_chat_send_comment_max_message_length)
+        val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         sendComment(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
@@ -212,7 +212,7 @@ class DebateChatActivityTest {
         startActivity()
         sendComment()
         sendCommentSubject.onError(RuntimeException())
-        onText(R.string.debate_comment_send_error).isDisplayed()
+        onText(R.string.debate_chat_send_comment_error).isDisplayed()
     }
 
     @Test
@@ -236,7 +236,7 @@ class DebateChatActivityTest {
         startActivityAndOpenCredentialsDialog()
         onId(R.id.debateCredentialsFirstNameInputText)
                 .isDisplayed()
-                .textInputEditTextHasHint(R.string.debate_comment_credentials_first_name_hint)
+                .textInputEditTextHasHint(R.string.debate_chat_credentials_first_name_hint)
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
@@ -245,7 +245,7 @@ class DebateChatActivityTest {
         startActivityAndOpenCredentialsDialog()
         onId(R.id.debateCredentialsLastNameInputText)
                 .isDisplayed()
-                .textInputEditTextHasHint(R.string.debate_comment_credentials_last_name_hint)
+                .textInputEditTextHasHint(R.string.debate_chat_credentials_last_name_hint)
                 .check(matches(withInputType(TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_NORMAL)))
     }
 
@@ -267,26 +267,26 @@ class DebateChatActivityTest {
     fun shouldDisplayErrorOnIncorrectFirstName() {
         startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = " ", lastName = "lastName")
-        onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_comment_credentials_first_name_incorrect)
+        onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_chat_credentials_first_name_incorrect)
     }
 
     @Test
     fun shouldDisplayErrorOnIncorrectLastName() {
         startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
         saveCredentials(firstName = "firstName", lastName = " ")
-        onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_comment_credentials_last_name_incorrect)
+        onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_chat_credentials_last_name_incorrect)
     }
 
     @Test
     fun shouldHaveCredentialsDialogInfo() {
         startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
-        onText(R.string.debate_comment_credentials_info).isDisplayed()
+        onText(R.string.debate_chat_credentials_info).isDisplayed()
     }
 
     private fun saveCredentials(firstName: String, lastName: String) {
         onId(R.id.debateCredentialsFirstNameInputText).replaceText(firstName)
         onId(R.id.debateCredentialsLastNameInputText).replaceText(lastName)
-        onText(R.string.debate_comment_credentials_confirm).click()
+        onText(R.string.debate_chat_credentials_confirm).click()
     }
 
     private fun startActivity(debateToken: String = "debateToken") {

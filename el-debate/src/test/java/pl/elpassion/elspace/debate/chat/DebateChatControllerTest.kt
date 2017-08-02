@@ -17,103 +17,103 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
     private val sendCommentSubject = CompletableSubject.create()
-    private val getComment = GetComment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
-    private val getCommentsSubject = PublishSubject.create<GetComment>()
+    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
+    private val commentSubject = PublishSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
-        whenever(service.getComment(any())).thenReturn(getCommentsSubject)
+        whenever(service.getComment(any())).thenReturn(commentSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
 
     @Test
-    fun shouldCallServiceGetCommentsWithGivenTokenOnCreate() {
+    fun shouldCallServiceGetCommentWithGivenTokenOnCreate() {
         onCreate()
         verify(service).getComment("token")
     }
 
     @Test
-    fun shouldCallServiceGetCommentsWithReallyGivenTokenOnCreate() {
+    fun shouldCallServiceGetCommentWithReallyGivenTokenOnCreate() {
         val token = "someOtherToken"
         controller.onCreate(token)
         verify(service).getComment(token)
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromService() {
+    fun shouldShowCommentReturnedFromService() {
         onCreate()
-        getCommentsSubject.onNext(getComment)
-        verify(view).showComment(getComment)
+        commentSubject.onNext(comment)
+        verify(view).showComment(comment)
     }
 
     @Test
-    fun shouldShowLoaderOnServiceGetCommentsCall() {
+    fun shouldShowLoaderOnServiceGetCommentCall() {
         onCreate()
         verify(view).showLoader()
     }
 
     @Test
-    fun shouldHideLoaderOnServiceGetCommentsNext() {
+    fun shouldHideLoaderOnServiceGetCommentNext() {
         onCreate()
-        getCommentsSubject.onNext(getComment)
+        commentSubject.onNext(comment)
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldNotHideLoaderOnServiceGetCommentsIfCallIsInProgress() {
+    fun shouldNotHideLoaderOnServiceGetCommentIfCallIsInProgress() {
         onCreate()
         verify(view, never()).hideLoader()
     }
 
     @Test
-    fun shouldShowCommentEveryTimeOnServiceGetCommentsEmissions() {
+    fun shouldShowCommentEveryTimeOnServiceGetCommentEmits() {
         onCreate()
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onNext(getComment)
-        getCommentsSubject.onComplete()
-        verify(view, times(3)).showComment(getComment)
+        commentSubject.onNext(comment)
+        commentSubject.onNext(comment)
+        commentSubject.onNext(comment)
+        commentSubject.onComplete()
+        verify(view, times(3)).showComment(comment)
     }
 
     @Test
-    fun shouldShowCommentsClosedWhenServiceGetCommentsFinished() {
+    fun shouldShowGetCommentFinishedWhenServiceGetCommentFinished() {
         onCreate()
-        getCommentsSubject.onComplete()
-        verify(view).showCommentsClosed()
+        commentSubject.onComplete()
+        verify(view).showGetCommentFinished()
     }
 
     @Test
-    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetComments() {
+    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetComment() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getCommentsSubject.onNext(getComment)
+        commentSubject.onNext(comment)
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
-        getCommentsSubject.onNext(getComment)
+        commentSubject.onNext(comment)
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetComments() {
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetComment() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getCommentsSubject.onNext(getComment)
+        commentSubject.onNext(comment)
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldShowGetCommentsErrorWhenServiceGetCommentsFails() {
+    fun shouldShowGetCommentErrorWhenServiceGetCommentFails() {
         onCreate()
         val exception = RuntimeException()
-        getCommentsSubject.onError(exception)
-        verify(view).showGetCommentsError(exception)
+        commentSubject.onError(exception)
+        verify(view).showGetCommentError(exception)
     }
 
     @Test

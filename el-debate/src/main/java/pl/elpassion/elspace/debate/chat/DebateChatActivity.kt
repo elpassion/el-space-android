@@ -34,7 +34,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
 
-    private var comments = mutableListOf<GetComment>()
+    private var comments = mutableListOf<Comment>()
 
     private val controller by lazy {
         DebateChatController(
@@ -68,8 +68,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(token, debateChatSendCommentInputText.text.toString()) }
     }
 
-    private fun createHolderForComment(getComment: GetComment) = when {
-        getComment.isMine -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
+    private fun createHolderForComment(comment: Comment) = when {
+        comment.isMine -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
         else -> throw IllegalArgumentException()
     }
 
@@ -83,16 +83,16 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showComment(getComment: GetComment) {
-        comments.add(getComment)
+    override fun showComment(comment: Comment) {
+        comments.add(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
-    override fun showCommentsClosed() {
+    override fun showGetCommentFinished() {
 
     }
 
-    override fun showGetCommentsError(exception: Throwable) {
+    override fun showGetCommentError(exception: Throwable) {
 
     }
 

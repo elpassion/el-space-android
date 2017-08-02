@@ -19,10 +19,10 @@ class DebateChatController(
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
-                .doFinally(view::showCommentsClosed)
+                .doFinally(view::showGetCommentFinished)
                 .subscribe(
-                        { getComment -> view.showComment(getComment); view.hideLoader() },
-                        view::showGetCommentsError)
+                        { comment -> view.showComment(comment); view.hideLoader() },
+                        view::showGetCommentError)
                 .addTo(subscriptions)
     }
 
@@ -37,8 +37,8 @@ class DebateChatController(
 
     private fun serviceSendComment(token: String, message: String) {
         val (firstName, lastName) = debateRepo.getTokenCredentials(token)
-        val comment = CommentToSend(token, message, firstName, lastName)
-        service.sendComment(comment)
+        val commentToSend = CommentToSend(token, message, firstName, lastName)
+        service.sendComment(commentToSend)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

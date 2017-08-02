@@ -30,12 +30,12 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val getComment = GetComment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
-    private val getCommentsSubject = PublishSubject.create<GetComment>()
+    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
+    private val commentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
-        whenever(getComment(any())).thenReturn(getCommentsSubject)
+        whenever(getComment(any())).thenReturn(commentSubject)
     }
 
     @JvmField @Rule
@@ -62,7 +62,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
-        getCommentsSubject.onNext(getComment)
+        commentSubject.onNext(comment)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 

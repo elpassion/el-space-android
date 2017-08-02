@@ -107,6 +107,13 @@ class DebateChatActivityTest {
         startActivity()
         onId(R.id.loader).isDisplayed()
     }
+    
+    @Test
+    fun shouldNotShowLoaderOnServiceGetCommentNext() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onId(R.id.loader).doesNotExist()
+    }
 
     @Test
     fun shouldShowSendCommentHintInInputField() {

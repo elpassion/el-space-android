@@ -12,6 +12,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
+import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -43,6 +44,13 @@ class DebateChatActivityTest {
         onId(R.id.toolbar)
                 .isDisplayed()
                 .hasChildWithText(R.string.debate_title)
+    }
+
+    @Test
+    fun shouldExitScreenOnBackArrowClick() {
+        startActivity()
+        onToolbarBackArrow().click()
+        Assert.assertTrue(rule.activity.isFinishing)
     }
 
     @Test

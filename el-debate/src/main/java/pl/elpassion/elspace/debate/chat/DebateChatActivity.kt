@@ -5,12 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
+import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
+import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -43,7 +47,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun setupUI() {
-        setTitle(R.string.debate_comment_hint)
+        setSupportActionBar(toolbar)
+        showBackArrowOnActionBar()
         debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.sendComment(token, inputText.text.toString())
@@ -52,6 +57,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
 
     override fun showLoader() {
         showLoader(debateChatCoordinator)

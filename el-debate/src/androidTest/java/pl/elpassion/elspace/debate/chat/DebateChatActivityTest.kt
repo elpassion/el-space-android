@@ -96,6 +96,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCorrectMessageInCommentView() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherMessage")
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)

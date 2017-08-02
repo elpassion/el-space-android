@@ -34,7 +34,7 @@ class DebateChatActivityTest {
     private val getCommentsSubject = PublishSubject.create<GetComment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(comment(any())).thenReturn(sendCommentSubject)
+        whenever(sendComment(any())).thenReturn(sendCommentSubject)
         whenever(getComment(any())).thenReturn(getCommentsSubject)
     }
 
@@ -67,13 +67,13 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowCommentHintInInputField() {
+    fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
     }
 
     @Test
-    fun shouldShowCommentSendButton() {
+    fun shouldShowSendCommentButton() {
         startActivity()
         onId(R.id.debateChatSendCommentButton)
                 .isDisplayed()
@@ -81,7 +81,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldHaveCorrectCommentInput() {
+    fun shouldHaveCorrectSendCommentInput() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText)
                 .isDisplayed()
@@ -91,27 +91,27 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldUseCorrectTokenAndMessageOnCommentKeyboardConfirmClick() {
+    fun shouldUseCorrectTokenAndMessageOnSendCommentKeyboardConfirmClick() {
         startActivity(debateToken = "someToken")
-        sendMessage()
-        verify(service).comment(Comment("someToken", "message", "firstName", "lastName"))
+        sendComment()
+        verify(service).sendComment(CommentToSend("someToken", "message", "firstName", "lastName"))
     }
 
     @Ignore
     @Test
-    fun shouldUseCorrectTokenAndMessageOnCommentSendClick() {
+    fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
         startActivity(debateToken = "someToken")
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
         onId(R.id.debateChatSendCommentButton).click()
-        verify(service).comment(Comment("someToken", "message", "firstName", "lastName"))
+        verify(service).sendComment(CommentToSend("someToken", "message", "firstName", "lastName"))
     }
 
     @Test
     fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
         startActivity()
-        sendMessage("")
+        sendComment("")
         onText(R.string.debate_comment_invalid_input_error).isDisplayed()
     }
 
@@ -120,7 +120,7 @@ class DebateChatActivityTest {
         startActivity()
         val maxMessageLength = 100
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
-        sendMessage(createString(maxMessageLength + 1))
+        sendComment(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
 
@@ -129,21 +129,21 @@ class DebateChatActivityTest {
         startActivity()
         val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_comment_max_message_length)
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_comment_input_over_limit_error).format(maxMessageLength)
-        sendMessage(createString(maxMessageLength + 1))
+        sendComment(createString(maxMessageLength + 1))
         onText(message).isDisplayed()
     }
 
     @Test
     fun shouldShowLoaderOnSendComment() {
         startActivity()
-        sendMessage()
+        sendComment()
         onId(R.id.loader).isDisplayed()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         startActivity()
-        sendMessage()
+        sendComment()
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.loader).doesNotExist()
     }
@@ -151,7 +151,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
         startActivity()
-        sendMessage()
+        sendComment()
         sendCommentSubject.onError(RuntimeException())
         onText(R.string.debate_comment_send_error).isDisplayed()
     }
@@ -159,7 +159,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotClearCommentInputWhenSendCommentFailed() {
         startActivity()
-        sendMessage("New message")
+        sendComment("New message")
         sendCommentSubject.onError(RuntimeException())
         onId(R.id.debateChatSendCommentInputText).hasText("New message")
     }
@@ -167,7 +167,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowSendCommentSuccessOnSuccessfullySentComment() {
         startActivity()
-        sendMessage()
+        sendComment()
         sendCommentSubject.onComplete()
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
@@ -234,7 +234,7 @@ class DebateChatActivityTest {
         rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
     }
 
-    private fun sendMessage(message: String = "message") {
+    private fun sendComment(message: String = "message") {
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText(message)
                 .pressImeActionButton()
@@ -243,6 +243,6 @@ class DebateChatActivityTest {
     private fun startActivityAndOpenCredentialsDialog(debateToken: String = "debateToken") {
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
         startActivity(debateToken = debateToken)
-        sendMessage()
+        sendComment()
     }
 }

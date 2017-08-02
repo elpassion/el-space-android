@@ -5,7 +5,7 @@ import io.reactivex.ObservableEmitter
 
 class ServiceImpl(val api: DebateChat.Api) : DebateChat.Service {
 
-    override fun comment(comment: Comment) = comment.run { api.comment(token, message, firstName, lastName) }
+    override fun sendComment(commentToSend: CommentToSend) = commentToSend.run { api.comment(token, message, firstName, lastName) }
 
     override fun getComment(token: String): Observable<GetComment> = Observable.create<GetComment> { emitter: ObservableEmitter<GetComment> ->
 

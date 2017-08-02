@@ -16,14 +16,14 @@ class DebateChatControllerTest {
     private val service = mock<DebateChat.Service>()
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
-    private val commentSubject = CompletableSubject.create()
+    private val sendCommentSubject = CompletableSubject.create()
     private val getComment = GetComment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
     private val getCommentsSubject = PublishSubject.create<GetComment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(service.comment(any())).thenReturn(commentSubject)
+        whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(service.getComment(any())).thenReturn(getCommentsSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
@@ -117,17 +117,17 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallApiCommentWithGivenDataOnSendComment() {
+    fun shouldCallServiceSendCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
-        verify(service).comment(Comment("token", "message", "firstName", "lastName"))
+        verify(service).sendComment(CommentToSend("token", "message", "firstName", "lastName"))
     }
 
     @Test
-    fun shouldReallyCallApiCommentWithGivenDataWhenMessageIsValidOnSendComment() {
+    fun shouldReallyCallServiceSendCommentWithGivenDataWhenMessageIsValidOnSendComment() {
         val token = "someOtherToken"
         whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName", "NewlastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(service).comment(Comment("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName"))
+        verify(service).sendComment(CommentToSend("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName"))
     }
 
     @Test
@@ -137,9 +137,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldNotCallApiCommentWhenMessageIsEmptyOnSendComment() {
+    fun shouldNotCallServiceSendCommentWhenMessageIsEmptyOnSendComment() {
         sendComment(message = "")
-        verify(service, never()).comment(any())
+        verify(service, never()).sendComment(any())
     }
 
     @Test
@@ -149,9 +149,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldNotCallApiCommentWhenMessageIsBlankOnSendComment() {
+    fun shouldNotCallServiceSendCommentWhenMessageIsBlankOnSendComment() {
         sendComment(message = " ")
-        verify(service, never()).comment(any())
+        verify(service, never()).sendComment(any())
     }
 
     @Test
@@ -161,22 +161,22 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallApiCommentWhenMessageIsUnderLimitOnSendComment() {
+    fun shouldCallServiceSendCommentWhenMessageIsUnderLimitOnSendComment() {
         sendComment(message = createString(100))
-        verify(service).comment(any())
+        verify(service).sendComment(any())
     }
 
     @Test
-    fun shouldNotCallApiCommentWhenMessageIsOverLimitOnSendComment() {
+    fun shouldNotCallServiceSendCommentWhenMessageIsOverLimitOnSendComment() {
         sendComment(message = createString(101))
-        verify(service, never()).comment(any())
+        verify(service, never()).sendComment(any())
     }
 
     @Test
     fun shouldUseRealMaxMessageLengthWhenMessageIsUnderLimitOnSendComment() {
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 30)
         controller.sendComment("token", createString(31))
-        verify(service, never()).comment(any())
+        verify(service, never()).sendComment(any())
     }
 
     @Test
@@ -200,14 +200,14 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         sendComment()
-        commentSubject.onComplete()
+        sendCommentSubject.onComplete()
         verify(view).hideLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenSendCommentFailed() {
         sendComment()
-        commentSubject.onError(RuntimeException())
+        sendCommentSubject.onError(RuntimeException())
         verify(view).hideLoader()
     }
 
@@ -229,7 +229,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        commentSubject.onComplete()
+        sendCommentSubject.onComplete()
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -240,7 +240,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        commentSubject.onComplete()
+        sendCommentSubject.onComplete()
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
@@ -249,7 +249,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
         sendComment()
-        commentSubject.onComplete()
+        sendCommentSubject.onComplete()
         verify(view).showSendCommentSuccess()
     }
 
@@ -257,7 +257,7 @@ class DebateChatControllerTest {
     fun shouldShowErrorWhenSendCommentFailed() {
         sendComment()
         val exception = RuntimeException()
-        commentSubject.onError(exception)
+        sendCommentSubject.onError(exception)
         verify(view).showSendCommentError(exception)
     }
 

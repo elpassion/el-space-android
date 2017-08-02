@@ -37,8 +37,8 @@ class DebateChatController(
 
     private fun serviceSendComment(token: String, message: String) {
         val (firstName, lastName) = debateRepo.getTokenCredentials(token)
-        val comment = Comment(token, message, firstName, lastName)
-        service.comment(comment)
+        val comment = CommentToSend(token, message, firstName, lastName)
+        service.sendComment(comment)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

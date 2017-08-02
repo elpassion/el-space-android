@@ -12,7 +12,7 @@ import retrofit2.http.POST
 interface DebateChat {
 
     interface Service {
-        fun comment(comment: Comment): Completable
+        fun sendComment(commentToSend: CommentToSend): Completable
 
         fun getComment(token: String): Observable<GetComment>
     }

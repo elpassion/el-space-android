@@ -40,7 +40,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCommentHintInInputField() {
         startActivity()
-        onText(R.string.debate_comment_hint).isDisplayed()
+        onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)
     }
 
     @Test

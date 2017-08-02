@@ -9,5 +9,6 @@ class CommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
 
     override fun bind(item: Comment) {
         itemView.commentInitials.text = item.initials
+        itemView.commentName.text = item.name
     }
 }

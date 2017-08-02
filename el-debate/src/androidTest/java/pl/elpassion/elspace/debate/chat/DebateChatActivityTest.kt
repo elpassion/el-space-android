@@ -30,8 +30,8 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 666, message = "OtherMessage", isPostedByLoggedUser = false)
     private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "Message", isPostedByLoggedUser = true)
+    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 666, message = "OtherMessage", isPostedByLoggedUser = false)
     private val commentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
@@ -61,13 +61,6 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowCorrectInitialsInCommentView() {
-        startActivity()
-        commentSubject.onNext(comment)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
-    }
-
-    @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
         commentSubject.onNext(commentByLoggedUser)
@@ -86,6 +79,20 @@ class DebateChatActivityTest {
         startActivity()
         commentSubject.onNext(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
+    }
+
+    @Test
+    fun shouldShowCorrectInitialsInCommentView() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
+    }
+
+    @Test
+    fun shouldShowCorrectNameInCommentView() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test

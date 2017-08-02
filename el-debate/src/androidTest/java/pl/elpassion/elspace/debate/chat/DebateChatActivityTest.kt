@@ -30,7 +30,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "Message", isPostedByLoggedUser = true)
+    private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "Message", isPostedByLoggedUser = true)
     private val commentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
@@ -62,21 +62,21 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        commentSubject.onNext(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        commentSubject.onNext(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        commentSubject.onNext(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentMessage).hasChildWithText("Message")
     }
 

@@ -10,5 +10,6 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
     override fun bind(item: Comment) {
         itemView.loggedUserCommentInitials.text = item.initials
         itemView.loggedUserCommentName.text = item.name
+        itemView.loggedUserCommentMessage.text = item.message
     }
 }

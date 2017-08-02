@@ -67,6 +67,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCorrectNameInLoggedUserCommentView() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)

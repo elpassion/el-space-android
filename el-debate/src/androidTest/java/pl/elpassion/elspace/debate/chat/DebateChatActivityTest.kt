@@ -116,6 +116,16 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCommentEveryTimeOnServiceGetCommentEmits() {
+        startActivity()
+        commentSubject.onNext(comment)
+        commentSubject.onNext(comment)
+        commentSubject.onNext(commentByLoggedUser)
+        commentSubject.onNext(commentByLoggedUser)
+        onId(R.id.debateChatCommentsContainer).hasChildCount(4)
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)

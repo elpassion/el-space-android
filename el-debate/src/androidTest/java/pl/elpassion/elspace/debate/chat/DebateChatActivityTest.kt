@@ -77,7 +77,7 @@ class DebateChatActivityTest {
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity()
         commentSubject.onNext(commentByLoggedUser)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentMessage).hasChildWithText("Message")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test

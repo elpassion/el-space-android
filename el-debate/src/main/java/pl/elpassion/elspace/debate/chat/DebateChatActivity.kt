@@ -69,7 +69,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun createHolderForComment(comment: Comment) = when {
-        comment.isMine -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
+        comment.isPostedByLoggedUser -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
         else -> throw IllegalArgumentException()
     }
 

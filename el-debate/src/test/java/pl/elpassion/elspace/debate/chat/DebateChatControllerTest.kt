@@ -17,7 +17,7 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
     private val sendCommentSubject = CompletableSubject.create()
-    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
+    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isPostedByLoggedUser = true)
     private val commentSubject = PublishSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 

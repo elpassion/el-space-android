@@ -30,7 +30,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isMine = true)
+    private val comment = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isPostedByLoggedUser = true)
     private val commentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {

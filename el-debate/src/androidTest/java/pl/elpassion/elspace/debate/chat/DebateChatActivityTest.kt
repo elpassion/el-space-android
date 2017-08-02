@@ -126,6 +126,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowGetCommentFinishedWhenServiceGetCommentFinished() {
+        startActivity()
+        commentSubject.onComplete()
+        onText(R.string.debate_chat_get_comment_finished)
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)

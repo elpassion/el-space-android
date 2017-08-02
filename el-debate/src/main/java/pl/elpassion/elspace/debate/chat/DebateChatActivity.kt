@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
@@ -90,7 +91,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showGetCommentFinished() {
-
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_comment_finished, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showGetCommentError(exception: Throwable) {

@@ -103,6 +103,12 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowLoaderOnServiceGetComment() {
+        startActivity()
+        onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)

@@ -133,6 +133,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowGetCommentErrorWhenServiceGetCommentFails() {
+        startActivity()
+        val exception = RuntimeException()
+        commentSubject.onError(exception)
+        onText(R.string.debate_chat_get_comment_error)
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)

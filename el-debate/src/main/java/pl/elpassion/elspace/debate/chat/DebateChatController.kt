@@ -12,7 +12,7 @@ class DebateChatController(
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
-    private var subscriptions = CompositeDisposable()
+    private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
         service.getComment(token)

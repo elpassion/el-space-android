@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
@@ -18,6 +20,7 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
 
 class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
@@ -30,6 +33,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_comment_max_message_length) }
+
+    private var comments = mutableListOf<GetComment>()
 
     private val controller by lazy {
         DebateChatController(
@@ -44,18 +49,28 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_chat_activity)
         setupUI()
+        controller.onCreate(token)
     }
 
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
+        debateChatCommentsContainer.layoutManager = LinearLayoutManager(this)
+        debateChatCommentsContainer.adapter = basicAdapterWithConstructors(comments) { position ->
+            createHolderForComment(comments[position])
+        }
+        debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.sendComment(token, inputText.text.toString())
             }
             false
         }
-        debateCommentSendButton.setOnClickListener { controller.sendComment(token, debateCommentInputText.text.toString()) }
+        debateChatSendCommentButton.setOnClickListener { controller.sendComment(token, debateChatSendCommentInputText.text.toString()) }
+    }
+
+    private fun createHolderForComment(getComment: GetComment) = when {
+        getComment.isMine -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
+        else -> throw IllegalArgumentException()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -69,7 +84,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showComment(getComment: GetComment) {
-
+        comments.add(getComment)
+        debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
     override fun showCommentsClosed() {
@@ -81,7 +97,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showSendCommentSuccess() {
-        debateCommentInputText.text.clear()
+        debateChatSendCommentInputText.text.clear()
     }
 
     override fun showSendCommentError(exception: Throwable) {
@@ -98,11 +114,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun showErrorInInput(@StringRes message: Int) {
-        debateCommentInputLayout.error = getString(message)
+        debateChatSendCommentInputLayout.error = getString(message)
     }
 
     private fun showErrorInInput(message: String) {
-        debateCommentInputLayout.error = message
+        debateChatSendCommentInputLayout.error = message
     }
 
     override fun showCredentialsDialog() {

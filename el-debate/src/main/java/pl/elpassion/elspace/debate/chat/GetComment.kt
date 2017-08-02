@@ -1,3 +1,3 @@
 package pl.elpassion.elspace.debate.chat
 
-class GetComment(val firstName: String, val lastName: String, val initials: String, val backgroundColor: Int, val message: String)
+class GetComment(val initials: String, val backgroundColor: Int, val name: String, val message: String, val isMine: Boolean)

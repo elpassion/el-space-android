@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".elspace.debate.chat.DebateChatActivity">
 
+    <include layout="@layout/debate_toolbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

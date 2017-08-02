@@ -38,6 +38,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowToolbarWithCorrectTitle() {
+        startActivity()
+        onId(R.id.toolbar)
+                .isDisplayed()
+                .hasChildWithText(R.string.debate_title)
+    }
+
+    @Test
     fun shouldShowCommentHintInInputField() {
         startActivity()
         onId(R.id.debateCommentInputText).textInputEditTextHasHint(R.string.debate_comment_hint)

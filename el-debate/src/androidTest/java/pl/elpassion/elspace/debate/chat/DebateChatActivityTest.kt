@@ -30,6 +30,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
+    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 666, message = "OtherMessage", isPostedByLoggedUser = false)
     private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "Message", isPostedByLoggedUser = true)
     private val commentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
@@ -57,6 +58,13 @@ class DebateChatActivityTest {
         startActivity()
         onToolbarBackArrow().click()
         Assert.assertTrue(rule.activity.isFinishing)
+    }
+
+    @Test
+    fun shouldShowCorrectInitialsInCommentView() {
+        startActivity()
+        commentSubject.onNext(comment)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test

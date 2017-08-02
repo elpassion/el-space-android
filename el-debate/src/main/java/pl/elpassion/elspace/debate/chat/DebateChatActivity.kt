@@ -20,6 +20,7 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
 
 class DebateChatActivity : AppCompatActivity(), DebateChat.View {
@@ -70,7 +71,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private fun createHolderForComment(comment: Comment) = when {
         comment.isPostedByLoggedUser -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
-        else -> throw IllegalArgumentException()
+        else -> R.layout.comment to ::CommentHolder
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)

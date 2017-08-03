@@ -8,6 +8,7 @@ import pl.elpassion.elspace.debate.chat.Comment
 class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
 
     override fun bind(item: Comment) {
+        itemView.loggedUserCommentInitials.setBackgroundColor(item.backgroundColor)
         itemView.loggedUserCommentInitials.text = item.initials
         itemView.loggedUserCommentName.text = item.name
         itemView.loggedUserCommentMessage.text = item.message

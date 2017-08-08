@@ -29,7 +29,8 @@ class DebateChatControllerTest {
     fun setUp() {
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(service.getLatestComments(any())).thenReturn(getLatestCommentsSubject)
-        whenever(service.updateComments()).thenReturn(updateCommentsSubject)
+        whenever(service.updateComments(any())).thenReturn(updateCommentsSubject)
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
@@ -108,7 +109,14 @@ class DebateChatControllerTest {
     fun shouldCallServiceUpdateCommentsWhenServiceGetLatestCommentsSucceeded() {
         onCreate()
         getLatestCommentsSubject.onSuccess(latestComments)
-        verify(service).updateComments()
+        verify(service).updateComments(any())
+    }
+
+    @Test
+    fun shouldCallServiceUpdateCommentsWithLatestDebateCode() {
+        onCreate()
+        getLatestCommentsSubject.onSuccess(latestComments)
+        verify(service).updateComments("12345")
     }
 
     @Test

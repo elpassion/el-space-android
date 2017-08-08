@@ -11,7 +11,7 @@ interface DebateChat {
 
     interface Service {
         fun getLatestComments(token: String): Single<List<Comment>>
-        fun updateComments(): PublishSubject<Comment>
+        fun updateComments(debateCode: String): PublishSubject<Comment>
         fun sendComment(commentToSend: CommentToSend): Completable
     }
 

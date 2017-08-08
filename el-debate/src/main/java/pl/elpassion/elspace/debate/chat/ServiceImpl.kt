@@ -7,7 +7,7 @@ class ServiceImpl(val api: DebateChat.Api) : DebateChat.Service {
 
     override fun getLatestComments(token: String): Single<List<Comment>> = api.comment(token)
 
-    override fun updateComments(): PublishSubject<Comment> = PublishSubject.create()
+    override fun updateComments(debateCode: String): PublishSubject<Comment> = PublishSubject.create()
 
     override fun sendComment(commentToSend: CommentToSend) = commentToSend.run { api.comment(token, message, firstName, lastName) }
 }

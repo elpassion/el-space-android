@@ -31,8 +31,9 @@ class DebateChatActivityTest {
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 0xFFFF0000.toInt(), message = "Message", isPostedByLoggedUser = true)
-    private val latestComments = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 0xFF0000FF.toInt(), message = "OtherMessage", isPostedByLoggedUser = false)
-    private val latestCommentsSubject = SingleSubject.create<Comment>()
+    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 0xFF0000FF.toInt(), message = "OtherMessage", isPostedByLoggedUser = false)
+    private val latestComments = listOf(commentByLoggedUser, comment)
+    private val latestCommentsSubject = SingleSubject.create<List<Comment>>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
@@ -63,21 +64,21 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 

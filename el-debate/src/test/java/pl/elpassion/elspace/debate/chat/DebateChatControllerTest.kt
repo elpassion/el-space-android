@@ -17,8 +17,10 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val debateRepo = mock<DebatesRepository>()
     private val sendCommentSubject = CompletableSubject.create()
-    private val latestComments = Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isPostedByLoggedUser = true)
-    private val getLatestCommentsSubject = SingleSubject.create<Comment>()
+    private val latestComments = listOf(
+            Comment(name = "First Last", initials = "FO", backgroundColor = 333, message = "MessOne", isPostedByLoggedUser = true),
+            Comment(name = "Second Last", initials = "SL", backgroundColor = 666, message = "MessTwo", isPostedByLoggedUser = false))
+    private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before

@@ -14,7 +14,7 @@ interface DebateChat {
     interface Service {
         fun sendComment(commentToSend: CommentToSend): Completable
 
-        fun getLatestComments(token: String): Single<Comment>
+        fun getLatestComments(token: String): Single<List<Comment>>
     }
 
     interface Api {
@@ -30,7 +30,7 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showLatestComments(comment: Comment)
+        fun showLatestComments(comments: List<Comment>)
         fun showGetLatestCommentsError(exception: Throwable)
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)

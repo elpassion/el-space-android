@@ -85,8 +85,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showLatestComments(comment: Comment) {
-        comments.add(comment)
+    override fun showLatestComments(comments: List<Comment>) {
+        this.comments.addAll(comments)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 

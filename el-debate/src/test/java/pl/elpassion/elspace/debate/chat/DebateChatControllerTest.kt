@@ -113,10 +113,18 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceUpdateCommentsWithLatestDebateCode() {
+    fun shouldCallServiceUpdateCommentsWithDebateCode() {
         onCreate()
         getLatestCommentsSubject.onSuccess(latestComments)
         verify(service).updateComments("12345")
+    }
+
+    @Test
+    fun shouldCallServiceUpdateCommentsWithRepoLatestDebateCode() {
+        onCreate()
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
+        getLatestCommentsSubject.onSuccess(latestComments)
+        verify(service).updateComments("67890")
     }
 
     @Test

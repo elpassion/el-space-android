@@ -30,7 +30,7 @@ class DebateChatController(
 
     private fun onServiceGetLatestCommentsSuccess(comments: List<Comment>) {
         view.showLatestComments(comments)
-        service.updateComments("12345")
+        debateRepo.getLatestDebateCode()?.let(service::updateComments)
     }
 
     fun sendComment(token: String, message: String) {

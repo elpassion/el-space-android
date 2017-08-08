@@ -20,6 +20,8 @@ import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
+import pl.elpassion.elspace.dabate.chat.createComment
+import pl.elpassion.elspace.dabate.chat.createCommentByLoggedUser
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -30,9 +32,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 0xFFFF0000.toInt(), message = "Message", isPostedByLoggedUser = true)
-    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 0xFF0000FF.toInt(), message = "OtherMessage", isPostedByLoggedUser = false)
-    private val latestComments = listOf(commentByLoggedUser, comment)
+    private val latestComments = listOf(createCommentByLoggedUser(), createComment())
     private val latestCommentsSubject = SingleSubject.create<List<Comment>>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {

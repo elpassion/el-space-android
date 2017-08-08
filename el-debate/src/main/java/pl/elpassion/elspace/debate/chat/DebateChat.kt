@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Single
 import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import retrofit2.http.Field
@@ -14,7 +14,7 @@ interface DebateChat {
     interface Service {
         fun sendComment(commentToSend: CommentToSend): Completable
 
-        fun getComment(token: String): Observable<Comment>
+        fun getLatestComments(token: String): Single<Comment>
     }
 
     interface Api {
@@ -30,9 +30,8 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showComment(comment: Comment)
-        fun showGetCommentFinished()
-        fun showGetCommentError(exception: Throwable)
+        fun showLatestComments(comment: Comment)
+        fun showGetLatestCommentsError(exception: Throwable)
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
         fun closeScreen()

@@ -1,13 +1,11 @@
 package pl.elpassion.elspace.debate.chat
 
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
+import io.reactivex.Single
+import io.reactivex.subjects.SingleSubject
 
 class ServiceImpl(val api: DebateChat.Api) : DebateChat.Service {
 
     override fun sendComment(commentToSend: CommentToSend) = commentToSend.run { api.comment(token, message, firstName, lastName) }
 
-    override fun getComment(token: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
-
-    }
+    override fun getLatestComments(token: String): Single<Comment> = SingleSubject.create()
 }

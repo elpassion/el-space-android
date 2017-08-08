@@ -13,7 +13,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Rule
@@ -31,12 +31,12 @@ class DebateChatActivityTest {
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val commentByLoggedUser = Comment(name = "First Last", initials = "FO", backgroundColor = 0xFFFF0000.toInt(), message = "Message", isPostedByLoggedUser = true)
-    private val comment = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 0xFF0000FF.toInt(), message = "OtherMessage", isPostedByLoggedUser = false)
-    private val commentSubject = PublishSubject.create<Comment>()
+    private val latestComments = Comment(name = "OtherFirst OtherLast", initials = "WX", backgroundColor = 0xFF0000FF.toInt(), message = "OtherMessage", isPostedByLoggedUser = false)
+    private val latestCommentsSubject = SingleSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
-        whenever(getComment(any())).thenReturn(commentSubject)
+        whenever(getLatestComments(any())).thenReturn(latestCommentsSubject)
     }
 
     @JvmField @Rule
@@ -63,81 +63,64 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity()
-        commentSubject.onNext(commentByLoggedUser)
+        latestCommentsSubject.onSuccess(commentByLoggedUser)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
         startActivity()
-        commentSubject.onNext(comment)
+        latestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherMessage")
     }
 
     @Test
-    fun shouldShowLoaderOnServiceGetComment() {
+    fun shouldShowLoaderOnServiceGetLatestComments() {
         startActivity()
         onId(R.id.loader).isDisplayed()
     }
     
     @Test
-    fun shouldNotShowLoaderOnServiceGetCommentNext() {
+    fun shouldNotShowLoaderOnServiceGetLatestCommentsSuccess() {
         startActivity()
-        commentSubject.onNext(comment)
+        latestCommentsSubject.onSuccess(latestComments)
         onId(R.id.loader).doesNotExist()
     }
 
     @Test
-    fun shouldShowCommentEveryTimeOnServiceGetCommentEmits() {
-        startActivity()
-        commentSubject.onNext(comment)
-        commentSubject.onNext(comment)
-        commentSubject.onNext(commentByLoggedUser)
-        commentSubject.onNext(commentByLoggedUser)
-        onId(R.id.debateChatCommentsContainer).hasChildCount(4)
-    }
-
-    @Test
-    fun shouldShowGetCommentFinishedWhenServiceGetCommentFinished() {
-        startActivity()
-        commentSubject.onComplete()
-        onText(R.string.debate_chat_get_comment_finished)
-    }
-
-    @Test
-    fun shouldShowGetCommentErrorWhenServiceGetCommentFails() {
+    fun shouldShowGetLatestCommentsErrorWhenServiceGetLatestCommentsFails() {
         startActivity()
         val exception = RuntimeException()
-        commentSubject.onError(exception)
-        onText(R.string.debate_chat_get_comment_error)
+        latestCommentsSubject.onError(exception)
+        onText(R.string.debate_chat_get_latest_comments_error)
     }
 
     @Test

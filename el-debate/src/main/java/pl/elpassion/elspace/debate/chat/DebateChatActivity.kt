@@ -85,17 +85,13 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showComment(comment: Comment) {
+    override fun showLatestComments(comment: Comment) {
         comments.add(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
-    override fun showGetCommentFinished() {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_comment_finished, Snackbar.LENGTH_INDEFINITE).show()
-    }
-
-    override fun showGetCommentError(exception: Throwable) {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_comment_error, Snackbar.LENGTH_INDEFINITE).show()
+    override fun showGetLatestCommentsError(exception: Throwable) {
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_latest_comments_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showSendCommentSuccess() {

@@ -24,10 +24,13 @@ class DebateChatController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(
-                        { comments -> view.showLatestComments(comments); service.updateComments() },
-                        view::showGetLatestCommentsError)
+                .subscribe(this::onServiceGetLatestCommentsSuccess, view::showGetLatestCommentsError)
                 .addTo(subscriptions)
+    }
+
+    private fun onServiceGetLatestCommentsSuccess(comments: List<Comment>) {
+        view.showLatestComments(comments)
+        service.updateComments()
     }
 
     fun sendComment(token: String, message: String) {

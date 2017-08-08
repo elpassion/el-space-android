@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
@@ -21,12 +22,14 @@ class DebateChatControllerTest {
     private val sendCommentSubject = CompletableSubject.create()
     private val latestComments = listOf(createCommentByLoggedUser(), createComment())
     private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
+    private val updateCommentsSubject = PublishSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(service.getLatestComments(any())).thenReturn(getLatestCommentsSubject)
+        whenever(service.updateComments()).thenReturn(updateCommentsSubject)
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
@@ -99,6 +102,13 @@ class DebateChatControllerTest {
         val exception = RuntimeException()
         getLatestCommentsSubject.onError(exception)
         verify(view).showGetLatestCommentsError(exception)
+    }
+
+    @Test
+    fun shouldCallServiceUpdateCommentsWhenServiceGetLatestCommentsSucceeded() {
+        onCreate()
+        getLatestCommentsSubject.onSuccess(latestComments)
+        verify(service).updateComments()
     }
 
     @Test

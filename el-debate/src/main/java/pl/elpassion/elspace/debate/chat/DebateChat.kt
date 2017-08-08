@@ -2,6 +2,7 @@ package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.subjects.PublishSubject
 import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import retrofit2.http.*
@@ -9,9 +10,9 @@ import retrofit2.http.*
 interface DebateChat {
 
     interface Service {
-        fun sendComment(commentToSend: CommentToSend): Completable
-
         fun getLatestComments(token: String): Single<List<Comment>>
+        fun updateComments(): PublishSubject<Comment>
+        fun sendComment(commentToSend: CommentToSend): Completable
     }
 
     interface Api {

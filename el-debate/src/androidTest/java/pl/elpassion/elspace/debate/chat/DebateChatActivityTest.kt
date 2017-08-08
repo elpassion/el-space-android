@@ -86,21 +86,21 @@ class DebateChatActivityTest {
     fun shouldShowCorrectInitialsInCommentView() {
         startActivity()
         latestCommentsSubject.onSuccess(latestComments)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
         startActivity()
         latestCommentsSubject.onSuccess(latestComments)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
         startActivity()
         latestCommentsSubject.onSuccess(latestComments)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherMessage")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherMessage")
     }
 
     @Test

@@ -85,12 +85,12 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showLatestComments(comments: List<Comment>) {
-        this.comments.addAll(comments)
+    override fun showComment(comment: Comment) {
+        this.comments.add(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
-    override fun showGetLatestCommentsError(exception: Throwable) {
+    override fun showCommentError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_latest_comments_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 

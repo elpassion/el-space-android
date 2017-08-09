@@ -31,8 +31,8 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showLatestComments(comments: List<Comment>)
-        fun showGetLatestCommentsError(exception: Throwable)
+        fun showComment(comment: Comment)
+        fun showCommentError(exception: Throwable)
         fun showSendCommentSuccess()
         fun showSendCommentError(exception: Throwable)
         fun closeScreen()

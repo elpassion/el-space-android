@@ -49,10 +49,12 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromService() {
+    fun shouldShowCommentsReturnedFromServiceGetLatestComments() {
         onCreate()
         getLatestCommentsSubject.onSuccess(latestComments)
-        verify(view).showLatestComments(latestComments)
+        latestComments.forEach {
+            verify(view).showComment(it)
+        }
     }
 
     @Test
@@ -98,33 +100,11 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowGetLatestCommentsErrorWhenServiceGetLatestCommentsFails() {
+    fun shouldShowCommentErrorWhenServiceGetLatestCommentsFails() {
         onCreate()
         val exception = RuntimeException()
         getLatestCommentsSubject.onError(exception)
-        verify(view).showGetLatestCommentsError(exception)
-    }
-
-    @Test
-    fun shouldCallServiceUpdateCommentsWhenServiceGetLatestCommentsSucceeded() {
-        onCreate()
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(service).updateComments(any())
-    }
-
-    @Test
-    fun shouldCallServiceUpdateCommentsWithDebateCode() {
-        onCreate()
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(service).updateComments("12345")
-    }
-
-    @Test
-    fun shouldCallServiceUpdateCommentsWithRepoLatestDebateCode() {
-        onCreate()
-        whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(service).updateComments("67890")
+        verify(view).showCommentError(exception)
     }
 
     @Test

@@ -15,22 +15,17 @@ class DebateChatController(
     private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
-        serviceGetLatestComments(token)
+        serviceGetComments(token)
     }
 
-    private fun serviceGetLatestComments(token: String) {
-        service.getLatestComments(token)
+    private fun serviceGetComments(token: String) {
+        service.getLatestComments(token).flattenAsObservable { it }
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(this::onServiceGetLatestCommentsSuccess, view::showGetLatestCommentsError)
+                .subscribe(view::showComment, view::showCommentError)
                 .addTo(subscriptions)
-    }
-
-    private fun onServiceGetLatestCommentsSuccess(comments: List<Comment>) {
-        view.showLatestComments(comments)
-        debateRepo.getLatestDebateCode()?.let(service::updateComments)
     }
 
     fun sendComment(token: String, message: String) {

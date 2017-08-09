@@ -78,6 +78,15 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldShowCommentReturnedFromServiceGetNewComment() {
+        onCreate()
+        getLatestCommentsSubject.onSuccess(emptyList())
+        val comment = createComment()
+        getNewCommentSubject.onNext(comment)
+        verify(view).showComment(comment)
+    }
+
+    @Test
     fun shouldShowLoaderOnServiceGetCommentsCall() {
         onCreate()
         verify(view).showLoader()

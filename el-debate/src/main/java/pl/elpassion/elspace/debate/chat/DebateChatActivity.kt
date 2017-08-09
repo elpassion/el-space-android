@@ -91,7 +91,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showCommentError(exception: Throwable) {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_get_latest_comments_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_comment_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun showSendCommentSuccess() {

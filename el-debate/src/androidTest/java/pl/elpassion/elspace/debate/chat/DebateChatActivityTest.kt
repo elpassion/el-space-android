@@ -121,11 +121,11 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowGetLatestCommentsErrorWhenServiceGetLatestCommentsFails() {
+    fun shouldShowCommentErrorWhenServiceGetLatestCommentsFails() {
         startActivity()
         val exception = RuntimeException()
         getLatestCommentsSubject.onError(exception)
-        onText(R.string.debate_chat_get_latest_comments_error)
+        onText(R.string.debate_chat_comment_error)
     }
 
     @Test

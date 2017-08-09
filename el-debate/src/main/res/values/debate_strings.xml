@@ -18,7 +18,7 @@
     <string name="debate_details_vote_slow_down_title">Slow down!</string>
     <string name="debate_details_vote_slow_down_info">You always can change your vote, but you have to wait a few seconds between your votes. Try again in a moment! :)</string>
     <string name="debate_details_vote_slow_down_OK_button">OK</string>
-    <string name="debate_chat_get_latest_comments_error">Fetching latest comments failed</string>
+    <string name="debate_chat_comment_error">Fetching comment failed</string>
     <string name="debate_chat_send_comment_hint">Add comment</string>
     <string name="debate_chat_send_comment_button">Send</string>
     <string name="debate_chat_send_comment_success">Comment sent!</string>

@@ -160,6 +160,15 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldShowCommentErrorWhenServiceGetNewCommentFails() {
+        onCreate()
+        val exception = RuntimeException()
+        getLatestCommentsSubject.onSuccess(latestComments)
+        getNewCommentSubject.onError(exception)
+        verify(view).showCommentError(exception)
+    }
+
+    @Test
     fun shouldCallServiceSendCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).sendComment(CommentToSend("token", "message", "firstName", "lastName"))

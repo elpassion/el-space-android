@@ -1,10 +1,10 @@
 package pl.elpassion.elspace.debate.chat
 
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
@@ -21,7 +21,6 @@ class DebateChatControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val latestComments = listOf(createCommentByLoggedUser(), createComment())
     private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
-    private val getNewCommentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
@@ -29,7 +28,7 @@ class DebateChatControllerTest {
     fun setUp() {
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(service.getLatestComments(any())).thenReturn(getLatestCommentsSubject)
-        whenever(service.getNewComment(any())).thenReturn(getNewCommentSubject)
+        whenever(service.getNewComment(any())).thenReturn(Observable.never())
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
@@ -79,10 +78,10 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowCommentReturnedFromServiceGetNewComment() {
+        val comment = createComment()
+        whenever(service.getNewComment(any())).thenReturn(Observable.just(comment))
         onCreate()
         getLatestCommentsSubject.onSuccess(emptyList())
-        val comment = createComment()
-        getNewCommentSubject.onNext(comment)
         verify(view).showComment(comment)
     }
 
@@ -118,11 +117,11 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetNewComment() {
+        whenever(service.getNewComment(any())).thenReturn(Observable.error(RuntimeException()))
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate(token = "token")
         getLatestCommentsSubject.onSuccess(latestComments)
-        getNewCommentSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         subscribeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -141,11 +140,11 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenServiceGetNewComment() {
+        whenever(service.getNewComment(any())).thenReturn(Observable.error(RuntimeException()))
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate(token = "token")
         getLatestCommentsSubject.onSuccess(latestComments)
-        getNewCommentSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         observeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -161,10 +160,10 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowCommentErrorWhenServiceGetNewCommentFails() {
-        onCreate()
         val exception = RuntimeException()
+        whenever(service.getNewComment(any())).thenReturn(Observable.error(exception))
+        onCreate()
         getLatestCommentsSubject.onSuccess(latestComments)
-        getNewCommentSubject.onError(exception)
         verify(view).showCommentError(exception)
     }
 

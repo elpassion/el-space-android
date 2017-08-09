@@ -22,14 +22,14 @@ class DebateChatControllerTest {
     private val sendCommentSubject = CompletableSubject.create()
     private val latestComments = listOf(createCommentByLoggedUser(), createComment())
     private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
-    private val updateCommentsSubject = PublishSubject.create<Comment>()
+    private val getNewCommentSubject = PublishSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(service.getLatestComments(any())).thenReturn(getLatestCommentsSubject)
-        whenever(service.updateComments(any())).thenReturn(updateCommentsSubject)
+        whenever(service.getNewComment(any())).thenReturn(getNewCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))

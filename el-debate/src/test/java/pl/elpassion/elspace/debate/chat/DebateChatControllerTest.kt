@@ -129,11 +129,23 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetComments() {
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetLatestComments() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate(token = "token")
         getLatestCommentsSubject.onError(RuntimeException())
+        verify(view, never()).showCommentError(any())
+        observeOn.triggerActions()
+        verify(view).showCommentError(any())
+    }
+
+    @Test
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetNewComment() {
+        val observeOn = TestScheduler()
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
+        controller.onCreate(token = "token")
+        getLatestCommentsSubject.onSuccess(latestComments)
+        getNewCommentSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         observeOn.triggerActions()
         verify(view).showCommentError(any())

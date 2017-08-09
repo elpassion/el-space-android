@@ -1,5 +1,6 @@
 package pl.elpassion.elspace.debate.chat
 
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -19,11 +20,13 @@ class DebateChatController(
     }
 
     private fun serviceGetComments(token: String) {
-        service.getLatestComments(token).flattenAsObservable { it }
+        Observable.concat(
+                service.getLatestComments(token).flattenAsObservable { it }
+                        .doFinally(view::hideLoader),
+                service.getNewComment("12345"))
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
-                .doFinally(view::hideLoader)
                 .subscribe(view::showComment, view::showCommentError)
                 .addTo(subscriptions)
     }

@@ -49,6 +49,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceGetNewCommentsWithLatestDebateCodeOnCreate() {
+        onCreate()
+        verify(service).getNewComment("12345")
+    }
+
+    @Test
     fun shouldShowCommentsReturnedFromServiceGetLatestComments() {
         onCreate()
         getLatestCommentsSubject.onSuccess(latestComments)
@@ -58,7 +64,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowLoaderOnServiceGetLatestCommentsCall() {
+    fun shouldShowLoaderOnServiceGetCommentsCall() {
         onCreate()
         verify(view).showLoader()
     }
@@ -71,36 +77,35 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldNotHideLoaderOnServiceGetLatestCommentsIfCallIsInProgress() {
+    fun shouldNotHideLoaderOnServiceGetCommentsIfServiceGetLatestCommentsCallIsInProgress() {
         onCreate()
         verify(view, never()).hideLoader()
     }
 
     @Test
-    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetLatestComments() {
+    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceGetComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(view, never()).hideLoader()
+        getLatestCommentsSubject.onError(RuntimeException())
+        verify(view, never()).showCommentError(any())
         subscribeOn.triggerActions()
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(view).hideLoader()
+        verify(view).showCommentError(any())
     }
 
     @Test
-    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetLatestComments() {
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceGetComments() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate(token = "token")
-        getLatestCommentsSubject.onSuccess(latestComments)
-        verify(view, never()).hideLoader()
+        getLatestCommentsSubject.onError(RuntimeException())
+        verify(view, never()).showCommentError(any())
         observeOn.triggerActions()
-        verify(view).hideLoader()
+        verify(view).showCommentError(any())
     }
 
     @Test
-    fun shouldShowCommentErrorWhenServiceGetLatestCommentsFails() {
+    fun shouldShowCommentErrorWhenServiceGetCommentsFails() {
         onCreate()
         val exception = RuntimeException()
         getLatestCommentsSubject.onError(exception)

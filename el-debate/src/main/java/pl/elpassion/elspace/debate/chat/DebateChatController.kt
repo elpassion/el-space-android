@@ -17,7 +17,6 @@ class DebateChatController(
 
     fun onCreate(token: String) {
         getObservables(token)
-                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .subscribe(view::showComment, view::showCommentError)
                 .addTo(subscriptions)
@@ -31,6 +30,7 @@ class DebateChatController(
         val newCommentObservable = when {
             (debateRepo.getLatestDebateCode() != null) ->
                 service.getNewComment(debateRepo.getLatestDebateCode()!!)
+                        .subscribeOn(schedulers.backgroundScheduler)
             else -> Observable.never<Comment>()
         }
         return Observable.concat(latestCommentObservable, newCommentObservable)

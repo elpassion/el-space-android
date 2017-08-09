@@ -130,6 +130,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCommentErrorWhenServiceGetNewCommentFails() {
+        whenever(service.getNewComment(any())).thenReturn(Observable.error(RuntimeException()))
+        startActivity()
+        onText(R.string.debate_chat_comment_error)
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)

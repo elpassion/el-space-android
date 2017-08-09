@@ -66,42 +66,42 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowCorrectInitialsInLoggedUserCommentView() {
+    fun shouldShowCorrectInitialsInLoggedUserCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
-    fun shouldShowCorrectNameInLoggedUserCommentView() {
+    fun shouldShowCorrectNameInLoggedUserCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
-    fun shouldShowCorrectMessageInLoggedUserCommentView() {
+    fun shouldShowCorrectMessageInLoggedUserCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
-    fun shouldShowCorrectInitialsInCommentView() {
+    fun shouldShowCorrectInitialsInCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test
-    fun shouldShowCorrectNameInCommentView() {
+    fun shouldShowCorrectNameInCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test
-    fun shouldShowCorrectMessageInCommentView() {
+    fun shouldShowCorrectMessageInCommentViewReturnedFromServiceGetLatestComments() {
         startActivity()
         getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherMessage")

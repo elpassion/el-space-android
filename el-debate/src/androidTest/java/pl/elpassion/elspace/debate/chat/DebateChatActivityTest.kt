@@ -13,6 +13,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
 import org.junit.Ignore
@@ -29,15 +30,18 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 class DebateChatActivityTest {
 
     private val debateRepo = mock<DebatesRepository>().apply {
+        whenever(getLatestDebateCode()).thenReturn("12345")
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
     private val latestComments = listOf(createCommentByLoggedUser(), createComment())
-    private val latestCommentsSubject = SingleSubject.create<List<Comment>>()
+    private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
+    private val getNewCommentSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
+        whenever(getLatestComments(any())).thenReturn(getLatestCommentsSubject)
+        whenever(getNewComment(any())).thenReturn(getNewCommentSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
-        whenever(getLatestComments(any())).thenReturn(latestCommentsSubject)
     }
 
     @JvmField @Rule
@@ -64,42 +68,42 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherMessage")
     }
 
@@ -112,7 +116,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotShowLoaderOnServiceGetLatestCommentsSuccess() {
         startActivity()
-        latestCommentsSubject.onSuccess(latestComments)
+        getLatestCommentsSubject.onSuccess(latestComments)
         onId(R.id.loader).doesNotExist()
     }
 
@@ -120,7 +124,7 @@ class DebateChatActivityTest {
     fun shouldShowGetLatestCommentsErrorWhenServiceGetLatestCommentsFails() {
         startActivity()
         val exception = RuntimeException()
-        latestCommentsSubject.onError(exception)
+        getLatestCommentsSubject.onError(exception)
         onText(R.string.debate_chat_get_latest_comments_error)
     }
 

@@ -16,13 +16,13 @@ import pl.elpassion.elspace.debate.DebatesRepository
 
 class DebateChatControllerTest {
 
-    private val service = mock<DebateChat.Service>()
     private val view = mock<DebateChat.View>()
+    private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
-    private val sendCommentSubject = CompletableSubject.create()
     private val latestComments = listOf(createCommentByLoggedUser(), createComment())
     private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
     private val getNewCommentSubject = PublishSubject.create<Comment>()
+    private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
@@ -49,9 +49,23 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceGetNewCommentsWithLatestDebateCodeOnCreate() {
+    fun shouldCallServiceGetNewCommentsWithDebateCodeOnCreate() {
         onCreate()
         verify(service).getNewComment("12345")
+    }
+
+    @Test
+    fun shouldCallServiceGetNewCommentsWithRepoLatestDebateCodeOnCreate() {
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
+        onCreate()
+        verify(service).getNewComment("67890")
+    }
+
+    @Test
+    fun shouldNotCallServiceGetNewCommentsWhenRepoLatestDebateCodeIsNullOnCreate() {
+        whenever(debateRepo.getLatestDebateCode()).thenReturn(null)
+        onCreate()
+        verify(service, never()).getNewComment(any())
     }
 
     @Test

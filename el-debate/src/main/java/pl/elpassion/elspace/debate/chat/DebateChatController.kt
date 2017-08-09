@@ -16,19 +16,24 @@ class DebateChatController(
     private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
-        serviceGetComments(token)
-    }
-
-    private fun serviceGetComments(token: String) {
-        Observable.concat(
-                service.getLatestComments(token).flattenAsObservable { it }
-                        .doFinally(view::hideLoader),
-                service.getNewComment("12345"))
-                .subscribeOn(schedulers.backgroundScheduler)
+        getObservables(token)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .subscribe(view::showComment, view::showCommentError)
                 .addTo(subscriptions)
+    }
+
+    private fun getObservables(token: String): Observable<Comment> {
+        val latestCommentObservable = service.getLatestComments(token).flattenAsObservable { it }
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
+                .doFinally(view::hideLoader)
+        val newCommentObservable = when {
+            (debateRepo.getLatestDebateCode() != null) ->
+                service.getNewComment(debateRepo.getLatestDebateCode()!!)
+            else -> Observable.never<Comment>()
+        }
+        return Observable.concat(latestCommentObservable, newCommentObservable)
     }
 
     fun sendComment(token: String, message: String) {

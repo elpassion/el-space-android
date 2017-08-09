@@ -86,7 +86,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showComment(comment: Comment) {
-        this.comments.add(comment)
+        comments.add(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 

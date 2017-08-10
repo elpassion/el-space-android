@@ -7,7 +7,6 @@ import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
@@ -93,7 +92,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showCommentError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_comment_error, Snackbar.LENGTH_INDEFINITE).show()
-        Log.e("ShowCommentError", exception.message)
     }
 
     override fun showSendCommentSuccess() {

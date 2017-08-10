@@ -25,7 +25,7 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldCallApiWithRealToken() {
-        debateChatServiceImpl.commentsObservable("someToken")
+        debateChatServiceImpl.commentsObservable("someToken", "code")
         verify(api).comment("someToken")
     }
 
@@ -33,7 +33,7 @@ class DebateChatServiceTest {
     fun shouldReturnCommentsReceivedFromApi() {
         val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
         debateChatServiceImpl
-                .commentsObservable("token")
+                .commentsObservable("token", "code")
                 .test()
                 .apply { commentsFromApiSubject.onSuccess(commentsFromApi) }
                 .assertValues(*commentsFromApi.toTypedArray())
@@ -43,17 +43,23 @@ class DebateChatServiceTest {
     fun shouldReturnErrorReceivedFromApi() {
         val exception = RuntimeException()
         debateChatServiceImpl
-                .commentsObservable("token")
+                .commentsObservable("token", "code")
                 .test()
                 .apply { commentsFromApiSubject.onError(exception) }
                 .assertError(exception)
     }
 
     @Test
+    fun shouldCallSocketWithRealDebateCode() {
+        debateChatServiceImpl.commentsObservable("token", "someDebateCode")
+        verify(socket).commentsObservable("someDebateCode")
+    }
+
+    @Test
     fun shouldPropagateCommentsReturnedFromSocket() {
         val comment = createComment(name = "NameSocket")
         debateChatServiceImpl
-                .commentsObservable("token")
+                .commentsObservable("token", "code")
                 .test()
                 .apply {
                     commentsFromApiSubject.onSuccess(emptyList())
@@ -65,7 +71,7 @@ class DebateChatServiceTest {
 
 class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) {
 
-    fun commentsObservable(token: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(""))
+    fun commentsObservable(token: String, debateCode: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(debateCode))
 }
 
 interface CommentsSocket {

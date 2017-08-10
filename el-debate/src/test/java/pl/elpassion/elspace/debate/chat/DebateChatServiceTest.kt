@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
@@ -76,14 +77,30 @@ class DebateChatServiceTest {
                 .test()
                 .apply {
                     commentsFromApiSubject.onSuccess(emptyList())
-                    commentsFromSocketSubject.onError(exception) }
+                    commentsFromSocketSubject.onError(exception)
+                }
                 .assertError(exception)
+    }
+
+    @Test
+    fun shouldCallApiSendCommentWithRealData() {
+        val commentToSend = CommentToSend("token", "message", "first", "last")
+        debateChatServiceImpl.sendComment(commentToSend)
+        commentToSend.run {
+            verify(api).comment(token, message, firstName, lastName)
+        }
     }
 }
 
-class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) {
+interface ChatService {
+    fun commentsObservable(token: String, debateCode: String): Observable<Comment>
+    fun sendComment(commentToSend: CommentToSend): Completable
+}
 
-    fun commentsObservable(token: String, debateCode: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(debateCode))
+class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) : ChatService {
+
+    override fun commentsObservable(token: String, debateCode: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(debateCode))
+    override fun sendComment(commentToSend: CommentToSend): Completable = commentToSend.run { api.comment(token, message, firstName, lastName) }
 }
 
 interface CommentsSocket {

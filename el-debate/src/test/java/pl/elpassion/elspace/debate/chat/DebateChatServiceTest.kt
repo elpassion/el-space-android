@@ -5,6 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
@@ -12,15 +13,25 @@ import pl.elpassion.elspace.dabate.chat.createComment
 
 class DebateChatServiceTest {
 
-    private val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
     private val commentsFromApiSubject = SingleSubject.create<List<Comment>>()
     private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any())).thenReturn(commentsFromApiSubject)
     }
-    private val debateChatServiceImpl = DebateChatServiceImpl(api)
+    private val commentsFromSocketSubject = PublishSubject.create<Comment>()
+    private val socket = mock<CommentsSocket>().apply {
+        whenever(commentsObservable(any())).thenReturn(commentsFromSocketSubject)
+    }
+    private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
+
+    @Test
+    fun shouldCallApiWithRealToken() {
+        debateChatServiceImpl.commentsObservable("someToken")
+        verify(api).comment("someToken")
+    }
 
     @Test
     fun shouldReturnCommentsReceivedFromApi() {
+        val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
         debateChatServiceImpl
                 .commentsObservable("token")
                 .test()
@@ -29,13 +40,34 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldCallApiWithRealToken() {
-        debateChatServiceImpl.commentsObservable("someToken")
-        verify(api).comment("someToken")
+    fun shouldReturnErrorReceivedFromApi() {
+        val exception = RuntimeException()
+        debateChatServiceImpl
+                .commentsObservable("token")
+                .test()
+                .apply { commentsFromApiSubject.onError(exception) }
+                .assertError(exception)
+    }
+
+    @Test
+    fun shouldPropagateCommentsReturnedFromSocket() {
+        val comment = createComment(name = "NameSocket")
+        debateChatServiceImpl
+                .commentsObservable("token")
+                .test()
+                .apply {
+                    commentsFromApiSubject.onSuccess(emptyList())
+                    commentsFromSocketSubject.onNext(comment)
+                }
+                .assertValue(comment)
     }
 }
 
-class DebateChatServiceImpl(private val api: DebateChat.Api) {
+class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) {
 
-    fun commentsObservable(token: String): Observable<Comment> = api.comment(token).flattenAsObservable { it }
+    fun commentsObservable(token: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(""))
+}
+
+interface CommentsSocket {
+    fun commentsObservable(debateCode: String): Observable<Comment>
 }

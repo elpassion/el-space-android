@@ -6,17 +6,21 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
+import pl.elpassion.elspace.dabate.chat.createCommentToSend
 
 
 class DebateChatServiceTest {
 
     private val commentsFromApiSubject = SingleSubject.create<List<Comment>>()
+    private val sendCommentsApiSubject = CompletableSubject.create()
     private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any())).thenReturn(commentsFromApiSubject)
+        whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
     private val socket = mock<CommentsSocket>().apply {
@@ -25,13 +29,13 @@ class DebateChatServiceTest {
     private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
 
     @Test
-    fun shouldCallApiWithRealToken() {
+    fun shouldCallApiCommentWithRealToken() {
         debateChatServiceImpl.commentsObservable("someToken", "code")
         verify(api).comment("someToken")
     }
 
     @Test
-    fun shouldReturnCommentsReceivedFromApi() {
+    fun shouldReturnCommentsReceivedFromApiComment() {
         val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
         debateChatServiceImpl
                 .commentsObservable("token", "code")
@@ -41,7 +45,7 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldReturnErrorReceivedFromApi() {
+    fun shouldReturnErrorReceivedFromApiComment() {
         val exception = RuntimeException()
         debateChatServiceImpl
                 .commentsObservable("token", "code")
@@ -84,11 +88,21 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldCallApiSendCommentWithRealData() {
-        val commentToSend = CommentToSend("token", "message", "first", "last")
+        val commentToSend = createCommentToSend()
         debateChatServiceImpl.sendComment(commentToSend)
         commentToSend.run {
             verify(api).comment(token, message, firstName, lastName)
         }
+    }
+
+    @Test
+    fun shouldReturnErrorReceivedFromApiSendComment() {
+        val exception = RuntimeException()
+        debateChatServiceImpl
+                .sendComment(createCommentToSend())
+                .test()
+                .apply { sendCommentsApiSubject.onError(exception) }
+                .assertError(exception)
     }
 }
 

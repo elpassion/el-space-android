@@ -1,27 +1,31 @@
 package pl.elpassion.elspace.debate.chat
 
 import android.util.Log
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
-import com.pusher.client.channel.Channel
+import com.pusher.client.channel.SubscriptionEventListener
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionStateChange
 import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
     private val pusherOptions by lazy { PusherOptions().apply { setCluster("eu") } }
     private val pusher by lazy { Pusher("###", pusherOptions) }
-    private var connectionEventListener: ConnectionEventListener? = null
 
-    override fun commentsObservable(debateCode: String): Observable<Comment> {
-        val channel = pusher.subscribe("dashboard_channel_$debateCode")
-        pusher.connect(connectionEventListener)
-        return bindObservable(channel)
-    }
+    override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
 
-    fun bindObservable(channel: Channel): Observable<Comment> = Observable.create<Comment> { emitter ->
-        connectionEventListener = object : ConnectionEventListener {
+        val channelListener = SubscriptionEventListener { channelName, eventName, data ->
+            val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+            val comment = gson.fromJson(data, Comment::class.java)
+            emitter.onNext(comment)
+            Log.i("onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+        }
+
+        val connectionListener = object : ConnectionEventListener {
             override fun onConnectionStateChange(p0: ConnectionStateChange) {
                 Log.i("onConnectionState: ", p0.currentState.name)
             }
@@ -29,11 +33,14 @@ class DebateChatSocketImpl : DebateChat.Socket {
             override fun onError(p0: String, p1: String, exception: Exception) {
                 Log.i("onError", "p0: $p0, p1: $p1, p2: ${exception.message}")
                 emitter.onError(exception)
+                pusher.disconnect()
             }
         }
-        channel.bind("comment_added") { channelName, eventName, data ->
-            emitter.onNext(Comment(userInitials = "AA", createdAt = "123", userInitialsBackgroundColor = "#f9ceca", fullName = "DD", content = data, token = "token"))
-            Log.i("onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
-        }
+
+        pusher.connect(connectionListener)
+        val channel = pusher.subscribe("dashboard_channel_$debateCode")
+        channel.bind("comment_added", channelListener)
+
+        emitter.setCancellable { pusher.disconnect() }
     }
 }

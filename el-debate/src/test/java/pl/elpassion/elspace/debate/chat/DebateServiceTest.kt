@@ -4,8 +4,6 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
@@ -14,7 +12,7 @@ import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
 
 
-class DebateChatServiceTest {
+class DebateServiceTest {
 
     private val commentsFromApiSubject = SingleSubject.create<List<Comment>>()
     private val sendCommentsApiSubject = CompletableSubject.create()
@@ -23,7 +21,7 @@ class DebateChatServiceTest {
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
-    private val socket = mock<CommentsSocket>().apply {
+    private val socket = mock<DebateChat.Socket>().apply {
         whenever(commentsObservable(any())).thenReturn(commentsFromSocketSubject)
     }
     private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
@@ -106,19 +104,4 @@ class DebateChatServiceTest {
                 .apply { sendCommentsApiSubject.onError(exception) }
                 .assertError(exception)
     }
-}
-
-interface ChatService {
-    fun commentsObservable(token: String, debateCode: String): Observable<Comment>
-    fun sendComment(commentToSend: CommentToSend): Completable
-}
-
-class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) : ChatService {
-
-    override fun commentsObservable(token: String, debateCode: String): Observable<Comment> = Observable.concat(api.comment(token).flattenAsObservable { it }, socket.commentsObservable(debateCode))
-    override fun sendComment(commentToSend: CommentToSend): Completable = commentToSend.run { api.comment(token, message, firstName, lastName) }
-}
-
-interface CommentsSocket {
-    fun commentsObservable(debateCode: String): Observable<Comment>
 }

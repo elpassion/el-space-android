@@ -10,8 +10,7 @@ import retrofit2.http.*
 interface DebateChat {
 
     interface Service {
-        fun getLatestComments(token: String): Single<List<Comment>>
-        fun getNewComment(debateCode: String): Observable<Comment>
+        fun commentsObservable(token: String, debateCode: String): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Completable
     }
 
@@ -26,6 +25,10 @@ interface DebateChat {
 
         @GET("comment")
         fun comment(@Header("Authorization") token: String): Single<List<Comment>>
+    }
+
+    interface Socket {
+        fun commentsObservable(debateCode: String): Observable<Comment>
     }
 
     interface View {
@@ -45,10 +48,14 @@ interface DebateChat {
     }
 
     object ServiceProvider : Provider<Service>({
-        ServiceImpl(ApiProvider.get())
+        DebateChatServiceImpl(ApiProvider.get(), SocketProvider.get())
     })
 
     object ApiProvider : Provider<Api>({
         DebateRetrofitProvider.get().create(Api::class.java)
+    })
+
+    object SocketProvider : Provider<Socket>({
+        DebateChatSocketImpl()
     })
 }

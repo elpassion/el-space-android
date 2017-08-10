@@ -14,9 +14,7 @@ import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -34,11 +32,9 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areCredentialsMissing(any())).thenReturn(false)
     }
-    private val getLatestCommentsSubject = SingleSubject.create<List<Comment>>()
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(getLatestComments(any())).thenReturn(getLatestCommentsSubject)
-        whenever(getNewComment(any())).thenReturn(Observable.never())
+        whenever(commentsObservable(any(), any())).thenReturn(Observable.never())
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
@@ -65,72 +61,49 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
-        whenever(service.getNewComment(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("WX")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
-        whenever(service.getNewComment(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
-        whenever(service.getNewComment(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
         startActivity()
-        getLatestCommentsSubject.onSuccess(listOf(createCommentByLoggedUser()))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.commentView).hasChildWithText("OtherMessage")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherMessage")
     }
 
     @Test
-    fun shouldShowLoaderOnServiceGetLatestComments() {
-        startActivity()
-        onId(R.id.loader).isDisplayed()
-    }
-    
-    @Test
-    fun shouldNotShowLoaderOnServiceGetLatestCommentsSuccess() {
-        startActivity()
-        getLatestCommentsSubject.onSuccess(emptyList())
-        onId(R.id.loader).doesNotExist()
-    }
-
-    @Test
-    fun shouldShowCommentErrorWhenServiceGetLatestCommentsFails() {
-        startActivity()
-        getLatestCommentsSubject.onError(RuntimeException())
-        onText(R.string.debate_chat_comment_error)
-    }
-
-    @Test
-    fun shouldShowCommentErrorWhenServiceGetNewCommentFails() {
-        whenever(service.getNewComment(any())).thenReturn(Observable.error(RuntimeException()))
+    fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         onText(R.string.debate_chat_comment_error)
     }
@@ -166,7 +139,6 @@ class DebateChatActivityTest {
         verify(service).sendComment(CommentToSend("someToken", "message", "firstName", "lastName"))
     }
 
-    @Ignore
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
         startActivity(debateToken = "someToken")

@@ -1,6 +1,5 @@
 package pl.elpassion.elspace.debate.chat
 
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -16,24 +15,11 @@ class DebateChatController(
     private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
-        getObservables(token)
-                .doOnSubscribe { view.showLoader() }
-                .subscribe(view::showComment, view::showCommentError)
-                .addTo(subscriptions)
-    }
-
-    private fun getObservables(token: String): Observable<Comment> {
-        val latestCommentObservable = service.getLatestComments(token).flattenAsObservable { it }
+        service.commentsObservable(token, debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doFinally(view::hideLoader)
-        val newCommentObservable = when {
-            (debateRepo.getLatestDebateCode() != null) ->
-                service.getNewComment(debateRepo.getLatestDebateCode()!!)
-                        .subscribeOn(schedulers.backgroundScheduler)
-            else -> Observable.never<Comment>()
-        }
-        return Observable.concat(latestCommentObservable, newCommentObservable)
+                .subscribe(view::showComment, view::showCommentError)
+                .addTo(subscriptions)
     }
 
     fun sendComment(token: String, message: String) {

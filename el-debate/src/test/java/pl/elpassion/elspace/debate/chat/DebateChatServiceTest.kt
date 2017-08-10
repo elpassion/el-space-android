@@ -12,7 +12,7 @@ import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
 
 
-class DebateServiceTest {
+class DebateChatServiceTest {
 
     private val commentsFromApiSubject = SingleSubject.create<List<Comment>>()
     private val sendCommentsApiSubject = CompletableSubject.create()

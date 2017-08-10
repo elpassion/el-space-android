@@ -62,15 +62,17 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldPropagateCommentsReturnedFromSocket() {
-        val comment = createComment(name = "NameSocket")
+        val commentFirst = createComment(name = "NameSocket")
+        val commentSecond = createComment(name = "NameSocketSecond")
         debateChatServiceImpl
                 .commentsObservable("token", "code")
                 .test()
                 .apply {
                     commentsFromApiSubject.onSuccess(emptyList())
-                    commentsFromSocketSubject.onNext(comment)
+                    commentsFromSocketSubject.onNext(commentFirst)
+                    commentsFromSocketSubject.onNext(commentSecond)
                 }
-                .assertValue(comment)
+                .assertValues(commentFirst, commentSecond)
     }
 
     @Test

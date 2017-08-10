@@ -67,6 +67,18 @@ class DebateChatServiceTest {
                 }
                 .assertValue(comment)
     }
+
+    @Test
+    fun shouldReturnErrorReceivedFromSocket() {
+        val exception = RuntimeException()
+        debateChatServiceImpl
+                .commentsObservable("token", "code")
+                .test()
+                .apply {
+                    commentsFromApiSubject.onSuccess(emptyList())
+                    commentsFromSocketSubject.onError(exception) }
+                .assertError(exception)
+    }
 }
 
 class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: CommentsSocket) {

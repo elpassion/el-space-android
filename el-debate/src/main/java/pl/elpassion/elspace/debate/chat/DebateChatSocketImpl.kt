@@ -32,7 +32,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
             }
         }
         channel.bind("comment_added") { channelName, eventName, data ->
-            emitter.onNext(Comment(initials = "AA", backgroundColor = 123, name = "DD", message = data, isPostedByLoggedUser = false))
+            emitter.onNext(Comment(userInitials = "AA", createdAt = "123", userInitialsBackgroundColor = "#f9ceca", fullName = "DD", content = data, token = "token"))
             Log.i("onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
         }
     }

@@ -35,21 +35,21 @@ class DebateChatServiceTest {
     @Test
     fun shouldReturnCommentsReceivedFromApiComment() {
         val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
-        debateChatServiceImpl
+        val testObserver = debateChatServiceImpl
                 .commentsObservable("token", "code")
                 .test()
-                .apply { commentsFromApiSubject.onSuccess(commentsFromApi) }
-                .assertValues(*commentsFromApi.toTypedArray())
+        commentsFromApiSubject.onSuccess(commentsFromApi)
+        testObserver.assertValues(*commentsFromApi.toTypedArray())
     }
 
     @Test
     fun shouldReturnErrorReceivedFromApiComment() {
         val exception = RuntimeException()
-        debateChatServiceImpl
+        val testObserver = debateChatServiceImpl
                 .commentsObservable("token", "code")
                 .test()
-                .apply { commentsFromApiSubject.onError(exception) }
-                .assertError(exception)
+        commentsFromApiSubject.onError(exception)
+        testObserver.assertError(exception)
     }
 
     @Test
@@ -62,28 +62,24 @@ class DebateChatServiceTest {
     fun shouldPropagateCommentsReturnedFromSocket() {
         val commentFirst = createComment(name = "NameSocket")
         val commentSecond = createComment(name = "NameSocketSecond")
-        debateChatServiceImpl
+        val testObserver = debateChatServiceImpl
                 .commentsObservable("token", "code")
                 .test()
-                .apply {
-                    commentsFromApiSubject.onSuccess(emptyList())
-                    commentsFromSocketSubject.onNext(commentFirst)
-                    commentsFromSocketSubject.onNext(commentSecond)
-                }
-                .assertValues(commentFirst, commentSecond)
+        commentsFromApiSubject.onSuccess(emptyList())
+        commentsFromSocketSubject.onNext(commentFirst)
+        commentsFromSocketSubject.onNext(commentSecond)
+        testObserver.assertValues(commentFirst, commentSecond)
     }
 
     @Test
     fun shouldReturnErrorReceivedFromSocket() {
         val exception = RuntimeException()
-        debateChatServiceImpl
+        val testObserver = debateChatServiceImpl
                 .commentsObservable("token", "code")
                 .test()
-                .apply {
-                    commentsFromApiSubject.onSuccess(emptyList())
-                    commentsFromSocketSubject.onError(exception)
-                }
-                .assertError(exception)
+        commentsFromApiSubject.onSuccess(emptyList())
+        commentsFromSocketSubject.onError(exception)
+        testObserver.assertError(exception)
     }
 
     @Test
@@ -98,10 +94,10 @@ class DebateChatServiceTest {
     @Test
     fun shouldReturnErrorReceivedFromApiSendComment() {
         val exception = RuntimeException()
-        debateChatServiceImpl
+        val testObserver = debateChatServiceImpl
                 .sendComment(createCommentToSend())
                 .test()
-                .apply { sendCommentsApiSubject.onError(exception) }
-                .assertError(exception)
+        sendCommentsApiSubject.onError(exception)
+        testObserver.assertError(exception)
     }
 }

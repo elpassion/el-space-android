@@ -51,7 +51,7 @@ class DebateLoginController(
                 Single.just(debateRepo.getTokenForDebate(debateCode))
             } else {
                 loginApi.login(debateCode)
-                        .map { it.authToken }
+                        .map { it }
                         .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
             }
 

@@ -22,6 +22,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentByLoggedUser
 import pl.elpassion.elspace.dabate.details.createString
+import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 
@@ -134,14 +135,14 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentKeyboardConfirmClick() {
-        startActivity(debateToken = "someToken")
+        startActivity("someToken")
         sendComment()
         verify(service).sendComment(CommentToSend("someToken", "message", "firstName", "lastName"))
     }
 
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
-        startActivity(debateToken = "someToken")
+        startActivity("someToken")
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText("message")
         Espresso.closeSoftKeyboard()
@@ -233,35 +234,35 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldSaveProvidedCredentialsToRepo() {
-        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = "firstName", lastName = "lastName")
         verify(debateRepo).saveTokenCredentials("DebateToken", TokenCredentials("firstName", "lastName"))
     }
 
     @Test
     fun shouldHideCredentialDialogWhenCredentialsWereSaved() {
-        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = "firstName", lastName = "lastName")
         onId(R.id.debateCommentCredentialsDialog).doesNotExist()
     }
 
     @Test
     fun shouldDisplayErrorOnIncorrectFirstName() {
-        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = " ", lastName = "lastName")
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_chat_credentials_first_name_incorrect)
     }
 
     @Test
     fun shouldDisplayErrorOnIncorrectLastName() {
-        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = "firstName", lastName = " ")
         onId(R.id.debateCredentialsLastNameInputText).editTextHasError(R.string.debate_chat_credentials_last_name_incorrect)
     }
 
     @Test
     fun shouldHaveCredentialsDialogInfo() {
-        startActivityAndOpenCredentialsDialog(debateToken = "DebateToken")
+        startActivityAndOpenCredentialsDialog("DebateToken")
         onText(R.string.debate_chat_credentials_info).isDisplayed()
     }
 
@@ -271,8 +272,8 @@ class DebateChatActivityTest {
         onText(R.string.debate_chat_credentials_confirm).click()
     }
 
-    private fun startActivity(debateToken: String = "debateToken") {
-        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), debateToken))
+    private fun startActivity(token: String = "debateToken") {
+        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, "userId")))
     }
 
     private fun sendComment(message: String = "message") {
@@ -281,9 +282,9 @@ class DebateChatActivityTest {
                 .pressImeActionButton()
     }
 
-    private fun startActivityAndOpenCredentialsDialog(debateToken: String = "debateToken") {
+    private fun startActivityAndOpenCredentialsDialog(token: String = "debateToken") {
         whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
-        startActivity(debateToken = debateToken)
+        startActivity(token)
         sendComment()
     }
 }

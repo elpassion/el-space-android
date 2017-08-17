@@ -23,15 +23,15 @@ import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createHttpException
+import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
-import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
 class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebatesRepository>()
-    private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
+    private val apiSubject = SingleSubject.create<AuthToken>()
     private val api = mock<DebateLogin.Api>()
 
     @JvmField @Rule
@@ -152,7 +152,7 @@ class DebateLoginActivityTest {
         stubIntentAndRepo()
         loginToDebate()
         intended(allOf(
-                hasExtra("debateAuthTokenKey", "tokenFromRepo"),
+                hasExtra("debateAuthTokenKey", AuthToken("tokenFromRepo", "userIdFromRepo")),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -160,10 +160,10 @@ class DebateLoginActivityTest {
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
         loginToDebate(debateCode = "12345")
-        apiSubject.onSuccess(LoginResponse("authTokenFromApi"))
-        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "authTokenFromApi")
+        apiSubject.onSuccess(AuthToken("authTokenFromApi", "userIdFromApi"))
+        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = AuthToken("authTokenFromApi", "userIdFromApi"))
         intended(allOf(
-                hasExtra("debateAuthTokenKey", "authTokenFromApi"),
+                hasExtra("debateAuthTokenKey", AuthToken("authTokenFromApi", "userIdFromApi")),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -192,7 +192,7 @@ class DebateLoginActivityTest {
     private fun stubIntentAndRepo() {
         stubAllIntents()
         whenever(tokenRepo.hasToken("12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn(AuthToken("tokenFromRepo", "userIdFromRepo"))
     }
 
     private fun loginToDebate(debateCode: String = "12345") {

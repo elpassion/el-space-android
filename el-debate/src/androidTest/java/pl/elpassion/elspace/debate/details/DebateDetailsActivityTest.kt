@@ -20,6 +20,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
+import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import java.lang.Thread.sleep
 
@@ -287,7 +288,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldUseTokenPassedWithIntent() {
-        startActivity(token = "newToken")
+        startActivity("newToken")
         verify(apiMock).getDebateDetails("newToken")
     }
 
@@ -338,7 +339,7 @@ class DebateDetailsActivityTest {
         stubAllIntents()
         onId(R.id.debateChatButton).click()
         Intents.intended(Matchers.allOf(
-                IntentMatchers.hasExtra("debateAuthTokenKey", token),
+                IntentMatchers.hasExtra("debateAuthTokenKey", AuthToken(token, "userId")),
                 IntentMatchers.hasComponent(DebateChatActivity::class.java.name)))
     }
 
@@ -392,7 +393,7 @@ class DebateDetailsActivityTest {
     }
 
     private fun startActivity(token: String = "token") {
-        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), token))
+        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, "userId")))
     }
 
     private fun voteSuccessfully() {

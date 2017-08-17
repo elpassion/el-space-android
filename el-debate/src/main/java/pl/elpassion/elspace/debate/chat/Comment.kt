@@ -5,4 +5,4 @@ data class Comment(val userInitials: String,
                    val userInitialsBackgroundColor: String,
                    val fullName: String,
                    val content: String,
-                   val token: String)
+                   val userId: String)

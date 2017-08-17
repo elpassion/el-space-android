@@ -20,7 +20,6 @@ import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
-import pl.elpassion.elspace.dabate.chat.createCommentByLoggedUser
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -62,51 +61,44 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
-        startActivity()
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FO")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "1")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FL")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
-        startActivity()
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "1")
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser()))
-        startActivity()
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "1")
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
-        startActivity()
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("WX")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "2")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("FL")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
-        startActivity()
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherFirst OtherLast")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "2")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment()))
-        startActivity()
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("OtherMessage")
-    }
-
-    @Test
-    fun shouldShowCorrectCommentViewForLoggedUser() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser(userId = "33")))
-        startActivity(userId = "33")
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
+        startActivity(userId = "2")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("Message")
     }
 
     @Test

@@ -3,6 +3,5 @@ package pl.elpassion.elspace.dabate.chat
 import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.CommentToSend
 
-fun createCommentByLoggedUser(userId: String = "1") = Comment(fullName = "First Last", createdAt = "123", userInitials = "FO", userInitialsBackgroundColor = "#83ff33", content = "Message", userId = userId)
-fun createComment(name: String = "OtherFirst OtherLast") = Comment(fullName = name, createdAt = "456", userInitials = "WX", userInitialsBackgroundColor = "#ff3333", content = "OtherMessage", userId = "2")
+fun createComment(name: String = "First Last", userId: String = "1") = Comment(fullName = name, createdAt = "456", userInitials = "FL", userInitialsBackgroundColor = "#ff3333", content = "Message", userId = userId)
 fun createCommentToSend() = CommentToSend("token", "message", "first", "last")

@@ -103,6 +103,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCorrectCommentViewForLoggedUser() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createCommentByLoggedUser(userId = "33")))
+        startActivity(userId = "33")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
+    }
+
+    @Test
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
@@ -272,8 +279,8 @@ class DebateChatActivityTest {
         onText(R.string.debate_chat_credentials_confirm).click()
     }
 
-    private fun startActivity(token: String = "debateToken") {
-        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, "userId")))
+    private fun startActivity(token: String = "debateToken", userId: String = "userId") {
+        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, userId)))
     }
 
     private fun sendComment(message: String = "message") {

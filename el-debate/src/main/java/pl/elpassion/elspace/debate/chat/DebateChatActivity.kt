@@ -72,7 +72,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun createHolderForComment(comment: Comment) = when {
-        comment.userId == "1" -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
+        comment.userId == authToken.userId -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
         else -> R.layout.comment to ::CommentHolder
     }
 

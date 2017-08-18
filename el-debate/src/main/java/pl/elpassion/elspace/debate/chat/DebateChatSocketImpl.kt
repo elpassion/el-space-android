@@ -14,25 +14,14 @@ import pl.elpassion.BuildConfig
 class DebateChatSocketImpl : DebateChat.Socket {
 
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
-        val pusherOptions = PusherOptions().apply { setCluster("eu") }
-        val pusher = Pusher("###", pusherOptions)
-
-        if (BuildConfig.DEBUG) connectPusherDebug(pusher) else pusher.connect()
-
-        val channel = pusher.subscribe("my-channel")
-
-        channel.bind("my-event", { channelName, eventName, data ->
-            if (BuildConfig.DEBUG) {
-                Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
-            }
-            data?.let {
-                val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
-                val comment = gson.fromJson(it, Comment::class.java)
-                emitter.onNext(comment)
-            }
-        })
-
+        val pusher = Pusher("###", PusherOptions().setCluster("eu"))
+        connectPusher(pusher, emitter)
         emitter.setCancellable { pusher.disconnect() }
+    }
+
+    private fun connectPusher(pusher: Pusher, emitter: ObservableEmitter<Comment>) {
+        if (BuildConfig.DEBUG) connectPusherDebug(pusher) else pusher.connect()
+        bindToChannel(pusher, emitter)
     }
 
     private fun connectPusherDebug(pusher: Pusher) {
@@ -46,4 +35,19 @@ class DebateChatSocketImpl : DebateChat.Socket {
             }
         })
     }
+
+    private fun bindToChannel(pusher: Pusher, emitter: ObservableEmitter<Comment>) {
+        val channel = pusher.subscribe("my-channel")
+        channel.bind("my-event", { channelName, eventName, data ->
+            if (BuildConfig.DEBUG) {
+                Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            }
+            if (data != null) emitter.onNext(createComment(data))
+        })
+    }
+
+    private fun createComment(data: String) =
+            GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create().run {
+                fromJson(data, Comment::class.java)
+            }
 }

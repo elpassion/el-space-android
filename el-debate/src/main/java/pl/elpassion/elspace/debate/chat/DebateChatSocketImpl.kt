@@ -9,6 +9,7 @@ import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionStateChange
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
+import pl.elpassion.BuildConfig
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
@@ -16,6 +17,25 @@ class DebateChatSocketImpl : DebateChat.Socket {
         val pusherOptions = PusherOptions().apply { setCluster("eu") }
         val pusher = Pusher("###", pusherOptions)
 
+        if (BuildConfig.DEBUG) connectPusherDebug(pusher) else pusher.connect()
+
+        val channel = pusher.subscribe("my-channel")
+
+        channel.bind("my-event", { channelName, eventName, data ->
+            if (BuildConfig.DEBUG) {
+                Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            }
+            data?.let {
+                val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+                val comment = gson.fromJson(it, Comment::class.java)
+                emitter.onNext(comment)
+            }
+        })
+
+        emitter.setCancellable { pusher.disconnect() }
+    }
+
+    private fun connectPusherDebug(pusher: Pusher) {
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(connectionStateChange: ConnectionStateChange?) {
                 Log.i("PUSHER ConnectionState", connectionStateChange?.currentState?.name)
@@ -25,18 +45,5 @@ class DebateChatSocketImpl : DebateChat.Socket {
                 Log.e("PUSHER onError", "p0: $p0, p1: $p1, p2: ${exception?.message}")
             }
         })
-
-        val channel = pusher.subscribe("my-channel")
-
-        channel.bind("my-event", { channelName, eventName, data ->
-            Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
-            data?.let {
-                val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
-                val comment = gson.fromJson(it, Comment::class.java)
-                emitter.onNext(comment)
-            }
-        })
-
-        emitter.setCancellable { pusher.disconnect() }
     }
 }

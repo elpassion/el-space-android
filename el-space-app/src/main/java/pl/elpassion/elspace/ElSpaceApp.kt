@@ -1,9 +1,12 @@
 package pl.elpassion.elspace
 
 import android.support.multidex.MultiDexApplication
+import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.hub.UnauthenticatedRetrofitProvider
 import pl.elpassion.elspace.hub.login.GoogleHubLogin
@@ -19,6 +22,7 @@ class ElSpaceApp : MultiDexApplication() {
         Fabric.with(this, Crashlytics.Builder().core(createCrashlyticsCore()).build())
         ContextProvider.override = { applicationContext }
         setupHubLoginActivity()
+        setRxJavaErrorHandler()
     }
 
     private fun createCrashlyticsCore() = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
@@ -30,5 +34,13 @@ class ElSpaceApp : MultiDexApplication() {
         GoogleHubLoginActivity.startGoogleSignInActivity = GoogleSingInDI.startGoogleSignInActivity
         GoogleHubLoginActivity.getHubGoogleSignInResult = GoogleSingInDI.getHubGoogleSignInResult
         GoogleHubLoginActivity.logoutFromGoogle = GoogleSingInDI.logoutFromGoogle
+    }
+
+    private fun setRxJavaErrorHandler() {
+        RxJavaPlugins.setErrorHandler { throwable ->
+            if (throwable is UndeliverableException) {
+                Log.e("UndeliverableException", "RxJava threw UndeliverableException")
+            } else throw throwable
+        }
     }
 }

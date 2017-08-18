@@ -38,7 +38,8 @@ class DebateChatActivityTest {
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
-    @JvmField @Rule
+    @JvmField
+    @Rule
     val rule = rule<DebateChatActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
         DebateChat.ServiceProvider.override = { service }
@@ -99,6 +100,18 @@ class DebateChatActivityTest {
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
         startActivity(userId = "2")
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("Message")
+    }
+
+    @Test
+    fun shouldScrollToLastComment() {
+        val comments = mutableListOf<Comment>().apply {
+            for (i in 1..10) {
+                if (i == 10) add(createComment("LastMessage")) else add(createComment())
+            }
+        }
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.fromIterable(comments))
+        startActivity()
+        onText("LastMessage").isDisplayed()
     }
 
     @Test

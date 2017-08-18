@@ -89,6 +89,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     override fun showComment(comment: Comment) {
         comments.add(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
+        debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
     }
 
     override fun showCommentError(exception: Throwable) {

@@ -5,7 +5,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
-import com.pusher.client.channel.SubscriptionEventListener
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionStateChange
 import io.reactivex.Observable
@@ -13,33 +12,30 @@ import io.reactivex.ObservableEmitter
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
-    private val pusherOptions by lazy { PusherOptions().apply { setCluster("eu") } }
-    private val pusher by lazy { Pusher("###", pusherOptions) }
-
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
+        val pusherOptions = PusherOptions().apply { setCluster("eu") }
+        val pusher = Pusher("###", pusherOptions)
 
-        val channelListener = SubscriptionEventListener { channelName, eventName, data ->
-            val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
-            val comment = gson.fromJson(data, Comment::class.java)
-            emitter.onNext(comment)
-            Log.i("onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
-        }
-
-        val connectionListener = object : ConnectionEventListener {
-            override fun onConnectionStateChange(p0: ConnectionStateChange) {
-                Log.i("onConnectionState: ", p0.currentState.name)
+        pusher.connect(object : ConnectionEventListener {
+            override fun onConnectionStateChange(connectionStateChange: ConnectionStateChange?) {
+                Log.i("PUSHER ConnectionState", connectionStateChange?.currentState?.name)
             }
 
-            override fun onError(p0: String, p1: String, exception: Exception) {
-                Log.i("onError", "p0: $p0, p1: $p1, p2: ${exception.message}")
-                emitter.onError(exception)
-                pusher.disconnect()
+            override fun onError(p0: String?, p1: String?, exception: Exception?) {
+                Log.e("PUSHER onError", "p0: $p0, p1: $p1, p2: ${exception?.message}")
             }
-        }
+        })
 
-        pusher.connect(connectionListener)
-        val channel = pusher.subscribe("dashboard_channel_$debateCode")
-        channel.bind("comment_added", channelListener)
+        val channel = pusher.subscribe("my-channel")
+
+        channel.bind("my-event", { channelName, eventName, data ->
+            Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            data?.let {
+                val gson = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+                val comment = gson.fromJson(it, Comment::class.java)
+                emitter.onNext(comment)
+            }
+        })
 
         emitter.setCancellable { pusher.disconnect() }
     }

@@ -8,6 +8,8 @@
     <color name="blackText">#000</color>
     <color name="greyLightText">#B8B8B8</color>
     <color name="greyDarkText">#4A4A4A</color>
+    <color name="greyLight">#E6E6E6</color>
+    <color name="greyBackground">#FAFAFA</color>
     <color name="textUnderline">#e2e2e2</color>
     <color name="hint">#C0C0C0</color>
     <color name="answerPositive">#0098E3</color>

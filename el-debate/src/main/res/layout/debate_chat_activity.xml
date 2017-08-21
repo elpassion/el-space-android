@@ -36,7 +36,8 @@
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/border"
-                app:hintTextAppearance="@style/HintChat">
+                app:hintTextAppearance="@style/HintChat"
+                app:theme="@style/HintChat">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/debateChatSendCommentInputText"

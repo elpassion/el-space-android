@@ -138,9 +138,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowSendCommentButton() {
         startActivity()
-        onId(R.id.debateChatSendCommentButton)
-                .isDisplayed()
-                .hasText(R.string.debate_chat_send_comment_button)
+        onId(R.id.debateChatSendCommentButton).isDisplayed()
     }
 
     @Test

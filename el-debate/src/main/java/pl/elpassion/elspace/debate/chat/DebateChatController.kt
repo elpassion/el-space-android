@@ -4,6 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
+import java.net.SocketException
 
 class DebateChatController(
         private val view: DebateChat.View,
@@ -18,8 +19,15 @@ class DebateChatController(
         service.commentsObservable(token, debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .subscribe(view::showComment, view::showCommentError)
+                .subscribe(view::showComment, this::onCommentsObservableError)
                 .addTo(subscriptions)
+    }
+
+    private fun onCommentsObservableError(exception: Throwable) {
+        when (exception) {
+            is SocketException -> view.showSocketError()
+            else -> view.showCommentError(exception)
+        }
     }
 
     fun sendComment(token: String, message: String) {

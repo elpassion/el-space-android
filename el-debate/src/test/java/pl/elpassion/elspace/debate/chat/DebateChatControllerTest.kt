@@ -11,6 +11,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
+import java.net.SocketException
 
 class DebateChatControllerTest {
 
@@ -80,11 +81,18 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowCommentErrorWhenServiceGetNewCommentFails() {
+    fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
         val exception = RuntimeException()
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(exception))
         onCreate()
         verify(view).showCommentError(exception)
+    }
+
+    @Test
+    fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(SocketException()))
+        onCreate()
+        verify(view).showSocketError()
     }
 
     @Test

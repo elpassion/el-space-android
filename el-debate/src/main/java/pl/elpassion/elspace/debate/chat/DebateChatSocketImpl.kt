@@ -13,13 +13,17 @@ import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import pl.elpassion.BuildConfig
 import java.net.SocketException
+const val API_KEY = "###"
+const val CLUSTER = "eu"
+const val CHANNEL_NAME = "my-channel"
+const val EVENT_NAME = "my-event"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
-        val pusher = Pusher("###", PusherOptions().setCluster("eu"))
+        val pusher = Pusher(API_KEY, PusherOptions().setCluster(CLUSTER))
         connectPusher(pusher, emitter)
-        val channel = pusher.subscribe("my-channel")
+        val channel = pusher.subscribe(CHANNEL_NAME)
         bindToChannel(channel, emitter)
         emitter.setCancellable { pusher.disconnect() }
     }
@@ -42,7 +46,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
     }
 
     private fun bindToChannel(channel: Channel, emitter: ObservableEmitter<Comment>) {
-        channel.bind("my-event", { channelName, eventName, data ->
+        channel.bind(EVENT_NAME, { channelName, eventName, data ->
             when {
                 (BuildConfig.DEBUG) -> Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
                 (data != null) -> emitter.onNext(createComment(data))

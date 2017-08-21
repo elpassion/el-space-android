@@ -104,9 +104,9 @@ class DebateChatControllerTest {
     @Test
     fun shouldReallyCallServiceSendCommentWithGivenDataWhenMessageIsValidOnSendComment() {
         val token = "someOtherToken"
-        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewfirstName", "NewlastName"))
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewFirstName", "NewLastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
-        verify(service).sendComment(CommentToSend("someOtherToken", "someOtherMessage", "NewfirstName", "NewlastName"))
+        verify(service).sendComment(CommentToSend("someOtherToken", "someOtherMessage", "NewFirstName", "NewLastName"))
     }
 
     @Test

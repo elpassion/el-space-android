@@ -24,6 +24,7 @@ import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import java.net.SocketException
 
 class DebateChatActivityTest {
 
@@ -118,7 +119,14 @@ class DebateChatActivityTest {
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        onText(R.string.debate_chat_comment_error)
+        onText(R.string.debate_chat_comment_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(SocketException()))
+        startActivity()
+        onText(R.string.debate_chat_socket_error).isDisplayed()
     }
 
     @Test

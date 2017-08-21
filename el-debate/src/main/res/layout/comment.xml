@@ -4,41 +4,56 @@
     android:id="@+id/commentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="15dp">
-
-    <TextView
-        android:id="@+id/commentInitials"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="15dp"
-        android:padding="5dp"
-        tools:text="QW" />
+    android:layout_marginEnd="15dp"
+    android:layout_marginStart="15dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:paddingBottom="15dp"
+        android:paddingTop="15dp">
 
         <TextView
-            android:id="@+id/commentName"
-            android:layout_width="match_parent"
+            android:id="@+id/commentInitials"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:textColor="@color/greyDarkText"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            tools:text="First Last" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="15dp"
+            android:padding="5dp"
+            tools:text="QW" />
 
-        <TextView
-            android:id="@+id/commentMessage"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/greyDarkText"
-            android:textSize="13sp"
-            tools:text="Message" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/commentName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
+                android:textColor="@color/greyDarkText"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                tools:text="First Last" />
+
+            <TextView
+                android:id="@+id/commentMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/greyDarkText"
+                android:textSize="13sp"
+                tools:text="Message" />
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/greyLight" />
 
 </LinearLayout>

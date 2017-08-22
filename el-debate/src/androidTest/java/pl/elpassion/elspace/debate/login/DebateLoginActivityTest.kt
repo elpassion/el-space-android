@@ -23,15 +23,15 @@ import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 
 class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebatesRepository>()
-    private val apiSubject = SingleSubject.create<AuthToken>()
+    private val apiSubject = SingleSubject.create<LoginCredentials>()
     private val api = mock<DebateLogin.Api>()
 
     @JvmField @Rule
@@ -39,7 +39,7 @@ class DebateLoginActivityTest {
 
     @JvmField @Rule
     val rule = rule<DebateLoginActivity> {
-        whenever(tokenRepo.hasToken(any())).thenReturn(false)
+        whenever(tokenRepo.hasLoginCredentials(any())).thenReturn(false)
         DebatesRepositoryProvider.override = { tokenRepo }
         DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
@@ -152,7 +152,7 @@ class DebateLoginActivityTest {
         stubIntentAndRepo()
         loginToDebate()
         intended(allOf(
-                hasExtra("debateAuthTokenKey", AuthToken("tokenFromRepo", "userIdFromRepo")),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("tokenFromRepo", "userIdFromRepo")),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -160,10 +160,10 @@ class DebateLoginActivityTest {
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
         loginToDebate(debateCode = "12345")
-        apiSubject.onSuccess(AuthToken("authTokenFromApi", "userIdFromApi"))
-        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = AuthToken("authTokenFromApi", "userIdFromApi"))
+        apiSubject.onSuccess(LoginCredentials("authTokenFromApi", "userIdFromApi"))
+        verify(tokenRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("authTokenFromApi", "userIdFromApi"))
         intended(allOf(
-                hasExtra("debateAuthTokenKey", AuthToken("authTokenFromApi", "userIdFromApi")),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("authTokenFromApi", "userIdFromApi")),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -191,8 +191,8 @@ class DebateLoginActivityTest {
 
     private fun stubIntentAndRepo() {
         stubAllIntents()
-        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn(AuthToken("tokenFromRepo", "userIdFromRepo"))
+        whenever(tokenRepo.hasLoginCredentials("12345")).thenReturn(true)
+        whenever(tokenRepo.getLoginCredentialsForDebate("12345")).thenReturn(LoginCredentials("tokenFromRepo", "userIdFromRepo"))
     }
 
     private fun loginToDebate(debateCode: String = "12345") {

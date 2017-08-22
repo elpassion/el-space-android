@@ -26,7 +26,7 @@ class DebateChatControllerTest {
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.never())
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(false)
+        whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
     }
 
@@ -248,7 +248,7 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
-        whenever(debateRepo.areCredentialsMissing("token")).thenReturn(true)
+        whenever(debateRepo.areTokenCredentialsMissing("token")).thenReturn(true)
         controller.sendComment("token", "message")
         verify(view).showCredentialsDialog()
     }

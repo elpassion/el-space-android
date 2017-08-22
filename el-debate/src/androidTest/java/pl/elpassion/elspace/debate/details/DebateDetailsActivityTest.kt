@@ -20,7 +20,7 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.debate.AuthToken
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import java.lang.Thread.sleep
 
@@ -339,7 +339,7 @@ class DebateDetailsActivityTest {
         stubAllIntents()
         onId(R.id.debateChatButton).click()
         Intents.intended(Matchers.allOf(
-                IntentMatchers.hasExtra("debateAuthTokenKey", AuthToken(token, "userId")),
+                IntentMatchers.hasExtra("debateLoginCredentialsKey", LoginCredentials(token, "userId")),
                 IntentMatchers.hasComponent(DebateChatActivity::class.java.name)))
     }
 
@@ -393,7 +393,7 @@ class DebateDetailsActivityTest {
     }
 
     private fun startActivity(token: String = "token") {
-        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, "userId")))
+        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, "userId")))
     }
 
     private fun voteSuccessfully() {

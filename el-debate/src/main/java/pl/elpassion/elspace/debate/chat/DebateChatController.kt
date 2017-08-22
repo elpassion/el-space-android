@@ -32,7 +32,7 @@ class DebateChatController(
 
     fun sendComment(token: String, message: String) {
         when {
-            debateRepo.areCredentialsMissing(token) -> view.showCredentialsDialog()
+            debateRepo.areTokenCredentialsMissing(token) -> view.showCredentialsDialog()
             message.isBlank() -> view.showInvalidInputError()
             message.length > maxMessageLength -> view.showInputOverLimitError()
             else -> serviceSendComment(token, message)

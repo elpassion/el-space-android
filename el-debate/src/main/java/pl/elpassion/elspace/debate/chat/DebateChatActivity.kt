@@ -20,8 +20,8 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
 
@@ -29,11 +29,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private val credentialsDialog by lazy {
         DebateCredentialsDialog(this) { credentials ->
-            controller.onNewCredentials(authToken.token, credentials)
+            controller.onNewCredentials(loginCredentials.authToken, credentials)
         }
     }
 
-    private val authToken by lazy { intent.getSerializableExtra(debateAuthTokenKey) as AuthToken }
+    private val loginCredentials by lazy { intent.getSerializableExtra(debateLoginCredentialsKey) as LoginCredentials }
 
     private val maxMessageLength by lazy { resources.getInteger(R.integer.debate_chat_send_comment_max_message_length) }
 
@@ -52,7 +52,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_chat_activity)
         setupUI()
-        controller.onCreate(authToken.token)
+        controller.onCreate(loginCredentials.authToken)
     }
 
     private fun setupUI() {
@@ -64,15 +64,15 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                controller.sendComment(authToken.token, inputText.text.toString())
+                controller.sendComment(loginCredentials.authToken, inputText.text.toString())
             }
             false
         }
-        debateChatSendCommentButton.setOnClickListener { controller.sendComment(authToken.token, debateChatSendCommentInputText.text.toString()) }
+        debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
     }
 
     private fun createHolderForComment(comment: Comment) = when {
-        comment.userId == authToken.userId -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
+        comment.userId == loginCredentials.userId -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
         else -> R.layout.comment to ::CommentHolder
     }
 
@@ -151,13 +151,13 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     companion object {
-        private val debateAuthTokenKey = "debateAuthTokenKey"
+        private val debateLoginCredentialsKey = "debateLoginCredentialsKey"
 
-        fun start(context: Context, debateToken: AuthToken) = context.startActivity(intent(context, debateToken))
+        fun start(context: Context, loginCredentials: LoginCredentials) = context.startActivity(intent(context, loginCredentials))
 
-        fun intent(context: Context, debateToken: AuthToken) =
+        fun intent(context: Context, loginCredentials: LoginCredentials) =
                 Intent(context, DebateChatActivity::class.java).apply {
-                    putExtra(debateAuthTokenKey, debateToken)
+                    putExtra(debateLoginCredentialsKey, loginCredentials)
                 }
     }
 

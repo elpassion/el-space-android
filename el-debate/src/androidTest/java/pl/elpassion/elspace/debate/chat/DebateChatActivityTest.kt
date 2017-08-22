@@ -21,9 +21,9 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
-import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import java.net.SocketException
 
 class DebateChatActivityTest {
@@ -31,7 +31,7 @@ class DebateChatActivityTest {
     private val debateRepo = mock<DebatesRepository>().apply {
         whenever(getLatestDebateCode()).thenReturn("12345")
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
-        whenever(areCredentialsMissing(any())).thenReturn(false)
+        whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
     private val service = mock<DebateChat.Service>().apply {
@@ -291,7 +291,7 @@ class DebateChatActivityTest {
     }
 
     private fun startActivity(token: String = "debateToken", userId: String = "userId") {
-        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), AuthToken(token, userId)))
+        rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, userId)))
     }
 
     private fun sendComment(message: String = "message") {
@@ -301,7 +301,7 @@ class DebateChatActivityTest {
     }
 
     private fun startActivityAndOpenCredentialsDialog(token: String = "debateToken") {
-        whenever(debateRepo.areCredentialsMissing(any())).thenReturn(true)
+        whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(true)
         startActivity(token)
         sendComment()
     }

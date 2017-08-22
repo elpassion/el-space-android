@@ -8,12 +8,12 @@ import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.debate.chat.TokenCredentials
 
 interface DebatesRepository {
-    fun hasToken(debateCode: String): Boolean
-    fun saveDebateToken(debateCode: String, authToken: AuthToken)
-    fun getTokenForDebate(debateCode: String): AuthToken
+    fun hasLoginCredentials(debateCode: String): Boolean
+    fun saveLoginCredentials(debateCode: String, loginCredentials: LoginCredentials)
+    fun getLoginCredentialsForDebate(debateCode: String): LoginCredentials
     fun saveLatestDebateCode(debateCode: String)
     fun getLatestDebateCode(): String?
-    fun areCredentialsMissing(token: String): Boolean
+    fun areTokenCredentialsMissing(token: String): Boolean
     fun saveTokenCredentials(token: String, credentials: TokenCredentials)
     fun getTokenCredentials(token: String): TokenCredentials
 }
@@ -25,23 +25,23 @@ object DebatesRepositoryProvider : Provider<DebatesRepository>({
 
         private val defaultSharedPreferences = { PreferenceManager.getDefaultSharedPreferences(ContextProvider.get()) }
 
-        private val authTokenRepository = createSharedPrefs<AuthToken>(defaultSharedPreferences, gsonConverterAdapter())
+        private val loginCredentialsRepository = createSharedPrefs<LoginCredentials>(defaultSharedPreferences, gsonConverterAdapter())
 
         private val authTokenCredentialsRepository = createSharedPrefs<TokenCredentials>(defaultSharedPreferences, gsonConverterAdapter())
 
         private val latestDebateCodeRepository = createSharedPrefs<String>(defaultSharedPreferences, gsonConverterAdapter())
 
-        override fun hasToken(debateCode: String) = authTokenRepository.read(debateCode) != null
+        override fun hasLoginCredentials(debateCode: String) = loginCredentialsRepository.read(debateCode) != null
 
-        override fun saveDebateToken(debateCode: String, authToken: AuthToken) = authTokenRepository.write(debateCode, authToken)
+        override fun saveLoginCredentials(debateCode: String, loginCredentials: LoginCredentials) = loginCredentialsRepository.write(debateCode, loginCredentials)
 
-        override fun getTokenForDebate(debateCode: String) = authTokenRepository.read(debateCode)!!
+        override fun getLoginCredentialsForDebate(debateCode: String) = loginCredentialsRepository.read(debateCode)!!
 
         override fun saveLatestDebateCode(debateCode: String) = latestDebateCodeRepository.write(latestDebateCode, debateCode)
 
         override fun getLatestDebateCode() = latestDebateCodeRepository.read(latestDebateCode)
 
-        override fun areCredentialsMissing(token: String): Boolean = authTokenCredentialsRepository.read(token) == null
+        override fun areTokenCredentialsMissing(token: String): Boolean = authTokenCredentialsRepository.read(token) == null
 
         override fun saveTokenCredentials(token: String, credentials: TokenCredentials) = authTokenCredentialsRepository.write(token, credentials)
 

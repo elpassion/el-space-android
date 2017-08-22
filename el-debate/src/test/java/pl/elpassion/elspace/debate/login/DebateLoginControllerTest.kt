@@ -8,8 +8,8 @@ import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.LoginCredentials
 
 class DebateLoginControllerTest {
 
@@ -17,11 +17,11 @@ class DebateLoginControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val loginApi = mock<DebateLogin.Api>()
     private val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()))
-    private val apiSubject = SingleSubject.create<AuthToken>()
+    private val apiSubject = SingleSubject.create<LoginCredentials>()
 
     @Before
     fun setUp() {
-        whenever(debateRepo.hasToken(any())).thenReturn(false)
+        whenever(debateRepo.hasLoginCredentials(any())).thenReturn(false)
         whenever(loginApi.login(any())).thenReturn(apiSubject)
     }
 
@@ -29,14 +29,14 @@ class DebateLoginControllerTest {
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12348")
         returnTokenFromApi("authToken", "userId")
-        verify(debateRepo).saveDebateToken(debateCode = "12348", authToken = AuthToken("authToken", "userId"))
+        verify(debateRepo).saveLoginCredentials(debateCode = "12348", loginCredentials = LoginCredentials("authToken", "userId"))
     }
 
     @Test
     fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12345")
         returnTokenFromApi("realAuthToken", "realUserId")
-        verify(debateRepo).saveDebateToken(debateCode = "12345", authToken = AuthToken("realAuthToken", "realUserId"))
+        verify(debateRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("realAuthToken", "realUserId"))
     }
 
     @Test
@@ -98,7 +98,7 @@ class DebateLoginControllerTest {
     fun shouldOpenDebateScreenOnLoginSuccess() {
         logToDebate()
         returnTokenFromApi("authToken", "userId")
-        verify(view).openDebateScreen(AuthToken("authToken", "userId"))
+        verify(view).openDebateScreen(LoginCredentials("authToken", "userId"))
     }
 
     @Test
@@ -110,7 +110,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenWithAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        val token = AuthToken("token", "userId")
+        val token = LoginCredentials("token", "userId")
         forCodeReturnTokenFromRepo(debateCode = "12345", token = token)
         logToDebate("12345")
         verify(view).openDebateScreen(token)
@@ -118,7 +118,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenWithRealAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        val token = AuthToken("authToken", "realUserId")
+        val token = LoginCredentials("authToken", "realUserId")
         forCodeReturnTokenFromRepo(debateCode = "23456", token = token)
         logToDebate("23456")
         verify(view).openDebateScreen(token)
@@ -126,7 +126,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldShowLoaderOnLoggingWithTokenFromRepository() {
-        forCodeReturnTokenFromRepo(debateCode = "23456", token = AuthToken("authToken", "userId"))
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", "userId"))
         logToDebate("23456")
         verify(view).showLoader()
     }
@@ -145,7 +145,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotShowWrongPinErrorWhenPinHas5Digits() {
-        forCodeReturnTokenFromRepo(debateCode = "23456", token = AuthToken("authToken", "userId"))
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", "userId"))
         logToDebate("23456")
         verify(view, never()).showWrongPinError()
     }
@@ -199,13 +199,13 @@ class DebateLoginControllerTest {
         verify(loginApi).login("12345")
     }
 
-    private fun forCodeReturnTokenFromRepo(debateCode: String, token: AuthToken) {
-        whenever(debateRepo.hasToken(debateCode = debateCode)).thenReturn(true)
-        whenever(debateRepo.getTokenForDebate(debateCode = debateCode)).thenReturn(token)
+    private fun forCodeReturnTokenFromRepo(debateCode: String, token: LoginCredentials) {
+        whenever(debateRepo.hasLoginCredentials(debateCode = debateCode)).thenReturn(true)
+        whenever(debateRepo.getLoginCredentialsForDebate(debateCode = debateCode)).thenReturn(token)
     }
 
     private fun returnTokenFromApi(token: String, userId: String) {
-        apiSubject.onSuccess(AuthToken(token, userId))
+        apiSubject.onSuccess(LoginCredentials(token, userId))
     }
 
     private fun logToDebate(debateCode: String = "12345") {

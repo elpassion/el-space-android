@@ -18,8 +18,8 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.debate.AuthToken
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 
 class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
@@ -70,8 +70,8 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         super.onDestroy()
     }
 
-    override fun openDebateScreen(authToken: AuthToken) {
-        DebateDetailsActivity.start(this, authToken)
+    override fun openDebateScreen(loginCredentials: LoginCredentials) {
+        DebateDetailsActivity.start(this, loginCredentials)
     }
 
     override fun showDebateClosedError() {

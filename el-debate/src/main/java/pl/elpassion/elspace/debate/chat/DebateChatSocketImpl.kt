@@ -16,15 +16,15 @@ import java.net.SocketException
 
 const val API_KEY = "###"
 const val CLUSTER = "eu"
-const val CHANNEL_NAME = "my-channel"
-const val EVENT_NAME = "my-event"
+const val CHANNEL_NAME_PREFIX = "dashboard_channel_"
+const val EVENT_NAME = "comment_added"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
         val pusher = Pusher(API_KEY, PusherOptions().setCluster(CLUSTER))
         connectPusher(pusher, emitter)
-        val channel = pusher.subscribe(CHANNEL_NAME)
+        val channel = pusher.subscribe("$CHANNEL_NAME_PREFIX$debateCode")
         bindToChannel(channel, emitter)
         emitter.setCancellable { pusher.disconnect() }
     }

@@ -63,43 +63,43 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "1")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 1)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FL")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "1")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 1)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "1")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 1)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "2")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 2)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("FL")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "2")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 2)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("First Last")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = "1")))
-        startActivity(userId = "2")
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        startActivity(userId = 2)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("Message")
     }
 
@@ -290,7 +290,7 @@ class DebateChatActivityTest {
         onText(R.string.debate_chat_credentials_confirm).click()
     }
 
-    private fun startActivity(token: String = "debateToken", userId: String = "userId") {
+    private fun startActivity(token: String = "debateToken", userId: Long = 333) {
         rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, userId)))
     }
 

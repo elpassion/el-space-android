@@ -152,7 +152,7 @@ class DebateLoginActivityTest {
         stubIntentAndRepo()
         loginToDebate()
         intended(allOf(
-                hasExtra("debateLoginCredentialsKey", LoginCredentials("tokenFromRepo", "userIdFromRepo")),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("tokenFromRepo", 999)),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -160,10 +160,10 @@ class DebateLoginActivityTest {
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
         loginToDebate(debateCode = "12345")
-        apiSubject.onSuccess(LoginCredentials("authTokenFromApi", "userIdFromApi"))
-        verify(tokenRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("authTokenFromApi", "userIdFromApi"))
+        apiSubject.onSuccess(LoginCredentials("authTokenFromApi", 444))
+        verify(tokenRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("authTokenFromApi", 444))
         intended(allOf(
-                hasExtra("debateLoginCredentialsKey", LoginCredentials("authTokenFromApi", "userIdFromApi")),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("authTokenFromApi", 444)),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -192,7 +192,7 @@ class DebateLoginActivityTest {
     private fun stubIntentAndRepo() {
         stubAllIntents()
         whenever(tokenRepo.hasLoginCredentials("12345")).thenReturn(true)
-        whenever(tokenRepo.getLoginCredentialsForDebate("12345")).thenReturn(LoginCredentials("tokenFromRepo", "userIdFromRepo"))
+        whenever(tokenRepo.getLoginCredentialsForDebate("12345")).thenReturn(LoginCredentials("tokenFromRepo", 999))
     }
 
     private fun loginToDebate(debateCode: String = "12345") {

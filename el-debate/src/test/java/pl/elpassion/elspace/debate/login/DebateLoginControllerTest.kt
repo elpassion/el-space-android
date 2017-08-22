@@ -28,15 +28,15 @@ class DebateLoginControllerTest {
     @Test
     fun shouldSaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12348")
-        returnTokenFromApi("authToken", "userId")
-        verify(debateRepo).saveLoginCredentials(debateCode = "12348", loginCredentials = LoginCredentials("authToken", "userId"))
+        returnTokenFromApi("authToken", 222)
+        verify(debateRepo).saveLoginCredentials(debateCode = "12348", loginCredentials = LoginCredentials("authToken", 222))
     }
 
     @Test
     fun shouldReallySaveReturnedTokenAndDebateCodeOnLogToDebate() {
         logToDebate(debateCode = "12345")
-        returnTokenFromApi("realAuthToken", "realUserId")
-        verify(debateRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("realAuthToken", "realUserId"))
+        returnTokenFromApi("realAuthToken", 333)
+        verify(debateRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("realAuthToken", 333))
     }
 
     @Test
@@ -57,7 +57,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldNotShowErrorIfLoginSucceed() {
         logToDebate()
-        returnTokenFromApi("authToken", "userId")
+        returnTokenFromApi("authToken", 111)
         verify(view, never()).showLoginError(any())
     }
 
@@ -70,7 +70,7 @@ class DebateLoginControllerTest {
     @Test
     fun shouldHideLoaderOnLoginEnd() {
         logToDebate()
-        returnTokenFromApi("authToken", "userId")
+        returnTokenFromApi("authToken", 111)
         verify(view).hideLoader()
     }
 
@@ -97,8 +97,8 @@ class DebateLoginControllerTest {
     @Test
     fun shouldOpenDebateScreenOnLoginSuccess() {
         logToDebate()
-        returnTokenFromApi("authToken", "userId")
-        verify(view).openDebateScreen(LoginCredentials("authToken", "userId"))
+        returnTokenFromApi("authToken", 111)
+        verify(view).openDebateScreen(LoginCredentials("authToken", 111))
     }
 
     @Test
@@ -110,7 +110,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenWithAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        val token = LoginCredentials("token", "userId")
+        val token = LoginCredentials("token", 111)
         forCodeReturnTokenFromRepo(debateCode = "12345", token = token)
         logToDebate("12345")
         verify(view).openDebateScreen(token)
@@ -118,7 +118,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldOpenDebateScreenWithRealAuthTokenFromRepositoryIfAlreadyLoggedInOnLogin() {
-        val token = LoginCredentials("authToken", "realUserId")
+        val token = LoginCredentials("authToken", 777)
         forCodeReturnTokenFromRepo(debateCode = "23456", token = token)
         logToDebate("23456")
         verify(view).openDebateScreen(token)
@@ -126,7 +126,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldShowLoaderOnLoggingWithTokenFromRepository() {
-        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", "userId"))
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", 111))
         logToDebate("23456")
         verify(view).showLoader()
     }
@@ -145,7 +145,7 @@ class DebateLoginControllerTest {
 
     @Test
     fun shouldNotShowWrongPinErrorWhenPinHas5Digits() {
-        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", "userId"))
+        forCodeReturnTokenFromRepo(debateCode = "23456", token = LoginCredentials("authToken", 111))
         logToDebate("23456")
         verify(view, never()).showWrongPinError()
     }
@@ -155,7 +155,7 @@ class DebateLoginControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(subscribeOn, Schedulers.trampoline()))
         controller.onLogToDebate("12345")
-        returnTokenFromApi("authToken", "userId")
+        returnTokenFromApi("authToken", 111)
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -166,7 +166,7 @@ class DebateLoginControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateLoginController(view, debateRepo, loginApi, SchedulersSupplier(Schedulers.trampoline(), observeOn))
         controller.onLogToDebate("12345")
-        returnTokenFromApi("authToken", "userId")
+        returnTokenFromApi("authToken", 111)
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
@@ -204,7 +204,7 @@ class DebateLoginControllerTest {
         whenever(debateRepo.getLoginCredentialsForDebate(debateCode = debateCode)).thenReturn(token)
     }
 
-    private fun returnTokenFromApi(token: String, userId: String) {
+    private fun returnTokenFromApi(token: String, userId: Long) {
         apiSubject.onSuccess(LoginCredentials(token, userId))
     }
 

@@ -16,14 +16,14 @@ interface DebateChat {
 
     interface Api {
         @FormUrlEncoded
-        @POST("comment")
+        @POST("comments")
         fun comment(
                 @Header("Authorization") token: String,
                 @Field("text") message: String,
                 @Field("first_name") firstName: String,
                 @Field("last_name") lastName: String): Completable
 
-        @GET("comment")
+        @GET("comments")
         fun comment(@Header("Authorization") token: String): Single<List<Comment>>
     }
 

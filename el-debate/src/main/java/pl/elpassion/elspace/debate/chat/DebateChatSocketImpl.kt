@@ -3,6 +3,7 @@ package pl.elpassion.elspace.debate.chat
 import android.util.Log
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
 import com.pusher.client.channel.Channel
@@ -17,7 +18,9 @@ import java.net.SocketException
 const val API_KEY = "###"
 const val CLUSTER = "eu"
 const val CHANNEL_NAME_PREFIX = "dashboard_channel_"
+const val CHANNEL_NAME_MULTIPLE_PREFIX = "dashboard_channel_multiple_"
 const val EVENT_NAME = "comment_added"
+const val EVENT_NAME_MULTIPLE = "comments_added"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
@@ -26,6 +29,8 @@ class DebateChatSocketImpl : DebateChat.Socket {
         connectPusher(pusher, emitter)
         val channel = pusher.subscribe("$CHANNEL_NAME_PREFIX$debateCode")
         bindToChannel(channel, emitter)
+        val channelMultiple = pusher.subscribe("$CHANNEL_NAME_MULTIPLE_PREFIX$debateCode")
+        bindToChannelWithMultipleEvents(channelMultiple, emitter)
         emitter.setCancellable { pusher.disconnect() }
     }
 
@@ -44,7 +49,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
 
     private fun bindToChannel(channel: Channel, emitter: ObservableEmitter<Comment>) {
         channel.bind(EVENT_NAME, { channelName, eventName, data ->
-            if (BuildConfig.DEBUG) Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            logEvent(channelName, eventName, data)
             if (data != null) emitter.onNext(createComment(data))
         })
     }
@@ -53,4 +58,23 @@ class DebateChatSocketImpl : DebateChat.Socket {
             GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create().run {
                 fromJson(data, Comment::class.java)
             }
+
+    private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
+        channel.bind(EVENT_NAME_MULTIPLE, { channelName, eventName, data ->
+            logEvent(channelName, eventName, data)
+            if (data != null) {
+                createCommentList(data).forEach(emitter::onNext)
+            }
+        })
+    }
+
+    private fun createCommentList(data: String) =
+            GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create().run {
+                val listType = object : TypeToken<List<Comment>>() {}.type
+                fromJson<List<Comment>>(data, listType)
+            }
+
+    private fun logEvent(channelName: String, eventName: String, data: String) {
+        if (BuildConfig.DEBUG) Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+    }
 }

@@ -22,11 +22,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="15dp"
             android:padding="5dp"
-            tools:text="QW" />
+            tools:text="PP" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -37,7 +39,7 @@
                 android:textColor="@color/greyDarkText"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                tools:text="First Last" />
+                tools:text="Some Name" />
 
             <TextView
                 android:id="@+id/commentMessage"
@@ -45,9 +47,17 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/greyDarkText"
                 android:textSize="13sp"
-                tools:text="Message" />
+                tools:text="Comment" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/commentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/greyLightText"
+            android:textSize="13sp"
+            tools:text="23:48" />
 
     </LinearLayout>
 

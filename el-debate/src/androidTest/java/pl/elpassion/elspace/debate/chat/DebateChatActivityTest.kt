@@ -111,6 +111,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCorrectTimeInCommentView() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(createdAt = 70000000, userId = 1)))
+        startActivity(userId = 2)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("20:26")
+    }
+
+    @Test
     fun shouldScrollToLastComment() {
         val comments = mutableListOf<Comment>().apply {
             for (i in 1..10) {

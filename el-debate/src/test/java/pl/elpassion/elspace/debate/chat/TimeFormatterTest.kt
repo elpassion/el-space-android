@@ -8,19 +8,19 @@ class TimeFormatterTest {
 
     @Test
     fun shouldReturnCorrectTime() {
-        val time = 5000L.getTime(TimeZone.getTimeZone("GMT"))
+        val time = 5000000L.getTime(TimeZone.getTimeZone("GMT"))
         assertTrue(time == "01:23")
     }
 
     @Test
     fun shouldReturnCorrectTimeForDifferentTimeZone() {
-        val time = 5000L.getTime(TimeZone.getTimeZone("Europe/Warsaw"))
+        val time = 5000000L.getTime(TimeZone.getTimeZone("Europe/Warsaw"))
         assertTrue(time == "02:23")
     }
 
     @Test
     fun shouldReturnCorrectTimeForModernTimestamp() {
-        val time = 1503413839L.getTime(TimeZone.getTimeZone("GMT"))
+        val time = 1503413839000L.getTime(TimeZone.getTimeZone("GMT"))
         assertTrue(time == "14:57")
     }
 }

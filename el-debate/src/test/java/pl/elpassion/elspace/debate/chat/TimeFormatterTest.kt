@@ -19,7 +19,7 @@ class TimeFormatterTest {
     }
 
     @Test
-    fun shouldReturnCorrectTimeForGMT() {
+    fun shouldReturnCorrectTimeForModernTimestamp() {
         val time = 1503413839L.getTime(TimeZone.getTimeZone("GMT"))
         assertTrue(time == "14:57")
     }

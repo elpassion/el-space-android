@@ -26,8 +26,10 @@
             tools:text="QW" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -49,6 +51,14 @@
                 tools:text="Message" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/loggedUserCommentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/greyLightText"
+            android:textSize="13sp"
+            tools:text="12:34" />
 
     </LinearLayout>
 

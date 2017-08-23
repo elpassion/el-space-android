@@ -83,6 +83,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCorrectTimeInLoggedUserCommentView() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(createdAt = 4000000, userId = 1)))
+        startActivity(userId = 1)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("02:06")
+    }
+
+    @Test
     fun shouldShowCorrectInitialsInCommentView() {
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userInitials = "NLI", userId = 1)))
         startActivity(userId = 2)

@@ -1,5 +1,6 @@
 *.iml
 .gradle
 /local.properties
+/pusher.properties
 .idea
 build

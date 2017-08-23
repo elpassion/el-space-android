@@ -63,51 +63,51 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userInitials = "LXX", userId = 1)))
         startActivity(userId = 1)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("FL")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LXX")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(name = "LoggedUserName", userId = 1)))
         startActivity(userId = 1)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("First Last")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserName")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(content = "LoggedUserContent", userId = 1)))
         startActivity(userId = 1)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("Message")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserContent")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userInitials = "NLI", userId = 1)))
         startActivity(userId = 2)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("FL")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NLI")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(name = "NotLoggedName", userId = 1)))
         startActivity(userId = 2)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("First Last")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedName")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(content = "NotLoggedContent", userId = 1)))
         startActivity(userId = 2)
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("Message")
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedContent")
     }
 
     @Test
     fun shouldScrollToLastComment() {
         val comments = mutableListOf<Comment>().apply {
             for (i in 1..10) {
-                if (i == 10) add(createComment("LastMessage")) else add(createComment())
+                if (i == 10) add(createComment(content = "LastMessage")) else add(createComment())
             }
         }
         whenever(service.commentsObservable(any(), any())).thenReturn(Observable.fromIterable(comments))

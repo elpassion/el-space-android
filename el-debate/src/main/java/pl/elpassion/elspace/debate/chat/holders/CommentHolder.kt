@@ -14,6 +14,6 @@ class CommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
         itemView.commentInitials.text = item.userInitials
         itemView.commentName.text = item.fullName
         itemView.commentMessage.text = item.content
-        itemView.commentMessage.text = item.createdAt.getTime()
+        itemView.commentTime.text = item.createdAt.getTime()
     }
 }

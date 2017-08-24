@@ -11,6 +11,15 @@ apply plugin: 'kotlin-android-extensions'
 apply from: '../gradle/app-version.gradle'
 apply from: '../gradle/android.gradle'
 
+def pusherPropertiesFile = rootProject.file("pusher.properties")
+def pusherProperties = new Properties()
+pusherProperties.load(new FileInputStream(pusherPropertiesFile))
+android {
+    buildTypes.each {
+        it.buildConfigField 'String', 'PUSHER_API_KEY', pusherProperties['PusherApiKey']
+    }
+}
+
 dependencies {
     api group: 'com.android.support', name: 'gridlayout-v7', version: support_version
     api group: 'com.android.support', name: 'cardview-v7', version: support_version

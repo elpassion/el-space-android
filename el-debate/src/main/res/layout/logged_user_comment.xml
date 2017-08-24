@@ -18,12 +18,15 @@
 
         <TextView
             android:id="@+id/loggedUserCommentInitials"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginEnd="15dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
             android:padding="5dp"
-            tools:text="QW" />
+            android:textColor="@color/greyDarkText"
+            android:textSize="13sp"
+            tools:text="LL" />
 
         <LinearLayout
             android:layout_width="0dp"

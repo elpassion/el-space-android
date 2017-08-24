@@ -63,7 +63,7 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userInitials = "LXX", userId = 1)))
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(createComment(userInitials = "LXX", userId = 1), createComment(userInitials = "LXX", userId = 2)))
         startActivity(userId = 1)
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LXX")
     }

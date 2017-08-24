@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/border"
+                android:background="@drawable/rectangle_with_border"
                 app:hintTextAppearance="@style/HintChat"
                 app:theme="@style/HintChat">
 

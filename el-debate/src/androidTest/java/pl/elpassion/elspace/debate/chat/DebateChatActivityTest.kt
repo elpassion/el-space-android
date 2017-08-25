@@ -12,6 +12,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Assert
@@ -129,15 +130,15 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        commentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_comment_error).isDisplayed()
     }
 
     @Test
     fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
+        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(SocketException()))
         startActivity()
-        commentsSubject.onError(SocketException())
         onText(R.string.debate_chat_socket_error).isDisplayed()
     }
 

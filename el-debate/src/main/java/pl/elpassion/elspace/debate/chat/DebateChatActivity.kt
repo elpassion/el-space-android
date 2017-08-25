@@ -119,11 +119,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun showErrorInInput(@StringRes message: Int) {
-        debateChatSendCommentInputLayout.error = getString(message)
+        debateChatSendCommentInputText.error = getString(message)
     }
 
     private fun showErrorInInput(message: String) {
-        debateChatSendCommentInputLayout.error = message
+        debateChatSendCommentInputText.error = message
     }
 
     override fun showCredentialsDialog() {

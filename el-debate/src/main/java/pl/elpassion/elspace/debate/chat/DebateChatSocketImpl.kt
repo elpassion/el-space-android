@@ -16,7 +16,7 @@ import pl.elpassion.BuildConfig
 import java.net.SocketException
 
 const val API_KEY = BuildConfig.PUSHER_API_KEY
-const val CLUSTER = "eu"
+const val CLUSTER = "mt1"
 const val CHANNEL_NAME_PREFIX = "dashboard_channel_"
 const val CHANNEL_NAME_MULTIPLE_PREFIX = "dashboard_channel_multiple_"
 const val EVENT_NAME = "comment_added"

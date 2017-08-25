@@ -1,10 +1,10 @@
 package pl.elpassion.elspace.debate.chat
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
+import io.reactivex.subjects.PublishSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
@@ -18,12 +18,13 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
+    private val commentsSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.never())
+        whenever(service.commentsObservable(any(), any())).thenReturn(commentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
@@ -53,17 +54,17 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowCommentsReturnedFromServiceCommentsObservable() {
         val comment = createComment()
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.just(comment))
         onCreate()
+        commentsSubject.onNext(comment)
         verify(view).showComment(comment)
     }
 
     @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceCommentsObservable() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate("token")
+        commentsSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         subscribeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -71,10 +72,10 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldUseGivenSchedulerToObserveOnWhenServiceCommentsObservable() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(RuntimeException()))
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate("token")
+        commentsSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         observeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -83,15 +84,15 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
         val exception = RuntimeException()
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(exception))
+        commentsSubject.onError(exception)
         onCreate()
         verify(view).showCommentError(exception)
     }
 
     @Test
     fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(Observable.error(SocketException()))
         onCreate()
+        commentsSubject.onError(SocketException())
         verify(view).showSocketError()
     }
 

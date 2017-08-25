@@ -238,9 +238,9 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowSendCommentSuccessOnSuccessfullySentComment() {
+    fun shouldClearSendCommentInputOnSuccessfullySentComment() {
         startActivity()
-        sendComment()
+        sendComment("Message")
         sendCommentSubject.onComplete()
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }

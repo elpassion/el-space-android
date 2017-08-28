@@ -11,6 +11,6 @@ fun Long.getTime(myTimeZone: TimeZone = TimeZone.getDefault()): String {
     return Formatter().format("%tR", calendar).toString()
 }
 
-fun String.debug() {
+fun String.printIfDebug() {
     if (BuildConfig.DEBUG) println(this)
 }

@@ -106,7 +106,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showSendCommentError(exception: Throwable) {
         showErrorInInput(R.string.debate_chat_send_comment_error)
-        exception.message?.debug()
+        exception.message?.printIfDebug()
     }
 
     override fun showInvalidInputError() {

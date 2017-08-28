@@ -142,10 +142,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         credentialsDialog.showLastNameError()
     }
 
-    override fun closeScreen() {
-        finish()
-    }
-
     override fun onDestroy() {
         controller.onDestroy()
         super.onDestroy()

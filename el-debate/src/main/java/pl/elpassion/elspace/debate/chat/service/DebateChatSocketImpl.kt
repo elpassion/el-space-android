@@ -26,6 +26,9 @@ const val EVENT_NAME_MULTIPLE = "comments_added"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
+    private val gson by lazy { GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create() }
+    private val commentListType by lazy { object : TypeToken<List<Comment>>() {}.type }
+
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
         val pusher = Pusher(API_KEY, PusherOptions().setCluster(CLUSTER))
         connectPusher(pusher, emitter)
@@ -56,10 +59,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
         })
     }
 
-    private fun createComment(data: String) =
-            GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create().run {
-                fromJson(data, Comment::class.java)
-            }
+    private fun createComment(data: String) = gson.fromJson(data, Comment::class.java)
 
     private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
         channel.bind(EVENT_NAME_MULTIPLE, { channelName, eventName, data ->
@@ -70,9 +70,5 @@ class DebateChatSocketImpl : DebateChat.Socket {
         })
     }
 
-    private fun createCommentList(data: String) =
-            GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create().run {
-                val listType = object : TypeToken<List<Comment>>() {}.type
-                fromJson<List<Comment>>(data, listType)
-            }
+    private fun createCommentList(data: String): List<Comment> = gson.fromJson<List<Comment>>(data, commentListType)
 }

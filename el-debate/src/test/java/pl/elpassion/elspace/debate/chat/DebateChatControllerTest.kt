@@ -242,12 +242,6 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCloseScreenOnCancel() {
-        controller.onCancel()
-        verify(view).closeScreen()
-    }
-
-    @Test
     fun shouldShowCredentialDialogOnSendCommentIfCredentialsAreMissing() {
         whenever(debateRepo.areTokenCredentialsMissing("token")).thenReturn(true)
         controller.sendComment("token", "message")

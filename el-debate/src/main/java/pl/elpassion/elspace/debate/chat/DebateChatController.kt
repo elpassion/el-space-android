@@ -55,10 +55,6 @@ class DebateChatController(
         subscriptions.dispose()
     }
 
-    fun onCancel() {
-        view.closeScreen()
-    }
-
     fun onNewCredentials(token: String, credentials: TokenCredentials) {
         if (credentials.lastName.isBlank()) {
             view.showLastNameError()

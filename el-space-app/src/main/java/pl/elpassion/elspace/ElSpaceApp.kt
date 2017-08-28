@@ -40,7 +40,9 @@ class ElSpaceApp : MultiDexApplication() {
         RxJavaPlugins.setErrorHandler { throwable ->
             if (throwable is UndeliverableException) {
                 Log.e("UndeliverableException", "RxJava threw UndeliverableException")
-            } else throw throwable
+            } else {
+                throw throwable
+            }
         }
     }
 }

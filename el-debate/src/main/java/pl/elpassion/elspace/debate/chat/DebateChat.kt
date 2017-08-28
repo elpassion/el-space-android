@@ -5,6 +5,8 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.debate.chat.model.Comment
+import pl.elpassion.elspace.debate.chat.model.CommentToSend
 import retrofit2.http.*
 
 interface DebateChat {

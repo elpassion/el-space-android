@@ -13,6 +13,7 @@ import com.pusher.client.connection.ConnectionStateChange
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import pl.elpassion.BuildConfig
+import pl.elpassion.elspace.debate.chat.model.Comment
 import java.net.SocketException
 
 const val API_KEY = BuildConfig.PUSHER_API_KEY

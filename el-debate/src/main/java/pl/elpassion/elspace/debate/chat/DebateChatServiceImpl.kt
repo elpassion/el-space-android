@@ -2,6 +2,8 @@ package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.Completable
 import io.reactivex.Observable
+import pl.elpassion.elspace.debate.chat.model.Comment
+import pl.elpassion.elspace.debate.chat.model.CommentToSend
 
 class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: DebateChat.Socket) : DebateChat.Service {
 

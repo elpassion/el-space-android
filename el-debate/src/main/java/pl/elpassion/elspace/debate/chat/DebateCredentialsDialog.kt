@@ -5,6 +5,7 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import kotlinx.android.synthetic.main.credentials_dialog_layout.view.*
 import pl.elpassion.R
+import pl.elpassion.elspace.debate.chat.model.TokenCredentials
 
 class DebateCredentialsDialog(private val context: Context, private val onNewCredentials: (TokenCredentials) -> Unit) {
 

@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.chat
+package pl.elpassion.elspace.debate.chat.model
 
 import java.io.Serializable
 

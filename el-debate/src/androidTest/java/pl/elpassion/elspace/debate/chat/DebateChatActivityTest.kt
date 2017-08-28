@@ -25,6 +25,9 @@ import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
+import pl.elpassion.elspace.debate.chat.model.Comment
+import pl.elpassion.elspace.debate.chat.model.CommentToSend
+import pl.elpassion.elspace.debate.chat.model.TokenCredentials
 import java.net.SocketException
 
 class DebateChatActivityTest {

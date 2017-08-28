@@ -5,8 +5,8 @@ import android.graphics.PorterDuff
 import android.view.View
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.logged_user_comment.view.*
-import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.getTime
+import pl.elpassion.elspace.debate.chat.model.Comment
 
 class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
 

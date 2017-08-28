@@ -1,6 +1,5 @@
 package pl.elpassion.elspace.debate.chat.service
 
-import android.util.Log
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -15,6 +14,7 @@ import io.reactivex.ObservableEmitter
 import pl.elpassion.BuildConfig
 import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.DebateChat
+import pl.elpassion.elspace.debate.chat.debug
 import java.net.SocketException
 
 const val API_KEY = BuildConfig.PUSHER_API_KEY
@@ -39,19 +39,19 @@ class DebateChatSocketImpl : DebateChat.Socket {
     private fun connectPusher(pusher: Pusher, emitter: ObservableEmitter<Comment>) {
         pusher.connect(object : ConnectionEventListener {
             override fun onConnectionStateChange(connectionStateChange: ConnectionStateChange?) {
-                if (BuildConfig.DEBUG) Log.i("PUSHER ConnectionState", connectionStateChange?.currentState?.name)
+                "PUSHER ConnectionState ${connectionStateChange?.currentState?.name}".debug()
                 if (connectionStateChange?.currentState == ConnectionState.DISCONNECTED) emitter.onError(SocketException())
             }
 
             override fun onError(p0: String?, p1: String?, exception: Exception?) {
-                if (BuildConfig.DEBUG) Log.e("PUSHER onError", "p0: $p0, p1: $p1, p2: ${exception?.message}")
+                "PUSHER onError, p0: $p0, p1: $p1, p2: ${exception?.message}".debug()
             }
         })
     }
 
     private fun bindToChannel(channel: Channel, emitter: ObservableEmitter<Comment>) {
         channel.bind(EVENT_NAME, { channelName, eventName, data ->
-            logEvent(channelName, eventName, data)
+            "PUSHER onEvent, channelName: $channelName, eventName: $eventName, data: $data".debug()
             if (data != null) emitter.onNext(createComment(data))
         })
     }
@@ -63,7 +63,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
 
     private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
         channel.bind(EVENT_NAME_MULTIPLE, { channelName, eventName, data ->
-            logEvent(channelName, eventName, data)
+            "PUSHER onEvent, channelName: $channelName, eventName: $eventName, data: $data".debug()
             if (data != null) {
                 createCommentList(data).forEach(emitter::onNext)
             }
@@ -75,8 +75,4 @@ class DebateChatSocketImpl : DebateChat.Socket {
                 val listType = object : TypeToken<List<Comment>>() {}.type
                 fromJson<List<Comment>>(data, listType)
             }
-
-    private fun logEvent(channelName: String, eventName: String, data: String) {
-        if (BuildConfig.DEBUG) Log.i("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
-    }
 }

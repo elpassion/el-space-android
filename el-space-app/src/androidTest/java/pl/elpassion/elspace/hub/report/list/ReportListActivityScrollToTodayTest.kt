@@ -1,12 +1,10 @@
 package pl.elpassion.elspace.hub.report.list
 
-import android.support.test.InstrumentationRegistry
 import com.elpassion.android.commons.espresso.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.elspace.R
@@ -15,7 +13,6 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 
 class ReportListActivityScrollToTodayTest {
 
@@ -24,7 +21,6 @@ class ReportListActivityScrollToTodayTest {
     @JvmField @Rule
     val rule = rule<ReportListActivity>(autoStart = false)
 
-    @Ignore
     @Test
     fun shouldScrollToTodayOnTodayClickWhenNoReports() {
         stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 31)
@@ -33,7 +29,6 @@ class ReportListActivityScrollToTodayTest {
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
-    @Ignore
     @Test
     fun shouldReallyScrollToTodayOnTodayClickWhenNoReports() {
         stubServiceAndStart(reports = emptyList(), year = 2017, month = 1, day = 1)
@@ -43,7 +38,6 @@ class ReportListActivityScrollToTodayTest {
         onId(R.id.reportsContainer).doesNotHaveChildWithText("31 Tue")
     }
 
-    @Ignore
     @Test
     fun shouldScrollToTodayOnTodayClickWhenOneReportIsAdded() {
         stubServiceAndStart(
@@ -54,12 +48,11 @@ class ReportListActivityScrollToTodayTest {
         onId(R.id.reportsContainer).hasChildWithText("31 Tue")
     }
 
-
     private fun stubServiceAndStart(reports: List<Report>, year: Int = 2016, month: Int = 6, day: Int = 1) {
         val date = getDateString(year, month, day)
         stubCurrentTime(date)
         whenever(service.getReports(any())).thenReturn(Observable.just(reports))
         ReportList.ServiceProvider.override = { service }
-        rule.startActivity(ReportAddActivity.intent(InstrumentationRegistry.getTargetContext(), date))
+        rule.startActivity()
     }
 }

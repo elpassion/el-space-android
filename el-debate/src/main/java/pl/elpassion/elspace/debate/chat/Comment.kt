@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.chat.model
+package pl.elpassion.elspace.debate.chat
 
 data class Comment(val userInitials: String,
                    val userInitialsBackgroundColor: String,

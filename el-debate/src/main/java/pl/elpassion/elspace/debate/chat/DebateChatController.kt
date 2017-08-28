@@ -4,8 +4,6 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
-import pl.elpassion.elspace.debate.chat.model.CommentToSend
-import pl.elpassion.elspace.debate.chat.model.TokenCredentials
 import java.net.SocketException
 
 class DebateChatController(

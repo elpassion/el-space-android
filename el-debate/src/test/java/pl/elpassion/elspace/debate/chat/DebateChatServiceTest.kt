@@ -10,7 +10,6 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
-import pl.elpassion.elspace.debate.chat.model.Comment
 import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 

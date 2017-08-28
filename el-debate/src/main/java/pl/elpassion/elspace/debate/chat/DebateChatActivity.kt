@@ -24,7 +24,6 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
-import pl.elpassion.elspace.debate.chat.model.Comment
 
 class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 

@@ -11,9 +11,6 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
-import pl.elpassion.elspace.debate.chat.model.Comment
-import pl.elpassion.elspace.debate.chat.model.CommentToSend
-import pl.elpassion.elspace.debate.chat.model.TokenCredentials
 import java.net.SocketException
 
 class DebateChatControllerTest {

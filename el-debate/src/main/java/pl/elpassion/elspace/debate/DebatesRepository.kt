@@ -5,7 +5,7 @@ import com.elpassion.android.commons.sharedpreferences.createSharedPrefs
 import com.elpassion.sharedpreferences.gsonadapter.gsonConverterAdapter
 import pl.elpassion.elspace.common.ContextProvider
 import pl.elpassion.elspace.common.Provider
-import pl.elpassion.elspace.debate.chat.model.TokenCredentials
+import pl.elpassion.elspace.debate.chat.TokenCredentials
 
 interface DebatesRepository {
     fun hasLoginCredentials(debateCode: String): Boolean

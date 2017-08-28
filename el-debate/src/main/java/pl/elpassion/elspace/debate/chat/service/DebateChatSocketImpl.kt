@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.chat
+package pl.elpassion.elspace.debate.chat.service
 
 import android.util.Log
 import com.google.gson.FieldNamingPolicy
@@ -13,6 +13,7 @@ import com.pusher.client.connection.ConnectionStateChange
 import io.reactivex.Observable
 import io.reactivex.ObservableEmitter
 import pl.elpassion.BuildConfig
+import pl.elpassion.elspace.debate.chat.DebateChat
 import pl.elpassion.elspace.debate.chat.model.Comment
 import java.net.SocketException
 

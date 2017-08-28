@@ -1,7 +1,8 @@
-package pl.elpassion.elspace.debate.chat
+package pl.elpassion.elspace.debate.chat.service
 
 import io.reactivex.Completable
 import io.reactivex.Observable
+import pl.elpassion.elspace.debate.chat.DebateChat
 import pl.elpassion.elspace.debate.chat.model.Comment
 import pl.elpassion.elspace.debate.chat.model.CommentToSend
 

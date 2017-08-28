@@ -7,6 +7,8 @@ import pl.elpassion.elspace.api.DebateRetrofitProvider
 import pl.elpassion.elspace.common.Provider
 import pl.elpassion.elspace.debate.chat.model.Comment
 import pl.elpassion.elspace.debate.chat.model.CommentToSend
+import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
+import pl.elpassion.elspace.debate.chat.service.DebateChatSocketImpl
 import retrofit2.http.*
 
 interface DebateChat {

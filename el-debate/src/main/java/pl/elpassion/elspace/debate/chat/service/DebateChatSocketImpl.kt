@@ -64,9 +64,7 @@ class DebateChatSocketImpl : DebateChat.Socket {
     private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
         channel.bind(EVENT_NAME_MULTIPLE, { channelName, eventName, data ->
             "PUSHER onEvent, channelName: $channelName, eventName: $eventName, data: $data".printIfDebug()
-            if (data != null) {
-                createCommentList(data).forEach(emitter::onNext)
-            }
+            if (data != null) createCommentList(data).forEach(emitter::onNext)
         })
     }
 

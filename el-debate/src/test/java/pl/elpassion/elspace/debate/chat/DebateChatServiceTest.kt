@@ -44,6 +44,17 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldSortCommentsReceivedFromApiComment() {
+        val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "Third", createdAt = 3), createComment(name = "First", createdAt = 1), createComment(name = "Second", createdAt = 2))
+        val testObserver = debateChatServiceImpl
+                .commentsObservable("token", "code")
+                .test()
+        commentsFromApiSubject.onSuccess(commentsFromApi)
+        val sortedComments = commentsFromApi.sortedBy { it.createdAt }
+        testObserver.assertValues(*sortedComments.toTypedArray())
+    }
+
+    @Test
     fun shouldReturnErrorReceivedFromApiComment() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl

@@ -100,7 +100,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_socket_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
-    override fun showSendCommentSuccess() {
+    override fun clearSendCommentInput() {
         debateChatSendCommentInputText.text.clear()
     }
 

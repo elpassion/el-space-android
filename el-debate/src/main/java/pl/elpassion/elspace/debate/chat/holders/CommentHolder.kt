@@ -11,10 +11,12 @@ import pl.elpassion.elspace.debate.chat.getTime
 class CommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
 
     override fun bind(item: Comment) {
-        itemView.commentInitials.background.setColorFilter(Color.parseColor(item.userInitialsBackgroundColor), PorterDuff.Mode.SRC_IN)
-        itemView.commentInitials.text = item.userInitials
-        itemView.commentName.text = item.fullName
-        itemView.commentMessage.text = item.content
-        itemView.commentTime.text = item.createdAt.getTime()
+        itemView.run {
+            commentInitials.background.setColorFilter(Color.parseColor(item.userInitialsBackgroundColor), PorterDuff.Mode.SRC_IN)
+            commentInitials.text = item.userInitials
+            commentName.text = item.fullName
+            commentMessage.text = item.content
+            commentTime.text = item.createdAt.getTime()
+        }
     }
 }

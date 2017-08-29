@@ -220,9 +220,10 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
+        sendCommentSubject.onError(RuntimeException())
         startActivity()
         sendComment()
-        sendCommentSubject.onError(RuntimeException())
+        Thread.sleep(200)
         onText(R.string.debate_chat_send_comment_error).isDisplayed()
     }
 
@@ -240,19 +241,6 @@ class DebateChatActivityTest {
         sendComment("Message")
         sendCommentSubject.onComplete()
         onId(R.id.debateChatSendCommentInputText).hasText("")
-    }
-
-    @Test
-    fun shouldClearSendCommentInputErrorOnSuccessfullySentComment() {
-        val completableSubject = CompletableSubject.create()
-        whenever(service.sendComment(any())).thenReturn(sendCommentSubject, completableSubject)
-        startActivity()
-        sendComment()
-        sendCommentSubject.onError(RuntimeException())
-        sendComment()
-        completableSubject.onComplete()
-        Thread.sleep(300)
-        onText(R.string.debate_chat_send_comment_error).doesNotExist()
     }
 
     @Test

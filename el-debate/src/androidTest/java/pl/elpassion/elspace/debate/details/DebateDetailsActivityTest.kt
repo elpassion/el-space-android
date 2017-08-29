@@ -20,7 +20,8 @@ import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createDebateData
 import pl.elpassion.elspace.dabate.details.createHttpException
-import pl.elpassion.elspace.debate.comment.DebateCommentActivity
+import pl.elpassion.elspace.debate.LoginCredentials
+import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import java.lang.Thread.sleep
 
 class DebateDetailsActivityTest {
@@ -87,10 +88,10 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowCommentButton() {
+    fun shouldShowChatButton() {
         startActivity()
-        onId(R.id.debateCommentButton)
-                .hasText(R.string.debate_details_button_comment)
+        onId(R.id.debateChatButton)
+                .hasText(R.string.debate_details_button_chat)
                 .isDisplayed()
                 .isEnabled()
     }
@@ -255,8 +256,8 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_title).isDisplayed()
-        onText(R.string.debate_vote_slow_down_info).isDisplayed()
+        onText(R.string.debate_details_vote_slow_down_title).isDisplayed()
+        onText(R.string.debate_details_vote_slow_down_info).isDisplayed()
     }
 
     @Test
@@ -264,9 +265,9 @@ class DebateDetailsActivityTest {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNegativeAnswerButton).click()
         sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_vote_slow_down_OK_button).click()
-        onText(R.string.debate_vote_slow_down_title).doesNotExist()
-        onText(R.string.debate_vote_slow_down_info).doesNotExist()
+        onText(R.string.debate_details_vote_slow_down_OK_button).click()
+        onText(R.string.debate_details_vote_slow_down_title).doesNotExist()
+        onText(R.string.debate_details_vote_slow_down_info).doesNotExist()
     }
 
     @Test
@@ -287,7 +288,7 @@ class DebateDetailsActivityTest {
 
     @Test
     fun shouldUseTokenPassedWithIntent() {
-        startActivity(token = "newToken")
+        startActivity("newToken")
         verify(apiMock).getDebateDetails("newToken")
     }
 
@@ -324,22 +325,22 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldOpenCommentScreenWhenCommentButtonClicked() {
+    fun shouldOpenChatScreenWhenChatButtonClicked() {
         startActivityAndSuccessfullyReturnDebateDetails()
         stubAllIntents()
-        onId(R.id.debateCommentButton).click()
-        checkIntent(DebateCommentActivity::class.java)
+        onId(R.id.debateChatButton).click()
+        checkIntent(DebateChatActivity::class.java)
     }
 
     @Test
-    fun shouldOpenCommentScreenWithGivenToken() {
+    fun shouldOpenChatScreenWithGivenToken() {
         val token = "someToken"
         startActivityAndSuccessfullyReturnDebateDetails(token = token)
         stubAllIntents()
-        onId(R.id.debateCommentButton).click()
+        onId(R.id.debateChatButton).click()
         Intents.intended(Matchers.allOf(
-                IntentMatchers.hasExtra("debateAuthTokenKey", token),
-                IntentMatchers.hasComponent(DebateCommentActivity::class.java.name)))
+                IntentMatchers.hasExtra("debateLoginCredentialsKey", LoginCredentials(token, 111)),
+                IntentMatchers.hasComponent(DebateChatActivity::class.java.name)))
     }
 
     @Test
@@ -392,7 +393,7 @@ class DebateDetailsActivityTest {
     }
 
     private fun startActivity(token: String = "token") {
-        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), token))
+        rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, 111)))
     }
 
     private fun voteSuccessfully() {

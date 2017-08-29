@@ -23,10 +23,9 @@
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeDebate" />
         <activity
-            android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppThemeDebate_Dialog"
-            android:windowSoftInputMode="stateVisible" />
+            android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
+            android:theme="@style/AppThemeDebate"
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.comment
+package pl.elpassion.elspace.debate.chat
 
 import android.content.Context
 import android.support.v7.app.AlertDialog
@@ -28,11 +28,11 @@ class DebateCredentialsDialog(private val context: Context, private val onNewCre
     fun hide() = credentialsDialog.hide()
 
     fun showFirstNameError() {
-        credentialsDialogView.debateCredentialsFirstNameLayout.error = context.getString(R.string.debate_comment_credentials_first_name_incorrect)
+        credentialsDialogView.debateCredentialsFirstNameLayout.error = context.getString(R.string.debate_chat_credentials_first_name_incorrect)
     }
 
     fun showLastNameError() {
-        credentialsDialogView.debateCredentialsLastNameLayout.error = context.getString(R.string.debate_comment_credentials_last_name_incorrect)
+        credentialsDialogView.debateCredentialsLastNameLayout.error = context.getString(R.string.debate_chat_credentials_last_name_incorrect)
     }
 
 }

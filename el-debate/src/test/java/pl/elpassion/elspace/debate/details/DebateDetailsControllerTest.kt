@@ -217,9 +217,9 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldOpenCommentScreenOnComment() {
-        createController().onComment()
-        verify(view).openCommentScreen()
+    fun shouldOpenChatScreenOnChat() {
+        createController().onChat()
+        verify(view).openChatScreen()
     }
 
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),

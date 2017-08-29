@@ -20,7 +20,8 @@ import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.debate.comment.DebateCommentActivity
+import pl.elpassion.elspace.debate.LoginCredentials
+import pl.elpassion.elspace.debate.chat.DebateChatActivity
 
 
 class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
@@ -29,7 +30,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         DebateDetailsController(DebateDetails.ApiProvider.get(), this, SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
-    private val token by lazy { intent.getStringExtra(debateAuthTokenKey) }
+    private val loginCredentials by lazy { intent.getSerializableExtra(debateLoginCredentialsKey) as LoginCredentials }
 
     private val answersAnimators by lazy { AnswersAnimators(debateDetailsCoordinator, this) }
 
@@ -38,8 +39,8 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
         setContentView(R.layout.debate_details_activity)
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateCommentButton.setOnClickListener { controller.onComment() }
-        controller.onCreate(token)
+        debateChatButton.setOnClickListener { controller.onChat() }
+        controller.onCreate(loginCredentials.authToken)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -56,13 +57,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
                 answers.neutral.id -> answersAnimators.startNeutralAnswerAnimation()
             }
             debatePositiveAnswerButton.setOnClickListener {
-                controller.onVote(token, answers.positive)
+                controller.onVote(loginCredentials.authToken, answers.positive)
             }
             debateNegativeAnswerButton.setOnClickListener {
-                controller.onVote(token, answers.negative)
+                controller.onVote(loginCredentials.authToken, answers.negative)
             }
             debateNeutralAnswerButton.setOnClickListener {
-                controller.onVote(token, answers.neutral)
+                controller.onVote(loginCredentials.authToken, answers.neutral)
             }
         }
     }
@@ -77,7 +78,7 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     override fun showDebateDetailsError(exception: Throwable) {
         createSnackbar(R.string.debate_details_error)
-                .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(token) })
+                .setAction(R.string.debate_details_error_refresh, { controller.onDebateDetailsRefresh(loginCredentials.authToken) })
                 .show()
     }
 
@@ -126,15 +127,15 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
     private fun createSnackbar(textId: Int, length: Int = Snackbar.LENGTH_INDEFINITE) =
             Snackbar.make(debateDetailsCoordinator, textId, length)
 
-    override fun openCommentScreen() {
-        DebateCommentActivity.start(this, token)
+    override fun openChatScreen() {
+        DebateChatActivity.start(this, loginCredentials)
     }
 
     override fun showSlowDownInformation() {
         AlertDialog.Builder(this)
-                .setTitle(R.string.debate_vote_slow_down_title)
-                .setMessage(R.string.debate_vote_slow_down_info)
-                .setPositiveButton(R.string.debate_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
+                .setTitle(R.string.debate_details_vote_slow_down_title)
+                .setMessage(R.string.debate_details_vote_slow_down_info)
+                .setPositiveButton(R.string.debate_details_vote_slow_down_OK_button, { dialog, _ -> dialog.dismiss() })
                 .create()
                 .show()
     }
@@ -146,13 +147,13 @@ class DebateDetailsActivity : AppCompatActivity(), DebateDetails.View {
 
     companion object {
 
-        private val debateAuthTokenKey = "debateAuthTokenKey"
+        private val debateLoginCredentialsKey = "debateLoginCredentialsKey"
 
-        fun start(context: Context, debateToken: String) = context.startActivity(intent(context, debateToken))
+        fun start(context: Context, loginCredentials: LoginCredentials) = context.startActivity(intent(context, loginCredentials))
 
-        fun intent(context: Context, debateToken: String) =
+        fun intent(context: Context, loginCredentials: LoginCredentials) =
                 Intent(context, DebateDetailsActivity::class.java).apply {
-                    putExtra(debateAuthTokenKey, debateToken)
+                    putExtra(debateLoginCredentialsKey, loginCredentials)
                 }
     }
 

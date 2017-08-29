@@ -47,12 +47,12 @@ class DebateLoginController(
     }
 
     private fun getAuthTokenObservable(debateCode: String) =
-            if (debateRepo.hasToken(debateCode)) {
-                Single.just(debateRepo.getTokenForDebate(debateCode))
+            if (debateRepo.hasLoginCredentials(debateCode)) {
+                Single.just(debateRepo.getLoginCredentialsForDebate(debateCode))
             } else {
                 loginApi.login(debateCode)
-                        .map { it.authToken }
-                        .doOnSuccess { debateRepo.saveDebateToken(debateCode = debateCode, authToken = it) }
+                        .map { it }
+                        .doOnSuccess { debateRepo.saveLoginCredentials(debateCode = debateCode, loginCredentials = it) }
             }
 
     fun onDestroy() {

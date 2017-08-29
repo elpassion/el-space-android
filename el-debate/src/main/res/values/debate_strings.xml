@@ -24,7 +24,6 @@
     <string name="debate_chat_send_comment_button">Send</string>
     <string name="debate_chat_send_comment_success">Comment sent!</string>
     <string name="debate_chat_send_comment_error">Sending your comment failed, please try again</string>
-    <string name="debate_chat_send_comment_invalid_input_error">Invalid input!</string>
     <integer name="debate_chat_send_comment_max_message_length">100</integer>
     <string name="debate_chat_send_comment_input_over_limit_error">Too many characters! Input must have maximum %d characters.</string>
     <string name="debate_chat_credentials_first_name_hint">First name</string>

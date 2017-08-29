@@ -111,21 +111,15 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldNotShowInvalidInputErrorWhenMessageIsValidOnSendComment() {
-        sendComment()
-        verify(view, never()).showInvalidInputError()
-    }
-
-    @Test
     fun shouldNotCallServiceSendCommentWhenMessageIsEmptyOnSendComment() {
         sendComment(message = "")
         verify(service, never()).sendComment(any())
     }
 
     @Test
-    fun shouldShowInvalidInputErrorWhenMessageIsEmptyOnSendComment() {
+    fun shouldNotSendCommentIfCommentIsEmpty() {
         sendComment(message = "")
-        verify(view).showInvalidInputError()
+        verify(service, never()).sendComment(any())
     }
 
     @Test
@@ -135,9 +129,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowInvalidInputErrorWhenMessageIsBlankOnSendComment() {
-        sendComment(message = " ")
-        verify(view).showInvalidInputError()
+    fun shouldNotSendCommentIfCommentIsBlank() {
+        sendComment(message = "")
+        verify(service, never()).sendComment(any())
     }
 
     @Test

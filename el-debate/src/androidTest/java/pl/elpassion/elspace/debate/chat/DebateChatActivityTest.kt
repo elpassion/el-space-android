@@ -8,10 +8,7 @@ import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
@@ -182,10 +179,10 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowInvalidInputErrorWhenInputIsEmptyOnSendComment() {
+    fun shouldNotSendCommentIfCommentIsEmpty() {
         startActivity()
         sendComment("")
-        onText(R.string.debate_chat_send_comment_invalid_input_error).isDisplayed()
+        verify(service, never()).sendComment(any())
     }
 
     @Test

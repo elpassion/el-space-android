@@ -109,21 +109,17 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         exception.message?.printIfDebug()
     }
 
-    override fun showInvalidInputError() {
-        showErrorInInput(R.string.debate_chat_send_comment_invalid_input_error)
-    }
-
     override fun showInputOverLimitError() {
         val message = getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         showErrorInInput(message)
     }
 
     private fun showErrorInInput(@StringRes message: Int) {
-        debateChatSendCommentInputText.error = getString(message)
+        debateChatSendCommentTextInputLayout.error = getString(message)
     }
 
     private fun showErrorInInput(message: String) {
-        debateChatSendCommentInputText.error = message
+        debateChatSendCommentTextInputLayout.error = message
     }
 
     override fun showCredentialsDialog() {

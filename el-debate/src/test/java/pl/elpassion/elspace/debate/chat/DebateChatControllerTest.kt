@@ -221,7 +221,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
+    fun shouldClearSendCommentInputWhenSendCommentSucceeded() {
         sendComment()
         sendCommentSubject.onComplete()
         verify(view).clearSendCommentInput()

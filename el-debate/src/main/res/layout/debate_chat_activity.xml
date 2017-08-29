@@ -9,23 +9,27 @@
 
     <include layout="@layout/debate_toolbar" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/debateChatCommentsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_above="@+id/debateChatSendCommentView"
-            android:background="@color/greyLight" />
+            android:background="@color/colorPrimaryDarkDebate" />
 
         <LinearLayout
             android:id="@+id/debateChatSendCommentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/rectangle_with_border"
             android:orientation="horizontal"
             android:padding="6dp">
 
@@ -39,6 +43,7 @@
                     android:id="@+id/debateChatSendCommentInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:hint="@string/debate_chat_send_comment_hint"
                     android:imeOptions="actionDone"
                     android:inputType="text"
@@ -59,13 +64,7 @@
                 android:src="@drawable/send_comment" />
 
         </LinearLayout>
+    </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/debateChatCommentsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/debateChatSendCommentView" />
-
-    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

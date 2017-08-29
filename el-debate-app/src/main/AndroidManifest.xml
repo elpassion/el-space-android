@@ -25,7 +25,7 @@
         <activity
             android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
             android:theme="@style/AppThemeDebate"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="adjustResize" />
 
         <meta-data
             android:name="io.fabric.ApiKey"

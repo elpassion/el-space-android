@@ -6,7 +6,7 @@ import android.view.View
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import kotlinx.android.synthetic.main.logged_user_comment.view.*
 import pl.elpassion.elspace.debate.chat.Comment
-import pl.elpassion.elspace.debate.chat.getTime
+import pl.elpassion.elspace.debate.chat.formatMillisToTime
 
 class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
 
@@ -16,7 +16,7 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             loggedUserCommentInitials.text = item.userInitials
             loggedUserCommentName.text = item.fullName
             loggedUserCommentMessage.text = item.content
-            loggedUserCommentTime.text = item.createdAt.getTime()
+            loggedUserCommentTime.text = item.createdAt.formatMillisToTime()
         }
     }
 }

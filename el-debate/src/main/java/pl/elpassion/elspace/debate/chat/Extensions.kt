@@ -1,14 +1,12 @@
 package pl.elpassion.elspace.debate.chat
 
 import pl.elpassion.BuildConfig
+import java.text.SimpleDateFormat
 import java.util.*
 
-fun Long.getTime(myTimeZone: TimeZone = TimeZone.getDefault()): String {
-    val calendar = Calendar.getInstance().apply {
-        timeZone = myTimeZone
-        timeInMillis = this@getTime
-    }
-    return Formatter().format("%tR", calendar).toString()
+fun Long.formatMillisToTime(myTimeZone: TimeZone = TimeZone.getDefault()): String = SimpleDateFormat("HH:mm", Locale.US).let {
+    it.timeZone = myTimeZone
+    it.format(Date(this))
 }
 
 fun String.printIfDebug() {

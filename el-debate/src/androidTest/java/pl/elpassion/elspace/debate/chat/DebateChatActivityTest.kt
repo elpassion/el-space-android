@@ -243,6 +243,19 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldClearSendCommentInputErrorOnSuccessfullySentComment() {
+        val completableSubject = CompletableSubject.create()
+        whenever(service.sendComment(any())).thenReturn(sendCommentSubject, completableSubject)
+        startActivity()
+        sendComment()
+        sendCommentSubject.onError(RuntimeException())
+        sendComment()
+        completableSubject.onComplete()
+        Thread.sleep(300)
+        onText(R.string.debate_chat_send_comment_error).doesNotExist()
+    }
+
+    @Test
     fun shouldShowFirstNameCredentialInputOnMissingCredentials() {
         startActivityAndOpenCredentialsDialog()
         onId(R.id.debateCredentialsFirstNameInputText)

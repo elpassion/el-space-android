@@ -3,7 +3,6 @@ package pl.elpassion.elspace.debate.chat
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -108,21 +107,13 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showSendCommentError(exception: Throwable) {
-        showErrorInInput(R.string.debate_chat_send_comment_error)
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_send_comment_error, 3000).show()
         logExceptionIfDebug(this.localClassName, exception)
     }
 
     override fun showInputOverLimitError() {
         val message = getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
-        showErrorInInput(message)
-    }
-
-    private fun showErrorInInput(@StringRes message: Int) {
-        debateChatSendCommentTextInputLayout.error = getString(message)
-    }
-
-    private fun showErrorInInput(message: String) {
-        debateChatSendCommentTextInputLayout.error = message
+        Snackbar.make(debateChatCoordinator, message, 3000).show()
     }
 
     override fun showCredentialsDialog() {

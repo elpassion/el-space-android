@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
+import pl.elpassion.elspace.common.extensions.logExceptionIfDebug
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader

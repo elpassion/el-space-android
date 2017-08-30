@@ -19,6 +19,7 @@ class DebateChatController(
     }
 
     fun onInitialsCommentsRefresh(token: String) {
+        subscriptions.clear()
         getInitialComments(token)
     }
 
@@ -34,6 +35,7 @@ class DebateChatController(
     }
 
     fun onLiveCommentsRefresh() {
+        subscriptions.clear()
         subscribeToLiveComments()
     }
 

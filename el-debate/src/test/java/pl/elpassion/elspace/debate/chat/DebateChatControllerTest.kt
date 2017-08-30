@@ -55,13 +55,13 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowLoaderWhenServiceInitialsCommentsStarts() {
-        controller.onCreate("token")
+        onCreate()
         verify(view).showLoader()
     }
 
     @Test
     fun shouldHideLoaderWhenServiceInitialsCommentsEnds() {
-        controller.onCreate("token")
+        onCreate()
         initialsCommentsSubject.onComplete()
         verify(view).hideLoader()
     }
@@ -129,7 +129,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         val exception = RuntimeException()
-        controller.onCreate("token")
+        onCreate()
         initialsCommentsSubject.onComplete()
         liveCommentsSubject.onError(exception)
         verify(view).showLiveCommentsError(exception)

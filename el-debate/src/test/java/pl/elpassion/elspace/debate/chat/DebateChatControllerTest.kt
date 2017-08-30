@@ -97,6 +97,13 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceLiveCommentsWhenServiceInitialsCommentsCompleted() {
+        onCreate()
+        initialsCommentsSubject.onComplete()
+        verify(service).liveCommentsObservable(any())
+    }
+
+    @Test
     fun shouldCallServiceInitialsCommentsOnRefresh() {
         controller.onServiceRefresh("refreshToken")
         verify(service).initialsCommentsObservable("refreshToken")

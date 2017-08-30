@@ -9,6 +9,7 @@ import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Assert
@@ -33,8 +34,10 @@ class DebateChatActivityTest {
     }
     private val sendCommentSubject = CompletableSubject.create()
     private val commentsSubject = PublishSubject.create<Comment>()
+    private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(commentsObservable(any(), any())).thenReturn(commentsSubject)
+        whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
+        whenever(initialsCommentsObservable(any())).thenReturn(commentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
@@ -126,16 +129,17 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
+    fun shouldShowCommentErrorWhenFetchingInitialCommentsFails() {
         startActivity()
         commentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_comment_error).isDisplayed()
     }
 
     @Test
-    fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
+    fun shouldShowSocketErrorWhenLiveCommentsObservableThrowsSocketException() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
         startActivity()
-        commentsSubject.onError(SocketException())
         onText(R.string.debate_chat_socket_error).isDisplayed()
     }
 
@@ -151,7 +155,7 @@ class DebateChatActivityTest {
         startActivity()
         commentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_comment_error_refresh).click()
-        verify(service, times(2)).commentsObservable(any(), any())
+        verify(service, times(2)).initialsCommentsObservable(any())
     }
 
     @Test

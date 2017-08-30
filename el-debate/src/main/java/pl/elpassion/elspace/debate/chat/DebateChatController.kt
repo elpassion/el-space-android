@@ -24,7 +24,8 @@ class DebateChatController(
     }
 
     private fun getComments(token: String) {
-        service.commentsObservable(token, debateRepo.getLatestDebateCode()!!)
+        service.initialsCommentsObservable(token)
+                .doOnComplete(this::subscribeToLiveComments)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .subscribe(view::showComment, this::onCommentsObservableError)
@@ -36,6 +37,14 @@ class DebateChatController(
             is SocketException -> view.showSocketError()
             else -> view.showCommentError(exception)
         }
+    }
+
+    private fun subscribeToLiveComments() {
+        service.liveCommentsObservable(debateRepo.getLatestDebateCode()!!)
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
+                .subscribe(view::showComment, this::onCommentsObservableError)
+                .addTo(subscriptions)
     }
 
     fun sendComment(token: String, message: String) {

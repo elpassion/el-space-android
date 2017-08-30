@@ -17,14 +17,14 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
-    private val commentsSubject = PublishSubject.create<Comment>()
+    private val initialsCommentsSubject = PublishSubject.create<Comment>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(commentsSubject)
+        whenever(service.initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
         whenever(service.liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
@@ -49,7 +49,7 @@ class DebateChatControllerTest {
     fun shouldCallServiceLiveCommentsObservableWithReallyGivenDebateCodeOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate()
-        commentsSubject.onComplete()
+        initialsCommentsSubject.onComplete()
         verify(service).liveCommentsObservable("67890")
     }
 
@@ -57,7 +57,7 @@ class DebateChatControllerTest {
     fun shouldShowCommentsReturnedFromServiceCommentsObservable() {
         val comment = createComment()
         onCreate()
-        commentsSubject.onNext(comment)
+        initialsCommentsSubject.onNext(comment)
         verify(view).showComment(comment)
     }
 
@@ -66,7 +66,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate("token")
-        commentsSubject.onError(RuntimeException())
+        initialsCommentsSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         subscribeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -77,7 +77,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate("token")
-        commentsSubject.onError(RuntimeException())
+        initialsCommentsSubject.onError(RuntimeException())
         verify(view, never()).showCommentError(any())
         observeOn.triggerActions()
         verify(view).showCommentError(any())
@@ -87,7 +87,7 @@ class DebateChatControllerTest {
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
         onCreate()
         val exception = RuntimeException()
-        commentsSubject.onError(exception)
+        initialsCommentsSubject.onError(exception)
         verify(view).showCommentError(exception)
     }
 
@@ -310,7 +310,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenFetchingInitialCommentsEnds() {
         controller.onCreate("token")
-        commentsSubject.onComplete()
+        initialsCommentsSubject.onComplete()
         verify(view).hideLoader()
     }
 
@@ -318,7 +318,7 @@ class DebateChatControllerTest {
     fun shouldShowSocketsErrorOnLiveCommentsError() {
         val exception = RuntimeException()
         controller.onCreate("token")
-        commentsSubject.onComplete()
+        initialsCommentsSubject.onComplete()
         liveCommentsSubject.onError(exception)
         verify(view).showSocketError(exception)
     }

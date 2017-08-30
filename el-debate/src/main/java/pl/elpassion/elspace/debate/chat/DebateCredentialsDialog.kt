@@ -27,6 +27,8 @@ class DebateCredentialsDialog(private val context: Context, private val onNewCre
 
     fun hide() = credentialsDialog.hide()
 
+    fun dismiss() = credentialsDialog.dismiss()
+
     fun showFirstNameError() {
         credentialsDialogView.debateCredentialsFirstNameLayout.error = context.getString(R.string.debate_chat_credentials_first_name_incorrect)
     }

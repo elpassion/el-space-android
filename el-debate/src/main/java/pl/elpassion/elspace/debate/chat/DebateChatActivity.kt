@@ -132,6 +132,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun onDestroy() {
+        credentialsDialog.dismiss()
         controller.onDestroy()
         super.onDestroy()
     }

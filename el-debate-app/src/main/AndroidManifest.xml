@@ -12,6 +12,7 @@
         android:supportsRtl="true">
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,9 +22,11 @@
         </activity>
         <activity
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate" />
         <activity
             android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate"
             android:windowSoftInputMode="adjustResize" />
 

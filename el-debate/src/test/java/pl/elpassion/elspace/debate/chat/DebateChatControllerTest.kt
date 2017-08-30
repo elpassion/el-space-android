@@ -94,7 +94,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallServiceCommentsObservableOnRefresh() {
         controller.onServiceRefresh("refreshToken")
-        verify(service).commentsObservable("refreshToken", "12345")
+        verify(service).initialsCommentsObservable("refreshToken")
     }
 
     @Test

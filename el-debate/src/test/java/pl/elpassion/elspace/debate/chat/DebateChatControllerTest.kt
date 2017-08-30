@@ -54,6 +54,19 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldShowLoaderWhenServiceInitialsCommentsStarts() {
+        controller.onCreate("token")
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenServiceInitialsCommentsEnds() {
+        controller.onCreate("token")
+        initialsCommentsSubject.onComplete()
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceInitialsComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
@@ -104,6 +117,15 @@ class DebateChatControllerTest {
         initialsCommentsSubject.onComplete()
         liveCommentsSubject.onNext(comment)
         verify(view).showComment(comment)
+    }
+
+    @Test
+    fun shouldShowSocketsErrorOnLiveCommentsError() {
+        val exception = RuntimeException()
+        controller.onCreate("token")
+        initialsCommentsSubject.onComplete()
+        liveCommentsSubject.onError(exception)
+        verify(view).showSocketError(exception)
     }
 
     @Test
@@ -308,28 +330,6 @@ class DebateChatControllerTest {
         val credentials = createCredentials(firstName = " ", lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view, never()).closeCredentialsDialog()
-    }
-
-    @Test
-    fun shouldShowLoaderWhenFetchingInitialCommentsStarts() {
-        controller.onCreate("token")
-        verify(view).showLoader()
-    }
-
-    @Test
-    fun shouldHideLoaderWhenFetchingInitialCommentsEnds() {
-        controller.onCreate("token")
-        initialsCommentsSubject.onComplete()
-        verify(view).hideLoader()
-    }
-
-    @Test
-    fun shouldShowSocketsErrorOnLiveCommentsError() {
-        val exception = RuntimeException()
-        controller.onCreate("token")
-        initialsCommentsSubject.onComplete()
-        liveCommentsSubject.onError(exception)
-        verify(view).showSocketError(exception)
     }
 
     private fun onCreate(token: String = "token") = controller.onCreate(token)

@@ -95,7 +95,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showCommentError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_comment_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.debate_details_error_refresh, {  })
+                .setAction(R.string.debate_details_error_refresh, { controller.onServiceRefresh(loginCredentials.authToken) })
                 .show()
     }
 

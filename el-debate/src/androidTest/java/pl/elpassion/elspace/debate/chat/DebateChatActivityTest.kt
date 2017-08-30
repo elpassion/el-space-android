@@ -147,6 +147,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldCallServiceSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
+        startActivity()
+        commentsSubject.onError(RuntimeException())
+        onText(R.string.debate_chat_comment_error_refresh).click()
+        verify(service, times(2)).commentsObservable(any(), any())
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)

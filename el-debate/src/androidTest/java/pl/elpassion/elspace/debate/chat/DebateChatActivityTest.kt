@@ -206,6 +206,7 @@ class DebateChatActivityTest {
         val maxMessageLength = 100
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         sendComment(createString(maxMessageLength + 1))
+        Thread.sleep(200)
         onText(message).isDisplayed()
     }
 
@@ -215,6 +216,7 @@ class DebateChatActivityTest {
         val maxMessageLength = InstrumentationRegistry.getTargetContext().resources.getInteger(R.integer.debate_chat_send_comment_max_message_length)
         val message = InstrumentationRegistry.getTargetContext().resources.getString(R.string.debate_chat_send_comment_input_over_limit_error).format(maxMessageLength)
         sendComment(createString(maxMessageLength + 1))
+        Thread.sleep(200)
         onText(message).isDisplayed()
     }
 

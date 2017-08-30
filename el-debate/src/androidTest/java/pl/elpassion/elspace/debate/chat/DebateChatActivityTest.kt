@@ -34,11 +34,11 @@ class DebateChatActivityTest {
         whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
-    private val commentsSubject = PublishSubject.create<Comment>()
+    private val initialsCommentsSubject = PublishSubject.create<Comment>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
         whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
-        whenever(initialsCommentsObservable(any())).thenReturn(commentsSubject)
+        whenever(initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
@@ -67,56 +67,56 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity(userId = 1)
-        commentsSubject.onNext(createComment(userInitials = "LXX", userId = 1))
+        initialsCommentsSubject.onNext(createComment(userInitials = "LXX", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LXX")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity(userId = 1)
-        commentsSubject.onNext(createComment(name = "LoggedUserName", userId = 1))
+        initialsCommentsSubject.onNext(createComment(name = "LoggedUserName", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserName")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity(userId = 1)
-        commentsSubject.onNext(createComment(content = "LoggedUserContent", userId = 1))
+        initialsCommentsSubject.onNext(createComment(content = "LoggedUserContent", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserContent")
     }
 
     @Test
     fun shouldShowCorrectTimeInLoggedUserCommentView() {
         startActivity(userId = 1)
-        commentsSubject.onNext(createComment(createdAt = 4000000, userId = 1))
+        initialsCommentsSubject.onNext(createComment(createdAt = 4000000, userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("02:06")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
         startActivity(userId = 2)
-        commentsSubject.onNext(createComment(userInitials = "NLI", userId = 1))
+        initialsCommentsSubject.onNext(createComment(userInitials = "NLI", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NLI")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
         startActivity(userId = 2)
-        commentsSubject.onNext(createComment(name = "NotLoggedName", userId = 1))
+        initialsCommentsSubject.onNext(createComment(name = "NotLoggedName", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedName")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
         startActivity(userId = 2)
-        commentsSubject.onNext(createComment(content = "NotLoggedContent", userId = 1))
+        initialsCommentsSubject.onNext(createComment(content = "NotLoggedContent", userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedContent")
     }
 
     @Test
     fun shouldShowCorrectTimeInCommentView() {
         startActivity(userId = 2)
-        commentsSubject.onNext(createComment(createdAt = 70000000, userId = 1))
+        initialsCommentsSubject.onNext(createComment(createdAt = 70000000, userId = 1))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("20:26")
     }
 
@@ -124,16 +124,15 @@ class DebateChatActivityTest {
     fun shouldScrollToLastComment() {
         startActivity()
         for (i in 1..10) {
-            if (i == 10) commentsSubject.onNext(createComment(content = "LastMessage")) else commentsSubject.onNext(createComment())
+            if (i == 10) initialsCommentsSubject.onNext(createComment(content = "LastMessage")) else initialsCommentsSubject.onNext(createComment())
         }
         onText("LastMessage").isDisplayed()
     }
 
     @Test
-    fun shouldShowCommentErrorWhenFetchingInitialCommentsFails() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
+    fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         startActivity()
-        Thread.sleep(200)
+        initialsCommentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_comment_error).isDisplayed()
     }
 
@@ -196,7 +195,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
         startActivity("someToken")
-        commentsSubject.onComplete()
+        initialsCommentsSubject.onComplete()
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText("message")
         Espresso.closeSoftKeyboard()

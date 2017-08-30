@@ -94,13 +94,13 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showInitialsCommentsError(exception: Throwable) {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_comment_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.debate_chat_comment_error_refresh, { controller.onInitialsCommentsRefresh(loginCredentials.authToken) })
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_initials_comments_error, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.debate_chat_initials_comments_error_refresh, { controller.onInitialsCommentsRefresh(loginCredentials.authToken) })
                 .show()
     }
 
     override fun showLiveCommentsError(exception: Throwable) {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_socket_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 
     override fun clearSendCommentInput() {

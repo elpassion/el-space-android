@@ -138,7 +138,7 @@ class DebateChatActivityTest {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         Thread.sleep(200)
-        onText(R.string.debate_chat_comment_error).isDisplayed()
+        onText(R.string.debate_chat_initials_comments_error).isDisplayed()
     }
 
     @Test
@@ -147,7 +147,7 @@ class DebateChatActivityTest {
         whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
         startActivity()
         Thread.sleep(200)
-        onText(R.string.debate_chat_socket_error).isDisplayed()
+        onText(R.string.debate_chat_live_comments_error).isDisplayed()
     }
 
     @Test
@@ -155,7 +155,7 @@ class DebateChatActivityTest {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         Thread.sleep(200)
-        onText(R.string.debate_chat_comment_error_refresh).isDisplayedEffectively()
+        onText(R.string.debate_chat_initials_comments_error_refresh).isDisplayedEffectively()
     }
 
     @Ignore
@@ -164,7 +164,7 @@ class DebateChatActivityTest {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         Thread.sleep(200)
-        onText(R.string.debate_chat_comment_error_refresh).click()
+        onText(R.string.debate_chat_initials_comments_error_refresh).click()
         verify(service, times(2)).initialsCommentsObservable(any())
     }
 

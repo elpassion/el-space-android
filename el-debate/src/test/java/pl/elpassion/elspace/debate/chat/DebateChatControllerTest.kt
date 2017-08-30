@@ -127,6 +127,18 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceLiveComments() {
+        val subscribeOn = TestScheduler()
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
+        controller.onCreate("token")
+        initialsCommentsSubject.onComplete()
+        liveCommentsSubject.onError(RuntimeException())
+        verify(view, never()).showLiveCommentsError(any())
+        subscribeOn.triggerActions()
+        verify(view).showLiveCommentsError(any())
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         val exception = RuntimeException()
         onCreate()

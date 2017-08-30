@@ -130,8 +130,9 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowCommentErrorWhenFetchingInitialCommentsFails() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        commentsSubject.onError(RuntimeException())
+        Thread.sleep(200)
         onText(R.string.debate_chat_comment_error).isDisplayed()
     }
 
@@ -140,20 +141,23 @@ class DebateChatActivityTest {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
         whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
         startActivity()
+        Thread.sleep(200)
         onText(R.string.debate_chat_socket_error).isDisplayed()
     }
 
     @Test
     fun shouldShowRefreshButtonWithCommentError() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        commentsSubject.onError(RuntimeException())
+        Thread.sleep(200)
         onText(R.string.debate_chat_comment_error_refresh).isDisplayedEffectively()
     }
 
     @Test
     fun shouldCallServiceSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        commentsSubject.onError(RuntimeException())
+        Thread.sleep(200)
         onText(R.string.debate_chat_comment_error_refresh).click()
         verify(service, times(2)).initialsCommentsObservable(any())
     }

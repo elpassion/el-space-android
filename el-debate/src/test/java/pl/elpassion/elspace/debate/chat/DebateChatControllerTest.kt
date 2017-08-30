@@ -39,7 +39,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallFetchInintialCommentsWithReallyGivenTokenOnCreate() {
+    fun shouldCallFetchInitialCommentsWithReallyGivenTokenOnCreate() {
         val token = "someOtherToken"
         controller.onCreate(token)
         verify(service).initialsCommentsObservable(token)

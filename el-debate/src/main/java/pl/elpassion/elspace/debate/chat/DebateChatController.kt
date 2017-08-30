@@ -26,6 +26,7 @@ class DebateChatController(
     private fun getComments(token: String) {
         service.initialsCommentsObservable(token)
                 .doOnSubscribe { view.showLoader() }
+                .doOnTerminate(view::hideLoader)
                 .doOnComplete(this::subscribeToLiveComments)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)

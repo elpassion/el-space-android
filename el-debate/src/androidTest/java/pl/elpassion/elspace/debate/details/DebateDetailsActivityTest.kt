@@ -13,7 +13,10 @@ import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.SingleSubject
 import org.hamcrest.Matchers
 import org.hamcrest.core.IsEqual.equalTo
-import org.junit.*
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import pl.elpassion.R
 import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
@@ -180,12 +183,11 @@ class DebateDetailsActivityTest {
         onText(R.string.debate_details_error_refresh).isDisplayedEffectively()
     }
 
-    @Ignore
     @Test
     fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
         startActivity()
         debateDetailsSubject.onError(RuntimeException())
-        sleep(100)
+        sleep(200)
         onText(R.string.debate_details_error_refresh).click()
         verify(apiMock, times(2)).getDebateDetails(any())
     }

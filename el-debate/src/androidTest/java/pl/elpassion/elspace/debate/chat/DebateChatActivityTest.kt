@@ -142,16 +142,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
-        startActivity()
-        Thread.sleep(200)
-        onText(R.string.debate_chat_live_comments_error).isDisplayed()
-    }
-
-    @Test
-    fun shouldShowRefreshButtonWithCommentError() {
+    fun shouldShowInitialsCommentsRefreshButtonWithInitialsCommentsError() {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         Thread.sleep(200)
@@ -160,12 +151,21 @@ class DebateChatActivityTest {
 
     @Ignore
     @Test
-    fun shouldCallServiceSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
+    fun shouldCallServiceInitialsCommentsSecondTimeOnRefreshInitialsCommentsClicked() {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
         Thread.sleep(200)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
         verify(service, times(2)).initialsCommentsObservable(any())
+    }
+
+    @Test
+    fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
+        startActivity()
+        Thread.sleep(200)
+        onText(R.string.debate_chat_live_comments_error).isDisplayed()
     }
 
     @Test

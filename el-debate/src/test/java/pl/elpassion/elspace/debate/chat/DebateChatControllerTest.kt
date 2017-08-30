@@ -83,9 +83,9 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowCommentErrorWhenServiceCommentsObservableFails() {
+        onCreate()
         val exception = RuntimeException()
         commentsSubject.onError(exception)
-        onCreate()
         verify(view).showCommentError(exception)
     }
 

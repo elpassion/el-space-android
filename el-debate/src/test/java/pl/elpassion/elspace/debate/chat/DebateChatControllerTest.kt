@@ -309,6 +309,12 @@ class DebateChatControllerTest {
         verify(view, never()).closeCredentialsDialog()
     }
 
+    @Test
+    fun shouldShowLoaderWhenFetchingInitialCommentsStarts() {
+        controller.onCreate("token")
+        verify(view).showLoader()
+    }
+
     private fun onCreate(token: String = "token") = controller.onCreate(token)
 
     private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)

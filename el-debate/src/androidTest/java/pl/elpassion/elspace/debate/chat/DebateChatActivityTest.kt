@@ -169,6 +169,15 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowLiveCommentsRefreshButtonWithLiveCommentsError() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
+        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
+        startActivity()
+        Thread.sleep(200)
+        onText(R.string.debate_chat_live_comments_error_refresh).isDisplayedEffectively()
+    }
+
+    @Test
     fun shouldShowSendCommentHintInInputField() {
         startActivity()
         onId(R.id.debateChatSendCommentInputText).textInputEditTextHasHint(R.string.debate_chat_send_comment_hint)

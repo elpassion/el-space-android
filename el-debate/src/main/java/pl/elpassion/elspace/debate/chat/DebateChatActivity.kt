@@ -100,7 +100,9 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showLiveCommentsError(exception: Throwable) {
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE).show()
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.debate_chat_live_comments_error_refresh, {  })
+                .show()
     }
 
     override fun clearSendCommentInput() {

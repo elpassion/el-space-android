@@ -21,6 +21,7 @@
     <string name="debate_chat_initials_comments_error">Fetching comments failed</string>
     <string name="debate_chat_initials_comments_error_refresh">Refresh</string>
     <string name="debate_chat_live_comments_error">Connecting to chat failed</string>
+    <string name="debate_chat_live_comments_error_refresh">Refresh</string>
     <string name="debate_chat_send_comment_hint">Chat about this debate</string>
     <string name="debate_chat_send_comment_button">Send</string>
     <string name="debate_chat_send_comment_success">Comment sent!</string>

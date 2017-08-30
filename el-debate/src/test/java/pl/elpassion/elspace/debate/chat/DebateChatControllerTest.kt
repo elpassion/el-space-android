@@ -33,20 +33,20 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallFetchInitialCommentsWithGivenDataOnCreate() {
+    fun shouldCallServiceInitialsCommentsWithGivenDataOnCreate() {
         onCreate()
         verify(service).initialsCommentsObservable("token")
     }
 
     @Test
-    fun shouldCallFetchInitialCommentsWithReallyGivenTokenOnCreate() {
+    fun shouldCallServiceInitialsCommentsObservableWithReallyGivenTokenOnCreate() {
         val token = "someOtherToken"
         controller.onCreate(token)
         verify(service).initialsCommentsObservable(token)
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromServiceInitialsCommentsObservable() {
+    fun shouldShowCommentsReturnedFromServiceInitialsComments() {
         val comment = createComment()
         onCreate()
         initialsCommentsSubject.onNext(comment)
@@ -54,7 +54,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceInitialsCommentsObservable() {
+    fun shouldUseGivenSchedulerToSubscribeOnWhenServiceInitialsComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate("token")
@@ -65,7 +65,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldUseGivenSchedulerToObserveOnWhenServiceInitialsCommentsObservable() {
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceInitialsComments() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate("token")
@@ -76,7 +76,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowCommentErrorWhenServiceInitialsCommentsObservableFails() {
+    fun shouldShowCommentErrorWhenServiceInitialsCommentsFails() {
         onCreate()
         val exception = RuntimeException()
         initialsCommentsSubject.onError(exception)
@@ -84,13 +84,13 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsObservableOnRefresh() {
+    fun shouldCallServiceInitialsCommentsOnRefresh() {
         controller.onServiceRefresh("refreshToken")
         verify(service).initialsCommentsObservable("refreshToken")
     }
 
     @Test
-    fun shouldCallServiceLiveCommentsObservableWithReallyGivenDebateCodeOnCreate() {
+    fun shouldCallServiceLiveCommentsWithReallyGivenDebateCodeOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate()
         initialsCommentsSubject.onComplete()
@@ -98,7 +98,7 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromServiceLiveCommentsObservable() {
+    fun shouldShowCommentsReturnedFromServiceLiveComments() {
         val comment = createComment()
         onCreate()
         initialsCommentsSubject.onComplete()

@@ -135,13 +135,14 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
+        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        initialsCommentsSubject.onError(RuntimeException())
+        Thread.sleep(200)
         onText(R.string.debate_chat_comment_error).isDisplayed()
     }
 
     @Test
-    fun shouldShowSocketErrorWhenLiveCommentsObservableThrowsSocketException() {
+    fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
         whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
         startActivity()

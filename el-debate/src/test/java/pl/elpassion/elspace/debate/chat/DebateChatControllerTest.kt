@@ -160,6 +160,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceLiveCommentsOnServiceLiveCommentsRefresh() {
+        controller.onLiveCommentsRefresh()
+        verify(service).liveCommentsObservable(any())
+    }
+
+    @Test
     fun shouldCallServiceSendCommentWithGivenDataOnSendComment() {
         sendComment("token", "message")
         verify(service).sendComment(CommentToSend("token", "message", "firstName", "lastName"))

@@ -33,6 +33,10 @@ class DebateChatController(
                 .addTo(subscriptions)
     }
 
+    fun onLiveCommentsRefresh() {
+        subscribeToLiveComments()
+    }
+
     private fun subscribeToLiveComments() {
         service.liveCommentsObservable(debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)

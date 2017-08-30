@@ -72,9 +72,9 @@ class DebateChatControllerTest {
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate("token")
         initialsCommentsSubject.onError(RuntimeException())
-        verify(view, never()).showCommentError(any())
+        verify(view, never()).showInitialsCommentsError(any())
         subscribeOn.triggerActions()
-        verify(view).showCommentError(any())
+        verify(view).showInitialsCommentsError(any())
     }
 
     @Test
@@ -83,17 +83,17 @@ class DebateChatControllerTest {
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate("token")
         initialsCommentsSubject.onError(RuntimeException())
-        verify(view, never()).showCommentError(any())
+        verify(view, never()).showInitialsCommentsError(any())
         observeOn.triggerActions()
-        verify(view).showCommentError(any())
+        verify(view).showInitialsCommentsError(any())
     }
 
     @Test
-    fun shouldShowCommentErrorWhenServiceInitialsCommentsFails() {
+    fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         onCreate()
         val exception = RuntimeException()
         initialsCommentsSubject.onError(exception)
-        verify(view).showCommentError(exception)
+        verify(view).showInitialsCommentsError(exception)
     }
 
     @Test
@@ -120,12 +120,12 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowSocketsErrorOnLiveCommentsError() {
+    fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         val exception = RuntimeException()
         controller.onCreate("token")
         initialsCommentsSubject.onComplete()
         liveCommentsSubject.onError(exception)
-        verify(view).showSocketError(exception)
+        verify(view).showLiveCommentsError(exception)
     }
 
     @Test

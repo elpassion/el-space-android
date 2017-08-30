@@ -29,7 +29,7 @@ class DebateChatController(
                 .doOnComplete(this::subscribeToLiveComments)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .subscribe(view::showComment, view::showCommentError)
+                .subscribe(view::showComment, view::showInitialsCommentsError)
                 .addTo(subscriptions)
     }
 
@@ -37,7 +37,7 @@ class DebateChatController(
         service.liveCommentsObservable(debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .subscribe(view::showComment, view::showSocketError)
+                .subscribe(view::showComment, view::showLiveCommentsError)
                 .addTo(subscriptions)
     }
 

@@ -15,6 +15,7 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
+import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
@@ -136,6 +137,13 @@ class DebateChatActivityTest {
         startActivity()
         commentsSubject.onError(SocketException())
         onText(R.string.debate_chat_socket_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowRefreshButtonWithCommentError() {
+        startActivity()
+        commentsSubject.onError(RuntimeException())
+        onText(R.string.debate_chat_comment_error_refresh).isDisplayedEffectively()
     }
 
     @Test

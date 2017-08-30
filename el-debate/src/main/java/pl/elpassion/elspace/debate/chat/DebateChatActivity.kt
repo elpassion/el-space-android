@@ -97,12 +97,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_initials_comments_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.debate_chat_initials_comments_error_refresh, { controller.onInitialsCommentsRefresh(loginCredentials.authToken) })
                 .show()
+        logExceptionIfDebug(this.localClassName, exception)
     }
 
     override fun showLiveCommentsError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.debate_chat_live_comments_error_refresh, {  })
                 .show()
+        logExceptionIfDebug(this.localClassName, exception)
     }
 
     override fun clearSendCommentInput() {

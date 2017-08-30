@@ -11,7 +11,6 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
-import java.net.SocketException
 
 class DebateChatControllerTest {
 
@@ -96,14 +95,6 @@ class DebateChatControllerTest {
     fun shouldCallServiceCommentsObservableOnRefresh() {
         controller.onServiceRefresh("refreshToken")
         verify(service).commentsObservable("refreshToken", "12345")
-    }
-
-    @Test
-    fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
-        onCreate()
-        val exception = SocketException()
-        commentsSubject.onError(exception)
-        verify(view).showSocketError(exception)
     }
 
     @Test

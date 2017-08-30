@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.constraint_debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R

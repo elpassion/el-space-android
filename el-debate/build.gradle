@@ -47,6 +47,7 @@ dependencies {
     api group: 'com.elpassion.android.commons', name: 'shared-preferences', version: elCommon
     api group: 'com.elpassion.android.commons', name: 'shared-preferences-gson-converter-adapter', version: elCommon
     api group: 'com.elpassion.android.commons', name: 'view', version: elCommon
+    api group: 'com.android.support.constraint', name: 'constraint-layout', version: '1.0.2'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

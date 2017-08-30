@@ -54,10 +54,19 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromServiceCommentsObservable() {
+    fun shouldShowCommentsReturnedFromServiceInitialsCommentsObservable() {
         val comment = createComment()
         onCreate()
         initialsCommentsSubject.onNext(comment)
+        verify(view).showComment(comment)
+    }
+
+    @Test
+    fun shouldShowCommentsReturnedFromServiceLiveCommentsObservable() {
+        val comment = createComment()
+        onCreate()
+        initialsCommentsSubject.onComplete()
+        liveCommentsSubject.onNext(comment)
         verify(view).showComment(comment)
     }
 

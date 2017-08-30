@@ -124,7 +124,11 @@ class DebateChatActivityTest {
     fun shouldScrollToLastComment() {
         startActivity()
         for (i in 1..10) {
-            if (i == 10) initialsCommentsSubject.onNext(createComment(content = "LastMessage")) else initialsCommentsSubject.onNext(createComment())
+            if (i == 10) {
+                initialsCommentsSubject.onNext(createComment(content = "LastMessage"))
+            } else {
+                initialsCommentsSubject.onNext(createComment())
+            }
         }
         onText("LastMessage").isDisplayed()
     }

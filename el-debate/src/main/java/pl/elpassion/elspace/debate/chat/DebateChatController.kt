@@ -15,14 +15,14 @@ class DebateChatController(
     private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
-        getComments(token)
+        getInitialComments(token)
     }
 
-    fun onServiceRefresh(token: String) {
-        getComments(token)
+    fun onInitialsCommentsRefresh(token: String) {
+        getInitialComments(token)
     }
 
-    private fun getComments(token: String) {
+    private fun getInitialComments(token: String) {
         service.initialsCommentsObservable(token)
                 .doOnSubscribe { view.showLoader() }
                 .doOnTerminate(view::hideLoader)

@@ -11,7 +11,6 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
-import java.net.SocketException
 
 class DebateChatControllerTest {
 
@@ -19,12 +18,14 @@ class DebateChatControllerTest {
     private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
     private val commentsSubject = PublishSubject.create<Comment>()
+    private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
     fun setUp() {
-        whenever(service.commentsObservable(any(), any())).thenReturn(commentsSubject)
+        whenever(service.initialsCommentsObservable(any())).thenReturn(commentsSubject)
+        whenever(service.liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
@@ -32,23 +33,24 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceCommentsObservableWithGivenDataOnCreate() {
+    fun shouldCallFetchInitialCommentsWithGivenDataOnCreate() {
         onCreate()
-        verify(service).commentsObservable("token", "12345")
+        verify(service).initialsCommentsObservable("token")
     }
 
     @Test
-    fun shouldCallServiceCommentsObservableWithReallyGivenTokenOnCreate() {
+    fun shouldCallFetchInintialCommentsWithReallyGivenTokenOnCreate() {
         val token = "someOtherToken"
         controller.onCreate(token)
-        verify(service).commentsObservable(token, "12345")
+        verify(service).initialsCommentsObservable(token)
     }
 
     @Test
-    fun shouldCallServiceCommentsObservableWithReallyGivenDebateCodeOnCreate() {
+    fun shouldCallServiceLiveCommentsObservableWithReallyGivenDebateCodeOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate()
-        verify(service).commentsObservable("token", "67890")
+        commentsSubject.onComplete()
+        verify(service).liveCommentsObservable("67890")
     }
 
     @Test
@@ -93,13 +95,6 @@ class DebateChatControllerTest {
     fun shouldCallServiceCommentsObservableOnRefresh() {
         controller.onServiceRefresh("refreshToken")
         verify(service).commentsObservable("refreshToken", "12345")
-    }
-
-    @Test
-    fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
-        onCreate()
-        commentsSubject.onError(SocketException())
-        verify(view).showSocketError()
     }
 
     @Test
@@ -304,6 +299,28 @@ class DebateChatControllerTest {
         val credentials = createCredentials(firstName = " ", lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view, never()).closeCredentialsDialog()
+    }
+
+    @Test
+    fun shouldShowLoaderWhenFetchingInitialCommentsStarts() {
+        controller.onCreate("token")
+        verify(view).showLoader()
+    }
+
+    @Test
+    fun shouldHideLoaderWhenFetchingInitialCommentsEnds() {
+        controller.onCreate("token")
+        commentsSubject.onComplete()
+        verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldShowSocketsErrorOnLiveCommentsError() {
+        val exception = RuntimeException()
+        controller.onCreate("token")
+        commentsSubject.onComplete()
+        liveCommentsSubject.onError(exception)
+        verify(view).showSocketError(exception)
     }
 
     private fun onCreate(token: String = "token") = controller.onCreate(token)

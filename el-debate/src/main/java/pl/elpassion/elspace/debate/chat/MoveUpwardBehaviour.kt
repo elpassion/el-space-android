@@ -19,13 +19,20 @@ class MoveUpwardBehaviour : AppBarLayout.ScrollingViewBehavior {
     }
 
     override fun onDependentViewChanged(parent: CoordinatorLayout, child: View?, dependency: View): Boolean {
-        val translationY = Math.min(0f, ViewCompat.getTranslationY(dependency) - dependency.height)
-        ViewCompat.setTranslationY(child, translationY)
-        return super.onDependentViewChanged(parent, child, dependency)
+        if (dependency is Snackbar.SnackbarLayout) {
+            val translationY = Math.min(0f, ViewCompat.getTranslationY(dependency) - dependency.height)
+            ViewCompat.setTranslationY(child, translationY)
+            return true
+        } else {
+            return super.onDependentViewChanged(parent, child, dependency)
+        }
     }
 
     override fun onDependentViewRemoved(parent: CoordinatorLayout, child: View?, dependency: View) {
-        ViewCompat.animate(child).translationY(0f).start()
-        super.onDependentViewChanged(parent, child, dependency)
+        if (dependency is Snackbar.SnackbarLayout) {
+            ViewCompat.animate(child).translationY(0f).start()
+        } else {
+            super.onDependentViewChanged(parent, child, dependency)
+        }
     }
 }

@@ -29,7 +29,7 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldCallApiCommentWithRealToken() {
-        debateChatServiceImpl.commentsObservable("someToken", "code")
+        debateChatServiceImpl.initialsCommentsObservable("someToken")
         verify(api).comment("someToken")
     }
 
@@ -37,7 +37,7 @@ class DebateChatServiceTest {
     fun shouldReturnCommentsReceivedFromApiComment() {
         val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
         val testObserver = debateChatServiceImpl
-                .commentsObservable("token", "code")
+                .initialsCommentsObservable("token")
                 .test()
         commentsFromApiSubject.onSuccess(commentsFromApi)
         testObserver.assertValues(*commentsFromApi.toTypedArray())
@@ -47,7 +47,7 @@ class DebateChatServiceTest {
     fun shouldSortCommentsReceivedFromApiComment() {
         val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(createdAt = 3), createComment(createdAt = 1), createComment(createdAt = 2))
         val testObserver = debateChatServiceImpl
-                .commentsObservable("token", "code")
+                .initialsCommentsObservable("token")
                 .test()
         commentsFromApiSubject.onSuccess(commentsFromApi)
         val sortedComments = commentsFromApi.sortedBy { it.createdAt }
@@ -58,7 +58,7 @@ class DebateChatServiceTest {
     fun shouldReturnErrorReceivedFromApiComment() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl
-                .commentsObservable("token", "code")
+                .initialsCommentsObservable("token")
                 .test()
         commentsFromApiSubject.onError(exception)
         testObserver.assertError(exception)
@@ -66,7 +66,7 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldCallSocketWithRealDebateCode() {
-        debateChatServiceImpl.commentsObservable("token", "someDebateCode")
+        debateChatServiceImpl.liveCommentsObservable("someDebateCode")
         verify(socket).commentsObservable("someDebateCode")
     }
 
@@ -75,9 +75,8 @@ class DebateChatServiceTest {
         val commentFirst = createComment(name = "NameSocket")
         val commentSecond = createComment(name = "NameSocketSecond")
         val testObserver = debateChatServiceImpl
-                .commentsObservable("token", "code")
+                .liveCommentsObservable("code")
                 .test()
-        commentsFromApiSubject.onSuccess(emptyList())
         commentsFromSocketSubject.onNext(commentFirst)
         commentsFromSocketSubject.onNext(commentSecond)
         testObserver.assertValues(commentFirst, commentSecond)
@@ -87,9 +86,8 @@ class DebateChatServiceTest {
     fun shouldReturnErrorReceivedFromSocket() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl
-                .commentsObservable("token", "code")
+                .liveCommentsObservable("code")
                 .test()
-        commentsFromApiSubject.onSuccess(emptyList())
         commentsFromSocketSubject.onError(exception)
         testObserver.assertError(exception)
     }

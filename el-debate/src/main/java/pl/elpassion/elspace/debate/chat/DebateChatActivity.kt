@@ -99,7 +99,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
                 .show()
     }
 
-    override fun showSocketError() {
+    override fun showSocketError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_socket_error, Snackbar.LENGTH_INDEFINITE).show()
     }
 

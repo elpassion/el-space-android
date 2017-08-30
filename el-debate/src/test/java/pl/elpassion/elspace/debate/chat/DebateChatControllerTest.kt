@@ -101,8 +101,9 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
         onCreate()
-        commentsSubject.onError(SocketException())
-        verify(view).showSocketError()
+        val exception = SocketException()
+        commentsSubject.onError(exception)
+        verify(view).showSocketError(exception)
     }
 
     @Test
@@ -320,6 +321,15 @@ class DebateChatControllerTest {
         controller.onCreate("token")
         commentsSubject.onComplete()
         verify(view).hideLoader()
+    }
+
+    @Test
+    fun shouldShowSocketsErrorOnLiveCommentsError() {
+        val exception = RuntimeException()
+        controller.onCreate("token")
+        commentsSubject.onComplete()
+        liveCommentsSubject.onError(exception)
+        verify(view).showSocketError(exception)
     }
 
     private fun onCreate(token: String = "token") = controller.onCreate(token)

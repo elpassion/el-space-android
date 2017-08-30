@@ -36,7 +36,7 @@ class DebateChatController(
 
     private fun onCommentsObservableError(exception: Throwable) {
         when (exception) {
-            is SocketException -> view.showSocketError()
+            is SocketException -> view.showSocketError(exception)
             else -> view.showCommentError(exception)
         }
     }
@@ -45,7 +45,7 @@ class DebateChatController(
         service.liveCommentsObservable(debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .subscribe(view::showComment, this::onCommentsObservableError)
+                .subscribe(view::showComment, view::showSocketError)
                 .addTo(subscriptions)
     }
 

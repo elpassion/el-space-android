@@ -190,6 +190,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
         startActivity("someToken")
+        commentsSubject.onComplete()
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText("message")
         Espresso.closeSoftKeyboard()

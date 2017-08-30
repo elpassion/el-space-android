@@ -16,6 +16,14 @@ class DebateChatController(
     private val subscriptions = CompositeDisposable()
 
     fun onCreate(token: String) {
+        getComments(token)
+    }
+
+    fun onServiceRefresh(token: String) {
+        getComments(token)
+    }
+
+    private fun getComments(token: String) {
         service.commentsObservable(token, debateRepo.getLatestDebateCode()!!)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)

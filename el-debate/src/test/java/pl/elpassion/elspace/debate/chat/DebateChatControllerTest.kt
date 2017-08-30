@@ -90,6 +90,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceCommentsObservableOnRefresh() {
+        controller.onServiceRefresh("refreshToken")
+        verify(service).commentsObservable("refreshToken", "12345")
+    }
+
+    @Test
     fun shouldShowSocketErrorWhenServiceCommentsObservableThrowsSocketException() {
         onCreate()
         commentsSubject.onError(SocketException())

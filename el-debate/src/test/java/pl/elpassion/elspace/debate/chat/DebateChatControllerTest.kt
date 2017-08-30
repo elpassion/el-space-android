@@ -139,6 +139,18 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldUseGivenSchedulerToObserveOnWhenServiceLiveComments() {
+        val observeOn = TestScheduler()
+        val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
+        controller.onCreate("token")
+        initialsCommentsSubject.onComplete()
+        liveCommentsSubject.onError(RuntimeException())
+        verify(view, never()).showLiveCommentsError(any())
+        observeOn.triggerActions()
+        verify(view).showLiveCommentsError(any())
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         val exception = RuntimeException()
         onCreate()

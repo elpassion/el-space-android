@@ -13,7 +13,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -149,7 +148,6 @@ class DebateChatActivityTest {
         onText(R.string.debate_chat_initials_comments_error_refresh).isDisplayedEffectively()
     }
 
-    @Ignore
     @Test
     fun shouldCallServiceInitialsCommentsSecondTimeOnRefreshInitialsCommentsClicked() {
         whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))

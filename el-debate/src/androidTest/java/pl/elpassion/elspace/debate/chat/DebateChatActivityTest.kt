@@ -124,7 +124,7 @@ class DebateChatActivityTest {
     fun shouldScrollToLastComment() {
         startActivity()
         val comments = mutableListOf<Comment>().apply {
-            for (i in 1..10) {
+            (1..10).forEach {
                 add(createComment())
             }
             add(createComment(content = "LastMessage"))

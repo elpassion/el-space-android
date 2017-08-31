@@ -9,9 +9,9 @@ import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Observable
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -19,6 +19,7 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
+import pl.elpassion.elspace.dabate.chat.createComments
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -33,7 +34,7 @@ class DebateChatActivityTest {
         whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
     private val sendCommentSubject = CompletableSubject.create()
-    private val initialsCommentsSubject = PublishSubject.create<Comment>()
+    private val initialsCommentsSubject = SingleSubject.create<List<Comment>>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
         whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
@@ -66,92 +67,90 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity(userId = 1)
-        initialsCommentsSubject.onNext(createComment(userInitials = "LXX", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(userInitials = "LXX", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LXX")
     }
 
     @Test
     fun shouldShowCorrectNameInLoggedUserCommentView() {
         startActivity(userId = 1)
-        initialsCommentsSubject.onNext(createComment(name = "LoggedUserName", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(name = "LoggedUserName", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserName")
     }
 
     @Test
     fun shouldShowCorrectMessageInLoggedUserCommentView() {
         startActivity(userId = 1)
-        initialsCommentsSubject.onNext(createComment(content = "LoggedUserContent", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(content = "LoggedUserContent", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("LoggedUserContent")
     }
 
     @Test
     fun shouldShowCorrectTimeInLoggedUserCommentView() {
         startActivity(userId = 1)
-        initialsCommentsSubject.onNext(createComment(createdAt = 4000000, userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(createdAt = 4000000, userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentView).hasChildWithText("02:06")
     }
 
     @Test
     fun shouldShowCorrectInitialsInCommentView() {
         startActivity(userId = 2)
-        initialsCommentsSubject.onNext(createComment(userInitials = "NLI", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(userInitials = "NLI", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NLI")
     }
 
     @Test
     fun shouldShowCorrectNameInCommentView() {
         startActivity(userId = 2)
-        initialsCommentsSubject.onNext(createComment(name = "NotLoggedName", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(name = "NotLoggedName", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedName")
     }
 
     @Test
     fun shouldShowCorrectMessageInCommentView() {
         startActivity(userId = 2)
-        initialsCommentsSubject.onNext(createComment(content = "NotLoggedContent", userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(content = "NotLoggedContent", userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("NotLoggedContent")
     }
 
     @Test
     fun shouldShowCorrectTimeInCommentView() {
         startActivity(userId = 2)
-        initialsCommentsSubject.onNext(createComment(createdAt = 70000000, userId = 1))
+        initialsCommentsSubject.onSuccess(listOf(createComment(createdAt = 70000000, userId = 1)))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("20:26")
     }
 
     @Test
     fun shouldScrollToLastComment() {
         startActivity()
+        val comments = mutableListOf<Comment>()
         for (i in 1..10) {
-            if (i == 10) {
-                initialsCommentsSubject.onNext(createComment(content = "LastMessage"))
-            } else {
-                initialsCommentsSubject.onNext(createComment())
-            }
+            comments.add(createComment())
         }
+        comments.add(createComment(content = "LastMessage"))
+        initialsCommentsSubject.onSuccess(comments)
         onText("LastMessage").isDisplayed()
     }
 
     @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
+        initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_initials_comments_error).isDisplayed()
     }
 
     @Test
     fun shouldShowInitialsCommentsRefreshButtonWithInitialsCommentsError() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        Thread.sleep(200)
+        initialsCommentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_initials_comments_error_refresh).isDisplayedEffectively()
     }
 
     @Test
     fun shouldCallServiceInitialsCommentsSecondTimeOnRefreshInitialsCommentsClicked() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
+        initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
         verify(service, times(2)).initialsCommentsObservable(any())
@@ -159,27 +158,26 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(SocketException()))
         startActivity()
+        initialsCommentsSubject.onSuccess(createComments())
+        liveCommentsSubject.onError(SocketException())
         Thread.sleep(200)
         onText(R.string.debate_chat_live_comments_error).isDisplayed()
     }
 
     @Test
     fun shouldShowLiveCommentsRefreshButtonWithLiveCommentsError() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
-        Thread.sleep(200)
+        initialsCommentsSubject.onSuccess(createComments())
+        liveCommentsSubject.onError(RuntimeException())
         onText(R.string.debate_chat_live_comments_error_refresh).isDisplayedEffectively()
     }
 
     @Test
     fun shouldCallServiceLiveCommentsSecondTimeOnRefreshLiveCommentsClicked() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(Observable.just(createComment()))
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.error(RuntimeException()))
         startActivity()
+        initialsCommentsSubject.onSuccess(createComments())
+        liveCommentsSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_live_comments_error_refresh).click()
         verify(service, times(2)).liveCommentsObservable(any())
@@ -217,7 +215,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldUseCorrectTokenAndMessageOnSendCommentButtonClick() {
         startActivity("someToken")
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText("message")
         Espresso.closeSoftKeyboard()

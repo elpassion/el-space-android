@@ -40,7 +40,7 @@ class DebateChatServiceTest {
                 .initialsCommentsObservable("token")
                 .test()
         commentsFromApiSubject.onSuccess(commentsFromApi)
-        testObserver.assertValues(*commentsFromApi.toTypedArray())
+        testObserver.assertValues(commentsFromApi)
     }
 
     @Test
@@ -51,7 +51,7 @@ class DebateChatServiceTest {
                 .test()
         commentsFromApiSubject.onSuccess(commentsFromApi)
         val sortedComments = commentsFromApi.sortedBy { it.createdAt }
-        testObserver.assertValues(*sortedComments.toTypedArray())
+        testObserver.assertValues(sortedComments)
     }
 
     @Test

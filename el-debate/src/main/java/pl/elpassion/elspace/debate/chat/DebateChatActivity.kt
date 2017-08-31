@@ -87,8 +87,17 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showComment(comment: Comment) {
-        comments.add(comment)
+    override fun showLiveComment(liveComment: Comment) {
+        comments.add(liveComment)
+        updateAdapter()
+    }
+
+    override fun showInitialsComments(initialsComments: List<Comment>) {
+        comments.addAll(initialsComments)
+        updateAdapter()
+    }
+
+    private fun updateAdapter() {
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
         debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
     }

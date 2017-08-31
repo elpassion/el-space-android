@@ -12,7 +12,7 @@ import retrofit2.http.*
 interface DebateChat {
 
     interface Service {
-        fun initialsCommentsObservable(token: String): Observable<Comment>
+        fun initialsCommentsObservable(token: String): Single<List<Comment>>
         fun liveCommentsObservable(debateCode: String): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Completable
     }
@@ -37,8 +37,9 @@ interface DebateChat {
     interface View {
         fun showLoader()
         fun hideLoader()
-        fun showComment(comment: Comment)
+        fun showInitialsComments(initialsComments: List<Comment>)
         fun showInitialsCommentsError(exception: Throwable)
+        fun showLiveComment(liveComment: Comment)
         fun showLiveCommentsError(exception: Throwable)
         fun clearSendCommentInput()
         fun showSendCommentError(exception: Throwable)

@@ -5,10 +5,12 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
+import pl.elpassion.elspace.dabate.chat.createComments
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 
@@ -17,7 +19,7 @@ class DebateChatControllerTest {
     private val view = mock<DebateChat.View>()
     private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
-    private val initialsCommentsSubject = PublishSubject.create<Comment>()
+    private val initialsCommentsSubject = SingleSubject.create<List<Comment>>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val sendCommentSubject = CompletableSubject.create()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
@@ -47,10 +49,10 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldShowCommentsReturnedFromServiceInitialsComments() {
-        val comment = createComment()
+        val comments = listOf(createComment(), createComment())
         onCreate()
-        initialsCommentsSubject.onNext(comment)
-        verify(view).showComment(comment)
+        initialsCommentsSubject.onSuccess(comments)
+        verify(view).showInitialsComments(comments)
     }
 
     @Test
@@ -62,7 +64,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenServiceInitialsCommentsEnds() {
         onCreate()
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         verify(view).hideLoader()
     }
 
@@ -99,7 +101,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallServiceLiveCommentsWhenServiceInitialsCommentsCompleted() {
         onCreate()
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         verify(service).liveCommentsObservable(any())
     }
 
@@ -113,17 +115,17 @@ class DebateChatControllerTest {
     fun shouldCallServiceLiveCommentsWithReallyGivenDebateCodeOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate()
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         verify(service).liveCommentsObservable("67890")
     }
 
     @Test
     fun shouldShowCommentsReturnedFromServiceLiveComments() {
-        val comment = createComment()
+        val comment = createComment(name = "LiveComment")
         onCreate()
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         liveCommentsSubject.onNext(comment)
-        verify(view).showComment(comment)
+        verify(view).showLiveComment(comment)
     }
 
     @Test
@@ -131,7 +133,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.onCreate("token")
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         liveCommentsSubject.onError(RuntimeException())
         verify(view, never()).showLiveCommentsError(any())
         subscribeOn.triggerActions()
@@ -143,7 +145,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.onCreate("token")
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(createComments())
         liveCommentsSubject.onError(RuntimeException())
         verify(view, never()).showLiveCommentsError(any())
         observeOn.triggerActions()
@@ -154,7 +156,7 @@ class DebateChatControllerTest {
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         val exception = RuntimeException()
         onCreate()
-        initialsCommentsSubject.onComplete()
+        initialsCommentsSubject.onSuccess(listOf(createComment()))
         liveCommentsSubject.onError(exception)
         verify(view).showLiveCommentsError(exception)
     }

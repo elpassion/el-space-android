@@ -49,7 +49,8 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:padding="5dp"
-                    android:textColor="@color/greyDarkText" />
+                    android:textColor="@color/greyDarkText"
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -64,7 +65,7 @@
                 android:src="@drawable/send_comment" />
 
         </LinearLayout>
-    </LinearLayout>
 
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

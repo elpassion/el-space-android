@@ -25,11 +25,11 @@ class DebateChatController(
 
     private fun getInitialComments(token: String) {
         service.initialsCommentsObservable(token)
+                .subscribeOn(schedulers.backgroundScheduler)
+                .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doOnTerminate(view::hideLoader)
                 .doOnComplete(this::subscribeToLiveComments)
-                .subscribeOn(schedulers.backgroundScheduler)
-                .observeOn(schedulers.uiScheduler)
                 .subscribe(view::showComment, view::showInitialsCommentsError)
                 .addTo(subscriptions)
     }

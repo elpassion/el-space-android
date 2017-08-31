@@ -87,13 +87,13 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         hideLoader(debateChatCoordinator)
     }
 
-    override fun showLiveComment(liveComment: Comment) {
-        comments.add(liveComment)
+    override fun showInitialsComments(initialsComments: List<Comment>) {
+        comments.addAll(initialsComments)
         updateAdapter()
     }
 
-    override fun showInitialsComments(initialsComments: List<Comment>) {
-        comments.addAll(initialsComments)
+    override fun showLiveComment(liveComment: Comment) {
+        comments.add(liveComment)
         updateAdapter()
     }
 

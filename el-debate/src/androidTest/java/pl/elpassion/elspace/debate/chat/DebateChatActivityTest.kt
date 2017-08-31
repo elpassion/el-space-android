@@ -269,9 +269,9 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowSendCommentErrorWhenSendCommentFailed() {
-        sendCommentSubject.onError(RuntimeException())
         startActivity()
         sendComment()
+        sendCommentSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_send_comment_error).isDisplayed()
     }

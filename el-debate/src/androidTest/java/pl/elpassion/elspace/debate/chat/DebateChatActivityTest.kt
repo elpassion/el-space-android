@@ -65,6 +65,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowEmptyContainerWhenServiceInitialsCommentsReturnsEmptyList() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(emptyList())
+        onId(R.id.debateChatCommentsContainer).hasChildCount(0)
+    }
+
+    @Test
     fun shouldShowCorrectInitialsInLoggedUserCommentView() {
         startActivity(userId = 1)
         initialsCommentsSubject.onSuccess(listOf(createComment(userInitials = "LXX", userId = 1)))

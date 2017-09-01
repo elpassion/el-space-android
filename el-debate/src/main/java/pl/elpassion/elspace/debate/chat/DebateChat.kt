@@ -12,7 +12,7 @@ import retrofit2.http.*
 interface DebateChat {
 
     interface Service {
-        fun initialsCommentsObservable(token: String): Single<List<Comment>>
+        fun initialsCommentsObservable(token: String): Single<InitialsComments>
         fun liveCommentsObservable(debateCode: String): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Completable
     }
@@ -27,7 +27,7 @@ interface DebateChat {
                 @Field("last_name") lastName: String): Completable
 
         @GET("comments")
-        fun comment(@Header("Authorization") token: String): Single<List<Comment>>
+        fun comment(@Header("Authorization") token: String): Single<InitialsComments>
     }
 
     interface Socket {

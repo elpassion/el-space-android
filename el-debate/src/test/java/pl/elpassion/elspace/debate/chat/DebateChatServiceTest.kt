@@ -10,12 +10,13 @@ import io.reactivex.subjects.SingleSubject
 import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
+import pl.elpassion.elspace.dabate.chat.createInitialsComments
 import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 
 class DebateChatServiceTest {
 
-    private val commentsFromApiSubject = SingleSubject.create<List<Comment>>()
+    private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
     private val sendCommentsApiSubject = CompletableSubject.create()
     private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any())).thenReturn(commentsFromApiSubject)
@@ -34,24 +35,24 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldReturnCommentsReceivedFromApiComment() {
-        val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(name = "FirstTestName"), createComment(name = "TestName"))
+    fun shouldReturnInitialsCommentsReceivedFromApiComment() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")))
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()
-        commentsFromApiSubject.onSuccess(commentsFromApi)
-        testObserver.assertValues(commentsFromApi)
+        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        testObserver.assertValues(initialsCommentsFromApi)
     }
 
     @Test
     fun shouldSortCommentsReceivedFromApiComment() {
-        val commentsFromApi: ArrayList<Comment> = arrayListOf(createComment(createdAt = 3), createComment(createdAt = 1), createComment(createdAt = 2))
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(createdAt = 3), createComment(createdAt = 1), createComment(createdAt = 2)))
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()
-        commentsFromApiSubject.onSuccess(commentsFromApi)
-        val sortedComments = commentsFromApi.sortedBy { it.createdAt }
-        testObserver.assertValues(sortedComments)
+        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.createdAt }
+        testObserver.assertValues(createInitialsComments(comments = sortedComments))
     }
 
     @Test

@@ -165,6 +165,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldHideSendCommentLayoutWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        onId(R.id.debateChatSendCommentView).isNotDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

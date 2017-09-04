@@ -306,6 +306,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned406CodeError() {
+        startActivity()
+        sendComment()
+        sendCommentSubject.onError(createHttpException(406))
+        onText(R.string.debate_chat_debate_closed_error).isDisplayed()
+    }
+
+    @Test
     fun shouldNotClearCommentInputWhenSendCommentFailed() {
         startActivity()
         sendComment("New message")

@@ -125,13 +125,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showSendCommentSuccessPending() {
         clearSendCommentInputText()
+        Snackbar.make(debateChatCoordinator, R.string.debate_chat_send_comment_success_pending_info, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun clearSendCommentInput() {
         clearSendCommentInputText()
     }
 
-    private fun clearSendCommentInputText(){
+    private fun clearSendCommentInputText() {
         debateChatSendCommentInputText.text.clear()
     }
 

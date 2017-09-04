@@ -312,7 +312,7 @@ class DebateChatControllerTest {
     fun shouldClearSendCommentInputWhenSendCommentSucceeded() {
         sendComment()
         sendCommentSubject.onSuccess(SendCommentResponse(false))
-        verify(view).clearSendCommentInput()
+        verify(view).showSendCommentSuccess()
     }
 
     @Test

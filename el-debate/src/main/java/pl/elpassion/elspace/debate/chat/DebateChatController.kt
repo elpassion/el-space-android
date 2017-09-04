@@ -70,7 +70,7 @@ class DebateChatController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe({ response -> view.clearSendCommentInput() },
+                .subscribe({ response -> view.showSendCommentSuccess() },
                         { error -> checkSendCommentError(error) })
                 .addTo(subscriptions)
     }

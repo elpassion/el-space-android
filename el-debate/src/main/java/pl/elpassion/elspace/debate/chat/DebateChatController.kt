@@ -4,6 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
+import retrofit2.HttpException
 
 class DebateChatController(
         private val view: DebateChat.View,
@@ -69,8 +70,16 @@ class DebateChatController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .subscribe(view::clearSendCommentInput, view::showSendCommentError)
+                .subscribe(view::clearSendCommentInput,
+                        { error -> checkSendCommentError(error) })
                 .addTo(subscriptions)
+    }
+
+    private fun checkSendCommentError(error: Throwable) {
+        when {
+            error is HttpException && error.code() == 406 -> view.showDebateClosedError()
+            else -> view.showSendCommentError(error)
+        }
     }
 
     fun onDestroy() {

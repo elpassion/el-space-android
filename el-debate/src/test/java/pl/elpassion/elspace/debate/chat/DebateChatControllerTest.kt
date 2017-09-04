@@ -11,6 +11,7 @@ import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 
@@ -321,6 +322,13 @@ class DebateChatControllerTest {
         val exception = RuntimeException()
         sendCommentSubject.onError(exception)
         verify(view).showSendCommentError(exception)
+    }
+
+    @Test
+    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned406CodeError() {
+        sendComment()
+        sendCommentSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
     }
 
     @Test

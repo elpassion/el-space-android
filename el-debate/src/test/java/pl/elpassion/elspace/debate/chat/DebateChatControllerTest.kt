@@ -316,6 +316,13 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
+        sendComment()
+        sendCommentSubject.onSuccess(SendCommentResponse(pending = false))
+        verify(view).clearSendCommentInput()
+    }
+
+    @Test
     fun shouldShowErrorWhenSendCommentFailed() {
         sendComment()
         val exception = RuntimeException()

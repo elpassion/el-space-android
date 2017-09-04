@@ -127,6 +127,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         debateChatSendCommentInputText.text.clear()
     }
 
+    override fun clearSendCommentInput() {
+
+    }
+
     override fun showSendCommentError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_send_comment_error, 3000).show()
         logExceptionIfDebug(this.localClassName, exception)

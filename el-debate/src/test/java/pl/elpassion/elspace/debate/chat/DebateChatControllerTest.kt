@@ -102,14 +102,14 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowDebateClosedErrorWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         verify(view).showDebateClosedError()
     }
 
     @Test
     fun shouldNotCallServiceLiveCommentsWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         verify(service, never()).liveCommentsObservable(any())
     }
 

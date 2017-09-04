@@ -168,14 +168,14 @@ class DebateChatActivityTest {
     @Test
     fun shouldHideSendCommentLayoutWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         onId(R.id.debateChatSendCommentView).isNotDisplayed()
     }
 
     @Test
     fun shouldShowDebateClosedErrorWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         onText(R.string.debate_chat_debate_closed_error).isDisplayed()
     }
 

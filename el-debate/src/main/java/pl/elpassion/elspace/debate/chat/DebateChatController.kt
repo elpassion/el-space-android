@@ -30,7 +30,8 @@ class DebateChatController(
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .doOnSuccess { (isDebateClosed) ->
-                    if (!isDebateClosed) subscribeToLiveComments()
+                    if (isDebateClosed) view.showDebateClosedError()
+                    else subscribeToLiveComments()
                 }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },

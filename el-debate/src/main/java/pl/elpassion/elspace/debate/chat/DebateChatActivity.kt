@@ -109,6 +109,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         logExceptionIfDebug(this.localClassName, exception)
     }
 
+    override fun showDebateClosedError() {
+
+    }
+
     override fun showLiveCommentsError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.debate_chat_live_comments_error_refresh, { controller.onLiveCommentsRefresh() })

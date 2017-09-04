@@ -39,6 +39,7 @@ interface DebateChat {
         fun hideLoader()
         fun showInitialsComments(initialsComments: List<Comment>)
         fun showInitialsCommentsError(exception: Throwable)
+        fun showDebateClosedError()
         fun showLiveComment(liveComment: Comment)
         fun showLiveCommentsError(exception: Throwable)
         fun clearSendCommentInput()

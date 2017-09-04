@@ -9,7 +9,6 @@ import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
@@ -34,7 +33,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
-    private val sendCommentSubject = CompletableSubject.create()
+    private val sendCommentSubject = SingleSubject.create<SendCommentResponse>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
@@ -325,7 +324,7 @@ class DebateChatActivityTest {
     fun shouldClearSendCommentInputOnSuccessfullySentComment() {
         startActivity()
         sendComment("Message")
-        sendCommentSubject.onComplete()
+        sendCommentSubject.onSuccess(SendCommentResponse(false))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 

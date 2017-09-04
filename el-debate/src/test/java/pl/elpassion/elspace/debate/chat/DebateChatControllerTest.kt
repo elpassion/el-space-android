@@ -3,7 +3,6 @@ package pl.elpassion.elspace.debate.chat
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
@@ -22,7 +21,7 @@ class DebateChatControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
-    private val sendCommentSubject = CompletableSubject.create()
+    private val sendCommentSubject = SingleSubject.create<SendCommentResponse>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
@@ -263,7 +262,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         sendComment()
-        sendCommentSubject.onComplete()
+        sendCommentSubject.onSuccess(SendCommentResponse(false))
         verify(view).hideLoader()
     }
 
@@ -292,7 +291,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onComplete()
+        sendCommentSubject.onSuccess(SendCommentResponse(false))
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -303,7 +302,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onComplete()
+        sendCommentSubject.onSuccess(SendCommentResponse(false))
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
@@ -312,7 +311,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldClearSendCommentInputWhenSendCommentSucceeded() {
         sendComment()
-        sendCommentSubject.onComplete()
+        sendCommentSubject.onSuccess(SendCommentResponse(false))
         verify(view).clearSendCommentInput()
     }
 

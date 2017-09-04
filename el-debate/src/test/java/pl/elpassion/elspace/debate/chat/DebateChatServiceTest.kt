@@ -4,7 +4,6 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.subjects.CompletableSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Test
@@ -17,7 +16,7 @@ import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 class DebateChatServiceTest {
 
     private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
-    private val sendCommentsApiSubject = CompletableSubject.create()
+    private val sendCommentsApiSubject = SingleSubject.create<SendCommentResponse>()
     private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any())).thenReturn(commentsFromApiSubject)
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
@@ -110,5 +109,25 @@ class DebateChatServiceTest {
                 .test()
         sendCommentsApiSubject.onError(exception)
         testObserver.assertError(exception)
+    }
+
+    @Test
+    fun shouldReturnSendCommentResponseFromApiSendCommentWhenPendingIsTrue() {
+        val sendCommentResponse = SendCommentResponse(pending = true)
+        val testObserver = debateChatServiceImpl
+                .sendComment(createCommentToSend())
+                .test()
+        sendCommentsApiSubject.onSuccess(sendCommentResponse)
+        testObserver.assertValue(sendCommentResponse)
+    }
+
+    @Test
+    fun shouldReturnSendCommentResponseFromApiSendCommentWhenPendingIsFalse() {
+        val sendCommentResponse = SendCommentResponse(pending = false)
+        val testObserver = debateChatServiceImpl
+                .sendComment(createCommentToSend())
+                .test()
+        sendCommentsApiSubject.onSuccess(sendCommentResponse)
+        testObserver.assertValue(sendCommentResponse)
     }
 }

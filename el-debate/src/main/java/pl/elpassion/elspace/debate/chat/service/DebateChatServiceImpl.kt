@@ -1,12 +1,8 @@
 package pl.elpassion.elspace.debate.chat.service
 
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import pl.elpassion.elspace.debate.chat.Comment
-import pl.elpassion.elspace.debate.chat.CommentToSend
-import pl.elpassion.elspace.debate.chat.DebateChat
-import pl.elpassion.elspace.debate.chat.InitialsComments
+import pl.elpassion.elspace.debate.chat.*
 
 class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: DebateChat.Socket) : DebateChat.Service {
 
@@ -16,6 +12,6 @@ class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket:
 
     override fun liveCommentsObservable(debateCode: String): Observable<Comment> = socket.commentsObservable(debateCode)
 
-    override fun sendComment(commentToSend: CommentToSend): Completable =
+    override fun sendComment(commentToSend: CommentToSend): Single<SendCommentResponse> =
             commentToSend.run { api.comment(token, message, firstName, lastName) }
 }

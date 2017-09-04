@@ -1,6 +1,5 @@
 package pl.elpassion.elspace.debate.chat
 
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import pl.elpassion.elspace.api.DebateRetrofitProvider
@@ -14,7 +13,7 @@ interface DebateChat {
     interface Service {
         fun initialsCommentsObservable(token: String): Single<InitialsComments>
         fun liveCommentsObservable(debateCode: String): Observable<Comment>
-        fun sendComment(commentToSend: CommentToSend): Completable
+        fun sendComment(commentToSend: CommentToSend): Single<SendCommentResponse>
     }
 
     interface Api {
@@ -24,7 +23,7 @@ interface DebateChat {
                 @Header("Authorization") token: String,
                 @Field("text") message: String,
                 @Field("first_name") firstName: String,
-                @Field("last_name") lastName: String): Completable
+                @Field("last_name") lastName: String): Single<SendCommentResponse>
 
         @GET("comments")
         fun comment(@Header("Authorization") token: String): Single<InitialsComments>

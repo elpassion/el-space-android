@@ -124,11 +124,15 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showSendCommentSuccessPending() {
-        debateChatSendCommentInputText.text.clear()
+        clearSendCommentInputText()
     }
 
     override fun clearSendCommentInput() {
+        clearSendCommentInputText()
+    }
 
+    private fun clearSendCommentInputText(){
+        debateChatSendCommentInputText.text.clear()
     }
 
     override fun showSendCommentError(exception: Throwable) {

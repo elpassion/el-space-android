@@ -18,4 +18,5 @@
     <color name="answerNeutral">#8F8F8F</color>
     <color name="answerInactive">#EAEAEA</color>
     <color name="black">#000</color>
+    <color name="redBackground">#FFFF0000</color>
 </resources>

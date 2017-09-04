@@ -94,6 +94,13 @@ class DebateDetailsControllerTest {
     }
 
     @Test
+    fun shouldShowDebateClosedErrorOnGetDebateDetails406CodeErrorFromApi() {
+        createController().onCreate("token")
+        debateDetailsSubject.onError(createHttpException(406))
+        verify(view).showDebateClosedError()
+    }
+
+    @Test
     fun shouldHideLoaderOnDestroyIfApiCallIsRunning() {
         createController().run {
             onCreate("token")

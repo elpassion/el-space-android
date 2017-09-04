@@ -177,6 +177,13 @@ class DebateDetailsActivityTest {
     }
 
     @Test
+    fun shouldShowDebateClosedErrorOnGetDebateDetails406CodeErrorFromApi() {
+        startActivity()
+        debateDetailsSubject.onError(createHttpException(406))
+        onId(R.id.debateClosedView).isDisplayed()
+    }
+
+    @Test
     fun shouldShowRefreshButtonWithDebateDetailsError() {
         startActivity()
         debateDetailsSubject.onError(RuntimeException())

@@ -123,7 +123,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         logExceptionIfDebug(this.localClassName, exception)
     }
 
-    override fun showSendCommentSuccess() {
+    override fun showSendCommentSuccessPending() {
         debateChatSendCommentInputText.text.clear()
     }
 

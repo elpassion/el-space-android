@@ -41,7 +41,7 @@ interface DebateChat {
         fun showDebateClosedError()
         fun showLiveComment(liveComment: Comment)
         fun showLiveCommentsError(exception: Throwable)
-        fun showSendCommentSuccess()
+        fun showSendCommentSuccessPending()
         fun showSendCommentError(exception: Throwable)
         fun showInputOverLimitError()
         fun showCredentialsDialog()

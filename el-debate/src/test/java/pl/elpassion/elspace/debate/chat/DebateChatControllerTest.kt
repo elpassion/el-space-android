@@ -309,10 +309,10 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowSendCommentSuccessWhenSendCommentSucceeded() {
+    fun shouldShowSendCommentSuccessPendingWhenSendCommentResponseIsPending() {
         sendComment()
-        sendCommentSubject.onSuccess(SendCommentResponse(false))
-        verify(view).showSendCommentSuccess()
+        sendCommentSubject.onSuccess(SendCommentResponse(pending = true))
+        verify(view).showSendCommentSuccessPending()
     }
 
     @Test

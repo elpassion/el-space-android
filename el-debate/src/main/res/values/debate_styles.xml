@@ -17,7 +17,7 @@
 
     <style name="HintDebate">
         <item name="colorAccent">@color/hint</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@color/hint</item>
     </style>
 

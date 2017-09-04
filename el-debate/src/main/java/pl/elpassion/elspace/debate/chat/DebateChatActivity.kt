@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
+import com.elpassion.android.view.show
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
@@ -112,6 +113,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showDebateClosedError() {
         debateChatSendCommentView.hide()
+        debateChatSendCommentViewError.show()
     }
 
     override fun showLiveCommentsError(exception: Throwable) {

@@ -173,6 +173,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowDebateClosedErrorWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(isDebateClosed = true))
+        onText(R.string.debate_chat_debate_closed_error).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

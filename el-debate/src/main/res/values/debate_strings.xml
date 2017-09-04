@@ -22,7 +22,7 @@
     <string name="debate_chat_initials_comments_error_refresh">Refresh</string>
     <string name="debate_chat_live_comments_error">Connecting to chat failed</string>
     <string name="debate_chat_live_comments_error_refresh">Refresh</string>
-    <string name="debate_chat_send_comment_hint">Chat about this debate</string>
+    <string name="debate_chat_send_comment_hint">Share your thoughts</string>
     <string name="debate_chat_send_comment_button">Send</string>
     <string name="debate_chat_send_comment_success">Comment sent!</string>
     <string name="debate_chat_send_comment_error">Sending your comment failed, please try again</string>

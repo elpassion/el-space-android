@@ -20,6 +20,7 @@ import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
+import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -287,6 +288,14 @@ class DebateChatActivityTest {
         sendCommentSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_send_comment_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldHideSendCommentLayoutWhenServiceSendCommentReturned406CodeError() {
+        startActivity()
+        sendComment()
+        sendCommentSubject.onError(createHttpException(406))
+        onId(R.id.debateChatSendCommentView).isNotDisplayed()
     }
 
     @Test

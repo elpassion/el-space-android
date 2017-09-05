@@ -23,6 +23,7 @@
     <string name="debate_chat_live_comments_error">Connecting to chat failed</string>
     <string name="debate_chat_live_comments_error_refresh">Refresh</string>
     <string name="debate_chat_send_comment_hint">Share your thoughts</string>
+    <string name="debate_chat_send_comment_pending_info">This commennt is pending</string>
     <string name="debate_chat_send_comment_error">Sending your comment failed, please try again</string>
     <string name="debate_chat_debate_closed_error">This debate is closed</string>
     <integer name="debate_chat_send_comment_max_message_length">100</integer>

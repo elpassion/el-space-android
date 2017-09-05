@@ -19,6 +19,7 @@ import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
+import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -324,7 +325,7 @@ class DebateChatActivityTest {
     fun shouldClearSendCommentInputWhenSendCommentResponseIsPending() {
         startActivity()
         sendComment("Message")
-        sendCommentSubject.onSuccess(SendCommentResponse(pending = true))
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 
@@ -332,7 +333,7 @@ class DebateChatActivityTest {
     fun shouldShowSendCommentSuccessPendingInfoWhenSendCommentResponseIsPending() {
         startActivity()
         sendComment("Message")
-        sendCommentSubject.onSuccess(SendCommentResponse(pending = true))
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
         onText(R.string.debate_chat_send_comment_success_pending_info).isDisplayedEffectively()
     }
 
@@ -340,7 +341,7 @@ class DebateChatActivityTest {
     fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
         startActivity()
         sendComment("Message")
-        sendCommentSubject.onSuccess(SendCommentResponse(pending = false))
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = false))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 

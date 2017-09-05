@@ -10,6 +10,7 @@ import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
+import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -262,7 +263,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         sendComment()
-        sendCommentSubject.onSuccess(SendCommentResponse(false))
+        sendCommentSubject.onSuccess(createSendCommentResponse())
         verify(view).hideLoader()
     }
 
@@ -291,7 +292,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onSuccess(SendCommentResponse(false))
+        sendCommentSubject.onSuccess(createSendCommentResponse())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -302,7 +303,7 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onSuccess(SendCommentResponse(false))
+        sendCommentSubject.onSuccess(createSendCommentResponse())
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
@@ -311,14 +312,14 @@ class DebateChatControllerTest {
     @Test
     fun shouldShowSendCommentSuccessPendingWhenSendCommentResponseIsPending() {
         sendComment()
-        sendCommentSubject.onSuccess(SendCommentResponse(pending = true))
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
         verify(view).showSendCommentSuccessPending()
     }
 
     @Test
     fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
         sendComment()
-        sendCommentSubject.onSuccess(SendCommentResponse(pending = false))
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = false))
         verify(view).clearSendCommentInput()
     }
 

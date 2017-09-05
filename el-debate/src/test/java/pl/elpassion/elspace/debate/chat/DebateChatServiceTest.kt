@@ -10,6 +10,7 @@ import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
+import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 
@@ -112,18 +113,8 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldReturnSendCommentResponseFromApiSendCommentWhenPendingIsTrue() {
-        val sendCommentResponse = SendCommentResponse(pending = true)
-        val testObserver = debateChatServiceImpl
-                .sendComment(createCommentToSend())
-                .test()
-        sendCommentsApiSubject.onSuccess(sendCommentResponse)
-        testObserver.assertValue(sendCommentResponse)
-    }
-
-    @Test
-    fun shouldReturnSendCommentResponseFromApiSendCommentWhenPendingIsFalse() {
-        val sendCommentResponse = SendCommentResponse(pending = false)
+    fun shouldReturnSendCommentResponseFromApiSendComment() {
+        val sendCommentResponse = createSendCommentResponse()
         val testObserver = debateChatServiceImpl
                 .sendComment(createCommentToSend())
                 .test()

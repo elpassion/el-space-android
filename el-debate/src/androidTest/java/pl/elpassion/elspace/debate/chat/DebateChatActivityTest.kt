@@ -180,6 +180,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowLiveCommentOnServiceLiveCommentsNext() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onNext(createComment(name = "LiveComment"))
+        onText("LiveComment").isDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

@@ -9,6 +9,7 @@ import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
 import com.nhaarman.mockito_kotlin.*
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
@@ -181,9 +182,9 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowLiveCommentOnServiceLiveCommentsNext() {
+        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.just(createComment(name = "LiveComment")))
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        liveCommentsSubject.onNext(createComment(name = "LiveComment"))
         onText("LiveComment").isDisplayed()
     }
 

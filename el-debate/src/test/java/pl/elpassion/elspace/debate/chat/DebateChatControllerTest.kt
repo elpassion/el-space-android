@@ -310,10 +310,11 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowSendCommentSuccessPendingWhenSendCommentResponseIsPending() {
+    fun shouldShowSendCommentSuccessPendingWithRealCommentWhenSendCommentResponseIsPending() {
+        val comment = createComment(name = "PendingComment")
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
-        verify(view).showSendCommentSuccessPending()
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true, comment = comment))
+        verify(view).showSendCommentSuccessPending(comment)
     }
 
     @Test

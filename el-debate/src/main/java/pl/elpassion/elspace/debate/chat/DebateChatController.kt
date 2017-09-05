@@ -75,7 +75,7 @@ class DebateChatController(
     }
 
     private fun showSendCommentSuccess(response: SendCommentResponse) {
-        if (response.pending) view.showSendCommentSuccessPending()
+        if (response.pending) view.showSendCommentSuccessPending(response.comment)
         else view.clearSendCommentInput()
     }
 

@@ -346,23 +346,15 @@ class DebateChatActivityTest {
     @Test
     fun shouldClearSendCommentInputWhenSendCommentResponseIsPending() {
         startActivity()
-        sendComment("Message")
+        sendComment()
         sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 
     @Test
-    fun shouldShowSendCommentSuccessPendingInfoWhenSendCommentResponseIsPending() {
-        startActivity()
-        sendComment("Message")
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
-        onText(R.string.debate_chat_send_comment_success_pending_info).isDisplayedEffectively()
-    }
-
-    @Test
     fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
         startActivity()
-        sendComment("Message")
+        sendComment()
         sendCommentSubject.onSuccess(createSendCommentResponse(pending = false))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }

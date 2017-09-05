@@ -123,9 +123,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         logExceptionIfDebug(this.localClassName, exception)
     }
 
-    override fun showSendCommentSuccessPending() {
+    override fun showSendCommentSuccessPending(comment: Comment) {
         clearSendCommentInputText()
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_send_comment_success_pending_info, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun clearSendCommentInput() {

@@ -352,6 +352,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowPendingCommentWhenSendCommentResponseIsPending() {
+        startActivity(userId = 1)
+        sendComment()
+        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true, comment = createComment(name = "PendingComment", userId = 1)))
+        onText("PendingComment").isDisplayed()
+    }
+
+    @Test
     fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
         startActivity()
         sendComment()

@@ -95,7 +95,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showLiveComment(liveComment: Comment) {
-        comments.add(liveComment)
+        showComment(liveComment)
+    }
+
+    private fun showComment(comment: Comment) {
+        comments.add(comment)
         updateAdapter()
     }
 
@@ -125,6 +129,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showSendCommentSuccessPending(comment: Comment) {
         clearSendCommentInputText()
+        showComment(comment)
     }
 
     override fun clearSendCommentInput() {

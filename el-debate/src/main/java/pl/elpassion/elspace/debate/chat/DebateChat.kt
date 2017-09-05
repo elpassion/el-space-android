@@ -13,7 +13,7 @@ interface DebateChat {
     interface Service {
         fun initialsCommentsObservable(token: String): Single<InitialsComments>
         fun liveCommentsObservable(debateCode: String): Observable<Comment>
-        fun sendComment(commentToSend: CommentToSend): Single<SendCommentResponse>
+        fun sendComment(commentToSend: CommentToSend): Single<Comment>
     }
 
     interface Api {
@@ -23,7 +23,7 @@ interface DebateChat {
                 @Header("Authorization") token: String,
                 @Field("text") message: String,
                 @Field("first_name") firstName: String,
-                @Field("last_name") lastName: String): Single<SendCommentResponse>
+                @Field("last_name") lastName: String): Single<Comment>
 
         @GET("comments")
         fun comment(@Header("Authorization") token: String): Single<InitialsComments>

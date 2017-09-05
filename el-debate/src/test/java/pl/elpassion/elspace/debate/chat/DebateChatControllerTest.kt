@@ -10,7 +10,6 @@ import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
-import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -22,7 +21,7 @@ class DebateChatControllerTest {
     private val debateRepo = mock<DebatesRepository>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
-    private val sendCommentSubject = SingleSubject.create<SendCommentResponse>()
+    private val sendCommentSubject = SingleSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 
     @Before
@@ -263,7 +262,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldHideLoaderWhenSendCommentSucceeded() {
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse())
+        sendCommentSubject.onSuccess(createComment())
         verify(view).hideLoader()
     }
 
@@ -292,7 +291,7 @@ class DebateChatControllerTest {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onSuccess(createSendCommentResponse())
+        sendCommentSubject.onSuccess(createComment())
         verify(view, never()).hideLoader()
         subscribeOn.triggerActions()
         verify(view).hideLoader()
@@ -303,24 +302,24 @@ class DebateChatControllerTest {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
         controller.sendComment(token = "token", message = "message")
-        sendCommentSubject.onSuccess(createSendCommentResponse())
+        sendCommentSubject.onSuccess(createComment())
         verify(view, never()).hideLoader()
         observeOn.triggerActions()
         verify(view).hideLoader()
     }
 
     @Test
-    fun shouldShowSendCommentSuccessPendingWithRealCommentWhenSendCommentResponseIsPending() {
-        val comment = createComment(name = "PendingComment")
+    fun shouldShowSendCommentSuccessPendingWhenSendCommentStatusIsPending() {
+        val comment = createComment(name = "PendingComment", status = "pending")
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true, comment = comment))
+        sendCommentSubject.onSuccess(comment)
         verify(view).showSendCommentSuccessPending(comment)
     }
 
     @Test
-    fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
+    fun shouldClearSendCommentInputWhenSendCommentStatusIsNotPending() {
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = false))
+        sendCommentSubject.onSuccess(createComment(status = "accepted"))
         verify(view).clearSendCommentInput()
     }
 

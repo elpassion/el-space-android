@@ -20,7 +20,6 @@ import pl.elpassion.elspace.common.isDisplayedEffectively
 import pl.elpassion.elspace.common.rule
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
-import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -35,7 +34,7 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
-    private val sendCommentSubject = SingleSubject.create<SendCommentResponse>()
+    private val sendCommentSubject = SingleSubject.create<Comment>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
     private val liveCommentsSubject = PublishSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
@@ -344,26 +343,26 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldClearSendCommentInputWhenSendCommentResponseIsPending() {
+    fun shouldClearSendCommentInputWhenSendCommentStatusIsPending() {
         startActivity()
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true))
+        sendCommentSubject.onSuccess(createComment(status = "pending"))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 
     @Test
-    fun shouldShowPendingCommentWhenSendCommentResponseIsPending() {
+    fun shouldShowPendingCommentWhenSendCommentStatusIsPending() {
         startActivity(userId = 1)
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = true, comment = createComment(name = "PendingComment", userId = 1)))
+        sendCommentSubject.onSuccess(createComment(name = "PendingComment", userId = 1, status = "pending"))
         onText("PendingComment").isDisplayed()
     }
 
     @Test
-    fun shouldClearSendCommentInputWhenSendCommentResponseIsNotPending() {
+    fun shouldClearSendCommentInputWhenSendCommentStatusIsNotPending() {
         startActivity()
         sendComment()
-        sendCommentSubject.onSuccess(createSendCommentResponse(pending = false))
+        sendCommentSubject.onSuccess(createComment(status = "accepted"))
         onId(R.id.debateChatSendCommentInputText).hasText("")
     }
 

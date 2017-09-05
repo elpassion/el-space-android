@@ -10,14 +10,13 @@ import org.junit.Test
 import pl.elpassion.elspace.dabate.chat.createComment
 import pl.elpassion.elspace.dabate.chat.createCommentToSend
 import pl.elpassion.elspace.dabate.chat.createInitialsComments
-import pl.elpassion.elspace.dabate.chat.createSendCommentResponse
 import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 
 class DebateChatServiceTest {
 
     private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
-    private val sendCommentsApiSubject = SingleSubject.create<SendCommentResponse>()
+    private val sendCommentsApiSubject = SingleSubject.create<Comment>()
     private val api = mock<DebateChat.Api>().apply {
         whenever(comment(any())).thenReturn(commentsFromApiSubject)
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
@@ -114,11 +113,11 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldReturnSendCommentResponseFromApiSendComment() {
-        val sendCommentResponse = createSendCommentResponse()
+        val comment = createComment()
         val testObserver = debateChatServiceImpl
                 .sendComment(createCommentToSend())
                 .test()
-        sendCommentsApiSubject.onSuccess(sendCommentResponse)
-        testObserver.assertValue(sendCommentResponse)
+        sendCommentsApiSubject.onSuccess(comment)
+        testObserver.assertValue(comment)
     }
 }

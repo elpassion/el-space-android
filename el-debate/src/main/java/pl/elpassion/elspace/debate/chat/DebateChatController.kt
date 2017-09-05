@@ -74,9 +74,11 @@ class DebateChatController(
                 .addTo(subscriptions)
     }
 
-    private fun showSendCommentSuccess(response: SendCommentResponse) {
-        if (response.pending) view.showSendCommentSuccessPending(response.comment)
-        else view.clearSendCommentInput()
+    private fun showSendCommentSuccess(comment: Comment) {
+        when (comment.commentStatus) {
+            CommentStatus.PENDING -> view.showSendCommentSuccessPending(comment)
+            else -> view.clearSendCommentInput()
+        }
     }
 
     private fun checkSendCommentError(error: Throwable) {

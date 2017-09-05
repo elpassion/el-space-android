@@ -143,6 +143,19 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollToLastCommentOnLiveCommentsNext() {
+        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.just(createComment(name = "LastMessage")))
+        startActivity()
+        val comments = mutableListOf<Comment>().apply {
+            (1..10).forEach {
+                add(createComment())
+            }
+        }
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        onText("LastMessage").isDisplayed()
+    }
+
+    @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         startActivity()
         initialsCommentsSubject.onError(RuntimeException())

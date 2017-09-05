@@ -9,8 +9,7 @@ import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
 import com.elpassion.android.commons.espresso.recycler.onRecyclerViewItem
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
 import org.junit.Rule
@@ -34,12 +33,12 @@ class DebateChatActivityTest {
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
         whenever(areTokenCredentialsMissing(any())).thenReturn(false)
     }
-    private val sendCommentSubject = SingleSubject.create<Comment>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
-    private val liveCommentsSubject = PublishSubject.create<Comment>()
+    private val liveCommentsSubject = BehaviorSubject.create<Comment>()
+    private val sendCommentSubject = SingleSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
         whenever(initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
+        whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
@@ -143,7 +142,6 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldScrollToLastCommentOnLiveCommentsNext() {
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.just(createComment(name = "LastMessage")))
         startActivity()
         val comments = mutableListOf<Comment>().apply {
             (1..10).forEach {
@@ -151,6 +149,7 @@ class DebateChatActivityTest {
             }
         }
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
         onText("LastMessage").isDisplayed()
     }
 
@@ -194,9 +193,9 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowLiveCommentOnServiceLiveCommentsNext() {
-        whenever(service.liveCommentsObservable(any())).thenReturn(Observable.just(createComment(name = "LiveComment")))
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onNext(createComment(name = "LiveComment"))
         onText("LiveComment").isDisplayed()
     }
 
@@ -364,6 +363,16 @@ class DebateChatActivityTest {
         sendComment()
         sendCommentSubject.onSuccess(createComment(userId = 1, status = "pending"))
         onText(R.string.debate_chat_send_comment_pending_info).isDisplayed()
+    }
+
+    @Test
+    fun shouldHidePendingInfoWhenCommentStatusChangedToNotPending() {
+        startActivity(userId = 1)
+        sendComment()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
+        sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
+        liveCommentsSubject.onNext(createComment(id = 123, userId = 1, status = "accepted"))
+        onText(R.string.debate_chat_send_comment_pending_info).isNotDisplayed()
     }
 
     @Test

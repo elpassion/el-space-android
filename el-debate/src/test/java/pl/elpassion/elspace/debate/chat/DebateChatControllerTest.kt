@@ -3,7 +3,7 @@ package pl.elpassion.elspace.debate.chat
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +20,7 @@ class DebateChatControllerTest {
     private val service = mock<DebateChat.Service>()
     private val debateRepo = mock<DebatesRepository>()
     private val initialsCommentsSubject = SingleSubject.create<InitialsComments>()
-    private val liveCommentsSubject = PublishSubject.create<Comment>()
+    private val liveCommentsSubject = BehaviorSubject.create<Comment>()
     private val sendCommentSubject = SingleSubject.create<Comment>()
     private val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), Schedulers.trampoline()), maxMessageLength = 100)
 

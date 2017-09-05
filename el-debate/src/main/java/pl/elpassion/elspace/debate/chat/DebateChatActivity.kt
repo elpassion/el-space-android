@@ -99,8 +99,17 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun showComment(comment: Comment) {
-        comments.add(comment)
-        updateAdapter()
+        comments.run {
+            indexOfFirst { it.id == comment.id }.run {
+                if (this > -1) {
+                    removeAt(this)
+                    add(this, comment)
+                } else {
+                    add(comment)
+                }
+                updateAdapter()
+            }
+        }
     }
 
     private fun updateAdapter() {

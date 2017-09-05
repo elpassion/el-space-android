@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.view.View
 import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
+import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.logged_user_comment.view.*
 import pl.elpassion.elspace.common.extensions.formatMillisToTime
@@ -21,6 +22,7 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             loggedUserCommentTime.text = item.createdAt.formatMillisToTime()
             when (item.commentStatus) {
                 CommentStatus.PENDING -> loggedUserCommentPendingInfo.show()
+                else -> loggedUserCommentPendingInfo.hide()
             }
         }
     }

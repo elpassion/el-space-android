@@ -130,7 +130,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldScrollToLastComment() {
+    fun shouldScrollToLastCommentOnInitialsCommentsSuccess() {
         startActivity()
         val comments = mutableListOf<Comment>().apply {
             (1..10).forEach {

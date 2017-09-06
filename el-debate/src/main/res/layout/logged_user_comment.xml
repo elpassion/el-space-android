@@ -66,11 +66,11 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/loggedUserCommentPendingInfo"
+        android:id="@+id/loggedUserCommentStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/debate_chat_send_comment_pending_info"
+        android:text="..."
         android:visibility="gone" />
 
     <View

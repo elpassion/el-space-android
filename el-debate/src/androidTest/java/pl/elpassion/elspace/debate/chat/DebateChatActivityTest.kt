@@ -358,31 +358,39 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowPendingInfoWhenSendCommentStatusIsPending() {
+    fun shouldShowCommentStatusViewWhenSendCommentStatusIsPending() {
         startActivity(userId = 1)
         sendComment()
         sendCommentSubject.onSuccess(createComment(userId = 1, status = "pending"))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentPendingInfo).isDisplayed()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentStatus).isDisplayed()
     }
 
     @Test
-    fun shouldHidePendingInfoWhenCommentStatusChangedToAccepted() {
+    fun shouldShowCommentStatusPendingTextWhenSendCommentStatusIsPending() {
+        startActivity(userId = 1)
+        sendComment()
+        sendCommentSubject.onSuccess(createComment(userId = 1, status = "pending"))
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentStatus).hasText(R.string.debate_chat_send_comment_status_pending)
+    }
+
+    @Test
+    fun shouldHideCommentStatusViewWhenCommentStatusChangedToAccepted() {
         startActivity(userId = 1)
         sendComment()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
         sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
         liveCommentsSubject.onNext(createComment(id = 123, userId = 1, status = "accepted"))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentPendingInfo).isNotDisplayed()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentStatus).isNotDisplayed()
     }
 
     @Test
-    fun shouldNotRemovePendingInfoWhenServiceLiveCommentsReturnedCommentWithDifferentId() {
+    fun shouldNotHideCommentStatusViewWhenServiceLiveCommentsReturnedCommentWithDifferentId() {
         startActivity(userId = 1)
         sendComment()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
         sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
         liveCommentsSubject.onNext(createComment(id = 124, userId = 1, status = "accepted"))
-        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentPendingInfo).isDisplayed()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentStatus).isDisplayed()
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import kotlinx.android.synthetic.main.logged_user_comment.view.*
+import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.formatMillisToTime
 import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.CommentStatus
@@ -21,8 +22,12 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             loggedUserCommentMessage.text = item.content
             loggedUserCommentTime.text = item.createdAt.formatMillisToTime()
             when (item.commentStatus) {
-                CommentStatus.PENDING -> loggedUserCommentPendingInfo.show()
-                else -> loggedUserCommentPendingInfo.hide()
+                CommentStatus.PENDING -> {
+                    loggedUserCommentStatus.show()
+                    loggedUserCommentStatus.text = itemView.context.getString(R.string.debate_chat_send_comment_status_pending)
+                }
+                CommentStatus.REJECTED -> { }
+                CommentStatus.ACCEPTED -> loggedUserCommentStatus.hide()
             }
         }
     }

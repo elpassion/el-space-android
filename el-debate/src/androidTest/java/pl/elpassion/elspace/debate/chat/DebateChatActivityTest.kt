@@ -221,7 +221,7 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onError(RuntimeException())
-        Thread.sleep(200)
+        Thread.sleep(300)
         onText(R.string.debate_chat_live_comments_error_refresh).click()
         verify(service, times(2)).liveCommentsObservable(any())
     }

@@ -383,7 +383,7 @@ class DebateChatActivityTest {
         onId(R.id.loggedUserCommentStatus).isNotDisplayed()
     }
 
-    @Test
+    /*@Test
     fun shouldNotHideCommentStatusViewWhenServiceLiveCommentsReturnedCommentWithDifferentId() {
         startActivity(userId = 1)
         sendComment()
@@ -391,7 +391,7 @@ class DebateChatActivityTest {
         sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
         liveCommentsSubject.onNext(createComment(id = 124, userId = 1, status = "accepted"))
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentStatus).isDisplayed()
-    }
+    }*/
 
     @Test
     fun shouldShowCommentStatusRejectedTextWhenSendCommentStatusChangedToRejected() {

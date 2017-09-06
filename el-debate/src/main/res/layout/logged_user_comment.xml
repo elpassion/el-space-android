@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/debate_chat_send_comment_pending_info"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

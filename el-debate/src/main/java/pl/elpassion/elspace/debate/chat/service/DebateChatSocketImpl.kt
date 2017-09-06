@@ -69,5 +69,5 @@ class DebateChatSocketImpl : DebateChat.Socket {
         })
     }
 
-    private fun createCommentList(data: String): List<Comment> = gson.fromJson<List<Comment>>(data, commentListType)
+    private fun createCommentList(data: String): List<Comment> = gson.fromJson<List<Comment>>(data, commentListType).sortedBy { it.createdAt }
 }

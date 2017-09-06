@@ -100,10 +100,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     private fun showComment(comment: Comment) {
         comments.run {
-            indexOfFirst { it.id == comment.id }.run {
-                if (this > -1) {
-                    removeAt(this)
-                    add(this, comment)
+            indexOfFirst { it.id == comment.id }.also {
+                if (it > -1) {
+                    removeAt(it)
+                    add(it, comment)
                 } else {
                     add(comment)
                 }

@@ -362,7 +362,7 @@ class DebateChatActivityTest {
         startActivity(userId = 1)
         sendComment()
         sendCommentSubject.onSuccess(createComment(userId = 1, status = "pending"))
-        onText(R.string.debate_chat_send_comment_pending_info).isDisplayed()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.loggedUserCommentPendingInfo).isDisplayed()
     }
 
     @Test
@@ -372,7 +372,17 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
         sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
         liveCommentsSubject.onNext(createComment(id = 123, userId = 1, status = "accepted"))
-        onText(R.string.debate_chat_send_comment_pending_info).isNotDisplayed()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentPendingInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldNotRemovePendingInfoWhenServiceLiveCommentsReturnedCommentWithDifferentId() {
+        startActivity(userId = 1)
+        sendComment()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
+        sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
+        liveCommentsSubject.onNext(createComment(id = 124, userId = 1, status = "accepted"))
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentPendingInfo).isDisplayed()
     }
 
     @Test

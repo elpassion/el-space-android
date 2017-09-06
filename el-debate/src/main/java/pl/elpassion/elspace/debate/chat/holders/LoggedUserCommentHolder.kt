@@ -24,10 +24,10 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             when (item.commentStatus) {
                 CommentStatus.PENDING -> {
                     loggedUserCommentStatus.show()
-                    loggedUserCommentStatus.text = itemView.context.getString(R.string.debate_chat_send_comment_status_pending)
+                    loggedUserCommentStatus.text = itemView.context.getString(R.string.debate_chat_comment_status_pending)
                 }
-                CommentStatus.REJECTED -> { }
                 CommentStatus.ACCEPTED -> loggedUserCommentStatus.hide()
+                CommentStatus.REJECTED -> loggedUserCommentStatus.text = itemView.context.getString(R.string.debate_chat_comment_status_rejected)
             }
         }
     }

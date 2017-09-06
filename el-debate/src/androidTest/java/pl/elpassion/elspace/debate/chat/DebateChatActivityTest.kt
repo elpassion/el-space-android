@@ -366,7 +366,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldHidePendingInfoWhenCommentStatusChangedToNotPending() {
+    fun shouldHidePendingInfoWhenCommentStatusChangedToAccepted() {
         startActivity(userId = 1)
         sendComment()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))

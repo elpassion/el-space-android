@@ -21,9 +21,11 @@ import java.net.SocketException
 const val API_KEY = BuildConfig.PUSHER_API_KEY
 const val CLUSTER = "mt1"
 const val CHANNEL_NAME_PREFIX = "dashboard_channel_"
+const val EVENT_NAME_ADDED = "comment_added"
+const val EVENT_NAME_REJECTED = "comment_rejected"
 const val CHANNEL_NAME_MULTIPLE_PREFIX = "dashboard_channel_multiple_"
-const val EVENT_NAME = "comment_added"
-const val EVENT_NAME_MULTIPLE = "comments_added"
+const val EVENT_NAME_MULTIPLE_ADDED = "comments_added"
+const val EVENT_NAME_MULTIPLE_REJECTED = "comments_rejected"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
@@ -54,7 +56,11 @@ class DebateChatSocketImpl : DebateChat.Socket {
     }
 
     private fun bindToChannel(channel: Channel, emitter: ObservableEmitter<Comment>) {
-        channel.bind(EVENT_NAME, { channelName, eventName, data ->
+        channel.bind(EVENT_NAME_ADDED, { channelName, eventName, data ->
+            logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            if (data != null) emitter.onNext(createComment(data))
+        })
+        channel.bind(EVENT_NAME_REJECTED, { channelName, eventName, data ->
             logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
             if (data != null) emitter.onNext(createComment(data))
         })
@@ -63,7 +69,11 @@ class DebateChatSocketImpl : DebateChat.Socket {
     private fun createComment(data: String) = gson.fromJson(data, Comment::class.java)
 
     private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
-        channel.bind(EVENT_NAME_MULTIPLE, { channelName, eventName, data ->
+        channel.bind(EVENT_NAME_MULTIPLE_ADDED, { channelName, eventName, data ->
+            logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
+            if (data != null) createCommentList(data).forEach(emitter::onNext)
+        })
+        channel.bind(EVENT_NAME_MULTIPLE_REJECTED, { channelName, eventName, data ->
             logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventName: $eventName, data: $data")
             if (data != null) createCommentList(data).forEach(emitter::onNext)
         })

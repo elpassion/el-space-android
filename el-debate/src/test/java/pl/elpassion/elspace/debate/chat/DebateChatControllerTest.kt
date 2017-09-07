@@ -332,9 +332,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned406CodeError() {
+    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned403CodeError() {
         sendComment()
-        sendCommentSubject.onError(createHttpException(406))
+        sendCommentSubject.onError(createHttpException(403))
         verify(view).showDebateClosedError()
     }
 

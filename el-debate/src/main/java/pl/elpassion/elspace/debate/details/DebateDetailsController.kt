@@ -33,7 +33,7 @@ class DebateDetailsController(
 
     private fun onGetDebateDetailsError(error: Throwable) {
         when {
-            error is HttpException && error.code() == 406 -> view.showDebateClosedError()
+            error is HttpException && error.code() == 403 -> view.showDebateClosedError()
             else -> view.showDebateDetailsError(error)
         }
     }
@@ -50,7 +50,7 @@ class DebateDetailsController(
 
     private fun onVoteError(error: Throwable) {
         when {
-            error is HttpException && error.code() == 406 -> view.showDebateClosedError()
+            error is HttpException && error.code() == 403 -> view.showDebateClosedError()
             error is HttpException && error.code() == 429 -> view.showSlowDownInformation()
             else -> view.showVoteError(error)
         }

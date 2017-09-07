@@ -83,7 +83,7 @@ class DebateChatController(
 
     private fun checkSendCommentError(error: Throwable) {
         when {
-            error is HttpException && error.code() == 406 -> view.showDebateClosedError()
+            error is HttpException && error.code() == 403 -> view.showDebateClosedError()
             else -> view.showSendCommentError(error)
         }
     }

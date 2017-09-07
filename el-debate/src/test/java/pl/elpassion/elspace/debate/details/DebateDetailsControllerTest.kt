@@ -94,9 +94,9 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnGetDebateDetails406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnGetDebateDetails403CodeErrorFromApi() {
         createController().onCreate("token")
-        debateDetailsSubject.onError(createHttpException(406))
+        debateDetailsSubject.onError(createHttpException(403))
         verify(view).showDebateClosedError()
     }
 
@@ -193,9 +193,9 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnVote403CodeErrorFromApi() {
         createController().onVote("token", createPositiveAnswer())
-        sendVoteSubject.onError(createHttpException(406))
+        sendVoteSubject.onError(createHttpException(403))
         verify(view).showDebateClosedError()
     }
 

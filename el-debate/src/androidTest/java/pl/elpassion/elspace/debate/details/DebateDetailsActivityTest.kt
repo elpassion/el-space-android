@@ -177,9 +177,9 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnGetDebateDetails406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnGetDebateDetails403CodeErrorFromApi() {
         startActivity()
-        debateDetailsSubject.onError(createHttpException(406))
+        debateDetailsSubject.onError(createHttpException(403))
         onId(R.id.debateClosedView).isDisplayed()
     }
 
@@ -253,10 +253,10 @@ class DebateDetailsActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnVote403CodeErrorFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
         onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        sendVoteSubject.onError(createHttpException(406))
+        sendVoteSubject.onError(createHttpException(403))
         onId(R.id.debateClosedView).isDisplayed()
     }
 

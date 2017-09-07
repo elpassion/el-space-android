@@ -175,16 +175,16 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnLogin403CodeErrorFromApi() {
         loginToDebate()
-        apiSubject.onError(createHttpException(406))
+        apiSubject.onError(createHttpException(403))
         onText(R.string.debate_login_debate_closed_error).isDisplayed()
     }
 
     @Test
     fun shouldCloseDebateClosedErrorDialogOnOkClick() {
         loginToDebate()
-        apiSubject.onError(createHttpException(406))
+        apiSubject.onError(createHttpException(403))
         onText(R.string.debate_login_debate_closed_error_button_ok).click()
         onText(R.string.debate_login_debate_closed_error).doesNotExist()
     }

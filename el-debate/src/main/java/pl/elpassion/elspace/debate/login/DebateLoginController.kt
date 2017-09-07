@@ -39,7 +39,7 @@ class DebateLoginController(
     }
 
     private fun onLoginError(error: Throwable) {
-        if (error is HttpException && error.code() == 406) {
+        if (error is HttpException && error.code() == 403) {
             view.showDebateClosedError()
         } else {
             view.showLoginError(error)

@@ -318,18 +318,18 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldHideSendCommentLayoutWhenServiceSendCommentReturned406CodeError() {
+    fun shouldHideSendCommentLayoutWhenServiceSendCommentReturned403CodeError() {
         startActivity()
         sendComment()
-        sendCommentSubject.onError(createHttpException(406))
+        sendCommentSubject.onError(createHttpException(403))
         onId(R.id.debateChatSendCommentView).isNotDisplayed()
     }
 
     @Test
-    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned406CodeError() {
+    fun shouldShowDebateClosedErrorWhenServiceSendCommentReturned403CodeError() {
         startActivity()
         sendComment()
-        sendCommentSubject.onError(createHttpException(406))
+        sendCommentSubject.onError(createHttpException(403))
         onText(R.string.debate_chat_debate_closed_error).isDisplayed()
     }
 

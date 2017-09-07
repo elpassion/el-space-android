@@ -394,6 +394,16 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowCommentStatusViewWhenSendCommentStatusIsRejected() {
+        startActivity(userId = 1)
+        sendComment()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(userId = 2))))
+        sendCommentSubject.onSuccess(createComment(id = 123, userId = 1, status = "pending"))
+        liveCommentsSubject.onNext(createComment(id = 123, userId = 1, status = "rejected"))
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 1, R.id.loggedUserCommentStatus).isDisplayed()
+    }
+
+    @Test
     fun shouldShowCommentStatusRejectedTextWhenSendCommentStatusChangedToRejected() {
         startActivity(userId = 1)
         sendComment()

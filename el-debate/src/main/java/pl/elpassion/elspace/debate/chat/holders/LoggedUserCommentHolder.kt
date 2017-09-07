@@ -23,19 +23,15 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             loggedUserCommentMessage.text = item.content
             loggedUserCommentTime.text = item.createdAt.formatMillisToTime()
             when (item.commentStatus) {
-                CommentStatus.PENDING -> showCommentAsPending()
+                CommentStatus.PENDING -> showCommentStatusWithText(R.string.debate_chat_comment_status_pending)
                 CommentStatus.ACCEPTED -> loggedUserCommentStatus.hide()
-                CommentStatus.REJECTED -> changeCommentStatusText(R.string.debate_chat_comment_status_rejected)
+                CommentStatus.REJECTED -> showCommentStatusWithText(R.string.debate_chat_comment_status_rejected)
             }
         }
     }
 
-    private fun showCommentAsPending() {
+    private fun showCommentStatusWithText(@StringRes resource: Int) {
         itemView.loggedUserCommentStatus.show()
-        changeCommentStatusText(R.string.debate_chat_comment_status_pending)
-    }
-
-    private fun changeCommentStatusText(@StringRes resource: Int) {
         itemView.loggedUserCommentStatus.text = itemView.context.getString(resource)
     }
 }

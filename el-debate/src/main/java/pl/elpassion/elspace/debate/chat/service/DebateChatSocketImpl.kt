@@ -24,6 +24,8 @@ const val CHANNEL_DASHBOARD = "dashboard_channel_"
 const val EVENT_COMMENT_ADDED = "comment_added"
 const val CHANNEL_DASHBOARD_MULTIPLE = "dashboard_channel_multiple_"
 const val EVENT_COMMENTS_ADDED = "comments_added"
+const val CHANNEL_USER = "user_channel_"
+const val EVENT_COMMENT_REJECTED = "comment_rejected"
 
 class DebateChatSocketImpl : DebateChat.Socket {
 
@@ -33,10 +35,12 @@ class DebateChatSocketImpl : DebateChat.Socket {
     override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
         val pusher = Pusher(API_KEY, PusherOptions().setCluster(CLUSTER))
         connectPusher(pusher, emitter)
-        val channel = pusher.subscribe("$CHANNEL_DASHBOARD$debateCode")
-        bindToChannel(channel, emitter)
-        val channelMultiple = pusher.subscribe("$CHANNEL_DASHBOARD_MULTIPLE$debateCode")
-        bindToChannelWithMultipleEvents(channelMultiple, emitter)
+        val channelDashboard = pusher.subscribe("$CHANNEL_DASHBOARD$debateCode")
+        channelDashboard.connectEvent(EVENT_COMMENT_ADDED, emitter)
+        val channelDashboardMultiple = pusher.subscribe("$CHANNEL_DASHBOARD_MULTIPLE$debateCode")
+        channelDashboardMultiple.connectEventMultiple(emitter)
+        val channelUser = pusher.subscribe("$CHANNEL_USER")
+        channelUser.connectEvent(EVENT_COMMENT_REJECTED, emitter)
         emitter.setCancellable { pusher.disconnect() }
     }
 
@@ -53,8 +57,8 @@ class DebateChatSocketImpl : DebateChat.Socket {
         })
     }
 
-    private fun bindToChannel(channel: Channel, emitter: ObservableEmitter<Comment>) {
-        channel.bind(EVENT_COMMENT_ADDED, { channelName, eventNameLog, data ->
+    private fun Channel.connectEvent(event: String, emitter: ObservableEmitter<Comment>) {
+        bind(event, { channelName, eventNameLog, data ->
             logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventNameLog: $eventNameLog, data: $data")
             if (data != null) emitter.onNext(createComment(data))
         })
@@ -62,8 +66,8 @@ class DebateChatSocketImpl : DebateChat.Socket {
 
     private fun createComment(data: String) = gson.fromJson(data, Comment::class.java)
 
-    private fun bindToChannelWithMultipleEvents(channel: Channel, emitter: ObservableEmitter<Comment>) {
-        channel.bind(EVENT_COMMENTS_ADDED, { channelName, eventNameLog, data ->
+    private fun Channel.connectEventMultiple(emitter: ObservableEmitter<Comment>) {
+        bind(EVENT_COMMENTS_ADDED, { channelName, eventNameLog, data ->
             logMessageIfDebug("PUSHER onEvent", "channelName: $channelName, eventNameLog: $eventNameLog, data: $data")
             if (data != null) createCommentList(data).forEach(emitter::onNext)
         })

@@ -13,7 +13,7 @@ class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket:
             api.comment(token)
                     .map { it.copy(comments = it.comments.sortedBy { it.createdAt }) }
 
-    override fun liveCommentsObservable(debateCode: String): Observable<Comment> = socket.commentsObservable(debateCode)
+    override fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment> = socket.commentsObservable(debateCode, userId)
 
     override fun sendComment(commentToSend: CommentToSend): Single<Comment> =
             commentToSend.run { api.comment(token, message, firstName, lastName) }

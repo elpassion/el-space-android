@@ -4,6 +4,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.LoginCredentials
 import retrofit2.HttpException
 
 class DebateChatController(
@@ -15,24 +16,24 @@ class DebateChatController(
 
     private val subscriptions = CompositeDisposable()
 
-    fun onCreate(token: String) {
-        getInitialComments(token)
+    fun onCreate(loginCredentials: LoginCredentials) {
+        getInitialComments(loginCredentials)
     }
 
-    fun onInitialsCommentsRefresh(token: String) {
+    fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         subscriptions.clear()
-        getInitialComments(token)
+        getInitialComments(loginCredentials)
     }
 
-    private fun getInitialComments(token: String) {
-        service.initialsCommentsObservable(token)
+    private fun getInitialComments(loginCredentials: LoginCredentials) {
+        service.initialsCommentsObservable(loginCredentials.authToken)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .doOnSuccess { (debateClosed) ->
                     if (debateClosed) view.showDebateClosedError()
-                    else subscribeToLiveComments()
+                    else subscribeToLiveComments(loginCredentials.userId)
                 }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
@@ -40,17 +41,19 @@ class DebateChatController(
                 .addTo(subscriptions)
     }
 
-    fun onLiveCommentsRefresh() {
+    fun onLiveCommentsRefresh(userId: Long) {
         subscriptions.clear()
-        subscribeToLiveComments()
+        subscribeToLiveComments(userId)
     }
 
-    private fun subscribeToLiveComments() {
-        service.liveCommentsObservable(debateRepo.getLatestDebateCode()!!)
-                .subscribeOn(schedulers.backgroundScheduler)
-                .observeOn(schedulers.uiScheduler)
-                .subscribe(view::showLiveComment, view::showLiveCommentsError)
-                .addTo(subscriptions)
+    private fun subscribeToLiveComments(userId: Long) {
+        debateRepo.getLatestDebateCode()?.let {
+            service.liveCommentsObservable(it, userId)
+                    .subscribeOn(schedulers.backgroundScheduler)
+                    .observeOn(schedulers.uiScheduler)
+                    .subscribe(view::showLiveComment, view::showLiveCommentsError)
+                    .addTo(subscriptions)
+        }
     }
 
     fun sendComment(token: String, message: String) {

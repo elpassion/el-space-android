@@ -54,7 +54,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.debate_chat_activity)
         setupUI()
-        controller.onCreate(loginCredentials.authToken)
+        controller.onCreate(loginCredentials)
     }
 
     private fun setupUI() {
@@ -119,7 +119,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showInitialsCommentsError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_initials_comments_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.debate_chat_initials_comments_error_refresh, { controller.onInitialsCommentsRefresh(loginCredentials.authToken) })
+                .setAction(R.string.debate_chat_initials_comments_error_refresh, { controller.onInitialsCommentsRefresh(loginCredentials) })
                 .show()
         logExceptionIfDebug(this.localClassName, exception)
     }
@@ -131,7 +131,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun showLiveCommentsError(exception: Throwable) {
         Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.debate_chat_live_comments_error_refresh, { controller.onLiveCommentsRefresh() })
+                .setAction(R.string.debate_chat_live_comments_error_refresh, { controller.onLiveCommentsRefresh(loginCredentials.userId) })
                 .show()
         logExceptionIfDebug(this.localClassName, exception)
     }

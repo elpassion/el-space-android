@@ -38,7 +38,7 @@ class DebateChatActivityTest {
     private val sendCommentSubject = SingleSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
         whenever(initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
-        whenever(liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
+        whenever(liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
 
@@ -62,6 +62,12 @@ class DebateChatActivityTest {
         startActivity()
         onToolbarBackArrow().click()
         Assert.assertTrue(rule.activity.isFinishing)
+    }
+
+    @Test
+    fun shouldUseCorrectTokenOnServiceInitialsComments() {
+        startActivity(token = "myToken")
+        verify(service).initialsCommentsObservable("myToken")
     }
 
     @Test
@@ -178,6 +184,15 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldUseCorrectTokenOnRefreshInitialsCommentsClicked() {
+        startActivity(token = "refreshToken")
+        initialsCommentsSubject.onError(RuntimeException())
+        Thread.sleep(200)
+        onText(R.string.debate_chat_initials_comments_error_refresh).click()
+        verify(service, times(2)).initialsCommentsObservable("refreshToken")
+    }
+
+    @Test
     fun shouldHideSendCommentLayoutWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
@@ -189,6 +204,14 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         onText(R.string.debate_chat_debate_closed_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldCallServiceLiveCommentsWithRealData() {
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
+        startActivity(userId = 333)
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        verify(service).liveCommentsObservable("34567", 333)
     }
 
     @Test
@@ -223,7 +246,18 @@ class DebateChatActivityTest {
         liveCommentsSubject.onError(RuntimeException())
         Thread.sleep(300)
         onText(R.string.debate_chat_live_comments_error_refresh).click()
-        verify(service, times(2)).liveCommentsObservable(any())
+        verify(service, times(2)).liveCommentsObservable(any(), any())
+    }
+
+    @Test
+    fun shouldUseRealDataOnRefreshLiveCommentsClicked() {
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
+        startActivity(userId = 90)
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onError(RuntimeException())
+        Thread.sleep(300)
+        onText(R.string.debate_chat_live_comments_error_refresh).click()
+        verify(service, times(2)).liveCommentsObservable("67890", 90)
     }
 
     @Test

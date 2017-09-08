@@ -13,6 +13,7 @@ import pl.elpassion.elspace.dabate.chat.createInitialsComments
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.dabate.details.createString
 import pl.elpassion.elspace.debate.DebatesRepository
+import pl.elpassion.elspace.debate.LoginCredentials
 
 class DebateChatControllerTest {
 
@@ -27,11 +28,11 @@ class DebateChatControllerTest {
     @Before
     fun setUp() {
         whenever(service.initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
-        whenever(service.liveCommentsObservable(any())).thenReturn(liveCommentsSubject)
+        whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
-        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createCredentials("firstName", "lastName"))
+        whenever(debateRepo.getTokenCredentials(any())).thenReturn(createTokenCredentials("firstName", "lastName"))
     }
 
     @Test
@@ -42,9 +43,8 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldCallServiceInitialsCommentsObservableWithReallyGivenTokenOnCreate() {
-        val token = "someOtherToken"
-        controller.onCreate(token)
-        verify(service).initialsCommentsObservable(token)
+        onCreate(token = "someOtherToken")
+        verify(service).initialsCommentsObservable("someOtherToken")
     }
 
     @Test
@@ -72,7 +72,7 @@ class DebateChatControllerTest {
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceInitialsComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
-        controller.onCreate("token")
+        controller.onCreate(createLoginCredentials())
         initialsCommentsSubject.onError(RuntimeException())
         verify(view, never()).showInitialsCommentsError(any())
         subscribeOn.triggerActions()
@@ -83,7 +83,7 @@ class DebateChatControllerTest {
     fun shouldUseGivenSchedulerToObserveOnWhenServiceInitialsComments() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
-        controller.onCreate("token")
+        controller.onCreate(createLoginCredentials())
         initialsCommentsSubject.onError(RuntimeException())
         verify(view, never()).showInitialsCommentsError(any())
         observeOn.triggerActions()
@@ -106,31 +106,37 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceInitialsCommentsOnServiceInitialsCommentsRefresh() {
+        controller.onInitialsCommentsRefresh(createLoginCredentials())
+        verify(service).initialsCommentsObservable(any())
+    }
+
+    @Test
+    fun shouldCallServiceInitialsCommentsWithReallyGivenTokenOnServiceInitialsCommentsRefresh() {
+        controller.onInitialsCommentsRefresh(createLoginCredentials(token = "someRefreshToken"))
+        verify(service).initialsCommentsObservable("someRefreshToken")
+    }
+
+    @Test
     fun shouldNotCallServiceLiveCommentsWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
-        verify(service, never()).liveCommentsObservable(any())
+        verify(service, never()).liveCommentsObservable(any(), any())
     }
 
     @Test
     fun shouldCallServiceLiveCommentsWhenServiceInitialsCommentsCompleted() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        verify(service).liveCommentsObservable(any())
+        verify(service).liveCommentsObservable(any(), any())
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsOnServiceInitialsCommentsRefresh() {
-        controller.onInitialsCommentsRefresh("refreshToken")
-        verify(service).initialsCommentsObservable("refreshToken")
-    }
-
-    @Test
-    fun shouldCallServiceLiveCommentsWithReallyGivenDebateCodeOnCreate() {
+    fun shouldCallServiceLiveCommentsWithReallyGivenDataOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
-        onCreate()
+        onCreate(userId = 456)
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        verify(service).liveCommentsObservable("67890")
+        verify(service).liveCommentsObservable("67890", 456)
     }
 
     @Test
@@ -146,7 +152,7 @@ class DebateChatControllerTest {
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceLiveComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)
-        controller.onCreate("token")
+        controller.onCreate(createLoginCredentials())
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onError(RuntimeException())
         verify(view, never()).showLiveCommentsError(any())
@@ -158,7 +164,7 @@ class DebateChatControllerTest {
     fun shouldUseGivenSchedulerToObserveOnWhenServiceLiveComments() {
         val observeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(Schedulers.trampoline(), observeOn), maxMessageLength = 100)
-        controller.onCreate("token")
+        controller.onCreate(createLoginCredentials())
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onError(RuntimeException())
         verify(view, never()).showLiveCommentsError(any())
@@ -180,8 +186,18 @@ class DebateChatControllerTest {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onError(RuntimeException())
-        controller.onLiveCommentsRefresh()
-        verify(service, times(2)).liveCommentsObservable(any())
+        controller.onLiveCommentsRefresh(123)
+        verify(service, times(2)).liveCommentsObservable(any(), any())
+    }
+
+    @Test
+    fun shouldCallServiceLiveCommentsWithReallyGivenDataOnServiceLiveCommentsRefresh() {
+        whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
+        onCreate(userId = 123)
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onError(RuntimeException())
+        controller.onLiveCommentsRefresh(123)
+        verify(service, times(2)).liveCommentsObservable("34567", 123)
     }
 
     @Test
@@ -193,7 +209,7 @@ class DebateChatControllerTest {
     @Test
     fun shouldReallyCallServiceSendCommentWithGivenDataWhenMessageIsValidOnSendComment() {
         val token = "someOtherToken"
-        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createCredentials("NewFirstName", "NewLastName"))
+        whenever(debateRepo.getTokenCredentials(token)).thenReturn(createTokenCredentials("NewFirstName", "NewLastName"))
         sendComment(token = "someOtherToken", message = "someOtherMessage")
         verify(service).sendComment(CommentToSend("someOtherToken", "someOtherMessage", "NewFirstName", "NewLastName"))
     }
@@ -348,42 +364,42 @@ class DebateChatControllerTest {
     @Test
     fun shouldSaveCredentialsOnNewCredentials() {
         val token = "token"
-        val credentials = createCredentials()
+        val credentials = createTokenCredentials()
         controller.onNewCredentials(token, credentials)
         verify(debateRepo).saveTokenCredentials(token, credentials)
     }
 
     @Test
     fun shouldShowFirstNameErrorOnBlankFirstName() {
-        val credentials = createCredentials(firstName = " ")
+        val credentials = createTokenCredentials(firstName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view).showFirstNameError()
     }
 
     @Test
     fun shouldNotSaveTokenCredentialsOnBlankFirstName() {
-        val credentials = createCredentials(firstName = " ")
+        val credentials = createTokenCredentials(firstName = " ")
         controller.onNewCredentials("token", credentials)
         verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
     @Test
     fun shouldShowLastNameErrorOnBlankLastName() {
-        val credentials = createCredentials(lastName = " ")
+        val credentials = createTokenCredentials(lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view).showLastNameError()
     }
 
     @Test
     fun shouldNotSaveTokenCredentialsOnBlankLastName() {
-        val credentials = createCredentials(lastName = " ")
+        val credentials = createTokenCredentials(lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(debateRepo, never()).saveTokenCredentials(any(), any())
     }
 
     @Test
     fun shouldShowBothErrorsOnBlankCredentials() {
-        val credentials = createCredentials(firstName = " ", lastName = " ")
+        val credentials = createTokenCredentials(firstName = " ", lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view).showLastNameError()
         verify(view).showFirstNameError()
@@ -391,21 +407,23 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldCloseCredentialsDialogOnCorrectCredentials() {
-        val credentials = createCredentials()
+        val credentials = createTokenCredentials()
         controller.onNewCredentials("token", credentials)
         verify(view).closeCredentialsDialog()
     }
 
     @Test
     fun shouldNotCloseCredentialDialogOnIncorrectCredentials() {
-        val credentials = createCredentials(firstName = " ", lastName = " ")
+        val credentials = createTokenCredentials(firstName = " ", lastName = " ")
         controller.onNewCredentials("token", credentials)
         verify(view, never()).closeCredentialsDialog()
     }
 
-    private fun onCreate(token: String = "token") = controller.onCreate(token)
+    private fun onCreate(token: String = "token", userId: Long = 123) = controller.onCreate(createLoginCredentials(token, userId))
 
-    private fun createCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
+    private fun createTokenCredentials(firstName: String = "name", lastName: String = "lastName"): TokenCredentials = TokenCredentials(firstName, lastName)
+
+    private fun createLoginCredentials(token: String = "token", userId: Long = 123) = LoginCredentials(token, userId)
 
     private fun sendComment(token: String = "token", message: String = "message") = controller.sendComment(token, message)
 }

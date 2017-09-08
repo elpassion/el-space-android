@@ -32,14 +32,14 @@ class DebateChatSocketImpl : DebateChat.Socket {
     private val gson by lazy { GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create() }
     private val commentListType by lazy { object : TypeToken<List<Comment>>() {}.type }
 
-    override fun commentsObservable(debateCode: String): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
+    override fun commentsObservable(debateCode: String, userId: Long): Observable<Comment> = Observable.create<Comment> { emitter: ObservableEmitter<Comment> ->
         val pusher = Pusher(API_KEY, PusherOptions().setCluster(CLUSTER))
         connectPusher(pusher, emitter)
         val channelDashboard = pusher.subscribe("$CHANNEL_DASHBOARD$debateCode")
         channelDashboard.connectEvent(EVENT_COMMENT_ADDED, emitter)
         val channelDashboardMultiple = pusher.subscribe("$CHANNEL_DASHBOARD_MULTIPLE$debateCode")
         channelDashboardMultiple.connectEventMultiple(emitter)
-        val channelUser = pusher.subscribe("$CHANNEL_USER")
+        val channelUser = pusher.subscribe("$CHANNEL_USER$userId")
         channelUser.connectEvent(EVENT_COMMENT_REJECTED, emitter)
         emitter.setCancellable { pusher.disconnect() }
     }

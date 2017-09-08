@@ -23,7 +23,7 @@ class DebateChatServiceTest {
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
     private val socket = mock<DebateChat.Socket>().apply {
-        whenever(commentsObservable(any())).thenReturn(commentsFromSocketSubject)
+        whenever(commentsObservable(any(), any())).thenReturn(commentsFromSocketSubject)
     }
     private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
 
@@ -65,9 +65,9 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldCallSocketWithRealDebateCode() {
-        debateChatServiceImpl.liveCommentsObservable("someDebateCode")
-        verify(socket).commentsObservable("someDebateCode")
+    fun shouldCallSocketWithRealData() {
+        debateChatServiceImpl.liveCommentsObservable("someDebateCode", 123)
+        verify(socket).commentsObservable("someDebateCode", 123)
     }
 
     @Test
@@ -75,7 +75,7 @@ class DebateChatServiceTest {
         val commentFirst = createComment(name = "NameSocket")
         val commentSecond = createComment(name = "NameSocketSecond")
         val testObserver = debateChatServiceImpl
-                .liveCommentsObservable("code")
+                .liveCommentsObservable("code", 1)
                 .test()
         commentsFromSocketSubject.onNext(commentFirst)
         commentsFromSocketSubject.onNext(commentSecond)
@@ -86,7 +86,7 @@ class DebateChatServiceTest {
     fun shouldReturnErrorReceivedFromSocket() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl
-                .liveCommentsObservable("code")
+                .liveCommentsObservable("code", 1)
                 .test()
         commentsFromSocketSubject.onError(exception)
         testObserver.assertError(exception)

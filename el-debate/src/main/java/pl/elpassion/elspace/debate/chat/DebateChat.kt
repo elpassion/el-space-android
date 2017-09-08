@@ -12,7 +12,7 @@ interface DebateChat {
 
     interface Service {
         fun initialsCommentsObservable(token: String): Single<InitialsComments>
-        fun liveCommentsObservable(debateCode: String): Observable<Comment>
+        fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Single<Comment>
     }
 
@@ -30,7 +30,7 @@ interface DebateChat {
     }
 
     interface Socket {
-        fun commentsObservable(debateCode: String): Observable<Comment>
+        fun commentsObservable(debateCode: String, userId: Long): Observable<Comment>
     }
 
     interface View {

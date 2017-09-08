@@ -3,7 +3,7 @@ package pl.elpassion.elspace.hub.report.list
 import pl.elpassion.elspace.hub.report.DailyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 
-sealed class Day {
+sealed class Day: AdapterItem {
     abstract val uuid: Long
     abstract val name: String
     abstract val date: String

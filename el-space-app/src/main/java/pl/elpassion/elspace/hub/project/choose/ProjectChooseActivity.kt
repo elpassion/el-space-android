@@ -11,11 +11,12 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
-import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
-import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
+import com.elpassion.android.commons.recycler.adapters.basicAdapterWithLayoutAndBinder
 import com.jakewharton.rxbinding2.support.v7.widget.queryTextChanges
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.project_choose_activity.*
+import kotlinx.android.synthetic.main.project_item.view.*
 import pl.elpassion.elspace.R
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
@@ -23,14 +24,11 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.hub.project.Project
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     private val controller by lazy { ProjectChooseController(this, ProjectRepositoryProvider.get(), SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread())) }
-    private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
-    private val adapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
+    private var projects = mutableListOf<Project>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,18 +40,16 @@ class ProjectChooseActivity : AppCompatActivity(), ProjectChoose.View {
 
     private fun initRecyclerView() {
         projectsContainer.layoutManager = LinearLayoutManager(this)
-        projectsContainer.adapter = adapter
+        projectsContainer.adapter = basicAdapterWithLayoutAndBinder(projects, R.layout.project_item) { holder, item ->
+            holder.itemView.projectName.text = item.name
+            holder.itemView.setOnClickListener { controller.onProjectClicked(item) }
+        }
     }
 
     override fun showProjects(projects: List<Project>) {
-        updateAdapterList(projects)
-    }
-
-    private fun updateAdapterList(projects: List<Project>) {
-        itemsStrategy.set(projects.map {
-            ProjectItemAdapter(it) { controller.onProjectClicked(it) }
-        })
-        adapter.notifyDataSetChanged()
+        this.projects.clear()
+        this.projects.addAll(projects)
+        projectsContainer.adapter.notifyDataSetChanged()
     }
 
     override fun selectProject(project: Project) {

@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.Snackbar.Callback.DISMISS_EVENT_ACTION
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.crashlytics.android.Crashlytics
-import com.elpassion.android.commons.recycler.adapters.stableRecyclerViewAdapter
-import com.elpassion.android.commons.recycler.components.base.MutableListItemsStrategy
-import com.elpassion.android.commons.recycler.components.stable.StableItemAdapter
+import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
+import com.elpassion.android.commons.recycler.basic.ViewHolderBinder
 import com.jakewharton.rxbinding2.support.design.widget.dismisses
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
@@ -27,13 +26,14 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
-import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.PaidVacationHourlyReport
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.add.ReportAddActivity
 import pl.elpassion.elspace.hub.report.edit.ReportEditActivity
-import pl.elpassion.elspace.hub.report.list.adapter.items.*
+import pl.elpassion.elspace.hub.report.list.adapter.Empty
+import pl.elpassion.elspace.hub.report.list.adapter.Separator
+import pl.elpassion.elspace.hub.report.list.adapter.holders.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 
@@ -48,8 +48,7 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()))
     }
 
-    private val itemsStrategy = MutableListItemsStrategy<StableItemAdapter<*>>()
-    private val reportsAdapter by lazy { stableRecyclerViewAdapter(itemsStrategy) }
+    private var adapterItems = mutableListOf<AdapterItem>()
     private val toolbarClicks by lazy { toolbar.menuClicks() }
     private val reportScreenResult: PublishSubject<Unit> = PublishSubject.create()
     private val errorSnackBar by lazy {
@@ -63,8 +62,27 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         reportsContainer.layoutManager = ReportsLinearLayoutManager(this)
-        reportsContainer.adapter = reportsAdapter
+        reportsContainer.adapter = basicAdapterWithConstructors(adapterItems, this::createHoldersForItem)
         controller.onCreate()
+    }
+
+    private fun createHoldersForItem(itemPosition: Int): Pair<Int, (itemView: View) -> ViewHolderBinder<AdapterItem>> {
+        val item = adapterItems[itemPosition]
+        return when (item) {
+            is DayWithHourlyReports -> DayItemViewHolder.create(controller::onDayClick)
+            is DayWithDailyReport -> DayWithDailyReportsItemViewHolder.create(controller::onReportClick)
+            is DayWithoutReports -> createDayWithoutReportsHolder(item)
+            is RegularHourlyReport -> RegularReportItemViewHolder.create(controller::onReportClick)
+            is PaidVacationHourlyReport -> PaidVacationReportItemViewHolder.create(controller::onReportClick)
+            is Separator -> SeparatorItemViewHolder.create()
+            is Empty -> EmptyItemViewHolder.create()
+            else -> throw IllegalArgumentException()
+        }
+    }
+
+    private fun createDayWithoutReportsHolder(day: DayWithoutReports) = when {
+        day.isWeekend -> WeekendDayItemViewHolder.create(controller::onDayClick)
+        else -> DayNotFilledInItemViewHolder.create(controller::onDayClick)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -140,44 +158,12 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
         errorSnackBar.show()
     }
 
-    override fun showDays(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick) {
-        val contentItemAdapters = createContentItemsAdapters(days, onDayClick, onReportClick)
-        val adapterList = listOf<StableItemAdapter<*>>(EmptyItemAdapter()) + contentItemAdapters + EmptyItemAdapter()
-        itemsStrategy.set(adapterList)
-        reportsAdapter.notifyDataSetChanged()
-        controller.updateLastPassedDayPosition(adapterList.indexOfLast { it is DayItem && it.day.hasPassed })
+    override fun showDays(items: List<AdapterItem>) {
+        adapterItems.clear()
+        adapterItems.addAll(items)
+        reportsContainer.adapter.notifyDataSetChanged()
+        controller.updateLastPassedDayPosition(adapterItems.indexOfLast { it is Day && it.hasPassed })
     }
-
-    private fun createContentItemsAdapters(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick) =
-            days.flatMap {
-                createDayAdapter(it, onDayClick, onReportClick)
-            }
-
-    private fun createDayAdapter(day: Day, onDayClick: OnDayClick, onReportClick: OnReportClick) =
-            when (day) {
-                is DayWithoutReports -> createDayWithoutReportsItemAdapter(day, onDayClick)
-                is DayWithHourlyReports -> createDayWithHoursReportsItemAdapters(day, onDayClick, onReportClick)
-                is DayWithDailyReport -> createDayWithDailyReportsItemAdapter(day, onReportClick)
-            }
-
-    private fun createDayWithDailyReportsItemAdapter(day: DayWithDailyReport, onReportClick: OnReportClick) = listOf(DayWithDailyReportsItemAdapter(day, onReportClick))
-
-    private fun createDayWithoutReportsItemAdapter(day: DayWithoutReports, onDayClick: OnDayClick): List<StableItemAdapter<out RecyclerView.ViewHolder>> =
-            if (day.isWeekend) {
-                listOf(WeekendDayItem(day, onDayClick))
-            } else {
-                listOf(DayNotFilledInItemAdapter(day, onDayClick))
-            }
-
-    private fun createDayWithHoursReportsItemAdapters(it: DayWithHourlyReports, onDayClick: OnDayClick, onReportClick: OnReportClick) =
-            listOf(DayItemAdapter(it, onDayClick)) + it.reports.map { createReportItemAdapter(it, onReportClick) }
-
-    private fun createReportItemAdapter(report: HourlyReport, onReportClick: OnReportClick): StableItemAdapter<out RecyclerView.ViewHolder> =
-            if (report is RegularHourlyReport) {
-                RegularReportItemAdapter(report, onReportClick)
-            } else {
-                PaidVacationReportItemAdapter(report as PaidVacationHourlyReport, onReportClick)
-            }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REPORT_SCREEN_CHANGES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {

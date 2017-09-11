@@ -211,6 +211,7 @@ class DebateChatActivityTest {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
         startActivity(userId = 333)
         initialsCommentsSubject.onSuccess(createInitialsComments())
+        Thread.sleep(200)
         verify(service).liveCommentsObservable("34567", 333)
     }
 

@@ -187,7 +187,7 @@ class DebateChatActivityTest {
     fun shouldUseCorrectTokenOnRefreshInitialsCommentsClicked() {
         startActivity(token = "refreshToken")
         initialsCommentsSubject.onError(RuntimeException())
-        Thread.sleep(200)
+        Thread.sleep(300)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
         verify(service, times(2)).initialsCommentsObservable("refreshToken")
     }

@@ -78,5 +78,13 @@ interface ReportList {
     object ProjectListServiceProvider : Provider<ProjectListService>({
         ProjectListServiceImpl(ProjectApiProvider.get(), CachedProjectRepositoryProvider.get())
     })
+
+    data class UIState(
+            val adapterItems: List<AdapterItem>
+    )
+
+    sealed class Event {
+        object OnCreate : Event()
+    }
 }
 

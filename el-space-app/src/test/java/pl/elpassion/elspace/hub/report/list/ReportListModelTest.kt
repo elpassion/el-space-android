@@ -17,11 +17,12 @@ class ReportListModelTest : TreeSpec() {
     init {
         "Model should " {
             "on create " {
+                val service = mock<ReportDayService>().apply {
+                    whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
+                }
+                val model = ReportListModel(service)
+
                 "propagate list of adapters" > {
-                    val service = mock<ReportDayService>().apply {
-                        whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
-                    }
-                    val model = ReportListModel(service)
                     Observable.just(ReportList.Event.OnCreate).subscribe(model.events)
                     model.states
                             .test()
@@ -29,10 +30,6 @@ class ReportListModelTest : TreeSpec() {
                 }
 
                 "call service for days" > {
-                    val service = mock<ReportDayService>().apply {
-                        whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
-                    }
-                    val model = ReportListModel(service)
                     model.events.accept(ReportList.Event.OnCreate)
                     verify(service).createDays(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
                 }

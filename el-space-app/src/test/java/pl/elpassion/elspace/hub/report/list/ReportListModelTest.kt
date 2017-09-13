@@ -8,7 +8,6 @@ import pl.elpassion.elspace.common.TreeSpec
 class ReportListModelTest : TreeSpec() {
 
     init {
-
         "Model should " {
             "on create " {
                 "propagate list of adapters" > {
@@ -20,8 +19,6 @@ class ReportListModelTest : TreeSpec() {
                 }
             }
         }
-
-
     }
 }
 

@@ -22,6 +22,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.report_list_activity.*
 import pl.elpassion.elspace.R
+import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
@@ -41,7 +42,9 @@ class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Acti
 
     private val controller by lazy {
         ReportListController(
-                reportDayService = ReportDayServiceImpl(ReportList.ServiceProvider.get()),
+                reportDayService = ReportDayServiceImpl(
+                        reportListService = ReportList.ServiceProvider.get(),
+                        currentTime = { getTimeFrom(CurrentTimeProvider.get()) }),
                 dayFilter = DayFilterImpl(),
                 actions = this,
                 view = this,

@@ -8,9 +8,7 @@ import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import pl.elpassion.elspace.common.CurrentTimeProvider
-import pl.elpassion.elspace.common.extensions.getCurrentTimeCalendar
-import pl.elpassion.elspace.commons.stubCurrentTime
+import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
@@ -19,8 +17,10 @@ import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import java.util.*
 
 class ReportDayServiceTest {
+
     val serviceApi = mock<ReportList.Service>()
-    var service = ReportDayServiceImpl(serviceApi)
+    var currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+    var service = ReportDayServiceImpl(serviceApi, { currentTime })
 
     @Test
     fun shouldCreate31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
@@ -41,21 +41,21 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldCorrectlyMapDayName() {
-        stubDateChangeObserver(year = 2016, month = 9)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
         stubServiceToReturn(emptyList())
         assertEquals(getFirstDay().name, "1 Thu")
     }
 
     @Test
     fun shouldReallyCorrectlyMapDayName() {
-        stubDateChangeObserver(year = 2016, month = 9)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
         stubServiceToReturn(emptyList())
         assertEquals(getDays()[1].name, "2 Fri")
     }
 
     @Test
     fun shouldMarkUnreportedPassedDays() {
-        stubDateChangeObserver(year = 2016, month = 6)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
         stubServiceToReturn(emptyList())
         assertTrue(getFirstDay().hasPassed)
     }
@@ -63,7 +63,7 @@ class ReportDayServiceTest {
     @Test
     fun shouldMapReturnedHourlyReportsToDaysWithHourlyReports() {
         val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
         stubServiceToReturn(listOf(report))
         assertTrue(getFirstDay() is DayWithHourlyReports)
         assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
@@ -71,7 +71,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldUnreportedPassedDaysWhichAreNotWeekendsHaveReports() {
-        stubDateChangeObserver(year = 2016, month = 6)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
         stubServiceToReturn(emptyList())
         assertTrue(getFirstDay() is DayWithoutReports)
         assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
@@ -80,7 +80,7 @@ class ReportDayServiceTest {
     @Test
     fun shouldMapReturnedDailyReportsToDaysWithDailyReports() {
         val report = newDailyReport(year = 2016, month = 6, day = 1)
-        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
         stubServiceToReturn(listOf(report))
         assertTrue(getFirstDay() is DayWithDailyReport)
         assertEquals((getFirstDay() as DayWithDailyReport).report, report)
@@ -90,7 +90,7 @@ class ReportDayServiceTest {
     fun shouldThrowIllegalArgumentExceptionWhenDayHasDailyReportTogetherWithHourlyReport() {
         val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
         val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
         stubServiceToReturn(listOf(dailyReport, hourlyReport))
         getFirstDay()
     }
@@ -98,14 +98,14 @@ class ReportDayServiceTest {
     @Test(expected = IllegalArgumentException::class)
     fun shouldThrowIllegalArgumentExceptionWhenDayHasTwoDailyReports() {
         val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-        stubDateChangeObserver(year = 2016, month = 6, day = 1)
+        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
         stubServiceToReturn(listOf(dailyReport, dailyReport))
         getFirstDay()
     }
 
     @Test
     fun shouldCallServiceWithCorrectYearMonth() {
-        val yearMonth = getCurrentTimeCalendar().toYearMonth()
+        val yearMonth = currentTime.toYearMonth()
         stubServiceToReturn(emptyList())
         getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
@@ -113,7 +113,7 @@ class ReportDayServiceTest {
 
     @Test
     fun shouldReallyCallServiceWithCorrectYearMonth() {
-        val yearMonth = getCurrentTimeCalendar().toYearMonth().copy(year = 2015)
+        val yearMonth = currentTime.toYearMonth().copy(year = 2015)
         stubServiceToReturn(emptyList())
         getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
@@ -125,19 +125,15 @@ class ReportDayServiceTest {
 
     private fun getFirstDay() = getDays().first()
 
-    private fun createYearMonthFromTimeProvider() = Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth()
+    private fun createYearMonthFromTimeProvider() = currentTime.toYearMonth()
 
     private fun stubServiceToReturn(list: List<Report>) {
         whenever(serviceApi.getReports(any())).thenReturn(Observable.just(list))
     }
 
-    private fun stubDateChangeObserver(year: Int, month: Int, day: Int = 1) {
-        stubCurrentTime(year = year, month = month, day = day)
-    }
-
     private fun verifyIfMapCorrectListForGivenParams(apiReturnValue: List<HourlyReport>, daysInMonth: Int, month: Int) {
         stubServiceToReturn(apiReturnValue)
-        stubDateChangeObserver(year = 2016, month = month)
+        currentTime = getTimeFrom(year = 2016, month = month - 1, day = 1)
         assertEquals(getDays().size, daysInMonth)
     }
 }

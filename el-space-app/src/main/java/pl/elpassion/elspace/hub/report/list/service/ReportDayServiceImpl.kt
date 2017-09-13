@@ -8,7 +8,9 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.*
 import java.util.*
 
-class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {
+class ReportDayServiceImpl(
+        private val reportListService: ReportList.Service,
+        private val currentTime: () -> Calendar) : ReportDayService {
 
     override fun createDays(yearMonth: YearMonth): Observable<List<Day>> =
             reportListService.getReports(yearMonth).map { yearMonth to it }
@@ -22,7 +24,7 @@ class ReportDayServiceImpl(private val reportListService: ReportList.Service) : 
             }
 
     private fun createDayWithReports(calendarForDay: Calendar, dayNumber: Int, reports: List<Report>, yearMonth: YearMonth): Day {
-        val hasPassed = calendarForDay.isNotAfter(getCurrentTimeCalendar())
+        val hasPassed = calendarForDay.isNotAfter(currentTime())
         val date = getDateString(yearMonth.year, yearMonth.month.index + 1, dayNumber)
         val dayName = "$dayNumber ${calendarForDay.dayName()}"
         val uuid = createDayUUid(yearMonth.year, yearMonth.month.index, dayNumber)

@@ -5,7 +5,6 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Observable
-import io.reactivex.Observable.just
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -117,7 +116,7 @@ class ReportDayServiceTest {
         val yearMonth = getCurrentTimeCalendar().toYearMonth()
         stubServiceToReturn(emptyList())
 
-        getDays(just(yearMonth))
+        getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
     }
 
@@ -126,18 +125,17 @@ class ReportDayServiceTest {
         val yearMonth = getCurrentTimeCalendar().toYearMonth().copy(year = 2015)
         stubServiceToReturn(emptyList())
 
-        getDays(just(yearMonth))
+        getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
     }
 
-    private fun getDays(dateChangeObservable: Observable<YearMonth> = createYearMonthFromTimeProvider()): List<Day> {
-        return service.createDays(dateChangeObservable).blockingFirst()
+    private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {
+        return service.createDays(yearMonth).blockingFirst()
     }
 
     private fun getFirstDay() = getDays().first()
 
-    private fun createYearMonthFromTimeProvider() =
-            Observable.just(Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth())
+    private fun createYearMonthFromTimeProvider() = Calendar.getInstance().apply { timeInMillis = CurrentTimeProvider.get() }.toYearMonth()
 
     private fun stubServiceToReturn(list: List<Report>) {
         whenever(serviceApi.getReports(any())).thenReturn(Observable.just(list))

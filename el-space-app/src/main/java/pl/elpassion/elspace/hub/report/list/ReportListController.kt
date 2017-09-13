@@ -4,7 +4,6 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
@@ -103,7 +102,10 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {
-                reportDayService.createDays(dateChangeObserver.observe().observeOn(Schedulers.io()))
+                dateChangeObserver
+                        .observe()
+                        .observeOn(schedulers.backgroundScheduler)
+                        .flatMap(reportDayService::createDays)
                         .subscribeOn(schedulers.backgroundScheduler)
                         .observeOn(schedulers.uiScheduler)
                         .doOnSubscribe {

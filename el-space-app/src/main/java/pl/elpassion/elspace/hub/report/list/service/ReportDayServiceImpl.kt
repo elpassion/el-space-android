@@ -1,20 +1,17 @@
 package pl.elpassion.elspace.hub.report.list.service
 
+import io.reactivex.Observable
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.DailyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.*
-import io.reactivex.Observable
 import java.util.*
 
 class ReportDayServiceImpl(private val reportListService: ReportList.Service) : ReportDayService {
 
-    override fun createDays(dateChangeObservable: Observable<YearMonth>): Observable<List<Day>> =
-            dateChangeObservable
-                    .flatMap { yearMonth ->
-                        reportListService.getReports(yearMonth).map { yearMonth to it }
-                    }
+    override fun createDays(yearMonth: YearMonth): Observable<List<Day>> =
+            reportListService.getReports(yearMonth).map { yearMonth to it }
                     .map { (yearMonth, reportList) -> createDaysWithReports(yearMonth, reportList) }
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =

@@ -94,6 +94,13 @@ class DebateDetailsControllerTest {
     }
 
     @Test
+    fun shouldShowDebateClosedErrorOnGetDebateDetails403CodeErrorFromApi() {
+        createController().onCreate("token")
+        debateDetailsSubject.onError(createHttpException(403))
+        verify(view).showDebateClosedError()
+    }
+
+    @Test
     fun shouldHideLoaderOnDestroyIfApiCallIsRunning() {
         createController().run {
             onCreate("token")
@@ -186,9 +193,9 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnVote406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnVote403CodeErrorFromApi() {
         createController().onVote("token", createPositiveAnswer())
-        sendVoteSubject.onError(createHttpException(406))
+        sendVoteSubject.onError(createHttpException(403))
         verify(view).showDebateClosedError()
     }
 
@@ -217,9 +224,9 @@ class DebateDetailsControllerTest {
     }
 
     @Test
-    fun shouldOpenCommentScreenOnComment() {
-        createController().onComment()
-        verify(view).openCommentScreen()
+    fun shouldOpenChatScreenOnChat() {
+        createController().onChat()
+        verify(view).openChatScreen()
     }
 
     private fun createController(subscribeOn: Scheduler = Schedulers.trampoline(),

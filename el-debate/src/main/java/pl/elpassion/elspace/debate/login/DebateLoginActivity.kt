@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.constraint_debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_login_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
@@ -19,6 +20,7 @@ import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
 
 class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
@@ -69,8 +71,8 @@ class DebateLoginActivity : AppCompatActivity(), DebateLogin.View {
         super.onDestroy()
     }
 
-    override fun openDebateScreen(authToken: String) {
-        DebateDetailsActivity.start(this, authToken)
+    override fun openDebateScreen(loginCredentials: LoginCredentials) {
+        DebateDetailsActivity.start(this, loginCredentials)
     }
 
     override fun showDebateClosedError() {

@@ -1,46 +1,41 @@
 package pl.elpassion.elspace.hub.report.list
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import io.kotlintest.matchers.shouldBe
+import pl.elpassion.elspace.common.TreeSpec
 import pl.elpassion.elspace.common.extensions.daysForCurrentMonth
 import pl.elpassion.elspace.common.extensions.getFullMonthName
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 
-class CalendarToYearMonthConverterTest {
-    @Test
-    fun shouldConvertProperYear() {
-        val calendar = getTimeFrom(2016, 1, 1)
+class CalendarToYearMonthConverterTest : TreeSpec() {
 
-        val yearMonth = calendar.toYearMonth()
+    init {
 
-        assertEquals(yearMonth.year, 2016)
+        "Should correctly convert " {
+
+            "year" > {
+                getTimeFrom(2016, 1, 1).toYearMonth().run {
+                    year shouldBe 2016
+                }
+            }
+
+            "month " > {
+                getTimeFrom(2016, 11, 1).toYearMonth().run {
+                    month.index shouldBe 11
+                }
+            }
+
+            "month name " > {
+                getTimeFrom(2016, 11, 21).run {
+                    this.toYearMonth().month.monthName shouldBe this.getFullMonthName()
+                }
+            }
+
+            "days in month" > {
+                getTimeFrom(2016, 11, 21).run {
+                    this.toYearMonth().month.daysInMonth shouldBe this.daysForCurrentMonth()
+                }
+            }
+        }
+
     }
-
-    @Test
-    fun shouldConvertProperMonth() {
-        val calendar = getTimeFrom(2016, 11, 1)
-
-        val yearMonth = calendar.toYearMonth()
-
-        assertEquals(yearMonth.month.index, 11)
-    }
-
-    @Test
-    fun shouldConvertProperMonthName() {
-        val calendar = getTimeFrom(2016, 11, 21)
-
-        val yearMonth = calendar.toYearMonth()
-
-        assertEquals(yearMonth.month.monthName, calendar.getFullMonthName())
-    }
-
-    @Test
-    fun shouldConvertProperMonthNames() {
-        val calendar = getTimeFrom(2016, 11, 21)
-
-        val yearMonth = calendar.toYearMonth()
-
-        assertEquals(yearMonth.month.daysInMonth, calendar.daysForCurrentMonth())
-    }
-
 }

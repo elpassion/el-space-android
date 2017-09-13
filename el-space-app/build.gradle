@@ -41,11 +41,15 @@ android {
 }
 
 dependencies {
+    implementation(group: 'io.kotlintest', name: 'kotlintest', version: '2.0.5') {
+        exclude group: 'org.mockito', module: 'mockito-core'
+    }
     implementation project(':el-debate')
     implementation group: 'com.google.android.gms', name: 'play-services-auth', version: '11.0.2'
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
+    implementation group: 'com.jakewharton.rxrelay2', name: 'rxrelay', version: '2.0.0'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

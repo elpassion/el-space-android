@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/debateChatCoordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".elspace.debate.chat.DebateChatActivity">
+
+    <include layout="@layout/debate_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="pl.elpassion.elspace.debate.chat.MoveUpwardBehaviour">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/debateChatCommentsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryDarkDebate" />
+
+        <LinearLayout
+            android:id="@+id/debateChatSendCommentView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="6dp"
+            android:visibility="visible">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <EditText
+                    android:id="@+id/debateChatSendCommentInputText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/debate_chat_send_comment_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:padding="5dp"
+                    android:textColor="@color/greyDarkText"
+                    android:textSize="15sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/debateChatSendCommentButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/send_comment" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/debateChatSendCommentViewError"
+            android:background="@color/redBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/debate_chat_debate_closed_error"
+            android:textColor="@color/greyDarkText"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

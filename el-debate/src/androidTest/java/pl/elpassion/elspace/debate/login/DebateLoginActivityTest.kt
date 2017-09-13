@@ -25,13 +25,13 @@ import pl.elpassion.elspace.common.stubAllIntents
 import pl.elpassion.elspace.dabate.details.createHttpException
 import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
+import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.details.DebateDetailsActivity
-import pl.elpassion.elspace.debate.login.DebateLogin.Api.LoginResponse
 
 class DebateLoginActivityTest {
 
     private val tokenRepo = mock<DebatesRepository>()
-    private val apiSubject = SingleSubject.create<DebateLogin.Api.LoginResponse>()
+    private val apiSubject = SingleSubject.create<LoginCredentials>()
     private val api = mock<DebateLogin.Api>()
 
     @JvmField @Rule
@@ -39,7 +39,7 @@ class DebateLoginActivityTest {
 
     @JvmField @Rule
     val rule = rule<DebateLoginActivity> {
-        whenever(tokenRepo.hasToken(any())).thenReturn(false)
+        whenever(tokenRepo.hasLoginCredentials(any())).thenReturn(false)
         DebatesRepositoryProvider.override = { tokenRepo }
         DebateLogin.ApiProvider.override = { api.apply { whenever(login(any())).thenReturn(apiSubject) } }
     }
@@ -152,7 +152,7 @@ class DebateLoginActivityTest {
         stubIntentAndRepo()
         loginToDebate()
         intended(allOf(
-                hasExtra("debateAuthTokenKey", "tokenFromRepo"),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("tokenFromRepo", 999)),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -160,10 +160,10 @@ class DebateLoginActivityTest {
     fun shouldSaveTokenReturnedFromApiAndOpenDebateScreen() {
         stubAllIntents()
         loginToDebate(debateCode = "12345")
-        apiSubject.onSuccess(LoginResponse("authTokenFromApi"))
-        verify(tokenRepo).saveDebateToken(debateCode = "12345", authToken = "authTokenFromApi")
+        apiSubject.onSuccess(LoginCredentials("authTokenFromApi", 444))
+        verify(tokenRepo).saveLoginCredentials(debateCode = "12345", loginCredentials = LoginCredentials("authTokenFromApi", 444))
         intended(allOf(
-                hasExtra("debateAuthTokenKey", "authTokenFromApi"),
+                hasExtra("debateLoginCredentialsKey", LoginCredentials("authTokenFromApi", 444)),
                 hasComponent(DebateDetailsActivity::class.java.name)))
     }
 
@@ -175,24 +175,24 @@ class DebateLoginActivityTest {
     }
 
     @Test
-    fun shouldShowDebateClosedErrorOnLogin406CodeErrorFromApi() {
+    fun shouldShowDebateClosedErrorOnLogin403CodeErrorFromApi() {
         loginToDebate()
-        apiSubject.onError(createHttpException(406))
+        apiSubject.onError(createHttpException(403))
         onText(R.string.debate_login_debate_closed_error).isDisplayed()
     }
 
     @Test
     fun shouldCloseDebateClosedErrorDialogOnOkClick() {
         loginToDebate()
-        apiSubject.onError(createHttpException(406))
+        apiSubject.onError(createHttpException(403))
         onText(R.string.debate_login_debate_closed_error_button_ok).click()
         onText(R.string.debate_login_debate_closed_error).doesNotExist()
     }
 
     private fun stubIntentAndRepo() {
         stubAllIntents()
-        whenever(tokenRepo.hasToken("12345")).thenReturn(true)
-        whenever(tokenRepo.getTokenForDebate("12345")).thenReturn("tokenFromRepo")
+        whenever(tokenRepo.hasLoginCredentials("12345")).thenReturn(true)
+        whenever(tokenRepo.getLoginCredentialsForDebate("12345")).thenReturn(LoginCredentials("tokenFromRepo", 999))
     }
 
     private fun loginToDebate(debateCode: String = "12345") {

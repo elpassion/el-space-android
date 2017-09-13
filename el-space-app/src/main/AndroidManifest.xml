@@ -50,14 +50,16 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="pl.elpassion.elspace.debate.login.DebateLoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate" />
         <activity
+            android:screenOrientation="portrait"
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
             android:theme="@style/AppThemeDebate" />
         <activity
-            android:name="pl.elpassion.elspace.debate.comment.DebateCommentActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/AppThemeDebate_Dialog"
+            android:screenOrientation="portrait"
+            android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
+            android:theme="@style/AppThemeDebate"
             android:windowSoftInputMode="stateVisible" />
 
         <meta-data

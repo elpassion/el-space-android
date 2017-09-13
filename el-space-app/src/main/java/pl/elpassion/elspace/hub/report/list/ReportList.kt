@@ -1,7 +1,8 @@
 package pl.elpassion.elspace.hub.report.list
 
-import pl.elpassion.elspace.hub.HubRetrofitProvider
+import io.reactivex.Observable
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.hub.HubRetrofitProvider
 import pl.elpassion.elspace.hub.project.CachedProjectRepositoryProvider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.Report
@@ -11,7 +12,6 @@ import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
 import retrofit2.http.GET
 import retrofit2.http.Query
-import io.reactivex.Observable
 
 interface ReportList {
 
@@ -20,7 +20,7 @@ interface ReportList {
     }
 
     interface View {
-        fun showDays(days: List<Day>, onDayClick: OnDayClick, onReportClick: OnReportClick)
+        fun showDays(items: List<AdapterItem>)
 
         fun showError(ex: Throwable)
 
@@ -78,5 +78,13 @@ interface ReportList {
     object ProjectListServiceProvider : Provider<ProjectListService>({
         ProjectListServiceImpl(ProjectApiProvider.get(), CachedProjectRepositoryProvider.get())
     })
+
+    data class UIState(
+            val adapterItems: List<AdapterItem>
+    )
+
+    sealed class Event {
+        object OnCreate : Event()
+    }
 }
 

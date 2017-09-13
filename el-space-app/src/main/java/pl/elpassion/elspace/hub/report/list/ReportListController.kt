@@ -8,6 +8,7 @@ import io.reactivex.schedulers.Schedulers
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
+import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
@@ -45,13 +46,11 @@ class ReportListController(private val reportDayService: ReportDayService,
         subscriptions.clear()
     }
 
-    val onDayClick = { date: String ->
+    fun onDayClick(date: String) {
         view.openAddReportScreen(date)
     }
 
-    val onReportClick = { report: Report ->
-        view.openEditReportScreen(report)
-    }
+    fun onReportClick(report: Report) = view.openEditReportScreen(report)
 
     private fun onToday() {
         if (isCurrentYearAndMonth()) {
@@ -78,10 +77,25 @@ class ReportListController(private val reportDayService: ReportDayService,
                     }
                 })
                 .subscribe({ days ->
-                    view.showDays(days, onDayClick, onReportClick)
+                    createAdapterItems(days)
                 }, {
                 })
                 .addTo(subscriptions)
+    }
+
+    private fun createAdapterItems(days: List<Day>) {
+        val adapterItems = getDaysAndReportsAsAdapterItems(days)
+        val adapterItemsWithSeparators = addSeparators(adapterItems)
+        view.showDays(adapterItemsWithSeparators)
+    }
+
+    private fun getDaysAndReportsAsAdapterItems(days: List<Day>) = mutableListOf<AdapterItem>().apply {
+        days.forEach {
+            add(it)
+            when (it) {
+                is DayWithHourlyReports -> it.reports.forEach { add(it) }
+            }
+        }
     }
 
     private fun refreshingDataObservable() = Observable.merge(Observable.just(Unit),

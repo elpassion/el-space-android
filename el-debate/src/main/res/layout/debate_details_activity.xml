@@ -217,14 +217,14 @@
         </ScrollView>
 
         <Button
-            android:id="@+id/debateCommentButton"
+            android:id="@+id/debateChatButton"
             style="@style/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="16dp"
             android:background="@color/colorPrimaryDebate"
-            android:text="@string/debate_details_button_comment" />
+            android:text="@string/debate_details_button_chat" />
 
     </FrameLayout>
 

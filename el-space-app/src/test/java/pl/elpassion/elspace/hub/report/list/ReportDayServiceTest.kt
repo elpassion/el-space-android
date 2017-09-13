@@ -43,7 +43,6 @@ class ReportDayServiceTest {
     fun shouldCorrectlyMapDayName() {
         stubDateChangeObserver(year = 2016, month = 9)
         stubServiceToReturn(emptyList())
-
         assertEquals(getFirstDay().name, "1 Thu")
     }
 
@@ -51,7 +50,6 @@ class ReportDayServiceTest {
     fun shouldReallyCorrectlyMapDayName() {
         stubDateChangeObserver(year = 2016, month = 9)
         stubServiceToReturn(emptyList())
-
         assertEquals(getDays()[1].name, "2 Fri")
     }
 
@@ -59,7 +57,6 @@ class ReportDayServiceTest {
     fun shouldMarkUnreportedPassedDays() {
         stubDateChangeObserver(year = 2016, month = 6)
         stubServiceToReturn(emptyList())
-
         assertTrue(getFirstDay().hasPassed)
     }
 
@@ -68,7 +65,6 @@ class ReportDayServiceTest {
         val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
-
         assertTrue(getFirstDay() is DayWithHourlyReports)
         assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
     }
@@ -77,7 +73,6 @@ class ReportDayServiceTest {
     fun shouldUnreportedPassedDaysWhichAreNotWeekendsHaveReports() {
         stubDateChangeObserver(year = 2016, month = 6)
         stubServiceToReturn(emptyList())
-
         assertTrue(getFirstDay() is DayWithoutReports)
         assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
     }
@@ -87,7 +82,6 @@ class ReportDayServiceTest {
         val report = newDailyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(report))
-
         assertTrue(getFirstDay() is DayWithDailyReport)
         assertEquals((getFirstDay() as DayWithDailyReport).report, report)
     }
@@ -98,7 +92,6 @@ class ReportDayServiceTest {
         val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(dailyReport, hourlyReport))
-
         getFirstDay()
     }
 
@@ -107,7 +100,6 @@ class ReportDayServiceTest {
         val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
         stubDateChangeObserver(year = 2016, month = 6, day = 1)
         stubServiceToReturn(listOf(dailyReport, dailyReport))
-
         getFirstDay()
     }
 
@@ -115,7 +107,6 @@ class ReportDayServiceTest {
     fun shouldCallServiceWithCorrectYearMonth() {
         val yearMonth = getCurrentTimeCalendar().toYearMonth()
         stubServiceToReturn(emptyList())
-
         getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
     }
@@ -124,7 +115,6 @@ class ReportDayServiceTest {
     fun shouldReallyCallServiceWithCorrectYearMonth() {
         val yearMonth = getCurrentTimeCalendar().toYearMonth().copy(year = 2015)
         stubServiceToReturn(emptyList())
-
         getDays(yearMonth)
         verify(serviceApi).getReports(yearMonth)
     }

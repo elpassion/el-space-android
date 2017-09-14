@@ -15,10 +15,12 @@ import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 class DebateChatServiceTest {
 
-    private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
+    private val getCommentsFromApiSubject = SingleSubject.create<InitialsComments>()
+    private val getNextCommentsFromApiSubject = SingleSubject.create<InitialsComments>()
     private val sendCommentsApiSubject = SingleSubject.create<Comment>()
     private val api = mock<DebateChat.Api>().apply {
-        whenever(getComments(any())).thenReturn(commentsFromApiSubject)
+        whenever(getComments(any())).thenReturn(getCommentsFromApiSubject)
+        whenever(getNextComments(any(), any())).thenReturn(getNextCommentsFromApiSubject)
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
@@ -34,18 +36,12 @@ class DebateChatServiceTest {
     }
 
     @Test
-    fun shouldCallApiGetNextCommentsWithRealData() {
-        debateChatServiceImpl.initialsCommentsObservable("token", 123)
-        verify(api).getNextComments("token", 123)
-    }
-
-    @Test
     fun shouldReturnInitialsCommentsReceivedFromApiComment() {
         val initialsCommentsFromApi = createInitialsComments(debateClosed = false, comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")), nextPosition = 123)
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()
-        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
         testObserver.assertValues(initialsCommentsFromApi)
     }
 
@@ -55,7 +51,7 @@ class DebateChatServiceTest {
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()
-        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
         val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.createdAt }
         testObserver.assertValues(createInitialsComments(comments = sortedComments))
     }
@@ -66,8 +62,24 @@ class DebateChatServiceTest {
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()
-        commentsFromApiSubject.onError(exception)
+        getCommentsFromApiSubject.onError(exception)
         testObserver.assertError(exception)
+    }
+
+    @Test
+    fun shouldCallApiGetNextCommentsWithRealData() {
+        debateChatServiceImpl.initialsCommentsObservable("token", 123)
+        verify(api).getNextComments("token", 123)
+    }
+
+    @Test
+    fun shouldReturnInitialsCommentsReceivedFromApiGetNextComments() {
+        val initialsCommentsFromApi = createInitialsComments(debateClosed = false, comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")), nextPosition = 123)
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 123)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        testObserver.assertValues(initialsCommentsFromApi)
     }
 
     @Test

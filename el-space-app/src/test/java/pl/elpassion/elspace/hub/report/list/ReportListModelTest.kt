@@ -31,7 +31,7 @@ class ReportListModelTest : TreeSpec() {
                 }
                 "show loader" > {
                     whenever(service.createDays(any())).thenReturn(Observable.never())
-                    model.states.test().assertValue { it.showLoader }
+                    model.states.test().assertValue { it.isLoaderVisible }
                 }
             }
         }
@@ -44,7 +44,7 @@ class ReportListModel(service: ReportDayService) {
 
     init {
         events.flatMap { service.createDays(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth()) }
-                .map { ReportList.UIState(adapterItems = emptyList(), showLoader = true) }
+                .map { ReportList.UIState(adapterItems = emptyList(), isLoaderVisible = true) }
                 .subscribe(states)
     }
 }

@@ -81,7 +81,7 @@ interface ReportList {
 
     data class UIState(
             val adapterItems: List<AdapterItem>,
-            val showLoader: Boolean
+            val isLoaderVisible: Boolean
     )
 
     sealed class Event {

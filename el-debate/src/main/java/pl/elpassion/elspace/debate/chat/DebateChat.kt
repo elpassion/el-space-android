@@ -11,8 +11,7 @@ import retrofit2.http.*
 interface DebateChat {
 
     interface Service {
-        fun initialsCommentsObservable(token: String): Single<InitialsComments>
-        fun initialsCommentsObservable(token: String, nextPosition: Long): Single<InitialsComments>
+        fun initialsCommentsObservable(token: String, nextPosition: Long?): Single<InitialsComments>
         fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Single<Comment>
     }

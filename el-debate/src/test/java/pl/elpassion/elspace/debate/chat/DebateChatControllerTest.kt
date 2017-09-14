@@ -27,7 +27,7 @@ class DebateChatControllerTest {
 
     @Before
     fun setUp() {
-        whenever(service.initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
+        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(initialsCommentsSubject)
         whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
@@ -38,13 +38,13 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallServiceInitialsCommentsWithGivenDataOnCreate() {
         onCreate()
-        verify(service).initialsCommentsObservable("token")
+        verify(service).initialsCommentsObservable("token", null)
     }
 
     @Test
     fun shouldCallServiceInitialsCommentsObservableWithReallyGivenTokenOnCreate() {
         onCreate(token = "someOtherToken")
-        verify(service).initialsCommentsObservable("someOtherToken")
+        verify(service).initialsCommentsObservable("someOtherToken", null)
     }
 
     @Test
@@ -108,13 +108,13 @@ class DebateChatControllerTest {
     @Test
     fun shouldCallServiceInitialsCommentsOnServiceInitialsCommentsRefresh() {
         controller.onInitialsCommentsRefresh(createLoginCredentials())
-        verify(service).initialsCommentsObservable(any())
+        verify(service).initialsCommentsObservable(any(), anyOrNull())
     }
 
     @Test
     fun shouldCallServiceInitialsCommentsWithReallyGivenTokenOnServiceInitialsCommentsRefresh() {
         controller.onInitialsCommentsRefresh(createLoginCredentials(token = "someRefreshToken"))
-        verify(service).initialsCommentsObservable("someRefreshToken")
+        verify(service).initialsCommentsObservable("someRefreshToken", null)
     }
 
     @Test

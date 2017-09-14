@@ -26,7 +26,7 @@ class DebateChatController(
     }
 
     private fun getInitialComments(loginCredentials: LoginCredentials) {
-        service.initialsCommentsObservable(loginCredentials.authToken)
+        service.initialsCommentsObservable(loginCredentials.authToken, null)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }

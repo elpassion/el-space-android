@@ -80,7 +80,8 @@ interface ReportList {
     })
 
     data class UIState(
-            val adapterItems: List<AdapterItem>
+            val adapterItems: List<AdapterItem>,
+            val showLoader: Boolean
     )
 
     sealed class Event {

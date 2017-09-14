@@ -16,22 +16,21 @@ class ReportListModelTest : TreeSpec() {
 
     init {
         "Model should " {
+            val service = mock<ReportDayService>().apply {
+                whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
+            }
+            val model = ReportListModel(service)
             "on create " {
-                val service = mock<ReportDayService>().apply {
-                    whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
-                }
-                val model = ReportListModel(service)
-
+                model.events.accept(ReportList.Event.OnCreate)
                 "propagate list of adapters" > {
-                    Observable.just(ReportList.Event.OnCreate).subscribe(model.events)
-                    model.states
-                            .test()
-                            .assertValue { it.adapterItems.isEmpty() }
+                    model.states.test().assertValue { it.adapterItems.isEmpty() }
                 }
-
                 "call service for days" > {
-                    model.events.accept(ReportList.Event.OnCreate)
                     verify(service).createDays(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
+                }
+                "show loader" > {
+                    whenever(service.createDays(any())).thenReturn(Observable.never())
+                    model.states.test().assertValue { it.showLoader }
                 }
             }
         }
@@ -44,7 +43,7 @@ class ReportListModel(service: ReportDayService) {
 
     init {
         events.flatMap { service.createDays(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth()) }
-                .map { ReportList.UIState(emptyList()) }
+                .map { ReportList.UIState(adapterItems = emptyList(), showLoader = true) }
                 .subscribe(states)
     }
 }

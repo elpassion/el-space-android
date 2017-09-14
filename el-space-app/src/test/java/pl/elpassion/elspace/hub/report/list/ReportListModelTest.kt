@@ -30,7 +30,6 @@ class ReportListModelTest : TreeSpec() {
                     verify(service).createDays(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
                 }
                 "show loader" > {
-                    whenever(service.createDays(any())).thenReturn(Observable.never())
                     model.states.test().assertValue { it.isLoaderVisible }
                 }
             }

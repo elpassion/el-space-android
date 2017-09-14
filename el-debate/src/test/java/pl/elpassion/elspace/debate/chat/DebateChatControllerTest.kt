@@ -132,6 +132,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceInitialsCommentsOnNextComments() {
+        controller.onNextComments()
+        verify(service).initialsCommentsObservable(any(), any())
+    }
+
+    @Test
     fun shouldCallServiceLiveCommentsWithReallyGivenDataOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate(userId = 456)

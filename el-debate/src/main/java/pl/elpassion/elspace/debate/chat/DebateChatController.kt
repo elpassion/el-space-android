@@ -56,6 +56,10 @@ class DebateChatController(
         }
     }
 
+    fun onNextComments() {
+        service.initialsCommentsObservable("12345", 222)
+    }
+
     fun sendComment(token: String, message: String) {
         when {
             debateRepo.areTokenCredentialsMissing(token) -> view.showCredentialsDialog()

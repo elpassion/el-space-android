@@ -37,7 +37,7 @@ class DebateChatActivityTest {
     private val liveCommentsSubject = BehaviorSubject.create<Comment>()
     private val sendCommentSubject = SingleSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
+        whenever(initialsCommentsObservable(any(), anyOrNull())).thenReturn(initialsCommentsSubject)
         whenever(liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
@@ -67,7 +67,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldUseCorrectTokenOnServiceInitialsComments() {
         startActivity(token = "myToken")
-        verify(service).initialsCommentsObservable("myToken")
+        verify(service).initialsCommentsObservable("myToken", null)
     }
 
     @Test
@@ -180,7 +180,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
-        verify(service, times(2)).initialsCommentsObservable(any())
+        verify(service, times(2)).initialsCommentsObservable(any(), anyOrNull())
     }
 
     @Test
@@ -189,7 +189,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(300)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
-        verify(service, times(2)).initialsCommentsObservable("refreshToken")
+        verify(service, times(2)).initialsCommentsObservable("refreshToken", null)
     }
 
     @Test

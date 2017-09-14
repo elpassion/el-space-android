@@ -14,12 +14,13 @@ import java.util.*
 
 class ReportListModelTest : TreeSpec() {
 
+    private val service = mock<ReportDayService>().apply {
+        whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
+    }
+    private val model = ReportListModel(service)
+
     init {
         "Model should " {
-            val service = mock<ReportDayService>().apply {
-                whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
-            }
-            val model = ReportListModel(service)
             "on create " {
                 model.events.accept(ReportList.Event.OnCreate)
                 "propagate list of adapters" > {

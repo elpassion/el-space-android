@@ -27,7 +27,7 @@ class ReportListControllerTest {
     private val filter = mock<DayFilter>()
     private val view = mock<ReportList.View>()
     private val controller = ReportListController(service, filter, actions, view, SchedulersSupplier(backgroundScheduler = trampoline(), uiScheduler = trampoline()))
-    private val daysSubject = PublishSubject.create<List<Day>>()
+    private val daysSubject = PublishSubject.create<List<AdapterItem>>()
     private val filterSubject = PublishSubject.create<Boolean>()
 
     @Before

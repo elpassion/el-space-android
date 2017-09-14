@@ -69,7 +69,7 @@ class ReportListController(private val reportDayService: ReportDayService,
 
     private fun fetchReports() {
         Observables.combineLatest(fetchDays(), actions.reportsFilter(),
-                { list: List<Day>, shouldFilter: Boolean ->
+                { list: List<AdapterItem>, shouldFilter: Boolean ->
                     when (shouldFilter) {
                         true -> dayFilter.fetchFilteredDays(list)
                         else -> list
@@ -82,13 +82,13 @@ class ReportListController(private val reportDayService: ReportDayService,
                 .addTo(subscriptions)
     }
 
-    private fun createAdapterItems(days: List<Day>) {
+    private fun createAdapterItems(days: List<AdapterItem>) {
         val adapterItems = getDaysAndReportsAsAdapterItems(days)
         val adapterItemsWithSeparators = addSeparators(adapterItems)
         view.showDays(adapterItemsWithSeparators)
     }
 
-    private fun getDaysAndReportsAsAdapterItems(days: List<Day>) = mutableListOf<AdapterItem>().apply {
+    private fun getDaysAndReportsAsAdapterItems(days: List<AdapterItem>) = mutableListOf<AdapterItem>().apply {
         days.forEach {
             add(it)
             when (it) {

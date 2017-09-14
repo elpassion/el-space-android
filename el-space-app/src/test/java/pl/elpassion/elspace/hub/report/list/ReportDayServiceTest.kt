@@ -120,7 +120,7 @@ class ReportDayServiceTest {
     }
 
     private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {
-        return service.createDays(yearMonth).blockingFirst()
+        return service.createDays(yearMonth).map { it.filter { it is Day }.map { it as Day } }.blockingFirst()
     }
 
     private fun getFirstDay() = getDays().first()

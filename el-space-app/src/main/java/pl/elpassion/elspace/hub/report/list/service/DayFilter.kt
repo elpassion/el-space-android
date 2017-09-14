@@ -1,7 +1,7 @@
 package pl.elpassion.elspace.hub.report.list.service
 
-import pl.elpassion.elspace.hub.report.list.Day
+import pl.elpassion.elspace.hub.report.list.AdapterItem
 
 interface DayFilter {
-    fun fetchFilteredDays(days: List<Day>): List<Day>
+    fun fetchFilteredDays(days: List<AdapterItem>): List<AdapterItem>
 }

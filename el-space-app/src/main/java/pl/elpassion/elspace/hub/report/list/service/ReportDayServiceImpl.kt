@@ -12,7 +12,7 @@ class ReportDayServiceImpl(
         private val reportListService: ReportList.Service,
         private val currentTime: () -> Calendar) : ReportDayService {
 
-    override fun createDays(yearMonth: YearMonth): Observable<List<Day>> =
+    override fun createDays(yearMonth: YearMonth): Observable<List<AdapterItem>> =
             reportListService.getReports(yearMonth).map { yearMonth to it }
                     .map { (yearMonth, reportList) -> createDaysWithReports(yearMonth, reportList) }
 

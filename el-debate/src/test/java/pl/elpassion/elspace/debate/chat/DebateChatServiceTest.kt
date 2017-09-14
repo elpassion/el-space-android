@@ -18,7 +18,7 @@ class DebateChatServiceTest {
     private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
     private val sendCommentsApiSubject = SingleSubject.create<Comment>()
     private val api = mock<DebateChat.Api>().apply {
-        whenever(comment(any())).thenReturn(commentsFromApiSubject)
+        whenever(getComments(any())).thenReturn(commentsFromApiSubject)
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
@@ -28,9 +28,15 @@ class DebateChatServiceTest {
     private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
 
     @Test
-    fun shouldCallApiCommentWithRealToken() {
+    fun shouldCallApiGetCommentsWithRealToken() {
         debateChatServiceImpl.initialsCommentsObservable("someToken")
-        verify(api).comment("someToken")
+        verify(api).getComments("someToken")
+    }
+
+    @Test
+    fun shouldCallApiGetNextCommentsWithRealData() {
+        debateChatServiceImpl.initialsCommentsObservable("token", 123)
+        verify(api).getNextComments("token", 123)
     }
 
     @Test

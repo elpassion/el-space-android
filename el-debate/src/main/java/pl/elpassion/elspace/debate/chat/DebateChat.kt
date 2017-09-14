@@ -12,6 +12,7 @@ interface DebateChat {
 
     interface Service {
         fun initialsCommentsObservable(token: String): Single<InitialsComments>
+        fun initialsCommentsObservable(token: String, nextPosition: Long): Single<InitialsComments>
         fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment>
         fun sendComment(commentToSend: CommentToSend): Single<Comment>
     }
@@ -26,7 +27,8 @@ interface DebateChat {
                 @Field("last_name") lastName: String): Single<Comment>
 
         @GET("comments")
-        fun comment(@Header("Authorization") token: String): Single<InitialsComments>
+        fun getComments(@Header("Authorization") token: String): Single<InitialsComments>
+        fun getNextComments(@Header("Authorization") token: String, nextPosition: Long): Single<InitialsComments>
     }
 
     interface Socket {

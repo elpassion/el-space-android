@@ -83,6 +83,16 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldReturnErrorReceivedFromApiGetNextComments() {
+        val exception = RuntimeException()
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 123)
+                .test()
+        getNextCommentsFromApiSubject.onError(exception)
+        testObserver.assertError(exception)
+    }
+
+    @Test
     fun shouldCallSocketWithRealData() {
         debateChatServiceImpl.liveCommentsObservable("someDebateCode", 123)
         verify(socket).commentsObservable("someDebateCode", 123)

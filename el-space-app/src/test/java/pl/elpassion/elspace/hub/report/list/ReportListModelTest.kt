@@ -15,7 +15,7 @@ import java.util.*
 class ReportListModelTest : TreeSpec() {
 
     private val service = mock<ReportDayService>().apply {
-        whenever(this.createDays(any())).thenReturn(Observable.just(emptyList()))
+        whenever(createDays(any())).thenReturn(Observable.just(emptyList()))
     }
     private val model = ReportListModel(service)
 

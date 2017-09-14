@@ -133,8 +133,14 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldCallServiceInitialsCommentsOnNextComments() {
-        controller.onNextComments()
+        controller.onNextComments("token", 1)
         verify(service).initialsCommentsObservable(any(), any())
+    }
+
+    @Test
+    fun shouldCallServiceInitialsCommentsOnNextCommentsWithReallyGivenData() {
+        controller.onNextComments("someToken", 123)
+        verify(service).initialsCommentsObservable("someToken", 123)
     }
 
     @Test

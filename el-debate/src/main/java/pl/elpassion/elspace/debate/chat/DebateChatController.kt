@@ -56,8 +56,8 @@ class DebateChatController(
         }
     }
 
-    fun onNextComments() {
-        service.initialsCommentsObservable("12345", 222)
+    fun onNextComments(authToken: String, nextPosition: Long) {
+        service.initialsCommentsObservable(authToken, nextPosition)
     }
 
     fun sendComment(token: String, message: String) {

@@ -41,7 +41,7 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldReturnInitialsCommentsReceivedFromApiComment() {
-        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")))
+        val initialsCommentsFromApi = createInitialsComments(debateClosed = false, comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")), nextPosition = 123)
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token")
                 .test()

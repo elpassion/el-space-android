@@ -124,6 +124,12 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldCallServiceInitialsCommentsWithNullNextPositionWhenNextPositionIsNullOnServiceInitialsCommentsRefresh() {
+        controller.onInitialsCommentsRefresh(createLoginCredentials())
+        verify(service).initialsCommentsObservable(any(), eq(null))
+    }
+
+    @Test
     fun shouldCallServiceInitialsCommentsWithReallyGivenNextPositionOnServiceInitialsCommentsRefresh() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 333))

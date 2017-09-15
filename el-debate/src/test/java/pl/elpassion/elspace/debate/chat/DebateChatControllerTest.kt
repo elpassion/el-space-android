@@ -69,6 +69,13 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldHideLoaderOnServiceInitialsCommentsError() {
+        onCreate()
+        initialsCommentsSubject.onError(RuntimeException())
+        verify(view).hideLoader()
+    }
+
+    @Test
     fun shouldUseGivenSchedulerToSubscribeOnWhenServiceInitialsComments() {
         val subscribeOn = TestScheduler()
         val controller = DebateChatController(view, debateRepo, service, SchedulersSupplier(subscribeOn, Schedulers.trampoline()), maxMessageLength = 100)

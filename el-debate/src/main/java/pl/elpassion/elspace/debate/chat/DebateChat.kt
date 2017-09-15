@@ -27,7 +27,9 @@ interface DebateChat {
 
         @GET("comments")
         fun getComments(@Header("Authorization") token: String): Single<InitialsComments>
-        fun getNextComments(@Header("Authorization") token: String, nextPosition: Long): Single<InitialsComments>
+
+        @GET("comments")
+        fun getNextComments(@Header("Authorization") token: String, @Query("position") nextPosition: Long): Single<InitialsComments>
     }
 
     interface Socket {

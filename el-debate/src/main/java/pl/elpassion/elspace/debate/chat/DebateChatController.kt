@@ -18,27 +18,27 @@ class DebateChatController(
     private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials.authToken, { subscribeToLiveComments(loginCredentials.userId) })
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         subscriptions.clear()
-        callServiceInitialsComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials.authToken, { subscribeToLiveComments(loginCredentials.userId) })
     }
 
     fun onNextComments(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials.authToken, {})
     }
 
-    private fun callServiceInitialsComments(loginCredentials: LoginCredentials) {
-        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
+    private fun callServiceInitialsComments(authToken: String, onSuccessAction: () -> Unit) {
+        service.initialsCommentsObservable(authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .doOnSuccess { (debateClosed) ->
                     if (debateClosed) view.showDebateClosedError()
-                    else if (nextPosition == null) subscribeToLiveComments(loginCredentials.userId)
+                    else onSuccessAction()
                 }
                 .doAfterSuccess { initialsComments: InitialsComments -> nextPosition = initialsComments.nextPosition }
                 .subscribe(

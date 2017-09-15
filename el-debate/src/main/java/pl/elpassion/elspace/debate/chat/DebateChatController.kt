@@ -26,8 +26,8 @@ class DebateChatController(
         callServiceInitialsComments(loginCredentials.authToken, { subscribeToLiveComments(loginCredentials.userId) })
     }
 
-    fun onNextComments(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials.authToken, {})
+    fun onNextComments(authToken: String) {
+        callServiceInitialsComments(authToken, {})
     }
 
     private fun callServiceInitialsComments(authToken: String, onSuccessAction: () -> Unit) {

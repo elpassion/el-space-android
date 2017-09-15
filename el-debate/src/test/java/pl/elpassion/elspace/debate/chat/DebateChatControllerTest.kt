@@ -150,7 +150,7 @@ class DebateChatControllerTest {
     fun shouldCallServiceInitialsCommentsWithNonNullNextPositionOnNextComments() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        controller.onNextComments(createLoginCredentials())
+        controller.onNextComments("token")
         verify(service).initialsCommentsObservable(any(), notNull())
     }
 
@@ -158,7 +158,7 @@ class DebateChatControllerTest {
     fun shouldCallServiceInitialsCommentsOnNextCommentsWithReallyGivenData() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 222))
-        controller.onNextComments(createLoginCredentials(token = "someToken"))
+        controller.onNextComments("someToken")
         verify(service).initialsCommentsObservable("someToken", 222)
     }
 
@@ -166,7 +166,7 @@ class DebateChatControllerTest {
     fun shouldNotCallServiceLiveCommentsSecondTimeOnServiceInitialsCommentsSuccessWhenNextPositionIsNotNull() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        controller.onNextComments(createLoginCredentials())
+        controller.onNextComments("token")
         initialsCommentsSubject.onSuccess(createInitialsComments())
         verify(service, atMost(1)).liveCommentsObservable(any(), any())
     }

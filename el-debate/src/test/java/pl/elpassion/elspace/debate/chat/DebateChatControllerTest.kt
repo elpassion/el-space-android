@@ -148,19 +148,11 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsOnNextCommentsWithNextPositionReturnedFromOnCreateCall() {
+    fun shouldCallServiceInitialsCommentsOnNextCommentsWithReallyGivenData() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 222))
-        controller.onNextComments(createLoginCredentials())
-        verify(service).initialsCommentsObservable(any(), eq(222))
-    }
-
-    @Test
-    fun shouldCallServiceInitialsCommentsOnNextCommentsWithReallyGivenToken() {
-        onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments())
         controller.onNextComments(createLoginCredentials(token = "someToken"))
-        verify(service).initialsCommentsObservable(eq("someToken"), any())
+        verify(service).initialsCommentsObservable("someToken", 222)
     }
 
     @Test

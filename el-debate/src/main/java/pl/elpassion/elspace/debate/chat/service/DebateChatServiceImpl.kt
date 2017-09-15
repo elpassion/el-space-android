@@ -12,7 +12,7 @@ class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket:
     override fun initialsCommentsObservable(token: String, nextPosition: Long?): Single<InitialsComments> =
             if (nextPosition == null) {
                 api.getComments(token)
-                        .map { it.copy(comments = it.comments.sortedBy { it.createdAt }) }
+                        .map { it.copy(comments = it.comments.sortedBy { it.id }) }
             } else {
                 api.getNextComments(token, nextPosition)
             }

@@ -53,12 +53,12 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldSortCommentsReceivedFromApiGetComments() {
-        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(createdAt = 3), createComment(createdAt = 1), createComment(createdAt = 2)))
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(id = 3), createComment(id = 1), createComment(id = 2)))
         val testObserver = debateChatServiceImpl
                 .initialsCommentsObservable("token", null)
                 .test()
         getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
-        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.createdAt }
+        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.id }
         testObserver.assertValues(createInitialsComments(comments = sortedComments))
     }
 

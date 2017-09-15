@@ -26,6 +26,7 @@ class ReportDayServiceTest : TreeSpec() {
 
     init {
         "Report day service should " {
+            stubServiceToReturn(emptyList())
             "create 31 days without reports if is october and api returns empty list" > {
                 verifyIfMapCorrectListForGivenParams(
                         apiReturnValue = emptyList(),
@@ -39,67 +40,61 @@ class ReportDayServiceTest : TreeSpec() {
                         daysInMonth = 30
                 )
             }
-            "correctly map day name" > {
-                currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
-                stubServiceToReturn(emptyList())
-                assertEquals(getFirstDay().name, "1 Thu")
-            }
-            "really correctly map day name" > {
-                currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
-                stubServiceToReturn(emptyList())
-                assertEquals(getDays()[1].name, "2 Fri")
-            }
-            "mark unreported passed days" > {
-                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
-                stubServiceToReturn(emptyList())
-                assertTrue(getFirstDay().hasPassed)
-            }
-            "map returned hourly reports to days with hourly reports" > {
-                val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-                stubServiceToReturn(listOf(report))
-                assertTrue(getFirstDay() is DayWithHourlyReports)
-                assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
-            }
-            "unreported passed days wchich are not weekends have reports" > {
-                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
-                stubServiceToReturn(emptyList())
-                assertTrue(getFirstDay() is DayWithoutReports)
-                assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
-            }
-            "map returned daily reports to days with daily reports" > {
-                val report = newDailyReport(year = 2016, month = 6, day = 1)
-                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-                stubServiceToReturn(listOf(report))
-                assertTrue(getFirstDay() is DayWithDailyReport)
-                assertEquals((getFirstDay() as DayWithDailyReport).report, report)
-            }
-            "throw IllegalArgumentException when day has daily report together with hourly report" > {
-                shouldThrow<IllegalArgumentException> {
-                    val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-                    val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-                    currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-                    stubServiceToReturn(listOf(dailyReport, hourlyReport))
-                    getFirstDay()
+            "at date: 2016-06-01, " {
+                before { currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1) }
+                "throw IllegalArgumentException when day has daily report together with hourly report" > {
+                    shouldThrow<IllegalArgumentException> {
+                        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
+                        val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
+                        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+                        stubServiceToReturn(listOf(dailyReport, hourlyReport))
+                        getFirstDay()
+                    }
                 }
+                "throw IllegalArgumentException when day has two daily reports" > {
+                    shouldThrow<IllegalArgumentException> {
+                        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
+                        stubServiceToReturn(listOf(dailyReport, dailyReport))
+                        getFirstDay()
+                    }
+                }
+                "map returned daily reports to days with daily reports" > {
+                    val report = newDailyReport(year = 2016, month = 6, day = 1)
+                    stubServiceToReturn(listOf(report))
+                    assertTrue(getFirstDay() is DayWithDailyReport)
+                    assertEquals((getFirstDay() as DayWithDailyReport).report, report)
+                }
+                "map returned hourly reports to days with hourly reports" > {
+                    val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
+                    stubServiceToReturn(listOf(report))
+                    assertTrue(getFirstDay() is DayWithHourlyReports)
+                    assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
+                }
+                "correctly map day name" > {
+                    assertEquals("1 Wed", getFirstDay().name)
+                }
+                "really correctly map day name" > {
+                    assertEquals("2 Thu", getDays()[1].name)
+                }
+
             }
-            "throw IllegalArgumentException when day has two daily reports" > {
-                shouldThrow<IllegalArgumentException> {
-                    val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-                    currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-                    stubServiceToReturn(listOf(dailyReport, dailyReport))
-                    getFirstDay()
+            "at date: 2016-06-02, " {
+                before { currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2) }
+                "mark unreported passed days" > {
+                    assertTrue(getFirstDay().hasPassed)
+                }
+                "unreported passed days wchich are not weekends have reports" > {
+                    assertTrue(getFirstDay() is DayWithoutReports)
+                    assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
                 }
             }
             "call service with correct yearMonth" > {
                 val yearMonth = currentTime.toYearMonth()
-                stubServiceToReturn(emptyList())
                 getDays(yearMonth)
                 verify(serviceApi).getReports(yearMonth)
             }
             "really call service with correct yearMonth" > {
                 val yearMonth = currentTime.toYearMonth().copy(year = 2015)
-                stubServiceToReturn(emptyList())
                 getDays(yearMonth)
                 verify(serviceApi).getReports(yearMonth)
             }

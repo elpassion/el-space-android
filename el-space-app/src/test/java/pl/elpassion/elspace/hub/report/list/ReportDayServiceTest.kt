@@ -83,7 +83,7 @@ class ReportDayServiceTest : TreeSpec() {
                 "mark unreported passed days" > {
                     assertTrue(getFirstDay().hasPassed)
                 }
-                "unreported passed days wchich are not weekends have reports" > {
+                "unreported passed days which are not weekends have reports" > {
                     assertTrue(getFirstDay() is DayWithoutReports)
                     assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
                 }

@@ -36,21 +36,15 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsWithGivenTokenOnCreate() {
+    fun shouldCallServiceInitialsCommentsOnCreate() {
         onCreate()
-        verify(service).initialsCommentsObservable(eq("token"), anyOrNull())
+        verify(service).initialsCommentsObservable(any(), anyOrNull())
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsWithNullNextPositionOnCreate() {
-        onCreate()
-        verify(service).initialsCommentsObservable(any(), eq(null))
-    }
-
-    @Test
-    fun shouldCallServiceInitialsCommentsObservableWithReallyGivenTokenOnCreate() {
+    fun shouldCallServiceInitialsCommentsObservableWithGivenDataOnCreate() {
         onCreate(token = "someOtherToken")
-        verify(service).initialsCommentsObservable(eq("someOtherToken"), anyOrNull())
+        verify(service).initialsCommentsObservable("someOtherToken", null)
     }
 
     @Test

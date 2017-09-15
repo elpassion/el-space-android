@@ -15,18 +15,23 @@ class DebateChatController(
         private val maxMessageLength: Int) {
 
     private val subscriptions = CompositeDisposable()
+    private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        getInitialComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials)
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         subscriptions.clear()
-        getInitialComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials)
     }
 
-    private fun getInitialComments(loginCredentials: LoginCredentials) {
-        service.initialsCommentsObservable(loginCredentials.authToken, null)
+    fun onNextComments(loginCredentials: LoginCredentials) {
+        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
+    }
+
+    private fun callServiceInitialsComments(loginCredentials: LoginCredentials) {
+        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
@@ -35,6 +40,7 @@ class DebateChatController(
                     if (debateClosed) view.showDebateClosedError()
                     else subscribeToLiveComments(loginCredentials.userId)
                 }
+                .doAfterSuccess { initialsComments: InitialsComments -> nextPosition = initialsComments.nextPosition }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
@@ -54,10 +60,6 @@ class DebateChatController(
                     .subscribe(view::showLiveComment, view::showLiveCommentsError)
                     .addTo(subscriptions)
         }
-    }
-
-    fun onNextComments(authToken: String, nextPosition: Long) {
-        service.initialsCommentsObservable(authToken, nextPosition)
     }
 
     fun sendComment(token: String, message: String) {

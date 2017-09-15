@@ -63,6 +63,17 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldSortCommentsReceivedFromApiGetNextComments() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(id = 9), createComment(id = 6), createComment(id = 8)))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 9)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.id }
+        testObserver.assertValues(createInitialsComments(comments = sortedComments))
+    }
+
+    @Test
     fun shouldReturnErrorReceivedFromApiGetComments() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl

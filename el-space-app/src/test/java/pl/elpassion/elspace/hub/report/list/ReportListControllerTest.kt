@@ -14,12 +14,12 @@ import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.commons.stubCurrentTime
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
-import pl.elpassion.elspace.hub.report.list.service.ReportDayService
+import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 import java.util.*
 
 class ReportListControllerTest {
 
-    private val service = mock<ReportDayService>()
+    private val service = mock<ReportsListAdaptersService>()
     private val actions = mock<ReportList.Actions> {
         on { snackBarRetry() } doReturn Observable.empty()
         on { resultRefresh() } doReturn Observable.empty()
@@ -32,7 +32,7 @@ class ReportListControllerTest {
 
     @Before
     fun setUp() {
-        whenever(service.createDays(any())).thenReturn(daysSubject)
+        whenever(service.createReportsListAdapters(any())).thenReturn(daysSubject)
         whenever(actions.reportsFilter()).thenReturn(filterSubject)
         stubCurrentTime()
         stubViewActions()
@@ -145,7 +145,7 @@ class ReportListControllerTest {
         whenever(actions.refreshingEvents()).thenReturn(Observable.just(Unit))
         controller.onCreate()
         daysSubject.onNext(emptyList())
-        verify(service, times(2)).createDays(any())
+        verify(service, times(2)).createReportsListAdapters(any())
     }
 
     @Test
@@ -230,7 +230,7 @@ class ReportListControllerTest {
     fun shouldCallServiceTwiceWhenRetryFromSnackBar() {
         whenever(actions.snackBarRetry()).thenReturn(Observable.just(Unit))
         controller.onCreate()
-        verify(service, times(2)).createDays(any())
+        verify(service, times(2)).createReportsListAdapters(any())
     }
 
     @Test

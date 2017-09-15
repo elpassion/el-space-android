@@ -9,9 +9,9 @@ import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
-import pl.elpassion.elspace.hub.report.list.service.ReportDayService
+import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 
-class ReportListController(private val reportDayService: ReportDayService,
+class ReportListController(private val reportDayService: ReportsListAdaptersService,
                            private val dayFilter: DayFilter,
                            private val actions: ReportList.Actions,
                            private val view: ReportList.View,
@@ -89,7 +89,7 @@ class ReportListController(private val reportDayService: ReportDayService,
                 dateChangeObserver
                         .observe()
                         .observeOn(schedulers.backgroundScheduler)
-                        .flatMap(reportDayService::createDays)
+                        .flatMap(reportDayService::createReportsListAdapters)
                         .subscribeOn(schedulers.backgroundScheduler)
                         .observeOn(schedulers.uiScheduler)
                         .doOnSubscribe {

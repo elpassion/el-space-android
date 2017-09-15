@@ -36,13 +36,13 @@ import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.adapter.Separator
 import pl.elpassion.elspace.hub.report.list.adapter.holders.*
 import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
-import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
+import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersServiceImpl
 
 class ReportListActivity : AppCompatActivity(), ReportList.View, ReportList.Actions {
 
     private val controller by lazy {
         ReportListController(
-                reportDayService = ReportDayServiceImpl(
+                reportDayService = ReportsListAdaptersServiceImpl(
                         reportListService = ReportList.ServiceProvider.get(),
                         currentTime = { getTimeFrom(CurrentTimeProvider.get()) }),
                 dayFilter = DayFilterImpl(),

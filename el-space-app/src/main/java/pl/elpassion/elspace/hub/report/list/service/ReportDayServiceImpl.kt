@@ -9,11 +9,11 @@ import pl.elpassion.elspace.hub.report.list.*
 import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 import java.util.*
 
-class ReportDayServiceImpl(
+class ReportsListAdaptersServiceImpl(
         private val reportListService: ReportList.Service,
-        private val currentTime: () -> Calendar) : ReportDayService {
+        private val currentTime: () -> Calendar) : ReportsListAdaptersService {
 
-    override fun createDays(yearMonth: YearMonth): Observable<List<AdapterItem>> =
+    override fun createReportsListAdapters(yearMonth: YearMonth): Observable<List<AdapterItem>> =
             reportListService.getReports(yearMonth).map { yearMonth to it }
                     .map { (yearMonth, reportList) -> createDaysWithReports(yearMonth, reportList) }
                     .map(::addSeparators)

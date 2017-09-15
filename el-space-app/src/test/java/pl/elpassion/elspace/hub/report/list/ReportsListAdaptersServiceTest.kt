@@ -16,15 +16,14 @@ import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
-import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
+import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersServiceImpl
 import java.util.*
 
-class ReportDayServiceTest : TreeSpec() {
+class ReportsListAdaptersServiceTest : TreeSpec() {
 
     private val serviceApi = mock<ReportList.Service>()
     private var currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-    private var service = ReportDayServiceImpl(serviceApi, { currentTime })
-
+    private var service = ReportsListAdaptersServiceImpl(serviceApi, { currentTime })
 
     init {
         "Report day service should " {
@@ -102,14 +101,14 @@ class ReportDayServiceTest : TreeSpec() {
             }
             "add reports items" > {
                 whenever(serviceApi.getReports(any())).thenReturn(Observable.just(listOf(newRegularHourlyReport(year = 2016, month = 6, day = 1))))
-                service.createDays(currentTime.toYearMonth())
+                service.createReportsListAdapters(currentTime.toYearMonth())
                         .map { it.filter { it is Day || it is Report } }
                         .test()
                         .assertValue { it.first() is DayWithHourlyReports }
                         .assertValue { it[1] is RegularHourlyReport }
             }
             "add separators to list" > {
-                service.createDays(currentTime.toYearMonth())
+                service.createReportsListAdapters(currentTime.toYearMonth())
                         .test()
                         .assertValue { it.first() is Empty }
                         .assertValue { it.last() is Empty }
@@ -118,7 +117,7 @@ class ReportDayServiceTest : TreeSpec() {
     }
 
     private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {
-        return service.createDays(yearMonth).map { it.filter { it is Day }.map { it as Day } }.blockingFirst()
+        return service.createReportsListAdapters(yearMonth).map { it.filter { it is Day }.map { it as Day } }.blockingFirst()
     }
 
     private fun getFirstDay() = getDays().first()

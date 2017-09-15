@@ -118,23 +118,17 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsWithReallyGivenTokenOnServiceInitialsCommentsRefresh() {
-        controller.onInitialsCommentsRefresh(createLoginCredentials(token = "someRefreshToken"))
-        verify(service).initialsCommentsObservable(eq("someRefreshToken"), anyOrNull())
+    fun shouldCallServiceInitialsCommentsWithGivenDataWhenNextPositionIsNullOnServiceInitialsCommentsRefresh() {
+        controller.onInitialsCommentsRefresh(createLoginCredentials(token = "refreshToken"))
+        verify(service).initialsCommentsObservable("refreshToken", null)
     }
 
     @Test
-    fun shouldCallServiceInitialsCommentsWithNullNextPositionWhenNextPositionIsNullOnServiceInitialsCommentsRefresh() {
-        controller.onInitialsCommentsRefresh(createLoginCredentials())
-        verify(service).initialsCommentsObservable(any(), eq(null))
-    }
-
-    @Test
-    fun shouldCallServiceInitialsCommentsWithReallyGivenNextPositionOnServiceInitialsCommentsRefresh() {
+    fun shouldCallServiceInitialsCommentsWithReallyGivenDataOnServiceInitialsCommentsRefresh() {
         onCreate()
         initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 333))
-        controller.onInitialsCommentsRefresh(createLoginCredentials())
-        verify(service).initialsCommentsObservable(any(), eq(333))
+        controller.onInitialsCommentsRefresh(createLoginCredentials(token = "someRefreshToken"))
+        verify(service).initialsCommentsObservable("someRefreshToken", 333)
     }
 
     @Test

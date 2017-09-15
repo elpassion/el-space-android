@@ -4,10 +4,11 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.kotlintest.matchers.shouldThrow
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Test
+import pl.elpassion.elspace.common.TreeSpec
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
@@ -16,107 +17,93 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import java.util.*
 
-class ReportDayServiceTest {
+class ReportDayServiceTest : TreeSpec() {
 
-    val serviceApi = mock<ReportList.Service>()
-    var currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-    var service = ReportDayServiceImpl(serviceApi, { currentTime })
+    private val serviceApi = mock<ReportList.Service>()
+    private var currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+    private var service = ReportDayServiceImpl(serviceApi, { currentTime })
 
-    @Test
-    fun shouldCreate31DaysWithoutReportsIfIsOctoberAndApiReturnsEmptyList() {
-        verifyIfMapCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 10,
-                daysInMonth = 31)
-    }
 
-    @Test
-    fun shouldCreate30DaysWithoutReportsIfIsNovemberAndApiReturnsEmptyList() {
-        verifyIfMapCorrectListForGivenParams(
-                apiReturnValue = emptyList(),
-                month = 11,
-                daysInMonth = 30
-        )
-    }
-
-    @Test
-    fun shouldCorrectlyMapDayName() {
-        currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
-        stubServiceToReturn(emptyList())
-        assertEquals(getFirstDay().name, "1 Thu")
-    }
-
-    @Test
-    fun shouldReallyCorrectlyMapDayName() {
-        currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
-        stubServiceToReturn(emptyList())
-        assertEquals(getDays()[1].name, "2 Fri")
-    }
-
-    @Test
-    fun shouldMarkUnreportedPassedDays() {
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
-        stubServiceToReturn(emptyList())
-        assertTrue(getFirstDay().hasPassed)
-    }
-
-    @Test
-    fun shouldMapReturnedHourlyReportsToDaysWithHourlyReports() {
-        val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-        stubServiceToReturn(listOf(report))
-        assertTrue(getFirstDay() is DayWithHourlyReports)
-        assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
-    }
-
-    @Test
-    fun shouldUnreportedPassedDaysWhichAreNotWeekendsHaveReports() {
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
-        stubServiceToReturn(emptyList())
-        assertTrue(getFirstDay() is DayWithoutReports)
-        assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
-    }
-
-    @Test
-    fun shouldMapReturnedDailyReportsToDaysWithDailyReports() {
-        val report = newDailyReport(year = 2016, month = 6, day = 1)
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-        stubServiceToReturn(listOf(report))
-        assertTrue(getFirstDay() is DayWithDailyReport)
-        assertEquals((getFirstDay() as DayWithDailyReport).report, report)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun shouldThrowIllegalArgumentExceptionWhenDayHasDailyReportTogetherWithHourlyReport() {
-        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-        val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-        stubServiceToReturn(listOf(dailyReport, hourlyReport))
-        getFirstDay()
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun shouldThrowIllegalArgumentExceptionWhenDayHasTwoDailyReports() {
-        val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
-        currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
-        stubServiceToReturn(listOf(dailyReport, dailyReport))
-        getFirstDay()
-    }
-
-    @Test
-    fun shouldCallServiceWithCorrectYearMonth() {
-        val yearMonth = currentTime.toYearMonth()
-        stubServiceToReturn(emptyList())
-        getDays(yearMonth)
-        verify(serviceApi).getReports(yearMonth)
-    }
-
-    @Test
-    fun shouldReallyCallServiceWithCorrectYearMonth() {
-        val yearMonth = currentTime.toYearMonth().copy(year = 2015)
-        stubServiceToReturn(emptyList())
-        getDays(yearMonth)
-        verify(serviceApi).getReports(yearMonth)
+    init {
+        "Report day service " {
+            "should create 31 days without reports if is october and api returns empty list" > {
+                verifyIfMapCorrectListForGivenParams(
+                        apiReturnValue = emptyList(),
+                        month = 10,
+                        daysInMonth = 31)
+            }
+            "should create 30 days without reports if is november and api returns empty list" > {
+                verifyIfMapCorrectListForGivenParams(
+                        apiReturnValue = emptyList(),
+                        month = 11,
+                        daysInMonth = 30
+                )
+            }
+            "should correctly map day name" > {
+                currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
+                stubServiceToReturn(emptyList())
+                assertEquals(getFirstDay().name, "1 Thu")
+            }
+            "should really correctly map day name" > {
+                currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
+                stubServiceToReturn(emptyList())
+                assertEquals(getDays()[1].name, "2 Fri")
+            }
+            "should mark unreported passed days" > {
+                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
+                stubServiceToReturn(emptyList())
+                assertTrue(getFirstDay().hasPassed)
+            }
+            "should map returned hourly reports to days with hourly reports" > {
+                val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
+                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+                stubServiceToReturn(listOf(report))
+                assertTrue(getFirstDay() is DayWithHourlyReports)
+                assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
+            }
+            "should unreported passed days wchich are not weekends have reports" > {
+                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
+                stubServiceToReturn(emptyList())
+                assertTrue(getFirstDay() is DayWithoutReports)
+                assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
+            }
+            "should map returned daily reports to days with daily reports" > {
+                val report = newDailyReport(year = 2016, month = 6, day = 1)
+                currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+                stubServiceToReturn(listOf(report))
+                assertTrue(getFirstDay() is DayWithDailyReport)
+                assertEquals((getFirstDay() as DayWithDailyReport).report, report)
+            }
+            "should throw IllegalArgumentException when day has daily report together with hourly report" > {
+                shouldThrow<IllegalArgumentException> {
+                    val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
+                    val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
+                    currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+                    stubServiceToReturn(listOf(dailyReport, hourlyReport))
+                    getFirstDay()
+                }
+            }
+            "should throw IllegalArgumentException when day has two daily reports" > {
+                shouldThrow<IllegalArgumentException> {
+                    val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
+                    currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
+                    stubServiceToReturn(listOf(dailyReport, dailyReport))
+                    getFirstDay()
+                }
+            }
+            "should call service with correct yearMonth" > {
+                val yearMonth = currentTime.toYearMonth()
+                stubServiceToReturn(emptyList())
+                getDays(yearMonth)
+                verify(serviceApi).getReports(yearMonth)
+            }
+            "should really call service with correct yearMonth" > {
+                val yearMonth = currentTime.toYearMonth().copy(year = 2015)
+                stubServiceToReturn(emptyList())
+                getDays(yearMonth)
+                verify(serviceApi).getReports(yearMonth)
+            }
+        }
     }
 
     private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {

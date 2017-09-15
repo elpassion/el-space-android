@@ -25,56 +25,56 @@ class ReportDayServiceTest : TreeSpec() {
 
 
     init {
-        "Report day service " {
-            "should create 31 days without reports if is october and api returns empty list" > {
+        "Report day service should " {
+            "create 31 days without reports if is october and api returns empty list" > {
                 verifyIfMapCorrectListForGivenParams(
                         apiReturnValue = emptyList(),
                         month = 10,
                         daysInMonth = 31)
             }
-            "should create 30 days without reports if is november and api returns empty list" > {
+            "create 30 days without reports if is november and api returns empty list" > {
                 verifyIfMapCorrectListForGivenParams(
                         apiReturnValue = emptyList(),
                         month = 11,
                         daysInMonth = 30
                 )
             }
-            "should correctly map day name" > {
+            "correctly map day name" > {
                 currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
                 stubServiceToReturn(emptyList())
                 assertEquals(getFirstDay().name, "1 Thu")
             }
-            "should really correctly map day name" > {
+            "really correctly map day name" > {
                 currentTime = getTimeFrom(year = 2016, month = Calendar.SEPTEMBER, day = 1)
                 stubServiceToReturn(emptyList())
                 assertEquals(getDays()[1].name, "2 Fri")
             }
-            "should mark unreported passed days" > {
+            "mark unreported passed days" > {
                 currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
                 stubServiceToReturn(emptyList())
                 assertTrue(getFirstDay().hasPassed)
             }
-            "should map returned hourly reports to days with hourly reports" > {
+            "map returned hourly reports to days with hourly reports" > {
                 val report = newRegularHourlyReport(year = 2016, month = 6, day = 1)
                 currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
                 stubServiceToReturn(listOf(report))
                 assertTrue(getFirstDay() is DayWithHourlyReports)
                 assertEquals((getFirstDay() as DayWithHourlyReports).reports, listOf(report))
             }
-            "should unreported passed days wchich are not weekends have reports" > {
+            "unreported passed days wchich are not weekends have reports" > {
                 currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 2)
                 stubServiceToReturn(emptyList())
                 assertTrue(getFirstDay() is DayWithoutReports)
                 assertTrue((getFirstDay() as DayWithoutReports).shouldHaveReports())
             }
-            "should map returned daily reports to days with daily reports" > {
+            "map returned daily reports to days with daily reports" > {
                 val report = newDailyReport(year = 2016, month = 6, day = 1)
                 currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
                 stubServiceToReturn(listOf(report))
                 assertTrue(getFirstDay() is DayWithDailyReport)
                 assertEquals((getFirstDay() as DayWithDailyReport).report, report)
             }
-            "should throw IllegalArgumentException when day has daily report together with hourly report" > {
+            "throw IllegalArgumentException when day has daily report together with hourly report" > {
                 shouldThrow<IllegalArgumentException> {
                     val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
                     val hourlyReport = newRegularHourlyReport(year = 2016, month = 6, day = 1)
@@ -83,7 +83,7 @@ class ReportDayServiceTest : TreeSpec() {
                     getFirstDay()
                 }
             }
-            "should throw IllegalArgumentException when day has two daily reports" > {
+            "throw IllegalArgumentException when day has two daily reports" > {
                 shouldThrow<IllegalArgumentException> {
                     val dailyReport = newDailyReport(year = 2016, month = 6, day = 1)
                     currentTime = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1)
@@ -91,13 +91,13 @@ class ReportDayServiceTest : TreeSpec() {
                     getFirstDay()
                 }
             }
-            "should call service with correct yearMonth" > {
+            "call service with correct yearMonth" > {
                 val yearMonth = currentTime.toYearMonth()
                 stubServiceToReturn(emptyList())
                 getDays(yearMonth)
                 verify(serviceApi).getReports(yearMonth)
             }
-            "should really call service with correct yearMonth" > {
+            "really call service with correct yearMonth" > {
                 val yearMonth = currentTime.toYearMonth().copy(year = 2015)
                 stubServiceToReturn(emptyList())
                 getDays(yearMonth)

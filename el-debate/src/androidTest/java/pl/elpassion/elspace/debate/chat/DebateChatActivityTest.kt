@@ -147,19 +147,6 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldScrollToLastCommentOnLiveCommentsNext() {
-        startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
-        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
-        onText("LastMessage").isDisplayed()
-    }
-
-    @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         startActivity()
         initialsCommentsSubject.onError(RuntimeException())
@@ -221,6 +208,19 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(name = "LiveComment"))
         onText("LiveComment").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollToLastCommentOnLiveCommentsNext() {
+        startActivity()
+        val comments = mutableListOf<Comment>().apply {
+            (1..10).forEach {
+                add(createComment())
+            }
+        }
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
+        onText("LastMessage").isDisplayed()
     }
 
     @Test

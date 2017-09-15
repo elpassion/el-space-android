@@ -176,18 +176,11 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldCallServiceLiveCommentsWithReallyGivenDebateCodeOnCreate() {
+    fun shouldCallServiceLiveCommentsWithReallyGivenDataOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
-        onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments())
-        verify(service).liveCommentsObservable(eq("67890"), any())
-    }
-
-    @Test
-    fun shouldCallServiceLiveCommentsWithReallyGivenUserIdCodeOnCreate() {
         onCreate(userId = 456)
         initialsCommentsSubject.onSuccess(createInitialsComments())
-        verify(service).liveCommentsObservable(any(), eq(456))
+        verify(service).liveCommentsObservable("67890", 456)
     }
 
     @Test

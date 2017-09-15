@@ -163,6 +163,15 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldNotCallServiceLiveCommentsSecondTimeOnServiceInitialsCommentsSuccessWhenNextPositionIsNotNull() {
+        onCreate()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        controller.onNextComments(createLoginCredentials())
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        verify(service, atMost(1)).liveCommentsObservable(any(), any())
+    }
+
+    @Test
     fun shouldCallServiceLiveCommentsWithReallyGivenDataOnCreate() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("67890")
         onCreate(userId = 456)

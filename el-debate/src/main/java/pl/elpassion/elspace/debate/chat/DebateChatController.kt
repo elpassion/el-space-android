@@ -27,7 +27,7 @@ class DebateChatController(
     }
 
     fun onNextComments(loginCredentials: LoginCredentials) {
-        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
+        callServiceInitialsComments(loginCredentials)
     }
 
     private fun callServiceInitialsComments(loginCredentials: LoginCredentials) {
@@ -38,7 +38,7 @@ class DebateChatController(
                 .doFinally(view::hideLoader)
                 .doOnSuccess { (debateClosed) ->
                     if (debateClosed) view.showDebateClosedError()
-                    else subscribeToLiveComments(loginCredentials.userId)
+                    else if (nextPosition == null) subscribeToLiveComments(loginCredentials.userId)
                 }
                 .doAfterSuccess { initialsComments: InitialsComments -> nextPosition = initialsComments.nextPosition }
                 .subscribe(

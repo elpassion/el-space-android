@@ -6,6 +6,7 @@ import pl.elpassion.elspace.hub.report.DailyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.*
+import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 import java.util.*
 
 class ReportDayServiceImpl(
@@ -15,6 +16,7 @@ class ReportDayServiceImpl(
     override fun createDays(yearMonth: YearMonth): Observable<List<AdapterItem>> =
             reportListService.getReports(yearMonth).map { yearMonth to it }
                     .map { (yearMonth, reportList) -> createDaysWithReports(yearMonth, reportList) }
+                    .map(::addSeparators)
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
             (1..yearMonth.month.daysInMonth).map { dayNumber ->

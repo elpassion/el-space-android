@@ -7,7 +7,6 @@ import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.hub.report.Report
-import pl.elpassion.elspace.hub.report.list.adapter.addSeparators
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportDayService
@@ -83,9 +82,7 @@ class ReportListController(private val reportDayService: ReportDayService,
     }
 
     private fun createAdapterItems(days: List<AdapterItem>) {
-        val adapterItems = getDaysAndReportsAsAdapterItems(days)
-        val adapterItemsWithSeparators = addSeparators(adapterItems)
-        view.showDays(adapterItemsWithSeparators)
+        view.showDays(getDaysAndReportsAsAdapterItems(days))
     }
 
     private fun getDaysAndReportsAsAdapterItems(days: List<AdapterItem>) = mutableListOf<AdapterItem>().apply {

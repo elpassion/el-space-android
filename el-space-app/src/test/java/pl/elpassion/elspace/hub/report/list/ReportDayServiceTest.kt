@@ -14,6 +14,7 @@ import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
 import pl.elpassion.elspace.hub.report.Report
+import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
 import java.util.*
 
@@ -98,7 +99,14 @@ class ReportDayServiceTest : TreeSpec() {
                 getDays(yearMonth)
                 verify(serviceApi).getReports(yearMonth)
             }
+            "add separators to list" > {
+                service.createDays(currentTime.toYearMonth())
+                        .test()
+                        .assertValue { it.first() is Empty }
+                        .assertValue { it.last() is Empty }
+            }
         }
+
     }
 
     private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {

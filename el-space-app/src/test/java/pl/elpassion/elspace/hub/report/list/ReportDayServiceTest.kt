@@ -13,6 +13,7 @@ import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.dto.newDailyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.HourlyReport
+import pl.elpassion.elspace.hub.report.RegularHourlyReport
 import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.service.ReportDayServiceImpl
@@ -99,6 +100,14 @@ class ReportDayServiceTest : TreeSpec() {
                 getDays(yearMonth)
                 verify(serviceApi).getReports(yearMonth)
             }
+            "add reports items" > {
+                whenever(serviceApi.getReports(any())).thenReturn(Observable.just(listOf(newRegularHourlyReport(year = 2016, month = 6, day = 1))))
+                service.createDays(currentTime.toYearMonth())
+                        .map { it.filter { it is Day || it is Report } }
+                        .test()
+                        .assertValue { it.first() is DayWithHourlyReports }
+                        .assertValue { it[1] is RegularHourlyReport }
+            }
             "add separators to list" > {
                 service.createDays(currentTime.toYearMonth())
                         .test()
@@ -106,7 +115,6 @@ class ReportDayServiceTest : TreeSpec() {
                         .assertValue { it.last() is Empty }
             }
         }
-
     }
 
     private fun getDays(yearMonth: YearMonth = createYearMonthFromTimeProvider()): List<Day> {

@@ -19,13 +19,26 @@ class ReportDayServiceImpl(
                     .map(::addSeparators)
 
     private fun createDaysWithReports(yearMonth: YearMonth, reportList: List<Report>) =
-            (1..yearMonth.month.daysInMonth).map { dayNumber ->
-                val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
-                val reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber))
-                createDayWithReports(calendarForDay, dayNumber, reports, yearMonth)
-            }
+            (1..yearMonth.month.daysInMonth)
+                    .mapToDays(yearMonth, reportList)
+                    .addReports()
 
-    private fun createDayWithReports(calendarForDay: Calendar, dayNumber: Int, reports: List<Report>, yearMonth: YearMonth): Day {
+    private fun IntRange.mapToDays(yearMonth: YearMonth, reportList: List<Report>) = map { dayNumber ->
+        val calendarForDay = getCalendarForDay(yearMonth, dayNumber)
+        val reports = reportList.filter(isFromSelectedDay(yearMonth, dayNumber))
+        createDay(calendarForDay, dayNumber, reports, yearMonth)
+    }
+
+    private fun List<AdapterItem>.addReports(): List<AdapterItem> = mutableListOf<AdapterItem>().also {
+        this.forEach { day ->
+            it.add(day)
+            if (day is DayWithHourlyReports) {
+                it.addAll(day.reports)
+            }
+        }
+    }
+
+    private fun createDay(calendarForDay: Calendar, dayNumber: Int, reports: List<Report>, yearMonth: YearMonth): Day {
         val hasPassed = calendarForDay.isNotAfter(currentTime())
         val date = getDateString(yearMonth.year, yearMonth.month.index + 1, dayNumber)
         val dayName = "$dayNumber ${calendarForDay.dayName()}"

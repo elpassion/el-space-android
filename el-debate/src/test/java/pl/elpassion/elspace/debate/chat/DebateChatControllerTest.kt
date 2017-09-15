@@ -113,6 +113,13 @@ class DebateChatControllerTest {
     }
 
     @Test
+    fun shouldNotCallServiceLiveCommentsWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
+        onCreate()
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
+        verify(service, never()).liveCommentsObservable(any(), any())
+    }
+
+    @Test
     fun shouldCallServiceInitialsCommentsOnServiceInitialsCommentsRefresh() {
         controller.onInitialsCommentsRefresh(createLoginCredentials())
         verify(service).initialsCommentsObservable(any(), anyOrNull())
@@ -133,16 +140,9 @@ class DebateChatControllerTest {
     }
 
     @Test
-    fun shouldNotCallServiceLiveCommentsWhenServiceInitialsCommentsReturnsDebateClosedFlag() {
+    fun shouldCallServiceLiveCommentsWhenServiceInitialsCommentsReturnsDebateNotClosedFlag() {
         onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
-        verify(service, never()).liveCommentsObservable(any(), any())
-    }
-
-    @Test
-    fun shouldCallServiceLiveCommentsWhenServiceInitialsCommentsCompleted() {
-        onCreate()
-        initialsCommentsSubject.onSuccess(createInitialsComments())
+        initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = false))
         verify(service).liveCommentsObservable(any(), any())
     }
 

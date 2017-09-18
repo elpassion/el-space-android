@@ -14,5 +14,5 @@ fun Completable.catchOnError(handleOnError: (throwable: Throwable) -> Unit): Com
         .doOnError(handleOnError)
         .onErrorComplete()
 
-fun <T, UiState> Observable<T>.mapToLastFrom(stream: Observable<UiState>, action: T.(UiState) -> UiState): Observable<UiState> =
+fun <T, UiState> Observable<T>.mapToWithLastFrom(stream: Observable<UiState>, action: T.(UiState) -> UiState): Observable<UiState> =
         withLatestFrom(stream, { x, y -> x.action(y) })

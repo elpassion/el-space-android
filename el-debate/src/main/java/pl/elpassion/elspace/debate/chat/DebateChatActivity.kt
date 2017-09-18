@@ -118,6 +118,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private fun showOldComments(initialsComments: List<Comment>) {
         comments.addAll(0, initialsComments)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
+        debateChatCommentsContainer.layoutManager.scrollToPosition(initialsComments.size - 1)
     }
 
     override fun showLiveComment(liveComment: Comment) {

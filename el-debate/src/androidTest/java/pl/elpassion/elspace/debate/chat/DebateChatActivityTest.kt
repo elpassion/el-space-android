@@ -235,6 +235,23 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollToLastCommentReturnedFromOnNextComments() {
+        val olderComments = mutableListOf<Comment>().apply {
+            (1..10).forEach {
+                add(createComment(name = it.toString(), id = it.toLong()))
+            }
+        }
+        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
+                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
+                SingleSubject.just(createInitialsComments(comments = olderComments)))
+        startActivity()
+        Espresso.closeSoftKeyboard()
+        scrollToRecyclerPosition(0)
+        onId(R.id.nextPosition).click()
+        onText("10").isDisplayed()
+    }
+
+    @Test
     fun shouldCallServiceLiveCommentsWithRealData() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
         startActivity(userId = 333)

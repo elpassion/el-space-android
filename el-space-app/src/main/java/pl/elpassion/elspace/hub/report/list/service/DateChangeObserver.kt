@@ -27,8 +27,8 @@ class DateChangeObserver(initialDateCalendar: Calendar) {
         notifyObservers()
     }
 
-    fun setYearMonth(year: Int, month: Int) {
-        date.changeToYearMonth(year, month)
+    fun setYearMonth(calendar: Calendar) {
+        date.changeToYearMonth(calendar)
         notifyObservers()
     }
 

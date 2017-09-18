@@ -54,7 +54,7 @@ class ReportListController(private val reportDayService: ReportsListAdaptersServ
         if (isCurrentYearAndMonth()) {
             scrollToTodayPosition(todayPositionObserver.lastPosition)
         } else {
-            dateChangeObserver.setYearMonth(calendar.year, calendar.month)
+            dateChangeObserver.setYearMonth(calendar)
             todayPositionObserver.observe().filter { it != -1 }
                     .subscribe { scrollToTodayPosition(it) }.addTo(subscriptions)
         }

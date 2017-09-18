@@ -103,8 +103,21 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
+        if (comments.isEmpty()) {
+            showNewComments(initialsComments)
+        } else {
+            showOldComments(initialsComments)
+        }
+    }
+
+    private fun showNewComments(initialsComments: List<Comment>) {
+        comments.addAll(initialsComments)
+        updateAdapterAndScrollDown()
+    }
+
+    private fun showOldComments(initialsComments: List<Comment>) {
         comments.addAll(0, initialsComments)
-        updateAdapter()
+        debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
     override fun showLiveComment(liveComment: Comment) {
@@ -120,12 +133,12 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
                 } else {
                     add(comment)
                 }
-                updateAdapter()
+                updateAdapterAndScrollDown()
             }
         }
     }
 
-    private fun updateAdapter() {
+    private fun updateAdapterAndScrollDown() {
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
         debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
     }

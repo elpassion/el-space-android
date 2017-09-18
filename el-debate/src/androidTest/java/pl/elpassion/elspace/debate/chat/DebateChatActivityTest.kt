@@ -223,6 +223,18 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldNotScrollToLastCommentWhenOnNextCommentsCalled() {
+        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
+                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
+                SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
+        startActivity()
+        Espresso.closeSoftKeyboard()
+        scrollToRecyclerPosition(0)
+        onId(R.id.nextPosition).click()
+        onText("20").doesNotExist()
+    }
+
+    @Test
     fun shouldCallServiceLiveCommentsWithRealData() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
         startActivity(userId = 333)

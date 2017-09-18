@@ -10,9 +10,9 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.kotlintest.matchers.shouldBe
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
 import pl.elpassion.elspace.common.TreeSpec
+import pl.elpassion.elspace.common.assertOnFirstElement
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
@@ -54,10 +54,6 @@ class ReportListModelTest : TreeSpec() {
             }
         }
     }
-}
-
-private fun <T> TestObserver<T>.assertOnFirstElement(assertion: (T) -> Unit) {
-    this.values().first().run(assertion)
 }
 
 class ReportListModel(service: ReportsListAdaptersService) {

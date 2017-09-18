@@ -27,8 +27,8 @@ class ReportListModel(service: ReportsListAdaptersService) {
                     .switchMap { service.createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth()) }
                     .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
-    private fun handleShowingLoader(): Observable<ReportList.UIState> =
-            events.ofType(ReportList.Event.OnCreate::class.java).mapToWithLastFrom(states) { state -> state.copy(isLoaderVisible = true) }
+    private fun handleShowingLoader(): Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnCreate::class.java)
+                    .mapToWithLastFrom(states) { state -> state.copy(isLoaderVisible = true) }
 
     companion object {
         val startState = ReportList.UIState(emptyList(), false)

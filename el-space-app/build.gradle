@@ -50,6 +50,7 @@ dependencies {
         transitive = true
     }
     implementation group: 'com.jakewharton.rxrelay2', name: 'rxrelay', version: '2.0.0'
+    implementation group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.1.0'
 }
 apply from: '../gradle/test-dependencies.gradle'
 apply from: '../gradle/android-test-dependencies.gradle'

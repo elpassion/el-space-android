@@ -4,7 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.withLatestFrom
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 import java.util.*
@@ -25,10 +25,10 @@ class ReportListModel(service: ReportsListAdaptersService) {
     private fun handleFetchingReportListAdapters(service: ReportsListAdaptersService) =
             events.ofType(ReportList.Event.OnCreate::class.java)
                     .switchMap { service.createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth()) }
-                    .withLatestFrom(states, BiFunction<List<AdapterItem>, ReportList.UIState, ReportList.UIState> { t1, t2 -> t2.copy(adapterItems = t1, isLoaderVisible = false) })
+                    .withLatestFrom(states, { t1, t2 -> t2.copy(adapterItems = t1, isLoaderVisible = false) })
 
     private fun handleShowingLoader(): Observable<ReportList.UIState> =
-            events.ofType(ReportList.Event.OnCreate::class.java).withLatestFrom(states, BiFunction { _, t2 -> t2.copy(isLoaderVisible = true) })
+            events.ofType(ReportList.Event.OnCreate::class.java).withLatestFrom(states, { _, t2 -> t2.copy(isLoaderVisible = true) })
 
     companion object {
         val startState = ReportList.UIState(emptyList(), false)

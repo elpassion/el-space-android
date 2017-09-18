@@ -77,8 +77,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                    controller.onNextComments(loginCredentials.authToken)
+                if (dy < 0) {
+                    if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                        controller.onNextComments(loginCredentials.authToken)
+                    }
                 }
             }
         })

@@ -15,7 +15,6 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -197,21 +196,35 @@ class DebateChatActivityTest {
         onText(R.string.debate_chat_debate_closed_error).isDisplayed()
     }
 
-    @Ignore
     @Test
     fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
         val comments = mutableListOf<Comment>().apply {
-            (10..20).forEach {
+            (11..20).forEach {
+                add(createComment(name = it.toString(), id = it.toLong()))
+            }
+        }
+        startActivity(token = "scrollToken")
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments, nextPosition = 1))
+        Espresso.closeSoftKeyboard()
+        onId(R.id.nextPosition).click()
+        verify(service).initialsCommentsObservable("scrollToken", 1)
+    }
+
+    @Test
+    fun shouldShowCommentsReturnedFromServiceInitialsCommentsOnNextCommentsAtBeginningOfList() {
+        val comments = mutableListOf<Comment>().apply {
+            (11..20).forEach {
                 add(createComment(name = it.toString(), id = it.toLong()))
             }
         }
         whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
                 SingleSubject.just(createInitialsComments(comments = comments, nextPosition = 1)),
-                SingleSubject.just(createInitialsComments()))
-        startActivity(token = "scrollToken")
+                SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
+        startActivity()
         Espresso.closeSoftKeyboard()
-        scrollToRecyclerItemWithText("10")
-        verify(service).initialsCommentsObservable("scrollToken", 1)
+        onId(R.id.nextPosition).click()
+        scrollToRecyclerPosition(0)
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
     }
 
     @Test
@@ -551,7 +564,7 @@ class DebateChatActivityTest {
         sendComment()
     }
 
-    private fun scrollToRecyclerItemWithText(text: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.debateChatCommentsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(text))))
+    private fun scrollToRecyclerPosition(position: Int) {
+        Espresso.onView(ViewMatchers.withId(R.id.debateChatCommentsContainer)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position))
     }
 }

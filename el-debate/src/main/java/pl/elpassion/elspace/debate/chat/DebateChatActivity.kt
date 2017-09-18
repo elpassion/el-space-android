@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
@@ -60,7 +61,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateChatCommentsContainer.layoutManager = LinearLayoutManager(this)
+        val linearLayoutManager = LinearLayoutManager(this)
+        debateChatCommentsContainer.layoutManager = linearLayoutManager
         debateChatCommentsContainer.adapter = basicAdapterWithConstructors(comments) { position ->
             createHolderForComment(comments[position])
         }
@@ -72,6 +74,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
         debateChatSendCommentInputText.requestFocus()
+        debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
+                    controller.onNextComments(loginCredentials.authToken)
+                }
+            }
+        })
     }
 
     private fun createHolderForComment(comment: Comment) = when {

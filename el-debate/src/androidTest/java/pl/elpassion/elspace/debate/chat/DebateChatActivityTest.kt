@@ -3,7 +3,10 @@ package pl.elpassion.elspace.debate.chat
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
+import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
+import android.support.v7.widget.RecyclerView
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
@@ -191,6 +194,20 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = true))
         onText(R.string.debate_chat_debate_closed_error).isDisplayed()
+    }
+
+    @Test
+    fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
+        startActivity(token = "scrollToken")
+        val comments = mutableListOf<Comment>().apply {
+            (10..20).forEach {
+                add(createComment(name = it.toString(), id = it.toLong()))
+            }
+        }
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments, nextPosition = 1))
+        Espresso.closeSoftKeyboard()
+        scrollToRecyclerItemWithText("10")
+        verify(service).initialsCommentsObservable("scrollToken", 1)
     }
 
     @Test
@@ -528,5 +545,9 @@ class DebateChatActivityTest {
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(true)
         startActivity(token)
         sendComment()
+    }
+
+    private fun scrollToRecyclerItemWithText(text: String) {
+        Espresso.onView(ViewMatchers.withId(R.id.debateChatCommentsContainer)).perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(ViewMatchers.withText(text))))
     }
 }

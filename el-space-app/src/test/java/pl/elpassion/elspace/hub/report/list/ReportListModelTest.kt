@@ -36,7 +36,7 @@ class ReportListModelTest : TreeSpec() {
             "on create " {
                 before { model.events.accept(ReportList.Event.OnCreate) }
                 "propagate list of adapters returned from service" > {
-                    val reportListAdapters = listOf(Empty(), Empty())
+                    val reportListAdapters = listOf(Empty, Empty)
                     reportListAdaptersSubject.onNext(reportListAdapters)
                     model.states.test()
                             .assertOnFirstElement { it.adapterItems shouldBe reportListAdapters }

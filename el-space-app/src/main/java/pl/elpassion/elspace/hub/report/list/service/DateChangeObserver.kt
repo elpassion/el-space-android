@@ -1,12 +1,12 @@
 package pl.elpassion.elspace.hub.report.list.service
 
-import pl.elpassion.elspace.common.extensions.changeToYearMonth
-import pl.elpassion.elspace.common.extensions.changeToNextMonth
-import pl.elpassion.elspace.common.extensions.changeToPreviousMonth
-import pl.elpassion.elspace.hub.report.list.YearMonth
-import pl.elpassion.elspace.hub.report.list.toYearMonth
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import pl.elpassion.elspace.common.extensions.changeToNextMonth
+import pl.elpassion.elspace.common.extensions.changeToPreviousMonth
+import pl.elpassion.elspace.common.extensions.changeToYearMonth
+import pl.elpassion.elspace.hub.report.list.YearMonth
+import pl.elpassion.elspace.hub.report.list.toYearMonth
 import java.util.*
 
 class DateChangeObserver(initialDateCalendar: Calendar) {
@@ -15,7 +15,7 @@ class DateChangeObserver(initialDateCalendar: Calendar) {
 
     val lastDate: YearMonth get() = dateSubject.blockingFirst()
 
-    fun observe(): Observable<YearMonth> = dateSubject
+    fun observable(): Observable<YearMonth> = dateSubject
 
     fun setNextMonth() {
         date.changeToNextMonth()

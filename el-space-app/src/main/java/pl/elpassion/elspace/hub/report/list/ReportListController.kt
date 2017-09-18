@@ -87,7 +87,7 @@ class ReportListController(private val reportDayService: ReportsListAdaptersServ
     private fun fetchDays() = refreshingDataObservable()
             .switchMap {
                 dateChangeObserver
-                        .observe()
+                        .observable()
                         .observeOn(schedulers.backgroundScheduler)
                         .flatMap(reportDayService::createReportsListAdapters)
                         .subscribeOn(schedulers.backgroundScheduler)
@@ -105,7 +105,7 @@ class ReportListController(private val reportDayService: ReportsListAdaptersServ
             }
 
     private fun subscribeDateChange() {
-        dateChangeObserver.observe()
+        dateChangeObserver.observable()
                 .subscribe { view.showMonthName(it.month.monthName) }
                 .addTo(subscriptions)
     }

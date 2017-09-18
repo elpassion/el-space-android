@@ -24,7 +24,7 @@ class DateChangeObserverTest {
     @Test
     fun shouldNotSkipAnyOfEventWhenIsSubscribed() {
         val testSub = TestObserver<YearMonth>()
-        dateController.observe()
+        dateController.observable()
                 .subscribe(testSub)
 
         dateController.setNextMonth()
@@ -39,6 +39,6 @@ class DateChangeObserverTest {
         assertNotEquals(firstIncomingDate().year, 1000)
     }
 
-    private fun firstIncomingDate() = dateController.observe().blockingFirst()
+    private fun firstIncomingDate() = dateController.observable().blockingFirst()
 
 }

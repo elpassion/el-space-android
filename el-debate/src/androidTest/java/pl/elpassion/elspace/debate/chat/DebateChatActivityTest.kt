@@ -31,6 +31,11 @@ import java.net.SocketException
 
 class DebateChatActivityTest {
 
+    private val initialsComments = mutableListOf<Comment>().apply {
+        (11..20).forEach {
+            add(createComment(name = it.toString(), id = it.toLong()))
+        }
+    }
     private val debateRepo = mock<DebatesRepository>().apply {
         whenever(getLatestDebateCode()).thenReturn("12345")
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
@@ -198,32 +203,22 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
-        val comments = mutableListOf<Comment>().apply {
-            (11..20).forEach {
-                add(createComment(name = it.toString(), id = it.toLong()))
-            }
-        }
         startActivity(token = "scrollToken")
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments, nextPosition = 1))
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
         Espresso.closeSoftKeyboard()
         onId(R.id.nextPosition).click()
         verify(service).initialsCommentsObservable("scrollToken", 1)
     }
 
     @Test
-    fun shouldShowCommentsReturnedFromServiceInitialsCommentsOnNextCommentsAtBeginningOfList() {
-        val comments = mutableListOf<Comment>().apply {
-            (11..20).forEach {
-                add(createComment(name = it.toString(), id = it.toLong()))
-            }
-        }
+    fun shouldShowInitialsCommentsCalledFromOnNextCommentsAtBeginningOfList() {
         whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
-                SingleSubject.just(createInitialsComments(comments = comments, nextPosition = 1)),
+                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
                 SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
         startActivity()
         Espresso.closeSoftKeyboard()
-        onId(R.id.nextPosition).click()
         scrollToRecyclerPosition(0)
+        onId(R.id.nextPosition).click()
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
     }
 

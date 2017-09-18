@@ -20,27 +20,29 @@ class ReportListModelTest : TreeSpec() {
         whenever(createReportsListAdapters(any())).thenReturn(reportListAdaptersSubject)
     }
     private val model = ReportListModel(service)
+    private val states = model.states
+    private val events = model.events
 
     init {
         "Model should " {
             "start with predefined ui state" > {
-                model.states
+                states
                         .test()
                         .assertOnFirstElement { it shouldBe ReportListModel.startState }
             }
             "on create " {
-                before { model.events.accept(ReportList.Event.OnCreate) }
+                before { events.accept(ReportList.Event.OnCreate) }
                 "propagate list of adapters returned from service" > {
                     val reportListAdapters = listOf(Empty, Empty)
                     reportListAdaptersSubject.onNext(reportListAdapters)
-                    model.states.test()
+                    states.test()
                             .assertOnFirstElement { it.adapterItems shouldBe reportListAdapters }
                 }
                 "call service for report list adapters" > {
                     verify(service).createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
                 }
                 "show loader" > {
-                    model.states
+                    states
                             .test()
                             .assertOnFirstElement {
                                 it.isLoaderVisible shouldBe true

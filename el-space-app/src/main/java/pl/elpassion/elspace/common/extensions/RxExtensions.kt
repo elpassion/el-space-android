@@ -2,6 +2,7 @@ package pl.elpassion.elspace.common.extensions
 
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.withLatestFrom
 
 fun <T> Observable<T>.catchOnError(handleOnError: (throwable: Throwable) -> Unit): Observable<T> = this
         .onErrorResumeNext { throwable: Throwable ->
@@ -12,3 +13,6 @@ fun <T> Observable<T>.catchOnError(handleOnError: (throwable: Throwable) -> Unit
 fun Completable.catchOnError(handleOnError: (throwable: Throwable) -> Unit): Completable = this
         .doOnError(handleOnError)
         .onErrorComplete()
+
+fun <T, UiState> Observable<T>.mapToLastFrom(stream: Observable<UiState>, action: T.(UiState) -> UiState): Observable<UiState> =
+        withLatestFrom(stream, { x, y -> x.action(y) })

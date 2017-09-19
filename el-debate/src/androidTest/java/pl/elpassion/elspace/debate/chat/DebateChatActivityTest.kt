@@ -206,7 +206,7 @@ class DebateChatActivityTest {
         startActivity(token = "scrollToken")
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
         Espresso.closeSoftKeyboard()
-        onId(R.id.nextPosition).click()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         verify(service).initialsCommentsObservable("scrollToken", 1)
     }
 
@@ -217,8 +217,7 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
         startActivity()
         Espresso.closeSoftKeyboard()
-        scrollToRecyclerPosition(0)
-        onId(R.id.nextPosition).click()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
     }
 
@@ -229,8 +228,7 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
         startActivity()
         Espresso.closeSoftKeyboard()
-        scrollToRecyclerPosition(0)
-        onId(R.id.nextPosition).click()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onText("20").doesNotExist()
     }
 
@@ -246,9 +244,8 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = olderComments)))
         startActivity()
         Espresso.closeSoftKeyboard()
-        scrollToRecyclerPosition(0)
-        onId(R.id.nextPosition).click()
-        onText("10").isDisplayed()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
+        onText("10").isDisplayedEffectively()
     }
 
     @Test

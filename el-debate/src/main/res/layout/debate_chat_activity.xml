@@ -15,12 +15,6 @@
         android:orientation="vertical"
         app:layout_behavior="pl.elpassion.elspace.debate.chat.MoveUpwardBehaviour">
 
-        <TextView
-            android:id="@+id/nextPosition"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NEXT" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/debateChatCommentsContainer"
             android:layout_width="match_parent"

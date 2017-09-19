@@ -74,7 +74,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
         debateChatSendCommentInputText.requestFocus()
-        nextPosition.setOnClickListener { controller.onNextComments(loginCredentials.authToken) }
         debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

@@ -47,14 +47,6 @@ class ReportListDateModelTest : TreeSpec() {
                     }
                 }
             }
-            "return last date" > {
-                ReportListDateModel(startDate).run {
-                    lastDate.run {
-                        year shouldBe 2016
-                        month.index shouldBe Calendar.OCTOBER
-                    }
-                }
-            }
         }
     }
 }

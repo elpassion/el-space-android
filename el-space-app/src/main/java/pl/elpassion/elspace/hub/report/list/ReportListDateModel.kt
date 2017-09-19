@@ -43,6 +43,4 @@ class ReportListDateModel(date: Calendar) {
                 onChangeDateHandler)
                 .subscribe(dates)
     }
-
-    val lastDate: YearMonth get() = dates.blockingFirst()
 }

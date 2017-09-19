@@ -204,10 +204,18 @@ class DebateChatActivityTest {
     @Test
     fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
         startActivity(token = "scrollToken")
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
         Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
         onId(R.id.debateChatCommentsContainer).swipeDown()
         verify(service).initialsCommentsObservable("scrollToken", 1)
+    }
+
+    @Test
+    fun shouldNotCallServiceInitialsCommentsWhenNotScrolledUpAndFirstPositionIsVisible() {
+        startActivity(token = "scrollToken")
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(name = "10")), nextPosition = 1))
+        verify(service, never()).initialsCommentsObservable("scrollToken", 1)
     }
 
     @Test

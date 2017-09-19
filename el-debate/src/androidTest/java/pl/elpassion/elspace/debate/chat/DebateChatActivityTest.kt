@@ -253,6 +253,7 @@ class DebateChatActivityTest {
         startActivity()
         Espresso.closeSoftKeyboard()
         onId(R.id.debateChatCommentsContainer).swipeDown()
+        Thread.sleep(200)
         onText("10").isDisplayedEffectively()
     }
 

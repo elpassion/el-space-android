@@ -19,6 +19,8 @@ fun Calendar.toYearMonth() =
                         daysInMonth = daysForCurrentMonth(),
                         monthName = getFullMonthName()))
 
+fun YearMonth.toCalendar() = getTimeFrom(year = year, month = month.index , day = 1)
+
 fun YearMonth.toMonthDateRange(): Pair<String, String> {
     val calendar = getTimeFrom(year, month.index, 1)
     return calendar.getDateString() to getTimeFrom(year, month.index, calendar.daysForCurrentMonth()).getDateString()

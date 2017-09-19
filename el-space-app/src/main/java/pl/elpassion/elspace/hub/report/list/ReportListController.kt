@@ -10,6 +10,7 @@ import pl.elpassion.elspace.hub.report.Report
 import pl.elpassion.elspace.hub.report.list.service.DateChangeObserver
 import pl.elpassion.elspace.hub.report.list.service.DayFilter
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
+import java.util.*
 
 class ReportListController(private val reportDayService: ReportsListAdaptersService,
                            private val dayFilter: DayFilter,
@@ -18,7 +19,7 @@ class ReportListController(private val reportDayService: ReportsListAdaptersServ
                            private val schedulers: SchedulersSupplier) {
 
     private val subscriptions = CompositeDisposable()
-    private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar()) }
+    private val dateChangeObserver by lazy { DateChangeObserver(getCurrentTimeCalendar().clone() as Calendar) }
     private val todayPositionObserver = TodayPositionObserver()
     private val calendar = getCurrentTimeCalendar()
 

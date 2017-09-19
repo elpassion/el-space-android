@@ -9,8 +9,7 @@ import pl.elpassion.elspace.hub.report.list.YearMonth
 import pl.elpassion.elspace.hub.report.list.toYearMonth
 import java.util.*
 
-class DateChangeObserver(initialDateCalendar: Calendar) {
-    private val date: Calendar = initialDateCalendar.clone() as Calendar
+class DateChangeObserver(private val date: Calendar) {
     private val dateSubject = BehaviorSubject.createDefault(date.toYearMonth())
 
     val lastDate: YearMonth get() = dateSubject.blockingFirst()

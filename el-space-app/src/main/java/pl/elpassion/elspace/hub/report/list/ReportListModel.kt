@@ -10,10 +10,10 @@ import pl.elpassion.elspace.common.extensions.mapToWithLastFrom
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 import java.util.*
 
-class ReportListModel(service: ReportsListAdaptersService) {
+class ReportListModel(service: ReportsListAdaptersService, getCurrentDay: () -> Calendar) {
 
     val states: Relay<ReportList.UIState> = BehaviorRelay.create<ReportList.UIState>().apply {
-        accept(startState)
+        accept(getGetStartState(getCurrentDay()))
     }
 
     val events: PublishRelay<ReportList.Event> = PublishRelay.create()
@@ -31,11 +31,28 @@ class ReportListModel(service: ReportsListAdaptersService) {
     private val callServiceForAdapterItems = service.createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
+    private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
+            .mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
+
+    private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)
+            .mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToPreviousMonth()) }
+
+    private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
+            .mapToWithLastFrom(states) { it.copy(yearMonth = getCurrentDay().toYearMonth()) }
+
     init {
-        handleOnCreateEvent.subscribe(states)
+        Observable.merge(
+                handleOnCreateEvent,
+                handleOnNextMonth,
+                handleOnPreviousMonth,
+                handleChangeToCurrentDay)
+                .subscribe(states)
     }
 
     companion object {
-        val startState = ReportList.UIState(emptyList(), false)
+        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), false, calendar.toYearMonth())
     }
 }
+
+private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()
+private fun YearMonth.changeToNextMonth() = toCalendar().apply { add(Calendar.MONTH, 1) }.toYearMonth()

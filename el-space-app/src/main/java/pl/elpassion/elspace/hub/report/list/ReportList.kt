@@ -12,7 +12,6 @@ import pl.elpassion.elspace.hub.report.list.service.ReportFromApi
 import pl.elpassion.elspace.hub.report.list.service.ReportListService
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.util.*
 
 interface ReportList {
 
@@ -82,19 +81,16 @@ interface ReportList {
 
     data class UIState(
             val adapterItems: List<AdapterItem>,
-            val isLoaderVisible: Boolean
+            val isLoaderVisible: Boolean,
+            val yearMonth: YearMonth
     )
 
     sealed class Event {
         object OnCreate : Event()
+        object OnNextMonth : Event()
+        object OnPreviousMonth : Event()
+        object OnChangeToCurrentDay : Event()
     }
 
-    interface Date {
-        sealed class Event {
-            object OnNextMonth : Event()
-            object OnPreviousMonth : Event()
-            data class OnChangeToDate(val calendar: Calendar) : Event()
-        }
-    }
 }
 

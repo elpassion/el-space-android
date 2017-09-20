@@ -54,6 +54,10 @@ interface DebateChat {
         fun closeCredentialsDialog()
     }
 
+    interface Events {
+        fun onNextComments(): Observable<Unit>
+    }
+
     object ServiceProvider : Provider<Service>({
         DebateChatServiceImpl(ApiProvider.get(), SocketProvider.get())
     })

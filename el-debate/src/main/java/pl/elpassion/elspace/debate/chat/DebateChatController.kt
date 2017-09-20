@@ -1,6 +1,7 @@
 package pl.elpassion.elspace.debate.chat
 
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -9,38 +10,40 @@ import retrofit2.HttpException
 
 class DebateChatController(
         private val view: DebateChat.View,
+        private val events: DebateChat.Events,
         private val debateRepo: DebatesRepository,
         private val service: DebateChat.Service,
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
     private val subscriptions = CompositeDisposable()
+    private var liveCommentsDisposable: Disposable? = null
     private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials.authToken, { subscribeToLiveComments(loginCredentials.userId) })
+        callServiceInitialsComments(loginCredentials)
+        events.onNextComments()
+                .doOnNext { callServiceInitialsComments(loginCredentials) }
+                .subscribe()
+                .addTo(subscriptions)
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         subscriptions.clear()
-        callServiceInitialsComments(loginCredentials.authToken, { subscribeToLiveComments(loginCredentials.userId) })
+        callServiceInitialsComments(loginCredentials)
     }
 
-    fun onNextComments(authToken: String) {
-        callServiceInitialsComments(authToken, {})
-    }
-
-    private fun callServiceInitialsComments(authToken: String, onSuccessAction: () -> Unit) {
-        service.initialsCommentsObservable(authToken, nextPosition)
+    private fun callServiceInitialsComments(loginCredentials: LoginCredentials) {
+        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .doOnSuccess { (debateClosed) ->
-                    if (debateClosed) view.showDebateClosedError()
-                    else onSuccessAction()
+                .doOnSuccess { initialsComments ->
+                    nextPosition = initialsComments.nextPosition
+                    if (initialsComments.debateClosed) view.showDebateClosedError()
+                    else if (liveCommentsDisposable == null || (liveCommentsDisposable!!.isDisposed)) subscribeToLiveComments(loginCredentials.userId)
                 }
-                .doAfterSuccess { initialsComments: InitialsComments -> nextPosition = initialsComments.nextPosition }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
@@ -54,7 +57,7 @@ class DebateChatController(
 
     private fun subscribeToLiveComments(userId: Long) {
         debateRepo.getLatestDebateCode()?.let {
-            service.liveCommentsObservable(it, userId)
+            liveCommentsDisposable = service.liveCommentsObservable(it, userId)
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe(view::showLiveComment, view::showLiveCommentsError)

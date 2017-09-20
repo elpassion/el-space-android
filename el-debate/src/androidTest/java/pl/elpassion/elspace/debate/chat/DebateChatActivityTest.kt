@@ -3,10 +3,7 @@ package pl.elpassion.elspace.debate.chat
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
-import android.support.v7.widget.RecyclerView
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
@@ -204,9 +201,8 @@ class DebateChatActivityTest {
     @Test
     fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
         startActivity(token = "scrollToken")
-        Espresso.closeSoftKeyboard()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
-        onId(R.id.debateChatCommentsContainer).swipeDown()
+        swipeDown()
         verify(service).initialsCommentsObservable("scrollToken", 1)
     }
 
@@ -224,8 +220,7 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
                 SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
         startActivity()
-        Espresso.closeSoftKeyboard()
-        onId(R.id.debateChatCommentsContainer).swipeDown()
+        swipeDown()
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
     }
 
@@ -235,8 +230,7 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
                 SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
         startActivity()
-        Espresso.closeSoftKeyboard()
-        onId(R.id.debateChatCommentsContainer).swipeDown()
+        swipeDown()
         onText("20").doesNotExist()
     }
 
@@ -251,8 +245,7 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
                 SingleSubject.just(createInitialsComments(comments = olderComments)))
         startActivity()
-        Espresso.closeSoftKeyboard()
-        onId(R.id.debateChatCommentsContainer).swipeDown()
+        swipeDown()
         Thread.sleep(200)
         onText("10").isDisplayedEffectively()
     }
@@ -555,6 +548,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldDisplayErrorOnIncorrectFirstName() {
         startActivityAndOpenCredentialsDialog("DebateToken")
+        initialsCommentsSubject.onSuccess(createInitialsComments())
         saveCredentials(firstName = " ", lastName = "lastName")
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_chat_credentials_first_name_incorrect)
     }
@@ -594,7 +588,9 @@ class DebateChatActivityTest {
         sendComment()
     }
 
-    private fun scrollToRecyclerPosition(position: Int) {
-        Espresso.onView(ViewMatchers.withId(R.id.debateChatCommentsContainer)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position))
+    private fun swipeDown() {
+        Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

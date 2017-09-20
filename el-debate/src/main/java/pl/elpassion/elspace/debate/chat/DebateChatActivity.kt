@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
@@ -28,7 +28,7 @@ import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
 
-class DebateChatActivity : AppCompatActivity(), DebateChat.View {
+class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Events {
 
     private val credentialsDialog by lazy {
         DebateCredentialsDialog(this) { credentials ->
@@ -45,6 +45,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private val controller by lazy {
         DebateChatController(
                 view = this,
+                events = this,
                 debateRepo = DebatesRepositoryProvider.get(),
                 service = DebateChat.ServiceProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
@@ -74,16 +75,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
         debateChatSendCommentInputText.requestFocus()
-        debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (dy < 0) {
-                    if (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) {
-                        controller.onNextComments(loginCredentials.authToken)
-                    }
-                }
-            }
-        })
     }
 
     private fun createHolderForComment(comment: Comment) = when {
@@ -99,7 +90,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun hideLoader() {
         hideLoader(debateChatCoordinator)
+        debateChatCommentsSwipeToRefresh.isRefreshing = false
     }
+
+    override fun onNextComments() = debateChatCommentsSwipeToRefresh.refreshes()
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
         if (comments.isEmpty()) {

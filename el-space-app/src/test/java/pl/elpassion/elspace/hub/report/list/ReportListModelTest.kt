@@ -1,3 +1,5 @@
+@file:Suppress("IllegalIdentifier")
+
 package pl.elpassion.elspace.hub.report.list
 
 import com.nhaarman.mockito_kotlin.any
@@ -7,6 +9,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.kotlintest.matchers.shouldBe
 import io.reactivex.subjects.PublishSubject
 import pl.elpassion.elspace.common.TreeSpec
+import pl.elpassion.elspace.common.TreeTestSuiteBuilder
 import pl.elpassion.elspace.common.assertOnFirstElement
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
@@ -44,19 +47,16 @@ class ReportListModelTest : TreeSpec() {
                 "call service for report list adapters" > {
                     verify(service).createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
                 }
-                "show loader" > {
-                    states
-                            .test()
-                            .assertOnFirstElement {
-                                it.isLoaderVisible shouldBe true
-                            }
-                }
+                `show loader`()
             }
             "on change to " {
-                "next month, change yearMonth to correct one" > {
-                    events.accept(ReportList.Event.OnNextMonth)
-                    states.test()
-                            .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.NOVEMBER) }
+                "next month " {
+                    before { events.accept(ReportList.Event.OnNextMonth) }
+                    "change yearMonth to correct one" > {
+                        states.test()
+                                .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.NOVEMBER) }
+                    }
+                    `show loader`()
                 }
                 "previous month, change yearMonth to correct one" > {
                     events.accept(ReportList.Event.OnPreviousMonth)
@@ -71,6 +71,14 @@ class ReportListModelTest : TreeSpec() {
                 }
             }
         }
+    }
+
+    private fun TreeTestSuiteBuilder.`show loader`() = "show loader" > {
+        states
+                .test()
+                .assertOnFirstElement {
+                    it.isLoaderVisible shouldBe true
+                }
     }
 
     private fun yearMonthFrom(year: Int, month: Int) = getTimeFrom(year, month, 1).toYearMonth()

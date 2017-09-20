@@ -32,7 +32,11 @@ class ReportListModel(service: ReportsListAdaptersService, getCurrentDay: () -> 
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
     private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
-            .mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
+            .mapToLastFrom(states)
+            .switchMap { state ->
+                showLoader(state)
+                        .concatWith(Observable.just(Unit).mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) })
+            }
 
     private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)
             .mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToPreviousMonth()) }

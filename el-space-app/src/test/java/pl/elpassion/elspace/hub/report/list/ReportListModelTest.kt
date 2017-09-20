@@ -44,8 +44,8 @@ class ReportListModelTest : TreeSpec() {
                     states.test()
                             .assertOnFirstElement { it.adapterItems shouldBe reportListAdapters }
                 }
-                "call service for report list adapters" > {
-                    verify(service).createReportsListAdapters(yearMonth = getTimeFrom(year = 2016, month = Calendar.JUNE, day = 1).toYearMonth())
+                "call service for report list adapters with correct yearMonth" > {
+                    verify(service).createReportsListAdapters(yearMonth = yearMonthFrom(2016, Calendar.OCTOBER))
                 }
                 `show loader`()
             }

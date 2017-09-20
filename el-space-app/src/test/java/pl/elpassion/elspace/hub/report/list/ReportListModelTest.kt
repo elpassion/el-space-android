@@ -63,7 +63,7 @@ class ReportListModelTest : TreeSpec() {
                     states.test()
                             .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.SEPTEMBER) }
                 }
-                "previous month, change yearMonth to correct one" > {
+                "current day, change yearMonth to correct one" > {
                     currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)
                     events.accept(ReportList.Event.OnChangeToCurrentDay)
                     states.test()

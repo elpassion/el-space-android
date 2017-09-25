@@ -269,6 +269,14 @@ class DebateChatActivityTest {
         Thread.sleep(200)
         onText("10").isDisplayedEffectively()
     }
+    
+    @Test
+    fun shouldNotShowMainLoaderOnNextComments() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        swipeDown()
+        onId(R.id.loader).doesNotExist()
+    }
 
     @Test
     fun shouldCallServiceLiveCommentsWithRealData() {

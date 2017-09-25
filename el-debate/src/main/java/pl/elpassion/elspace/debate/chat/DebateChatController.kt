@@ -16,20 +16,20 @@ class DebateChatController(
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
-    private val subscriptions = CompositeDisposable()
+    private val serviceSubscriptions = CompositeDisposable()
+    private var onNextCommentsEventDisposable: Disposable? = null
     private var liveCommentsDisposable: Disposable? = null
     private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
         callServiceInitialsComments(loginCredentials)
-        events.onNextComments()
+        onNextCommentsEventDisposable = events.onNextComments()
                 .doOnNext { callServiceInitialsComments(loginCredentials) }
                 .subscribe()
-                .addTo(subscriptions)
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
-        subscriptions.clear()
+        serviceSubscriptions.clear()
         callServiceInitialsComments(loginCredentials)
     }
 
@@ -47,12 +47,13 @@ class DebateChatController(
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
-                .addTo(subscriptions)
+                .addTo(serviceSubscriptions)
     }
 
     private fun isLiveCommentsUnsubscribed() = liveCommentsDisposable == null || liveCommentsDisposable!!.isDisposed
 
     fun onLiveCommentsRefresh(userId: Long) {
+        serviceSubscriptions.clear()
         subscribeToLiveComments(userId)
     }
 
@@ -62,7 +63,7 @@ class DebateChatController(
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe(view::showLiveComment, view::showLiveCommentsError)
-                    .addTo(subscriptions)
+                    .addTo(serviceSubscriptions)
         }
     }
 
@@ -84,7 +85,7 @@ class DebateChatController(
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe(this::showSendCommentSuccess, this::checkSendCommentError)
-                .addTo(subscriptions)
+                .addTo(serviceSubscriptions)
     }
 
     private fun showSendCommentSuccess(comment: Comment) {
@@ -102,7 +103,8 @@ class DebateChatController(
     }
 
     fun onDestroy() {
-        subscriptions.dispose()
+        serviceSubscriptions.dispose()
+        onNextCommentsEventDisposable?.dispose()
     }
 
     fun onNewCredentials(token: String, credentials: TokenCredentials) {

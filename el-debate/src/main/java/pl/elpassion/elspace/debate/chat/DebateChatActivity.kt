@@ -99,21 +99,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
         if (comments.isEmpty()) {
-            showNewComments(initialsComments)
+            comments.addAll(initialsComments)
+            debateChatCommentsContainer.adapter.notifyDataSetChanged()
+            debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
         } else {
-            showOldComments(initialsComments)
+            comments.addAll(0, initialsComments)
+            debateChatCommentsContainer.adapter.notifyDataSetChanged()
+            debateChatCommentsContainer.layoutManager.scrollToPosition(initialsComments.size - 1)
         }
-    }
-
-    private fun showNewComments(initialsComments: List<Comment>) {
-        comments.addAll(initialsComments)
-        updateAdapterAndScrollDown()
-    }
-
-    private fun showOldComments(initialsComments: List<Comment>) {
-        comments.addAll(0, initialsComments)
-        debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        debateChatCommentsContainer.layoutManager.scrollToPosition(initialsComments.size - 1)
     }
 
     override fun showLiveComment(liveComment: Comment) {
@@ -121,22 +114,21 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun showComment(comment: Comment) {
-        comments.run {
-            indexOfFirst { it.id == comment.id }.also {
-                if (it > -1) {
-                    removeAt(it)
-                    add(it, comment)
-                } else {
-                    add(comment)
-                }
-            }
-        }
-        updateAdapterAndScrollDown()
-    }
-
-    private fun updateAdapterAndScrollDown() {
+        val position = comments.indexOfFirst { it.id == comment.id }
+        updateList(position, comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
         debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
+    }
+
+    private fun updateList(position: Int, comment: Comment) {
+        comments.run {
+            if (position > -1) {
+                removeAt(position)
+                add(position, comment)
+            } else {
+                add(comment)
+            }
+        }
     }
 
     override fun showInitialsCommentsError(exception: Throwable) {

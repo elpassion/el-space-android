@@ -152,6 +152,12 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowMainLoaderOnInitialsCommentsWhenNotDuringOnNextComments() {
+        startActivity()
+        onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         startActivity()
         initialsCommentsSubject.onError(RuntimeException())

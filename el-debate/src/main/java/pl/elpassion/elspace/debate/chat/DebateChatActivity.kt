@@ -95,7 +95,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun onNextComments() = debateChatCommentsSwipeToRefresh.refreshes()
 
-    override fun isDuringOnNextComments(): Boolean = false
+    override fun isDuringOnNextComments(): Boolean = debateChatCommentsSwipeToRefresh.isRefreshing
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
         if (comments.isEmpty()) {

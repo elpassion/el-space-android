@@ -42,13 +42,15 @@ class DebateChatController(
                 .doOnSuccess { initialsComments ->
                     nextPosition = initialsComments.nextPosition
                     if (initialsComments.debateClosed) view.showDebateClosedError()
-                    else if (liveCommentsDisposable == null || (liveCommentsDisposable!!.isDisposed)) subscribeToLiveComments(loginCredentials.userId)
+                    else if (isLiveCommentsUnsubscribed()) subscribeToLiveComments(loginCredentials.userId)
                 }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
                 .addTo(subscriptions)
     }
+
+    private fun isLiveCommentsUnsubscribed() = liveCommentsDisposable == null || liveCommentsDisposable!!.isDisposed
 
     fun onLiveCommentsRefresh(userId: Long) {
         subscriptions.clear()

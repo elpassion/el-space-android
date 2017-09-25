@@ -37,7 +37,7 @@ class DebateChatController(
         service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { view.showLoader() }
+                .doOnSubscribe { if (!view.isDuringOnNextComments()) view.showLoader() }
                 .doFinally(view::hideLoader)
                 .doOnSuccess { initialsComments ->
                     nextPosition = initialsComments.nextPosition

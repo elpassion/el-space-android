@@ -35,6 +35,7 @@ class DebateChatControllerTest {
         whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(events.onNextComments()).thenReturn(onNextCommentsEvent)
+        whenever(view.isDuringOnNextComments()).thenReturn(false)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createTokenCredentials("firstName", "lastName"))
@@ -217,6 +218,14 @@ class DebateChatControllerTest {
         initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 222))
         onNextCommentsEvent.onNext(Unit)
         verify(service).initialsCommentsObservable("someToken", 222)
+    }
+
+    @Test
+    fun shouldNotShowMainLoaderOnNextComments() {
+        whenever(view.isDuringOnNextComments()).thenReturn(true)
+        onCreate()
+        onNextCommentsEvent.onNext(Unit)
+        verify(view, never()).showLoader()
     }
 
     @Test

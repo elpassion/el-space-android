@@ -165,6 +165,13 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldHideMainLoaderOnInitialsCommentsError() {
+        startActivity()
+        initialsCommentsSubject.onError(RuntimeException())
+        onId(R.id.loader).doesNotExist()
+    }
+
+    @Test
     fun shouldShowInitialsCommentsErrorWhenServiceInitialsCommentsFails() {
         startActivity()
         initialsCommentsSubject.onError(RuntimeException())

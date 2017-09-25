@@ -39,9 +39,9 @@ class DebateChatController(
                 .observeOn(schedulers.uiScheduler)
                 .doOnSubscribe { if (!view.isDuringOnNextComments()) view.showLoader() }
                 .doFinally(view::hideLoader)
-                .doOnSuccess { initialsComments ->
-                    nextPosition = initialsComments.nextPosition
-                    if (initialsComments.debateClosed) view.showDebateClosedError()
+                .doOnSuccess { (debateClosed, _, nextPositionFromService) ->
+                    nextPosition = nextPositionFromService
+                    if (debateClosed) view.showDebateClosedError()
                     else if (isLiveCommentsUnsubscribed()) subscribeToLiveComments(loginCredentials.userId)
                 }
                 .subscribe(

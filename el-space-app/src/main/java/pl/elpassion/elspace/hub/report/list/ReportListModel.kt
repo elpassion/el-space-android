@@ -21,20 +21,22 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .mapToLastFrom(states)
             .switchMap { state ->
                 showLoader(state)
-                        .concatWith(callServiceForAdapterItems(state))
+                        .concatWith(callServiceForAdapterItems(state.yearMonth))
             }
 
     private fun showLoader(state: ReportList.UIState) =
             Observable.just(state.copy(isLoaderVisible = true))
 
-    private fun callServiceForAdapterItems(state: ReportList.UIState) = service.createReportsListAdapters(state.yearMonth)
+    private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
     private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
             .mapToLastFrom(states)
             .switchMap { state ->
                 showLoader(state)
-                        .concatWith(Observable.just(Unit).mapToWithLastFrom(states) { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) })
+                        .map { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
+                        .concatWith(states.switchMap { callServiceForAdapterItems(it.yearMonth) })
+
             }
 
     private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)

@@ -44,9 +44,7 @@ class ReportListModelTest : TreeSpec() {
                     states.test()
                             .assertOnFirstElement { it.adapterItems shouldBe reportListAdapters }
                 }
-                "call service for report list adapters with correct yearMonth" > {
-                    verify(service).createReportsListAdapters(yearMonth = yearMonthFrom(2016, Calendar.OCTOBER))
-                }
+                `call service for report list adapters with correct yearMonth`(2016, Calendar.OCTOBER)
                 `show loader`()
             }
             "on change to " {
@@ -56,6 +54,7 @@ class ReportListModelTest : TreeSpec() {
                         states.test()
                                 .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.NOVEMBER) }
                     }
+                    `call service for report list adapters with correct yearMonth`(2016, Calendar.NOVEMBER)
                     `show loader`()
                 }
                 "previous month, change yearMonth to correct one" > {
@@ -80,6 +79,11 @@ class ReportListModelTest : TreeSpec() {
                     it.isLoaderVisible shouldBe true
                 }
     }
+
+    private fun TreeTestSuiteBuilder.`call service for report list adapters with correct yearMonth`(year: Int, month: Int) =
+            "call service for report list adapters with correct yearMonth" > {
+                verify(service).createReportsListAdapters(yearMonth = yearMonthFrom(year, month))
+            }
 
     private fun yearMonthFrom(year: Int, month: Int) = getTimeFrom(year, month, 1).toYearMonth()
 }

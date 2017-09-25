@@ -129,9 +129,9 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
                 } else {
                     add(comment)
                 }
-                updateAdapterAndScrollDown()
             }
         }
+        updateAdapterAndScrollDown()
     }
 
     private fun updateAdapterAndScrollDown() {

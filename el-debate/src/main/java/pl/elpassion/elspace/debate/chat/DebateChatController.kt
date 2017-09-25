@@ -53,7 +53,6 @@ class DebateChatController(
     private fun isLiveCommentsUnsubscribed() = liveCommentsDisposable == null || liveCommentsDisposable!!.isDisposed
 
     fun onLiveCommentsRefresh(userId: Long) {
-        subscriptions.clear()
         subscribeToLiveComments(userId)
     }
 

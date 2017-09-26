@@ -79,6 +79,18 @@ class ReportListModelTest : TreeSpec() {
                     `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
                 }
             }
+            "unsubscribe previous calls for report list adapters on next event" > {
+                val testObserver = states
+                        .filter { it.adapterItems.isNotEmpty() }
+                        .test()
+
+                events.accept(ReportList.Event.OnCreate)
+                events.accept(ReportList.Event.OnNextMonth)
+                reportListAdaptersSubject.onNext(listOf(Empty))
+
+                testObserver
+                        .assertValueCount(1)
+            }
         }
     }
 

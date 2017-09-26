@@ -22,9 +22,6 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val handleOnCreateEvent = events.ofType(ReportList.Event.OnCreate::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true) }
-            .switchMap { state ->
-                just(state) andThen callServiceForAdapterItems(state.yearMonth)
-            }
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
@@ -32,23 +29,14 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true, yearMonth = it.yearMonth.changeToNextMonth()) }
-            .switchMap { state ->
-                just(state) andThen callServiceForAdapterItems(state.yearMonth)
-            }
 
     private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true, yearMonth = it.yearMonth.changeToPreviousMonth()) }
-            .switchMap { state ->
-                just(state) andThen callServiceForAdapterItems(state.yearMonth)
-            }
 
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
             .mapToLastFrom(states)
             .map { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
-            .switchMap { state ->
-                just(state) andThen callServiceForAdapterItems(state.yearMonth)
-            }
 
     init {
         Observable.merge(
@@ -56,6 +44,9 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
                 handleOnNextMonth,
                 handleOnPreviousMonth,
                 handleChangeToCurrentDay)
+                .switchMap { state ->
+                    just(state) andThen callServiceForAdapterItems(state.yearMonth)
+                }
                 .subscribe(states)
     }
 

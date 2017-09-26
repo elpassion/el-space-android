@@ -296,7 +296,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldScrollToLastCommentOnLiveCommentsNext() {
+    fun shouldNotScrollToLastCommentOnLiveCommentsNext() {
         startActivity()
         val comments = mutableListOf<Comment>().apply {
             (1..10).forEach {
@@ -305,7 +305,7 @@ class DebateChatActivityTest {
         }
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
-        onText("LastMessage").isDisplayed()
+        onText("LastMessage").doesNotExist()
     }
 
     @Test

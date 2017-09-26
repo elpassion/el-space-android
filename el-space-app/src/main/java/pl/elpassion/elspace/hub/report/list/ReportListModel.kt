@@ -44,7 +44,11 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             }
 
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
-            .mapToWithLastFrom(states) { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
+            .mapToLastFrom(states)
+            .map { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
+            .switchMap { state ->
+                just(state) andThen callServiceForAdapterItems(state.yearMonth)
+            }
 
     init {
         Observable.merge(

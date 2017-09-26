@@ -76,6 +76,7 @@ class ReportListModelTest : TreeSpec() {
                                 .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2014, Calendar.JANUARY) }
                     }
                     `show loader`()
+                    `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
                 }
             }
         }

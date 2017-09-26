@@ -88,8 +88,7 @@ class ReportListModelTest : TreeSpec() {
                 events.accept(ReportList.Event.OnNextMonth)
                 reportListAdaptersSubject.onNext(listOf(Empty))
 
-                testObserver
-                        .assertValueCount(1)
+                testObserver.assertValueCount(1)
             }
         }
     }

@@ -57,10 +57,13 @@ class ReportListModelTest : TreeSpec() {
                     `call service for report list adapters with correct yearMonth`(2016, Calendar.NOVEMBER)
                     `show loader`()
                 }
-                "previous month, change yearMonth to correct one" > {
-                    events.accept(ReportList.Event.OnPreviousMonth)
-                    states.test()
-                            .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.SEPTEMBER) }
+                "previous month " {
+                    before { events.accept(ReportList.Event.OnPreviousMonth) }
+                    "change yearMonth to correct one" > {
+                        states.test()
+                                .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.SEPTEMBER) }
+                    }
+                    `show loader`()
                 }
                 "current day, change yearMonth to correct one" > {
                     currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)

@@ -20,13 +20,10 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private val handleOnCreateEvent = events.ofType(ReportList.Event.OnCreate::class.java)
             .mapToLastFrom(states)
+            .map { it.copy(isLoaderVisible = true) }
             .switchMap { state ->
-                showLoader(state)
-                        .concatWith(callServiceForAdapterItems(state.yearMonth))
+                just(state) andThen callServiceForAdapterItems(state.yearMonth)
             }
-
-    private fun showLoader(state: ReportList.UIState) =
-            Observable.just(state.copy(isLoaderVisible = true))
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }

@@ -141,6 +141,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun showSendCommentSuccessPending(comment: Comment) {
         debateChatSendCommentInputText.text.clear()
         showComment(comment)
+        debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
     }
 
     override fun clearSendCommentInput() {

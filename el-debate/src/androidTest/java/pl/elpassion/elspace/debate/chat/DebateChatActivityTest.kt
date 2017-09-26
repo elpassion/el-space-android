@@ -296,7 +296,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldNotScrollToLastCommentOnLiveCommentsNext() {
+    fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatus() {
         startActivity()
         val comments = mutableListOf<Comment>().apply {
             (1..10).forEach {
@@ -472,6 +472,15 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowPendingCommentWhenSendCommentStatusIsPending() {
         startActivity(userId = 1)
+        sendComment()
+        sendCommentSubject.onSuccess(createComment(name = "PendingComment", userId = 1, status = "pending"))
+        onText("PendingComment").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollDownToPendingCommentWhenSendCommentStatusIsPending() {
+        startActivity(userId = 1)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         sendComment()
         sendCommentSubject.onSuccess(createComment(name = "PendingComment", userId = 1, status = "pending"))
         onText("PendingComment").isDisplayed()

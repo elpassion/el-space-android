@@ -24,7 +24,6 @@ class ReportListModelTest : TreeSpec() {
     }
     private var currentDay: Calendar = getTimeFrom(2016, Calendar.OCTOBER, 4)
     private val currentDayProvider = { currentDay }
-
     private val model = ReportListModel(service, currentDayProvider)
     private val states = model.states
     private val events = model.events

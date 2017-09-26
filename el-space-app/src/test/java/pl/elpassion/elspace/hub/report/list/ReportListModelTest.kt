@@ -41,8 +41,9 @@ class ReportListModelTest : TreeSpec() {
                 "propagate list of adapters returned from service" > {
                     val reportListAdapters = listOf(Empty, Empty)
                     reportListAdaptersSubject.onNext(reportListAdapters)
-                    states.test()
-                            .assertOnFirstElement { it.adapterItems shouldBe reportListAdapters }
+                    states.test().assertOnFirstElement {
+                        it.adapterItems shouldBe reportListAdapters
+                    }
                 }
                 `call service for report list adapters with correct yearMonth`(2016, Calendar.OCTOBER)
                 `show loader`()
@@ -50,19 +51,13 @@ class ReportListModelTest : TreeSpec() {
             "on change to " {
                 "next month " {
                     before { events.accept(ReportList.Event.OnNextMonth) }
-                    "change yearMonth to correct one" > {
-                        states.test()
-                                .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.NOVEMBER) }
-                    }
+                    `change yearMonth to correct one`(2016, Calendar.NOVEMBER)
                     `call service for report list adapters with correct yearMonth`(2016, Calendar.NOVEMBER)
                     `show loader`()
                 }
                 "previous month " {
                     before { events.accept(ReportList.Event.OnPreviousMonth) }
-                    "change yearMonth to correct one" > {
-                        states.test()
-                                .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.SEPTEMBER) }
-                    }
+                    `change yearMonth to correct one`(2016, Calendar.SEPTEMBER)
                     `show loader`()
                     `call service for report list adapters with correct yearMonth`(2016, Calendar.SEPTEMBER)
                 }
@@ -71,10 +66,7 @@ class ReportListModelTest : TreeSpec() {
                         currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)
                         events.accept(ReportList.Event.OnChangeToCurrentDay)
                     }
-                    "change yearMonth to correct one" > {
-                        states.test()
-                                .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2014, Calendar.JANUARY) }
-                    }
+                    `change yearMonth to correct one`(2014, Calendar.JANUARY)
                     `show loader`()
                     `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
                 }
@@ -96,6 +88,12 @@ class ReportListModelTest : TreeSpec() {
     private fun TreeTestSuiteBuilder.`show loader`() = "show loader" > {
         states.test().assertOnFirstElement {
             it.isLoaderVisible shouldBe true
+        }
+    }
+
+    private fun TreeTestSuiteBuilder.`change yearMonth to correct one`(year: Int, month: Int) = "change yearMonth to correct one" > {
+        states.test().assertOnFirstElement {
+            it.yearMonth shouldBe yearMonthFrom(year, month)
         }
     }
 

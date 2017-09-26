@@ -60,7 +60,5 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 }
 
 infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>): Observable<T> = this.concatWith(nextObservable)
-private fun Observable<ReportList.UIState>.changeYearMonthToPrevMonth() = map { it.copy(yearMonth = it.yearMonth.changeToPreviousMonth()) }
-private fun Observable<ReportList.UIState>.changeYearMonthToNextMonth() = map { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
 private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()
 private fun YearMonth.changeToNextMonth() = toCalendar().apply { add(Calendar.MONTH, 1) }.toYearMonth()

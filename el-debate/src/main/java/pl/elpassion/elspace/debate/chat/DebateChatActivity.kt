@@ -21,6 +21,7 @@ import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
 import pl.elpassion.elspace.common.extensions.logExceptionIfDebug
 import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.extensions.update
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -114,21 +115,9 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun showComment(comment: Comment) {
-        val position = comments.indexOfFirst { it.id == comment.id }
-        updateList(position, comment)
+        comments.update(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
         debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
-    }
-
-    private fun updateList(position: Int, comment: Comment) {
-        comments.run {
-            if (position > -1) {
-                removeAt(position)
-                add(position, comment)
-            } else {
-                add(comment)
-            }
-        }
     }
 
     override fun showInitialsCommentsError(exception: Throwable) {

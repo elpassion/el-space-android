@@ -5,6 +5,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 import io.reactivex.Observable.just
+import pl.elpassion.elspace.common.extensions.andThen
 import pl.elpassion.elspace.common.extensions.mapToLastFrom
 import pl.elpassion.elspace.common.extensions.mapToWithLastFrom
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
@@ -59,6 +60,5 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     }
 }
 
-infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>): Observable<T> = this.concatWith(nextObservable)
 private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()
 private fun YearMonth.changeToNextMonth() = toCalendar().apply { add(Calendar.MONTH, 1) }.toYearMonth()

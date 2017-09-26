@@ -19,3 +19,5 @@ fun <T, UiState> Observable<T>.mapToWithLastFrom(stream: Observable<UiState>, ac
 
 fun <T, UiState> Observable<T>.mapToLastFrom(stream: Observable<UiState>): Observable<UiState> =
         withLatestFrom(stream, { _, y -> y })
+
+infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>): Observable<T> = this.concatWith(nextObservable)

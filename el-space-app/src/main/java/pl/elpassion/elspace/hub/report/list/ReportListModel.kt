@@ -33,10 +33,9 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
             .mapToLastFrom(states)
+            .map { it.copy(isLoaderVisible = true, yearMonth = it.yearMonth.changeToNextMonth()) }
             .switchMap { state ->
-                showLoader(state)
-                        .changeYearMonthToNextMonth()
-                        .concatWith(states.switchMap { callServiceForAdapterItems(it.yearMonth) })
+                just(state) andThen callServiceForAdapterItems(state.yearMonth)
             }
 
     private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)
@@ -63,7 +62,7 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     }
 }
 
-infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>) = this.concatWith(nextObservable)
+infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>): Observable<T> = this.concatWith(nextObservable)
 private fun Observable<ReportList.UIState>.changeYearMonthToPrevMonth() = map { it.copy(yearMonth = it.yearMonth.changeToPreviousMonth()) }
 private fun Observable<ReportList.UIState>.changeYearMonthToNextMonth() = map { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
 private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()

@@ -312,6 +312,14 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldShowNewCommentInfoOnLiveCommentsNextWhenStatusIsAccepted() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 100, status = "accepted"))
+        onText(R.string.debate_chat_live_comments_info_new).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

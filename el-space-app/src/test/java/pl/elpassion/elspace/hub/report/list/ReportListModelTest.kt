@@ -64,6 +64,7 @@ class ReportListModelTest : TreeSpec() {
                                 .assertOnFirstElement { it.yearMonth shouldBe yearMonthFrom(2016, Calendar.SEPTEMBER) }
                     }
                     `show loader`()
+                    `call service for report list adapters with correct yearMonth`(2016, Calendar.SEPTEMBER)
                 }
                 "current day, change yearMonth to correct one" > {
                     currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)

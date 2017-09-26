@@ -4,6 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
+import io.reactivex.Observable.just
 import pl.elpassion.elspace.common.extensions.mapToLastFrom
 import pl.elpassion.elspace.common.extensions.mapToWithLastFrom
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
@@ -40,9 +41,9 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private val handleOnPreviousMonth = events.ofType(ReportList.Event.OnPreviousMonth::class.java)
             .mapToLastFrom(states)
+            .map { it.copy(isLoaderVisible = true, yearMonth = it.yearMonth.changeToPreviousMonth()) }
             .switchMap { state ->
-                showLoader(state)
-                        .changeYearMonthToPrevMonth()
+                just(state) andThen callServiceForAdapterItems(state.yearMonth)
             }
 
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
@@ -62,6 +63,7 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     }
 }
 
+infix fun <T> Observable<T>.andThen(nextObservable: Observable<T>) = this.concatWith(nextObservable)
 private fun Observable<ReportList.UIState>.changeYearMonthToPrevMonth() = map { it.copy(yearMonth = it.yearMonth.changeToPreviousMonth()) }
 private fun Observable<ReportList.UIState>.changeYearMonthToNextMonth() = map { it.copy(yearMonth = it.yearMonth.changeToNextMonth()) }
 private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()

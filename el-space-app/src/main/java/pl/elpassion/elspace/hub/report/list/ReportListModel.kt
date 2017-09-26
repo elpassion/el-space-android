@@ -23,9 +23,6 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true) }
 
-    private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
-            .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
-
     private val handleOnNextMonth = events.ofType(ReportList.Event.OnNextMonth::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true, yearMonth = it.yearMonth.changeToNextMonth()) }
@@ -37,6 +34,9 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
             .mapToLastFrom(states)
             .map { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
+
+    private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
+            .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
     init {
         Observable.merge(

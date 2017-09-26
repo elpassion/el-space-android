@@ -1,7 +1,8 @@
-package pl.elpassion.elspace.common.extensions
+package pl.elpassion.elspace.common.extensions.time_extensions
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.elpassion.elspace.common.extensions.formatMillisToTime
 import java.util.*
 
 class FormatMillisToTimeTest {

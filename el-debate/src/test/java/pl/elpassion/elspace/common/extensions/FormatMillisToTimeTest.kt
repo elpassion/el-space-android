@@ -1,8 +1,7 @@
-package pl.elpassion.elspace.debate.chat
+package pl.elpassion.elspace.common.extensions
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import pl.elpassion.elspace.common.extensions.formatMillisToTime
 import java.util.*
 
 class FormatMillisToTimeTest {

@@ -316,6 +316,7 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100, status = "accepted"))
+        Thread.sleep(200)
         onText(R.string.debate_chat_live_comments_info_new).isDisplayed()
     }
 

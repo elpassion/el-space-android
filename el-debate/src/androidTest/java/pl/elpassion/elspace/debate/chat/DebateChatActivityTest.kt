@@ -298,12 +298,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatusIsAccepted() {
         startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "accepted"))
         onText("LastMessage").doesNotExist()
     }
@@ -311,12 +306,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatusIsRejected() {
         startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
         onText("LastMessage").doesNotExist()
     }

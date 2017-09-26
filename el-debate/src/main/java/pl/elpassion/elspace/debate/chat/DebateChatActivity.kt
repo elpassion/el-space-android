@@ -63,8 +63,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        val linearLayoutManager = LinearLayoutManager(this)
-        debateChatCommentsContainer.layoutManager = linearLayoutManager
+        debateChatCommentsContainer.layoutManager = LinearLayoutManager(this)
         debateChatCommentsContainer.adapter = basicAdapterWithConstructors(comments) { position ->
             createHolderForComment(comments[position])
         }

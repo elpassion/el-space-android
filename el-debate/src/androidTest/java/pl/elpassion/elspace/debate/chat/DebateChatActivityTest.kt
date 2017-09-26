@@ -309,6 +309,19 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatusIsRejected() {
+        startActivity()
+        val comments = mutableListOf<Comment>().apply {
+            (1..10).forEach {
+                add(createComment())
+            }
+        }
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
+        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
+        onText("LastMessage").doesNotExist()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

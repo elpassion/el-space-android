@@ -111,11 +111,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     override fun showLiveComment(liveComment: Comment) {
-        showComment(liveComment)
-    }
-
-    private fun showComment(comment: Comment) {
-        comments.update(comment)
+        comments.update(liveComment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
     }
 
@@ -140,7 +136,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun showSendCommentSuccessPending(comment: Comment) {
         debateChatSendCommentInputText.text.clear()
-        showComment(comment)
+        comments.update(comment)
+        debateChatCommentsContainer.adapter.notifyDataSetChanged()
         debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
     }
 

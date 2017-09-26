@@ -82,11 +82,9 @@ class ReportListModelTest : TreeSpec() {
     }
 
     private fun TreeTestSuiteBuilder.`show loader`() = "show loader" > {
-        states
-                .test()
-                .assertOnFirstElement {
-                    it.isLoaderVisible shouldBe true
-                }
+        states.test().assertOnFirstElement {
+            it.isLoaderVisible shouldBe true
+        }
     }
 
     private fun TreeTestSuiteBuilder.`call service for report list adapters with correct yearMonth`(year: Int, month: Int) =

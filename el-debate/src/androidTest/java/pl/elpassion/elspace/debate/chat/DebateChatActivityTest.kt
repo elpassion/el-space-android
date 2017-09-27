@@ -308,7 +308,6 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
-        Thread.sleep(200)
         onText("LastMessage").doesNotExist()
     }
 

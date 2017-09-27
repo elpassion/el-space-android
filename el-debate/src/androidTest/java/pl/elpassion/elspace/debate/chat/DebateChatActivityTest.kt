@@ -308,16 +308,26 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         onText("LastMessage").doesNotExist()
     }
 
     @Test
-    fun shouldShowNewCommentInfoOnLiveCommentsNextWhenStatusIsAccepted() {
+    fun shouldShowNewCommentInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = 100, status = "accepted"))
-        Thread.sleep(200)
+        liveCommentsSubject.onNext(createComment(id = 100))
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         onText(R.string.debate_chat_live_comments_info_new).isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowNewCommentInfoOnLiveCommentsNextWhenNewCommentIsVisible() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onNext(createComment(id = 100))
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        onText(R.string.debate_chat_live_comments_info_new).doesNotExist()
     }
 
     @Test
@@ -639,6 +649,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

@@ -112,7 +112,21 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun showLiveComment(liveComment: Comment) {
         comments.update(liveComment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_info_new, Snackbar.LENGTH_SHORT).show()
+        showNewCommentInfoIfCommentIsNotVisible(liveComment)
+    }
+
+    private fun showNewCommentInfoIfCommentIsNotVisible(liveComment: Comment) {
+        debateChatCommentsContainer.run {
+            post {
+                (layoutManager as LinearLayoutManager).run {
+                    val firstVisibleCommentId = adapter.getItemId(findFirstVisibleItemPosition())
+                    val lastVisibleCommentId = adapter.getItemId(findLastVisibleItemPosition())
+                    if (liveComment.id !in firstVisibleCommentId..lastVisibleCommentId) {
+                        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_info_new, Snackbar.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
     }
 
     override fun showInitialsCommentsError(exception: Throwable) {

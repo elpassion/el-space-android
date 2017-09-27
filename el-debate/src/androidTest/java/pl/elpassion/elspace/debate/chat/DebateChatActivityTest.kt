@@ -308,7 +308,7 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        Thread.sleep(200)
         onText("LastMessage").doesNotExist()
     }
 
@@ -317,7 +317,7 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        Thread.sleep(200)
         onText(R.string.debate_chat_live_comments_info_new).isDisplayed()
     }
 
@@ -326,7 +326,7 @@ class DebateChatActivityTest {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(id = 100))
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        Thread.sleep(200)
         onText(R.string.debate_chat_live_comments_info_new).doesNotExist()
     }
 

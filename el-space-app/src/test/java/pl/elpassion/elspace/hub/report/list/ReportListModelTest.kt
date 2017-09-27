@@ -81,6 +81,12 @@ class ReportListModelTest : TreeSpec() {
 
                 testObserver.assertValueCount(1)
             }
+            "on filter, change filter flag" > {
+                events.accept(ReportList.Event.OnFilter)
+                states.test().assertOnFirstElement {
+                    it.isFilterEnabled shouldBe true
+                }
+            }
         }
     }
 

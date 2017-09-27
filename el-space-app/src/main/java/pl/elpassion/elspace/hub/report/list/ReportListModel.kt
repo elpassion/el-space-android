@@ -35,23 +35,28 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .mapToLastFrom(states)
             .map { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
 
+    private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
+            .mapToLastFrom(states)
+            .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
+
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
 
     init {
         Observable.merge(
-                handleOnCreateEvent,
-                handleOnNextMonth,
-                handleOnPreviousMonth,
-                handleChangeToCurrentDay)
-                .switchMap { state ->
-                    just(state) andThen callServiceForAdapterItems(state.yearMonth)
-                }
+                Observable.merge(
+                        handleOnCreateEvent,
+                        handleOnNextMonth,
+                        handleOnPreviousMonth,
+                        handleChangeToCurrentDay)
+                        .switchMap { state ->
+                            just(state) andThen callServiceForAdapterItems(state.yearMonth)
+                        }, handleOnFilterEvent)
                 .subscribe(states)
     }
 
     companion object {
-        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), false, calendar.toYearMonth())
+        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), false, calendar.toYearMonth(), false)
     }
 }
 

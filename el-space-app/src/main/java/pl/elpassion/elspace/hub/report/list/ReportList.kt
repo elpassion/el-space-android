@@ -82,7 +82,8 @@ interface ReportList {
     data class UIState(
             val adapterItems: List<AdapterItem>,
             val isLoaderVisible: Boolean,
-            val yearMonth: YearMonth
+            val yearMonth: YearMonth,
+            val isFilterEnabled: Boolean
     )
 
     sealed class Event {
@@ -90,6 +91,7 @@ interface ReportList {
         object OnNextMonth : Event()
         object OnPreviousMonth : Event()
         object OnChangeToCurrentDay : Event()
+        object OnFilter : Event()
     }
 
 }

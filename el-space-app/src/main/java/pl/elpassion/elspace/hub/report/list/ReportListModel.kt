@@ -8,10 +8,13 @@ import io.reactivex.Observable.just
 import pl.elpassion.elspace.common.extensions.andThen
 import pl.elpassion.elspace.common.extensions.mapToLastFrom
 import pl.elpassion.elspace.common.extensions.mapToWithLastFrom
+import pl.elpassion.elspace.hub.report.list.service.DayFilterImpl
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 import java.util.*
 
 class ReportListModel(private val service: ReportsListAdaptersService, getCurrentDay: () -> Calendar) {
+
+    private val itemAdapterFilter = DayFilterImpl()
 
     val states: Relay<ReportList.UIState> = BehaviorRelay.create<ReportList.UIState>().apply {
         accept(getGetStartState(getCurrentDay()))
@@ -38,6 +41,13 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
+            .map {
+                if (it.isFilterEnabled) {
+                    it.copy(adapterItems = itemAdapterFilter.fetchFilteredDays(it.adapterItems))
+                } else {
+                    it
+                }
+            }
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }

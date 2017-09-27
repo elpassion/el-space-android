@@ -12,6 +12,8 @@ import pl.elpassion.elspace.common.TreeSpec
 import pl.elpassion.elspace.common.TreeTestSuiteBuilder
 import pl.elpassion.elspace.common.assertOnFirstElement
 import pl.elpassion.elspace.common.extensions.getTimeFrom
+import pl.elpassion.elspace.hub.project.dto.newDayWithoutReports
+import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
 import java.util.*
@@ -81,10 +83,22 @@ class ReportListModelTest : TreeSpec() {
 
                 testObserver.assertValueCount(1)
             }
-            "on filter, change filter flag" > {
-                events.accept(ReportList.Event.OnFilter)
-                states.test().assertOnFirstElement {
-                    it.isFilterEnabled shouldBe true
+            "on filter " {
+                val dayWithoutReports = newDayWithoutReports()
+                before {
+                    events.accept(ReportList.Event.OnCreate)
+                    reportListAdaptersSubject.onNext(listOf(Empty, newRegularHourlyReport(), dayWithoutReports))
+                    events.accept(ReportList.Event.OnFilter)
+                }
+                "change filter flag" > {
+                    states.test().assertOnFirstElement {
+                        it.isFilterEnabled shouldBe true
+                    }
+                }
+                "filter previous itemAdapters" > {
+                    states.test().assertOnFirstElement {
+                        it.adapterItems shouldBe listOf(Empty, dayWithoutReports)
+                    }
                 }
             }
         }

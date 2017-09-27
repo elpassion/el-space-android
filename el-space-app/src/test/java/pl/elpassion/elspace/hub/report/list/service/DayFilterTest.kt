@@ -3,9 +3,9 @@ package pl.elpassion.elspace.hub.report.list.service
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import pl.elpassion.elspace.hub.project.dto.newDayWithoutReports
 import pl.elpassion.elspace.hub.report.list.Day
 import pl.elpassion.elspace.hub.report.list.DayWithHourlyReports
-import pl.elpassion.elspace.hub.report.list.DayWithoutReports
 
 class DayFilterTest {
 
@@ -45,8 +45,6 @@ class DayFilterTest {
     }
 
     private fun filterDays(vararg days: Day) = DayFilterImpl().fetchFilteredDays(days.toList())
-
-    private fun newDayWithoutReports(isWeekend: Boolean = false, hasPassed: Boolean = true) = DayWithoutReports(0, "", "", hasPassed, isWeekend)
 
     private fun newDayReports() = DayWithHourlyReports(0, "", "", listOf(), false, 2.00)
 

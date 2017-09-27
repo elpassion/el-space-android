@@ -9,7 +9,8 @@ data class Comment(override val id: Long,
                    val content: String,
                    val createdAt: Long,
                    val userId: Long,
-                   val status: String) : WithStableId {
+                   val status: String,
+                   var wasShown: Boolean = false) : WithStableId {
     val commentStatus: CommentStatus
         get() = CommentStatus.valueOf(status.toUpperCase())
 }

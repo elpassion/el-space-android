@@ -74,6 +74,28 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldMarkCommentsReceivedFromApiGetCommentsAsShown() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(), createComment(), createComment()))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", null)
+                .test()
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val shownComments = listOf(createComment(wasShown = true), createComment(wasShown = true), createComment(wasShown = true))
+        testObserver.assertValues(createInitialsComments(comments = shownComments))
+    }
+
+    @Test
+    fun shouldMarkCommentsReceivedFromApiGetNextCommentsAsShown() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(), createComment(), createComment()))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 9)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val shownComments = listOf(createComment(wasShown = true), createComment(wasShown = true), createComment(wasShown = true))
+        testObserver.assertValues(createInitialsComments(comments = shownComments))
+    }
+
+    @Test
     fun shouldReturnErrorReceivedFromApiGetComments() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl

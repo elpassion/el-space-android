@@ -14,7 +14,10 @@ class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket:
                 api.getComments(token)
             } else {
                 api.getNextComments(token, nextPosition)
-            }.map { it.copy(comments = it.comments.sortedBy { it.id }) }
+            }.map {
+                it.comments.forEach { it.wasShown = true }
+                it.copy(comments = it.comments.sortedBy { it.id })
+            }
 
     override fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment> = socket.commentsObservable(debateCode, userId)
 

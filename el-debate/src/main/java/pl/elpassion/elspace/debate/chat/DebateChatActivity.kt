@@ -116,13 +116,16 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun showNewCommentInfoIfCommentIsNotVisible(liveComment: Comment) {
-        debateChatCommentsContainer.run {
-            post {
+        debateChatCommentsContainer.post {
+            debateChatCommentsContainer.run {
                 (layoutManager as LinearLayoutManager).run {
                     val firstVisibleCommentId = adapter.getItemId(findFirstVisibleItemPosition())
                     val lastVisibleCommentId = adapter.getItemId(findLastVisibleItemPosition())
                     if (liveComment.id !in firstVisibleCommentId..lastVisibleCommentId) {
-                        Snackbar.make(debateChatCoordinator, R.string.debate_chat_live_comments_info_new, Snackbar.LENGTH_SHORT).show()
+                        val count = comments.count { !it.wasShown }
+                        val message = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
+                        debateChatCommentsHasShownCounter.text = message
+                        debateChatCommentsHasShownCounter.show()
                     }
                 }
             }

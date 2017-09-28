@@ -30,7 +30,7 @@ class DebateChatActivityTest {
 
     private val initialsComments = mutableListOf<Comment>().apply {
         (11..20).forEach {
-            add(createComment(name = it.toString(), id = it.toLong()))
+            add(createComment(name = it.toString(), id = it.toLong(), wasShown = true))
         }
     }
     private val debateRepo = mock<DebatesRepository>().apply {
@@ -312,21 +312,36 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowNewCommentInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
+    fun shouldShowHasShownCounterViewOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
-        Thread.sleep(200)
-        onText(R.string.debate_chat_live_comments_info_new).isDisplayed()
+        Thread.sleep(100)
+        onId(R.id.debateChatCommentsHasShownCounter).isDisplayed()
     }
 
     @Test
-    fun shouldNotShowNewCommentInfoOnLiveCommentsNextWhenNewCommentIsVisible() {
+    fun shouldNotShowHasShownCounterViewOnLiveCommentsNextWhenNewCommentIsVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(id = 100))
-        Thread.sleep(200)
-        onText(R.string.debate_chat_live_comments_info_new).doesNotExist()
+        Thread.sleep(100)
+        onId(R.id.debateChatCommentsHasShownCounter).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowHasShownCounterWithCorrectCount() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 100))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 101))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 102))
+        val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
+                R.plurals.debate_chat_live_comments_has_shown_info, 3, 3)
+        Thread.sleep(100)
+        onText(message).isDisplayed()
     }
 
     @Test
@@ -648,6 +663,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

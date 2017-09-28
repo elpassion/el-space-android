@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
@@ -75,6 +76,23 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
         debateChatSendCommentInputText.requestFocus()
+        debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                debateChatCommentsContainer.run {
+                    val layoutManager = layoutManager as LinearLayoutManager
+                    val newVisibleComment = if (dy > 0) {
+                        adapter.getItemId(layoutManager.findLastCompletelyVisibleItemPosition())
+                    } else {
+                        adapter.getItemId(layoutManager.findFirstCompletelyVisibleItemPosition())
+                    }
+                    comments.first { it.id == newVisibleComment }.wasShown = true
+                    val count = comments.count { !it.wasShown }
+                    val message = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
+                    debateChatCommentsHasShownCounter.text = message
+                }
+            }
+        })
     }
 
     private fun createHolderForComment(comment: Comment) = when {

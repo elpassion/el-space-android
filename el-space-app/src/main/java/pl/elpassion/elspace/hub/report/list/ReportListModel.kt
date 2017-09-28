@@ -41,23 +41,20 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
             .mapToLastFrom(states)
             .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
-            .map {
-                if (it.isFilterEnabled) {
-                    it.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(it.adapterItems))
-                } else {
-                    it.copy(adapterItemsToShow = it.adapterItems)
-                }
-            }
+            .mapAdapterItemsToShow()
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
-            .map { state ->
-                if (state.isFilterEnabled) {
-                    state.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(state.adapterItems))
-                } else {
-                    state.copy(adapterItemsToShow = state.adapterItems)
-                }
-            }
+            .mapAdapterItemsToShow()
+
+
+    private fun Observable<ReportList.UIState>.mapAdapterItemsToShow() = map { state ->
+        if (state.isFilterEnabled) {
+            state.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(state.adapterItems))
+        } else {
+            state.copy(adapterItemsToShow = state.adapterItems)
+        }
+    }
 
     init {
         Observable.merge(

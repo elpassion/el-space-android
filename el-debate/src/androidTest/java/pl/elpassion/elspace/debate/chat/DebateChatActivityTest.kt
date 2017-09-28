@@ -348,7 +348,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldDecreaseHasShownCounterOnScrolled() {
+    fun shouldDecreaseHasShownCounterOnScrolledDown() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))

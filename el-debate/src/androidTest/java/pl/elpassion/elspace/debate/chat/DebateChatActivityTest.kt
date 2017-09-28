@@ -4,7 +4,6 @@ import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
 import android.support.v7.widget.RecyclerView
 import android.text.InputType.TYPE_CLASS_TEXT
@@ -356,10 +355,10 @@ class DebateChatActivityTest {
         liveCommentsSubject.onNext(createComment(id = 101))
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 102))
-        Espresso.onView(ViewMatchers.withId(R.id.debateChatCommentsContainer)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(11))
+        Thread.sleep(100)
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(11))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
-        Thread.sleep(100)
         onText(message).isDisplayed()
     }
 

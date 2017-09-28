@@ -51,6 +51,13 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
+            .map { state ->
+                if (state.isFilterEnabled) {
+                    state.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(state.adapterItems))
+                } else {
+                    state.copy(adapterItemsToShow = state.adapterItems)
+                }
+            }
 
     init {
         Observable.merge(

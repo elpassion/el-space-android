@@ -13,6 +13,7 @@ import pl.elpassion.elspace.common.TreeTestSuiteBuilder
 import pl.elpassion.elspace.common.assertOnFirstElement
 import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.dto.newDayWithoutReports
+import pl.elpassion.elspace.hub.project.dto.newPaidVacationHourlyReport
 import pl.elpassion.elspace.hub.project.dto.newRegularHourlyReport
 import pl.elpassion.elspace.hub.report.list.adapter.Empty
 import pl.elpassion.elspace.hub.report.list.service.ReportsListAdaptersService
@@ -43,11 +44,19 @@ class ReportListModelTest : TreeSpec() {
                     val reportListAdapters = listOf(Empty, Empty)
                     reportListAdaptersSubject.onNext(reportListAdapters)
                     states.test().assertOnFirstElement {
-                        it.adapterItems shouldBe reportListAdapters
+                        it.adapterItemsToShow shouldBe reportListAdapters
                     }
                 }
                 `call service for report list adapters with correct yearMonth`(2016, Calendar.OCTOBER)
                 `show loader`()
+                "return filtered adapter items list when filter is enabled" > {
+                    events.accept(ReportList.Event.OnFilter)
+                    val reportListAdapters = listOf(Empty, Empty, newPaidVacationHourlyReport())
+                    reportListAdaptersSubject.onNext(reportListAdapters)
+                    states.test().assertOnFirstElement {
+                        it.adapterItemsToShow shouldBe listOf(Empty, Empty)
+                    }
+                }
             }
             "on change to " {
                 "next month " {

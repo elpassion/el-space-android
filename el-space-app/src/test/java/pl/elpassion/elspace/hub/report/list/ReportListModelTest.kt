@@ -85,9 +85,10 @@ class ReportListModelTest : TreeSpec() {
             }
             "on filter " {
                 val dayWithoutReports = newDayWithoutReports()
+                val originalListOfAdapterItems = listOf(Empty, newRegularHourlyReport(), dayWithoutReports)
                 before {
                     events.accept(ReportList.Event.OnCreate)
-                    reportListAdaptersSubject.onNext(listOf(Empty, newRegularHourlyReport(), dayWithoutReports))
+                    reportListAdaptersSubject.onNext(originalListOfAdapterItems)
                     events.accept(ReportList.Event.OnFilter)
                 }
                 "change filter flag" > {
@@ -97,7 +98,13 @@ class ReportListModelTest : TreeSpec() {
                 }
                 "filter previous itemAdapters" > {
                     states.test().assertOnFirstElement {
-                        it.adapterItems shouldBe listOf(Empty, dayWithoutReports)
+                        it.adapterItemsToShow shouldBe listOf(Empty, dayWithoutReports)
+                    }
+                }
+                "return original list on second filter event" > {
+                    events.accept(ReportList.Event.OnFilter)
+                    states.test().assertOnFirstElement {
+                        it.adapterItemsToShow shouldBe originalListOfAdapterItems
                     }
                 }
             }

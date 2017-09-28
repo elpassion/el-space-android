@@ -43,9 +43,9 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
             .map {
                 if (it.isFilterEnabled) {
-                    it.copy(adapterItems = itemAdapterFilter.fetchFilteredDays(it.adapterItems))
+                    it.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(it.adapterItems))
                 } else {
-                    it
+                    it.copy(adapterItemsToShow = it.adapterItems)
                 }
             }
 
@@ -66,7 +66,7 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     }
 
     companion object {
-        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), false, calendar.toYearMonth(), false)
+        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), emptyList(), calendar.toYearMonth(), false, false)
     }
 }
 

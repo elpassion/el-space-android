@@ -36,7 +36,13 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
             .mapToLastFrom(states)
-            .map { it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true) }
+            .switchMap {
+                if (it.yearMonth != getCurrentDay().toYearMonth()) {
+                    just(it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true))
+                } else {
+                    Observable.empty()
+                }
+            }
 
     private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
             .mapToLastFrom(states)

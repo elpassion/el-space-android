@@ -2,10 +2,7 @@
 
 package pl.elpassion.elspace.hub.report.list
 
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldBe
 import io.reactivex.subjects.PublishSubject
 import pl.elpassion.elspace.common.TreeSpec
@@ -72,13 +69,21 @@ class ReportListModelTest : TreeSpec() {
                     `call service for report list adapters with correct yearMonth`(2016, Calendar.SEPTEMBER)
                 }
                 "current day "{
-                    before {
-                        currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)
-                        events.accept(ReportList.Event.OnChangeToCurrentDay)
+                    "with changed current day " {
+                        before {
+                            currentDay = getTimeFrom(2014, Calendar.JANUARY, 1)
+                            events.accept(ReportList.Event.OnChangeToCurrentDay)
+                        }
+                        `change yearMonth to correct one`(2014, Calendar.JANUARY)
+                        `show loader`()
+                        `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
                     }
-                    `change yearMonth to correct one`(2014, Calendar.JANUARY)
-                    `show loader`()
-                    `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
+                    "without changed current day " {
+                        before { events.accept(ReportList.Event.OnChangeToCurrentDay) }
+                        "not call service" > {
+                            verify(service, never()).createReportsListAdapters(any())
+                        }
+                    }
                 }
             }
             "unsubscribe previous calls for report list adapters on next event" > {

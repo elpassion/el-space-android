@@ -375,6 +375,15 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldHideHasShownInfoWhenAllNewCommentsHasShown() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 1))
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
+        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

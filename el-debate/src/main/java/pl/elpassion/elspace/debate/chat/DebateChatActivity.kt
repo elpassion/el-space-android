@@ -108,6 +108,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             val text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
             debateChatCommentsHasShownInfo.text = text
             debateChatCommentsHasShownInfo.show()
+        } else {
+            debateChatCommentsHasShownInfo.hide()
         }
     }
 

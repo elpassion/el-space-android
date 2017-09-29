@@ -314,7 +314,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowHasShownCounterViewOnLiveCommentsNextWhenNewCommentIsNotVisible() {
+    fun shouldShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -323,7 +323,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldNotShowHasShownCounterViewOnLiveCommentsNextWhenNewCommentIsVisible() {
+    fun shouldNotShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -332,7 +332,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowHasShownCounterWithCorrectCount() {
+    fun shouldShowHasShownInfoWithCorrectCount() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -345,7 +345,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldDecreaseHasShownCounterOnScrolledDown() {
+    fun shouldDecreaseHasShownInfoCountOnScrolledDown() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -360,7 +360,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldDecreaseHasShownCounterOnScrolledUp() {
+    fun shouldDecreaseHasShownInfoCountOnScrolledUp() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 1))

@@ -99,6 +99,7 @@ interface ReportList {
         object OnChangeToCurrentDay : Event()
         object OnFilter : Event()
         object OnScrollEnded : Event()
+        object OnRefresh : Event()
     }
 
 }

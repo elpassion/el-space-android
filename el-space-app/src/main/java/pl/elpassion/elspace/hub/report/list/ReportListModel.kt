@@ -24,7 +24,8 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     val events: PublishRelay<ReportList.Event> = PublishRelay.create()
 
-    private val handleOnCreateEvent = events.ofType(ReportList.Event.OnCreate::class.java)
+    private val handleBasicServiceCallEvents = events
+            .filter { it is ReportList.Event.OnCreate || it is ReportList.Event.OnRefresh }
             .mapToLastFrom(states)
             .map { it.copy(isLoaderVisible = true) }
 
@@ -47,7 +48,7 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
                 }
             }
 
-    private val handleServiceCalls = Observable.merge(handleOnCreateEvent, handleOnNextMonth, handleOnPreviousMonth, handleChangeToCurrentDay)
+    private val handleServiceCalls = Observable.merge(handleBasicServiceCallEvents, handleOnNextMonth, handleOnPreviousMonth, handleChangeToCurrentDay)
             .switchMap { state ->
                 just(state) andThen
                         if (state.scrollToCurrentDayAction != ReportList.ScrollToCurrentDayAction.SCROLL) {

@@ -144,6 +144,18 @@ class ReportListModelTest : TreeSpec() {
                     it.scrollToCurrentDayAction shouldBe ReportList.ScrollToCurrentDayAction.NOT_SCROLL
                 }
             }
+            "on refresh " {
+                before { events.accept(ReportList.Event.OnRefresh) }
+                "propagate list of adapters returned from service" > {
+                    val reportListAdapters = listOf(Empty, Empty)
+                    reportListAdaptersSubject.onNext(reportListAdapters)
+                    states.test().assertOnFirstElement {
+                        it.adapterItemsToShow shouldBe reportListAdapters
+                    }
+                }
+                `call service for report list adapters with correct yearMonth`(2016, Calendar.OCTOBER)
+                `show loader`()
+            }
         }
     }
 

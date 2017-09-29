@@ -75,6 +75,11 @@ class ReportListModelTest : TreeSpec() {
                             events.accept(ReportList.Event.OnChangeToCurrentDay)
                         }
                         `change yearMonth to correct one`(2014, Calendar.JANUARY)
+                        "change scrollToCurrentDayAction field to PENDING" > {
+                            states.test().assertOnFirstElement {
+                                it.scrollToCurrentDayAction shouldBe ReportList.ScrollToCurrentDayAction.PENDING
+                            }
+                        }
                         `show loader`()
                         `call service for report list adapters with correct yearMonth`(2014, Calendar.JANUARY)
                     }
@@ -82,6 +87,16 @@ class ReportListModelTest : TreeSpec() {
                         before { events.accept(ReportList.Event.OnChangeToCurrentDay) }
                         "not call service" > {
                             verify(service, never()).createReportsListAdapters(any())
+                        }
+                        "not show loader" > {
+                            states.test().assertOnFirstElement {
+                                it.isLoaderVisible shouldBe false
+                            }
+                        }
+                        "change scrollToCurrentDayAction field to SCROLL and loader should not be displayed" > {
+                            states.test().assertOnFirstElement {
+                                it.scrollToCurrentDayAction shouldBe ReportList.ScrollToCurrentDayAction.SCROLL
+                            }
                         }
                     }
                 }

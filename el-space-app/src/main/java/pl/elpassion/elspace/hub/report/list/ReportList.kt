@@ -84,8 +84,13 @@ interface ReportList {
             val adapterItemsToShow: List<AdapterItem>,
             val yearMonth: YearMonth,
             val isFilterEnabled: Boolean,
-            val isLoaderVisible: Boolean
+            val isLoaderVisible: Boolean,
+            val scrollToCurrentDayAction: ScrollToCurrentDayAction
     )
+
+    enum class ScrollToCurrentDayAction {
+        NOT_SCROLL, PENDING, SCROLL
+    }
 
     sealed class Event {
         object OnCreate : Event()

@@ -36,13 +36,14 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     private val handleChangeToCurrentDay = events.ofType(ReportList.Event.OnChangeToCurrentDay::class.java)
             .mapToLastFrom(states)
-            .switchMap {
+            .map {
                 if (it.yearMonth != getCurrentDay().toYearMonth()) {
-                    just(it.copy(yearMonth = getCurrentDay().toYearMonth(), isLoaderVisible = true))
+                    it.copy(scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.PENDING, isLoaderVisible = true)
                 } else {
-                    Observable.empty()
+                    it.copy(scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.SCROLL)
                 }
             }
+            .map { it.copy(yearMonth = getCurrentDay().toYearMonth()) }
 
     private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
             .mapToLastFrom(states)
@@ -70,13 +71,24 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
                         handleOnPreviousMonth,
                         handleChangeToCurrentDay)
                         .switchMap { state ->
-                            just(state) andThen callServiceForAdapterItems(state.yearMonth)
+                            just(state) andThen
+                                    if (state.scrollToCurrentDayAction != ReportList.ScrollToCurrentDayAction.SCROLL) {
+                                        callServiceForAdapterItems(state.yearMonth)
+                                    } else {
+                                        just(state.copy(isLoaderVisible = false))
+                                    }
                         }, handleOnFilterEvent)
                 .subscribe(states)
     }
 
     companion object {
-        fun getGetStartState(calendar: Calendar) = ReportList.UIState(emptyList(), emptyList(), calendar.toYearMonth(), false, false)
+        fun getGetStartState(calendar: Calendar) = ReportList.UIState(
+                adapterItems = emptyList(),
+                adapterItemsToShow = emptyList(),
+                yearMonth = calendar.toYearMonth(),
+                isFilterEnabled = false,
+                isLoaderVisible = false,
+                scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.NOT_SCROLL)
     }
 }
 

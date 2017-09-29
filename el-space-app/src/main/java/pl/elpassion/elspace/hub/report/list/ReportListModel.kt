@@ -5,6 +5,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 import io.reactivex.Observable.just
+import io.reactivex.disposables.Disposable
 import pl.elpassion.elspace.common.extensions.andThen
 import pl.elpassion.elspace.common.extensions.mapToLastFrom
 import pl.elpassion.elspace.common.extensions.mapToWithLastFrom
@@ -15,6 +16,7 @@ import java.util.*
 class ReportListModel(private val service: ReportsListAdaptersService, getCurrentDay: () -> Calendar) {
 
     private val itemAdapterFilter = DayFilterImpl()
+    private var disposable: Disposable? = null
 
     val states: Relay<ReportList.UIState> = BehaviorRelay.create<ReportList.UIState>().apply {
         accept(getGetStartState(getCurrentDay()))
@@ -68,7 +70,6 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .mapToLastFrom(states)
             .map { it.copy(scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.NOT_SCROLL) }
 
-
     private fun Observable<ReportList.UIState>.mapAdapterItemsToShow() = map { state ->
         if (state.isFilterEnabled) {
             state.copy(adapterItemsToShow = itemAdapterFilter.fetchFilteredDays(state.adapterItems))
@@ -78,11 +79,15 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     }
 
     init {
-        Observable.merge(
+        disposable = Observable.merge(
                 handleServiceCalls,
                 handleOnFilterEvent,
                 handleOnScrollEnded)
                 .subscribe(states)
+    }
+
+    fun onCleared() {
+        disposable?.dispose()
     }
 
     companion object {

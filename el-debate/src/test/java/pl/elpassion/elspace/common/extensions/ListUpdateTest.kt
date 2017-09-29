@@ -65,4 +65,12 @@ class ListUpdateTest {
         list.update(newItem)
         assertTrue(list.size == 3)
     }
+
+    @Test
+    fun shouldAddItemOnCorrectListIndex() {
+        val list = mutableListOf(MyType(1), MyType(3))
+        val newItem = MyType(2)
+        list.update(newItem)
+        assertEquals(list[1], newItem)
+    }
 }

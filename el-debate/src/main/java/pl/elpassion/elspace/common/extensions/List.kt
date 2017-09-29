@@ -9,7 +9,8 @@ fun <T : WithStableId> MutableList<T>.update(newItem: T) {
             removeAt(position)
             add(position, newItem)
         } else {
-            add(newItem)
+            val previousItemPosition = indexOfLast { it.id < newItem.id }
+            add(previousItemPosition + 1, newItem)
         }
     }
 }

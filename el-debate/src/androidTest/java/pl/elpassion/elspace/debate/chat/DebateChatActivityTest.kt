@@ -353,7 +353,6 @@ class DebateChatActivityTest {
         liveCommentsSubject.onNext(createComment(id = 101))
         liveCommentsSubject.onNext(createComment(id = 102))
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
-        Thread.sleep(100)
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
         onText(message).isDisplayed()
@@ -368,7 +367,6 @@ class DebateChatActivityTest {
         liveCommentsSubject.onNext(createComment(id = 101))
         liveCommentsSubject.onNext(createComment(id = 102))
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
-        Thread.sleep(100)
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
         onText(message).isDisplayed()

@@ -80,7 +80,8 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     init {
         Observable.merge(
                 handleServiceCalls,
-                handleOnFilterEvent)
+                handleOnFilterEvent,
+                handleOnScrollEnded)
                 .subscribe(states)
     }
 

@@ -45,13 +45,23 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
                 }
             }
 
-    private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
-            .mapToLastFrom(states)
-            .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
-            .mapAdapterItemsToShow()
+    private val handleServiceCalls = Observable.merge(handleOnCreateEvent, handleOnNextMonth, handleOnPreviousMonth, handleChangeToCurrentDay)
+            .switchMap { state ->
+                just(state) andThen
+                        if (state.scrollToCurrentDayAction != ReportList.ScrollToCurrentDayAction.SCROLL) {
+                            callServiceForAdapterItems(state.yearMonth)
+                        } else {
+                            just(state.copy(isLoaderVisible = false))
+                        }
+            }
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
             .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
+            .mapAdapterItemsToShow()
+
+    private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
+            .mapToLastFrom(states)
+            .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
             .mapAdapterItemsToShow()
 
 
@@ -65,19 +75,8 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
 
     init {
         Observable.merge(
-                Observable.merge(
-                        handleOnCreateEvent,
-                        handleOnNextMonth,
-                        handleOnPreviousMonth,
-                        handleChangeToCurrentDay)
-                        .switchMap { state ->
-                            just(state) andThen
-                                    if (state.scrollToCurrentDayAction != ReportList.ScrollToCurrentDayAction.SCROLL) {
-                                        callServiceForAdapterItems(state.yearMonth)
-                                    } else {
-                                        just(state.copy(isLoaderVisible = false))
-                                    }
-                        }, handleOnFilterEvent)
+                handleServiceCalls,
+                handleOnFilterEvent)
                 .subscribe(states)
     }
 

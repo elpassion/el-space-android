@@ -10,7 +10,7 @@
     <include layout="@layout/debate_toolbar" />
 
     <TextView
-        android:id="@+id/debateChatCommentsHasShownCounter"
+        android:id="@+id/debateChatCommentsHasShownInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"

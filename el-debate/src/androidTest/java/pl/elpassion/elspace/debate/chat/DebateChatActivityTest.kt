@@ -319,7 +319,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
-        onId(R.id.debateChatCommentsHasShownCounter).isDisplayed()
+        onId(R.id.debateChatCommentsHasShownInfo).isDisplayed()
     }
 
     @Test
@@ -328,7 +328,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
-        onId(R.id.debateChatCommentsHasShownCounter).isNotDisplayed()
+        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
     }
 
     @Test
@@ -352,7 +352,7 @@ class DebateChatActivityTest {
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 101))
         liveCommentsSubject.onNext(createComment(id = 102))
-        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(11))
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
         Thread.sleep(100)
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
@@ -678,6 +678,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

@@ -41,6 +41,7 @@ dependencies {
     api group: 'io.reactivex.rxjava2', name: 'rxkotlin', version: '2.1.0'
     api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-kotlin', version: rxBinding
     api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-appcompat-v7-kotlin', version: rxBinding
+    api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-recyclerview-v7-kotlin', version: rxBinding
     api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-support-v4-kotlin', version: rxBinding
     api group: 'com.jakewharton.rxbinding2', name: 'rxbinding-design-kotlin', version: rxBinding
     api group: 'com.elpassion.android.commons', name: 'recycler', version: elCommon

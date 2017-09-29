@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
@@ -37,6 +38,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             controller.onNewCredentials(loginCredentials.authToken, credentials)
         }
     }
+
+    private var scrollEventsDisposable: Disposable? = null
 
     private val loginCredentials by lazy { intent.getSerializableExtra(debateLoginCredentialsKey) as LoginCredentials }
 
@@ -76,23 +79,36 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
         debateChatSendCommentInputText.requestFocus()
-        debateChatCommentsContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                debateChatCommentsContainer.run {
-                    val layoutManager = layoutManager as LinearLayoutManager
-                    val newVisibleComment = if (dy > 0) {
-                        adapter.getItemId(layoutManager.findLastCompletelyVisibleItemPosition())
-                    } else {
-                        adapter.getItemId(layoutManager.findFirstCompletelyVisibleItemPosition())
+        scrollEventsDisposable = debateChatCommentsContainer.scrollEvents()
+                .doOnNext { updateCommentsWasShownStatus() }
+                .subscribe()
+    }
+
+    private fun updateCommentsWasShownStatus() {
+        debateChatCommentsContainer.run {
+            (layoutManager as LinearLayoutManager).run {
+                val firstVisibleItemPosition = findFirstCompletelyVisibleItemPosition()
+                val lastVisibleItemPosition = findLastCompletelyVisibleItemPosition()
+                if (firstVisibleItemPosition > -1) {
+                    val firstVisibleCommentId = adapter.getItemId(firstVisibleItemPosition)
+                    val lastVisibleCommentId = adapter.getItemId(lastVisibleItemPosition)
+                    (firstVisibleCommentId..lastVisibleCommentId).forEach {
+                        val id = it
+                        comments.find { it.id == id }?.wasShown = true
                     }
-                    comments.first { it.id == newVisibleComment }.wasShown = true
-                    val count = comments.count { !it.wasShown }
-                    val message = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
-                    debateChatCommentsHasShownCounter.text = message
                 }
             }
-        })
+        }
+        showChatCommentHasShownInfo()
+    }
+
+    private fun showChatCommentHasShownInfo() {
+        val count = comments.count { !it.wasShown }
+        if (count > 0) {
+            val text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
+            debateChatCommentsHasShownInfo.text = text
+            debateChatCommentsHasShownInfo.show()
+        }
     }
 
     private fun createHolderForComment(comment: Comment) = when {
@@ -130,20 +146,19 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun showLiveComment(liveComment: Comment) {
         comments.update(liveComment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        showNewCommentInfoIfCommentIsNotVisible(liveComment)
+        updateCommentWasShownStatus(liveComment)
     }
 
-    private fun showNewCommentInfoIfCommentIsNotVisible(liveComment: Comment) {
+    private fun updateCommentWasShownStatus(liveComment: Comment) {
         debateChatCommentsContainer.post {
             debateChatCommentsContainer.run {
                 (layoutManager as LinearLayoutManager).run {
                     val firstVisibleCommentId = adapter.getItemId(findFirstVisibleItemPosition())
                     val lastVisibleCommentId = adapter.getItemId(findLastVisibleItemPosition())
                     if (liveComment.id !in firstVisibleCommentId..lastVisibleCommentId) {
-                        val count = comments.count { !it.wasShown }
-                        val message = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
-                        debateChatCommentsHasShownCounter.text = message
-                        debateChatCommentsHasShownCounter.show()
+                        showChatCommentHasShownInfo()
+                    } else {
+                        liveComment.wasShown = true
                     }
                 }
             }
@@ -208,6 +223,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun onDestroy() {
         credentialsDialog.dismiss()
+        scrollEventsDisposable?.dispose()
         controller.onDestroy()
         super.onDestroy()
     }

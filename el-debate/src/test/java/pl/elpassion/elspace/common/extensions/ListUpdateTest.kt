@@ -80,4 +80,16 @@ class ListUpdateTest {
         list.update(MyType(1))
         assertTrue(list.size == 3)
     }
+
+    @Test
+    fun shouldHaveCorrectOrderWhenNewItemIdIsLower() {
+        val three = MyType(3)
+        val six = MyType(6)
+        val list = mutableListOf(three, six)
+        val one = MyType(1)
+        list.update(one)
+        assertEquals(list[0], one)
+        assertEquals(list[1], three)
+        assertEquals(list[2], six)
+    }
 }

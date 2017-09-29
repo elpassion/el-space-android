@@ -73,4 +73,11 @@ class ListUpdateTest {
         list.update(newItem)
         assertEquals(list[1], newItem)
     }
+
+    @Test
+    fun shouldHaveCorrectSizeWhenNewItemIdIsLower() {
+        val list = mutableListOf(MyType(2), MyType(3))
+        list.update(MyType(1))
+        assertTrue(list.size == 3)
+    }
 }

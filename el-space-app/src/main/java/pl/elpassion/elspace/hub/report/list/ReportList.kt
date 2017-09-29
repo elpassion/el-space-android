@@ -98,6 +98,7 @@ interface ReportList {
         object OnPreviousMonth : Event()
         object OnChangeToCurrentDay : Event()
         object OnFilter : Event()
+        object OnScrollEnded : Event()
     }
 
 }

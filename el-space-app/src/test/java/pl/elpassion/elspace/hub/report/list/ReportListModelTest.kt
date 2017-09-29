@@ -137,6 +137,13 @@ class ReportListModelTest : TreeSpec() {
                     }
                 }
             }
+            "on scroll ended change state" > {
+                events.accept(ReportList.Event.OnChangeToCurrentDay)
+                events.accept(ReportList.Event.OnScrollEnded)
+                states.test().assertOnFirstElement {
+                    it.scrollToCurrentDayAction shouldBe ReportList.ScrollToCurrentDayAction.NOT_SCROLL
+                }
+            }
         }
     }
 

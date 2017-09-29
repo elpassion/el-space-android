@@ -64,6 +64,10 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             .map { it.copy(isFilterEnabled = it.isFilterEnabled.not()) }
             .mapAdapterItemsToShow()
 
+    private val handleOnScrollEnded = events.ofType(ReportList.Event.OnScrollEnded::class.java)
+            .mapToLastFrom(states)
+            .map { it.copy(scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.NOT_SCROLL) }
+
 
     private fun Observable<ReportList.UIState>.mapAdapterItemsToShow() = map { state ->
         if (state.isFilterEnabled) {

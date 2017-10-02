@@ -298,6 +298,22 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollDownToNewCommentFromOnLiveCommentsNextWhenCreatedByLoggedUser() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "accepted"))
+        onText("LoggedUserMessage").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollUpToNewCommentFromOnLiveCommentsNextWhenCreatedByLoggedUser() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 1, status = "accepted"))
+        onText("LoggedUserMessage").isDisplayed()
+    }
+
+    @Test
     fun shouldShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))

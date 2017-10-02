@@ -64,9 +64,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateChatCommentsContainer.layoutManager = LinearLayoutManager(this)
-        debateChatCommentsContainer.adapter = basicAdapterWithConstructors(comments) { position ->
-            createHolderForComment(comments[position])
+        debateChatCommentsContainer.run {
+            layoutManager = LinearLayoutManager(this@DebateChatActivity)
+            adapter = basicAdapterWithConstructors(comments) { position ->
+                createHolderForComment(comments[position])
+            }
         }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {

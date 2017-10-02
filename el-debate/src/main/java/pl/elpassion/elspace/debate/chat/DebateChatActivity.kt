@@ -128,11 +128,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             if (comments.isEmpty()) {
                 comments.addAll(initialsComments)
                 adapter.notifyDataSetChanged()
-                layoutManager.scrollToPosition(comments.size - 1)
+                scrollToPosition(comments.size - 1)
             } else {
                 comments.addAll(0, initialsComments)
                 adapter.notifyDataSetChanged()
-                layoutManager.scrollToPosition(initialsComments.size - 1)
+                scrollToPosition(initialsComments.size - 1)
             }
         }
     }

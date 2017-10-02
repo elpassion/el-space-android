@@ -91,7 +91,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun updateChatCommentHasShownInfo() {
-        comments.count { !it.wasShown }.also {
+        comments.count { it.userId != loginCredentials.userId && !it.wasShown }.also {
             debateChatCommentsHasShownInfo.run {
                 if (it > 0) {
                     text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)

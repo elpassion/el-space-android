@@ -332,6 +332,15 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldNotShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsCreatedByLoggedUser() {
+        startActivity(userId = 3)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))
+        Thread.sleep(100)
+        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
+    }
+
+    @Test
     fun shouldShowHasShownInfoWithCorrectCount() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))

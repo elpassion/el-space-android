@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
@@ -21,10 +20,7 @@ import kotlinx.android.synthetic.main.debate_chat_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.elspace.common.extensions.logExceptionIfDebug
-import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
-import pl.elpassion.elspace.common.extensions.update
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
@@ -91,22 +87,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             comments.find { it.id == id }?.wasShown = true
         }
         updateChatCommentHasShownInfo()
-    }
-
-    fun RecyclerView.getVisibleItemsIds(): LongRange {
-        run {
-            (layoutManager as LinearLayoutManager).run {
-                val firstVisibleItemPosition = findFirstCompletelyVisibleItemPosition()
-                val lastVisibleItemPosition = findLastCompletelyVisibleItemPosition()
-                return if (firstVisibleItemPosition > -1) {
-                    val firstVisibleCommentId = adapter.getItemId(firstVisibleItemPosition)
-                    val lastVisibleCommentId = adapter.getItemId(lastVisibleItemPosition)
-                    firstVisibleCommentId..lastVisibleCommentId
-                } else {
-                    LongRange.EMPTY
-                }
-            }
-        }
     }
 
     private fun updateChatCommentHasShownInfo() {

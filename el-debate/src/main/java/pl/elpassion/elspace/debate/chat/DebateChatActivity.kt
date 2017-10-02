@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
@@ -85,21 +86,27 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun updateCommentsWasShownStatus() {
-        debateChatCommentsContainer.run {
+        debateChatCommentsContainer.getVisibleItemsIds().forEach {
+            val id = it
+            comments.find { it.id == id }?.wasShown = true
+        }
+        showChatCommentHasShownInfo()
+    }
+
+    fun RecyclerView.getVisibleItemsIds(): LongRange {
+        run {
             (layoutManager as LinearLayoutManager).run {
                 val firstVisibleItemPosition = findFirstCompletelyVisibleItemPosition()
                 val lastVisibleItemPosition = findLastCompletelyVisibleItemPosition()
-                if (firstVisibleItemPosition > -1) {
+                return if (firstVisibleItemPosition > -1) {
                     val firstVisibleCommentId = adapter.getItemId(firstVisibleItemPosition)
                     val lastVisibleCommentId = adapter.getItemId(lastVisibleItemPosition)
-                    (firstVisibleCommentId..lastVisibleCommentId).forEach {
-                        val id = it
-                        comments.find { it.id == id }?.wasShown = true
-                    }
+                    firstVisibleCommentId..lastVisibleCommentId
+                } else {
+                    LongRange.EMPTY
                 }
             }
         }
-        showChatCommentHasShownInfo()
     }
 
     private fun showChatCommentHasShownInfo() {
@@ -153,16 +160,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     private fun updateCommentWasShownStatus(liveComment: Comment) {
         debateChatCommentsContainer.post {
-            debateChatCommentsContainer.run {
-                (layoutManager as LinearLayoutManager).run {
-                    val firstVisibleCommentId = adapter.getItemId(findFirstVisibleItemPosition())
-                    val lastVisibleCommentId = adapter.getItemId(findLastVisibleItemPosition())
-                    if (liveComment.id !in firstVisibleCommentId..lastVisibleCommentId) {
-                        showChatCommentHasShownInfo()
-                    } else {
-                        liveComment.wasShown = true
-                    }
-                }
+            if (!debateChatCommentsContainer.getVisibleItemsIds().contains(liveComment.id)) {
+                showChatCommentHasShownInfo()
+            } else {
+                liveComment.wasShown = true
             }
         }
     }

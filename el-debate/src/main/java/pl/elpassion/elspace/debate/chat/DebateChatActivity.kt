@@ -94,8 +94,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         comments.count { !it.wasShown }.also {
             debateChatCommentsHasShownInfo.run {
                 if (it > 0) {
-                    val hasShownInfoText = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
-                    text = hasShownInfoText
+                    text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
                     show()
                 } else {
                     hide()

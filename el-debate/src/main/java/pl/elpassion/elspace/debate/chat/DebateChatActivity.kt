@@ -139,9 +139,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun showLiveComment(liveComment: Comment) {
         comments.update(liveComment)
-        debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        if (liveComment.userId == loginCredentials.userId) {
-            debateChatCommentsContainer.scrollToPosition(comments.indexOfFirst { it.id == liveComment.id })
+        debateChatCommentsContainer.run {
+            adapter.notifyDataSetChanged()
+            if (liveComment.userId == loginCredentials.userId) {
+                scrollToPosition(comments.indexOfFirst { it.id == liveComment.id })
+            }
         }
         debateChatCommentsContainer.post {
             updateCommentsWasShownStatus()

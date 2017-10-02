@@ -173,7 +173,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         debateChatSendCommentInputText.text.clear()
         comments.update(comment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
+        debateChatCommentsContainer.scrollToPosition(comments.indexOfFirst { it.id == comment.id })
     }
 
     override fun clearSendCommentInput() {

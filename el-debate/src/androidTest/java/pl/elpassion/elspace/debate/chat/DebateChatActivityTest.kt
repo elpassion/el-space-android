@@ -582,6 +582,15 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollUpToPendingCommentWhenSendCommentStatusIsPending() {
+        startActivity(userId = 1)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment()
+        sendCommentSubject.onSuccess(createComment(name = "PendingComment", id = 1, userId = 1, status = "pending"))
+        onText("PendingComment").isDisplayed()
+    }
+
+    @Test
     fun shouldShowCommentStatusViewWhenSendCommentStatusIsPending() {
         startActivity(userId = 1)
         sendComment()

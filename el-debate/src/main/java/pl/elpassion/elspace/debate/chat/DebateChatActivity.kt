@@ -126,14 +126,16 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun isDuringOnNextComments(): Boolean = debateChatCommentsSwipeToRefresh.isRefreshing
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
-        if (comments.isEmpty()) {
-            comments.addAll(initialsComments)
-            debateChatCommentsContainer.adapter.notifyDataSetChanged()
-            debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
-        } else {
-            comments.addAll(0, initialsComments)
-            debateChatCommentsContainer.adapter.notifyDataSetChanged()
-            debateChatCommentsContainer.layoutManager.scrollToPosition(initialsComments.size - 1)
+        debateChatCommentsContainer.run {
+            if (comments.isEmpty()) {
+                comments.addAll(initialsComments)
+                adapter.notifyDataSetChanged()
+                layoutManager.scrollToPosition(comments.size - 1)
+            } else {
+                comments.addAll(0, initialsComments)
+                adapter.notifyDataSetChanged()
+                layoutManager.scrollToPosition(initialsComments.size - 1)
+            }
         }
     }
 

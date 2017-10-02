@@ -91,12 +91,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     private fun updateChatCommentHasShownInfo() {
         comments.count { !it.wasShown }.also {
-            if (it > 0) {
-                val text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
-                debateChatCommentsHasShownInfo.text = text
-                debateChatCommentsHasShownInfo.show()
-            } else {
-                debateChatCommentsHasShownInfo.hide()
+            debateChatCommentsHasShownInfo.run {
+                if (it > 0) {
+                    val hasShownInfoText = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
+                    text = hasShownInfoText
+                    show()
+                } else {
+                    hide()
+                }
             }
         }
     }

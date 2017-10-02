@@ -84,8 +84,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun updateCommentsWasShownStatus() {
-        debateChatCommentsContainer.getVisibleItemsIds().forEach {
-            val id = it
+        debateChatCommentsContainer.getVisibleItemsIds().forEach { id ->
             comments.find { it.id == id }?.wasShown = true
         }
         updateChatCommentHasShownInfo()

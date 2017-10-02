@@ -341,6 +341,19 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldNotIncludeInHasShownInfoOnLiveCommentsNextWhenNewCommentIsCreatedByLoggedUser() {
+        startActivity(userId = 3)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 100))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(userId = 3, id = 101, status = "accepted"))
+        Thread.sleep(100)
+        val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
+                R.plurals.debate_chat_live_comments_has_shown_info, 1, 1)
+        onText(message).isDisplayed()
+    }
+
+    @Test
     fun shouldShowHasShownInfoWithCorrectCount() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))

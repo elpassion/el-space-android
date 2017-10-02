@@ -346,10 +346,10 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
-        liveCommentsSubject.onNext(createComment(userId = 3, id = 101, status = "accepted"))
-        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 101))
+        liveCommentsSubject.onNext(createComment(userId = 3, id = 102, status = "accepted"))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
-                R.plurals.debate_chat_live_comments_has_shown_info, 1, 1)
+                R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
         onText(message).isDisplayed()
     }
 

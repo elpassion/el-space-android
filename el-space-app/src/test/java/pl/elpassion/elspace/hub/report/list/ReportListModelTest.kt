@@ -156,6 +156,14 @@ class ReportListModelTest : TreeSpec() {
                 `call service for report list adapters with correct yearMonth`(2016, Calendar.OCTOBER)
                 `show loader`()
             }
+            "on service error set isErrorViewVisible flag to true" > {
+                events.accept(ReportList.Event.OnCreate)
+                val exception = RuntimeException()
+                reportListAdaptersSubject.onError(exception)
+                states.test().assertOnFirstElement {
+                    it.isErrorViewVisible shouldBe true
+                }
+            }
         }
     }
 

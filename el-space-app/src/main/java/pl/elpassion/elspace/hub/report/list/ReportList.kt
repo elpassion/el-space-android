@@ -85,7 +85,8 @@ interface ReportList {
             val yearMonth: YearMonth,
             val isFilterEnabled: Boolean,
             val isLoaderVisible: Boolean,
-            val scrollToCurrentDayAction: ScrollToCurrentDayAction
+            val scrollToCurrentDayAction: ScrollToCurrentDayAction,
+            val isErrorViewVisible: Boolean
     )
 
     enum class ScrollToCurrentDayAction {

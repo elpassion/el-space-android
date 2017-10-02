@@ -59,7 +59,11 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
             }
 
     private fun callServiceForAdapterItems(yearMonth: YearMonth) = service.createReportsListAdapters(yearMonth)
-            .mapToWithLastFrom(states) { state -> state.copy(adapterItems = this, isLoaderVisible = false) }
+            .map<GettingReportsListAdapters>(GettingReportsListAdapters::Success)
+            .onErrorReturn(GettingReportsListAdapters::Fail)
+            .mapToWithLastFrom(states) { state ->
+                state.copy(adapterItems = this.adapterItems, isLoaderVisible = false, isErrorViewVisible = this is GettingReportsListAdapters.Fail)
+            }
             .mapAdapterItemsToShow()
 
     private val handleOnFilterEvent: Observable<ReportList.UIState> = events.ofType(ReportList.Event.OnFilter::class.java)
@@ -98,8 +102,14 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
                 yearMonth = calendar.toYearMonth(),
                 isFilterEnabled = false,
                 isLoaderVisible = false,
-                scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.NOT_SCROLL)
+                scrollToCurrentDayAction = ReportList.ScrollToCurrentDayAction.NOT_SCROLL,
+                isErrorViewVisible = false)
     }
+}
+
+sealed class GettingReportsListAdapters(val adapterItems: List<AdapterItem>) {
+    class Success(adapterItems: List<AdapterItem>) : GettingReportsListAdapters(adapterItems)
+    data class Fail(val throwable: Throwable) : GettingReportsListAdapters(emptyList())
 }
 
 private fun YearMonth.changeToPreviousMonth() = toCalendar().apply { add(Calendar.MONTH, -1) }.toYearMonth()

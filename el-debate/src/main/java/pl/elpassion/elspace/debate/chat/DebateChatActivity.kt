@@ -84,8 +84,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun updateCommentsWasShownStatus() {
-        debateChatCommentsContainer.getVisibleItemsIds().forEach { id ->
-            comments.find { it.id == id }?.wasShown = true
+        debateChatCommentsContainer.getVisibleItemsPositions().forEach {
+            comments[it].wasShown = true
         }
         updateChatCommentHasShownInfo()
     }
@@ -140,16 +140,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun showLiveComment(liveComment: Comment) {
         comments.update(liveComment)
         debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        updateCommentWasShownStatus(liveComment)
-    }
-
-    private fun updateCommentWasShownStatus(liveComment: Comment) {
         debateChatCommentsContainer.post {
-            if (!debateChatCommentsContainer.getVisibleItemsIds().contains(liveComment.id)) {
-                updateChatCommentHasShownInfo()
-            } else {
-                liveComment.wasShown = true
-            }
+            updateCommentsWasShownStatus()
         }
     }
 

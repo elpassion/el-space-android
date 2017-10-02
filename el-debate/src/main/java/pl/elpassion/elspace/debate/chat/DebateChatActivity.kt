@@ -90,7 +90,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             val id = it
             comments.find { it.id == id }?.wasShown = true
         }
-        showChatCommentHasShownInfo()
+        updateChatCommentHasShownInfo()
     }
 
     fun RecyclerView.getVisibleItemsIds(): LongRange {
@@ -109,7 +109,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         }
     }
 
-    private fun showChatCommentHasShownInfo() {
+    private fun updateChatCommentHasShownInfo() {
         val count = comments.count { !it.wasShown }
         if (count > 0) {
             val text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, count, count)
@@ -161,7 +161,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     private fun updateCommentWasShownStatus(liveComment: Comment) {
         debateChatCommentsContainer.post {
             if (!debateChatCommentsContainer.getVisibleItemsIds().contains(liveComment.id)) {
-                showChatCommentHasShownInfo()
+                updateChatCommentHasShownInfo()
             } else {
                 liveComment.wasShown = true
             }

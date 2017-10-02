@@ -172,8 +172,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     override fun showSendCommentSuccessPending(comment: Comment) {
         debateChatSendCommentInputText.text.clear()
         comments.update(comment)
-        debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        debateChatCommentsContainer.scrollToPosition(comments.indexOfFirst { it.id == comment.id })
+        debateChatCommentsContainer.run {
+            adapter.notifyDataSetChanged()
+            scrollToPosition(comments.indexOfFirst { it.id == comment.id })
+        }
     }
 
     override fun clearSendCommentInput() {

@@ -298,22 +298,6 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatusIsAccepted() {
-        startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "accepted"))
-        onText("LastMessage").doesNotExist()
-    }
-
-    @Test
-    fun shouldNotScrollToLastCommentOnLiveCommentsNextWhenStatusIsRejected() {
-        startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100, status = "rejected"))
-        onText("LastMessage").doesNotExist()
-    }
-
-    @Test
     fun shouldShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))

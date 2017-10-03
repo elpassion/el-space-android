@@ -11,10 +11,11 @@ import android.view.View.INVISIBLE
 @Suppress("UNUSED")
 class ScrollAwareFABBehavior(private val context: Context, private val attributeSet: AttributeSet) : CoordinatorLayout.Behavior<FloatingActionButton>() {
 
-    override fun onNestedScroll(coordinatorLayout: CoordinatorLayout?,
-                                fab: FloatingActionButton,
-                                target: View?, dxConsumed: Int, dyConsumed: Int,
-                                dxUnconsumed: Int, dyUnconsumed: Int) {
+    override fun onNestedScroll(
+            coordinatorLayout: CoordinatorLayout,
+            fab: FloatingActionButton, target:
+            View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
+
         if (dyConsumed > 0 && fab.visibility == View.VISIBLE) {
             fab.hideFab()
         } else if (dyConsumed < 0 && fab.visibility != View.VISIBLE) {
@@ -30,6 +31,5 @@ class ScrollAwareFABBehavior(private val context: Context, private val attribute
         })
     }
 
-    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout?, child: FloatingActionButton?,
-                                     directTargetChild: View?, target: View?, nestedScrollAxes: Int) = true
+    override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: FloatingActionButton, directTargetChild: View, target: View, axes: Int, type: Int) = true
 }

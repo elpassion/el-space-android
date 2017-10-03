@@ -18,10 +18,7 @@ class ReportListModel(private val service: ReportsListAdaptersService, getCurren
     private val itemAdapterFilter = DayFilterImpl()
     private var disposable: Disposable? = null
 
-    val states: Relay<ReportList.UIState> = BehaviorRelay.create<ReportList.UIState>().apply {
-        accept(getGetStartState(getCurrentDay()))
-    }
-
+    val states: Relay<ReportList.UIState> = BehaviorRelay.createDefault<ReportList.UIState>(getGetStartState(getCurrentDay()))
     val events: PublishRelay<ReportList.Event> = PublishRelay.create()
 
     private val handleBasicServiceCallEvents = events

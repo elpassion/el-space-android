@@ -3,7 +3,7 @@ package pl.elpassion.elspace.common.extensions
 import com.elpassion.android.commons.recycler.basic.WithStableId
 
 fun <T : WithStableId> MutableList<T>.update(newItem: T) {
-    val position = indexOfFirst { it.id == newItem.id }
+    val position = findItemPositionById(newItem)
     run {
         if (position > -1) {
             removeAt(position)
@@ -14,3 +14,5 @@ fun <T : WithStableId> MutableList<T>.update(newItem: T) {
         }
     }
 }
+
+fun <T : WithStableId> MutableList<T>.findItemPositionById(item: T) = indexOfFirst { it.id == item.id }

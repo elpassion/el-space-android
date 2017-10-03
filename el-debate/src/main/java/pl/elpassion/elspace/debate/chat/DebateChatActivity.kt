@@ -142,7 +142,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
             if (liveComment.userId == loginCredentials.userId) {
-                scrollToPosition(comments.indexOfFirst { it.id == liveComment.id })
+                scrollToPosition(comments.findItemPositionById(liveComment))
             }
         }
         debateChatCommentsContainer.post {
@@ -174,7 +174,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         comments.update(comment)
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
-            scrollToPosition(comments.indexOfFirst { it.id == comment.id })
+            scrollToPosition(comments.findItemPositionById(comment))
         }
     }
 

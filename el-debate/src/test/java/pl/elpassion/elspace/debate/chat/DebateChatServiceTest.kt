@@ -166,6 +166,16 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldMarkCommentReceivedFromSocketAsShownWhenCreatedByLoggedUser() {
+        val comment = createComment(userId = 1, wasShown = false)
+        val testObserver = debateChatServiceImpl
+                .liveCommentsObservable("code", 1)
+                .test()
+        commentsFromSocketSubject.onNext(comment)
+        testObserver.assertValues(createComment(userId = 1, wasShown = true))
+    }
+
+    @Test
     fun shouldCallApiSendCommentWithRealData() {
         val commentToSend = createCommentToSend()
         debateChatServiceImpl.sendComment(commentToSend)

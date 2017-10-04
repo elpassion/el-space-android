@@ -211,4 +211,13 @@ class DebateChatServiceTest {
         sendCommentsApiSubject.onSuccess(comment)
         testObserver.assertValue(comment)
     }
+
+    @Test
+    fun shouldMarkCommentReceivedFromSendCommentAsShown() {
+        val testObserver = debateChatServiceImpl
+                .sendComment(createCommentToSend())
+                .test()
+        sendCommentsApiSubject.onSuccess(createComment(wasShown = false))
+        testObserver.assertValues(createComment(wasShown = true))
+    }
 }

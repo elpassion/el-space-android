@@ -23,5 +23,8 @@ class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket:
             .map { if (it.userId == userId) it.wasShown = true; it }
 
     override fun sendComment(commentToSend: CommentToSend): Single<Comment> =
-            commentToSend.run { api.comment(token, message, firstName, lastName) }
+            commentToSend.run {
+                api.comment(token, message, firstName, lastName)
+                        .map { it.wasShown = true; it }
+            }
 }

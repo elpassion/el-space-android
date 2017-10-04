@@ -92,4 +92,11 @@ class ListUpdateTest {
         assertEquals(list[1], three)
         assertEquals(list[2], six)
     }
+
+    @Test
+    fun shouldReturnCorrectPositionWhenListIsEmpty() {
+        val list = mutableListOf<MyType>()
+        val position = list.update(MyType(1))
+        assertEquals(position, 0)
+    }
 }

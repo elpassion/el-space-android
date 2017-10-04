@@ -99,4 +99,11 @@ class ListUpdateTest {
         val position = list.update(MyType(1))
         assertEquals(position, 0)
     }
+
+    @Test
+    fun shouldReturnCorrectPositionWhenIdMatched() {
+        val list = mutableListOf(MyType(1))
+        val position = list.update(MyType(1))
+        assertEquals(position, 0)
+    }
 }

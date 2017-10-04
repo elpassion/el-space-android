@@ -32,13 +32,26 @@
             android:layout_height="1dp"
             android:background="@color/colorPrimaryDarkDebate" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/debateChatCommentsHasShownInfo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            tools:text="Counter" />
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/debateChatCommentsHasShownInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                tools:text="Counter" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDarkDebate" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/debateChatSendCommentView"

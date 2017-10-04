@@ -363,7 +363,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldNotIncludeInHasShownInfoOnLiveCommentsNextWhenNewCommentIsCreatedByLoggedUser() {
+    fun shouldNotIncludeNewCommentInHasShownInfoOnLiveCommentsNextWhenIsCreatedByLoggedUser() {
         startActivity(userId = 3)
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))

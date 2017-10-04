@@ -138,11 +138,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     override fun showLiveComment(liveComment: Comment) {
-        comments.update(liveComment)
+        val position = comments.update(liveComment)
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
             if (liveComment.userId == loginCredentials.userId) {
-                scrollToPosition(comments.findItemPositionById(liveComment))
+                scrollToPosition(position)
             }
         }
         debateChatCommentsContainer.post {
@@ -171,10 +171,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
 
     override fun showSendCommentSuccessPending(comment: Comment) {
         debateChatSendCommentInputText.text.clear()
-        comments.update(comment)
+        val position = comments.update(comment)
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
-            scrollToPosition(comments.findItemPositionById(comment))
+            scrollToPosition(position)
         }
     }
 

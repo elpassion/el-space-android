@@ -1,8 +1,7 @@
 package pl.elpassion.elspace.common.extensions
 
 import com.elpassion.android.commons.recycler.basic.WithStableId
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
+import org.junit.Assert.*
 import org.junit.Test
 
 class ListUpdateTest {
@@ -92,6 +91,13 @@ class ListUpdateTest {
         assertEquals(list[0], one)
         assertEquals(list[1], three)
         assertEquals(list[2], six)
+    }
+    
+    @Test
+    fun shouldNotReturnNullPosition() {
+        val list = mutableListOf<MyType>()
+        val position = list.update(MyType(1))
+        assertNotNull(position)
     }
 
     @Test

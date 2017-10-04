@@ -71,7 +71,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
             }
         }
         debateChatCommentsHasShownInfo.setOnClickListener {
-            debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { it.userId != loginCredentials.userId && !it.wasShown })
+            debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { !it.wasShown })
         }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -96,7 +96,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun updateChatCommentHasShownInfo() {
-        comments.count { it.userId != loginCredentials.userId && !it.wasShown }.also {
+        comments.count { !it.wasShown }.also {
             if (it > 0) {
                 debateChatCommentsHasShownInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
                 debateChatCommentsHasShownInfo.show()

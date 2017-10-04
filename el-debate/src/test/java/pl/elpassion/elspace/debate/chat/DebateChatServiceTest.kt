@@ -167,12 +167,20 @@ class DebateChatServiceTest {
 
     @Test
     fun shouldMarkCommentReceivedFromSocketAsShownWhenCreatedByLoggedUser() {
-        val comment = createComment(userId = 1, wasShown = false)
         val testObserver = debateChatServiceImpl
                 .liveCommentsObservable("code", 1)
                 .test()
-        commentsFromSocketSubject.onNext(comment)
+        commentsFromSocketSubject.onNext(createComment(userId = 1, wasShown = false))
         testObserver.assertValues(createComment(userId = 1, wasShown = true))
+    }
+
+    @Test
+    fun shouldNotMarkCommentReceivedFromSocketAsShownWhenCreatedByNotLoggedUser() {
+        val testObserver = debateChatServiceImpl
+                .liveCommentsObservable("code", 1)
+                .test()
+        commentsFromSocketSubject.onNext(createComment(userId = 2, wasShown = false))
+        testObserver.assertValues(createComment(userId = 2, wasShown = false))
     }
 
     @Test

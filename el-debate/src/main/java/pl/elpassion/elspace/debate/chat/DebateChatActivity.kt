@@ -142,7 +142,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         val position = comments.update(liveComment)
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
-            if (liveComment.userId == loginCredentials.userId && (itemPosition > -1) && (comments[itemPosition].commentStatus == CommentStatus.PENDING)) {
+            if (liveComment.userId == loginCredentials.userId && itemPosition != position) {
                 scrollToPosition(position)
             }
         }

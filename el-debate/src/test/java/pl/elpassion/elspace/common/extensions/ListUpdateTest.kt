@@ -1,7 +1,8 @@
 package pl.elpassion.elspace.common.extensions
 
 import com.elpassion.android.commons.recycler.basic.WithStableId
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
 class ListUpdateTest {
@@ -29,7 +30,7 @@ class ListUpdateTest {
         val list = mutableListOf(MyType(1), MyType(2))
         val newItem = MyType(1)
         list.update(newItem)
-        assertTrue(list.size == 2)
+        assertEquals(list.size, 2)
     }
 
     @Test
@@ -63,7 +64,7 @@ class ListUpdateTest {
         val list = mutableListOf(MyType(1), MyType(2))
         val newItem = MyType(3)
         list.update(newItem)
-        assertTrue(list.size == 3)
+        assertEquals(list.size, 3)
     }
 
     @Test
@@ -78,7 +79,7 @@ class ListUpdateTest {
     fun shouldHaveCorrectSizeWhenNewItemIdIsLower() {
         val list = mutableListOf(MyType(2), MyType(3))
         list.update(MyType(1))
-        assertTrue(list.size == 3)
+        assertEquals(list.size, 3)
     }
 
     @Test

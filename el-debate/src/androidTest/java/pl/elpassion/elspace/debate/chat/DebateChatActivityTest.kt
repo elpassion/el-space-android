@@ -325,6 +325,17 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldNotScrollToRejectedCommentFromOnLiveCommentsNextWhenPreviousStatusWasPending() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment("LoggedUserMessage")
+        sendCommentSubject.onSuccess(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "pending"))
+        swipeDown()
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "rejected"))
+        onText("LoggedUserMessage").doesNotExist()
+    }
+
+    @Test
     fun shouldShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))

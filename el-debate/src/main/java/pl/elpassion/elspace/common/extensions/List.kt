@@ -4,14 +4,11 @@ import com.elpassion.android.commons.recycler.basic.WithStableId
 
 fun <T : WithStableId> MutableList<T>.update(newItem: T) {
     val position = findItemPositionById(newItem)
-    run {
-        if (position > -1) {
-            removeAt(position)
-            add(position, newItem)
-        } else {
-            val previousItemPosition = indexOfLast { it.id < newItem.id }
-            add(previousItemPosition + 1, newItem)
-        }
+    if (position > -1) {
+        this[position] = newItem
+    } else {
+        val previousItemPosition = indexOfLast { it.id < newItem.id }
+        add(previousItemPosition + 1, newItem)
     }
 }
 

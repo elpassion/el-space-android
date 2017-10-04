@@ -70,13 +70,18 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
                 createHolderForComment(comments[position])
             }
         }
+        debateChatCommentsHasShownInfo.setOnClickListener {
+            debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { it.userId != loginCredentials.userId && !it.wasShown })
+        }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.sendComment(loginCredentials.authToken, inputText.text.toString())
             }
             false
         }
-        debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
+        debateChatSendCommentButton.setOnClickListener {
+            controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString())
+        }
         debateChatSendCommentInputText.requestFocus()
         scrollEventsDisposable = debateChatCommentsContainer.scrollEvents()
                 .doOnNext { updateCommentsWasShownStatus() }

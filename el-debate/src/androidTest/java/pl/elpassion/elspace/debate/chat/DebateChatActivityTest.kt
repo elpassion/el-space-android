@@ -426,6 +426,17 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollToLastNotShownCommentOnHasShownInfoClick() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 100))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(name = "LastNewComment", id = 101))
+        onId(R.id.debateChatCommentsHasShownInfo).click()
+        onText("LastNewComment").isDisplayed()
+    }
+
+    @Test
     fun shouldShowLiveCommentsErrorOnServiceLiveCommentsError() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())

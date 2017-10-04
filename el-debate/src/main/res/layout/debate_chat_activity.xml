@@ -9,14 +9,6 @@
 
     <include layout="@layout/debate_toolbar" />
 
-    <TextView
-        android:id="@+id/debateChatCommentsHasShownInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|end"
-        android:visibility="gone"
-        tools:text="Counter" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,6 +31,14 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorPrimaryDarkDebate" />
+
+        <TextView
+            android:id="@+id/debateChatCommentsHasShownInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:text="Counter" />
 
         <LinearLayout
             android:id="@+id/debateChatSendCommentView"

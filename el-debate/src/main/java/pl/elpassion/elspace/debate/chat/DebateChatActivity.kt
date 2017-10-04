@@ -138,10 +138,11 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     override fun showLiveComment(liveComment: Comment) {
+        val itemPosition = comments.indexOfFirst { it.id == liveComment.id }
         val position = comments.update(liveComment)
         debateChatCommentsContainer.run {
             adapter.notifyDataSetChanged()
-            if (liveComment.userId == loginCredentials.userId) {
+            if (liveComment.userId == loginCredentials.userId && (itemPosition > -1) && (comments[itemPosition].commentStatus == CommentStatus.PENDING)) {
                 scrollToPosition(position)
             }
         }

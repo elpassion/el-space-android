@@ -30,14 +30,15 @@
             android:id="@+id/debateChatSendCommentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal"
-            android:padding="6dp"
             android:visibility="visible">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:padding="6dp">
 
                 <EditText
                     android:id="@+id/debateChatSendCommentInputText"
@@ -57,11 +58,13 @@
             <ImageView
                 android:id="@+id/debateChatSendCommentButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="6dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:paddingEnd="10dp"
+                android:paddingStart="15dp"
                 android:src="@drawable/send_comment" />
 
         </LinearLayout>

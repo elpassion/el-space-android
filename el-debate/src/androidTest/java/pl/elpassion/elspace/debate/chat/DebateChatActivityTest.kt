@@ -336,34 +336,34 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsNotVisible() {
+    fun shouldShowNewMessageInfoOnNewLiveComment_If_CommentIsNotInRecyclerVisibleRange() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
-        onId(R.id.debateChatCommentsHasShownInfo).isDisplayed()
+        onId(R.id.debateChatNewMessageInfo).isDisplayed()
     }
 
     @Test
-    fun shouldNotShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsVisible() {
+    fun shouldNotShowNewMessageInfoOnNewLiveComment_If_CommentIsInRecyclerVisibleRange() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
-        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
     }
 
     @Test
-    fun shouldNotShowHasShownInfoOnLiveCommentsNextWhenNewCommentIsCreatedByLoggedUser() {
+    fun shouldNotShowNewMessageInfoOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))
         Thread.sleep(100)
-        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
     }
 
     @Test
-    fun shouldNotIncludeNewCommentInHasShownInfoOnLiveCommentsNextWhenIsCreatedByLoggedUser() {
+    fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))
@@ -376,7 +376,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldShowHasShownInfoWithCorrectCount() {
+    fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -389,7 +389,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldDecreaseHasShownInfoCountOnScrolledDown() {
+    fun shouldDecreaseNewMessagesCounterValueOnScrolledDownToUnreadMessage() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
@@ -403,7 +403,7 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldDecreaseHasShownInfoCountOnScrolledUp() {
+    fun shouldDecreaseNewMessagesCounterValueOnScrolledUpToUnreadMessage() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 1))
@@ -417,22 +417,22 @@ class DebateChatActivityTest {
     }
 
     @Test
-    fun shouldHideHasShownInfoWhenAllNewCommentsHasShown() {
+    fun shouldHideNewMessageInfoIfNewMessagesCounterValueEqualsZero() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 1))
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
-        onId(R.id.debateChatCommentsHasShownInfo).isNotDisplayed()
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
     }
 
     @Test
-    fun shouldScrollToLastNotShownCommentOnHasShownInfoClick() {
+    fun shouldScrollToLastUnreadMessageOnNewMessageInfoClick() {
         startActivity()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(name = "LastNewComment", id = 101))
-        onId(R.id.debateChatCommentsHasShownInfo).click()
+        onId(R.id.debateChatNewMessageInfo).click()
         onText("LastNewComment").isDisplayed()
     }
 

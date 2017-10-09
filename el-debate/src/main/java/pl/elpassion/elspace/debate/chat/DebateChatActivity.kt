@@ -70,7 +70,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
                 createHolderForComment(comments[position])
             }
         }
-        debateChatCommentsHasShownInfo.setOnClickListener {
+        debateChatNewMessageInfo.setOnClickListener {
             debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { !it.wasShown })
         }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
@@ -92,16 +92,16 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         debateChatCommentsContainer.getVisibleItemsPositions().forEach {
             comments[it].wasShown = true
         }
-        updateChatCommentHasShownInfo()
+        updateChatCommentsNewMessageInfo()
     }
 
-    private fun updateChatCommentHasShownInfo() {
+    private fun updateChatCommentsNewMessageInfo() {
         comments.count { !it.wasShown }.also {
             if (it > 0) {
-                debateChatCommentsHasShownInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
-                debateChatCommentsHasShownInfo.show()
+                debateChatNewMessageInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
+                debateChatNewMessageInfo.show()
             } else {
-                debateChatCommentsHasShownInfo.hide()
+                debateChatNewMessageInfo.hide()
             }
         }
     }

@@ -33,14 +33,14 @@
             android:background="@color/colorPrimaryDarkDebate" />
 
         <LinearLayout
-            android:id="@+id/debateChatCommentsHasShownInfo"
+            android:id="@+id/debateChatNewMessageInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/debateChatCommentsHasShownInfoText"
+                android:id="@+id/debateChatNewMessageInfoText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

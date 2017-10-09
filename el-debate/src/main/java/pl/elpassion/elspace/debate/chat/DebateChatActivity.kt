@@ -98,7 +98,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     private fun updateChatCommentsNewMessageInfo() {
         comments.count { !it.wasShown }.also {
             if (it > 0) {
-                debateChatNewMessageInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_has_shown_info, it, it)
+                debateChatNewMessageInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_new_message_info, it, it)
                 debateChatNewMessageInfo.show()
             } else {
                 debateChatNewMessageInfo.hide()

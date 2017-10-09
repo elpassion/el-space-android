@@ -355,7 +355,7 @@ class DebateChatActivityTest {
         startActivity(userId = 3)
         returnThreeLiveComments(firstLiveCommentUserId = 3)
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
-                R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
+                R.plurals.debate_chat_live_comments_new_message_info, 2, 2)
         onText(message).isDisplayed()
     }
 
@@ -364,7 +364,7 @@ class DebateChatActivityTest {
         startActivity()
         returnThreeLiveComments()
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
-                R.plurals.debate_chat_live_comments_has_shown_info, 3, 3)
+                R.plurals.debate_chat_live_comments_new_message_info, 3, 3)
         onText(message).isDisplayed()
     }
 
@@ -374,7 +374,7 @@ class DebateChatActivityTest {
         returnThreeLiveComments()
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
-                R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
+                R.plurals.debate_chat_live_comments_new_message_info, 2, 2)
         onText(message).isDisplayed()
     }
 
@@ -384,7 +384,7 @@ class DebateChatActivityTest {
         returnThreeLiveComments(firstLiveCommentId = 1)
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
-                R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
+                R.plurals.debate_chat_live_comments_new_message_info, 2, 2)
         onText(message).isDisplayed()
     }
 

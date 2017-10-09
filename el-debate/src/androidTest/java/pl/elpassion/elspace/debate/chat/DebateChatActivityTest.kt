@@ -353,11 +353,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))
-        Thread.sleep(100)
-        liveCommentsSubject.onNext(createComment(id = 101))
-        liveCommentsSubject.onNext(createComment(id = 102))
+        returnThreeLiveComments(firstLiveCommentUserId = 3)
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
         onText(message).isDisplayed()
@@ -732,9 +728,9 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = oldComments)))
     }
 
-    private fun returnThreeLiveComments(firstLiveCommentId: Long = 100) {
+    private fun returnThreeLiveComments(firstLiveCommentId: Long = 100, firstLiveCommentUserId: Long = 1) {
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = firstLiveCommentId))
+        liveCommentsSubject.onNext(createComment(id = firstLiveCommentId, userId = firstLiveCommentUserId))
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 101))
         liveCommentsSubject.onNext(createComment(id = 102))

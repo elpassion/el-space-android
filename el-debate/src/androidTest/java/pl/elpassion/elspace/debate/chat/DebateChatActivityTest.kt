@@ -238,9 +238,7 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldShowInitialsCommentsCalledFromOnNextCommentsAtBeginningOfList() {
-        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
-                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
-                SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = listOf(createComment(name = "1")))
         startActivity()
         swipeDown()
         onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
@@ -248,9 +246,7 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldNotScrollToLastCommentWhenOnNextCommentsCalled() {
-        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
-                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
-                SingleSubject.just(createInitialsComments(comments = listOf(createComment(name = "1")))))
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = listOf(createComment(name = "1")))
         startActivity()
         swipeDown()
         onText("20").doesNotExist()
@@ -258,14 +254,12 @@ class DebateChatActivityTest {
 
     @Test
     fun shouldScrollToLastCommentReturnedFromOnNextComments() {
-        val olderComments = mutableListOf<Comment>().apply {
+        val oldComments = mutableListOf<Comment>().apply {
             (1..10).forEach {
                 add(createComment(name = it.toString(), id = it.toLong()))
             }
         }
-        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
-                SingleSubject.just(createInitialsComments(comments = initialsComments, nextPosition = 1)),
-                SingleSubject.just(createInitialsComments(comments = olderComments)))
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = oldComments)
         startActivity()
         swipeDown()
         Thread.sleep(200)
@@ -750,6 +744,12 @@ class DebateChatActivityTest {
         rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, userId)))
     }
 
+    private fun returnInitialsCommentsTwice(newComments: List<Comment>, oldComments: List<Comment>) {
+        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
+                SingleSubject.just(createInitialsComments(comments = newComments, nextPosition = 1)),
+                SingleSubject.just(createInitialsComments(comments = oldComments)))
+    }
+
     private fun sendComment(message: String = "message") {
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText(message)
@@ -764,6 +764,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

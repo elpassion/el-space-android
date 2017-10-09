@@ -143,14 +143,8 @@ class DebateChatActivityTest {
     @Test
     fun shouldScrollToLastCommentOnInitialsCommentsSuccess() {
         startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-            add(createComment(content = "LastMessage"))
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
-        onText("LastMessage").isDisplayed()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        onText("20").isDisplayed()
     }
 
     @Test
@@ -372,11 +366,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
         startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = 100))
-        Thread.sleep(100)
-        liveCommentsSubject.onNext(createComment(id = 101))
-        liveCommentsSubject.onNext(createComment(id = 102))
+        returnThreeLiveComments()
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 3, 3)
         onText(message).isDisplayed()
@@ -385,11 +375,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldDecreaseNewMessagesCounterValueOnScrolledDownToUnreadMessage() {
         startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = 100))
-        Thread.sleep(100)
-        liveCommentsSubject.onNext(createComment(id = 101))
-        liveCommentsSubject.onNext(createComment(id = 102))
+        returnThreeLiveComments()
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
@@ -399,11 +385,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldDecreaseNewMessagesCounterValueOnScrolledUpToUnreadMessage() {
         startActivity()
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = 1))
-        Thread.sleep(100)
-        liveCommentsSubject.onNext(createComment(id = 101))
-        liveCommentsSubject.onNext(createComment(id = 102))
+        returnThreeLiveComments(firstLiveCommentId = 1)
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
         val message = InstrumentationRegistry.getTargetContext().resources.getQuantityString(
                 R.plurals.debate_chat_live_comments_has_shown_info, 2, 2)
@@ -748,6 +730,14 @@ class DebateChatActivityTest {
         whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
                 SingleSubject.just(createInitialsComments(comments = newComments, nextPosition = 1)),
                 SingleSubject.just(createInitialsComments(comments = oldComments)))
+    }
+
+    private fun returnThreeLiveComments(firstLiveCommentId: Long = 100) {
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = firstLiveCommentId))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 101))
+        liveCommentsSubject.onNext(createComment(id = 102))
     }
 
     private fun sendComment(message: String = "message") {

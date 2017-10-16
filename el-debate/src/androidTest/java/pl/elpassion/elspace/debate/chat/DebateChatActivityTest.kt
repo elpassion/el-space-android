@@ -25,6 +25,7 @@ import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
 import java.net.SocketException
+import java.util.*
 
 class DebateChatActivityTest {
 
@@ -47,6 +48,7 @@ class DebateChatActivityTest {
     val rule = rule<DebateChatActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
         DebateChat.ServiceProvider.override = { service }
+        DebateChatActivity.timeZone = { TimeZone.getTimeZone("Europe/Warsaw") }
     }
 
     @Test

@@ -12,6 +12,7 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -148,6 +149,7 @@ class DebateChatActivityTest {
         onText("LastMessage").isDisplayed()
     }
 
+    @Ignore
     @Test
     fun shouldScrollToLastCommentOnLiveCommentsNext() {
         startActivity()

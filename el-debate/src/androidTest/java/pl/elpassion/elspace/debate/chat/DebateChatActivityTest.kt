@@ -353,32 +353,32 @@ class DebateChatActivityTest {
     @Test
     fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
-        returnThreeLiveComments(firstLiveCommentUserId = 3)
+        returnTwoLiveComments(firstLiveCommentUserId = 3)
         Thread.sleep(300)
-        onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
     }
 
     @Test
     fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
         startActivity()
-        returnThreeLiveComments()
-        onText(getNewMessageInfoTextFromResources(3)).isDisplayed()
+        returnTwoLiveComments()
+        onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
     }
 
     @Test
     fun shouldDecreaseNewMessagesCounterValueOnScrolledDownToUnreadMessage() {
         startActivity()
-        returnThreeLiveComments()
+        returnTwoLiveComments()
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
-        onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
     }
 
     @Test
     fun shouldDecreaseNewMessagesCounterValueOnScrolledUpToUnreadMessage() {
         startActivity()
-        returnThreeLiveComments(firstLiveCommentId = 1)
+        returnTwoLiveComments(firstLiveCommentId = 1)
         onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
-        onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
     }
 
     @Test
@@ -721,12 +721,11 @@ class DebateChatActivityTest {
                 SingleSubject.just(createInitialsComments(comments = oldComments)))
     }
 
-    private fun returnThreeLiveComments(firstLiveCommentId: Long = 100, firstLiveCommentUserId: Long = 1) {
+    private fun returnTwoLiveComments(firstLiveCommentId: Long = 100, firstLiveCommentUserId: Long = 1) {
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(id = firstLiveCommentId, userId = firstLiveCommentUserId))
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 101))
-        liveCommentsSubject.onNext(createComment(id = 102))
     }
 
     private fun getNewMessageInfoTextFromResources(count: Int): String =

@@ -354,6 +354,7 @@ class DebateChatActivityTest {
     fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
         returnThreeLiveComments(firstLiveCommentUserId = 3)
+        Thread.sleep(300)
         onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
     }
 

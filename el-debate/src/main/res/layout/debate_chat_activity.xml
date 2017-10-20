@@ -19,7 +19,8 @@
             android:id="@+id/debateChatCommentsContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
         <View
             android:layout_width="match_parent"
@@ -71,9 +72,9 @@
 
         <TextView
             android:id="@+id/debateChatSendCommentViewError"
-            android:background="@color/redBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/redBackground"
             android:gravity="center_horizontal"
             android:text="@string/debate_chat_debate_closed_error"
             android:textColor="@color/greyDarkText"

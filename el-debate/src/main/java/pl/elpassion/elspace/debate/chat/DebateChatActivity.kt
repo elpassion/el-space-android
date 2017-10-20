@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -62,13 +61,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateChatCommentsContainer.run {
-            layoutManager = LinearLayoutManager(this@DebateChatActivity)
-            adapter = basicAdapterWithConstructors(comments) { position ->
-                createHolderForComment(comments[position])
-            }
-            adapter.setHasStableIds(true)
-        }
+        val commentsAdapter = basicAdapterWithConstructors(comments) { position ->
+            createHolderForComment(comments[position])
+        }.apply { setHasStableIds(true) }
+        debateChatCommentsContainer.adapter = commentsAdapter
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 controller.sendComment(loginCredentials.authToken, inputText.text.toString())

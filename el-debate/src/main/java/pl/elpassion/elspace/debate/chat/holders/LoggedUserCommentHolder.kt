@@ -12,8 +12,9 @@ import pl.elpassion.R
 import pl.elpassion.elspace.common.extensions.formatMillisToTime
 import pl.elpassion.elspace.debate.chat.Comment
 import pl.elpassion.elspace.debate.chat.CommentStatus
+import java.util.*
 
-class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemView) {
+class LoggedUserCommentHolder(itemView: View, private val timeZone: () -> TimeZone) : ViewHolderBinder<Comment>(itemView) {
 
     override fun bind(item: Comment) {
         itemView.run {
@@ -21,7 +22,7 @@ class LoggedUserCommentHolder(itemView: View) : ViewHolderBinder<Comment>(itemVi
             loggedUserCommentInitials.text = item.userInitials
             loggedUserCommentName.text = item.fullName
             loggedUserCommentMessage.text = item.content
-            loggedUserCommentTime.text = item.createdAt.formatMillisToTime()
+            loggedUserCommentTime.text = item.createdAt.formatMillisToTime(timeZone)
             when (item.commentStatus) {
                 CommentStatus.PENDING -> showCommentStatusWithText(R.string.debate_chat_comment_status_pending)
                 CommentStatus.ACCEPTED -> loggedUserCommentStatus.hide()

@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
@@ -27,6 +27,7 @@ import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
+import java.util.*
 
 class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Events {
 
@@ -64,12 +65,10 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateChatCommentsContainer.run {
-            layoutManager = LinearLayoutManager(this@DebateChatActivity)
-            adapter = basicAdapterWithConstructors(comments) { position ->
-                createHolderForComment(comments[position])
-            }
-        }
+        val commentsAdapter = basicAdapterWithConstructors(comments) { position ->
+            createHolderForComment(comments[position])
+        }.apply { setHasStableIds(true) }
+        debateChatCommentsContainer.adapter = commentsAdapter
         debateChatNewMessageInfo.setOnClickListener {
             debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { !it.wasShown })
         }
@@ -107,8 +106,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     private fun createHolderForComment(comment: Comment) = when {
-        comment.userId == loginCredentials.userId -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
-        else -> R.layout.comment to ::CommentHolder
+        comment.userId == loginCredentials.userId -> R.layout.logged_user_comment to { itemView: View -> LoggedUserCommentHolder(itemView, timeZone) }
+        else -> R.layout.comment to { itemView: View -> CommentHolder(itemView, timeZone) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -220,6 +219,8 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
     }
 
     companion object {
+        var timeZone: () -> TimeZone = { TimeZone.getDefault() }
+
         private val debateLoginCredentialsKey = "debateLoginCredentialsKey"
 
         fun start(context: Context, loginCredentials: LoginCredentials) = context.startActivity(intent(context, loginCredentials))
@@ -229,5 +230,4 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
                     putExtra(debateLoginCredentialsKey, loginCredentials)
                 }
     }
-
 }

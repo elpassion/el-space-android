@@ -3,6 +3,7 @@ buildscript {
     ext.espressoVersion = '3.0.0'
     ext.elCommon = '0.0.20'
     ext.mockitoKotlin = '1.5.0'
+    ext.supportTestVersion = '1.0.1'
     repositories {
         jcenter()
         maven { url 'https://maven.google.com' }

@@ -14,7 +14,6 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -150,7 +149,6 @@ class DebateChatActivityTest {
         onText("20").isDisplayed()
     }
 
-    @Ignore
     @Test
     fun shouldShowMainLoaderOnInitialsCommentsWhenNotDuringOnNextComments() {
         startActivity()
@@ -579,6 +577,7 @@ class DebateChatActivityTest {
         startActivity(userId = 1)
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         sendComment()
+        Thread.sleep(100)
         sendCommentSubject.onSuccess(createComment(name = "PendingComment", userId = 1, status = "pending"))
         onText("PendingComment").isDisplayed()
     }
@@ -749,6 +748,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

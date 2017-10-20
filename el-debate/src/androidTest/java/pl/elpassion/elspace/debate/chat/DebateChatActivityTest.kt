@@ -392,10 +392,10 @@ class DebateChatActivityTest {
     @Test
     fun shouldScrollToLastUnreadMessageOnNewMessageInfoClick() {
         startActivity()
+        Espresso.closeSoftKeyboard()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
-        liveCommentsSubject.onNext(createComment(id = 100))
-        Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(name = "LastNewComment", id = 101))
+        Thread.sleep(200)
         onId(R.id.debateChatNewMessageInfo).click()
         onText("LastNewComment").isDisplayed()
     }

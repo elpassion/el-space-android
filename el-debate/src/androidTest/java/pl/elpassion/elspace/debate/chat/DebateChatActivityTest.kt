@@ -292,6 +292,7 @@ class DebateChatActivityTest {
         startActivity(userId = 5)
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "accepted"))
+        Thread.sleep(200)
         onText("LoggedUserMessage").isDisplayed()
     }
 

@@ -59,7 +59,6 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     private fun setupUI() {
-        debateChatSendCommentInputText.requestFocus()
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
         val commentsAdapter = basicAdapterWithConstructors(comments) { position ->
@@ -73,6 +72,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
             false
         }
         debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
+        debateChatSendCommentInputText.requestFocus()
     }
 
     private fun createHolderForComment(comment: Comment) = when {

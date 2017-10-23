@@ -151,6 +151,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldScrollToLastCommentOnLiveCommentsNext() {
         startActivity()
+        Espresso.closeSoftKeyboard()
         val comments = mutableListOf<Comment>().apply {
             (1..10).forEach {
                 add(createComment(name = it.toString()))
@@ -158,7 +159,6 @@ class DebateChatActivityTest {
         }
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
         liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
-        Thread.sleep(300)
         onText("LastMessage").isDisplayed()
     }
 

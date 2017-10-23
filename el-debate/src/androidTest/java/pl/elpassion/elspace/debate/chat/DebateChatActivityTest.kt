@@ -290,9 +290,9 @@ class DebateChatActivityTest {
     @Test
     fun shouldScrollDownToNewCommentFromOnLiveCommentsNextWhenCreatedByLoggedUser() {
         startActivity(userId = 5)
+        Espresso.closeSoftKeyboard()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
         liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "accepted"))
-        Thread.sleep(200)
         onText("LoggedUserMessage").isDisplayed()
     }
 
@@ -749,6 +749,7 @@ class DebateChatActivityTest {
 
     private fun swipeDown() {
         Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
         onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

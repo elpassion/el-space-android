@@ -359,7 +359,6 @@ class DebateChatActivityTest {
     fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
         startActivity(userId = 3)
         returnTwoLiveComments(firstLiveCommentUserId = 3)
-        Thread.sleep(300)
         onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
     }
 
@@ -367,7 +366,6 @@ class DebateChatActivityTest {
     fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
         startActivity()
         returnTwoLiveComments()
-        Thread.sleep(100)
         onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
     }
 
@@ -729,10 +727,13 @@ class DebateChatActivityTest {
     }
 
     private fun returnTwoLiveComments(firstLiveCommentId: Long = 100, firstLiveCommentUserId: Long = 1) {
+        Espresso.closeSoftKeyboard()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = firstLiveCommentId, userId = firstLiveCommentUserId))
         Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 101))
+        Thread.sleep(100)
     }
 
     private fun getNewMessageInfoTextFromResources(count: Int): String =

@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:padding="6dp">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/debateChatSendCommentInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

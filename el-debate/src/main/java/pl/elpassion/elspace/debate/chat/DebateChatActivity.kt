@@ -83,8 +83,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         }
         debateChatSendCommentInputText.requestFocus()
         scrollEventsDisposable = debateChatCommentsContainer.scrollEvents()
-                .doOnNext { updateCommentsWasShownStatus() }
-                .subscribe()
+                .subscribe { updateCommentsWasShownStatus() }
     }
 
     private fun updateCommentsWasShownStatus() {

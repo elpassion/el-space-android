@@ -24,8 +24,7 @@ class DebateChatController(
     fun onCreate(loginCredentials: LoginCredentials) {
         callServiceInitialsComments(loginCredentials)
         onNextCommentsEventDisposable = events.onNextComments()
-                .doOnNext { callServiceInitialsComments(loginCredentials) }
-                .subscribe()
+                .subscribe { callServiceInitialsComments(loginCredentials) }
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {

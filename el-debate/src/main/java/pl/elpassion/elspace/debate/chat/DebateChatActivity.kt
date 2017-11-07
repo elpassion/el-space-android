@@ -142,13 +142,18 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Even
         val positionBeforeUpdate = comments.indexOfFirst { it.id == liveComment.id }
         val positionAfterUpdate = comments.update(liveComment)
         debateChatCommentsContainer.run {
-            adapter.notifyDataSetChanged()
-            if (liveComment.userId == loginCredentials.userId && positionBeforeUpdate != positionAfterUpdate) {
-                scrollToPosition(positionAfterUpdate)
+            positionAfterUpdate.also {
+                if (positionBeforeUpdate != it) {
+                    adapter.notifyItemInserted(it)
+                } else {
+                    adapter.notifyItemChanged(it)
+                }
             }
         }
-        debateChatCommentsContainer.post {
-            updateCommentsWasShownStatus()
+        if (liveComment.userId == loginCredentials.userId && positionBeforeUpdate != positionAfterUpdate) {
+            debateChatCommentsContainer.post { debateChatCommentsContainer.scrollToPosition(positionAfterUpdate) }
+        } else {
+            debateChatCommentsContainer.post { updateCommentsWasShownStatus() }
         }
     }
 

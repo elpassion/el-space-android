@@ -329,7 +329,9 @@ class DebateChatActivityTest {
     @Test
     fun shouldShowNewMessageInfoOnNewLiveComment_If_CommentIsNotInRecyclerVisibleRange() {
         startActivity()
+        Espresso.closeSoftKeyboard()
         initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        Thread.sleep(100)
         liveCommentsSubject.onNext(createComment(id = 100))
         Thread.sleep(100)
         onId(R.id.debateChatNewMessageInfo).isDisplayed()

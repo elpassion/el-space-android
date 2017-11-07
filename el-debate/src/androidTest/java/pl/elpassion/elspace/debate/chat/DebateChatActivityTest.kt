@@ -365,6 +365,7 @@ class DebateChatActivityTest {
     fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
         startActivity()
         returnTwoLiveComments()
+        Thread.sleep(100)
         onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
     }
 

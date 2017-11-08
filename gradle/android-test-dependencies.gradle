@@ -12,6 +12,4 @@ dependencies {
     }
     androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockitoKotlin)
     androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
-    androidTestImplementation group: 'com.android.support.test', name: 'runner', version: supportTestVersion
-    androidTestUtil group: 'com.android.support.test', name: 'orchestrator', version: supportTestVersion
 }

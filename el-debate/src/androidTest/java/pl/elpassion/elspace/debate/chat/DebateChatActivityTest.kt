@@ -488,6 +488,7 @@ class DebateChatActivityTest {
     fun shouldHideCredentialDialogWhenCredentialsWereSaved() {
         startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = "firstName", lastName = "lastName")
+        Thread.sleep(200)
         onId(R.id.debateCommentCredentialsDialog).doesNotExist()
     }
 
@@ -495,6 +496,7 @@ class DebateChatActivityTest {
     fun shouldDisplayErrorOnIncorrectFirstName() {
         startActivityAndOpenCredentialsDialog("DebateToken")
         saveCredentials(firstName = " ", lastName = "lastName")
+        Thread.sleep(200)
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_chat_credentials_first_name_incorrect)
     }
 

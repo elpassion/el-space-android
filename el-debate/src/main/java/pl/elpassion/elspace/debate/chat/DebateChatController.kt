@@ -22,34 +22,34 @@ class DebateChatController(
     private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials, true)
         onNextCommentsEventDisposable = events.onNextComments()
-                .subscribe { callServiceInitialsComments(loginCredentials) }
+                .subscribe {
+                    callServiceInitialsComments(loginCredentials, callForLiveComments = false)
+                }
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         serviceSubscriptions.clear()
-        callServiceInitialsComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials, callForLiveComments = true)
     }
 
-    private fun callServiceInitialsComments(loginCredentials: LoginCredentials) {
+    private fun callServiceInitialsComments(loginCredentials: LoginCredentials, callForLiveComments: Boolean) {
         service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { if (!view.isDuringOnNextComments()) view.showLoader() }
+                .doOnSubscribe { if (callForLiveComments) view.showLoader() }
                 .doFinally(view::hideLoader)
                 .doOnSuccess { (debateClosed, _, nextPositionFromService) ->
                     nextPosition = nextPositionFromService
                     if (debateClosed) view.showDebateClosedError()
-                    else if (isLiveCommentsUnsubscribed()) subscribeToLiveComments(loginCredentials.userId)
+                    else if (callForLiveComments) subscribeToLiveComments(loginCredentials.userId)
                 }
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
                 .addTo(serviceSubscriptions)
     }
-
-    private fun isLiveCommentsUnsubscribed() = liveCommentsDisposable?.isDisposed ?: true
 
     fun onLiveCommentsRefresh(userId: Long) {
         serviceSubscriptions.clear()

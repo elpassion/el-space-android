@@ -7,7 +7,6 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.dabate.chat.createComment
@@ -35,7 +34,6 @@ class DebateChatControllerTest {
         whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject.share())
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(events.onNextComments()).thenReturn(onNextCommentsEvent)
-        whenever(view.isDuringOnNextComments()).thenReturn(false)
         whenever(debateRepo.getLatestDebateCode()).thenReturn("12345")
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(false)
         whenever(debateRepo.getTokenCredentials(any())).thenReturn(createTokenCredentials("firstName", "lastName"))
@@ -222,8 +220,9 @@ class DebateChatControllerTest {
 
     @Test
     fun shouldNotShowMainLoaderOnNextComments() {
-        whenever(view.isDuringOnNextComments()).thenReturn(true)
         onCreate()
+        initialsCommentsSubject.onSuccess(createInitialsComments(nextPosition = 222))
+        clearInvocations(view)
         onNextCommentsEvent.onNext(Unit)
         verify(view, never()).showLoader()
     }

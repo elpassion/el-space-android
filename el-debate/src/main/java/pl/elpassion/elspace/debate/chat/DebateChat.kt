@@ -52,7 +52,6 @@ interface DebateChat {
         fun showFirstNameError()
         fun showLastNameError()
         fun closeCredentialsDialog()
-        fun isDuringOnNextComments(): Boolean
     }
 
     interface Events {

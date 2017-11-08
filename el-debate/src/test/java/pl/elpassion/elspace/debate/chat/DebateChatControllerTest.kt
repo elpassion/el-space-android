@@ -32,7 +32,7 @@ class DebateChatControllerTest {
     @Before
     fun setUp() {
         whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(initialsCommentsSubject)
-        whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
+        whenever(service.liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject.share())
         whenever(service.sendComment(any())).thenReturn(sendCommentSubject)
         whenever(events.onNextComments()).thenReturn(onNextCommentsEvent)
         whenever(view.isDuringOnNextComments()).thenReturn(false)
@@ -176,13 +176,13 @@ class DebateChatControllerTest {
         verify(service).liveCommentsObservable(any(), any())
     }
 
-    @Ignore("Should simulate disposed somehow")
     @Test
     fun shouldCallServiceLiveCommentsWhenLiveCommentsSubscriptionIsDisposed() {
         onCreate()
-        liveCommentsSubject.onComplete()
         initialsCommentsSubject.onSuccess(createInitialsComments(debateClosed = false))
-        verify(service).liveCommentsObservable(any(), any())
+        onNextCommentsEvent.onNext(Unit)
+        liveCommentsSubject.onNext(createComment())
+        verify(view, times(1)).showLiveComment(any())
     }
 
     @Test

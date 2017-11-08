@@ -23,7 +23,7 @@ class DebateChatController(
     private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        callServiceInitialsComments(loginCredentials, initialWithLiveCallCommentHandling(loginCredentials))
+        callServiceInitialsComments(loginCredentials, initialWithLiveCallHandling(loginCredentials))
         onNextCommentsEventDisposable = events.onNextComments()
                 .subscribe {
                     callServiceInitialsComments(loginCredentials)
@@ -32,10 +32,10 @@ class DebateChatController(
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
         serviceSubscriptions.clear()
-        callServiceInitialsComments(loginCredentials, initialWithLiveCallCommentHandling(loginCredentials))
+        callServiceInitialsComments(loginCredentials, initialWithLiveCallHandling(loginCredentials))
     }
 
-    private fun callServiceInitialsComments(loginCredentials: LoginCredentials, transformer: Single<InitialsComments>.() -> Single<InitialsComments> = this::initialCommentCallHandling) {
+    private fun callServiceInitialsComments(loginCredentials: LoginCredentials, transformer: Single<InitialsComments>.() -> Single<InitialsComments> = this::initialCallHandling) {
         service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
@@ -62,13 +62,13 @@ class DebateChatController(
         }
     }
 
-    private fun initialCommentCallHandling(single: Single<InitialsComments>) =
+    private fun initialCallHandling(single: Single<InitialsComments>) =
             single.doOnSuccess { (debateClosed, _, nextPositionFromService) ->
                 nextPosition = nextPositionFromService
                 if (debateClosed) view.showDebateClosedError()
             }
 
-    private fun initialWithLiveCallCommentHandling(loginCredentials: LoginCredentials): Single<InitialsComments>.() -> Single<InitialsComments> =
+    private fun initialWithLiveCallHandling(loginCredentials: LoginCredentials): Single<InitialsComments>.() -> Single<InitialsComments> =
             {
                 doOnSubscribe { view.showLoader() }
                         .doOnSuccess { (debateClosed, _, nextPositionFromService) ->

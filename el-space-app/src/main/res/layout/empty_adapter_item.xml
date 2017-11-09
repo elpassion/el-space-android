@@ -3,5 +3,4 @@
     android:layout_width="match_parent"
     android:layout_height="22dp"
     android:layout_marginLeft="@dimen/report_row_edge_margin"
-    android:layout_marginRight="@dimen/report_row_edge_margin"
-    />
+    android:layout_marginRight="@dimen/report_row_edge_margin" />

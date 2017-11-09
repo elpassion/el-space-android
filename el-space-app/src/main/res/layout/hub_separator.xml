@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="3dp"
     android:layout_marginLeft="@dimen/report_row_edge_margin"
-    android:layout_marginRight="@dimen/report_row_edge_margin"
+    android:layout_marginRight="18dp"
     android:layout_marginTop="-5dp"
     android:background="#EAEAF5"
     tools:showIn="@layout/day_item" />

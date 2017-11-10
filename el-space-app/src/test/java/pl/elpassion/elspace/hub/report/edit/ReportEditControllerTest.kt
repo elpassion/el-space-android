@@ -107,17 +107,17 @@ class ReportEditControllerTest {
     }
 
     @Test
-    fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
-        createController().onCreate()
-        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
-        verify(view).showSickLeaveForm()
-    }
-
-    @Test
     fun shouldShowUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
         createController().onCreate()
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         verify(view).showUnpaidVacationsForm()
+    }
+
+    @Test
+    fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
+        createController().onCreate()
+        reportTypeChanges.onNext(ReportType.SICK_LEAVE)
+        verify(view).showSickLeaveForm()
     }
 
     @Test

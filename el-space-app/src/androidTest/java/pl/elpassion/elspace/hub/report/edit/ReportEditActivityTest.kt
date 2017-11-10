@@ -159,6 +159,12 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowOnlyDailyFormOnPaidConference() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE))
+        verifyIsPaidConferenceFormDisplayed()
+    }
+
+    @Test
     fun shouldShowRegularFormOnRegularReportActionCheck() {
         stubReportAndStart(newDailyReport())
         onId(R.id.action_regular_report).click()

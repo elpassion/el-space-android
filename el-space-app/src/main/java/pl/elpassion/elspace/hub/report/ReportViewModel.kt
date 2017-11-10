@@ -25,6 +25,6 @@ fun getReportViewModel(@IdRes actionId: Int,
         when (actionId) {
             R.id.action_regular_report -> RegularViewModel(date, project, description, hours)
             R.id.action_paid_vacations_report -> PaidVacationsViewModel(date, hours)
-            R.id.action_unpaid_vacations_report, R.id.action_sick_leave_report -> DailyViewModel(date)
+            R.id.action_unpaid_vacations_report, R.id.action_sick_leave_report, R.id.action_paid_conference_report -> DailyViewModel(date)
             else -> throw IllegalArgumentException()
         }

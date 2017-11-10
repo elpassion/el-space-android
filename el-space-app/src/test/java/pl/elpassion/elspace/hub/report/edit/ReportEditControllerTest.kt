@@ -157,6 +157,13 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldEditPaidConferenceWithChangedData() {
+        createController(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE, id = 66, year = 2007, month = 4, day = 1)).onCreate()
+        onEditReportClick(model = DailyViewModel("2007-04-09"))
+        verify(api).editReport(66, 4, "2007-04-09", null, null, null)
+    }
+
+    @Test
     fun shouldCloseAfterReportEdited() {
         createController().onCreate()
         onEditReportClick()

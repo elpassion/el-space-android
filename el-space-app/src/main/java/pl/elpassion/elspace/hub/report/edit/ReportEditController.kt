@@ -151,6 +151,7 @@ private val Report.type: ReportType
         is DailyReport -> when (reportType) {
             DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
             DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
+            DailyReportType.PAID_CONFERENCE -> ReportType.PAID_CONFERENCE
         }
     }
 

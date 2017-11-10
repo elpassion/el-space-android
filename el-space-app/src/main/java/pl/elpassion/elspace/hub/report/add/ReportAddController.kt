@@ -67,7 +67,7 @@ class ReportAddController(private val date: String?,
         ReportType.PAID_VACATIONS -> paidVacationReportHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
         ReportType.SICK_LEAVE -> sickLeaveReportHandler
-        ReportType.PAID_CONFERENCE -> TODO()
+        ReportType.PAID_CONFERENCE -> paidConferenceReportHandler
     }
 
     private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
@@ -105,6 +105,10 @@ class ReportAddController(private val date: String?,
 
     private val sickLeaveReportHandler = { model: ReportViewModel ->
         api.addSickLeaveReport(model.selectedDate)
+    }
+
+    private val paidConferenceReportHandler = { model: ReportViewModel ->
+        api.addPaidConferenceReport(model.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {

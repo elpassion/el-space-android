@@ -169,6 +169,13 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldReportPaidConferenceToApiAfterAddReportPaidConference() {
+        createController("2016-01-01").onCreate()
+        addPaidConferenceReport()
+        verify(api).addPaidConferenceReport("2016-01-01")
+    }
+
+    @Test
     fun shouldShouldUsePaidVacationsApiToAddPaidVacationsReport() {
         createController("2016-09-23").onCreate()
         addPaidVacationReport()
@@ -330,6 +337,11 @@ class ReportAddControllerTest {
 
     private fun addSickLeaveReport() {
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
+    }
+
+    private fun addPaidConferenceReport() {
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
         onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 }

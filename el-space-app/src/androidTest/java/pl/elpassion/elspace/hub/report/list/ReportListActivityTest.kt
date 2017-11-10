@@ -207,8 +207,9 @@ class ReportListActivityTest {
     }
 
     @Test
-    fun shouldShowSickLeaveInformationForDailyReportTypeSickLeave() {
-        onItemWithText("7 Fri").check(matches(hasDescendant(withText(R.string.report_sick_leave_title))))
+    fun shouldShowPaidVacationsInformationForPaidVacationReport() {
+        scrollToItemWithText("11 Tue")
+        onId(R.id.reportsContainer).hasChildWithText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
     }
 
     @Test
@@ -218,9 +219,8 @@ class ReportListActivityTest {
     }
 
     @Test
-    fun shouldShowPaidVacationsInformationForPaidVacationReport() {
-        scrollToItemWithText("11 Tue")
-        onId(R.id.reportsContainer).hasChildWithText("3h - ${getTargetContext().getString(R.string.report_paid_vacations_title)}")
+    fun shouldShowSickLeaveInformationForDailyReportTypeSickLeave() {
+        onItemWithText("7 Fri").check(matches(hasDescendant(withText(R.string.report_sick_leave_title))))
     }
 
     @Test

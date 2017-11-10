@@ -242,11 +242,22 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
+    fun shouldShowOnlySickLeaveFormOnSickLeave() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
         onText(R.string.report_add_sick_leave_info).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlyPaidConferenceFormOnPaidConference() {
+        stubRepositoryAndStart()
+        closeSoftwareKeyboard()
+        onId(R.id.action_paid_conference_report).click()
+        onText(R.string.report_add_paid_conference_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
         onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()

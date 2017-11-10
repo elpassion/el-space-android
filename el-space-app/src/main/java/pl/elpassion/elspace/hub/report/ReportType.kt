@@ -7,7 +7,8 @@ enum class ReportType(val id: Int) {
     REGULAR(0),
     PAID_VACATIONS(1),
     UNPAID_VACATIONS(2),
-    SICK_LEAVE(3)
+    SICK_LEAVE(3),
+    PAID_CONFERENCE(4)
 }
 
 fun Int.toReportType() = when (this) {
@@ -23,4 +24,5 @@ fun ReportType.toActionId() = when (this) {
     SICK_LEAVE -> R.id.action_sick_leave_report
     PAID_VACATIONS -> R.id.action_paid_vacations_report
     UNPAID_VACATIONS -> R.id.action_unpaid_vacations_report
+    PAID_CONFERENCE -> TODO()
 }

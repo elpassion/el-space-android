@@ -6,7 +6,9 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.withLatestFrom
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.*
+import pl.elpassion.elspace.common.extensions.catchOnError
+import pl.elpassion.elspace.common.extensions.getDateString
+import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.report.PaidVacationsViewModel
@@ -65,6 +67,7 @@ class ReportAddController(private val date: String?,
         ReportType.PAID_VACATIONS -> paidVacationReportHandler
         ReportType.SICK_LEAVE -> sickLeaveReportHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
+        ReportType.PAID_CONFERENCE -> TODO()
     }
 
     private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
@@ -109,6 +112,7 @@ class ReportAddController(private val date: String?,
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
         ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
+        ReportType.PAID_CONFERENCE -> TODO()
     }
 
     private fun RegularViewModel.hasNoDescription() = description.isBlank()

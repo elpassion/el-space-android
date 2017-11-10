@@ -126,6 +126,10 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
         showDailyForm()
     }
 
+    override fun showPaidConferenceForm() {
+
+    }
+
     override fun editReportClicks(): Observable<ReportViewModel> = toolbarClicks.onMenuItemAction(R.id.editReport).map {
         getReportViewModel(
                 actionId = bottomNavigation.menu.checkedItemId,

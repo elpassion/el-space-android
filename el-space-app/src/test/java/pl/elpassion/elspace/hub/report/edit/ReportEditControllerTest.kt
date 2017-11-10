@@ -121,6 +121,13 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowPaidConferenceFormAfterReportTypeChangedToPaidConference() {
+        createController().onCreate()
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
+        verify(view).showPaidConferenceForm()
+    }
+
+    @Test
     fun shouldEditRegularReportWithChangedData() {
         val report = newRegularHourlyReport(id = 7, reportedHours = 8.0, year = 2017, month = 1, day = 1, project = newProject(id = 11))
         createController(report).onCreate()

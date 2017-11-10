@@ -40,6 +40,7 @@ class ReportAddControllerTest {
         whenever(api.addPaidVacationsReport(any(), any())).thenReturn(addReportApi)
         whenever(api.addUnpaidVacationsReport(any())).thenReturn(addReportApi)
         whenever(api.addSickLeaveReport(any())).thenReturn(addReportApi)
+        whenever(api.addPaidConferenceReport(any())).thenReturn(addReportApi)
     }
 
     @Test
@@ -144,6 +145,13 @@ class ReportAddControllerTest {
         createController().onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
+    }
+    
+    @Test
+    fun shouldShowPaidConferenceFormAfterReportTypeChangedToPaidConference() {
+        createController().onCreate()
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
+        verify(view).showPaidConferenceForm()
     }
 
     @Test

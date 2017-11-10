@@ -112,7 +112,7 @@ class ReportAddController(private val date: String?,
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
         ReportType.SICK_LEAVE -> view.showSickLeaveForm()
-        ReportType.PAID_CONFERENCE -> TODO()
+        ReportType.PAID_CONFERENCE -> view.showPaidConferenceForm()
     }
 
     private fun RegularViewModel.hasNoDescription() = description.isBlank()

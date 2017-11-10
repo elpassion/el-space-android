@@ -132,14 +132,18 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
         reportAddDescriptionLayout.hide()
     }
 
+    override fun showUnpaidVacationsForm() {
+        hideRegularReportInputs()
+        showAdditionalInfo(R.string.report_add_unpaid_vacations_info)
+    }
+
     override fun showSickLeaveForm() {
         hideRegularReportInputs()
         showAdditionalInfo(R.string.report_add_sick_leave_info)
     }
 
-    override fun showUnpaidVacationsForm() {
-        hideRegularReportInputs()
-        showAdditionalInfo(R.string.report_add_unpaid_vacations_info)
+    override fun showPaidConferenceForm() {
+
     }
 
     private fun hideRegularReportInputs() {

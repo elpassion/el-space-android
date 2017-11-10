@@ -25,6 +25,7 @@
     <string name="report_add_action_paid_conference_report">Paid conference</string>
     <string name="report_add_sick_leave_info">Sick leave :(</string>
     <string name="report_add_unpaid_vacations_info">Unpaid vacations</string>
+    <string name="report_add_paid_conference_info">Paid conference</string>
     <string name="report_edit">Edit report</string>
     <string name="report_edit_action">Save changes</string>
     <string name="report_remove_action">Remove report</string>

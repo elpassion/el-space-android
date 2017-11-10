@@ -127,7 +127,7 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showPaidConferenceForm() {
-        reportEditAdditionalInfo.setText(R.string.report_add_action_paid_conference_report)
+        reportEditAdditionalInfo.setText(R.string.report_add_paid_conference_info)
         showDailyForm()
     }
 

@@ -129,6 +129,12 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowAdditionalInfoForPaidConference() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE))
+        onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_paid_conference_info)
+    }
+
+    @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
         verifyIsRegularFormDisplayed()

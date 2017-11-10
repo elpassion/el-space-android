@@ -231,22 +231,22 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
+    fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
-        onId(R.id.action_sick_leave_report).click()
-        onText(R.string.report_add_sick_leave_info).isDisplayed()
+        onId(R.id.action_unpaid_vacations_report).click()
+        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
         onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
     }
 
     @Test
-    fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
+    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
-        onId(R.id.action_unpaid_vacations_report).click()
-        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+        onId(R.id.action_sick_leave_report).click()
+        onText(R.string.report_add_sick_leave_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
         onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()

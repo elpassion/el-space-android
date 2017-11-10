@@ -177,6 +177,19 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldShowPaidConferenceDetailsAfterClickOnPaidConferenceReportType() {
+        stubRepositoryAndStart()
+        closeSoftwareKeyboard()
+        onId(R.id.action_paid_conference_report).click()
+
+        onId(R.id.reportAddDescription).isNotDisplayed()
+        onText("name").isNotDisplayed()
+        onId(R.id.reportAddHours).isNotDisplayed()
+
+        onText(R.string.report_add_paid_conference_info).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Observable.never()) } }
         stubRepositoryAndStart()

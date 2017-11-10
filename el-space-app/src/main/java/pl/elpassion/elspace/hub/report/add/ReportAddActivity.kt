@@ -143,7 +143,8 @@ class ReportAddActivity : AppCompatActivity(), ReportAdd.View {
     }
 
     override fun showPaidConferenceForm() {
-
+        hideRegularReportInputs()
+        showAdditionalInfo(R.string.report_add_paid_conference_info)
     }
 
     private fun hideRegularReportInputs() {

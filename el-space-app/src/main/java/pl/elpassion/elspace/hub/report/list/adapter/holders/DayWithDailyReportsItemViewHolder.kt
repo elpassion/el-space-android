@@ -22,6 +22,7 @@ class DayWithDailyReportsItemViewHolder(itemView: View, private val onReportClic
 
     private fun createReportDescription(item: DayWithDailyReport) = when (item.report.reportType) {
         DailyReportType.SICK_LEAVE -> R.string.report_sick_leave_title
+        DailyReportType.PAID_CONFERENCE -> R.string.report_paid_conference_title
         else -> R.string.report_unpaid_vacations_title
     }
 

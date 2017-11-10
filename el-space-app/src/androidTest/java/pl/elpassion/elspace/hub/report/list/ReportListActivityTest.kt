@@ -48,7 +48,8 @@ class ReportListActivityTest {
                 newDailyReport(year = 2016, month = 10, day = 7, reportType = DailyReportType.SICK_LEAVE),
                 newDailyReport(year = 2016, month = 10, day = 8, reportType = DailyReportType.UNPAID_VACATIONS),
                 newRegularHourlyReport(year = 2016, month = 10, day = 9, reportedHours = 3.0),
-                newPaidVacationHourlyReport(year = 2016, month = 10, day = 10, reportedHours = 3.0))))
+                newPaidVacationHourlyReport(year = 2016, month = 10, day = 10, reportedHours = 3.0),
+                newDailyReport(year = 2016, month = 10, day = 11, reportType = DailyReportType.PAID_CONFERENCE))))
         ReportList.ServiceProvider.override = { service }
     }
 
@@ -221,6 +222,12 @@ class ReportListActivityTest {
     @Test
     fun shouldShowSickLeaveInformationForDailyReportTypeSickLeave() {
         onItemWithText("7 Fri").check(matches(hasDescendant(withText(R.string.report_sick_leave_title))))
+    }
+
+    @Test
+    fun shouldShowPaidConferenceInformationForDailyReportTypePaidConference() {
+        scrollToItemWithText("11 Tue")
+        onItemWithText("11 Tue").check(matches(hasDescendant(withText(R.string.report_paid_conference_title))))
     }
 
     @Test

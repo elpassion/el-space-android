@@ -77,7 +77,7 @@ class ReportEditController(private val report: Report,
         ReportType.PAID_VACATIONS -> paidVacationReportEditHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportEditHandler
         ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
-        ReportType.PAID_CONFERENCE -> TODO()
+        ReportType.PAID_CONFERENCE -> paidConferenceReportEditHandler
     }
 
     private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) =
@@ -124,12 +124,16 @@ class ReportEditController(private val report: Report,
         }
     }
 
+    private val sickLeaveReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
+    }
+
     private val unpaidVacationReportEditHandler = { model: ReportViewModel ->
         api.editReport(report.id, ReportType.UNPAID_VACATIONS.id, model.selectedDate, null, null, null)
     }
 
-    private val sickLeaveReportEditHandler = { model: ReportViewModel ->
-        api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
+    private val paidConferenceReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.PAID_CONFERENCE.id, model.selectedDate, null, null, null)
     }
 
     private fun editRegularReport(model: RegularViewModel, project: Project) =

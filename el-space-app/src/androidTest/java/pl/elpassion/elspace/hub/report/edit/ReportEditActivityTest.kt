@@ -184,6 +184,14 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowPaidConferenceFormOnPaidConferenceReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        Espresso.closeSoftKeyboard()
+        onId(R.id.action_paid_conference_report).click()
+        verifyIsPaidConferenceFormDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportEditCall() {
         stubReportEditApiToNeverComplete()
         stubReportAndStart(newRegularHourlyReport())
@@ -310,6 +318,16 @@ class ReportEditActivityTest {
     private fun verifyIsUnpaidVacationsFormDisplayed() {
         Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
+    private fun verifyIsPaidConferenceFormDisplayed() {
+        Espresso.closeSoftKeyboard()
+        onId(R.id.action_paid_conference_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()

@@ -127,7 +127,8 @@ class ReportEditActivity : AppCompatActivity(), ReportEdit.View {
     }
 
     override fun showPaidConferenceForm() {
-
+        reportEditAdditionalInfo.setText(R.string.report_add_action_paid_conference_report)
+        showDailyForm()
     }
 
     override fun editReportClicks(): Observable<ReportViewModel> = toolbarClicks.onMenuItemAction(R.id.editReport).map {

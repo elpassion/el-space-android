@@ -16,6 +16,7 @@ fun Int.toReportType() = when (this) {
     R.id.action_paid_vacations_report -> PAID_VACATIONS
     R.id.action_sick_leave_report -> SICK_LEAVE
     R.id.action_unpaid_vacations_report -> UNPAID_VACATIONS
+    R.id.action_paid_conference_report -> PAID_CONFERENCE
     else -> throw IllegalArgumentException()
 }
 
@@ -24,5 +25,5 @@ fun ReportType.toActionId() = when (this) {
     SICK_LEAVE -> R.id.action_sick_leave_report
     PAID_VACATIONS -> R.id.action_paid_vacations_report
     UNPAID_VACATIONS -> R.id.action_unpaid_vacations_report
-    PAID_CONFERENCE -> TODO()
+    PAID_CONFERENCE -> R.id.action_paid_conference_report
 }

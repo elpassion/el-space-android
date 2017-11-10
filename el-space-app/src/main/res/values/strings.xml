@@ -22,6 +22,7 @@
     <string name="report_add_action_sick_leave_report">Sick Leave</string>
     <string name="report_add_action_paid_vacations_report">Paid Vacations</string>
     <string name="report_add_action_unpaid_vacations_report">Unpaid Vacations</string>
+    <string name="report_add_action_paid_conference_report">Paid conference</string>
     <string name="report_add_sick_leave_info">Sick leave :(</string>
     <string name="report_add_unpaid_vacations_info">Unpaid vacations</string>
     <string name="report_edit">Edit report</string>

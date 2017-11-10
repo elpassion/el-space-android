@@ -16,4 +16,8 @@
         android:id="@+id/action_unpaid_vacations_report"
         android:icon="@drawable/ic_airplanemode_inactive_black_24dp"
         android:title="@string/report_add_action_unpaid_vacations_report" />
+    <item
+        android:id="@+id/action_paid_conference_report"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="@string/report_add_action_paid_conference_report" />
 </menu>

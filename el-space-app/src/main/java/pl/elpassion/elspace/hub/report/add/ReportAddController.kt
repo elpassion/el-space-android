@@ -65,8 +65,8 @@ class ReportAddController(private val date: String?,
     private fun chooseReportHandler(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> regularReportHandler
         ReportType.PAID_VACATIONS -> paidVacationReportHandler
-        ReportType.SICK_LEAVE -> sickLeaveReportHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
+        ReportType.SICK_LEAVE -> sickLeaveReportHandler
         ReportType.PAID_CONFERENCE -> TODO()
     }
 
@@ -99,19 +99,19 @@ class ReportAddController(private val date: String?,
         api.addPaidVacationsReport(model.selectedDate, (model as PaidVacationsViewModel).hours)
     }
 
-    private val sickLeaveReportHandler = { model: ReportViewModel ->
-        api.addSickLeaveReport(model.selectedDate)
-    }
-
     private val unpaidVacationReportHandler = { model: ReportViewModel ->
         api.addUnpaidVacationsReport(model.selectedDate)
+    }
+
+    private val sickLeaveReportHandler = { model: ReportViewModel ->
+        api.addSickLeaveReport(model.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> view.showRegularForm()
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.PAID_CONFERENCE -> TODO()
     }
 

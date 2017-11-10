@@ -103,8 +103,8 @@ class ReportEditController(private val report: Report,
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> view.showRegularForm()
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.PAID_CONFERENCE -> view.showPaidConferenceForm()
     }
 
@@ -124,12 +124,12 @@ class ReportEditController(private val report: Report,
         }
     }
 
-    private val sickLeaveReportEditHandler = { model: ReportViewModel ->
-        api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
-    }
-
     private val unpaidVacationReportEditHandler = { model: ReportViewModel ->
         api.editReport(report.id, ReportType.UNPAID_VACATIONS.id, model.selectedDate, null, null, null)
+    }
+
+    private val sickLeaveReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
 
     private val paidConferenceReportEditHandler = { model: ReportViewModel ->
@@ -149,8 +149,8 @@ private val Report.type: ReportType
         is RegularHourlyReport -> ReportType.REGULAR
         is PaidVacationHourlyReport -> ReportType.PAID_VACATIONS
         is DailyReport -> when (reportType) {
-            DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
             DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
+            DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
         }
     }
 

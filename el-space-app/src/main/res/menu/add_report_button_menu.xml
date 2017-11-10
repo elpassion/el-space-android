@@ -5,10 +5,6 @@
         android:icon="@drawable/ic_desktop_mac_black_24dp"
         android:title="@string/report_add_action_regular_report" />
     <item
-        android:id="@+id/action_sick_leave_report"
-        android:icon="@drawable/ic_healing_black_24dp"
-        android:title="@string/report_add_action_sick_leave_report" />
-    <item
         android:id="@+id/action_paid_vacations_report"
         android:icon="@drawable/ic_airplanemode_active_black_24dp"
         android:title="@string/report_add_action_paid_vacations_report" />
@@ -16,6 +12,10 @@
         android:id="@+id/action_unpaid_vacations_report"
         android:icon="@drawable/ic_airplanemode_inactive_black_24dp"
         android:title="@string/report_add_action_unpaid_vacations_report" />
+    <item
+        android:id="@+id/action_sick_leave_report"
+        android:icon="@drawable/ic_healing_black_24dp"
+        android:title="@string/report_add_action_sick_leave_report" />
     <item
         android:id="@+id/action_paid_conference_report"
         android:icon="@drawable/ic_search_24dp"

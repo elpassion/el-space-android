@@ -141,15 +141,15 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldShowOnlyDailyFormOnSickLeave() {
-        stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
-        verifyIsSickLeaveFormDisplayed()
-    }
-
-    @Test
     fun shouldShowOnlyDailyFormOnUnpaidVacations() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
         verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlyDailyFormOnSickLeave() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
+        verifyIsSickLeaveFormDisplayed()
     }
 
     @Test
@@ -168,19 +168,19 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
-        stubReportAndStart(newRegularHourlyReport())
-        Espresso.closeSoftKeyboard()
-        onId(R.id.action_sick_leave_report).perform(scrollTo()).click()
-        verifyIsSickLeaveFormDisplayed()
-    }
-
-    @Test
     fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
         Espresso.closeSoftKeyboard()
         onId(R.id.action_unpaid_vacations_report).click()
         verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Test
+    fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        Espresso.closeSoftKeyboard()
+        onId(R.id.action_sick_leave_report).perform(scrollTo()).click()
+        verifyIsSickLeaveFormDisplayed()
     }
 
     @Test
@@ -305,9 +305,9 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
 
-    private fun verifyIsSickLeaveFormDisplayed() {
+    private fun verifyIsUnpaidVacationsFormDisplayed() {
         Espresso.closeSoftKeyboard()
-        onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
+        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
@@ -315,9 +315,9 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
     }
 
-    private fun verifyIsUnpaidVacationsFormDisplayed() {
+    private fun verifyIsSickLeaveFormDisplayed() {
         Espresso.closeSoftKeyboard()
-        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()

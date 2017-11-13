@@ -1,4 +1,4 @@
-package pl.elpassion.elspace.debate.chat
+package pl.elpassion.elspace.common.extensions.time_extensions
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

@@ -15,10 +15,12 @@ import pl.elpassion.elspace.debate.chat.service.DebateChatServiceImpl
 
 class DebateChatServiceTest {
 
-    private val commentsFromApiSubject = SingleSubject.create<InitialsComments>()
+    private val getCommentsFromApiSubject = SingleSubject.create<InitialsComments>()
+    private val getNextCommentsFromApiSubject = SingleSubject.create<InitialsComments>()
     private val sendCommentsApiSubject = SingleSubject.create<Comment>()
     private val api = mock<DebateChat.Api>().apply {
-        whenever(comment(any())).thenReturn(commentsFromApiSubject)
+        whenever(getComments(any())).thenReturn(getCommentsFromApiSubject)
+        whenever(getNextComments(any(), any())).thenReturn(getNextCommentsFromApiSubject)
         whenever(comment(any(), any(), any(), any())).thenReturn(sendCommentsApiSubject)
     }
     private val commentsFromSocketSubject = PublishSubject.create<Comment>()
@@ -28,39 +30,110 @@ class DebateChatServiceTest {
     private val debateChatServiceImpl = DebateChatServiceImpl(api, socket)
 
     @Test
-    fun shouldCallApiCommentWithRealToken() {
-        debateChatServiceImpl.initialsCommentsObservable("someToken")
-        verify(api).comment("someToken")
+    fun shouldCallApiGetCommentsWhenNextPositionIsNull() {
+        debateChatServiceImpl.initialsCommentsObservable("token", null)
+        verify(api).getComments(any())
     }
 
     @Test
-    fun shouldReturnInitialsCommentsReceivedFromApiComment() {
-        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")))
+    fun shouldCallApiGetCommentsWithRealToken() {
+        debateChatServiceImpl.initialsCommentsObservable("someToken", null)
+        verify(api).getComments("someToken")
+    }
+
+    @Test
+    fun shouldReturnInitialsCommentsReceivedFromApiGetComments() {
+        val initialsCommentsFromApi = createInitialsComments(debateClosed = false, comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")), nextPosition = 123)
         val testObserver = debateChatServiceImpl
-                .initialsCommentsObservable("token")
+                .initialsCommentsObservable("token", null)
                 .test()
-        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
         testObserver.assertValues(initialsCommentsFromApi)
     }
 
     @Test
-    fun shouldSortCommentsReceivedFromApiComment() {
-        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(createdAt = 3), createComment(createdAt = 1), createComment(createdAt = 2)))
+    fun shouldSortCommentsReceivedFromApiGetComments() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(id = 3), createComment(id = 1), createComment(id = 2)))
         val testObserver = debateChatServiceImpl
-                .initialsCommentsObservable("token")
+                .initialsCommentsObservable("token", null)
                 .test()
-        commentsFromApiSubject.onSuccess(initialsCommentsFromApi)
-        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.createdAt }
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.id }
         testObserver.assertValues(createInitialsComments(comments = sortedComments))
     }
 
     @Test
-    fun shouldReturnErrorReceivedFromApiComment() {
+    fun shouldSortCommentsReceivedFromApiGetNextComments() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(id = 9), createComment(id = 6), createComment(id = 8)))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 9)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val sortedComments = initialsCommentsFromApi.comments.sortedBy { it.id }
+        testObserver.assertValues(createInitialsComments(comments = sortedComments))
+    }
+
+    @Test
+    fun shouldMarkCommentsReceivedFromApiGetCommentsAsShown() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(), createComment(), createComment()))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", null)
+                .test()
+        getCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val shownComments = listOf(createComment(wasShown = true), createComment(wasShown = true), createComment(wasShown = true))
+        testObserver.assertValues(createInitialsComments(comments = shownComments))
+    }
+
+    @Test
+    fun shouldMarkCommentsReceivedFromApiGetNextCommentsAsShown() {
+        val initialsCommentsFromApi = createInitialsComments(comments = listOf(createComment(), createComment(), createComment()))
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 9)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        val shownComments = listOf(createComment(wasShown = true), createComment(wasShown = true), createComment(wasShown = true))
+        testObserver.assertValues(createInitialsComments(comments = shownComments))
+    }
+
+    @Test
+    fun shouldReturnErrorReceivedFromApiGetComments() {
         val exception = RuntimeException()
         val testObserver = debateChatServiceImpl
-                .initialsCommentsObservable("token")
+                .initialsCommentsObservable("token", null)
                 .test()
-        commentsFromApiSubject.onError(exception)
+        getCommentsFromApiSubject.onError(exception)
+        testObserver.assertError(exception)
+    }
+
+    @Test
+    fun shouldCallApiGetNextCommentsWhenNextPositionIsNotNull() {
+        debateChatServiceImpl.initialsCommentsObservable("token", 123)
+        verify(api).getNextComments(any(), any())
+    }
+
+    @Test
+    fun shouldCallApiGetNextCommentsWithRealData() {
+        debateChatServiceImpl.initialsCommentsObservable("token", 123)
+        verify(api).getNextComments("token", 123)
+    }
+
+    @Test
+    fun shouldReturnInitialsCommentsReceivedFromApiGetNextComments() {
+        val initialsCommentsFromApi = createInitialsComments(debateClosed = false, comments = listOf(createComment(name = "FirstTestName"), createComment(name = "TestName")), nextPosition = 123)
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 123)
+                .test()
+        getNextCommentsFromApiSubject.onSuccess(initialsCommentsFromApi)
+        testObserver.assertValues(initialsCommentsFromApi)
+    }
+
+    @Test
+    fun shouldReturnErrorReceivedFromApiGetNextComments() {
+        val exception = RuntimeException()
+        val testObserver = debateChatServiceImpl
+                .initialsCommentsObservable("token", 123)
+                .test()
+        getNextCommentsFromApiSubject.onError(exception)
         testObserver.assertError(exception)
     }
 
@@ -93,6 +166,24 @@ class DebateChatServiceTest {
     }
 
     @Test
+    fun shouldMarkCommentReceivedFromSocketAsShownWhenCreatedByLoggedUser() {
+        val testObserver = debateChatServiceImpl
+                .liveCommentsObservable("code", 1)
+                .test()
+        commentsFromSocketSubject.onNext(createComment(userId = 1, wasShown = false))
+        testObserver.assertValues(createComment(userId = 1, wasShown = true))
+    }
+
+    @Test
+    fun shouldNotMarkCommentReceivedFromSocketAsShownWhenCreatedByNotLoggedUser() {
+        val testObserver = debateChatServiceImpl
+                .liveCommentsObservable("code", 1)
+                .test()
+        commentsFromSocketSubject.onNext(createComment(userId = 2, wasShown = false))
+        testObserver.assertValues(createComment(userId = 2, wasShown = false))
+    }
+
+    @Test
     fun shouldCallApiSendCommentWithRealData() {
         val commentToSend = createCommentToSend()
         debateChatServiceImpl.sendComment(commentToSend)
@@ -119,5 +210,14 @@ class DebateChatServiceTest {
                 .test()
         sendCommentsApiSubject.onSuccess(comment)
         testObserver.assertValue(comment)
+    }
+
+    @Test
+    fun shouldMarkCommentReceivedFromSendCommentAsShown() {
+        val testObserver = debateChatServiceImpl
+                .sendComment(createCommentToSend())
+                .test()
+        sendCommentsApiSubject.onSuccess(createComment(wasShown = false))
+        testObserver.assertValues(createComment(wasShown = true))
     }
 }

@@ -15,17 +15,45 @@
         android:orientation="vertical"
         app:layout_behavior="pl.elpassion.elspace.debate.chat.MoveUpwardBehaviour">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/debateChatCommentsContainer"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/debateChatCommentsSwipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/debateChatCommentsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/colorPrimaryDarkDebate" />
+
+        <LinearLayout
+            android:id="@+id/debateChatNewMessageInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/debateChatNewMessageInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                tools:text="Counter" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDarkDebate" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/debateChatSendCommentView"

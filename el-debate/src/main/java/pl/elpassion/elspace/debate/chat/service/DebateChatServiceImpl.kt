@@ -9,12 +9,22 @@ import pl.elpassion.elspace.debate.chat.InitialsComments
 
 class DebateChatServiceImpl(private val api: DebateChat.Api, private val socket: DebateChat.Socket) : DebateChat.Service {
 
-    override fun initialsCommentsObservable(token: String): Single<InitialsComments> =
-            api.comment(token)
-                    .map { it.copy(comments = it.comments.sortedBy { it.createdAt }) }
+    override fun initialsCommentsObservable(token: String, nextPosition: Long?): Single<InitialsComments> =
+            if (nextPosition == null) {
+                api.getComments(token)
+            } else {
+                api.getNextComments(token, nextPosition)
+            }.map {
+                it.comments.forEach { it.wasShown = true }
+                it.copy(comments = it.comments.sortedBy { it.id })
+            }
 
     override fun liveCommentsObservable(debateCode: String, userId: Long): Observable<Comment> = socket.commentsObservable(debateCode, userId)
+            .map { if (it.userId == userId) it.wasShown = true; it }
 
     override fun sendComment(commentToSend: CommentToSend): Single<Comment> =
-            commentToSend.run { api.comment(token, message, firstName, lastName) }
+            commentToSend.run {
+                api.comment(token, message, firstName, lastName)
+                        .map { it.wasShown = true; it }
+            }
 }

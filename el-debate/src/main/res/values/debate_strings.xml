@@ -20,6 +20,10 @@
     <string name="debate_details_vote_slow_down_OK_button">OK</string>
     <string name="debate_chat_initials_comments_error">Fetching comments failed</string>
     <string name="debate_chat_initials_comments_error_refresh">Refresh</string>
+    <plurals name="debate_chat_live_comments_new_message_info">
+        <item quantity="one">%d new comment</item>
+        <item quantity="other">%d new comments</item>
+    </plurals>
     <string name="debate_chat_live_comments_error">Connecting to chat failed</string>
     <string name="debate_chat_live_comments_error_refresh">Refresh</string>
     <string name="debate_chat_send_comment_hint">Share your thoughts</string>

@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.1.51'
+    ext.kotlin_version = '1.1.60'
     ext.espressoVersion = '3.0.1'
     ext.elCommon = '0.0.21'
     ext.mockitoKotlin = '1.5.0'

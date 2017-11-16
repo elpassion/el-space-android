@@ -8,7 +8,7 @@ enum class ReportType(val id: Int) {
     PAID_VACATIONS(1),
     UNPAID_VACATIONS(2),
     SICK_LEAVE(3),
-    PAID_CONFERENCE(4)
+    PAID_CONFERENCE(4),
 }
 
 fun Int.toReportType() = when (this) {

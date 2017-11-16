@@ -45,5 +45,5 @@ data class DailyReport(
 enum class DailyReportType(val description: String) {
     UNPAID_VACATIONS("UnpaidVacation"),
     SICK_LEAVE("SickLeave"),
-    PAID_CONFERENCE("PaidConference")
+    PAID_CONFERENCE("PaidConference"),
 }

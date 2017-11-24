@@ -74,6 +74,14 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldAllowForProvidingDecimalNumbersAsHours() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddHours).replaceText("")
+                .typeText("8.5")
+                .hasText("8.5")
+    }
+
+    @Test
     fun shouldShowDescriptionInput() {
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).isDisplayed()

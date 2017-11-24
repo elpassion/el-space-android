@@ -80,6 +80,14 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldAllowForProvidingDecimalNumbersAsHours() {
+        stubReportAndStart(newRegularHourlyReport(reportedHours = 6.5))
+        onId(R.id.reportEditHours).replaceText("")
+                .typeText("8.5")
+                .hasText("8.5")
+    }
+
+    @Test
     fun shouldShowReportedHoursForHourlyReportWithoutTrailingZeroes() {
         stubReportAndStart(newRegularHourlyReport(reportedHours = 6.0))
         onId(R.id.reportEditHours).hasText("6")

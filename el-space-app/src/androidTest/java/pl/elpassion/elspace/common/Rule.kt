@@ -54,6 +54,8 @@ fun stubReportAddApi() {
             override fun addSickLeaveReport(date: String) = Observable.just(Unit)
 
             override fun addUnpaidVacationsReport(date: String) = Observable.just(Unit)
+
+            override fun addPaidConferenceReport(date: String): Observable<Unit> = Observable.just(Unit)
         }
     }
 }

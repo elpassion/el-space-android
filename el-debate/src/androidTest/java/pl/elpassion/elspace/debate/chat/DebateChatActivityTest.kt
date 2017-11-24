@@ -3,7 +3,9 @@ package pl.elpassion.elspace.debate.chat
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.withInputType
+import android.support.v7.widget.RecyclerView
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_VARIATION_NORMAL
 import com.elpassion.android.commons.espresso.*
@@ -12,6 +14,7 @@ import com.nhaarman.mockito_kotlin.*
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.SingleSubject
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import pl.elpassion.R
@@ -25,9 +28,15 @@ import pl.elpassion.elspace.debate.DebatesRepository
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
 import java.net.SocketException
+import java.util.*
 
 class DebateChatActivityTest {
 
+    private val initialsComments = mutableListOf<Comment>().apply {
+        (11..20).forEach {
+            add(createComment(name = it.toString(), id = it.toLong(), wasShown = true))
+        }
+    }
     private val debateRepo = mock<DebatesRepository>().apply {
         whenever(getLatestDebateCode()).thenReturn("12345")
         whenever(getTokenCredentials(any())).thenReturn(TokenCredentials("firstName", "lastName"))
@@ -37,7 +46,7 @@ class DebateChatActivityTest {
     private val liveCommentsSubject = BehaviorSubject.create<Comment>()
     private val sendCommentSubject = SingleSubject.create<Comment>()
     private val service = mock<DebateChat.Service>().apply {
-        whenever(initialsCommentsObservable(any())).thenReturn(initialsCommentsSubject)
+        whenever(initialsCommentsObservable(any(), anyOrNull())).thenReturn(initialsCommentsSubject)
         whenever(liveCommentsObservable(any(), any())).thenReturn(liveCommentsSubject)
         whenever(sendComment(any())).thenReturn(sendCommentSubject)
     }
@@ -47,6 +56,7 @@ class DebateChatActivityTest {
     val rule = rule<DebateChatActivity>(false) {
         DebatesRepositoryProvider.override = { debateRepo }
         DebateChat.ServiceProvider.override = { service }
+        DebateChatActivity.timeZone = { TimeZone.getTimeZone("Europe/Warsaw") }
     }
 
     @Test
@@ -67,7 +77,7 @@ class DebateChatActivityTest {
     @Test
     fun shouldUseCorrectTokenOnServiceInitialsComments() {
         startActivity(token = "myToken")
-        verify(service).initialsCommentsObservable("myToken")
+        verify(service).initialsCommentsObservable("myToken", null)
     }
 
     @Test
@@ -136,27 +146,28 @@ class DebateChatActivityTest {
     @Test
     fun shouldScrollToLastCommentOnInitialsCommentsSuccess() {
         startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-            add(createComment(content = "LastMessage"))
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
-        onText("LastMessage").isDisplayed()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        onText("20").isDisplayed()
     }
 
     @Test
-    fun shouldScrollToLastCommentOnLiveCommentsNext() {
+    fun shouldShowMainLoaderOnInitialsCommentsWhenNotDuringOnNextComments() {
         startActivity()
-        val comments = mutableListOf<Comment>().apply {
-            (1..10).forEach {
-                add(createComment())
-            }
-        }
-        initialsCommentsSubject.onSuccess(createInitialsComments(comments = comments))
-        liveCommentsSubject.onNext(createComment(name = "LastMessage", id = 100))
-        onText("LastMessage").isDisplayed()
+        onId(R.id.loader).isDisplayed()
+    }
+
+    @Test
+    fun shouldHideMainLoaderOnInitialsCommentsSuccess() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        onId(R.id.loader).doesNotExist()
+    }
+
+    @Test
+    fun shouldHideMainLoaderOnInitialsCommentsError() {
+        startActivity()
+        initialsCommentsSubject.onError(RuntimeException())
+        onId(R.id.loader).doesNotExist()
     }
 
     @Test
@@ -180,7 +191,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(200)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
-        verify(service, times(2)).initialsCommentsObservable(any())
+        verify(service, times(2)).initialsCommentsObservable(any(), anyOrNull())
     }
 
     @Test
@@ -189,7 +200,7 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onError(RuntimeException())
         Thread.sleep(300)
         onText(R.string.debate_chat_initials_comments_error_refresh).click()
-        verify(service, times(2)).initialsCommentsObservable("refreshToken")
+        verify(service, times(2)).initialsCommentsObservable("refreshToken", null)
     }
 
     @Test
@@ -207,6 +218,60 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldCallServiceInitialsCommentsOnScrolledUpToFirstPosition() {
+        startActivity(token = "scrollToken")
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments, nextPosition = 1))
+        swipeDown()
+        verify(service).initialsCommentsObservable("scrollToken", 1)
+    }
+
+    @Test
+    fun shouldNotCallServiceInitialsCommentsWhenNotScrolledUpAndFirstPositionIsVisible() {
+        startActivity(token = "scrollToken")
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = listOf(createComment(name = "10")), nextPosition = 1))
+        verify(service, never()).initialsCommentsObservable("scrollToken", 1)
+    }
+
+    @Test
+    fun shouldShowInitialsCommentsCalledFromOnNextCommentsAtBeginningOfList() {
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = listOf(createComment(name = "1")))
+        startActivity()
+        swipeDown()
+        onRecyclerViewItem(R.id.debateChatCommentsContainer, 0, R.id.commentView).hasChildWithText("1")
+    }
+
+    @Test
+    fun shouldNotScrollToLastCommentWhenOnNextCommentsCalled() {
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = listOf(createComment(name = "1")))
+        startActivity()
+        swipeDown()
+        onText("20").doesNotExist()
+    }
+
+    @Test
+    fun shouldScrollToLastCommentReturnedFromOnNextComments() {
+        val oldComments = mutableListOf<Comment>().apply {
+            (1..10).forEach {
+                add(createComment(name = it.toString(), id = it.toLong()))
+            }
+        }
+        returnInitialsCommentsTwice(newComments = initialsComments, oldComments = oldComments)
+        startActivity()
+        swipeDown()
+        Thread.sleep(200)
+        onText("10").isDisplayedEffectively()
+    }
+    
+    @Test
+    fun shouldNotShowMainLoaderOnNextComments() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        swipeDown()
+        onId(R.id.loader).doesNotExist()
+    }
+
+    @Test
     fun shouldCallServiceLiveCommentsWithRealData() {
         whenever(debateRepo.getLatestDebateCode()).thenReturn("34567")
         startActivity(userId = 333)
@@ -221,6 +286,124 @@ class DebateChatActivityTest {
         initialsCommentsSubject.onSuccess(createInitialsComments())
         liveCommentsSubject.onNext(createComment(name = "LiveComment"))
         onText("LiveComment").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollDownToNewCommentFromOnLiveCommentsNextWhenCreatedByLoggedUser() {
+        startActivity(userId = 5)
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "accepted"))
+        onText("LoggedUserMessage").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollUpToNewCommentFromOnLiveCommentsNextWhenCreatedByLoggedUser() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 1, status = "accepted"))
+        onText("LoggedUserMessage").isDisplayed()
+    }
+
+    @Test
+    fun shouldNotScrollToAcceptedCommentFromOnLiveCommentsNextWhenPreviousStatusWasPending() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment("LoggedUserMessage")
+        sendCommentSubject.onSuccess(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "pending"))
+        swipeDown()
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "accepted"))
+        onText("LoggedUserMessage").doesNotExist()
+    }
+
+    @Test
+    fun shouldNotScrollToRejectedCommentFromOnLiveCommentsNextWhenPreviousStatusWasPending() {
+        startActivity(userId = 5)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment("LoggedUserMessage")
+        sendCommentSubject.onSuccess(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "pending"))
+        swipeDown()
+        liveCommentsSubject.onNext(createComment(name = "LoggedUserMessage", userId = 5, id = 100, status = "rejected"))
+        onText("LoggedUserMessage").doesNotExist()
+    }
+
+    @Test
+    fun shouldShowNewMessageInfoOnNewLiveComment_If_CommentIsNotInRecyclerVisibleRange() {
+        startActivity()
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 100))
+        Thread.sleep(100)
+        onId(R.id.debateChatNewMessageInfo).isDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowNewMessageInfoOnNewLiveComment_If_CommentIsInRecyclerVisibleRange() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments())
+        liveCommentsSubject.onNext(createComment(id = 100))
+        Thread.sleep(100)
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldNotShowNewMessageInfoOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
+        startActivity(userId = 3)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(userId = 3, id = 100, status = "accepted"))
+        Thread.sleep(100)
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldNotIncreaseNewMessagesCounterOnNewLiveComment_If_CommentIsCreatedByLoggedUser() {
+        startActivity(userId = 3)
+        returnTwoLiveComments(firstLiveCommentUserId = 3)
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
+    }
+
+    @Test
+    fun shouldShowNewMessageInfoWithCorrectNewMessagesCounterValue() {
+        startActivity()
+        returnTwoLiveComments()
+        onText(getNewMessageInfoTextFromResources(2)).isDisplayed()
+    }
+
+    @Test
+    fun shouldDecreaseNewMessagesCounterValueOnScrolledDownToUnreadMessage() {
+        startActivity()
+        returnTwoLiveComments()
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(10))
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
+    }
+
+    @Test
+    fun shouldDecreaseNewMessagesCounterValueOnScrolledUpToUnreadMessage() {
+        startActivity()
+        returnTwoLiveComments(firstLiveCommentId = 1)
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
+        onText(getNewMessageInfoTextFromResources(1)).isDisplayed()
+    }
+
+    @Test
+    fun shouldHideNewMessageInfoIfNewMessagesCounterValueEqualsZero() {
+        startActivity()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(id = 1))
+        onId(R.id.debateChatCommentsContainer).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
+        onId(R.id.debateChatNewMessageInfo).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldScrollToLastUnreadMessageOnNewMessageInfoClick() {
+        startActivity()
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        liveCommentsSubject.onNext(createComment(name = "LastNewComment", id = 101))
+        Thread.sleep(200)
+        onId(R.id.debateChatNewMessageInfo).click()
+        onText("LastNewComment").isDisplayed()
     }
 
     @Test
@@ -393,6 +576,25 @@ class DebateChatActivityTest {
     }
 
     @Test
+    fun shouldScrollDownToPendingCommentWhenSendCommentStatusIsPending() {
+        startActivity(userId = 1)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment()
+        Thread.sleep(100)
+        sendCommentSubject.onSuccess(createComment(name = "PendingComment", userId = 1, status = "pending"))
+        onText("PendingComment").isDisplayed()
+    }
+
+    @Test
+    fun shouldScrollUpToPendingCommentWhenSendCommentStatusIsPending() {
+        startActivity(userId = 1)
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        sendComment()
+        sendCommentSubject.onSuccess(createComment(name = "PendingComment", id = 1, userId = 1, status = "pending"))
+        onText("PendingComment").isDisplayed()
+    }
+
+    @Test
     fun shouldShowCommentStatusViewWhenSendCommentStatusIsPending() {
         startActivity(userId = 1)
         sendComment()
@@ -488,9 +690,11 @@ class DebateChatActivityTest {
         onId(R.id.debateCommentCredentialsDialog).doesNotExist()
     }
 
+    @Ignore
     @Test
     fun shouldDisplayErrorOnIncorrectFirstName() {
         startActivityAndOpenCredentialsDialog("DebateToken")
+        initialsCommentsSubject.onSuccess(createInitialsComments())
         saveCredentials(firstName = " ", lastName = "lastName")
         onId(R.id.debateCredentialsFirstNameInputText).editTextHasError(R.string.debate_chat_credentials_first_name_incorrect)
     }
@@ -518,6 +722,25 @@ class DebateChatActivityTest {
         rule.startActivity(DebateChatActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, userId)))
     }
 
+    private fun returnInitialsCommentsTwice(newComments: List<Comment>, oldComments: List<Comment>) {
+        whenever(service.initialsCommentsObservable(any(), anyOrNull())).thenReturn(
+                SingleSubject.just(createInitialsComments(comments = newComments, nextPosition = 1)),
+                SingleSubject.just(createInitialsComments(comments = oldComments)))
+    }
+
+    private fun returnTwoLiveComments(firstLiveCommentId: Long = 100, firstLiveCommentUserId: Long = 1) {
+        Espresso.closeSoftKeyboard()
+        initialsCommentsSubject.onSuccess(createInitialsComments(comments = initialsComments))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = firstLiveCommentId, userId = firstLiveCommentUserId))
+        Thread.sleep(100)
+        liveCommentsSubject.onNext(createComment(id = 101))
+        Thread.sleep(100)
+    }
+
+    private fun getNewMessageInfoTextFromResources(count: Int): String =
+            InstrumentationRegistry.getTargetContext().resources.getQuantityString(R.plurals.debate_chat_live_comments_new_message_info, count, count)
+
     private fun sendComment(message: String = "message") {
         onId(R.id.debateChatSendCommentInputText)
                 .replaceText(message)
@@ -528,5 +751,10 @@ class DebateChatActivityTest {
         whenever(debateRepo.areTokenCredentialsMissing(any())).thenReturn(true)
         startActivity(token)
         sendComment()
+    }
+
+    private fun swipeDown() {
+        Espresso.closeSoftKeyboard()
+        onId(R.id.debateChatCommentsContainer).swipeDown()
     }
 }

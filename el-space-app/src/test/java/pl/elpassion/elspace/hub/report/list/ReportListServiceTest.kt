@@ -123,6 +123,13 @@ class ReportListServiceTest {
     }
 
     @Test
+    fun shouldMapPaidConferenceReportType() {
+        stubReportApiToReturn(newReportFromApi(reportType = 4))
+        getReports()
+        subscriber.assertValue(listOf(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE)))
+    }
+
+    @Test
     fun shouldCallApiWithStartAndEndDate() {
         stubReportApiToReturn(newReportFromApi())
         getReports(newYearMonth(2017, Calendar.MARCH))

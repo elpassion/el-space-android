@@ -98,6 +98,36 @@ class ReportListAddSeparatorsTest {
     }
 
     @Test
+    fun shouldNotHaveSeparatorBetweenReportItemAndWeekend() {
+        val givenItems = addSeparators(listOf(newRegularHourlyReport(), newDayWeekend()))
+        assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldNotHaveSeparatorBetweenDayWithDailyReportAndWeekend() {
+        val givenItems = addSeparators(listOf(newDayWithDailyReports(), newDayWeekend()))
+        assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldNotHaveSeparatorBetweenNotFilledInDayAndWeekend() {
+        val givenItems = addSeparators(listOf(newDayWithoutReports(), newDayWeekend()))
+        assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldNotHaveSeparatorBetweenFilledInDayAndWeekend() {
+        val givenItems = addSeparators(listOf(newDayWithHourlyReports(), newDayWeekend()))
+        assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
+    fun shouldNotHaveSeparatorBetweenPaidVacationAndWeekend() {
+        val givenItems = addSeparators(listOf(newPaidVacationHourlyReport(), newDayWeekend()))
+        assertFalse(givenItems[2] is Separator)
+    }
+
+    @Test
     fun shouldNotHaveSeparatorBetweenTwoWeekendItems() {
         val givenItems = addSeparators(listOf(newDayWeekend(), newDayWeekend()))
         assertFalse(givenItems[2] is Separator)

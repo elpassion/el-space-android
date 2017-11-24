@@ -1,6 +1,8 @@
 package pl.elpassion.elspace.debate.chat
 
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import pl.elpassion.elspace.common.SchedulersSupplier
 import pl.elpassion.elspace.debate.DebatesRepository
@@ -9,52 +11,72 @@ import retrofit2.HttpException
 
 class DebateChatController(
         private val view: DebateChat.View,
+        private val events: DebateChat.Events,
         private val debateRepo: DebatesRepository,
         private val service: DebateChat.Service,
         private val schedulers: SchedulersSupplier,
         private val maxMessageLength: Int) {
 
-    private val subscriptions = CompositeDisposable()
+    private val serviceSubscriptions = CompositeDisposable()
+    private var onNextCommentsEventDisposable: Disposable? = null
+    private var liveCommentsDisposable: Disposable? = null
+    private var nextPosition: Long? = null
 
     fun onCreate(loginCredentials: LoginCredentials) {
-        getInitialComments(loginCredentials)
+        callServiceInitialsComments(loginCredentials, initialWithLiveCallHandling(loginCredentials))
+        onNextCommentsEventDisposable = events.onNextComments()
+                .subscribe {
+                    callServiceInitialsComments(loginCredentials)
+                }
     }
 
     fun onInitialsCommentsRefresh(loginCredentials: LoginCredentials) {
-        subscriptions.clear()
-        getInitialComments(loginCredentials)
+        serviceSubscriptions.clear()
+        callServiceInitialsComments(loginCredentials, initialWithLiveCallHandling(loginCredentials))
     }
 
-    private fun getInitialComments(loginCredentials: LoginCredentials) {
-        service.initialsCommentsObservable(loginCredentials.authToken)
+    private fun callServiceInitialsComments(loginCredentials: LoginCredentials, transformer: Single<InitialsComments>.() -> Single<InitialsComments> = this::initialCallHandling) {
+        service.initialsCommentsObservable(loginCredentials.authToken, nextPosition)
                 .subscribeOn(schedulers.backgroundScheduler)
                 .observeOn(schedulers.uiScheduler)
-                .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
-                .doOnSuccess { (debateClosed) ->
-                    if (debateClosed) view.showDebateClosedError()
-                    else subscribeToLiveComments(loginCredentials.userId)
-                }
+                .transformer()
                 .subscribe(
                         { initialsComments -> view.showInitialsComments(initialsComments.comments) },
                         view::showInitialsCommentsError)
-                .addTo(subscriptions)
+                .addTo(serviceSubscriptions)
     }
 
     fun onLiveCommentsRefresh(userId: Long) {
-        subscriptions.clear()
+        serviceSubscriptions.clear()
         subscribeToLiveComments(userId)
     }
 
     private fun subscribeToLiveComments(userId: Long) {
         debateRepo.getLatestDebateCode()?.let {
-            service.liveCommentsObservable(it, userId)
+            liveCommentsDisposable = service.liveCommentsObservable(it, userId)
                     .subscribeOn(schedulers.backgroundScheduler)
                     .observeOn(schedulers.uiScheduler)
                     .subscribe(view::showLiveComment, view::showLiveCommentsError)
-                    .addTo(subscriptions)
+                    .addTo(serviceSubscriptions)
         }
     }
+
+    private fun initialCallHandling(single: Single<InitialsComments>) =
+            single.doOnSuccess { (debateClosed, _, nextPositionFromService) ->
+                nextPosition = nextPositionFromService
+                if (debateClosed) view.showDebateClosedError()
+            }
+
+    private fun initialWithLiveCallHandling(loginCredentials: LoginCredentials): Single<InitialsComments>.() -> Single<InitialsComments> =
+            {
+                doOnSubscribe { view.showLoader() }
+                        .doOnSuccess { (debateClosed, _, nextPositionFromService) ->
+                            nextPosition = nextPositionFromService
+                            if (debateClosed) view.showDebateClosedError()
+                            else subscribeToLiveComments(loginCredentials.userId)
+                        }
+            }
 
     fun sendComment(token: String, message: String) {
         when {
@@ -74,7 +96,7 @@ class DebateChatController(
                 .doOnSubscribe { view.showLoader() }
                 .doFinally(view::hideLoader)
                 .subscribe(this::showSendCommentSuccess, this::checkSendCommentError)
-                .addTo(subscriptions)
+                .addTo(serviceSubscriptions)
     }
 
     private fun showSendCommentSuccess(comment: Comment) {
@@ -92,7 +114,8 @@ class DebateChatController(
     }
 
     fun onDestroy() {
-        subscriptions.dispose()
+        serviceSubscriptions.dispose()
+        onNextCommentsEventDisposable?.dispose()
     }
 
     fun onNewCredentials(token: String, credentials: TokenCredentials) {

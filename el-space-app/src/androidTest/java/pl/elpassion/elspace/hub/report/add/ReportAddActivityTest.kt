@@ -74,6 +74,14 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldAllowForProvidingDecimalNumbersAsHours() {
+        stubRepositoryAndStart()
+        onId(R.id.reportAddHours).replaceText("")
+                .typeText("8.5")
+                .hasText("8.5")
+    }
+
+    @Test
     fun shouldShowDescriptionInput() {
         stubRepositoryAndStart()
         onId(R.id.reportAddDescription).isDisplayed()
@@ -177,6 +185,19 @@ class ReportAddActivityTest {
     }
 
     @Test
+    fun shouldShowPaidConferenceDetailsAfterClickOnPaidConferenceReportType() {
+        stubRepositoryAndStart()
+        closeSoftwareKeyboard()
+        onId(R.id.action_paid_conference_report).click()
+
+        onId(R.id.reportAddDescription).isNotDisplayed()
+        onText("name").isNotDisplayed()
+        onId(R.id.reportAddHours).isNotDisplayed()
+
+        onText(R.string.report_add_paid_conference_info).isDisplayed()
+    }
+
+    @Test
     fun shouldShowLoaderOnReportAddCall() {
         ReportAdd.ApiProvider.override = { mock<ReportAdd.Api>().apply { whenever(addRegularReport(any(), any(), any(), any())).thenReturn(Observable.never()) } }
         stubRepositoryAndStart()
@@ -218,7 +239,18 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldShowOnlySickLeaveFormFormOnSickLeave() {
+    fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
+        stubRepositoryAndStart()
+        closeSoftwareKeyboard()
+        onId(R.id.action_unpaid_vacations_report).click()
+        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+        onId(R.id.reportAddHoursLayout).isNotDisplayed()
+        onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportAddProjectNameLayout).isNotDisplayed()
+    }
+
+    @Test
+    fun shouldShowOnlySickLeaveFormOnSickLeave() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
         onId(R.id.action_sick_leave_report).click()
@@ -229,11 +261,11 @@ class ReportAddActivityTest {
     }
 
     @Test
-    fun shouldShowOnlyUnpaidVacationFormOnUnpaidVacation() {
+    fun shouldShowOnlyPaidConferenceFormOnPaidConference() {
         stubRepositoryAndStart()
         closeSoftwareKeyboard()
-        onId(R.id.action_unpaid_vacations_report).click()
-        onText(R.string.report_add_unpaid_vacations_info).isDisplayed()
+        onId(R.id.action_paid_conference_report).click()
+        onText(R.string.report_add_paid_conference_info).isDisplayed()
         onId(R.id.reportAddHoursLayout).isNotDisplayed()
         onId(R.id.reportAddDescriptionLayout).isNotDisplayed()
         onId(R.id.reportAddProjectNameLayout).isNotDisplayed()

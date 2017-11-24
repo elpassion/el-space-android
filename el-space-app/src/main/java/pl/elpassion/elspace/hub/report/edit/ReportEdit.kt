@@ -25,6 +25,7 @@ interface ReportEdit {
         fun showPaidVacationsForm()
         fun showSickLeaveForm()
         fun showUnpaidVacationsForm()
+        fun showPaidConferenceForm()
         fun editReportClicks(): Observable<ReportViewModel>
         fun removeReportClicks(): Observable<Unit>
         fun close()

@@ -5,35 +5,39 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.elpassion.android.commons.recycler.adapters.basicAdapterWithConstructors
 import com.elpassion.android.view.hide
 import com.elpassion.android.view.show
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.support.v7.widget.scrollEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.debate_chat_activity.*
 import kotlinx.android.synthetic.main.debate_toolbar.*
 import pl.elpassion.R
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.handleClickOnBackArrowItem
-import pl.elpassion.elspace.common.extensions.logExceptionIfDebug
-import pl.elpassion.elspace.common.extensions.showBackArrowOnActionBar
+import pl.elpassion.elspace.common.extensions.*
 import pl.elpassion.elspace.common.hideLoader
 import pl.elpassion.elspace.common.showLoader
 import pl.elpassion.elspace.debate.DebatesRepositoryProvider
 import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.holders.CommentHolder
 import pl.elpassion.elspace.debate.chat.holders.LoggedUserCommentHolder
+import java.util.*
 
-class DebateChatActivity : AppCompatActivity(), DebateChat.View {
+class DebateChatActivity : AppCompatActivity(), DebateChat.View, DebateChat.Events {
 
     private val credentialsDialog by lazy {
         DebateCredentialsDialog(this) { credentials ->
             controller.onNewCredentials(loginCredentials.authToken, credentials)
         }
     }
+
+    private var scrollEventsDisposable: Disposable? = null
 
     private val loginCredentials by lazy { intent.getSerializableExtra(debateLoginCredentialsKey) as LoginCredentials }
 
@@ -44,6 +48,7 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private val controller by lazy {
         DebateChatController(
                 view = this,
+                events = this,
                 debateRepo = DebatesRepositoryProvider.get(),
                 service = DebateChat.ServiceProvider.get(),
                 schedulers = SchedulersSupplier(Schedulers.io(), AndroidSchedulers.mainThread()),
@@ -60,9 +65,12 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     private fun setupUI() {
         setSupportActionBar(toolbar)
         showBackArrowOnActionBar()
-        debateChatCommentsContainer.layoutManager = LinearLayoutManager(this)
-        debateChatCommentsContainer.adapter = basicAdapterWithConstructors(comments) { position ->
+        val commentsAdapter = basicAdapterWithConstructors(comments) { position ->
             createHolderForComment(comments[position])
+        }.apply { setHasStableIds(true) }
+        debateChatCommentsContainer.adapter = commentsAdapter
+        debateChatNewMessageInfo.setOnClickListener {
+            debateChatCommentsContainer.scrollToPosition(comments.indexOfLast { !it.wasShown })
         }
         debateChatSendCommentInputText.setOnEditorActionListener { inputText, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -70,13 +78,35 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
             }
             false
         }
-        debateChatSendCommentButton.setOnClickListener { controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString()) }
+        debateChatSendCommentButton.setOnClickListener {
+            controller.sendComment(loginCredentials.authToken, debateChatSendCommentInputText.text.toString())
+        }
         debateChatSendCommentInputText.requestFocus()
+        scrollEventsDisposable = debateChatCommentsContainer.scrollEvents()
+                .subscribe { updateCommentsWasShownStatus() }
+    }
+
+    private fun updateCommentsWasShownStatus() {
+        debateChatCommentsContainer.getVisibleItemsPositions().forEach {
+            comments[it].wasShown = true
+        }
+        updateChatCommentsNewMessageInfo()
+    }
+
+    private fun updateChatCommentsNewMessageInfo() {
+        comments.count { !it.wasShown }.also {
+            if (it > 0) {
+                debateChatNewMessageInfoText.text = resources.getQuantityString(R.plurals.debate_chat_live_comments_new_message_info, it, it)
+                debateChatNewMessageInfo.show()
+            } else {
+                debateChatNewMessageInfo.hide()
+            }
+        }
     }
 
     private fun createHolderForComment(comment: Comment) = when {
-        comment.userId == loginCredentials.userId -> R.layout.logged_user_comment to ::LoggedUserCommentHolder
-        else -> R.layout.comment to ::CommentHolder
+        comment.userId == loginCredentials.userId -> R.layout.logged_user_comment to { itemView: View -> LoggedUserCommentHolder(itemView, timeZone) }
+        else -> R.layout.comment to { itemView: View -> CommentHolder(itemView, timeZone) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = handleClickOnBackArrowItem(item)
@@ -87,34 +117,42 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun hideLoader() {
         hideLoader(debateChatCoordinator)
+        debateChatCommentsSwipeToRefresh.isRefreshing = false
     }
+
+    override fun onNextComments() = debateChatCommentsSwipeToRefresh.refreshes()
 
     override fun showInitialsComments(initialsComments: List<Comment>) {
-        comments.addAll(initialsComments)
-        updateAdapter()
-    }
-
-    override fun showLiveComment(liveComment: Comment) {
-        showComment(liveComment)
-    }
-
-    private fun showComment(comment: Comment) {
-        comments.run {
-            indexOfFirst { it.id == comment.id }.also {
-                if (it > -1) {
-                    removeAt(it)
-                    add(it, comment)
-                } else {
-                    add(comment)
-                }
-                updateAdapter()
+        debateChatCommentsContainer.run {
+            if (comments.isEmpty()) {
+                comments.addAll(initialsComments)
+                adapter.notifyDataSetChanged()
+                scrollToPosition(comments.size - 1)
+            } else {
+                comments.addAll(0, initialsComments)
+                adapter.notifyDataSetChanged()
+                scrollToPosition(initialsComments.size - 1)
             }
         }
     }
 
-    private fun updateAdapter() {
-        debateChatCommentsContainer.adapter.notifyDataSetChanged()
-        debateChatCommentsContainer.layoutManager.scrollToPosition(comments.size - 1)
+    override fun showLiveComment(liveComment: Comment) {
+        val positionBeforeUpdate = comments.indexOfFirst { it.id == liveComment.id }
+        val positionAfterUpdate = comments.update(liveComment)
+        debateChatCommentsContainer.run {
+            positionAfterUpdate.also {
+                if (positionBeforeUpdate != it) {
+                    adapter.notifyItemInserted(it)
+                } else {
+                    adapter.notifyItemChanged(it)
+                }
+            }
+        }
+        if (liveComment.userId == loginCredentials.userId && positionBeforeUpdate != positionAfterUpdate) {
+            debateChatCommentsContainer.post { debateChatCommentsContainer.scrollToPosition(positionAfterUpdate) }
+        } else {
+            debateChatCommentsContainer.post { updateCommentsWasShownStatus() }
+        }
     }
 
     override fun showInitialsCommentsError(exception: Throwable) {
@@ -137,15 +175,15 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
     }
 
     override fun showSendCommentSuccessPending(comment: Comment) {
-        clearSendCommentInputText()
-        showComment(comment)
+        debateChatSendCommentInputText.text.clear()
+        val position = comments.update(comment)
+        debateChatCommentsContainer.run {
+            adapter.notifyDataSetChanged()
+            scrollToPosition(position)
+        }
     }
 
     override fun clearSendCommentInput() {
-        clearSendCommentInputText()
-    }
-
-    private fun clearSendCommentInputText() {
         debateChatSendCommentInputText.text.clear()
     }
 
@@ -177,11 +215,14 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
 
     override fun onDestroy() {
         credentialsDialog.dismiss()
+        scrollEventsDisposable?.dispose()
         controller.onDestroy()
         super.onDestroy()
     }
 
     companion object {
+        var timeZone: () -> TimeZone = { TimeZone.getDefault() }
+
         private val debateLoginCredentialsKey = "debateLoginCredentialsKey"
 
         fun start(context: Context, loginCredentials: LoginCredentials) = context.startActivity(intent(context, loginCredentials))
@@ -191,5 +232,4 @@ class DebateChatActivity : AppCompatActivity(), DebateChat.View {
                     putExtra(debateLoginCredentialsKey, loginCredentials)
                 }
     }
-
 }

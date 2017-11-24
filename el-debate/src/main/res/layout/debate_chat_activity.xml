@@ -15,11 +15,18 @@
         android:orientation="vertical"
         app:layout_behavior="pl.elpassion.elspace.debate.chat.MoveUpwardBehaviour">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/debateChatCommentsContainer"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/debateChatCommentsSwipeToRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/debateChatCommentsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <View
             android:layout_width="match_parent"
@@ -27,19 +34,42 @@
             android:background="@color/colorPrimaryDarkDebate" />
 
         <LinearLayout
+            android:id="@+id/debateChatNewMessageInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/debateChatNewMessageInfoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                tools:text="Counter" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDarkDebate" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/debateChatSendCommentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal"
-            android:padding="6dp"
             android:visibility="visible">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:padding="6dp">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/debateChatSendCommentInputText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,20 +87,22 @@
             <ImageView
                 android:id="@+id/debateChatSendCommentButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="6dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:paddingEnd="10dp"
+                android:paddingStart="15dp"
                 android:src="@drawable/send_comment" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/debateChatSendCommentViewError"
-            android:background="@color/redBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/redBackground"
             android:gravity="center_horizontal"
             android:text="@string/debate_chat_debate_closed_error"
             android:textColor="@color/greyDarkText"

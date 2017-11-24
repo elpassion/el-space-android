@@ -77,6 +77,7 @@ class ReportEditController(private val report: Report,
         ReportType.PAID_VACATIONS -> paidVacationReportEditHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportEditHandler
         ReportType.SICK_LEAVE -> sickLeaveReportEditHandler
+        ReportType.PAID_CONFERENCE -> paidConferenceReportEditHandler
     }
 
     private fun callApiToEdit(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Completable>) =
@@ -102,8 +103,9 @@ class ReportEditController(private val report: Report,
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> view.showRegularForm()
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
+        ReportType.PAID_CONFERENCE -> view.showPaidConferenceForm()
     }
 
     private val regularReportEditHandler = { model: ReportViewModel ->
@@ -130,6 +132,10 @@ class ReportEditController(private val report: Report,
         api.editReport(report.id, ReportType.SICK_LEAVE.id, model.selectedDate, null, null, null)
     }
 
+    private val paidConferenceReportEditHandler = { model: ReportViewModel ->
+        api.editReport(report.id, ReportType.PAID_CONFERENCE.id, model.selectedDate, null, null, null)
+    }
+
     private fun editRegularReport(model: RegularViewModel, project: Project) =
             api.editReport(report.id, ReportType.REGULAR.id, model.selectedDate, model.hours, model.description, project.id)
 
@@ -143,8 +149,9 @@ private val Report.type: ReportType
         is RegularHourlyReport -> ReportType.REGULAR
         is PaidVacationHourlyReport -> ReportType.PAID_VACATIONS
         is DailyReport -> when (reportType) {
-            DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
             DailyReportType.UNPAID_VACATIONS -> ReportType.UNPAID_VACATIONS
+            DailyReportType.SICK_LEAVE -> ReportType.SICK_LEAVE
+            DailyReportType.PAID_CONFERENCE -> ReportType.PAID_CONFERENCE
         }
     }
 

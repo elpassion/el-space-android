@@ -80,6 +80,14 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldAllowForProvidingDecimalNumbersAsHours() {
+        stubReportAndStart(newRegularHourlyReport(reportedHours = 6.5))
+        onId(R.id.reportEditHours).replaceText("")
+                .typeText("8.5")
+                .hasText("8.5")
+    }
+
+    @Test
     fun shouldShowReportedHoursForHourlyReportWithoutTrailingZeroes() {
         stubReportAndStart(newRegularHourlyReport(reportedHours = 6.0))
         onId(R.id.reportEditHours).hasText("6")
@@ -129,6 +137,12 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowAdditionalInfoForPaidConference() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE))
+        onId(R.id.reportEditAdditionalInfo).hasText(R.string.report_add_paid_conference_info)
+    }
+
+    @Test
     fun shouldShowOnlyRegularFormOnRegularReport() {
         stubReportAndStart(newRegularHourlyReport())
         verifyIsRegularFormDisplayed()
@@ -141,15 +155,21 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowOnlyDailyFormOnUnpaidVacations() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
+        verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Test
     fun shouldShowOnlyDailyFormOnSickLeave() {
         stubReportAndStart(newDailyReport(reportType = DailyReportType.SICK_LEAVE))
         verifyIsSickLeaveFormDisplayed()
     }
 
     @Test
-    fun shouldShowOnlyDailyFormOnUnpaidVacations() {
-        stubReportAndStart(newDailyReport(reportType = DailyReportType.UNPAID_VACATIONS))
-        verifyIsUnpaidVacationsFormDisplayed()
+    fun shouldShowOnlyDailyFormOnPaidConference() {
+        stubReportAndStart(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE))
+        verifyIsPaidConferenceFormDisplayed()
     }
 
     @Test
@@ -168,6 +188,14 @@ class ReportEditActivityTest {
     }
 
     @Test
+    fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
+        stubReportAndStart(newRegularHourlyReport())
+        Espresso.closeSoftKeyboard()
+        onId(R.id.action_unpaid_vacations_report).click()
+        verifyIsUnpaidVacationsFormDisplayed()
+    }
+
+    @Test
     fun shouldShowSickLeaveFormOnSickLeaveReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
         Espresso.closeSoftKeyboard()
@@ -176,11 +204,11 @@ class ReportEditActivityTest {
     }
 
     @Test
-    fun shouldShowUnpaidVacationsFormOnUnpaidVacationsReportActionCheck() {
+    fun shouldShowPaidConferenceFormOnPaidConferenceReportActionCheck() {
         stubReportAndStart(newRegularHourlyReport())
         Espresso.closeSoftKeyboard()
-        onId(R.id.action_unpaid_vacations_report).click()
-        verifyIsUnpaidVacationsFormDisplayed()
+        onId(R.id.action_paid_conference_report).click()
+        verifyIsPaidConferenceFormDisplayed()
     }
 
     @Test
@@ -297,6 +325,16 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).isNotDisplayed()
     }
 
+    private fun verifyIsUnpaidVacationsFormDisplayed() {
+        Espresso.closeSoftKeyboard()
+        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.reportEditDateLayout).isDisplayed()
+        onId(R.id.reportEditHoursLayout).isNotDisplayed()
+        onId(R.id.reportEditProjectNameLayout).isNotDisplayed()
+        onId(R.id.reportEditDescriptionLayout).isNotDisplayed()
+        onId(R.id.reportEditAdditionalInfo).isDisplayed()
+    }
+
     private fun verifyIsSickLeaveFormDisplayed() {
         Espresso.closeSoftKeyboard()
         onId(R.id.action_sick_leave_report).isBottomNavigationItemChecked()
@@ -307,9 +345,9 @@ class ReportEditActivityTest {
         onId(R.id.reportEditAdditionalInfo).isDisplayed()
     }
 
-    private fun verifyIsUnpaidVacationsFormDisplayed() {
+    private fun verifyIsPaidConferenceFormDisplayed() {
         Espresso.closeSoftKeyboard()
-        onId(R.id.action_unpaid_vacations_report).isBottomNavigationItemChecked()
+        onId(R.id.action_paid_conference_report).isBottomNavigationItemChecked()
         onId(R.id.reportEditDateLayout).isDisplayed()
         onId(R.id.reportEditHoursLayout).isNotDisplayed()
         onId(R.id.reportEditProjectNameLayout).isNotDisplayed()

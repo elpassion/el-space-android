@@ -11,5 +11,5 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
     }
     androidTestImplementation(group: 'com.nhaarman', name: 'mockito-kotlin-kt1.1', version: mockitoKotlin)
-    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.7.21'
+    androidTestImplementation group: 'org.mockito', name: 'mockito-android', version: '2.11.0'
 }

@@ -1,18 +1,12 @@
 package pl.elpassion.elspace.debate.details
 
 import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.scrollTo
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
-import android.support.test.espresso.matcher.ViewMatchers.withId
 import com.elpassion.android.commons.espresso.*
-import com.elpassion.android.commons.espresso.matchers.withParentId
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.subjects.CompletableSubject
-import io.reactivex.subjects.SingleSubject
+import com.nhaarman.mockito_kotlin.eq
 import org.hamcrest.Matchers
-import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -27,34 +21,25 @@ import pl.elpassion.elspace.debate.LoginCredentials
 import pl.elpassion.elspace.debate.chat.DebateChatActivity
 import java.lang.Thread.sleep
 
-class DebateDetailsActivityTest {
+class DebateDetailsActivityTest : DebateDetailsApiInteractor() {
 
-    private val debateDetailsSubject = SingleSubject.create<DebateData>()
-    private val sendVoteSubject = CompletableSubject.create()
-    private val apiMock by lazy {
-        mock<DebateDetails.Api>().apply {
-            whenever(getDebateDetails(any())).thenReturn(debateDetailsSubject)
-            whenever(vote(any(), any())).thenReturn(sendVoteSubject)
-        }
-    }
-
-    @JvmField @Rule
+    @JvmField
+    @Rule
     val intents = InitIntentsRule()
 
-    @JvmField @Rule
+    @JvmField
+    @Rule
     val rule = rule<DebateDetailsActivity>(autoStart = false)
-
+    
     @Before
     fun setup() {
-        DebateDetails.ApiProvider.override = { apiMock }
+        inject()
     }
 
     @Test
     fun shouldShowToolbarWithCorrectTitle() {
         startActivity()
-        onId(R.id.toolbar)
-                .isDisplayed()
-                .hasChildWithText(R.string.debate_title)
+        toolbarHasText(R.string.debate_title)
     }
 
     @Test
@@ -67,13 +52,13 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowTopicInfo() {
         startActivity()
-        onText(R.string.debate_details_info_topic).isDisplayed()
+        debateInfoDescription.isDisplayed()
     }
 
     @Test
     fun shouldShowTopicReturnedFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateTopic)
+        debateTopic
                 .isDisplayed()
                 .hasText("topic")
     }
@@ -81,19 +66,19 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowChooseSideInfo() {
         startActivity()
-        onText(R.string.debate_details_info_choose_side).isDisplayed()
+        debateInfoDetails.isDisplayed()
     }
 
     @Test
     fun shouldShowRememberInfo() {
         startActivity()
-        onText(R.string.debate_details_info_remember).perform(scrollTo()).isDisplayed()
+        debateInfoSubdetails.perform(scrollTo()).isDisplayed()
     }
 
     @Test
     fun shouldShowChatButton() {
         startActivity()
-        onId(R.id.debateChatButton)
+        debateChatButton
                 .hasText(R.string.debate_details_button_chat)
                 .isDisplayed()
                 .isEnabled()
@@ -102,242 +87,259 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldShowInactiveImagesInButtons() {
         startActivity()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(null))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(null))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(null))
+        answers.images {
+            positive.isNothighlighted()
+            negative.isNothighlighted()
+            neutral.isNothighlighted()
+        }
     }
 
     @Test
     fun shouldShowCorrectAnswersReturnedFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerText)
-                .isDisplayed()
-                .hasText("answerPositive")
-        onId(R.id.debateNegativeAnswerText)
-                .isDisplayed()
-                .hasText("answerNegative")
-        onId(R.id.debateNeutralAnswerText)
-                .isDisplayed()
-                .hasText("answerNeutral")
+        answers.texts {
+            positive.hasText("answerPositive")
+            negative.hasText("answerNegative")
+            neutral.hasText("answerNeutral")
+        }
     }
 
     @Test
     fun shouldHighlightPositiveAnswerWhenLastAnswerWasPositive() {
         startActivity()
-        debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 1))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        debateApi.success(createDebateData(lastAnswerId = 1))
+        answers.images {
+            positive.hasPositiveColor()
+            negative.hasInactiveColor()
+            neutral.hasInactiveColor()
+        }
     }
 
     @Test
     fun shouldHighlightNegativeAnswerWhenLastAnswerWasNegative() {
         startActivity()
-        debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 2))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        debateApi.success(createDebateData(lastAnswerId = 2))
+        answers.images {
+            positive.hasInactiveColor()
+            negative.hasNegativeColor()
+            neutral.hasInactiveColor()
+        }
     }
 
     @Test
     fun shouldHighlightNeutralAnswerWhenLastAnswerWasNeutral() {
         startActivity()
-        debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = 3))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
+        debateApi.success(createDebateData(lastAnswerId = 3))
+        answers.images {
+            positive.hasInactiveColor()
+            negative.hasInactiveColor()
+            neutral.hasNeutralColor()
+        }
     }
 
     @Test
     fun shouldNotHighlightAnswerWhenLastAnswerWasNull() {
         startActivity()
-        debateDetailsSubject.onSuccess(createDebateData(lastAnswerId = null))
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(null))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(null))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(null))
+        debateApi.success(createDebateData(lastAnswerId = null))
+        answers.images {
+            positive.isNothighlighted()
+            negative.isNothighlighted()
+            neutral.isNothighlighted()
+        }
     }
 
     @Test
     fun shouldShowLoaderWhenCallingApi() {
         startActivity()
-        onId(R.id.loader).isDisplayed()
+        debateMainLoader.isDisplayed()
     }
 
     @Test
     fun shouldNotShowLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.loader).doesNotExist()
+        debateMainLoader.doesNotExist()
     }
 
     @Test
     fun shouldShowDebateDetailsErrorWhenApiCallFailed() {
         startActivity()
-        debateDetailsSubject.onError(RuntimeException())
-        onText(R.string.debate_details_error).isDisplayedEffectively()
+        debateApi.error(RuntimeException())
+        errorWhileGettingDebateDetails.isDisplayedEffectively()
     }
 
     @Test
     fun shouldShowDebateClosedErrorOnGetDebateDetails403CodeErrorFromApi() {
         startActivity()
-        debateDetailsSubject.onError(createHttpException(403))
-        onId(R.id.debateClosedView).isDisplayed()
+        debateApi.error(createHttpException(403))
+        debateClosedView.isDisplayed()
     }
 
     @Test
     fun shouldShowRefreshButtonWithDebateDetailsError() {
         startActivity()
-        debateDetailsSubject.onError(RuntimeException())
-        onText(R.string.debate_details_error_refresh).isDisplayedEffectively()
+        debateApi.error(RuntimeException())
+        refreshAfterErrorButton.isDisplayedEffectively()
     }
 
     @Test
     fun shouldCallApiSecondTimeOnRefreshClickedWhenPreviousCallFailed() {
         startActivity()
-        debateDetailsSubject.onError(RuntimeException())
+        debateApi.error(RuntimeException())
         sleep(200)
-        onText(R.string.debate_details_error_refresh).click()
-        verify(apiMock, times(2)).getDebateDetails(any())
+        debateApi.resetInvocations()
+        refreshAfterErrorButton.click()
+        debateApi.assertCalled()
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debatePositiveAnswerLoader)).isDisplayed()
+        answers.positive {
+            button.scrollAndClick()
+            loader.isDisplayed()
+        }
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNegativeAnswerLoader)).isDisplayed()
+        answers.negative {
+            button.scrollAndClick()
+            loader.isDisplayed()
+        }
     }
 
     @Test
     fun shouldShowVoteLoaderWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNeutralAnswerLoader)).isDisplayed()
+        answers.neutral {
+            button.scrollAndClick()
+            loader.isDisplayed()
+        }
     }
 
     @Test
     fun shouldNotShowPositiveVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debatePositiveAnswerLoader)).isNotDisplayed()
+        answers.positive {
+            button.scrollAndClick()
+            votingApi.success()
+            loader.isNotDisplayed()
+        }
     }
 
     @Test
     fun shouldNotShowNegativeVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNegativeAnswerLoader)).isNotDisplayed()
+        answers.negative {
+            button.scrollAndClick()
+            votingApi.success()
+            loader.isNotDisplayed()
+        }
     }
 
     @Test
     fun shouldNotShowNeutralVoteLoaderWhenApiCallFinished() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onView(withId(R.id.debateAnswerLoader).withParentId(R.id.debateNeutralAnswerLoader)).isNotDisplayed()
+        answers.neutral {
+            button.scrollAndClick()
+            votingApi.success()
+            loader.isNotDisplayed()
+        }
     }
 
     @Test
     fun shouldShowVoteSuccessWhenClickOnAnswerAndApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onText(R.string.debate_details_vote_success).isDisplayedEffectively()
+        answers.negative.button.scrollAndClick()
+        votingApi.success()
+        voteSuccessfulText.isDisplayedEffectively()
     }
 
     @Test
     fun shouldShowDebateClosedErrorOnVote403CodeErrorFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        sendVoteSubject.onError(createHttpException(403))
-        onId(R.id.debateClosedView).isDisplayed()
+        answers.neutral.button.scrollAndClick()
+        votingApi.error(createHttpException(403))
+        debateClosedView.isDisplayed()
     }
 
     @Test
     fun shouldShowSlowDownInformationOn429ErrorCodeFromApi() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_details_vote_slow_down_title).isDisplayed()
-        onText(R.string.debate_details_vote_slow_down_info).isDisplayed()
+        answers.negative.button.click()
+        votingApi.error(createHttpException(429))
+        slowDownInfoIsDisplayed()
     }
 
     @Test
     fun shouldCloseSlowDownInformationOnButtonClick() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        sendVoteSubject.onError(createHttpException(429))
-        onText(R.string.debate_details_vote_slow_down_OK_button).click()
-        onText(R.string.debate_details_vote_slow_down_title).doesNotExist()
-        onText(R.string.debate_details_vote_slow_down_info).doesNotExist()
+        answers.negative.button.click()
+        votingApi.error(createHttpException(429))
+        slowDownView.button.click()
+        slowDownInfoIsNotDisplayed()
     }
 
     @Test
     fun shouldShowVoteErrorWhenApiCallFails() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        sendVoteSubject.onError(RuntimeException())
-        onText(R.string.debate_details_vote_error).isDisplayedEffectively()
+        answers.neutral.button.scrollAndClick()
+        votingApi.error(RuntimeException())
+        voteFailText.isDisplayedEffectively()
     }
 
     @Test
     fun shouldNotShowVoteErrorWhenApiCallFinishedSuccessfully() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onText(R.string.debate_details_vote_error).doesNotExist()
+        answers.neutral.button.scrollAndClick()
+        votingApi.success()
+        voteFailText.doesNotExist()
     }
 
     @Test
     fun shouldUseTokenPassedWithIntent() {
         startActivity("newToken")
-        verify(apiMock).getDebateDetails("newToken")
+        debateApi.assertCalled(tokenMatcher = { "newToken" })
     }
 
     @Test
     fun shouldUseTokenPassedWithIntentWhenSendingVote() {
         val token = "newToken"
         startActivityAndSuccessfullyReturnDebateDetails(token, createDebateData())
-        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        verify(apiMock).vote(eq(token), any())
+        answers.positive.button.scrollAndClick()
+        votingApi.assertCalled(tokenMatcher = { eq(token) })
     }
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingPositiveVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
-        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        verify(apiMock).vote("token", debateData.answers.positive)
+        answers.positive.button.scrollAndClick()
+        votingApi.assertCalled(answerMatcher = { eq(debateData.answers.positive) })
     }
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingNegativeVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
-        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        verify(apiMock).vote("token", debateData.answers.negative)
+        answers.negative.button.scrollAndClick()
+        votingApi.assertCalled(answerMatcher = { eq(debateData.answers.negative) })
     }
 
     @Test
     fun shouldUseCorrectAnswerWhenSendingNeutralVote() {
         val debateData = createDebateData()
         startActivityAndSuccessfullyReturnDebateDetails(debateData = debateData)
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        verify(apiMock).vote("token", debateData.answers.neutral)
+        answers.neutral.button.scrollAndClick()
+        votingApi.assertCalled(answerMatcher = { eq(debateData.answers.neutral) })
     }
 
     @Test
     fun shouldOpenChatScreenWhenChatButtonClicked() {
         startActivityAndSuccessfullyReturnDebateDetails()
         stubAllIntents()
-        onId(R.id.debateChatButton).click()
+        clickChatButton()
         checkIntent(DebateChatActivity::class.java)
     }
 
@@ -346,7 +348,7 @@ class DebateDetailsActivityTest {
         val token = "someToken"
         startActivityAndSuccessfullyReturnDebateDetails(token = token)
         stubAllIntents()
-        onId(R.id.debateChatButton).click()
+        clickChatButton()
         Intents.intended(Matchers.allOf(
                 IntentMatchers.hasExtra("debateLoginCredentialsKey", LoginCredentials(token, 111)),
                 IntentMatchers.hasComponent(DebateChatActivity::class.java.name)))
@@ -355,62 +357,78 @@ class DebateDetailsActivityTest {
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnPositive() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debatePositiveAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerPositive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        answers {
+            positive.button.scrollAndClick()
+            votingApi.success()
+            images {
+                positive.hasPositiveColor()
+                negative.hasInactiveColor()
+                neutral.hasInactiveColor()
+            }
+        }
     }
 
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNegative() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerNegative))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerInactive))
+        answers {
+            negative.button.scrollAndClick()
+            votingApi.success()
+            images {
+                positive.hasInactiveColor()
+                negative.hasNegativeColor()
+                neutral.hasInactiveColor()
+            }
+        }
     }
 
     @Test
     fun shouldChangeImagesInButtonsWhenClickedOnNeutral() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNeutralAnswerButton).perform(scrollTo()).click()
-        voteSuccessfully()
-        onId(R.id.debatePositiveAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNegativeAnswerImage).hasTag(equalTo(R.color.answerInactive))
-        onId(R.id.debateNeutralAnswerImage).hasTag(equalTo(R.color.answerNeutral))
+        answers {
+            neutral.button.scrollAndClick()
+            votingApi.success()
+            images {
+                positive.hasInactiveColor()
+                negative.hasInactiveColor()
+                neutral.hasNeutralColor()
+            }
+        }
     }
 
     @Test
     fun shouldHaveDisabledButtonsOnVoteCall() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        onId(R.id.debateNegativeAnswerButton).click()
-        onId(R.id.debatePositiveAnswerButton).isDisabled()
-        onId(R.id.debateNegativeAnswerButton).isDisabled()
-        onId(R.id.debateNeutralAnswerButton).isDisabled()
+        answers {
+            negative.button.click()
+            buttons {
+                positive.isDisabled()
+                negative.isDisabled()
+                neutral.isDisabled()
+            }
+        }
     }
 
     @Test
     fun shouldHaveEnabledButtonsOnVoteCallEnd() {
         startActivityAndSuccessfullyReturnDebateDetails()
-        voteSuccessfully()
-        onId(R.id.debateNegativeAnswerButton).click()
-        onId(R.id.debatePositiveAnswerButton).isEnabled()
-        onId(R.id.debateNegativeAnswerButton).isEnabled()
-        onId(R.id.debateNeutralAnswerButton).isEnabled()
+        votingApi.success()
+        answers {
+            negative.button.click()
+            buttons {
+                positive.isEnabled()
+                negative.isEnabled()
+                neutral.isEnabled()
+            }
+        }
     }
 
     private fun startActivity(token: String = "token") {
         rule.startActivity(DebateDetailsActivity.intent(InstrumentationRegistry.getTargetContext(), LoginCredentials(token, 111)))
     }
 
-    private fun voteSuccessfully() {
-        sendVoteSubject.onComplete()
-    }
-
     private fun startActivityAndSuccessfullyReturnDebateDetails(token: String = "token", debateData: DebateData = createDebateData()) {
         startActivity(token)
-        debateDetailsSubject.onSuccess(debateData)
+        debateApi.success(debateData)
     }
 }

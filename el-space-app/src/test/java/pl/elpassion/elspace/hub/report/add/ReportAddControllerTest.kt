@@ -37,9 +37,10 @@ class ReportAddControllerTest {
 
     private fun stubApiToReturnSubject() {
         whenever(api.addRegularReport(any(), any(), any(), any())).thenReturn(addReportApi)
-        whenever(api.addSickLeaveReport(any())).thenReturn(addReportApi)
-        whenever(api.addUnpaidVacationsReport(any())).thenReturn(addReportApi)
         whenever(api.addPaidVacationsReport(any(), any())).thenReturn(addReportApi)
+        whenever(api.addUnpaidVacationsReport(any())).thenReturn(addReportApi)
+        whenever(api.addSickLeaveReport(any())).thenReturn(addReportApi)
+        whenever(api.addPaidConferenceReport(any())).thenReturn(addReportApi)
     }
 
     @Test
@@ -133,17 +134,24 @@ class ReportAddControllerTest {
     }
 
     @Test
+    fun shouldShowUnpaidVacationFormAfterReportTypeChangeToUnpaidVacation() {
+        createController().onCreate()
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
+        verify(view).showUnpaidVacationsForm()
+    }
+
+    @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
         createController().onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
         verify(view).showSickLeaveForm()
     }
-
+    
     @Test
-    fun shouldShowUnpaidVacationFormAfterReportTypeChangeToUnpaidVacation() {
+    fun shouldShowPaidConferenceFormAfterReportTypeChangedToPaidConference() {
         createController().onCreate()
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).showUnpaidVacationsForm()
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
+        verify(view).showPaidConferenceForm()
     }
 
     @Test
@@ -158,6 +166,13 @@ class ReportAddControllerTest {
         createController("2016-01-01").onCreate()
         addSickLeaveReport()
         verify(api).addSickLeaveReport("2016-01-01")
+    }
+
+    @Test
+    fun shouldReportPaidConferenceToApiAfterAddReportPaidConference() {
+        createController("2016-01-01").onCreate()
+        addPaidConferenceReport()
+        verify(api).addPaidConferenceReport("2016-01-01")
     }
 
     @Test
@@ -310,6 +325,11 @@ class ReportAddControllerTest {
         addReportApi.onComplete()
     }
 
+    private fun addPaidVacationReport() {
+        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
+        onAddReportClicks.onNext(PaidVacationsViewModel("2016-09-23", "8"))
+    }
+
     private fun addUnpaidVacationReport() {
         reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
         onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
@@ -320,8 +340,8 @@ class ReportAddControllerTest {
         onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 
-    private fun addPaidVacationReport() {
-        reportTypeChanges.onNext(ReportType.PAID_VACATIONS)
-        onAddReportClicks.onNext(PaidVacationsViewModel("2016-09-23", "8"))
+    private fun addPaidConferenceReport() {
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
+        onAddReportClicks.onNext(DailyViewModel("2016-01-01"))
     }
 }

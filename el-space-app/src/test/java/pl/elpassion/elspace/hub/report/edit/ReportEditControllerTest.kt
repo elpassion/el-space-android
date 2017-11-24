@@ -107,6 +107,13 @@ class ReportEditControllerTest {
     }
 
     @Test
+    fun shouldShowUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
+        createController().onCreate()
+        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
+        verify(view).showUnpaidVacationsForm()
+    }
+
+    @Test
     fun shouldShowSickLeaveFormAfterReportTypeChangedToSickLeave() {
         createController().onCreate()
         reportTypeChanges.onNext(ReportType.SICK_LEAVE)
@@ -114,10 +121,10 @@ class ReportEditControllerTest {
     }
 
     @Test
-    fun shouldShowUnpaidVacationsFormAfterReportTypeChangedToUnpaidVacations() {
+    fun shouldShowPaidConferenceFormAfterReportTypeChangedToPaidConference() {
         createController().onCreate()
-        reportTypeChanges.onNext(ReportType.UNPAID_VACATIONS)
-        verify(view).showUnpaidVacationsForm()
+        reportTypeChanges.onNext(ReportType.PAID_CONFERENCE)
+        verify(view).showPaidConferenceForm()
     }
 
     @Test
@@ -147,6 +154,13 @@ class ReportEditControllerTest {
         createController(newDailyReport(reportType = DailyReportType.SICK_LEAVE, id = 3, year = 2000, month = 3, day = 7)).onCreate()
         onEditReportClick(model = DailyViewModel("2000-03-08"))
         verify(api).editReport(3, 3, "2000-03-08", null, null, null)
+    }
+
+    @Test
+    fun shouldEditPaidConferenceWithChangedData() {
+        createController(newDailyReport(reportType = DailyReportType.PAID_CONFERENCE, id = 66, year = 2007, month = 4, day = 1)).onCreate()
+        onEditReportClick(model = DailyViewModel("2007-04-09"))
+        verify(api).editReport(66, 4, "2007-04-09", null, null, null)
     }
 
     @Test

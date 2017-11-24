@@ -1,13 +1,13 @@
 package pl.elpassion.elspace.hub.report.add
 
-import pl.elpassion.elspace.hub.HubRetrofitProvider
+import io.reactivex.Observable
 import pl.elpassion.elspace.common.Provider
+import pl.elpassion.elspace.hub.HubRetrofitProvider
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.report.ReportType
 import pl.elpassion.elspace.hub.report.ReportViewModel
 import retrofit2.http.POST
 import retrofit2.http.Query
-import io.reactivex.Observable
 
 interface ReportAdd {
     interface View {
@@ -25,8 +25,9 @@ interface ReportAdd {
         fun projectClickEvents(): Observable<Unit>
         fun showRegularForm()
         fun showPaidVacationsForm()
-        fun showSickLeaveForm()
         fun showUnpaidVacationsForm()
+        fun showSickLeaveForm()
+        fun showPaidConferenceForm()
     }
 
     interface Api {
@@ -48,6 +49,9 @@ interface ReportAdd {
 
         @POST("activities?activity[report_type]=3&activity[value]=0")
         fun addSickLeaveReport(@Query("activity[performed_at]") date: String): Observable<Unit>
+
+        @POST("activities?activity[report_type]=4&activity[value]=0")
+        fun addPaidConferenceReport(@Query("activity[performed_at]") date: String): Observable<Unit>
     }
 
     object ApiProvider : Provider<Api>({

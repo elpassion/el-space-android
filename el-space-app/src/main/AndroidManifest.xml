@@ -30,7 +30,9 @@
 
                 <data
                     android:host="hub.elpassion.com"
+                    android:pathPrefix="/auth/google_oauth2"
                     android:scheme="https" />
+
             </intent-filter>
         </activity>
         <activity
@@ -53,12 +55,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate" />
         <activity
-            android:screenOrientation="portrait"
             android:name="pl.elpassion.elspace.debate.details.DebateDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate" />
         <activity
-            android:screenOrientation="portrait"
             android:name="pl.elpassion.elspace.debate.chat.DebateChatActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDebate"
             android:windowSoftInputMode="stateVisible" />
 

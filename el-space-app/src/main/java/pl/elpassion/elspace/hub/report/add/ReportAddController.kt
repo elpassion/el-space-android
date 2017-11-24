@@ -6,7 +6,9 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.withLatestFrom
 import pl.elpassion.elspace.common.CurrentTimeProvider
 import pl.elpassion.elspace.common.SchedulersSupplier
-import pl.elpassion.elspace.common.extensions.*
+import pl.elpassion.elspace.common.extensions.catchOnError
+import pl.elpassion.elspace.common.extensions.getDateString
+import pl.elpassion.elspace.common.extensions.getTimeFrom
 import pl.elpassion.elspace.hub.project.Project
 import pl.elpassion.elspace.hub.project.last.LastSelectedProjectRepository
 import pl.elpassion.elspace.hub.report.PaidVacationsViewModel
@@ -63,8 +65,9 @@ class ReportAddController(private val date: String?,
     private fun chooseReportHandler(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> regularReportHandler
         ReportType.PAID_VACATIONS -> paidVacationReportHandler
-        ReportType.SICK_LEAVE -> sickLeaveReportHandler
         ReportType.UNPAID_VACATIONS -> unpaidVacationReportHandler
+        ReportType.SICK_LEAVE -> sickLeaveReportHandler
+        ReportType.PAID_CONFERENCE -> paidConferenceReportHandler
     }
 
     private fun callApi(modelCallPair: Pair<ReportViewModel, (ReportViewModel) -> Observable<Unit>>) = modelCallPair.second(modelCallPair.first)
@@ -96,19 +99,24 @@ class ReportAddController(private val date: String?,
         api.addPaidVacationsReport(model.selectedDate, (model as PaidVacationsViewModel).hours)
     }
 
+    private val unpaidVacationReportHandler = { model: ReportViewModel ->
+        api.addUnpaidVacationsReport(model.selectedDate)
+    }
+
     private val sickLeaveReportHandler = { model: ReportViewModel ->
         api.addSickLeaveReport(model.selectedDate)
     }
 
-    private val unpaidVacationReportHandler = { model: ReportViewModel ->
-        api.addUnpaidVacationsReport(model.selectedDate)
+    private val paidConferenceReportHandler = { model: ReportViewModel ->
+        api.addPaidConferenceReport(model.selectedDate)
     }
 
     private fun onReportTypeChanged(reportType: ReportType) = when (reportType) {
         ReportType.REGULAR -> view.showRegularForm()
         ReportType.PAID_VACATIONS -> view.showPaidVacationsForm()
-        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
         ReportType.UNPAID_VACATIONS -> view.showUnpaidVacationsForm()
+        ReportType.SICK_LEAVE -> view.showSickLeaveForm()
+        ReportType.PAID_CONFERENCE -> view.showPaidConferenceForm()
     }
 
     private fun RegularViewModel.hasNoDescription() = description.isBlank()
